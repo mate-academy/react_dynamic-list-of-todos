@@ -42,7 +42,14 @@ export default class TodoList extends Component {
     if (this.state.loaded) {
       return (
         <table>
-          {this.list}
+          <thead>
+            <td>TODO</td>
+            <td>Name</td>
+            <td>Complited</td>
+          </thead>
+          <tbody>
+            {this.list}
+          </tbody>
         </table>
       )
     } else {
