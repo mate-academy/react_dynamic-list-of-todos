@@ -1,0 +1,15 @@
+table {
+  border-collapse: collapse;
+  margin: 30px auto; 
+}
+
+button {
+  margin: 0 20px;
+  border-radius: 3px;
+  width: 75px;
+  height: 40px;
+  outline: none;
+  font-weight: bold;
+  display: block;
+  margin: 20px auto;
+}
