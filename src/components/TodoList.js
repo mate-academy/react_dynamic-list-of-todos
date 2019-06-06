@@ -29,7 +29,7 @@ export default class TodoList extends Component {
         [this.todos, this.users] = [todos, users];
 
         this.todos.forEach(todo => {
-          this.list.push(<TodoItem todo={todo} user={this.users[this.users.findIndex(el => el.id === todo.userId)]} />)
+          this.list.push(<TodoItem  todo={todo} user={this.users[this.users.findIndex(el => el.id === todo.userId)]} />)
         })
 
         this.setState({
@@ -43,9 +43,11 @@ export default class TodoList extends Component {
       return (
         <table>
           <thead>
-            <td>TODO</td>
-            <td>Name</td>
-            <td>Complited</td>
+            <tr>
+              <th>TODO</th>
+              <th>Name</th>
+              <th>Complited</th>
+            </tr>
           </thead>
           <tbody>
             {this.list}
