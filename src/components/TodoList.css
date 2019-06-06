@@ -1,0 +1,73 @@
+body {
+  background: #1a1a1a;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+.download {
+  margin-top: 15%;
+  width: 250px;
+  height: 250px;
+  font-size: 40px;
+  color: #1a1a1a;
+  background: #ed1c5b;
+  border: none;
+  border-radius: 50%;
+  transition: box-shadow 400ms cubic-bezier(.2,0,.7,1);
+}
+ 
+.download:hover {
+  box-shadow: 0 0 1px 20px rgba(184,90,124, 0.4),
+  0 0 1px 40px rgba(184,90,124, 0.1),
+  0 0 1px 60px rgba(184,90,124, 0.1);
+}
+
+.loading {
+  font-size: 70px;
+  color: #ed1c5b;
+  margin-top: 15%;
+}
+
+table {
+  width: 80%;
+  text-align: center;
+  color: rgba(184,90,124);
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.tableTitle {
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(236, 229, 232);
+  background: none;
+  border: none;
+  text-transform: uppercase;
+}
+.tableTitle:hover {
+  cursor: pointer;
+}
+.tableTitle:hover::after {
+  content: "Sort items";
+  position: absolute;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: normal;
+  top: 15px;
+}
+
+tr > td:first-child {
+  text-align: left;
+}
+
+tr > td:last-child {
+  text-align: right;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(184,90,124); 
+}
