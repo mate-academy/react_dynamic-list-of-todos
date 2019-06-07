@@ -46,7 +46,7 @@ export default class TodoList extends Component {
             <tr>
               <th>TODO</th>
               <th>Name</th>
-              <th>Complited</th>
+              <th>Completed</th>
             </tr>
           </thead>
           <tbody>
