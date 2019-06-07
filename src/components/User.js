@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 function User(props) {
   return (
-    <td><a href={`mailto:${props.user.email}`}>{props.user.name}</a></td>
+    <a href={`mailto:${props.user.email}`}>{props.user.name}</a>
   );
-}
+};
 
-export default User
+export default User;
