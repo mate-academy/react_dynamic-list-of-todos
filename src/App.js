@@ -8,7 +8,12 @@ export default class App extends Component {
     this.state = {
       requested: false,
       loaded: false,
+      todosWithUsers: [],
     };
+  }
+
+  getData(url) {
+    return fetch(url).then(response => response.json());
   }
 
   requestData = () => {
@@ -16,23 +21,18 @@ export default class App extends Component {
       requested: true,
     })
 
-    const TodosResp = fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(response => response.json());
-
-    const UsersResp = fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json());
-
-    Promise.all([TodosResp, UsersResp])
+    Promise.all([
+      this.getData('https://jsonplaceholder.typicode.com/todos'),
+      this.getData('https://jsonplaceholder.typicode.com/users'),
+    ])
       .then(([todos, users]) => {
-        [this.todos, this.users] = [todos, users];
+        const usersMap = users.reduce((acc, user) => ({ ...acc, [user.id]: user }), {});
+        this.state.todosWithUsers = todos.map(todo => ({ ...todo, user: usersMap[todo.userId] }));
 
-        this.usersMap = users.reduce((acc, user) => ({ ...acc, [user.id]: user }), {});
-        this.todosWithUsers = todos.map(todo => ({ ...todo, user: this.usersMap[todo.userId] }));
-        
         this.setState({
           loaded: true,
-        })
-      })
+        });
+      });
   }
 
   render() {
@@ -47,7 +47,7 @@ export default class App extends Component {
             </tr>
           </thead>
           <tbody>
-            <TodoList todos={this.todosWithUsers} />
+            <TodoList todos={this.state.todosWithUsers} />
           </tbody>
         </table>
       )
