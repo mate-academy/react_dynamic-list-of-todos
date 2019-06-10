@@ -1,3 +1,5 @@
+https://gitkurmax.github.io/react_dynamic-list-of-todos/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
