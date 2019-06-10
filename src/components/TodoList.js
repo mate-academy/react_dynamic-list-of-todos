@@ -48,7 +48,7 @@ class TodoList extends React.Component {
             return a.title.localeCompare(b.title);
           case 'completed':
             return a.completed.toString().localeCompare(b.completed.toString());
-          case 'name':
+          case 'user':
             return a.user.name.localeCompare(b.user.name);
           default:
             return event.target;
@@ -62,18 +62,16 @@ class TodoList extends React.Component {
       return <button onClick={this.loadItems}>Load</button>;
     } else if (this.state.loaded) {
       return (
-        <div className="todos-list">
-          <table>
-            <tbody>
-              <tr onClick={this.sortItems}>
-                <th data-field="title">Title</th>
-                <th data-field="name">User name</th>
-                <th data-field="completed">Completed</th>
-              </tr>
-              {this.state.data.map(item => <TodoItem key={item.title} data={item} />)}
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <tbody>
+            <tr onClick={this.sortItems}>
+              <th data-field="title">Title</th>
+              <th data-field="user">User name</th>
+              <th data-field="completed">Completed</th>
+            </tr>
+            {this.state.data.map(item => <TodoItem key={item.title} data={item} />)}
+          </tbody>
+        </table>
       );
     } else {
       return <button>Loading...</button>

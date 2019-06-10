@@ -5,11 +5,17 @@ table {
 
 button {
   margin: 0 20px;
-  border-radius: 3px;
-  width: 75px;
-  height: 40px;
+  border-radius: 10px;
+  width: 200px;
+  height: 75px;
   outline: none;
   font-weight: bold;
   display: block;
-  margin: 20px auto;
+  margin: 0 auto;
+  font-size: 35px;
+  font-weight: normal;
+  background: rgb(119, 16, 119);
+  color: #fff;
+  border: none;
+  margin-top: calc(50vh - 40px);
 }
