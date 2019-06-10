@@ -4,14 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+README.md
 
 # testing
 /coverage
-/README.md/
-/package.json
-/public
-/src/serviceWorker.js
-/yarn.lock
 
 # production
 /build
