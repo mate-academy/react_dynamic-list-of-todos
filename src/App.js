@@ -20,7 +20,9 @@ class App extends Component {
                  isLoading: true
              }
          });
-         await Promise.all([this.service.getUsers(), this.service.getTodos()])
+         const usersPromice = this.service.getUsers();
+         const todosPromice = this.service.getTodos();
+         await Promise.all([usersPromice, todosPromice])
             .then(values => {
                     this.setState(state => {
                         return {
