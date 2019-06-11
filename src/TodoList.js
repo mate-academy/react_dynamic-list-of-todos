@@ -42,7 +42,7 @@ class TodoList extends React.Component {
   render() {
     return (
     <table>
-    <tbody>
+      <tbody>
     <tr>
     <th onClick={this.sortTable.bind(this, "id", null)}>Id</th>
     <th onClick={this.sortTable.bind(this, "title", null)}>Title</th>
