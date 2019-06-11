@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TodoList from './components/TodoList';
 import './App.css';
+
 const serverUrl = ' https://jsonplaceholder.typicode.com/';
 
 class App extends Component {
@@ -66,16 +67,6 @@ class App extends Component {
   }
 
   render() {
-    const loading = this.state.loading;
-    const button = (
-      <button
-        type="button"
-        disabled={loading}
-        onClick={this.loadData}
-      >
-        {this.isLoading ? 'Loading...' : 'Load data'}
-      </button>);
-
     if (this.isLoaded) {
       return (
         <div>
@@ -84,6 +75,14 @@ class App extends Component {
         </div>
       );
     } else {
+      const button = (
+        <button
+          type="button"
+          disabled={this.state.loading}
+          onClick={this.loadData}
+        >
+          {this.state.loading ? 'Loading...' : 'Load data'}
+        </button>);
       return (
         <div>
         <h1>Todo list</h1>

@@ -2,7 +2,6 @@ import React from 'react';
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
-
 function TodoList(props) {
   const { todoList } = props;
 
