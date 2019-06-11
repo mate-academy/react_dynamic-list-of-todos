@@ -3,7 +3,7 @@ import User from "./User.js";
 
 function TodoItem(props) {
   return (
-  <tr>
+    <tr>
     <td>
     {props.todo.id}
     </td>
