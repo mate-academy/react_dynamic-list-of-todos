@@ -1,16 +1,15 @@
-.todo-list{
-    width: 600px;
-    margin: 20px auto;
-    padding: 15px;
-    background-color: #ccc;
-    border-radius: 5px;
+.todo-list {
+  width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: #ccc;
+  border-radius: 5px;
 }
 
 .sort-panel {
-    margin: 0 auto;
-    width: 250px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+  margin: 0 auto;
+  width: 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
