@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TodoList from './component/TodoList';
+import './App.css';
 
 export default class App extends Component {
   constructor(props) {
@@ -52,9 +53,9 @@ export default class App extends Component {
     return (
       <div>
         {this.state.status === 'before dawnload'
-          && <button onClick={this.showTodos}>Show Todos!</button>}
+          && <button className="download" onClick={this.showTodos}>Show Todos!</button>}
         {this.state.status === 'loading'
-          && <button onClick={this.showTodos}>Loading...</button>}
+          && <button className="download" disabled>Loading...</button>}
         {this.state.status === 'redy to show'
           && <TodoList todos={this.state.todos} users={this.state.users} />}
       </div>
