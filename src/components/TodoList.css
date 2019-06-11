@@ -1,0 +1,14 @@
+.todo-list {
+  text-align: center;
+  border-collapse: collapse;
+  margin: 20px auto 0;
+}
+
+td,th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+th {
+  cursor: pointer;
+}
