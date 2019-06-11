@@ -1,7 +1,6 @@
-
 import TodoList from './components/TodoList';
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class App extends Component {
   constructor(props) {
@@ -10,28 +9,30 @@ export default class App extends Component {
       loadedUsers: false,
       users: '',
       loadedTodos: false,
-      todos: '',
-    }    
+      todos: ''
+    };
   }
 
   async requestUsers() {
-    const response = await fetch('https://jsonplaceholder.typicode.com/users')
-        this.setState({
-          loadedUsers: true,
-          users: await response.json(),
-        })
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    this.setState({
+      loadedUsers: true,
+      users: await response.json()
+    });
   }
 
   async requestTodos() {
-    const response = await fetch('https://jsonplaceholder.typicode.com/todos')
-        this.setState({
-          loadedTodos: true,
-          todos: await response.json(),
-        })
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+    this.setState({
+      loadedTodos: true,
+      todos: await response.json()
+    });
   }
 
   render() {
-    if (!this.state.loadedUsers && !this.state.loadedTodos) {
+    const { loadedUsers, loadedTodos, todos, users } = this.state;
+
+    if (!loadedUsers && !loadedTodos) {
       return (
         <button
           onClick={() => {
@@ -42,11 +43,16 @@ export default class App extends Component {
           Load
         </button>
       );
-    } else if (this.state.loadedUsers && this.state.loadedTodos) {
-      return <TodoList todos={this.state.todos} users={this.state.users}/>;
+    } else if (loadedUsers && loadedTodos) {
+      return <TodoList todos={todos} users={users} />;
     } else {
-      return <div>Loading...</div>;
+      return (
+        <div>
+          <button type='button' disabled>
+            Loading...
+          </button>
+        </div>
+      );
     }
   }
 }
-
