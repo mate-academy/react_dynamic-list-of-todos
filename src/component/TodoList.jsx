@@ -15,7 +15,6 @@ export default class TodoList extends Component {
   }
 
   sort(e) {
-    console.log(this.state.users)
     if (e.target.dataset.sortType === 'title') {
       const sortedArr = this.state.todos.sort((a, b) =>
         a.title.localeCompare(b.title));
