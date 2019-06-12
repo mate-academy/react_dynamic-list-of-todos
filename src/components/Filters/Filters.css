@@ -1,0 +1,36 @@
+.filters {
+  margin: 0 0 10px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+  justify-content: space-around;
+  background-color: darkslategrey;
+  color: blanchedalmond;
+  border: 4px solid darkkhaki;
+  padding: 4px 100px;
+  box-shadow: 0 0 7px #000;
+  border-radius: 5px;
+}
+
+.label-wrapper {
+  flex-basis: 200px;
+  max-width: 300px;
+  display: grid;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+.inputs {
+  width: 180px;
+  border: 3px inset lightgreen;
+  border-radius: 4px;
+  box-shadow: 0 0 0.7em lightslategray;
+}
+
+.inputs:focus {
+  box-shadow: 0 0 0.7em lightslategray, inset 0 0 0.4em 1px magenta;
+}
+
+.inputs:hover {
+  border-color: darkgoldenrod;
+}

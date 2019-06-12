@@ -1,0 +1,9 @@
+.info-details>ul {
+  padding: 3px 10px 2px 10px;
+  margin: 0;
+}
+
+.info-details>ul>li {
+  color: darkslategray;
+  text-shadow: 1px 1px 0.1em darkgoldenrod;
+}
