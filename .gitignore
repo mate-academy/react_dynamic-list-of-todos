@@ -1,0 +1,16 @@
+build
+.idea
+node_modules
+.DS_Store
+yarn.lock
+package-lock.json
+.stylelintignore
+.stylelintrc.js
+gulpfile.js
+LICENSE
+package.json
+.eslintrc.js
+.eslintignore
+.editorconfig
+src/logo.svg
+src/serviceWorker.js

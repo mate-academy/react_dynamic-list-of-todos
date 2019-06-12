@@ -1,0 +1,19 @@
+.container {
+  width: 65%;
+  margin: 0 auto;
+}
+
+.load-button {
+  cursor: pointer;
+  display: block;
+  color: black;
+  font-size: 14px;
+  margin: 0 auto 0 120px;
+  height: 30px;
+  width: 120px;
+  box-shadow: 4px 4px 0.8em darkkhaki;
+}
+
+.disabled {
+  cursor: auto;
+}

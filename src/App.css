@@ -1,0 +1,13 @@
+body {
+  background: #edd;
+}
+
+h1 {
+  color: peru;
+  margin: 25px 0 2px;
+  text-align: center;
+  box-shadow: 0 0 7px #000;
+  text-shadow: 1px 0 3px darkgoldenrod;
+  font-stretch: expanded;
+  font-weight: bold;
+}
