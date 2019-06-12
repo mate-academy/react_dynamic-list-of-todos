@@ -10,7 +10,7 @@ export default class TodoList extends Component {
       todos: this.props.todos,
       users: this.props.users,
       sortBy: 'time'
-    }
+    };
     this.sort = this.sort.bind(this);
   }
 
@@ -36,7 +36,7 @@ export default class TodoList extends Component {
       this.setState(() => ({
         todos: sortedArr
       }));
-    }
+    };
 
     if (e.target.dataset.sortType === 'name') {
       const sortedArr = this.state.todos.sort((a, b) => {
@@ -47,11 +47,11 @@ export default class TodoList extends Component {
           return -1;
         }
         return 0;
-      })
+      });
       this.setState(() => ({
         todos: sortedArr
       }));
-    }
+    };
   }
 
   render() {
@@ -71,6 +71,6 @@ export default class TodoList extends Component {
               email={this.state.users[item.userId].email} />
           </TodoItem>)}
       </div>
-    )
+    );
   }
 }

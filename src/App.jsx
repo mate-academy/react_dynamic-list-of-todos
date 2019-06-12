@@ -10,7 +10,7 @@ export default class App extends Component {
       todos: [],
       users: [],
       status: 'before dawnload'
-    }
+    };
     this.showTodos = this.showTodos.bind(this);
   }
 
@@ -37,15 +37,15 @@ export default class App extends Component {
   }
 
   showTodos() {
-    this.setState(state => state.status = 'loading')
-    this.init()
+    this.setState(state => state.status = 'loading');
+    this.init();
   }
 
   usersToObj(users) {
     const newObj = users.reduce(((acc, user) => {
       acc[user.id] = user;
       return acc;
-    }), {})
+    }), {});
     return newObj;
   }
 
@@ -53,7 +53,8 @@ export default class App extends Component {
     return (
       <div>
         {this.state.status === 'before dawnload'
-          && <button className="download" onClick={this.showTodos}>Show Todos!</button>}
+          && <button className="download" onClick={this.showTodos}>
+            Show Todos!</button>}
         {this.state.status === 'loading'
           && <button className="download" disabled>Loading...</button>}
         {this.state.status === 'redy to show'

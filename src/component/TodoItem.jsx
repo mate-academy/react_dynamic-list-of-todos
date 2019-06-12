@@ -9,6 +9,6 @@ export default class TodoItem extends Component {
         <span>{this.props.completed ? 'completed' : 'todo'}</span>
         {this.props.children}
       </div>
-    )
+    );
   }
 }
