@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 function TodoItem(props) {
  const {title, userName, completed} = props;
-
   return (
     <tr>
       <td>{title}</td>
