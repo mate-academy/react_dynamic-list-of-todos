@@ -12,8 +12,8 @@ class App extends React.Component {
 
   loadUrl(url) {
     return fetch(url)
-    .then(res => res.json())
-    .then(data => data);
+      .then(res => res.json())
+      .then(data => data);
   }
 
   loadContent() {
@@ -27,7 +27,7 @@ class App extends React.Component {
         users: users
       });
     });
-      this.setState({buttonState: 1});
+    this.setState({buttonState: 1});
   }
 
   render() {
