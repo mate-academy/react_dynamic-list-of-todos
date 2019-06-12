@@ -15,7 +15,6 @@ function TodoItem(props) {
 
 export default TodoItem;
 
-
 TodoItem.propTypes = {
   title: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
