@@ -25,24 +25,9 @@ class TodoList extends React.Component {
   sortTodos(str) {
     this.str =  str;
 
-    if (this.str === 'title') {
-      this.setState((state) => ({
-        todos: state.todos.sort((a, b) => a[this.str].localeCompare(b[this.str]))
-      }))
-    }
-
-    if (this.str === 'userId') {
-
-      this.setState((state) => ({
-        todos: state.todos.sort((a, b) => a[this.str].toString().localeCompare(b[this.str].toString()))
-      }))
-    }
-
-    if (this.str === 'completed') {
-      this.setState((state) => ({
-        todos: state.todos.sort((a, b) => a[this.str].toString().localeCompare(b[this.str].toString()))
-      }))
-    }
+    this.setState((state) => ({
+      todos: state.todos.sort((a, b) => a[this.str].toString().localeCompare(b[this.str].toString()))
+    }))
   }
 
   componentDidMount() {
@@ -68,7 +53,6 @@ class TodoList extends React.Component {
   render() {
     if (!this.state.request) {
       return <div className="button">
-        
         <button onClick={this.loadTodos}>Download</button>
       </div>
     } else if (this.state.loaded) {
@@ -81,7 +65,17 @@ class TodoList extends React.Component {
             <th title="click to sort" onClick={this.sortTodos.bind(this, 'completed')}>Completed</th>
           </tr>
         </thead>
-        <tbody>{this.state.todos.map(todo => <TodoItem title={todo.title} completed={todo.completed} users={this.state.users} key={todo.title} id={todo.userId}/>)}</tbody>
+        <tbody>
+          {this.state.todos.map(todo => (
+            <TodoItem
+              title={todo.title}
+              completed={todo.completed}
+              users={this.state.users}
+              key={todo.title}
+              id={todo.userId}
+              />
+          ))}
+        </tbody>
 
       </table>
       )
