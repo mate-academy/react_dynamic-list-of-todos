@@ -4,7 +4,8 @@ import User from './User.jsx'
 export default class TodoItem extends Component {
   constructor(props) {
     super(props);
-  }
+  };
+
   render() {
     return (
       <tr>
@@ -15,5 +16,5 @@ export default class TodoItem extends Component {
         </td>
       </tr>
     )
-  }
+  };
 }

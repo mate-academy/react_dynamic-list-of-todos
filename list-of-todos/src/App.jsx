@@ -4,9 +4,9 @@ import TodoList from './components/TodoList.jsx';
 
 function App() {
   return (
-    <table className="App">
+    <div className="App">
       <TodoList />
-    </table>
+    </div>
   );
 }
 
