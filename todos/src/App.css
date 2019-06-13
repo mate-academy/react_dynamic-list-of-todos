@@ -1,0 +1,23 @@
+table {
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+tr:first-child {
+  font: bold italic 18px sans-serif;
+}
+
+button {
+  padding: 10px;
+  position: relative;
+  left: 50%;
+}
+
+#load {
+  position: relative;
+  left: 50%;
+}
