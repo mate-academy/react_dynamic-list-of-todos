@@ -24,7 +24,7 @@ class TodoList extends React.Component {
       this.loadApi('https://jsonplaceholder.typicode.com/users'),
     ])
       .then(([todos, users]) => this.setState({
-        data: todos.map(item => ({
+        data: todos.map((item) => ({
           ...item,
           user: users.find(user => item.userId === user.id),
           completed: item.completed ? 'Completed' : 'In-process'
