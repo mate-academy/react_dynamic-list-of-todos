@@ -2,7 +2,6 @@ import React from 'react';
 import User from './User';
 
 function TodoItem(props) {
-
   const person = props.users.find(item => props.id === item.id);
     return (
       <tr>

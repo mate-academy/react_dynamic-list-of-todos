@@ -24,7 +24,6 @@ class TodoList extends React.Component {
 
   sortTodos(str) {
     this.str =  str;
-
     this.setState((state) => ({
       todos: state.todos.sort((a, b) => a[this.str].toString().localeCompare(b[this.str].toString()))
     }))
@@ -76,10 +75,8 @@ class TodoList extends React.Component {
               />
           ))}
         </tbody>
-
       </table>
       )
-
     } else {
       return <div>Loading...</div>;
     }
