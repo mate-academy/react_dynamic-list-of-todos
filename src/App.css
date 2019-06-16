@@ -1,0 +1,45 @@
+.completed,
+.active {
+  text-align: center;
+}
+
+.active {
+  background: #ee3;
+  text-align: center;
+}
+
+.completed {
+  background: green;
+  color: #fff;
+}
+
+.name {
+  text-decoration: none;
+  color: black;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+tr {
+  border-bottom: 1px solid #ee3;
+}
+
+th {
+  background: #eee;
+  padding: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+td {
+  padding: 5px;
+}
+
+.button {
+  width: 75px;
+  margin: 0 auto;
+}
