@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
-import User from './User';
-
-class TodoItem extends Component {
     
-    render() {
-        const currentUser =  this.props.users.find(person => person.id === this.props.item.userId);
+import React from 'react';
+import User from './User';
+    
+function TodoItem(props) {
+  const currentUser = props.users.find(person => person.id === props.item.userId);
 
-        return (       
-            <tr key={this.props.item.id}>
-                <td>{this.props.item.title}</td>
-                <td className={this.props.item.completed ? 
-                'active' : 'still_pending'}>{this.props.item.completed ? 'Active' : 'Still pending'}</td>
-                <td><User user={currentUser.name}/></td>
-            </tr>
-        );
-    }
+  return (       
+    <tr key={props.item.id}>
+      <td>{props.item.title}</td>
+      <td className={props.item.completed ? 'active' : 'still_pending'}>
+        {props.item.completed ? 'Active' : 'Still pending'}
+      </td>
+      <td><User user={currentUser.name}/></td>
+    </tr>
+  );
 }
 
 export default TodoItem;
-
