@@ -6,7 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: null,
+      list: false,
       display: 'invisible'
     }
 
@@ -16,7 +16,7 @@ class App extends React.Component {
   getData(event) {
     event.target.classList.add(this.state.display);
     this.setState({
-      list: <TodoList />,
+      list: true,
     });
   }
   
@@ -24,7 +24,7 @@ class App extends React.Component {
     return(
       <div>
         <button className = "get" onClick = {this.getData}>Get data</button>
-        {this.state.list}
+        {this.state.list ? <TodoList />: null}
       </div>
     )
   }

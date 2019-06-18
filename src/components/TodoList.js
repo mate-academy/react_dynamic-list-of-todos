@@ -44,9 +44,9 @@ class TodoList extends React.Component {
     if (this.state.loaded) {
       for (const todoItem of this.state.responses.todos) {
         const isCompleted = todoItem.completed ? 'completed' : 'not completed'
-        const user = this.state.responses.users.filter(user => user.id === todoItem.userId);
-        const userName = user[0].name;
-        const userEmail = user[0].email;
+        const user = this.state.responses.users.find(user => user.id === todoItem.userId);
+        const userName = user.name;
+        const userEmail = user.email;
 
       todosComponents.push(
         <TodoItem id = {todoItem.id}
