@@ -9,7 +9,7 @@ export default class App extends Component {
     this.state = {
       todos: [],
       users: [],
-      status: 'before dawnload'
+      status: 'before download'
     };
     this.showTodos = this.showTodos.bind(this);
   }
@@ -52,7 +52,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        {this.state.status === 'before dawnload'
+        {this.state.status === 'before download'
           && <button className="download" onClick={this.showTodos}>
             Show Todos!</button>}
         {this.state.status === 'loading'

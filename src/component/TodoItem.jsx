@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './TodoItem.css';
 
-export default class TodoItem extends Component {
-  render() {
-    return (
-      <div className="todo-item">
-        <span className="todo-title">{this.props.title}</span>
-        <span>{this.props.completed ? 'completed' : 'todo'}</span>
-        {this.props.children}
-      </div>
-    );
-  }
+export default function TodoItem(props) {
+  return (
+    <div className="todo-item">
+      <span className="todo-title">{props.title}</span>
+      <span>{props.completed ? 'completed' : 'todo'}</span>
+      {props.children}
+    </div>
+  );
 }
