@@ -14,8 +14,13 @@ class App extends Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.sortTable = this.sortTable.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
 
+  loadData(url) {
+    return fetch(url)
+      .then(res => res.json())
+  }
 
   handleClick() {
     this.setState({
@@ -23,42 +28,35 @@ class App extends Component {
       disabled: true
     });
 
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          todoList: data
-        })
-      });
-
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          users: data,
+    Promise.all([
+      this.loadData('https://jsonplaceholder.typicode.com/todos'),
+      this.loadData('https://jsonplaceholder.typicode.com/users'),
+    ])
+      .then(([todos, users]) => this.setState({
           loaded: true,
-          isLoading: false
+          todoList: todos,
+          users: users
         })
-      });
+      )
   }
 
-  sortTable(){
+  sortTable() {
     this.setState({
       todoList: this.state.todoList.sort((a, b) => a.title.localeCompare(b.title))
     });
   }
 
-
   render() {
     return (
       <div>
-        {this.state.loaded ? <TodoList list={this.state.todoList} users={this.state.users} sort={this.sortTable}/> :
-          <div>
-            <button onClick={this.handleClick} disabled={this.state.disabled}>Load</button>
-            {
-              this.state.isLoading ? <p id='load'>Loading...</p> : null
-            }
-          </div>
+        {this.state.loaded
+          ? <TodoList list={this.state.todoList} users={this.state.users} sort={this.sortTable}/>
+          : (
+            <div>
+              <button onClick={this.handleClick} disabled={this.state.disabled}>Load</button>
+              {this.state.isLoading ? <p id='load'>Loading...</p> : null}
+            </div>
+          )
         }
       </div>
     );

@@ -1,23 +1,27 @@
 import React from 'react';
 import TodoItem from "./TodoItem";
 
-
-function TodoList(props){
-  let newList= props.list.map(e => {
-    let user = props.users.find(u => {
-      return u.id === e.userId;
+function TodoList(props) {
+  let newList = props.list.map(element => {
+    let user = props.users.find(user => {
+      return user.id === element.userId;
     });
     return (
-      <TodoItem key={e.id} item={e.title} name={user.name} complete={e.completed ? 'completed' : 'not completed'}/>
+      <TodoItem key={element.id} item={element.title} name={user.name}
+                complete={element.completed ? 'completed' : 'not completed'}/>
     )
   });
 
-  return(
+  return (
     <table>
-    <tbody>
-    <tr><td onClick={props.sort}>Title(click to sort)</td><td>User</td><td>Status</td></tr>
-    {newList}
-    </tbody>
+      <tbody>
+      <tr>
+        <td onClick={props.sort}>Title(click to sort)</td>
+        <td>User</td>
+        <td>Status</td>
+      </tr>
+      {newList}
+      </tbody>
     </table>
   )
 }
