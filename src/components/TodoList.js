@@ -8,7 +8,11 @@ function TodoList(props) {
   return (  
     <table>
       <thead>
-        <tr><td>Title</td><td>Status</td><td>Author</td></tr>
+        <tr>
+          <td>Title</td>
+          <td>Status</td>
+          <td>Author</td>
+        </tr>
       </thead>
       <tbody>
         {todoList}
