@@ -32,7 +32,7 @@ export default class App extends Component {
     this.setState(() => ({
       todos: todos,
       users: users,
-      status: 'redy to show'
+      status: 'ready to show'
     }));
   }
 
@@ -57,7 +57,7 @@ export default class App extends Component {
             Show Todos!</button>}
         {this.state.status === 'loading'
           && <button className="download" disabled>Loading...</button>}
-        {this.state.status === 'redy to show'
+        {this.state.status === 'ready to show'
           && <TodoList todos={this.state.todos} users={this.state.users} />}
       </div>
     );
