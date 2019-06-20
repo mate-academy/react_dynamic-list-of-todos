@@ -15,43 +15,35 @@ export default class TodoList extends Component {
   }
 
   sort(e) {
-    if (e.target.dataset.sortType === 'title') {
-      const sortedArr = this.state.todos.sort((a, b) =>
-        a.title.localeCompare(b.title));
-      this.setState(() => ({
-        todos: sortedArr
-      }));
-    };
-
-    if (e.target.dataset.sortType === 'status') {
-      const sortedArr = this.state.todos.sort((a, b) => {
-        if (a.completed > b.completed) {
-          return 1;
-        }
-        if (a.completed < b.completed) {
-          return -1;
-        }
-        return 0;
-      });
-      this.setState(() => ({
-        todos: sortedArr
-      }));
-    };
-
-    if (e.target.dataset.sortType === 'name') {
-      const sortedArr = this.state.todos.sort((a, b) => {
-        if (this.state.users[a.userId].name > this.state.users[b.userId].name) {
-          return 1;
-        }
-        if (this.state.users[a.userId].name < this.state.users[b.userId].name) {
-          return -1;
-        }
-        return 0;
-      });
-      this.setState(() => ({
-        todos: sortedArr
-      }));
-    };
+    let sortedArr
+    switch (e.target.dataset.sortType) {
+      case 'title':
+        sortedArr = this.state.todos.sort((a, b) => {
+          return a.title.localeCompare(b.title);
+        });
+        this.setState(() => ({
+          todos: sortedArr
+        }));
+        break;
+      case 'status':
+        sortedArr = this.state.todos.sort((a, b) => {
+          return `${a.completed}`.localeCompare(`${b.completed}`);
+        });
+        this.setState(() => ({
+          todos: sortedArr
+        }));
+        break;
+      case 'name':
+        const users = this.state.users;
+        sortedArr = this.state.todos.sort((a, b) => {
+          return users[a.userId].name.localeCompare(users[b.userId].name);
+        });
+        this.setState(() => ({
+          todos: sortedArr
+        }));
+        break;
+      default: return;
+    }
   }
 
   render() {
