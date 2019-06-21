@@ -31,7 +31,7 @@ class TodoList extends Component {
       loaded: true,
       items: todos.map((item) => ({
         ...item,
-        user: users.find((i) => i.id === item.userId)
+        user: users.find(i => i.id === item.userId)
       }))
     }));
   }
