@@ -24,7 +24,10 @@ class TodoList extends Component {
       requested: true
     });
 
-    Promise.all([this.loadUrl(
+   Promise.all(
+     [this.loadUrl('https://jsonplaceholder.typicode.com/todos'),
+      this.loadUrl('https://jsonplaceholder.typicode.com/users')]
+    )
       'https://jsonplaceholder.typicode.com/todos'),
     this.loadUrl('https://jsonplaceholder.typicode.com/users')
     ])
