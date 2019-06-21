@@ -56,7 +56,7 @@ class TodoList extends Component {
           </thead>
           <tbody>
           {this.state.items.filter(item => (item.user.name.includes(this.state.filter) )).map(item => 
-          <TodoItem data={item} key={item.title} />)}
+            <TodoItem data={item} key={item.title} />)}
           </tbody>
         </table>
       );
