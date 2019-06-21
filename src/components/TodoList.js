@@ -27,7 +27,8 @@ class TodoList extends Component {
     Promise.all([this.loadUrl(
       'https://jsonplaceholder.typicode.com/todos'),
     this.loadUrl('https://jsonplaceholder.typicode.com/users')
-    ]).then(([todos, users]) => this.setState({
+    ])
+      .then(([todos, users]) => this.setState({
       loaded: true,
       items: todos.map((item) => ({
         ...item,
