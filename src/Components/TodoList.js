@@ -1,14 +1,17 @@
 import React from 'react';
-import todos from './todos';
 import TodoItem from './TodoItem'
 
-function TodoList() {
+function TodoList(props) {
+    const { todos, users } = props;
     return (
-        <ul className="list">
-            {todos.map(todo =>
-                <TodoItem userId={todo.userId} key={todo.id} title={todo.title} completed={todo.completed} />
-            )}
-        </ul>
+        <div>
+            {/* <button type="button">Sort</button> */}
+            <ul className="list">
+                {todos.map(todo =>
+                    <TodoItem userId={todo.userId} key={todo.id} users={users} title={todo.title} completed={todo.completed} />
+                )}
+            </ul>
+        </div>
     )
 }
 
