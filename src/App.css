@@ -1,0 +1,30 @@
+.table {
+  margin: 0 auto;
+}
+
+thead {
+  background: black;
+  color: white;
+  font-weight: bold;
+  font-size: 25px
+}
+
+tr {
+  font-size: 20px;
+  text-align: center;
+}
+.completed {
+  background-color:green;
+}
+
+.notComplited {
+  background-color: red;
+}
+
+.load-btn {
+  width: 150px;
+  height: 50px;
+  border-radius: 10%;
+  background: violet;
+  margin: 0 auto;
+}
