@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+html {
+  overflow-y: scroll;
+  background-color: thistle;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+button {
+  border: none;
+  background-color: rgb(158, 209, 209);
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:active {
+  transition-duration: 1s;
+  background-color: rgb(6, 95, 95);
+}
+
+.App {
+  text-align: center;
+}
+
+.todo {
+  display: flex;
+  justify-content: center;
+}
+
+.todo__PeopleList {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+}
+
+.todo__row {
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+  justify-content: space-between;
+  background-color: rgb(176, 224, 224);
+  padding: 5px;
+  margin: 1px;
+}
+
+.todo__row > * {
+  margin: 2px;
+}
+
+.todo__button-GET {
+  width: 15%;
+}
+
+.todo__taskList {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.todo__task {
+  position: relative;
+  display: flex;
+  margin: 1px;
+  padding: 5px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  background-color: rgb(158, 209, 209);
+  padding: 5px;
+}
+
+.todo__checkbox {
+  visibility: hidden;
+}
+
+.todo__checkbox:checked::before {
+  background-color: rgb(170, 240, 182);
+}
+
+.todo__checkbox::before {
+  display: block;
+  visibility: visible;
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgb(247, 247, 247);
+  background-color: rgb(247, 201, 201);
+}
