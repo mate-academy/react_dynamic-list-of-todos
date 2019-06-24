@@ -22,10 +22,12 @@ class App extends React.Component {
   
   render() {
     return(
-      <div>
-        <button className = "get" onClick = {this.getData}>Get data</button>
-        {this.state.list ? <TodoList />: null}
-      </div>
+      <>
+        {this.state.list 
+        ? <TodoList />
+        : <button className = "get" onClick = {this.getData}>Get data</button>
+        }
+      </>
     )
   }
 }
