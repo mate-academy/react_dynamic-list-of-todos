@@ -10,7 +10,7 @@ class App extends React.Component {
       todos: [],
       users: [],
       isLoaded: false,
-      stage: "Load"
+      disabled: false
     }
 
     this.loadData = async () => {
@@ -26,6 +26,11 @@ class App extends React.Component {
     }
 
     this.onLoad = () => {
+      this.setState(prevState => {
+        return {
+          disabled: !prevState.disabled
+        }
+      });
       this.loadData().then(this.setState({ isLoaded: true }))
       console.log(this.state);
     }
@@ -66,7 +71,7 @@ class App extends React.Component {
         </header>
         {this.state.isLoaded
           ? <TodoList todos={this.state.todos} users={this.state.users} />
-          : <button onClick={this.onLoad} className="btn_load">{this.state.stage}</button>}
+          : <button onClick={this.onLoad} className="btn_load" disabled={this.state.disabled}>{this.state.disabled ? "Loading..." : "Load"}</button>}
       </div>
     );
   }

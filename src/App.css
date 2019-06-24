@@ -36,6 +36,19 @@ float: left;
   text-align: left;
   text-transform: capitalize;
 }
+.btn_load {		
+	padding: 10px 20px;
+	font-size: 1.4rem;
+  color: #fff;
+  background-color: coral;
+	text-transform: uppercase;
+	cursor: pointer;
+ border: none;
+  transition: all .3s;
+}
+.btn_load:hover{
+background-color: chocolate;
+}
 
 @keyframes App-logo-spin {
   from {

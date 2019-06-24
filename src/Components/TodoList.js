@@ -5,7 +5,7 @@ function TodoList(props) {
     const { todos, users } = props;
     return (
         <div>
-            {/* <button type="button">Sort</button> */}
+            {/* <button type="button" className="btn_sort">Sort</button> */}
             <ul className="list">
                 {todos.map(todo =>
                     <TodoItem userId={todo.userId} key={todo.id} users={users} title={todo.title} completed={todo.completed} />
