@@ -10,7 +10,9 @@ class App extends React.Component {
       todos: [],
       users: [],
       isLoaded: false,
-      disabled: false
+      disabled: false,
+      filerParam: null,
+      value: null
     }
 
     this.loadData = async () => {
@@ -62,6 +64,16 @@ class App extends React.Component {
     //   .then(responses => Promise.all(responses.map(r => r.json())))
     //   .then(data => datas.forEach(data => this.setState{data}));
 
+    // this.sortBy((param) => {
+    //   this.setState = { filerParam: param };
+
+    //   this.setState(prevState => {
+    //     const copy = { ...prevState[prevState.filerParam] };
+    //     copy.sort((a, b) => a.title.localeCompare(b.title));
+    //     console.log(param);
+    //     return { [prevState.filerParam]: copy };
+    //   })
+    // })
   }
   render() {
     return (
@@ -70,7 +82,7 @@ class App extends React.Component {
           <h1 style={{ textTransform: 'uppercase' }}>Todos list</h1>
         </header>
         {this.state.isLoaded
-          ? <TodoList todos={this.state.todos} users={this.state.users} />
+          ? <TodoList todos={this.state.todos} users={this.state.users} sorting={this.sortBy} />
           : <button onClick={this.onLoad} className="btn_load" disabled={this.state.disabled}>{this.state.disabled ? "Loading..." : "Load"}</button>}
       </div>
     );
