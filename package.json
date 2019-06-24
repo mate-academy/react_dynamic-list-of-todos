@@ -1,6 +1,6 @@
 {
-  "homepage": "http://mag1ckdrak0n.github.io/todos_2",
-  "name": "todos",
+  "homepage": "http://mag1ckdrak0n.github.io/react_dynamic-list-of-todos",
+  "name": "react_dynamic-list-of-todos",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
