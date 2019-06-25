@@ -16,7 +16,6 @@ class TodoList extends React.Component {
     requestUrl(url) {
         return fetch(url)
             .then(result => result.json())
-            .then(data => data)
     }
 
     loadData() {
