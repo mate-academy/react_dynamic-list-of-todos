@@ -22,19 +22,17 @@
 .App-link {
   color: #61dafb;
 }
-.done{
+.done {
   background-color: greenyellow;
 }
-li{
+li {
   list-style: none;
-}
-.left{
-   width: 70%;
-float: left;
-}
-.todo{
   text-align: left;
   text-transform: capitalize;
+  display: flex;
+}
+.left {
+  width: 70%;
 }
 .btn_load {		
 	padding: 10px 20px;
@@ -46,10 +44,12 @@ float: left;
  border: none;
   transition: all .3s;
 }
-.btn_load:hover{
+.btn_load:hover {
 background-color: chocolate;
 }
-
+.list { 
+  padding-right: 20px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

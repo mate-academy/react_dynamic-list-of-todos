@@ -8,11 +8,10 @@ class App extends React.Component {
 
     this.state = {
       todos: [],
-      users: [],
       isLoaded: false,
       disabled: false,
       filerParam: null,
-      value: null
+      value: 'defaultValue'
     }
 
     this.loadData = async () => {
@@ -23,8 +22,18 @@ class App extends React.Component {
       const response2 = await fetch(`${url}users`);
       const users = await response2.json();
 
-      this.setState({ todos, users });
+      const todosUsers = todos.map((item) => {
 
+        users.forEach(element => {
+          if (item.userId === element.id) {
+            item = { ...element, ...item };
+          }
+        });
+        return item
+      })
+      console.log(todosUsers);
+
+      this.setState({ todos: todosUsers });
     }
 
     this.onLoad = () => {
@@ -33,12 +42,67 @@ class App extends React.Component {
           disabled: !prevState.disabled
         }
       });
-      this.loadData().then(this.setState({ isLoaded: true }))
-      console.log(this.state);
+      setTimeout(() => {
+        this.loadData().then(this.setState({ isLoaded: true }))
+      }, 500)
     }
 
-    ///then variant1
-    //const url = 'https://jsonplaceholder.typicode.com/';
+    this.sortBy = (event) => {
+      let targetValue = event.target.value;
+
+      this.setState(prevState => {
+        const copy = [...prevState.todos];
+        targetValue === 'todos'
+          ? copy.sort((a, b) => a.title.localeCompare(b.title))
+          : copy.sort((a, b) => a.name.localeCompare(b.name));
+
+        return {
+          filterParam: targetValue,
+          todos: copy
+        };
+      })
+    }
+  }
+  render() {
+    return (
+      <div className="App">
+        <header>
+          <h1 style={{ textTransform: 'uppercase' }}>Todos list</h1>
+        </header>
+        {this.state.isLoaded ? (
+          <TodoList
+            todos={this.state.todos}
+            value={this.state.value}
+            sortBy={this.sortBy}
+          />
+        ) : (
+            <button
+              onClick={this.onLoad}
+              className="btn_load"
+              disabled={this.state.disabled}
+            >
+              {this.state.disabled ? "Loading..." : "Load"}
+            </button>
+          )}
+      </div>
+    );
+  }
+}
+
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+    // /then variant1
+    // const url = 'https://jsonplaceholder.typicode.com/';
     // Promise.all([
     //  fetch(`${url}todos`)
     //    .then(response => { response.json()
@@ -63,31 +127,3 @@ class App extends React.Component {
     //   })
     //   .then(responses => Promise.all(responses.map(r => r.json())))
     //   .then(data => datas.forEach(data => this.setState{data}));
-
-    // this.sortBy((param) => {
-    //   this.setState = { filerParam: param };
-
-    //   this.setState(prevState => {
-    //     const copy = { ...prevState[prevState.filerParam] };
-    //     copy.sort((a, b) => a.title.localeCompare(b.title));
-    //     console.log(param);
-    //     return { [prevState.filerParam]: copy };
-    //   })
-    // })
-  }
-  render() {
-    return (
-      <div className="App">
-        <header>
-          <h1 style={{ textTransform: 'uppercase' }}>Todos list</h1>
-        </header>
-        {this.state.isLoaded
-          ? <TodoList todos={this.state.todos} users={this.state.users} sorting={this.sortBy} />
-          : <button onClick={this.onLoad} className="btn_load" disabled={this.state.disabled}>{this.state.disabled ? "Loading..." : "Load"}</button>}
-      </div>
-    );
-  }
-}
-
-
-export default App;
