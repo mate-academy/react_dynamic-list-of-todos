@@ -1,5 +1,7 @@
 # React dynamic list of TODOs
 
+[link] (https://anyalisna.github.io/react_dynamic-list-of-todos/)
+
 By requesting [https://jsonplaceholder.typicode.com/todos](https://jsonplaceholder.typicode.com/todos) and [https://jsonplaceholder.typicode.com/users](https://jsonplaceholder.typicode.com/users), create and display a list of TODO items.
 
 Create `TodoList` (for the whole list), `TodoItem` (for a single TODO item), and `User` (for displaying information about a user). `TodoList` should display a list of `TodoItem`s; each `TodoItem` must display the basic info about an item as well as the `User` the item belongs to. You can choose yourself what exact information you want to present and how, but you need to show at least the title of the item, the name of the user and whether the item is completed.
