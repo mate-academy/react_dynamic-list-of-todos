@@ -16,7 +16,8 @@ class TodoList extends Component {
 
   loadUrl(url) {
     return fetch(url)
-      .then(response => response.json()).then(response => response);
+      .then(response => response.json())
+      .then(response => response);
   }
 
   getItem() {
@@ -24,14 +25,18 @@ class TodoList extends Component {
       requested: true
     });
 
-    Promise.all([this.loadUrl(
+   Promise.all(
+     [this.loadUrl('https://jsonplaceholder.typicode.com/todos'),
+      this.loadUrl('https://jsonplaceholder.typicode.com/users')]
+    )
       'https://jsonplaceholder.typicode.com/todos'),
     this.loadUrl('https://jsonplaceholder.typicode.com/users')
-    ]).then(([todos, users]) => this.setState({
+    ])
+      .then(([todos, users]) => this.setState({
       loaded: true,
       items: todos.map((item) => ({
         ...item,
-        user: users.find((i) => i.id === item.userId)
+        user: users.find(i => i.id === item.userId)
       }))
     }));
   }
@@ -56,7 +61,7 @@ class TodoList extends Component {
           </thead>
           <tbody>
           {this.state.items.filter(item => (item.user.name.includes(this.state.filter) )).map(item => 
-          <TodoItem data={item} key={item.title} />)}
+            <TodoItem data={item} key={item.title} />)}
           </tbody>
         </table>
       );
