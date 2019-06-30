@@ -1,0 +1,34 @@
+body {
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    background-color: white;
+    position: relative;
+    
+}
+
+table, tr, td {
+    border: 2px solid rgb(30, 29, 92);
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: center;
+}
+
+.completed {
+    background: rgb(173, 216, 180);
+}
+
+.uncompleted {
+    background: rgb(221, 114, 114);
+}
+
+thead {
+    background:#ccd;
+}
+
+button {
+    padding: 10px;
+}
