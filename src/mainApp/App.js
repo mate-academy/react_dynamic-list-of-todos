@@ -7,7 +7,9 @@ import {
   SORT_ORDER_USER,
   SORT_ORDER_TITLE_BACK,
   SORT_ORDER_COMPLETED_BACK,
-  SORT_ORDER_USER_BACK
+  SORT_ORDER_USER_BACK,
+  getUsersFromServer,
+  getToDosFromServer
 } from "../helper/Helper";
 import "../mainApp/App.css";
 import MDSpinner from "react-md-spinner";
@@ -19,24 +21,12 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const todo = await this.getToDosFromServer();
-    const user = await this.getUsersFromServer();
+    const todo = await getToDosFromServer();
+    const user = await getUsersFromServer();
     this.setState({
       todos: this.findToDosAndUsers(todo, user)
     });
   }
-
-  getToDosFromServer = () => {
-    return fetch("https://jsonplaceholder.typicode.com/todos").then(res =>
-      res.json()
-    );
-  };
-
-  getUsersFromServer = () => {
-    return fetch("https://jsonplaceholder.typicode.com/users").then(res =>
-      res.json()
-    );
-  };
 
   findToDosAndUsers = (todos, users) => {
     return todos.map(todo => ({
