@@ -1,0 +1,13 @@
+.table-border {
+  border: 1px solid #dddddd;
+}
+
+.table {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pointer {
+  cursor: pointer;
+}
