@@ -4,7 +4,10 @@ import ToDoList from "../toDo/ToDoList";
 import {
   SORT_ORDER_TITLE,
   SORT_ORDER_COMPLETED,
-  SORT_ORDER_USER
+  SORT_ORDER_USER,
+  SORT_ORDER_TITLE_BACK,
+  SORT_ORDER_COMPLETED_BACK,
+  SORT_ORDER_USER_BACK
 } from "../helper/Helper";
 import "../mainApp/App.css";
 import MDSpinner from "react-md-spinner";
@@ -46,18 +49,19 @@ class App extends React.Component {
     const callbackMap = {
       [SORT_ORDER_TITLE]: (a, b) => a.title.localeCompare(b.title),
       [SORT_ORDER_USER]: (a, b) => a.user.name.localeCompare(b.user.name),
-      [SORT_ORDER_COMPLETED]: (a, b) => a.completed - b.completed
+      [SORT_ORDER_COMPLETED]: (a, b) => a.completed - b.completed,
+      [SORT_ORDER_TITLE_BACK]: (a, b) => b.title.localeCompare(a.title),
+      [SORT_ORDER_USER_BACK]: (a, b) => b.user.name.localeCompare(a.user.name),
+      [SORT_ORDER_COMPLETED_BACK]: (a, b) => b.completed - a.completed
     };
 
-    const callback = callbackMap[sortField] || callbackMap.title;
+    const callback = callbackMap[sortField] || callbackMap.SORT_ORDER_TITLE;
 
     return this.state.todos.sort(callback);
   };
 
   sortAndSetField = sortField => {
-    this.setState({ sortField }, () => {
-      this.setState({ todos: this.sortToDos(sortField) });
-    });
+    this.setState({ sortField, todos: this.sortToDos(sortField) });
   };
 
   render() {
@@ -67,6 +71,7 @@ class App extends React.Component {
         {this.state.todos.length > 0 ? (
           <ToDoList
             sortBy={this.sortAndSetField}
+            sorted={this.state.sortField}
             toDoItems={this.state.todos}
           />
         ) : (

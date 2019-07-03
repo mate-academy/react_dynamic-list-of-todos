@@ -1,4 +1,5 @@
 import React from "react";
+import User from "../user/User";
 
 const ToDoItem = ({ item }) => {
   return (
@@ -8,6 +9,7 @@ const ToDoItem = ({ item }) => {
       </td>
 
       <td className="table-border">{item.title}</td>
+      <User user={item.user} />
     </>
   );
 };
