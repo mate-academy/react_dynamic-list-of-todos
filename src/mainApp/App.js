@@ -57,7 +57,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Static list of todos</h1>
+        <h1>Dynamic list of todos</h1>
         {this.state.todos.length > 0 ? (
           <ToDoList
             sortBy={this.sortAndSetField}
