@@ -57,8 +57,8 @@ const ToDoList = ({ toDoItems, sortBy, sorted }) => {
       <tbody>
         {toDoItems.map(item => {
           return (
-            <tr>
-              <ToDoItem key={item.id} item={item} />
+            <tr key={item.id}>
+              <ToDoItem item={item} />
             </tr>
           );
         })}
