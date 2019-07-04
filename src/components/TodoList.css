@@ -1,0 +1,11 @@
+.title {
+  cursor: pointer;
+}
+
+.title:hover {
+  background: yellow;
+}
+
+.table {
+  margin: 0 auto;
+}
