@@ -60,6 +60,14 @@ class App extends Component {
     }));
   }
 
+  clearSort = () => {
+    this.setState(state => ({
+      sortType: null,
+      direction: 1,
+      sorted: state.todoList,
+    }));
+  }
+
   render() {
     return (
       <main className="container">
@@ -68,6 +76,7 @@ class App extends Component {
           this.state.isLoaded
             ? (
               <TodoList
+                clearSort={this.clearSort}
                 sortFunction={this.sortData}
                 state={this.state}
               />

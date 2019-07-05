@@ -3,6 +3,7 @@
   border: 1px solid rgba(34,36,38,.15);
   border-radius: 5px;
   border-spacing: 0;
+  box-sizing: border-box;
 }
 
 .align-left {
@@ -19,4 +20,30 @@
 
 .bold {
   font-weight: 700;
+}
+
+.buttons-block {
+  padding: 11px;
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.buttons-block__clear {
+  font-family: Roboto;
+  width: 200px;
+  height: 35px;
+  font-weight: 500;
+  text-transform: uppercase;
+  background: #fff;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 5px;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.buttons-block__clear:hover {
+  background: #f3f3f3;
 }
