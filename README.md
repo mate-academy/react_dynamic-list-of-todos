@@ -1,8 +1,8 @@
 # React dynamic list of TODOs
 
-## Demo link
+## Demo
 
-Add link here: `[DEMO LINK](https://<your_account>.github.io/<repo_name>/)`
+[PREVIEW](https://danheim.github.io/react_dynamic-list-of-todos/)
 
 
 ## Task 
