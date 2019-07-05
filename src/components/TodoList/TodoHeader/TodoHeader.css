@@ -1,0 +1,30 @@
+.table__header th {
+  padding: .92857143em .78571429em;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  color: #000;
+}
+
+.table__header th:not(:first-child):hover span {
+  cursor: pointer;
+  opacity: .8;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.arrow { 
+  display: inline-block;
+  position: absolute;
+  width: 30px;
+  height: 15px;
+  margin-top: 2px;
+}
+
+.arrow-up {
+  background: url(./images/up.svg) center no-repeat;
+}
+
+.arrow-down {
+  background: url(./images/down.svg) center no-repeat;
+}

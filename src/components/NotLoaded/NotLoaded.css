@@ -1,0 +1,53 @@
+.block {
+  display: flex;
+  justify-content: center;
+
+  padding: 15px;
+}
+
+.block__btn {
+  cursor: pointer;
+  width: 250px;
+  height: 45px;
+  background: #2185d0;
+
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 16px;
+  color: #fff;
+
+  border: none;
+  border-radius: 5px;
+
+  transition: all .2s;
+}
+
+.block__btn:hover {
+  background: #217CC1;
+}
+
+.load-ring {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}
+
+.load-ring:after {
+  content: "";
+  display: block;
+  width: 23px;
+  height: 23px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: load-ring 1.2s linear infinite;
+}
+@keyframes load-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

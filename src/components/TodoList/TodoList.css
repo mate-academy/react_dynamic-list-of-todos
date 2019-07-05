@@ -1,0 +1,22 @@
+.table {
+  width: 100%;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 5px;
+  border-spacing: 0;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.w-1 {
+  width: 40px;
+}
+
+.w-2 {
+  width: 130px;
+}
+
+.bold {
+  font-weight: 700;
+}
