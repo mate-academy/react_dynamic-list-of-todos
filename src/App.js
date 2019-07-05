@@ -37,32 +37,27 @@ class App extends Component {
   }
 
   sortData = (sortType) => {
-    let i = 0;
     this.setState(state => ({
       sortType,
       direction: state.direction === 1 ? -1 : 1,
       sorted: [...state.todoList].sort((a, b) => {
         switch (sortType) {
           case 'name':
-            i += 1;
             console.log('sorted by name');
             return (
               state.direction * (a.user[sortType]
                 .localeCompare(b.user[sortType]))
             );
           case 'completed':
-            i += 1;
             console.log('sorted by completed');
             return state.direction * (b[sortType] - a[sortType]);
           case 'title':
-            i += 1;
             console.log('sorted by title');
             return state.direction * a[sortType].localeCompare(b[sortType]);
           default: return 0;
         }
       }),
     }));
-    console.log('sorted', i);
   }
 
   render() {
