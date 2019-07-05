@@ -1,3 +1,73 @@
-.App {
-  text-align: center;
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body{
+  padding: 20px 20px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.load-button {
+  width: 100px;
+  height: 70px;
+  background-color: white;
+  border: 1px solid #a3a3a3;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px #a3a3a3;
+  font-size: 20px;
+  transition: 300ms all;
+}
+
+.load-button:hover {
+  cursor: pointer;
+  background-color: #a3a3a3;
+  color: white;
+}
+
+.todo-list {
+  border: 1px solid #a3a3a3;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.todo-item__title {
+  margin-right: 10px;
+}
+
+.main__sort-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 0 20px;
+  font-size: 20px;
+  align-items: center;
+}
+
+.main__sort-buttons button {
+  background-color: white;
+  border: 1px solid #a3a3a3;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px #a3a3a3;
+  transition: 300ms all;
+  width: 100px;
+  height: 35px;
+}
+
+.main__sort-buttons button:hover {
+  cursor: pointer;
+  background-color: #a3a3a3;
+  color: white;
 }
