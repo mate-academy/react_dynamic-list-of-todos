@@ -1,3 +1,42 @@
-.App {
-  text-align: center;
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.loadData {
+  position: absolute;
+  top: 40%;
+  left: 45%;
+  width: 150px;
+  height: 80px;
+  font-size: 26px;
+  text-transform: uppercase;
+}
+
+.loadData:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.todoList {
+  text-align: left;
+  font-size: 20px;
+  margin: 0 auto;
+}
+
+.todoList__title {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.todoList__title th, td {
+  border-bottom: 1px solid rgb(99, 95, 95);
+}
+
+.todoList__title th:hover {
+  cursor: pointer;
+}
+
+.todoItem:hover {
+  background-color: beige;
 }
