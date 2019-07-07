@@ -1,0 +1,11 @@
+.todo-list__item {
+  display: grid;
+  grid-template-columns: 1fr 3fr 100px;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+.todo-list__item + .todo-list__item {
+  margin-top: 2px;
+  border-top: 1px solid #eee;
+}

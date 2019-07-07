@@ -1,0 +1,13 @@
+.todo-list__item__name {
+  cursor: pointer;
+  font-weight: bold;
+  color: #444;
+}
+
+.todo-list__item--completed {
+  background: linear-gradient(130deg, #fff, #fff 80%, rgba(144, 217, 121, 0.5) 95%, #fff);
+}
+
+.todo-list__item--uncompleted {
+  background: linear-gradient(130deg, #fff, #fff 80%, #dd7e89 95%, #fff);
+}

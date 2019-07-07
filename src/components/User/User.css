@@ -1,0 +1,59 @@
+.user {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+.user__info {
+  position: absolute;
+  bottom: -250px;
+  left: calc(50% - 125px);
+  transition: 1s ease-out;
+  width: 250px;
+  background: #fff;
+  height: 250px;
+  z-index: 1;
+  padding: 20px 0;
+  box-sizing: border-box;
+  animation: show-pop-up 0.1s linear forwards;
+}
+
+.user__name {
+  font-size: 23px;
+  border-bottom: 4px solid #dd7e89;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.user__info__wrapper {
+  padding: 10px 5px;
+}
+
+.user__info__wrapper p {
+  margin-bottom: 5px;
+}
+
+.user__website,
+.user__website:visited,
+.user__website:active {
+  color: #45add6;
+  cursor: pointer;
+}
+
+.user__website:hover {
+  opacity: 0.8;
+}
+
+@keyframes show-pop-up {
+  100% {
+    bottom: calc(50% - 125px);
+  }
+}
+
+.user__background {
+  width: 100%;
+  opacity: 0.3;
+  height: 100vh;
+  background: #000;
+}

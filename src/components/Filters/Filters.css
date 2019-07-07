@@ -1,0 +1,18 @@
+.filter {
+  display: grid;
+  grid-template-columns: 1fr 3fr 100px;
+  background: #5e4187;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.filter p {
+  cursor: pointer;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+.filter p:hover {
+  background: #dd7e89;
+
+}
