@@ -43,7 +43,7 @@ class TodoList extends React.Component {
   filter(field, subfield) {
     const list = this.props.todosList;
     return list.sort((x, y) => {
-      if (subfield !== 'completed') {
+      if (typeof subfield === 'string') {
         // eslint-disable-next-line max-len
         return String(x[field][subfield]).localeCompare((String(y[field][subfield]))) * this.state.direction;
       }
