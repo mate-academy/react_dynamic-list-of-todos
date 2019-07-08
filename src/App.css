@@ -1,3 +1,30 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-load {
+  width: 100px;
+  height: 50px;
+  background-color: lightgreen;
+  border-radius: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: darkgreen;
+}
+
+h1 {
+  text-transform: uppercase;
+  font-family: Arial;
+  color: green;
+}
+
+.todo-list {
+  list-style: none;
+}
+
+.todo-list_item {
+  display: flex;
+  justify-content: space-between;
 }
