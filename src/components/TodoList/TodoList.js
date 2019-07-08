@@ -18,7 +18,6 @@ class TodoList extends React.Component {
 
   setUserInfo = (user) => {
     if (user) {
-      console.log(this);
       this.setState({
         chosenUser: user,
         showUserInfo: true,
@@ -64,6 +63,7 @@ class TodoList extends React.Component {
   }
 
   render() {
+    const { showUserInfo, chosenUser } = this.state;
     return (
       <div className="todo-wrapper">
         <Filter changeFilterField={this.changeFilterField} />
@@ -74,7 +74,7 @@ class TodoList extends React.Component {
         </div>
         {
           // eslint-disable-next-line max-len
-          this.state.showUserInfo && <User setUserInfo={this.setUserInfo} showUserInfo={this.state.showUserInfo} user={this.state.chosenUser} />
+          showUserInfo && <User setUserInfo={this.setUserInfo} showUserInfo={showUserInfo} user={chosenUser} />
         }
       </div>
     );

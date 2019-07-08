@@ -6,9 +6,16 @@ const TodoItem = ({ todo, setUserInfo }) => {
   const showUser = () => {
     setUserInfo(todo.user);
   };
+
+  const isCompleted = () => {
+    return todo.todo.completed
+      ? 'todo-list__item--completed'
+      : 'todo-list__item--uncompleted';
+  };
+
   return (
     // eslint-disable-next-line max-len
-    <div className={`todo-list__item ${todo.todo.completed ? 'todo-list__item--completed' : 'todo-list__item--uncompleted'}`}>
+    <div className={`todo-list__item ${isCompleted()}`}>
 
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}

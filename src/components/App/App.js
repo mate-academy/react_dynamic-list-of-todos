@@ -42,18 +42,23 @@ class App extends React.Component {
   }
 
   render() {
+    const { isLoaded, showLoading, todosList } = this.state;
     return (
       <main className="main">
         {
-          this.state.showLoading && <Loading />
+          showLoading && <Loading />
         }
         {
           // eslint-disable-next-line max-len,react/button-has-type
-          !this.state.isLoaded && <button className="load-btn" onClick={this.handleClickAndLoadTodo}>Load</button>
+          !isLoaded && (
+            <button className="load-btn" onClick={this.handleClickAndLoadTodo}>
+              Load
+            </button>
+          )
         }
         {
           // eslint-disable-next-line max-len
-          this.state.isLoaded && <TodoList todosList={this.state.todosList} />
+          isLoaded && <TodoList todosList={todosList} />
         }
       </main>
     );

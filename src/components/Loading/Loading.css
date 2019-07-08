@@ -16,7 +16,7 @@
   margin: auto;
   border-top: 4px solid #dd7e89;
   border-radius: 20px;
-  animation: loading 0.2s ease-out;
+  animation: loading 1s ease-out;
   animation-iteration-count: infinite;
 }
 
