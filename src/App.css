@@ -26,17 +26,27 @@
   width: 100%;
   border-collapse: collapse;
   border: 3px solid #000;
-  background: #4ce151;
+  background: #71f075;
 }
-.todo-list-table td, .todo-list-table th {
+.todo-list-table td {
+  line-height: 30px;
+}
+.todo-list-table tr,
+.todo-list-table th, .todo-list-table__task {
   border: 2px solid #000;
 }
 .todo-list-table__titles {
   font-weight: 900;
   font-size: 21px;
 }
-.todo-list-table__users {
+.todo-list-table__tasks {
   text-align: left;
+}
+.todo-list-table__user-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  border: none;
 }
 
 /*# sourceMappingURL=App.css.map */

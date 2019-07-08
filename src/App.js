@@ -5,11 +5,11 @@ import getTodos from './api/getTodos';
 import getUsers from './api/getUsers';
 import TodoList from './Components/TodoList';
 
-let usersWithTodos = [];
+let todosWithUsers = [];
 
 class App extends React.Component {
   state = {
-    usersData: [],
+    todosData: [],
     isLoaded: false,
     isLoading: false,
   };
@@ -18,9 +18,9 @@ class App extends React.Component {
     const users = await getUsers();
     const todos = await getTodos();
 
-    usersWithTodos = users.map(user => ({
-      ...user,
-      todo: todos.find(todo => todo.userId === user.id),
+    todosWithUsers = todos.map(todo => ({
+      ...todo,
+      user: users.find(user => user.id === todo.userId),
     }));
   }
 
@@ -31,7 +31,7 @@ class App extends React.Component {
 
     setTimeout(() => {
       this.setState({
-        usersData: usersWithTodos,
+        todosData: todosWithUsers,
         isLoaded: true,
         isLoading: false,
       });
@@ -45,7 +45,7 @@ class App extends React.Component {
           <>
             <h1 className="main-title">Dynamic list of todos</h1>
 
-            <TodoList usersData={this.state.usersData} />
+            <TodoList todosData={this.state.todosData} />
           </>
         ) : (
           <button type="button" onClick={this.handleClick} className="load-btn">

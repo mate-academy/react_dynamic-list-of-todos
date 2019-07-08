@@ -1,17 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todo }) => (
-  <td>
-    {todo.title}
-    {todo.completed
-      ? <input type="checkbox" checked />
-      : <input type="checkbox" /> }
-  </td>
-);
+import User from './User';
+
+const TodoItem = ({ todos }) => (
+  todos.map(todo => (
+    <tr>
+      <User currentUser={todo.user} />
+      <td className="todo-list-table__task">
+        {todo.title}
+        {todo.completed
+          ? <input type="checkbox" checked />
+          : <input type="checkbox" /> }
+      </td>
+    </tr>
+  )));
 
 TodoItem.propTypes = {
-  todo: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TodoItem;

@@ -31,10 +31,16 @@
 
   border-collapse: collapse;
   border: 3px solid #000;
-  background: #4ce151;
+  background: #71f075;
 
+  td {
+    // height: 30px;
+    line-height: 30px;
+  }
 
-  td, th {
+  tr,
+  th,
+  &__task {
     border: 2px solid #000;
   }
 
@@ -43,13 +49,15 @@
     font-size: 21px;
   }
 
-  &__users {
+  &__tasks {
     text-align: left;
   }
 
+  &__user-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    border: none;
+  }
+
 }
-
-
-
-
-
