@@ -1,3 +1,43 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "montserrat",sans-serif;
+  background: #f1f1f1;
+}
+
+h1 {
+  margin: 0 auto;
+}
+
 .App {
   text-align: center;
+}
+
+.todo__front {
+  width: 150px;
+  padding: 1em 2em;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #00a1a5;
+  font-size: 20px;
+}
+
+.todo__front:hover {
+  color: darkslategrey;
+}
+
+.todo__items {
+  font-family: Verdana, sans-serif;
+  font-size: 16px;
+  background-image: linear-gradient(to right top, #7088a7, #54c2c5, #00a1a5, #3dc78a, #bde368);
+  text-align: center;
+}
+
+li {
+  list-style-type: none;
 }
