@@ -25,7 +25,7 @@ const TodoList = ({ clearFunction, sortFunction, state }) => (
       </thead>
       <tbody>
         {
-          state.sorted.map(todo => <TodoItem todo={todo} />)
+          state.sortedTodoList.map(todo => <TodoItem todo={todo} />)
         }
       </tbody>
     </table>
@@ -36,7 +36,7 @@ TodoList.propTypes = {
   clearFunction: PropTypes.func.isRequired,
   sortFunction: PropTypes.func.isRequired,
   state: PropTypes.shape({
-    sorted: PropTypes.array.isRequired,
+    sortedTodoList: PropTypes.array.isRequired,
   }).isRequired,
 };
 

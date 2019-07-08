@@ -2,30 +2,7 @@ import React from 'react';
 import './TodoHeader.css';
 import PropTypes from 'prop-types';
 
-const Arrow = ({ state, sortType }) => (
-  state.sortType === sortType
-    ? <ArrowType state={state} />
-    : ''
-);
-
-Arrow.propTypes = {
-  state: PropTypes.shape({
-    sortType: PropTypes.string.isRequired,
-  }).isRequired,
-  sortType: PropTypes.string.isRequired,
-};
-
-const ArrowType = ({ state }) => (
-  state.direction === 1
-    ? <div className="arrow arrow-down" />
-    : <div className="arrow arrow-up" />
-);
-
-ArrowType.propTypes = {
-  state: PropTypes.shape({
-    direction: PropTypes.number.isRequired,
-  }).isRequired,
-};
+import Arrow from './Arrow';
 
 const TodoHeader = ({ sortFunction, state }) => (
   <tr className="table__header">

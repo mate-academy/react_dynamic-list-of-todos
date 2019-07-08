@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './NotLoaded.css';
+import './LoadButton.css';
 
-const NotLoaded = ({ loadFunction, isLoading }) => (
+const LoadButton = ({ loadFunction, isLoading }) => (
   <div className="block">
     {
       isLoading
@@ -25,9 +25,9 @@ const NotLoaded = ({ loadFunction, isLoading }) => (
   </div>
 );
 
-NotLoaded.propTypes = {
+LoadButton.propTypes = {
   loadFunction: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default NotLoaded;
+export default LoadButton;

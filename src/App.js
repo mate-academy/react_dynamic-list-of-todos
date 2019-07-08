@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 
 import TodoList from './components/TodoList/TodoList';
-import NotLoaded from './components/NotLoaded/NotLoaded';
+import LoadButton from './components/LoadButton/LoadButton';
 import fetchData from './components/fetchData';
 
 import './App.css';
 
 class App extends Component {
   state = {
-    todoList: null,
-    sorted: null,
+    todoList: [],
+    sortedTodoList: [],
     isLoaded: false,
     isLoading: false,
-    sortType: null,
+    sortType: '',
     direction: 1,
   };
 
@@ -21,7 +21,7 @@ class App extends Component {
     const currentTodos = await fetchData();
     this.setState({
       todoList: currentTodos,
-      sorted: currentTodos,
+      sortedTodoList: currentTodos,
       isLoading: false,
       isLoaded: true,
     });
@@ -31,7 +31,7 @@ class App extends Component {
     this.setState(state => ({
       sortType,
       direction: state.direction === 1 ? -1 : 1,
-      sorted: [...state.todoList].sort((a, b) => {
+      sortedTodoList: [...state.todoList].sort((a, b) => {
         switch (sortType) {
           case 'name':
             return (
@@ -50,7 +50,7 @@ class App extends Component {
 
   clearSorting = () => {
     this.setState(state => ({
-      sortType: null,
+      sortType: '',
       direction: 1,
       sorted: state.todoList,
     }));
@@ -68,9 +68,8 @@ class App extends Component {
                 sortFunction={this.sortData}
                 state={this.state}
               />
-            )
-            : (
-              <NotLoaded
+            ) : (
+              <LoadButton
                 loadFunction={this.getTodos}
                 isLoading={this.state.isLoading}
               />
