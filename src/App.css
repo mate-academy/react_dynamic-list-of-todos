@@ -1,3 +1,28 @@
-.App {
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700|Roboto:400,500,700&display=swap');
+
+body {
+  margin: 0;
+}
+
+.container {
+  font-family: 'Lato';
+  font-size: 14px;
+
+  margin: 20px auto;
+
+  width: 1000px;
+  padding: 1em;
+
+  border-top: 3px solid #2185d0!important;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 6px;
+
+  box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+
   text-align: center;
 }
+
+.container__header {
+  margin: 0 0 15px;
+}
+

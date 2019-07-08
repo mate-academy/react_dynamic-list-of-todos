@@ -1,0 +1,17 @@
+.table__body td {
+  padding: 11px;
+}
+
+.table__body:not(:last-child) td {
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.success {
+  color: #2c662d;
+  background: #fcfff5;
+}
+
+.error {
+  color: #9f3a38;
+  background: #fff6f6;
+}
