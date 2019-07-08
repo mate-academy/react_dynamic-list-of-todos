@@ -34,7 +34,6 @@
   background: #71f075;
 
   td {
-    // height: 30px;
     line-height: 30px;
   }
 
@@ -47,6 +46,7 @@
   &__titles {
     font-weight: 900;
     font-size: 21px;
+    background: #4b693b;
   }
 
   &__tasks {

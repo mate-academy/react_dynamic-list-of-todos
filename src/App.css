@@ -38,6 +38,7 @@
 .todo-list-table__titles {
   font-weight: 900;
   font-size: 21px;
+  background: #4b693b;
 }
 .todo-list-table__tasks {
   text-align: left;
