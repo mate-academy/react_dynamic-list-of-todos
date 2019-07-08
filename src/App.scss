@@ -1,42 +1,55 @@
 .App {
   text-align: center;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .load-btn {
   position: fixed;
   top: calc(50% - 50px);
   left: calc(50% - 100px);
+
   width: 200px;
   height: 100px;
+
   border: 3px solid #000;
   background: #4ce151;
-  font-family: "Montserrat", sans-serif;
+
+  font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 .main-title,
 .todo-list-table__titles {
-  font-family: "Rock Salt", sans-serif;
+  font-family: 'Rock Salt', sans-serif;
 }
 
 .todo-list-table {
   margin: 0 auto;
   width: 100%;
+
+
   border-collapse: collapse;
   border: 3px solid #000;
   background: #4ce151;
-}
-.todo-list-table td, .todo-list-table th {
-  border: 2px solid #000;
-}
-.todo-list-table__titles {
-  font-weight: 900;
-  font-size: 21px;
-}
-.todo-list-table__users {
-  text-align: left;
+
+
+  td, th {
+    border: 2px solid #000;
+  }
+
+  &__titles {
+    font-weight: 900;
+    font-size: 21px;
+  }
+
+  &__users {
+    text-align: left;
+  }
+
 }
 
-/*# sourceMappingURL=App.css.map */
+
+
+
+
