@@ -1,0 +1,13 @@
+.todo-list__item {
+  background-color: #8ccbff;
+}
+
+.todo-item__info {
+  display: flex;
+  padding-top: 10px;
+}
+
+.todo-item__user {
+  list-style: none;
+  padding-bottom: 10px;
+}
