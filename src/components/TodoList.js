@@ -65,8 +65,8 @@ class TodoList extends React.Component {
     if (name === 'titleSort') {
       this.setState({
         todos: this.state.todos.sort((todoA, todoB) => (
-          this.state.sortUsersByName * todoA.title.localeCompare(todoB.title))),
-        sortTodoByDone: -this.state.sortTodoByDone,
+          this.state.sortTodoByDone * todoA.title.localeCompare(todoB.title))),
+          sortTodoByDone: -this.state.sortTodoByDone,
       });
     } else {
       this.setState({
