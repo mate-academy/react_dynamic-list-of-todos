@@ -8,7 +8,7 @@ const TodoList = ({ allTodos, sortBy, sortByName }) => (
     <tr className="todoList__title">
       <th onClick={() => sortBy('id')}>№</th>
       <th onClick={() => sortBy('title')}>Title</th>
-      <th onClick={() => sortByName('user.name')}>User</th>
+      <th onClick={() => sortBy()}>User</th>
       <th onClick={() => sortBy('completed')}>Status</th>
     </tr>
 
