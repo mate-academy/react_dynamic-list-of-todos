@@ -1,5 +1,5 @@
 {
-  "homepage": "https://mate-academy.github.io/react_dynamic-list-of-todos",
+  "homepage": "https://GitHubForDmitry.github.io/react_dynamic-list-of-todos",
   "name": "react_dynamic-list-of-todos",
   "version": "0.1.0",
   "private": true,
@@ -23,7 +23,9 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-react": "^7.14.2",
     "gh-pages": "^2.0.1",
-    "stylelint": "^10.0.0"
+    "stylelint": "^10.0.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.5"
   },
   "scripts": {
     "start": "react-scripts start",
