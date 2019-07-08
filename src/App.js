@@ -4,22 +4,30 @@ import './App.css';
 import TodoList from './components/TodoList';
 
 let currentList = [];
+const todosFromServer = 'https://jsonplaceholder.typicode.com/todos';
+const usersFromServer = 'https://jsonplaceholder.typicode.com/users';
 
-const getTodos = async () => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+const getTodos = async() => {
+  const response = await fetch(todosFromServer);
   const todos = await response.json();
 
   return todos;
 };
 
-const getUsers = async () => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/users')
+const getUsers = async() => {
+  const response = await fetch(usersFromServer);
   const todos = await response.json();
 
   return todos;
 };
 
 class App extends React.Component {
+  state = {
+    todos: [],
+    isLoaded: false,
+    isLoading: false,
+    dir: 'asc',
+  };
 
   async componentDidMount() {
     const todos = await getTodos();
@@ -27,16 +35,9 @@ class App extends React.Component {
 
     currentList = todos.map(todo => ({
       ...todo,
-      user: users.find(user => (user.id === todo.userId))
+      user: users.find(user => (user.id === todo.userId)),
     }));
   }
-
-  state = {
-    todos: [],
-    isLoaded: false,
-    isLoading: false,
-    dir: 'asc',
-  };
 
   handleClick = () => {
     this.setState({
@@ -61,8 +62,9 @@ class App extends React.Component {
           }
 
           return (b[key] > a[key]) ? 1 : -1;
-        } else if (prevState.dir.localeCompare('asc')) {
+        }
 
+        if (prevState.dir.localeCompare('asc')) {
           return (a.user.name > b.user.name) ? 1 : -1;
         }
 
