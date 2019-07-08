@@ -74,7 +74,7 @@ class TodoList extends React.Component {
         </div>
         {
           // eslint-disable-next-line max-len
-          showUserInfo && <User setUserInfo={this.setUserInfo} showUserInfo={showUserInfo} user={chosenUser} />
+          showUserInfo && <User setUserInfo={this.setUserInfo} user={chosenUser} />
         }
       </div>
     );
