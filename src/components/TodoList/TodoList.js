@@ -66,12 +66,12 @@ class TodoList extends React.Component {
     const { showUserInfo, chosenUser } = this.state;
     return (
       <div className="todo-wrapper">
-        <Filter changeFilterField={this.changeFilterField} />
-        <div className="todo-list">
+        <table className="todo-list">
+          <Filter changeFilterField={this.changeFilterField} />
           {
             this.showList()
           }
-        </div>
+        </table>
         {
           // eslint-disable-next-line max-len
           showUserInfo && <User setUserInfo={this.setUserInfo} user={chosenUser} />

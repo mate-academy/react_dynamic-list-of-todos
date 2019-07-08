@@ -11,18 +11,18 @@ class App extends React.Component {
     super(props);
     this.state = {
       todosList: [],
-      isLoaded: false,
-      showLoading: false,
+      loaded: false,
+      loadingRequested: false,
     };
   }
 
   // Load data on button click and show TodoList
-  handleClickAndLoadTodo = async() => {
-    this.setState({ showLoading: true });
+  loadTodos = async() => {
+    this.setState({ loadingRequested: true });
     await this.prepareData();
     this.setState({
-      showLoading: false,
-      isLoaded: true,
+      loadingRequested: false,
+      loaded: true,
     });
   };
 
@@ -42,23 +42,23 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoaded, showLoading, todosList } = this.state;
+    const { loaded, loadingRequested, todosList } = this.state;
     return (
       <main className="main">
         {
-          showLoading && <Loading />
+          loadingRequested && <Loading />
         }
         {
           // eslint-disable-next-line max-len,react/button-has-type
-          !isLoaded && (
-            <button className="load-btn" onClick={this.handleClickAndLoadTodo}>
+          !loaded && (
+            <button className="load-btn" onClick={this.loadTodos}>
               Load
             </button>
           )
         }
         {
           // eslint-disable-next-line max-len
-          isLoaded && <TodoList todosList={todosList} />
+          loaded && <TodoList todosList={todosList} />
         }
       </main>
     );

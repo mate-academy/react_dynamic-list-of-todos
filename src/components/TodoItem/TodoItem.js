@@ -9,27 +9,27 @@ const TodoItem = ({ todo, setUserInfo }) => {
 
   const isCompleted = () => {
     return todo.todo.completed
-      ? 'todo-list__item--completed'
-      : 'todo-list__item--uncompleted';
+      ? 'todo-item__status--completed'
+      : 'todo-item__status--uncompleted';
   };
 
   return (
     // eslint-disable-next-line max-len
-    <div className={`todo-list__item ${isCompleted()}`}>
+    <tr className="todo-item">
 
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
-      <p className="todo-list__item__name" onClick={showUser}>
+      <td className="todo-item__name" onClick={showUser}>
         {todo.user.name}
-      </p>
-      <p className="todo-list__item__title">
+      </td>
+      <td className="todo-item__title">
         {todo.todo.title}
-      </p>
-      <p className="todo-list__item__completed">
+      </td>
+      <td className={`todo-item__status ${isCompleted()}`}>
         {todo.todo.completed ? 'Completed' : 'Uncompleted'}
-      </p>
+      </td>
 
-    </div>
+    </tr>
   );
 };
 

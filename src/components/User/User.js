@@ -6,7 +6,7 @@ const User = ({ user, setUserInfo }) => (
   <div className="user">
     <div className="user__info">
       <h3 className="user__name">{user.name}</h3>
-      <div className="user__info__wrapper">
+      <div className="additional-info">
         <p className="user__username">{user.username}</p>
         <p className="user__email">{user.email}</p>
         <a href={user.website} className="user__website">{user.website}</a>

@@ -1,13 +1,16 @@
-.todo-list__item__name {
+table {
+  margin: auto;
+}
+
+th {
   cursor: pointer;
+}
+
+tr {
+  border: 1px solid #eee;
+}
+
+.todo-item__name {
   font-weight: bold;
-  color: #444;
-}
-
-.todo-list__item--completed {
-  background: linear-gradient(130deg, #fff, #fff 80%, rgba(144, 217, 121, 0.5) 95%, #fff);
-}
-
-.todo-list__item--uncompleted {
-  background: linear-gradient(130deg, #fff, #fff 80%, #dd7e89 95%, #fff);
+  cursor: pointer;
 }

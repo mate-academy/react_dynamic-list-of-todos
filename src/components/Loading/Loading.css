@@ -10,13 +10,11 @@
 }
 
 .loading__circle {
-  position: absolute;
   height: 40px;
   width: 40px;
-  margin: auto;
-  border-top: 4px solid #dd7e89;
+  border-top: 4px solid #000;
   border-radius: 20px;
-  animation: loading 1s ease-out;
+  animation: loading 0.5s linear;
   animation-iteration-count: infinite;
 }
 

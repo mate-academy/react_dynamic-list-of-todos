@@ -19,6 +19,12 @@
   animation: show-pop-up 0.1s linear forwards;
 }
 
+@keyframes show-pop-up {
+  100% {
+    bottom: calc(50% - 125px);
+  }
+}
+
 .user__name {
   font-size: 23px;
   border-bottom: 4px solid #dd7e89;
@@ -26,11 +32,11 @@
   box-sizing: border-box;
 }
 
-.user__info__wrapper {
+.additional-info {
   padding: 10px 5px;
 }
 
-.user__info__wrapper p {
+.additional-info p {
   margin-bottom: 5px;
 }
 
@@ -43,12 +49,6 @@
 
 .user__website:hover {
   opacity: 0.8;
-}
-
-@keyframes show-pop-up {
-  100% {
-    bottom: calc(50% - 125px);
-  }
 }
 
 .user__background {
