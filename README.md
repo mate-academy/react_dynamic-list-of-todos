@@ -2,7 +2,7 @@
 
 ## Demo link
 
-Add link here: `[DEMO LINK](https://tarasulo.github.io/react_dynamic-list-of-todos/)`
+[DEMO LINK](https://tarasulo.github.io/react_dynamic-list-of-todos/)
 
 
 ## Task
