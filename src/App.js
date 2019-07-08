@@ -20,6 +20,7 @@ class App extends React.Component {
     todos: [],
     isLoaded: false,
     isLoading: false,
+    dir: 'asc',
   };
 
   handleClick = () => {
@@ -38,15 +39,27 @@ class App extends React.Component {
 
   sortBy = (key) => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (
-        (a[key] > b[key]) ? 1 : -1)),
+      todos: prevState.todos.sort((a, b) => {
+        if (prevState.dir === 'asc') {
+          return (a[key] > b[key]) ? 1 : -1;
+        }
+
+        return (b[key] > a[key]) ? 1 : -1;
+      }),
+      dir: prevState.dir === 'asc' ? 'desc' : 'asc',
     }));
   };
 
   sortByName = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (
-        (a.user.name > b.user.name) ? 1 : -1)),
+      todos: prevState.todos.sort((a, b) => {
+        if (prevState.dir === 'asc') {
+          return (a.user.name > b.user.name) ? 1 : -1;
+        }
+
+        return (b.user.name > a.user.name) ? 1 : -1;
+      }),
+      dir: prevState.dir === 'asc' ? 'desc' : 'asc',
     }));
   };
 
