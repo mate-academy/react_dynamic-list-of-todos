@@ -5,13 +5,13 @@ import './TodoList.css';
 import TodoItem from './TodoItem/TodoItem';
 import TodoHeader from './TodoHeader/TodoHeader';
 
-const TodoList = ({ clearSort, sortFunction, state }) => (
+const TodoList = ({ clearFunction, sortFunction, state }) => (
   <div>
     <div className="buttons-block">
       <button
         type="button"
         className="buttons-block__clear"
-        onClick={clearSort}
+        onClick={clearFunction}
       >
         Clear sorting filters
       </button>
@@ -24,14 +24,16 @@ const TodoList = ({ clearSort, sortFunction, state }) => (
         />
       </thead>
       <tbody>
-        {state.sorted.map(todo => <TodoItem todo={todo} />)}
+        {
+          state.sorted.map(todo => <TodoItem todo={todo} />)
+        }
       </tbody>
     </table>
   </div>
 );
 
 TodoList.propTypes = {
-  clearSort: PropTypes.func.isRequired,
+  clearFunction: PropTypes.func.isRequired,
   sortFunction: PropTypes.func.isRequired,
   state: PropTypes.shape({
     sorted: PropTypes.array.isRequired,

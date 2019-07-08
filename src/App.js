@@ -2,35 +2,26 @@ import React, { Component } from 'react';
 
 import TodoList from './components/TodoList/TodoList';
 import NotLoaded from './components/NotLoaded/NotLoaded';
+import fetchData from './components/fetchData';
 
 import './App.css';
 
 class App extends Component {
   state = {
-    todoList: [],
-    sorted: [],
+    todoList: null,
+    sorted: null,
     isLoaded: false,
     isLoading: false,
     sortType: null,
     direction: 1,
   };
 
-  fetchData = async() => {
+  getTodos = async() => {
     this.setState({ isLoading: true });
-
-    const resUsers = await fetch('https://jsonplaceholder.typicode.com/users');
-    const users = await resUsers.json();
-
-    const resTodos = await fetch('https://jsonplaceholder.typicode.com/todos');
-    let todos = await resTodos.json();
-    todos = todos.map(todo => ({
-      ...todo,
-      user: users.find(user => user.id === todo.userId),
-    })).slice(0, 100);
-
+    const currentTodos = await fetchData();
     this.setState({
-      todoList: todos,
-      sorted: todos,
+      todoList: currentTodos,
+      sorted: currentTodos,
       isLoading: false,
       isLoaded: true,
     });
@@ -43,16 +34,13 @@ class App extends Component {
       sorted: [...state.todoList].sort((a, b) => {
         switch (sortType) {
           case 'name':
-            console.log('sorted by name');
             return (
               state.direction * (a.user[sortType]
                 .localeCompare(b.user[sortType]))
             );
           case 'completed':
-            console.log('sorted by completed');
             return state.direction * (b[sortType] - a[sortType]);
           case 'title':
-            console.log('sorted by title');
             return state.direction * a[sortType].localeCompare(b[sortType]);
           default: return 0;
         }
@@ -60,7 +48,7 @@ class App extends Component {
     }));
   }
 
-  clearSort = () => {
+  clearSorting = () => {
     this.setState(state => ({
       sortType: null,
       direction: 1,
@@ -76,14 +64,14 @@ class App extends Component {
           this.state.isLoaded
             ? (
               <TodoList
-                clearSort={this.clearSort}
+                clearFunction={this.clearSorting}
                 sortFunction={this.sortData}
                 state={this.state}
               />
             )
             : (
               <NotLoaded
-                loadFunction={this.fetchData}
+                loadFunction={this.getTodos}
                 isLoading={this.state.isLoading}
               />
             )
