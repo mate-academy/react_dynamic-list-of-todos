@@ -14,10 +14,6 @@ class App extends React.Component {
       isLoading: false,
       direction: 1,
     };
-
-    this.sortByName = this.sortByName.bind(this);
-    this.sortByTitle = this.sortByTitle.bind(this);
-    this.sortByCompleted = this.sortByCompleted.bind(this);
   }
 
   LoadData = async() => {
@@ -42,7 +38,7 @@ class App extends React.Component {
     });
   }
 
-  sortByName(name) {
+  sortByName  = (name) => {
     this.setState(state => ({
       direction: state.direction === 1 ? -1 : 1,
       sortedTodos: [...state.todos].sort((a, b) => (
@@ -51,7 +47,7 @@ class App extends React.Component {
     }));
   }
 
-  sortByTitle(title) {
+  sortByTitle = (title) => {
     this.setState(state => ({
       direction: state.direction === 1 ? -1 : 1,
       sortedTodos: [...state.todos].sort((a, b) => (
@@ -60,7 +56,7 @@ class App extends React.Component {
     }));
   }
 
-  sortByCompleted(completed) {
+  sortByCompleted = (completed) => {
     this.setState(state => ({
       direction: state.direction === 1 ? -1 : 1,
       sortedTodos: [...state.todos].sort((a, b) => (
@@ -70,7 +66,9 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.isLoaded) {
+    const { isLoaded, sortedTodos, isLoading } = this.state;
+
+    if (isLoaded) {
       return (
         <div>
           <Buttons
@@ -79,7 +77,7 @@ class App extends React.Component {
             sortByCompleted={this.sortByCompleted}
           />
           <TodoList
-            todosItems={this.state.sortedTodos}
+            todosItems={sortedTodos}
           />
         </div>
       );
@@ -87,7 +85,7 @@ class App extends React.Component {
     return (
       <div className="button_load">
         <button className="button" onClick={this.LoadData} type="button">
-          {this.state.isLoading ? 'Loading...' : 'Load'}
+          {isLoading ? 'Loading...' : 'Load'}
         </button>
       </div>
     );
