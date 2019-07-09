@@ -40,7 +40,7 @@ class TodoList extends React.Component {
   };
 
   filter(field, subfield) {
-    const list = this.props.todosList;
+    const list = [...this.props.todosList];
     return list.sort((x, y) => {
       if (typeof subfield === 'string') {
         // eslint-disable-next-line max-len
