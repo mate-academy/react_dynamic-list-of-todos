@@ -65,10 +65,10 @@ class App extends React.Component {
         }
 
         if (prevState.dir.localeCompare('asc')) {
-          return (a.user.name > b.user.name) ? 1 : -1;
+          return (a.user.name.localeCompare(b.user.name));
         }
 
-        return (b.user.name > a.user.name) ? 1 : -1;
+        return (b.user.name.localeCompare(a.user.name));
       }),
       dir: prevState.dir === 'asc' ? 'desc' : 'asc',
     }));
