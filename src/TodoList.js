@@ -17,28 +17,12 @@ const TodoList = ({ data }) => (
       <tbody className="todolist-table">
         {data.map(element => (
           <>
-          <td><User userData={element.user} key={element.user.id} /></td>
-          <td><TodoItem todoData={element} /></td>
+          <User userData={element.user} key={element.user.id} />
+          <TodoItem todoData={element} />
           </>
         ))}
       </tbody>
     </table>
-
-    {/* {data.map(element => (
-      <table className="todolist-table">
-        <tbody>
-          <div className="todolist-table">
-            <td className="td-user-component">
-              <User userData={element.user} key={element.user.id} />
-            </td>
-            <td className="td-todoItem-component">
-              <TodoItem todoData={element} />
-            </td>
-          </div>
-        </tbody>
-      </table>
-    ))} */}
-    ;
   </div>
 );
 

@@ -26,7 +26,7 @@ class App extends React.Component {
    }
 
   sortData = (event) => {
-    const value = event.target.value;
+    const {value} = event.target;
     if (value === 'name') {
       this.setState({
         unitedData: this.state.unitedData.sort((a, b) =>
