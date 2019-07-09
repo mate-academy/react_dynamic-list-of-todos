@@ -10,9 +10,9 @@ const TodoList = ({ todo }) => {
     <table className="TodoList">
       <thead>
         <tr>
-          <th className="row1">Name</th>
+          <th className="row1">Status</th>
           <th className="row2">Task</th>
-          <th className="row3">Status</th>
+          <th className="row3">Name</th>
         </tr>
       </thead>
       <tbody>
