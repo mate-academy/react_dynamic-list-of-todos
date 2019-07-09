@@ -1,27 +1,26 @@
 import React from 'react';
 import './App.css';
 
-import getTodos from './api/getTodos';
-import getUsers from './api/getUsers';
+import getData from './api/getData';
+import getSortedList from './Components/getSortedList';
 import TodoList from './Components/TodoList';
-
-let todosWithUsers = [];
 
 class App extends React.Component {
   state = {
-    todosData: [],
+    todos: [],
+    visibleTodos: [],
     isLoaded: false,
     isLoading: false,
+    sortField: 'id',
   };
 
   async componentDidMount() {
-    const users = await getUsers();
-    const todos = await getTodos();
+    const todos = await getData();
 
-    todosWithUsers = todos.map(todo => ({
-      ...todo,
-      user: users.find(user => user.id === todo.userId),
-    }));
+    this.setState({
+      todos,
+      visibleTodos: [...todos],
+    });
   }
 
   handleClick = () => {
@@ -31,25 +30,66 @@ class App extends React.Component {
 
     setTimeout(() => {
       this.setState({
-        todosData: todosWithUsers,
         isLoaded: true,
         isLoading: false,
       });
     }, 2000);
   };
 
+  sortBy = (sortField) => {
+    this.setState(prevState => ({
+      visibleTodos: getSortedList(prevState),
+      sortField,
+    }));
+  };
+
   render() {
+    const {
+      visibleTodos,
+      sortField,
+      isLoaded,
+      isLoading,
+    } = this.state;
+
     return (
       <div className="App">
-        { this.state.isLoaded ? (
+        { isLoaded ? (
           <>
             <h1 className="main-title">Dynamic list of todos</h1>
 
-            <TodoList todosData={this.state.todosData} />
+            <div className="sort-buttons">
+              <h2>
+                Sorted by:
+                {sortField}
+              </h2>
+              <button
+                type="button"
+                onClick={() => this.sortBy('id')}
+                className="sort-buttons__btn"
+              >
+                ID
+              </button>
+              <button
+                type="button"
+                onClick={() => this.sortBy('title')}
+                className="sort-buttons__btn"
+              >
+                Task
+              </button>
+              <button
+                type="button"
+                onClick={() => this.sortBy('user')}
+                className="sort-buttons__btn"
+              >
+                User
+              </button>
+            </div>
+
+            <TodoList todos={visibleTodos} />
           </>
         ) : (
           <button type="button" onClick={this.handleClick} className="load-btn">
-            {this.state.isLoading ? 'Loading...' : 'Load' }
+            {isLoading ? 'Loading...' : 'Load' }
           </button>
         )}
       </div>
