@@ -33,7 +33,7 @@ class TodoList extends React.Component {
         isLoaded: true,
         isLoading: false,
       });
-    }, 2000);
+    }, 0);
   };
 
   sortData = (sortItem) => {
@@ -65,7 +65,7 @@ class TodoList extends React.Component {
           <table className="table table-sm table-dark">
             <thead>
               <tr>
-                <th onClick={() => this.sortData('completed')}>
+                <th onClick={() => this.sortData('completed') }>
                   Completed
                 </th>
                 <th onClick={() => this.sortData('title')}>
