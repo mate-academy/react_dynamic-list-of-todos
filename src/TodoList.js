@@ -10,6 +10,7 @@ class TodoList extends React.Component {
 
   state = {
     todos: [],
+    direction: 1,
     isLoaded: false,
     isLoading: false,
   };
@@ -32,10 +33,11 @@ class TodoList extends React.Component {
         isLoaded: true,
         isLoading: false,
       });
-    }, 1000);
+    }, 2000);
   };
 
   sortData = (sortItem) => {
+    console.log(sortItem);
     this.setState(state => ({
       direction: state.direction === 1 ? -1 : 1,
       todos: [...state.todos].sort((a, b) => {
@@ -56,6 +58,7 @@ class TodoList extends React.Component {
   }
 
   render() {
+    console.log(this.state.todos);
     return (
       <main>
         {this.state.isLoaded ? (
