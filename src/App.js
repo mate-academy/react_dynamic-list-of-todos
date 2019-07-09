@@ -2,24 +2,10 @@ import React from 'react';
 import './App.css';
 
 import TodoList from './components/TodoList';
+import { getData } from './api/getData';
 
 let currentList = [];
-const todosFromServer = 'https://jsonplaceholder.typicode.com/todos';
-const usersFromServer = 'https://jsonplaceholder.typicode.com/users';
-
-const getTodos = async() => {
-  const response = await fetch(todosFromServer);
-  const todos = await response.json();
-
-  return todos;
-};
-
-const getUsers = async() => {
-  const response = await fetch(usersFromServer);
-  const todos = await response.json();
-
-  return todos;
-};
+const myUrl = 'https://jsonplaceholder.typicode.com';
 
 class App extends React.Component {
   state = {
@@ -30,19 +16,15 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const todos = await getTodos();
-    const users = await getUsers();
-
-    currentList = todos.map(todo => ({
-      ...todo,
-      user: users.find(user => (user.id === todo.userId)),
-    }));
+    currentList = await getData(myUrl);
   }
 
   handleClick = () => {
     this.setState({
       isLoading: true,
     });
+
+    document.getElementsByClassName('loadData').disabled = true;
 
     setTimeout(() => {
       this.setState({
@@ -81,7 +63,6 @@ class App extends React.Component {
           <TodoList
             allTodos={this.state.todos}
             sortBy={this.sortBy}
-            sortByName={this.sortByName}
           />
         ) : (
           <button
