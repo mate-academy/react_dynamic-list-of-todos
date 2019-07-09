@@ -1,37 +1,31 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import TodoItem from './TodoItem';
-import User from './User';
 import './todoList.css';
 
-const sortByTodoName = () => {
+const TodoList = ({ todos }) => (
+  <table className="table">
+    <thead className="table__thead">
+      <tr>
+        <th className="table__item">ID</th>
+        <th className="table__item">Completed</th>
+        <th className="table__item">Title</th>
+        <th className="table__item">User</th>
+      </tr>
+    </thead>
+    <tbody>
+      {todos.map(todo => (
+        <TodoItem
+          todo={todo}
+          key={todo.id}
+        />
+      ))}
+    </tbody>
+  </table>
+);
 
-};
-
-const TodoList = ({ todos, users }) => {
-  const listItem = todos.map(todoItem => users.map(
-    (userItem) => {
-      if (userItem.id === todoItem.userId) {
-        return (
-          <div className="todo-list__item">
-            <TodoItem key={todoItem.id} item={todoItem} />
-            <User key={userItem.id} user={userItem} />
-          </div>
-        );
-      }
-
-      return false;
-    }
-  ));
-
-  return (
-    <div className="todo-list__container">
-      <h1>Todos List</h1>
-      <div>
-        <button onClick={sortByTodoName} className="todo-list__sort-by-name" type="button">Todo name</button>
-      </div>
-      {listItem}
-    </div>
-  );
+TodoList.propTypes = {
+  todos: propTypes.shape().isRequired,
 };
 
 export default TodoList;

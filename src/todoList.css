@@ -1,13 +1,12 @@
-.todo-list__item {
-  background-color: #8ccbff;
+.table {
+  background-color: #abdbab;
 }
 
-.todo-item__info {
-  display: flex;
-  padding-top: 10px;
+.table__thead {
+  background-color: darkkhaki;
 }
 
-.todo-item__user {
-  list-style: none;
-  padding-bottom: 10px;
+.table__item {
+  padding: 5px 0;
+  border: 2px solid white;
 }

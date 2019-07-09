@@ -1,30 +1,44 @@
 import React from 'react';
 import './App.css';
 import TodoList from './TodoList';
-import getTodos from './getTodos';
-import getUsers from './getUsers';
-import './App.css';
+import { getTodos, getUsers } from './getData';
+
+const getData = async() => {
+  const todos = await getTodos();
+  const users = await getUsers();
+
+  return todos.map(todo => ({
+    ...todo,
+    user: users.find(user => user.id === todo.userId),
+  }));
+};
+
+const getSortedTodos = ({ todos, sortField }) => {
+  const callbackMap = {
+    id: (a, b) => a.id - b.id,
+    completed: (a, b) => a.completed - b.completed,
+    title: (a, b) => a.title.localeCompare(b.title),
+    user: (a, b) => a.user.name.localeCompare(b.user.name),
+  };
+
+  const callback = callbackMap[sortField] || callbackMap.id;
+
+  return [...todos].sort(callback);
+};
 
 class App extends React.Component {
   state = {
     todos: [],
-    users: [],
+    visibleTodos: [],
     isLoaded: false,
     isLoading: false,
+    sortField: 'id',
   };
 
-  loadData = async function() {
+  handlerClick = async() => {
     this.setState({
       isLoading: true,
     });
-    this.todos = await getTodos();
-    this.users = await getUsers();
-
-    console.log(this.todos);
-    console.log(this.users);
-  };
-
-  handlerClick = () => {
     this.loadData();
     setTimeout(() => {
       this.setState({
@@ -33,20 +47,76 @@ class App extends React.Component {
     }, 2000);
   };
 
+  loadData = async() => {
+    const todos = await getData();
+    this.state.todos = todos;
+    this.setState((prevState) => {
+      return {
+        visibleTodos: getSortedTodos(prevState),
+        isLoading: true,
+      };
+    });
+  };
+
+  sortBy = (sortField) => {
+    this.setState((prevState) => {
+      return {
+        visibleTodos: getSortedTodos(prevState),
+        sortField: sortField,
+      };
+    });
+  };
+
   render() {
     return (
       <main className="main">
         {
           (!this.state.isLoaded)
             ? (
-              <button onClick={this.handlerClick} className="main__button" type="button">
+              <button
+                onClick={this.handlerClick}
+                className="main__button"
+                type="button"
+              >
                 {this.state.isLoading ? 'Loading...' : 'Load'}
               </button>
             ) : (
-              <TodoList
-                todos={this.todos}
-                users={this.users}
-              />
+              <>
+                <h1>Todos List</h1>
+                <div className="main__button-container">
+                  <button
+                    onClick={() => this.sortBy('id')}
+                    type="button"
+                    className="main__button-sort"
+                  >
+                    Id
+                  </button>
+                  <button
+                    onClick={() => this.sortBy('completed')}
+                    type="button"
+                    className="main__button-sort"
+                  >
+                    Completed
+                  </button>
+                  <button
+                    onClick={() => this.sortBy('title')}
+                    type="button"
+                    className="main__button-sort"
+                  >
+                    Title
+                  </button>
+                  <button
+                    onClick={() => this.sortBy('user')}
+                    type="button"
+                    className="main__button-sort"
+                  >
+                    User
+                  </button>
+                </div>
+                <TodoList
+                  todos={this.state.visibleTodos}
+                />
+              </>
             )
         }
       </main>
