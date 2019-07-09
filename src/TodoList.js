@@ -37,17 +37,15 @@ class TodoList extends React.Component {
 
   sortData = (sortItem) => {
     this.setState(state => ({
-      sortType: sortItem,
-      direction: state.direction === 1 ? -1 : 1,
-      sortedTodoList: [...state.todos].sort((a, b) => {
+      todos: [...state.todos].sort((a, b) => {
         switch (sortItem) {
           case 'completed':
-            return state.direction * (b[sortItem] - a[sortItem]);
+            return b[sortItem] - a[sortItem];
           case 'title':
-            return state.direction * a[sortItem].localeCompare(b[sortItem]);
+            return a[sortItem].localeCompare(b[sortItem]);
           case 'name':
             return (
-              state.direction * (a.user[sortItem]
+              (a.user[sortItem]
                 .localeCompare(b.user[sortItem]))
             );
           default: return 0;
