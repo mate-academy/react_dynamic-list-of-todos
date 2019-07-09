@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 import User from './User';
 
 const TodoItem = ({ itemData }) => (
-  <div className="TodoItem">
-    <User userData={itemData.user} />
-    <div>
-      <input type="checkbox" checked={itemData.completed} />
-      {itemData.title}
-    </div>
-  </div>
+    <tr className="TodoItem">
+      <td className="row1"><input type="checkbox" checked={itemData.completed} /></td>
+      <td className="row2">{itemData.title}</td>
+      <td className="row3"><User userData={itemData.user} /></td>
+    </tr>
 );
 
 TodoItem.propTypes = {

@@ -7,9 +7,14 @@ const TodoList = ({ todo }) => {
     <TodoItem itemData={item} />
   ));
   return (
-    <div className="TodoList">
-      {items}
-    </div>
+<table className="TodoList">
+  <tr>
+    <td className ="row1">Name</td>
+    <td className ="row2">Task</td>
+    <td className ="row3">Status</td>
+  </tr>
+  {items}
+</table>
   );
 };
 

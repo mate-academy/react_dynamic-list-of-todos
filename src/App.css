@@ -4,7 +4,7 @@ body {
 }
 .App {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 1024px;
 }
 
 
@@ -37,4 +37,16 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+}
+
+.row1 {
+  width: 5%;
+}
+
+.row2 {
+  width: 77%;
+}
+
+.row3 {
+  width: 18%;
 }
