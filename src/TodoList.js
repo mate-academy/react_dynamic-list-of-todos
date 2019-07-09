@@ -8,15 +8,23 @@ import User from './User';
 const TodoList = ({ data }) => (
   <div className="todolist">
     <table>
-      <tbody>
+      <thead>
         <tr className="todolist-table-headline">
-          <td className="td-headline">name</td>
-          <td className="td-headline">title</td>
+          <th className="td-headline">name</th>
+          <th className="td-headline">title</th>
         </tr>
+      </thead>
+      <tbody className="todolist-table">
+        {data.map(element => (
+          <>
+          <td><User userData={element.user} key={element.user.id} /></td>
+          <td><TodoItem todoData={element} /></td>
+          </>
+        ))}
       </tbody>
     </table>
 
-    {data.map(element => (
+    {/* {data.map(element => (
       <table className="todolist-table">
         <tbody>
           <div className="todolist-table">
@@ -29,7 +37,7 @@ const TodoList = ({ data }) => (
           </div>
         </tbody>
       </table>
-    ))}
+    ))} */}
     ;
   </div>
 );

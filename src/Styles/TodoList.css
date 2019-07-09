@@ -4,14 +4,14 @@
 
 .todolist-table-headline {
   display: grid;
-  grid-template-columns: 300px 500px;
+  grid-template-columns: 300px 700px;
   text-align: center;
 
 }
 
 .todolist-table {
   display: grid;
-  grid-template-columns: 300px 500px ;
+  grid-template-columns: 300px 700px ;
   grid-template-rows: 50px;
   justify-items: left;
   border: 1px solid #a3a3a3;

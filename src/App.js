@@ -25,7 +25,7 @@ class App extends React.Component {
      }, 2000);
    }
 
-  sortBy = (event) => {
+  sortData = (event) => {
     const value = event.target.value;
     if (value === 'name') {
       this.setState({
@@ -34,10 +34,11 @@ class App extends React.Component {
       });
     }
 
-    this.setState({
+    else {this.setState({
       unitedData: this.state.unitedData.sort((a, b) =>
         String(a[value]).localeCompare(String(b[value]))),
-    });
+      });
+    }
   };
 
   render() {
@@ -60,7 +61,7 @@ class App extends React.Component {
           <select
             className="app-select"
             defaultValue="this.state.value"
-            onChange={this.sortBy}
+            onChange={this.sortData}
           >
             <option value="" >Sort by: </option>
             <option value="name" >User </option>
@@ -70,7 +71,6 @@ class App extends React.Component {
         </div>
         <TodoList
           data={this.state.unitedData}
-          key={this.state.unitedData.id}
         />
       </div>
     );

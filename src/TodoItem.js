@@ -1,28 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import './Styles/TodoItem.css'
+import './Styles/TodoItem.css';
 
 const TodoItem = ({ todoData }) => (
   <table className="todoitem">
-    <tbody>
+
       <tr>
         <td className="todoitem_title">
           {todoData.title}
         </td>
-        </tr>
-        <tr>
+
+
         <td className="todoitem_status">
-          {!todoData.completed ?
-            <span className="progress">
+          {!todoData.completed
+          ? (<span className="progress">
               IN PROGRESS...
             </span>
-          : <span className="done">
+          ) : <span className="done">
               DONE!
             </span>}
+          )
         </td>
       </tr>
-    </tbody>
+
   </table>
 );
 

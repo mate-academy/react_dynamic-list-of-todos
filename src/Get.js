@@ -1,10 +1,10 @@
+const API_URL = 'https://jsonplaceholder.typicode.com';
+
 const getFromServer = async() => {
-  const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
-  const responseTodos = await fetch(todosUrl);
+  const responseTodos = await fetch(`${API_URL}/todos`);
   const todos = await responseTodos.json();
 
-  const usersUrl = 'https://jsonplaceholder.typicode.com/users';
-  const responseUsers = await fetch(usersUrl);
+  const responseUsers = await fetch(`${API_URL}/users`);
   const users = await responseUsers.json();
 
   const userWithTodo = todos.map(todo => ({
