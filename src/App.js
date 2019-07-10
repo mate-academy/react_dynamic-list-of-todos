@@ -34,9 +34,10 @@ class App extends React.Component {
       });
     }
 
-    else {this.setState({
-      unitedData: this.state.unitedData.sort((a, b) =>
-        String(a[value]).localeCompare(String(b[value]))),
+    else {
+      this.setState({
+        unitedData: this.state.unitedData.sort((a, b) =>
+          String(a[value]).localeCompare(String(b[value]))),
       });
     }
   };

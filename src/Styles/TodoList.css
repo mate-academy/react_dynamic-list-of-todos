@@ -1,7 +1,3 @@
-.todolist {
-
-}
-
 .todolist-table-headline {
   display: grid;
   grid-template-columns: 300px 700px;
@@ -21,14 +17,5 @@
   display: inline-block;
   font-size: 25px;
   margin: 15px;
-
-}
-
-
-.td-user-component {
-
-}
-
-.td-todoItem-component {
 
 }
