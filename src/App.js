@@ -12,18 +12,26 @@ const getData = async() => {
     user: users.find(user => user.id === todo.userId),
   }));
 };
+let currentKey = '';
+let currentTodos = [];
+let sortedTodos = [];
 
 const getSortedTodos = ({ todos, sortField }) => {
+  if (currentKey === sortField && currentTodos === todos) {
+    return sortedTodos;
+  }
+
+  currentKey = sortField;
+  currentTodos = todos;
   const callbackMap = {
     id: (a, b) => a.id - b.id,
     completed: (a, b) => a.completed - b.completed,
     title: (a, b) => a.title.localeCompare(b.title),
     user: (a, b) => a.user.name.localeCompare(b.user.name),
   };
-
-  const callback = callbackMap[sortField] || callbackMap.id;
-
-  return [...todos].sort(callback);
+  const callback = callbackMap[sortField];
+  sortedTodos = [...todos].sort(callback);
+  return sortedTodos;
 };
 
 class App extends React.Component {
@@ -39,12 +47,12 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
-    this.loadData();
     setTimeout(() => {
       this.setState({
         isLoaded: true,
       });
     }, 2000);
+    this.loadData();
   };
 
   loadData = async() => {
@@ -56,13 +64,16 @@ class App extends React.Component {
         isLoading: true,
       };
     });
+
   };
 
   sortBy = (sortField) => {
+    this.setState({
+      sortField: sortField,
+    });
     this.setState((prevState) => {
       return {
         visibleTodos: getSortedTodos(prevState),
-        sortField: sortField,
       };
     });
   };
