@@ -1,5 +1,5 @@
 import React from 'react';
-import Buttons from './components/Buttons';
+import LIstHeaders from './components/LIstHeaders';
 import TodoList from './components/TodoList';
 import { loadTodos, loadUsers } from './api/dataOfUsersAndTodos';
 import './styles/App.css';
@@ -28,7 +28,6 @@ class App extends React.Component {
       ...todo,
       user: users.find(user => user.id === todo.userId),
     }));
-    console.log(todosWithUsers);
 
     this.setState({
       todos: todosWithUsers,
@@ -38,7 +37,7 @@ class App extends React.Component {
     });
   }
 
-  sortByName  = (name) => {
+  sortByName = (name) => {
     this.setState(state => ({
       direction: state.direction === 1 ? -1 : 1,
       sortedTodos: [...state.todos].sort((a, b) => (
@@ -71,7 +70,7 @@ class App extends React.Component {
     if (isLoaded) {
       return (
         <div>
-          <Buttons
+          <LIstHeaders
             sortByName={this.sortByName}
             sortByTitle={this.sortByTitle}
             sortByCompleted={this.sortByCompleted}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Buttons = ({ sortByName, sortByTitle, sortByCompleted }) => (
+const LIstHeaders = ({ sortByName, sortByTitle, sortByCompleted }) => (
   <div className="button_list">
     <button
       type="button"
@@ -35,10 +35,10 @@ Sort By Completed
   </div>
 );
 
-Buttons.propTypes = {
+LIstHeaders.propTypes = {
   sortByName: PropTypes.func.isRequired,
   sortByTitle: PropTypes.func.isRequired,
   sortByCompleted: PropTypes.func.isRequired,
 };
 
-export default Buttons;
+export default LIstHeaders;
