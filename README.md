@@ -1,7 +1,7 @@
 # React dynamic list of TODOs
 
 
-DEMO LINK: (https://djkamry22.github.io/react_dynamic-list-of-todos/)
+DEMO LINK: ( https://djkamry22.github.io/react_dynamic-list-of-todos/ )
 
 
 ## Task
