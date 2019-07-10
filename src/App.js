@@ -69,6 +69,7 @@ class App extends React.Component {
             type="button"
             className="loadData"
             onClick={this.handleClick}
+            disabled={this.state.isLoading}
           >
             {this.state.isLoading ? 'Loading...' : 'Load' }
           </button>
