@@ -33,7 +33,6 @@ class App extends React.Component {
           String(a.user.name).localeCompare(String(b.user.name))),
       });
     }
-
     else {
       this.setState({
         unitedData: this.state.unitedData.sort((a, b) =>
@@ -49,6 +48,7 @@ class App extends React.Component {
           type="button"
           className="load-button"
           onClick={this.handleLoad}
+          disabled={this.state.buttonDisabled}
         >
           {this.state.isLoading ? 'Loading...' : 'Load'}
         </button>
