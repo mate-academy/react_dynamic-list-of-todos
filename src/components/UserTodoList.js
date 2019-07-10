@@ -6,24 +6,21 @@ import UserTodos from './UserTodos';
 
 class UserTodoList extends React.Component {
   state={
-    name: 'close',
+    isCommentsShown: false,
   }
 
-  handleShowComments = (event) => {
-    const { name } = event.target;
-    if (name === 'close') {
-      this.setState({
-        name: 'open',
-      });
-    } else {
-      this.setState({
-        name: 'close',
-      });
-    }
+  handleShowComments = () => {
+    this.setState(prevState => ({
+      isCommentsShown: !prevState.isCommentsShown,
+    }));
   }
 
   render() {
-    const userTodos = this.props.user.usertodos
+    const {
+      username, email, phone, usertodos,
+    } = this.props.user;
+
+    const userTodos = usertodos
       .map(todo => (
         <UserTodos
           key={todo.id}
@@ -38,19 +35,19 @@ class UserTodoList extends React.Component {
           <h3 className="user-info user-info__header">
           Username:
             {' '}
-            {this.props.user.username}
+            {username}
           </h3>
 
           <p
             className="user-info user-info__additional user-info__email"
           >
-            {this.props.user.email}
+            {email}
           </p>
 
           <p
             className="user-info user-info__additional user-info__phone"
           >
-            {this.props.user.phone}
+            {phone}
           </p>
         </div>
 
@@ -59,13 +56,18 @@ class UserTodoList extends React.Component {
           <button
             onClick={this.handleShowComments}
             className="button--link"
-            name={this.state.name}
+            type="button"
           >
-            Show Todos
+            {this.state.isCommentsShown ? 'Hide Todos' : 'Show Todos'}
           </button>
         </div>
 
-        <div className="todos" style={{ display: this.state.name === 'open' ? 'block' : 'none' }}>
+        <div
+          className="todos"
+          style={{
+            display: this.state.isCommentsShown ? 'block' : 'none',
+          }}
+        >
           <ul className="todos__list">
             {userTodos}
           </ul>
@@ -74,6 +76,7 @@ class UserTodoList extends React.Component {
             <button
               onClick={this.props.handleSortClickTodos}
               className="button--link"
+              type="button"
             >
             Sort by Done
             </button>
@@ -82,6 +85,7 @@ class UserTodoList extends React.Component {
               onClick={this.props.handleSortClickTodos}
               name="titleSort"
               className="button--link"
+              type="button"
             >
               Sort by Title
             </button>
@@ -94,6 +98,8 @@ class UserTodoList extends React.Component {
 }
 
 UserTodoList.propTypes = {
+  handleSortClickTodos: PropTypes.func.isRequired,
+  handleCheckBox: PropTypes.func.isRequired,
   user: PropTypes.shape({
     username: PropTypes.string,
     email: PropTypes.string,

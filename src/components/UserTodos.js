@@ -1,33 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './UserTodos.css';
 
-const UserTodos = props => {
-  const syle = {
-    textDecoration: 'line-through',
-    color: '#cdcdcd',
-    fontStyle: 'italick'
-  };
+const UserTodos = (props) => {
+  const { id, completed, title } = props.todo;
 
   return (
     <li>
       <label
+        className={props.todo.completed ? 'todo__label' : null}
         htmlFor="checkbox"
-        style={props.todo.completed ? syle : null}
       >
         <input
-          name={props.todo.id}
+          name={id}
           type="checkbox"
-          checked={props.todo.completed}
+          checked={completed}
           onChange={props.handleCheckBox}
         />
-        {props.todo.title}
+        {title}
       </label>
     </li>
-  )
+  );
 };
 
 UserTodos.propTypes = {
+  handleCheckBox: PropTypes.func.isRequired,
   todo: PropTypes.shape({
+    id: PropTypes.number,
     completed: PropTypes.bool,
     title: PropTypes.string,
   }).isRequired,
