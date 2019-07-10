@@ -1,22 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const styleCompleted = {
-  fontFamily: 'italic',
-  textDecoration: 'line-through',
-  color: 'silver',
-}
-
 function TodoItem({ item }) {
   return (
-    <div className="container">
+    <div className=" container">
       <p
-        className="text-left"
-        style={!item.completed ? styleCompleted : null}
+        className={!item.completed ? 'сompleted' : null}
       >
         {item.title}
       </p>
       <input
+        className="todoItem"
         type="checkbox"
         defaultChecked={item.completed}
       />

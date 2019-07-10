@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const text = {
-  textAlign: 'left',
-  fontSize: '16px',
-}
-
 function User({ users }) {
   return (
-    <div className="container">
-      <p style={text}>
+    <div>
+      <p className="text">
         {users.username}
       </p>
-      <p style={text}>
+      <p className="text">
         {users.email}
       </p>
     </div>
