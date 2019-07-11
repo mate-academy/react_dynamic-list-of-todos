@@ -9,8 +9,8 @@ const TodoItem = ({ currentTodo }) => (
     <td>
       {
         currentTodo.completed
-          ? <span style={{ color: 'green', fontSize: '20px' }}>✔</span>
-          : <span style={{ color: 'red', fontSize: '20px' }}>✘</span>
+          ? <span className="completed">✔</span>
+          : <span className="not-completed">✘</span>
       }
     </td>
   </tr>

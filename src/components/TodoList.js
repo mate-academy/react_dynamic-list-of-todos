@@ -6,38 +6,18 @@ const TodoList = ({ sortedTodos, sorting }) => (
   <table>
     <thead>
       <tr>
-        <th
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            sorting('id');
-          }}
-        >
+        <th onClick={() => sorting('id')}>
           ID
         </th>
 
-        <th
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            sorting('title');
-          }}
-        >
+        <th onClick={() => sorting('title')}>
           Title
         </th>
 
-        <th
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            sorting('user');
-          }}
-        >
+        <th onClick={() => sorting('user')}>
           User
         </th>
-        <th
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            sorting('completed');
-          }}
-        >
+        <th onClick={() => sorting('completed')}>
           Completed
         </th>
       </tr>

@@ -1,13 +1,15 @@
 import React from 'react';
 import Button from './components/Button';
 import TodoList from './components/TodoList';
+
+import { todosLink, usersLink, loadData } from './GetData';
 import './App.css';
 
 class App extends React.Component {
   state = {
     todosWithUsers: null,
     sortedTodos: null,
-    direction: true,
+    direction: false,
     isLoading: false,
     isLoaded: false,
   }
@@ -17,16 +19,8 @@ class App extends React.Component {
       isLoading: true,
     });
 
-    const responseTodos = await fetch(
-      'https://jsonplaceholder.typicode.com/todos'
-    );
-
-    const responseUsers = await fetch(
-      'https://jsonplaceholder.typicode.com/users'
-    );
-
-    const todos = await responseTodos.json();
-    const users = await responseUsers.json();
+    const todos = await loadData(todosLink);
+    const users = await loadData(usersLink);
 
     const todosWithUsers = todos.map(todo => ({
       ...todo,
@@ -58,19 +52,20 @@ class App extends React.Component {
   }
 
   render() {
+    const { sortedTodos, isLoading } = this.state;
     return (
       <div className="common-block">
         {
           this.state.isLoaded
             ? (
               <TodoList
+                sortedTodos={sortedTodos}
                 sorting={this.sorting}
-                sortedTodos={this.state.sortedTodos}
               />
             )
             : (
               <Button
-                isLoading={this.state.isLoading}
+                isLoading={isLoading}
                 getData={this.getData}
               />
             )

@@ -7,7 +7,7 @@ const Button = ({ isLoading, getData }) => (
     <button type="button" onClick={getData}>
       {
         isLoading
-          ? 'Loding...'
+          ? 'Loading...'
           : 'Load'
       }
     </button>
