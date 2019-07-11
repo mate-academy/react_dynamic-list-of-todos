@@ -5,7 +5,7 @@ import UserTodoList from './UserTodoList';
 
 class TodoList extends React.Component {
   state={
-    isTodoUnloaded: true,
+    todosUnload: true,
     isServerLoading: false,
     sortUsersByName: 1,
     sortTodoByDone: 1,
@@ -24,7 +24,7 @@ class TodoList extends React.Component {
     });
 
     this.setState(prevState => ({
-      isLoading: !prevState.isLoading,
+      todosUnload: !prevState.todosUnload,
       isServerLoading: !prevState.isServerLoading,
     }));
   }
@@ -98,14 +98,14 @@ class TodoList extends React.Component {
           className="button"
           type="button"
           onClick={this.handleClick}
-          style={{ backgroundColor: !this.state.isTodoUnloaded && '#000' }}
+          style={{ backgroundColor: !this.state.todosUnload && '#000' }}
         >
-          {this.state.isTodoUnloaded ? 'Load Todos' : 'Hide Todos'}
+          {this.state.todosUnload ? 'Load Todos' : 'Hide Todos'}
         </button>
       );
 
     const display = this.state.isServerLoading
-      || this.state.isTodoUnloaded
+      || this.state.todosUnload
       || (
       <>
         <button
