@@ -2,21 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import User from './User';
 
-const TodoItem = ({ id, title, completed, user, changeCompleted }) => (
-  <div className="todo-row">
-    <input
-      id={`todo${id}`}
-      type="checkbox"
-      defaultChecked={completed}
-      onChange={changeCompleted}
-    />
+const updateStatus = (index, todos) => {
+  const todo = todos[index];
+  todo.completed = !todo.completed;
+  todos.splice(index, 1, todo);
+  todo.updateAppState({ todos: [...todos] });
+};
 
-    <label htmlFor={`todo${id}`}>
-      {title}
-    </label>
+const TodoItem = ({ id, title, completed, user, currentIndex, todos }) => (
+  <tr>
+    <td>
+      <input
+        id={`todo${id}`}
+        type="checkbox"
+        defaultChecked={completed}
+        onChange={() => updateStatus(currentIndex, todos)}
+      />
+    </td>
 
-    <User {...user} />
-  </div>
+    <td>
+      <label htmlFor={`todo${id}`}>
+        {title}
+      </label>
+    </td>
+
+    <td>
+      <User {...user} />
+    </td>
+  </tr>
 );
 
 TodoItem.propTypes = {
@@ -26,7 +39,8 @@ TodoItem.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string,
   }),
-  changeCompleted: PropTypes.func.isRequired,
+  currentIndex: PropTypes.number.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 TodoItem.defaultProps = {

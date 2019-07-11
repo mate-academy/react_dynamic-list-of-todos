@@ -1,12 +1,5 @@
-.todo-row {
-  display: grid;
-  grid-template-columns: 50px 2fr 1fr;
-  grid-column-gap: 10px;
-  align-items: center;
-  padding: 10px;
-}
-.todo-row--head {
-  font-weight: 600;
+.table-head {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=App.css.map */

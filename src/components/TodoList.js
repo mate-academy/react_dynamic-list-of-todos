@@ -1,45 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
-import ColumnHead from './ColumnHead';
-import changeCompleted from './changeCompleted';
 
-const TodoList = ({ todos, sortStatus, updateAppState }) => (
-  <div>
-    <div className="todo-row">
-      <ColumnHead
-        todos={todos}
-        sortStatus={sortStatus}
-        updateAppState={updateAppState}
-        columnName="Status"
-      />
+let sortStatus = 1;
 
-      <ColumnHead
-        todos={todos}
-        sortStatus={sortStatus}
-        updateAppState={updateAppState}
-        columnName="Todo"
-      />
+class TodoList extends React.Component {
+  constructor({ todos }) {
+    super();
+    this.todos = todos;
 
-      <ColumnHead
-        todos={todos}
-        sortStatus={sortStatus}
-        updateAppState={updateAppState}
-        columnName="User"
-      />
-    </div>
+    this.state = {
+      sortTotos: [...this.todos],
+    };
+  }
 
-    {
-      todos.map((todo, currentIndex) => (
-        <TodoItem
-          {...todo}
-          key={`keyTodo${todo.id}`}
-          changeCompleted={() => changeCompleted(currentIndex, todo, todos, updateAppState)}
-        />
-      ))
+  sort = (fieldOfSort, todos, sortWay) => {
+    let funcSort;
+    switch (fieldOfSort) {
+      case 'Status':
+        funcSort = (a, b) => sortWay * (a.completed - b.completed);
+        break;
+      case 'Todo':
+        funcSort = (a, b) => sortWay * a.title.localeCompare(b.title);
+        break;
+      case 'User':
+        funcSort = (a, b) => sortWay * a.user.name.localeCompare(b.user.name);
+        break;
+      default: break;
     }
-  </div>
-);
+
+    sortStatus = -sortStatus;
+
+    this.setState({
+      sortTotos: [...todos].sort(funcSort),
+    });
+  };
+
+  render() {
+    return (
+      <table>
+        <thead>
+          <tr className="table-head">
+            <th onClick={() => this.sort('Status', this.todos, sortStatus)}>Status</th>
+            <th onClick={() => this.sort('Todo', this.todos, sortStatus)}>Todo</th>
+            <th onClick={() => this.sort('User', this.todos, sortStatus)}>User</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.state.sortTotos.map((todo, currentIndex) => (
+              <TodoItem
+                {...todo}
+                todos={this.todos}
+                currentIndex={currentIndex}
+                key={`keyTodo${todo.id}`}
+              />
+            ))
+          }
+        </tbody>
+      </table>
+    );
+  }
+}
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
@@ -50,8 +72,6 @@ TodoList.propTypes = {
       name: PropTypes.string,
     }),
   })).isRequired,
-  sortStatus: PropTypes.number.isRequired,
-  updateAppState: PropTypes.func.isRequired,
 };
 
 export default TodoList;
