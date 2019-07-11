@@ -5,7 +5,7 @@ import UserTodoList from './UserTodoList';
 
 class TodoList extends React.Component {
   state={
-    todosUnload: true,
+    isLoading: true,
     isServerLoading: false,
     sortUsersByName: 1,
     sortTodoByDone: 1,
@@ -24,7 +24,7 @@ class TodoList extends React.Component {
     });
 
     this.setState(prevState => ({
-      todosUnload: !prevState.todosUnload,
+      isLoading: !prevState.isLoading,
       isServerLoading: !prevState.isServerLoading,
     }));
   }
@@ -71,17 +71,15 @@ class TodoList extends React.Component {
     }
   }
 
-  getUsersWithOwnTodos = () => {
-    return this.state.users.map(user => (
-      {
-        ...user,
-        usertodos: this.state.todos.filter(todo => todo.userId === user.id),
-      }
-    ));
-  }
+  getUsers = () => this.state.users.map(user => (
+    {
+      ...user,
+      usertodos: this.state.todos.filter(todo => todo.userId === user.id),
+    }
+  ))
 
   render() {
-    const userWithOwnTodos = this.state.getUsersWithOwnTodos();
+    const userWithOwnTodos = this.getUsers();
 
     const usersTodoLists = userWithOwnTodos
       .map(user => (
@@ -102,14 +100,14 @@ class TodoList extends React.Component {
           className="button"
           type="button"
           onClick={this.handleClick}
-          style={{ backgroundColor: !this.state.todosUnload && '#000' }}
+          style={{ backgroundColor: !this.state.isLoading && '#000' }}
         >
-          {this.state.todosUnload ? 'Load Todos' : 'Hide Todos'}
+          {this.state.isLoading ? 'Load Todos' : 'Hide Todos'}
         </button>
       );
 
     const display = this.state.isServerLoading
-      || this.state.todosUnload
+      || this.state.isLoading
       || (
       <>
         <button
