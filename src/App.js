@@ -48,7 +48,7 @@ class App extends React.Component {
           type="button"
           className="load-button"
           onClick={this.handleLoad}
-          disabled={this.state.buttonDisabled}
+          disabled={this.state.isLoading}
         >
           {this.state.isLoading ? 'Loading...' : 'Load'}
         </button>
