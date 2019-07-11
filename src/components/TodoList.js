@@ -71,13 +71,17 @@ class TodoList extends React.Component {
     }
   }
 
-  render() {
-    const userWithOwnTodos = this.state.users.map(user => (
+  getUsersWithOwnTodos = () => {
+    return this.state.users.map(user => (
       {
         ...user,
         usertodos: this.state.todos.filter(todo => todo.userId === user.id),
       }
     ));
+  }
+
+  render() {
+    const userWithOwnTodos = this.state.getUsersWithOwnTodos();
 
     const usersTodoLists = userWithOwnTodos
       .map(user => (
