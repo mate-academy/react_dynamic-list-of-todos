@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
 const TodoList = ({ currentTodos }) => (
-  <div>
+  <tbody>
     {currentTodos.map(todo => (
-      <div className="App__container">
-        <p className="App__todoItem"><TodoItem item={todo} /></p>
-      </div>
+      <TodoItem todo={todo} key={todo.id} />
     ))}
-  </div>
+  </tbody>
 );
 
 TodoList.propTypes = {

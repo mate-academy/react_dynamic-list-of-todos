@@ -2,18 +2,18 @@ import React from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ item }) => (
+const TodoItem = ({ todo }) => (
   <tr className="App__table_container">
-    <td>{item.id}</td>
-    <td className="bold">{item.user.name}</td>
-    <td>{item.title}</td>
-    <td className="align-left">{item.title}</td>
-    <input type="checkbox" checked={item.completed} />
+    <td>{todo.id}</td>
+    <td className="bold">{todo.user.name}</td>
+    <td>{todo.title}</td>
+    <td className="align-left">{todo.title}</td>
+    <td><input type="checkbox" checked={todo.completed} /></td>
   </tr>
 );
 
 TodoItem.propTypes = {
-  item: PropTypes.shape({
+  todo: PropTypes.shape({
     completed: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     id: PropTypes.number,
