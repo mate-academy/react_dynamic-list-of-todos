@@ -1,0 +1,23 @@
+.todoitem {
+  display: inline-block;
+}
+
+.todoitem_title {
+  display: inline-block;
+
+}
+
+.todoitem_status {
+  display: inline-block;
+  font-size: 18px;
+}
+
+.progress {
+  color: rgb(126, 35, 35);
+  font-weight: 700;
+}
+
+.done {
+  color: rgb(6, 134, 17);
+  font-weight: 700;
+}
