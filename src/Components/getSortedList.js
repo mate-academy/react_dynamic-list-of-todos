@@ -4,7 +4,7 @@ let sortedTodos = [];
 
 const getSortedList = ({ todos, sortField }) => {
   if (currentKey === sortField && currentTodos === todos) {
-    return sortedTodos;
+    return sortedTodos.reverse();
   }
 
   currentKey = sortField;

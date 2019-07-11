@@ -37,16 +37,17 @@ class App extends React.Component {
   };
 
   sortBy = (sortField) => {
+    this.setState({
+      sortField,
+    });
     this.setState(prevState => ({
       visibleTodos: getSortedList(prevState),
-      sortField,
     }));
   };
 
   render() {
     const {
       visibleTodos,
-      sortField,
       isLoaded,
       isLoading,
     } = this.state;
@@ -59,8 +60,7 @@ class App extends React.Component {
 
             <div className="sort-buttons">
               <h2>
-                Sorted by:
-                {sortField}
+                Sort by:
               </h2>
               <button
                 type="button"
