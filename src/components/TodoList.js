@@ -5,7 +5,7 @@ import UserTodoList from './UserTodoList';
 
 class TodoList extends React.Component {
   state={
-    isLoading: true,
+    isLoaded: false,
     isServerLoading: false,
     sortUsersByName: 1,
     sortTodoByDone: 1,
@@ -24,7 +24,7 @@ class TodoList extends React.Component {
     });
 
     this.setState(prevState => ({
-      isLoading: !prevState.isLoading,
+      isLoaded: !prevState.isLoaded,
       isServerLoading: !prevState.isServerLoading,
     }));
   }
@@ -80,6 +80,7 @@ class TodoList extends React.Component {
 
   render() {
     const userWithOwnTodos = this.getUsers();
+    const { isLoaded, isServerLoading } = this.state;
 
     const usersTodoLists = userWithOwnTodos
       .map(user => (
@@ -92,35 +93,35 @@ class TodoList extends React.Component {
         />
       ));
 
-    const loader = this.state.isServerLoading && <div className="loader" />;
+    const loader = isServerLoading && <div className="loader" />;
 
-    const loadButton = this.state.isServerLoading
+    const loadButton = isServerLoading
       || (
         <button
           className="button"
           type="button"
           onClick={this.handleClick}
-          style={{ backgroundColor: !this.state.isLoading && '#000' }}
+          style={{ backgroundColor: !isLoaded && '#000000' }}
         >
-          {this.state.isLoading ? 'Load Todos' : 'Hide Todos'}
+          {isLoaded ? 'Delete all Todos' : 'Load Todos from server'}
         </button>
       );
 
-    const display = this.state.isServerLoading
-      || this.state.isLoading
-      || (
-      <>
-        <button
-          className="button--link"
-          onClick={this.handleSortClick}
-          type="button"
-        >
-            Sort users by UserName
-        </button>
+    const display = isServerLoading
+      || (isLoaded
+      && (
+        <>
+          <button
+            className="button--link"
+            onClick={this.handleSortClick}
+            type="button"
+          >
+              Sort users by UserName
+          </button>
 
-        {usersTodoLists}
-      </>
-      );
+          {usersTodoLists}
+        </>
+      ));
 
     return (
       <div>
