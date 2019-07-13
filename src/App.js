@@ -38,9 +38,9 @@ class App extends React.Component {
   handleClick = async() => {
     const todos = await getData();
 
-    this.setState(prev => ({
+    this.setState(prevState => ({
       isLoading: true,
-      visibleTodos: getSortedTodos(todos, prev.sortField),
+      visibleTodos: getSortedTodos(todos, prevState.sortField),
     }), () => {
       this.setState({
         isLoaded: true,
@@ -51,28 +51,28 @@ class App extends React.Component {
 
   sortBy = (sortField) => {
     if (this.state.sortField === sortField) {
-      this.setState(prev => ({
-        visibleTodos: getSortedTodos(prev.visibleTodos, sortField).reverse(),
+      this.setState(prevState => ({
+        visibleTodos: getSortedTodos(prevState.visibleTodos, sortField)
+          .reverse(),
         sortField,
       }));
     } else {
-      this.setState(prev => ({
-        visibleTodos: getSortedTodos(prev.visibleTodos, sortField),
+      this.setState(prevState => ({
+        visibleTodos: getSortedTodos(prevState.visibleTodos, sortField),
         sortField,
       }));
     }
   };
 
   render() {
-    const { sortField, visibleTodos } = this.state;
+    const { sortField, visibleTodos, isLoaded } = this.state;
     console.log(visibleTodos);
     return (
       <div>
-
-        { this.state.isLoaded ? (
+        { isLoaded ? (
           <div>
             <h1>
-              {this.state.visibleTodos.length}
+              {visibleTodos.length}
               {' '}
               sorted by:
               {' '}
@@ -109,12 +109,12 @@ class App extends React.Component {
                   </th>
                 </tr>
               </thead>
-              <TodoList currentTodos={this.state.visibleTodos} />
+              <TodoList currentTodos={visibleTodos} />
             </table>
           </div>
         ) : (
           <button type="button" onClick={this.handleClick}>
-            {this.state.isLoading ? 'Loading...' : 'Load'}
+            { this.state.isLoading ? 'Loading...' : 'Load'}
           </button>
         )}
       </div>
