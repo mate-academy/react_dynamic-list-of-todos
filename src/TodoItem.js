@@ -6,7 +6,6 @@ const TodoItem = ({ todo }) => (
   <tr className="App__table_container">
     <td>{todo.id}</td>
     <td className="bold">{todo.user.name}</td>
-    <td>{todo.title}</td>
     <td className="align-left">{todo.title}</td>
     <td><input type="checkbox" checked={todo.completed} /></td>
   </tr>

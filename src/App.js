@@ -50,10 +50,17 @@ class App extends React.Component {
   }
 
   sortBy = (sortField) => {
-    this.setState(prev => ({
-      visibleTodos: getSortedTodos(prev.visibleTodos, sortField),
-      sortField,
-    }));
+    if (this.state.sortField === sortField) {
+      this.setState(prev => ({
+        visibleTodos: getSortedTodos(prev.visibleTodos, sortField).reverse(),
+        sortField,
+      }));
+    } else {
+      this.setState(prev => ({
+        visibleTodos: getSortedTodos(prev.visibleTodos, sortField),
+        sortField,
+      }));
+    }
   };
 
   render() {
@@ -67,7 +74,7 @@ class App extends React.Component {
             <h1>
               {this.state.visibleTodos.length}
               {' '}
-              sorted by
+              sorted by:
               {' '}
               {sortField}
             </h1>
@@ -80,11 +87,8 @@ class App extends React.Component {
                     </button>
                   </th>
                   <th>
-                    <button
-                      type="button"
-                      onClick={() => this.sortBy('completed')}
-                    >
-                      Completed
+                    <button type="button" onClick={() => this.sortBy('user')}>
+                        Name
                     </button>
                   </th>
                   <th>
@@ -98,9 +102,9 @@ class App extends React.Component {
                   <th>
                     <button
                       type="button"
-                      onClick={() => this.sortBy('user')}
+                      onClick={() => this.sortBy('completed')}
                     >
-                      User
+                      Completed
                     </button>
                   </th>
                 </tr>
