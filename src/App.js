@@ -66,7 +66,7 @@ class App extends React.Component {
 
   render() {
     const { sortField, visibleTodos, isLoaded } = this.state;
-    console.log(visibleTodos);
+
     return (
       <div>
         { isLoaded ? (
