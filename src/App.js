@@ -54,20 +54,20 @@ class App extends React.Component {
     }, 2000);
   };
 
-  sortData = (sortItem) => {
+  sortData = (sortCase) => {
     this.setState(state => ({
-      sortType: sortItem,
+      sortType: sortCase,
       direction: state.direction === 1 ? -1 : 1,
       sortedTodoList: [...state.todos].sort((a, b) => {
-        switch (sortItem) {
+        switch (sortCase) {
           case 'id':
-            return state.direction * (b[sortItem] - a[sortItem]);
+            return state.direction * (b[sortCase] - a[sortCase]);
           case 'completed':
-            return state.direction * (b[sortItem] - a[sortItem]);
+            return state.direction * (b[sortCase] - a[sortCase]);
           case 'title':
-            return state.direction * a[sortItem].localeCompare(b[sortItem]);
+            return state.direction * a[sortCase].localeCompare(b[sortCase]);
           case 'userId':
-            return state.direction * (b[sortItem] - a[sortItem]);
+            return state.direction * (b[sortCase] - a[sortCase]);
           default: return 0;
         }
       }),
