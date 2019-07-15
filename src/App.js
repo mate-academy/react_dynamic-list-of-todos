@@ -40,7 +40,7 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       isLoading: true,
-      visibleTodos: getSortedTodos(todos, prevState.sortField),
+      visibleTodos: [...todos],
     }), () => {
       this.setState({
         isLoaded: true,
@@ -49,77 +49,78 @@ class App extends React.Component {
     });
   }
 
-  sortBy = (sortField) => {
-    if (this.state.sortField === sortField) {
-      this.setState(prevState => ({
-        visibleTodos: getSortedTodos(prevState.visibleTodos, sortField)
-          .reverse(),
-        sortField,
-      }));
-    } else {
-      this.setState(prevState => ({
-        visibleTodos: getSortedTodos(prevState.visibleTodos, sortField),
-        sortField,
-      }));
-    }
-  };
+sortByReverse = () => {
+  this.setState(prevState => ({
+    visibleTodos: getSortedTodos(prevState.visibleTodos)
+      .reverse(),
+  }));
+};
 
-  render() {
-    const { sortField, visibleTodos, isLoaded } = this.state;
+sortBy = (sortField) => {
+  sortField !== this.state.sortField
+    ? this.setState(prevState => ({
+      visibleTodos: getSortedTodos(prevState.visibleTodos, sortField),
+      sortField,
+    }))
+    : this.sortByReverse();
+}
 
-    return (
-      <div>
-        { isLoaded ? (
-          <div>
-            <h1>
-              {visibleTodos.length}
-              {' '}
+render() {
+  const { sortField, visibleTodos, isLoaded } = this.state;
+
+  return (
+    <div>
+      { isLoaded ? (
+        <div>
+          <h1>
+            {visibleTodos.length}
+            {' '}
               sorted by:
-              {' '}
-              {sortField}
-            </h1>
-            <table className="App">
-              <thead>
-                <tr>
-                  <th>
-                    <button type="button" onClick={() => this.sortBy('id')}>
+            {' '}
+            {sortField}
+          </h1>
+          <table className="App">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" onClick={() => this.sortBy('id')}>
                         №
-                    </button>
-                  </th>
-                  <th>
-                    <button type="button" onClick={() => this.sortBy('user')}>
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => this.sortBy('user')}>
                         Name
-                    </button>
-                  </th>
-                  <th>
-                    <button
-                      type="button"
-                      onClick={() => this.sortBy('title')}
-                    >
+                  </button>
+                </th>
+                <th>
+                  <button
+                    type="button"
+                    onClick={() => this.sortBy('title')}
+                  >
                       title
-                    </button>
-                  </th>
-                  <th>
-                    <button
-                      type="button"
-                      onClick={() => this.sortBy('completed')}
-                    >
+                  </button>
+                </th>
+                <th>
+                  <button
+                    type="button"
+                    onClick={() => this.sortBy('completed')}
+                  >
                       Completed
-                    </button>
-                  </th>
-                </tr>
-              </thead>
-              <TodoList currentTodos={visibleTodos} />
-            </table>
-          </div>
-        ) : (
-          <button type="button" onClick={this.handleClick}>
-            { this.state.isLoading ? 'Loading...' : 'Load'}
-          </button>
-        )}
-      </div>
-    );
-  }
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <TodoList currentTodos={visibleTodos} key={visibleTodos.id} />
+          </table>
+        </div>
+      ) : (
+        <button type="button" onClick={this.handleClick}>
+          { this.state.isLoading ? 'Loading...' : 'Load'}
+        </button>
+      )}
+    </div>
+  );
+}
 }
 
 export default App;
