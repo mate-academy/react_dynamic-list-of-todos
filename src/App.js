@@ -1,19 +1,19 @@
 import React from 'react';
 import './App.css';
 
-import todos from './api/todos';
-import users from './api/users';
+let todosWithUser = [];
 
-function getUser(userId) {
-  return users.find(user => user.id === userId);
-}
+const getTodos = async() => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const todos = await response.json();
+  return todos;
+};
 
-const todosWithUser = todos.map((todo) => {
-  return {
-    ...todo,
-    user: getUser(todo.userId),
-  };
-});
+const getUsers = async() => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const todos = await response.json();
+  return todos;
+};
 
 class App extends React.Component {
   state = {
@@ -21,6 +21,16 @@ class App extends React.Component {
     isLoaded: false,
     isLoading: false,
   };
+
+  async componentDidMount() {
+    const todos = await getTodos();
+    const users = await getUsers();
+
+    todosWithUser = todos.map(todo => ({
+      ...todo,
+      user: users.find(user => (user.id === todo.userId)),
+    }));
+  }
 
   handleClick = () => {
     this.setState({
