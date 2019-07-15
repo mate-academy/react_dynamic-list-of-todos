@@ -54,7 +54,7 @@ class App extends Component {
           : (
             <div>
               <button onClick={this.handleClick} disabled={this.state.disabled}>Load</button>
-              {this.state.isLoading ? <p id='load'>Loading...</p> : null}
+              {this.state.isLoading ? <div id='load'>Loading...</div> : null}
             </div>
           )
         }

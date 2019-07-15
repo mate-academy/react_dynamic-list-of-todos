@@ -6,7 +6,7 @@ function TodoItem(props) {
     <tr>
       <td>{props.item}</td>
       <User name={props.name}/>
-      <td>{props.complete}</td>
+      <td className={props.complete === 'completed' ? "completed" : "notcompleted"}>{props.complete}</td>
     </tr>
   );
 }
