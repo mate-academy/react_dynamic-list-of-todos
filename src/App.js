@@ -28,11 +28,14 @@ class App extends React.Component {
       });
     await getTodos(this.urlParams)
       .then((todosData) => {
-        this.setState(
+        this.setState(previousState => (
           {
-            todos: todosData,
-          },
-        );
+            todos: todosData.map(todo => ({
+              ...todo,
+              user: previousState.users.find(user => user.id === todo.userId),
+            })),
+          }
+        ));
       });
   }
 
@@ -63,10 +66,7 @@ class App extends React.Component {
   };
 
   render() {
-    const todosWithUser = this.state.sortedTodoList.map(todo => ({
-      ...todo,
-      user: this.state.users.find(user => user.id === todo.userId),
-    }));
+    const todosWithUser = this.state.sortedTodoList;
     return (
       <main>
         {this.state.isLoaded ? (
