@@ -48,11 +48,11 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         {this.state.loaded
           ? <TodoList list={this.state.todoList} users={this.state.users} sort={this.sortTable}/>
           : (
-            <div>
+            <div className="container">
               <button onClick={this.handleClick} disabled={this.state.disabled}>Load</button>
               {this.state.isLoading ? <div id='load'>Loading...</div> : null}
             </div>

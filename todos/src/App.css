@@ -1,14 +1,11 @@
 body {
     background-image: url("\images\bg.jpg");
     font-family: "Comic Sans MS", sans-serif;
+    padding: 10px;
 }
 
 table {
     border-collapse: collapse;
-    position: absolute;
-    left: 15%;
-    top: 10px;
-
 }
 
 td {
@@ -21,9 +18,6 @@ tr:first-child {
 }
 
 button {
-    position: relative;
-    left: 45%;
-    top: 10px;
     background-color: #f3f3f3;
     outline: 0;
     background-image: linear-gradient(top, #f3f3f3 0%, #dddddd 50%, #d2d2d2 50%, #dfdfdf 100%);
@@ -38,12 +32,6 @@ button {
     width: 150px;
 }
 
-#load {
-    position: relative;
-    left: 48%;
-    top: 10px;
-}
-
 .completed {
     background: rgba(155, 253, 155, 0.28);
 }
@@ -54,4 +42,11 @@ button {
 
 tr {
     background: rgba(228, 233, 237, 0.28);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
