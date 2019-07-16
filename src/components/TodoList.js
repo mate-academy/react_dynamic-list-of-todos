@@ -10,50 +10,44 @@ class TodoList extends React.Component {
     this.todos = todos;
 
     this.state = {
-      sortTotos: [...this.todos],
+      sortedTotos: [...this.todos],
     };
   }
 
-  sort = (fieldOfSort, todos, sortWay) => {
-    let funcSort;
-    switch (fieldOfSort) {
-      case 'Status':
-        funcSort = (a, b) => sortWay * (a.completed - b.completed);
-        break;
-      case 'Todo':
-        funcSort = (a, b) => sortWay * a.title.localeCompare(b.title);
-        break;
-      case 'User':
-        funcSort = (a, b) => sortWay * a.user.name.localeCompare(b.user.name);
-        break;
-      default: break;
-    }
+  sortTotos = (event) => {
+    const fieldOfSort = event.target.textContent.toLowerCase();
+    const sortMethod = {
+      status: (a, b) => sortStatus * (a.completed - b.completed),
+      todo: (a, b) => sortStatus * a.title.localeCompare(b.title),
+      user: (a, b) => sortStatus * a.user.name.localeCompare(b.user.name),
+    };
 
     sortStatus = -sortStatus;
 
     this.setState({
-      sortTotos: [...todos].sort(funcSort),
+      sortedTotos: [...this.todos].sort(sortMethod[fieldOfSort]),
     });
   };
 
   render() {
+    const { sortedTotos } = this.state;
+
     return (
       <table>
         <thead>
           <tr className="table-head">
-            <th onClick={() => this.sort('Status', this.todos, sortStatus)}>Status</th>
-            <th onClick={() => this.sort('Todo', this.todos, sortStatus)}>Todo</th>
-            <th onClick={() => this.sort('User', this.todos, sortStatus)}>User</th>
+            <th onClick={this.sortTotos}>Status</th>
+            <th onClick={this.sortTotos}>Todo</th>
+            <th onClick={this.sortTotos}>User</th>
           </tr>
         </thead>
         <tbody>
           {
-            this.state.sortTotos.map((todo, currentIndex) => (
+            sortedTotos.map(todo => (
               <TodoItem
                 {...todo}
                 todos={this.todos}
-                currentIndex={currentIndex}
-                key={`keyTodo${todo.id}`}
+                key={todo.id}
               />
             ))
           }

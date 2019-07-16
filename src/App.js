@@ -5,8 +5,9 @@ import { getTodosWithUsers } from './components/loadingData';
 
 class App extends React.Component {
   state = {
-    renderButton: true,
+    isLoadButtonVisible: true,
     todos: [],
+    textOfLoadButton: 'Load',
   }
 
   updateAppState = (config) => {
@@ -14,36 +15,39 @@ class App extends React.Component {
   };
 
   handleClick = () => {
-    const loadButton = document.querySelector('.load-button');
-    loadButton.disabled = true;
-    loadButton.textContent = 'Loading...';
+    this.setState({
+      textOfLoadButton: 'Loading...',
+    });
 
     getTodosWithUsers(this.updateAppState).then((data) => {
       this.setState({
         todos: data,
-        renderButton: false,
+        isLoadButtonVisible: false,
       });
     });
   };
 
   render() {
+    const { textOfLoadButton, isLoadButtonVisible, todos } = this.state;
+
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
         {
-          (this.state.renderButton)
+          (isLoadButtonVisible)
             ? (
               <button
                 type="button"
                 className="load-button"
+                disabled={textOfLoadButton === 'Loading...'}
                 onClick={this.handleClick}
               >
-                Load
+                {textOfLoadButton}
               </button>
             )
             : (
               <TodoList
-                todos={this.state.todos}
+                todos={todos}
               />
             )
         }
