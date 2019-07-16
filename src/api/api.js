@@ -3,7 +3,6 @@ const baseUrl = 'https://jsonplaceholder.typicode.com';
 export const getTodos = async(urlParams) => {
   const url = '/todos';
   const response = await fetch(`${baseUrl}${url}${urlParams}`);
-  console.log(`${baseUrl}${url}${urlParams}`);
   const todos = await response.json();
   return todos;
 };
