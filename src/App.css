@@ -5,12 +5,20 @@
   justify-content: center;
 }
 
-td {
-  border: 1px solid black;
+.table {
   border-collapse: collapse;
 }
 
-.BTN {
+.tableCell {
+  border: 1px solid black;
+}
+
+.table__header-btn {
+  cursor: pointer;
+}
+
+.btn {
+
   background: azure;
   border: 1px solid lightblue;
   border-radius: 5px;

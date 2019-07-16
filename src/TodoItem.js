@@ -3,14 +3,14 @@ import React from 'react';
 
 const TodoItem = ({ todoItem }) => (
   <tr>
-    <td>{todoItem.id}</td>
-    <td>
+    <td className="tableCell">{todoItem.id}</td>
+    <td className="tableCell">
       {todoItem.title}
     </td>
-    <td>
-      <User user={todoItem.user} />
+    <td className="tableCell">
+      <div>{todoItem.user.name}</div>
     </td>
-    <td>
+    <td className="tableCell">
       <input
         type="checkbox"
         checked={todoItem.completed}
@@ -18,23 +18,12 @@ const TodoItem = ({ todoItem }) => (
     </td>
   </tr>
 );
-
-const User = ({ user }) => (
-  <div>{user.name}</div>
-);
-
 TodoItem.propTypes = {
   todoItem: propTypes.shape({
     id: propTypes.number,
     completed: propTypes.bool,
     title: propTypes.string,
     user: propTypes.string,
-  }).isRequired,
-};
-
-User.propTypes = {
-  user: propTypes.shape({
-    name: propTypes.string,
   }).isRequired,
 };
 

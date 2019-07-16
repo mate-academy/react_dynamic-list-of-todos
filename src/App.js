@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import propTypes from 'prop-types';
+import propTypes from './propTypes';
 import { getTodos, getUsers } from './api/api';
 import TodoItem from './TodoItem';
 
@@ -11,16 +11,12 @@ class App extends React.Component {
     users: [],
     isLoaded: false,
     isLoading: false,
-    tableItemsAmount: 200,
-    activePage: 1,
     sortType: 'id',
     sortDirection: 1, // 1 = 'asc', // 2 = desc
   };
 
   urlParams = (
-    `?_limit=${this.state.tableItemsAmount}
-    &_page=${this.state.activePage}
-    &_sort=${this.state.sortType}
+    `?_sort=${this.state.sortType}
     &_order=${this.state.sortDirection === 1 ? 'asc' : 'desc'}`);
 
   async componentDidMount() {
@@ -38,7 +34,6 @@ class App extends React.Component {
           },
         );
       });
-    console.log(this.state);
   }
 
   handleClick = () => {
@@ -59,17 +54,10 @@ class App extends React.Component {
       sortType: sortCase,
       direction: state.direction === 1 ? -1 : 1,
       sortedTodoList: [...state.todos].sort((a, b) => {
-        switch (sortCase) {
-          case 'id':
-            return state.direction * (b[sortCase] - a[sortCase]);
-          case 'completed':
-            return state.direction * (b[sortCase] - a[sortCase]);
-          case 'title':
-            return state.direction * a[sortCase].localeCompare(b[sortCase]);
-          case 'userId':
-            return state.direction * (b[sortCase] - a[sortCase]);
-          default: return 0;
+        if (sortCase === 'title') {
+          return state.direction * a[sortCase].localeCompare(b[sortCase]);
         }
+        return state.direction * (b[sortCase] - a[sortCase]);
       }),
     }));
   };
@@ -79,60 +67,54 @@ class App extends React.Component {
       ...todo,
       user: this.state.users.find(user => user.id === todo.userId),
     }));
-    console.log(this.state);
     return (
       <main>
         {this.state.isLoaded ? (
           <div className="App">
             <h1>Static list of todos</h1>
-            <table>
+            <table className="table">
               <thead>
                 <tr>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => this.sortData('id')}
-                    >
+                  <th
+                    className="tableCell table__header-btn"
+                    onClick={() => this.sortData('id')}
+                  >
                     Id
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => this.sortData('title')}
-                    >
+                  </th>
+                  <th
+                    className="tableCell table__header-btn"
+                    onClick={() => this.sortData('title')}
+                  >
                     Title
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => this.sortData('userId')}
-                    >
+                  </th>
+                  <th
+                    className="tableCell table__header-btn"
+                    onClick={() => this.sortData('userId')}
+                  >
                     User
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => this.sortData('completed')}
-                    >
+                  </th>
+                  <th
+                    className="tableCell table__header-btn"
+                    onClick={() => this.sortData('completed')}
+                  >
                     Status
-                    </button>
-                  </td>
+                  </th>
                 </tr>
               </thead>
-              {
-                todosWithUser.map(todo => (
-                  <TodoItem todoItem={todo} />
-                ))
-              }
+              <tbody>
+                {
+                  todosWithUser.map(todo => (
+                    <TodoItem todoItem={todo} />
+                  ))
+                }
+              </tbody>
             </table>
           </div>
         ) : (
           <button
-            className="BTN"
+            className="btn"
             type="submit"
+            disabled={this.state.isLoading}
             onClick={this.handleClick}
           >
             {this.state.isLoading ? 'Loading...' : 'Load'}
@@ -142,29 +124,6 @@ class App extends React.Component {
     );
   }
 }
+propTypes.state = propTypes;
 
-propTypes.state = {
-  users: propTypes.shape({
-    id: propTypes.number,
-    name: propTypes.string,
-    username: propTypes.string,
-    email: propTypes.string,
-    address: propTypes.shape({
-      street: propTypes.string,
-      suite: propTypes.string,
-      city: propTypes.string,
-    }),
-    phone: propTypes.string,
-    website: propTypes.string,
-    company: propTypes.shape({
-      name: propTypes.string,
-    }),
-  }),
-  todos: propTypes.shape({
-    userId: propTypes.number,
-    id: propTypes.number,
-    title: propTypes.string,
-    completed: propTypes.boolean,
-  }),
-};
 export default App;
