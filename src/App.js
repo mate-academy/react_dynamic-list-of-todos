@@ -12,6 +12,7 @@ const getData = async() => {
     user: users.find(user => user.id === todo.userId),
   }));
 };
+
 let currentKey = '';
 let currentTodos = [];
 let sortedTodos = [];
@@ -58,24 +59,19 @@ class App extends React.Component {
   loadData = async() => {
     const todos = await getData();
     this.state.todos = todos;
-    this.setState((prevState) => {
-      return {
-        visibleTodos: getSortedTodos(prevState),
-        isLoading: true,
-      };
-    });
-
+    this.setState(prevState => ({
+      visibleTodos: getSortedTodos(prevState),
+      isLoading: true,
+    }));
   };
 
   sortBy = (sortField) => {
     this.setState({
-      sortField: sortField,
+      sortField,
     });
-    this.setState((prevState) => {
-      return {
-        visibleTodos: getSortedTodos(prevState),
-      };
-    });
+    this.setState(prevState => ({
+      visibleTodos: getSortedTodos(prevState),
+    }));
   };
 
   render() {
@@ -94,38 +90,9 @@ class App extends React.Component {
             ) : (
               <>
                 <h1>Todos List</h1>
-                <div className="main__button-container">
-                  <button
-                    onClick={() => this.sortBy('id')}
-                    type="button"
-                    className="main__button-sort"
-                  >
-                    Id
-                  </button>
-                  <button
-                    onClick={() => this.sortBy('completed')}
-                    type="button"
-                    className="main__button-sort"
-                  >
-                    Completed
-                  </button>
-                  <button
-                    onClick={() => this.sortBy('title')}
-                    type="button"
-                    className="main__button-sort"
-                  >
-                    Title
-                  </button>
-                  <button
-                    onClick={() => this.sortBy('user')}
-                    type="button"
-                    className="main__button-sort"
-                  >
-                    User
-                  </button>
-                </div>
                 <TodoList
                   todos={this.state.visibleTodos}
+                  onSortBy={this.sortBy}
                 />
               </>
             )

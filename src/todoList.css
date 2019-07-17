@@ -10,3 +10,7 @@
   padding: 5px 0;
   border: 2px solid white;
 }
+
+.table__thead .table__item:hover {
+  cursor: pointer;
+}

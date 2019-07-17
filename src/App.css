@@ -30,18 +30,3 @@ button:hover {
   color: #242424;
   text-align: center;
 }
-
-.main__button {
-  background-color: black;
-  color: #bfbfbf;
-}
-
-.main__button:hover {
-  background-color: #bfbfbf;
-  color: black;
-}
-
-.main__button-container {
-  display: flex;
-  justify-content: space-between;
-}
