@@ -2,15 +2,29 @@ import propTypes from 'prop-types';
 import React from 'react';
 
 const TodoItem = ({ todoItem }) => (
-  <tr>
-    <td className="tableCell">{todoItem.id}</td>
-    <td className="tableCell">
+  <tr key={todoItem.id}>
+    <td
+      key={`tRow_row-${todoItem.id}--id`}
+      className="tableCell"
+    >
+      {todoItem.id}
+    </td>
+    <td
+      key={`tRow_row-${todoItem.id}--title`}
+      className="tableCell"
+    >
       {todoItem.title}
     </td>
-    <td className="tableCell">
-      <div>{todoItem.user.name}</div>
+    <td
+      key={`tRow_row-${todoItem.id}--name`}
+      className="tableCell"
+    >
+      {todoItem.user.name}
     </td>
-    <td className="tableCell">
+    <td
+      key={`tRow_row-${todoItem.id}--completed`}
+      className="tableCell"
+    >
       <input
         type="checkbox"
         checked={todoItem.completed}
@@ -23,7 +37,10 @@ TodoItem.propTypes = {
     id: propTypes.number,
     completed: propTypes.bool,
     title: propTypes.string,
-    user: propTypes.string,
+    user: propTypes.shape({
+      id: propTypes.number,
+      name: propTypes.string,
+    }),
   }).isRequired,
 };
 

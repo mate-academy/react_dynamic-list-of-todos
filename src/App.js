@@ -15,11 +15,39 @@ class App extends React.Component {
     sortDirection: 1, // 1 = 'asc', // 2 = desc
   };
 
-  urlParams = (
+  urlParams =
     `?_sort=${this.state.sortType}
-    &_order=${this.state.sortDirection === 1 ? 'asc' : 'desc'}`);
+    &_order=${this.state.sortDirection === 1 ? 'asc' : 'desc'}`;
 
-  async componentDidMount() {
+  sortData = (sortCase) => {
+    this.setState(state => ({
+      sortType: sortCase,
+      direction: state.direction === 1 ? -1 : 1,
+      sortedTodoList: [...state.todos].sort((a, b) => {
+        if (sortCase === 'title') {
+          return state.direction * a[sortCase].localeCompare(b[sortCase]);
+        }
+        return state.direction * (b[sortCase] - a[sortCase]);
+      }),
+    }));
+  };
+
+  handleClick = () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    this.loadData()
+      .then(() => {
+        this.sortData(this.state.sortType);
+        this.setState({
+          isLoaded: true,
+          isLoading: false,
+        });
+      });
+  };
+
+  async loadData() {
     await getUsers()
       .then((userData) => {
         this.setState(
@@ -39,61 +67,39 @@ class App extends React.Component {
       });
   }
 
-  handleClick = () => {
-    this.setState({
-      isLoading: true,
-    });
-    setTimeout(() => {
-      this.sortData(this.state.sortType);
-      this.setState({
-        isLoaded: true,
-        isLoading: false,
-      });
-    }, 2000);
-  };
-
-  sortData = (sortCase) => {
-    this.setState(state => ({
-      sortType: sortCase,
-      direction: state.direction === 1 ? -1 : 1,
-      sortedTodoList: [...state.todos].sort((a, b) => {
-        if (sortCase === 'title') {
-          return state.direction * a[sortCase].localeCompare(b[sortCase]);
-        }
-        return state.direction * (b[sortCase] - a[sortCase]);
-      }),
-    }));
-  };
-
   render() {
     const todosWithUser = this.state.sortedTodoList;
     return (
       <main>
         {this.state.isLoaded ? (
           <div className="App">
-            <h1>Static list of todos</h1>
-            <table className="table">
-              <thead>
-                <tr>
+            <h1>Dynamic list of todos</h1>
+            <table className="table" key="table">
+              <thead key="table_head">
+                <tr key="thead_row">
                   <th
+                    key="thead_row--id"
                     className="tableCell table__header-btn"
                     onClick={() => this.sortData('id')}
                   >
                     Id
                   </th>
                   <th
+                    key="thead_row--title"
                     className="tableCell table__header-btn"
                     onClick={() => this.sortData('title')}
                   >
                     Title
                   </th>
                   <th
+                    key="thead_row--userId"
                     className="tableCell table__header-btn"
                     onClick={() => this.sortData('userId')}
                   >
                     User
                   </th>
                   <th
+                    key="thead_row--completed"
                     className="tableCell table__header-btn"
                     onClick={() => this.sortData('completed')}
                   >
@@ -101,10 +107,10 @@ class App extends React.Component {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody key="table_body">
                 {
                   todosWithUser.map(todo => (
-                    <TodoItem todoItem={todo} />
+                    <TodoItem key={`todo-${todo.id}`} todoItem={todo} />
                   ))
                 }
               </tbody>
