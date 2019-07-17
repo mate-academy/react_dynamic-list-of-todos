@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TodoItem = ({ item }) => (
-  <div className="Item__container">
-    <div className="Item__container-id">{item.id}</div>
-    <div className="Item__container-name">{item.user.name}</div>
-    <div className="Item__container-title">{item.title}</div>
-    <input className="Item__container-completed" type="checkbox" checked={item.completed} />
+  <div className="item__container">
+    <div className="item__container-id">{item.id}</div>
+    <div className="item__container-name">{item.user.name}</div>
+    <div className="item__container-title">{item.title}</div>
+    <input className="item__container-completed" type="checkbox" checked={item.completed} />
   </div>
 );
 

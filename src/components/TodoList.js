@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
 const TodoList = ({ completedTodo }) => (
-  <div className="Todo__List">
+  <div className="todo__List">
     {completedTodo.map(todo => (
-      <div className="Todo__List-container">
-        <div className="Container__Item"><TodoItem item={todo} /></div>
+      <div className="todo__List-container">
+        <div className="container__Item"><TodoItem item={todo} key={todo.id} /></div>
       </div>
     ))}
   </div>

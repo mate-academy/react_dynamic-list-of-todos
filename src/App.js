@@ -1,21 +1,7 @@
 import React from 'react';
 import './App.css';
-
+import { getTodos, getUsers } from './components/DataTransferTodo';
 import TodoList from './components/TodoList';
-
-const getTodos = async() => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const currentTodos = await response.json();
-
-  return currentTodos;
-};
-
-const getUsers = async() => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/users');
-  const currentUsers = await response.json();
-
-  return currentUsers;
-};
 
 const getSortedTodos = (completedTodoList, sortField) => {
   let callback = (typeof completedTodoList[0][sortField] === 'string')
@@ -25,7 +11,7 @@ const getSortedTodos = (completedTodoList, sortField) => {
   if (sortField === 'user') {
     callback = (a, b) => a.user.name.localeCompare(b.user.name);
   }
-  return completedTodoList.sort(callback);
+  return [...completedTodoList].sort(callback);
 };
 
 class App extends React.Component {
@@ -33,6 +19,7 @@ class App extends React.Component {
       completedTodoList: [],
       isLoaded: false,
       isLoading: false,
+      sortField: 'id',
     };
 
     handleClick = async() => {
@@ -43,7 +30,7 @@ class App extends React.Component {
         user: users.find(user => user.id === todo.userId),
       }));
       this.setState({
-        completedTodoList: prepared,
+        completedTodoList: [...prepared],
         isLoading: true,
       });
 
@@ -55,11 +42,21 @@ class App extends React.Component {
       }, 1000);
     };
 
-    sortBy = (sortField) => {
-      this.setState({
-        completedTodoList: getSortedTodos(this.state.completedTodoList, sortField),
-      });
+    sortByReverse = () => {
+      this.setState(prevState => ({
+        completedTodoList: getSortedTodos(prevState.completedTodoList)
+          .reverse(),
+      }));
     };
+
+    sortBy = (sortField) => {
+      sortField !== this.state.sortField
+        ? this.setState(prevState => ({
+          completedTodoList: getSortedTodos(prevState.completedTodoList, sortField),
+          sortField,
+        }))
+        : this.sortByReverse();
+    }
 
     render() {
       return (
