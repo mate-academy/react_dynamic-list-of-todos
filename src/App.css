@@ -1,3 +1,20 @@
 .App {
   text-align: center;
 }
+
+.todo-list {
+  padding: 0;
+}
+
+.todo-item {
+  width: 50%;
+  list-style: none;
+  padding: 10px;
+  background-color: cornflowerblue;
+  margin: auto auto 20px;
+  border-radius: 25px;
+}
+
+.user-name {
+  margin-top: 0;
+}
