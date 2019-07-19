@@ -26,9 +26,6 @@
   color: white;
 }
 
-.Todo {
-  display: block;
-  background-color: rgb(112, 231, 162);
-  margin: 5px;
-  border: 1px solid black;
-}
+  .Todo {
+    background-color: rgb(112, 231, 162);
+  }

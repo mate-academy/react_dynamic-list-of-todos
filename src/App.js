@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import TodoList from './component/Todolist';
+import getSort from './component/getSort';
 
 const getTodos = async() => {
   const responce = await fetch('https://jsonplaceholder.typicode.com/todos');
@@ -17,8 +18,10 @@ let todosFromServer = [];
 class App extends React.Component {
   state = {
     todos: [],
+    visibleTodos: [],
     isLoaded: false,
     isLoading: false,
+    sortField: ''
   };
 
   async componentDidMount() {
@@ -27,7 +30,17 @@ class App extends React.Component {
     todosFromServer = todos.map(todo => ({
       ...todo,
       user: users.find(user => user.id === todo.userId),
-    }));
+    }))
+  }
+
+  sortBy = (sortField) => {
+
+    this.setState(prevState => {
+      return {
+        visibleTodos: getSort(prevState.visibleTodos, sortField, prevState.sortField === sortField),
+        sortField,
+      };
+    });
   }
 
   handleClick = () => {
@@ -38,19 +51,26 @@ class App extends React.Component {
     setTimeout(() => {
       this.setState({
         todos: todosFromServer,
+        visibleTodos: todosFromServer,
         isLoaded: true,
         isLoading: false,
       });
-    }, 2000);
-  };
+    }, 1000);
+  }
 
   render() {
+    const {visibleTodos} = this.state;
     return (
       <main>
-        { this.state.isLoaded ? (
+        {this.state.isLoaded ? (
           <div className="App">
             <h1>Dynamic list of todos</h1>
-            <TodoList todos={this.state.todos} />
+            <h3> try to sort {this.state.sortField}</h3>
+            <button onClick={() => this.sortBy('id')}>ID</button>
+            <button onClick={() => this.sortBy('user')}>USER</button>
+            <button onClick={() => this.sortBy('completed')}>DONE</button>
+            <button onClick={() => this.sortBy('title')}>TASK</button>
+            <TodoList todos={visibleTodos} />
           </div>
         ) : (
           <button className="load" onClick={this.handleClick}>
@@ -60,6 +80,6 @@ class App extends React.Component {
       </main>
     );
   }
-}
+};
 
 export default App;

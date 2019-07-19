@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 
 const User = props => (
   <div>
-    <p>
-      {props.user.name}
-    </p>
-    <p>
-      contact :
-      {props.user.email}
-    </p>
+    {props.user.name}
   </div>
 );
 
@@ -18,7 +12,6 @@ User.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-      email: PropTypes.string,
     })
   ).isRequired,
 };
