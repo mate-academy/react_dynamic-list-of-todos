@@ -1,0 +1,48 @@
+.header {
+  text-align: center;
+}
+
+.start-btn {
+  font-size: 29px;
+  width: 100%;
+  color: #fff;
+  background-color: #45cbda;
+  border: 2px solid #35a5b0;
+  border-radius: 20px;
+  padding: 30px 0;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background-color: #8be0e9;
+}
+
+.table {
+  border: 1px solid #f1f1f1;
+  border-radius: 20px;
+  width: 70%;
+  text-align: center;
+  margin: auto;
+  padding: 10px;
+  background-color: #fbffff
+}
+
+.task {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.status {
+  height: 25px;
+  width: 25px;
+}
+
+th {
+  padding-bottom: 15px;
+  cursor: pointer;
+}
+
+td {
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+}
