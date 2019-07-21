@@ -14,7 +14,7 @@ const TodoItem = ({ todo }) => (
       <input
         className="status"
         type="checkbox"
-        checked={todo.completed}
+        defaultChecked={todo.completed}
       />
     </td>
   </tr>
@@ -25,7 +25,13 @@ TodoItem.propTypes = {
     id: PropTypes.number,
     title: PropTypes.string,
     completed: PropTypes.bool,
-    user: PropTypes.object,
+    user: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      email: PropTypes.string,
+      address: PropTypes.object,
+    }).isRequired,
   }).isRequired,
 };
 

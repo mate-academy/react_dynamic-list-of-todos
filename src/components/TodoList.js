@@ -22,13 +22,11 @@ class TodoList extends React.Component {
       user: users.find(user => todo.userId === user.id),
     }));
 
-    setTimeout(() => {
-      this.setState({
-        todos: preparedPostsList,
-        isLoaded: true,
-        isLoading: false,
-      });
-    }, 2000);
+    this.setState({
+      todos: preparedPostsList,
+      isLoaded: true,
+      isLoading: false,
+    });
   };
 
   sortBy = (item) => {

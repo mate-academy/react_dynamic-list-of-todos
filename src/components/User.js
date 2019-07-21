@@ -9,7 +9,11 @@ const User = ({ item }) => (
 
 User.propTypes = {
   item: PropTypes.shape({
-    name: PropTypes.string,
+    id: PropTypes.number,
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string,
+    email: PropTypes.string,
+    address: PropTypes.object,
   }).isRequired,
 };
 
