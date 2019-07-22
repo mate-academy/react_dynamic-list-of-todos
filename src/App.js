@@ -2,16 +2,8 @@ import React from 'react';
 import './App.css';
 import TodoList from './component/Todolist';
 import getSort from './component/getSort';
-
-const getTodos = async() => {
-  const responce = await fetch('https://jsonplaceholder.typicode.com/todos');
-  return await responce.json();
-};
-
-const getUsers = async() => {
-  const responce = await fetch('https://jsonplaceholder.typicode.com/users');
-  return await responce.json();
-};
+import getTodos from './component/getTodos';
+import getUsers from './component/getUsers';
 
 let todosFromServer = [];
 
@@ -21,7 +13,7 @@ class App extends React.Component {
     visibleTodos: [],
     isLoaded: false,
     isLoading: false,
-    sortField: ''
+    sortField: 'id',
   };
 
   async componentDidMount() {
@@ -59,10 +51,10 @@ class App extends React.Component {
   }
 
   render() {
-    const {visibleTodos} = this.state;
+    const {visibleTodos, isLoaded, isLoading} = this.state;
     return (
       <main>
-        {this.state.isLoaded ? (
+        {isLoaded ? (
           <div className="App">
             <h1>Dynamic list of todos</h1>
             <h3> try to sort {this.state.sortField}</h3>
@@ -74,7 +66,7 @@ class App extends React.Component {
           </div>
         ) : (
           <button className="load" onClick={this.handleClick}>
-            {this.state.isLoading ? 'Loading...' : 'Load' }
+            {isLoading ? 'Loading...' : 'Load' }
           </button>
         )}
       </main>

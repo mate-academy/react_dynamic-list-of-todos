@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import User from './User';
 
-const TodoItem = props => (
+const TodoItem = ({todo}) => (
   <tr className="Todo">
     <td>
-      {props.todo.id}
+      {todo.id}
     </td>
     <td>
-      <User user={props.todo.user} />
+      <User user={todo.user} />
     </td>
     <td>
-      <input type="checkbox" checked={props.todo.completed} />
+      <input type="checkbox" checked={todo.completed} />
     </td>
     <td>
-      {props.todo.title}
+      {todo.title}
     </td>
   </tr>
 );

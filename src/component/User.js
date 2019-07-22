@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const User = props => (
+const User = ({ user }) => (
   <div>
-    {props.user.name}
+    {user.name}
   </div>
 );
 
