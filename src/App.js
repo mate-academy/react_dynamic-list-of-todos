@@ -42,11 +42,13 @@ class App extends React.Component {
     isLoaded: false,
     isLoading: false,
     sortField: 'id',
+    disabled: false,
   };
 
   handlerClick = async() => {
     this.setState({
       isLoading: true,
+      disabled: true,
     });
     setTimeout(() => {
       this.setState({
@@ -75,23 +77,26 @@ class App extends React.Component {
   };
 
   render() {
+    const { visibleTodos, isLoading, isLoaded, disabled } = this.state;
+
     return (
       <main className="main">
         {
-          (!this.state.isLoaded)
+          (!isLoaded)
             ? (
               <button
                 onClick={this.handlerClick}
                 className="main__button"
                 type="button"
+                disabled={disabled}
               >
-                {this.state.isLoading ? 'Loading...' : 'Load'}
+                {isLoading ? 'Loading...' : 'Load'}
               </button>
             ) : (
               <>
                 <h1>Todos List</h1>
                 <TodoList
-                  todos={this.state.visibleTodos}
+                  todos={visibleTodos}
                   onSortBy={this.sortBy}
                 />
               </>
