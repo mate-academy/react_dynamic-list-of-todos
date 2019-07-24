@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
 
-import { getTodos, getUsers} from './api/data';
+import { getTodos, getUsers } from './api/data';
 import TodoList from './components/TodoList';
 
-const getData = async () => {
+const getData = async() => {
   const todos = await getTodos();
   const users = await getUsers();
 
@@ -17,20 +17,18 @@ const getData = async () => {
 };
 
 const getSortedTodos = ({ todos, sortField }) => {
- let callback = (typeof todos[0][sortField] === 'string')
-  ? (todoA, todoB) => todoA[sortField].localeCompare(todoB[sortField])
-  : (todoA, todoB) => todoA[sortField] - todoB[sortField]
+  let callback = (typeof todos[0][sortField] === 'string')
+    ? (todoA, todoB) => todoA[sortField].localeCompare(todoB[sortField])
+    : (todoA, todoB) => todoA[sortField] - todoB[sortField];
 
   if (sortField === 'user') {
-    callback = (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name)
-    }
+    callback = (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name);
+  }
 
   return todos.sort(callback);
 };
 
-
 class App extends React.Component {
-
   state = {
     todos: [],
     isLoaded: false,
@@ -38,7 +36,7 @@ class App extends React.Component {
     sortField: 'id',
   };
 
-  loadData = async () => {
+  loadData = async() => {
     const todos = await getData();
     this.setState({
       isLoading: true,
@@ -48,10 +46,9 @@ class App extends React.Component {
       this.setState({
         isLoading: false,
         isLoaded: true,
-        todos: todos,
+        todos,
       });
     }, 2000);
-
   };
 
   sortBy = (sortField) => {
@@ -69,11 +66,15 @@ class App extends React.Component {
     const { todos, isLoaded, isLoading } = this.state;
     return (
       <main>
-        <div className='center'>
+        <div className="center">
           <h1>List of Todos</h1>
           {isLoaded ? (
             <div>
-              <h2>({todos.length} items)</h2>
+              <h2>
+                (
+                {todos.length}
+                 items)
+              </h2>
               <button onClick={() => this.sortBy('id')}>
                 Sort by ID
               </button>
@@ -93,13 +94,13 @@ class App extends React.Component {
               <TodoList todos={todos} />
             </div>
           ) : (
-              <div>
-                <h2>({todos.length} items)</h2>
-                <button onClick={this.loadData}>
-                  {isLoading ? 'Loading...' : 'Load'}
-                </button>
-              </div>
-            )}
+            <div>
+              <h2>({todos.length} items)</h2>
+              <button onClick={this.loadData}>
+                {isLoading ? 'Loading...' : 'Load'}
+              </button>
+            </div>
+          )}
         </div>
       </main>
     );
