@@ -1,10 +1,9 @@
 .App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 
-.button-load {
+.button-load,
+.button-sort {
   width: 100px;
   height: 50px;
   background-color: lightgreen;
@@ -14,17 +13,39 @@
   color: darkgreen;
 }
 
+.button-sort {
+  height: 40px;
+}
+
 h1 {
   text-transform: uppercase;
   font-family: Arial;
   color: green;
 }
 
+h2 {
+  font-family: Arial;
+  color: green;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+.todo-list_item_title {
+  text-align: left;
+}
+
 .todo-list {
   list-style: none;
+
 }
 
 .todo-list_item {
-  display: flex;
-  justify-content: space-between;
+
 }

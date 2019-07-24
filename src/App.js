@@ -2,24 +2,33 @@ import React from 'react';
 import TodoList from './components/TodoList';
 
 import './App.css';
+import { getTodos, getUsers } from './api/data';
 
-const getTodos = async() => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const todosFromServer = await response.json();
-  return todosFromServer;
-};
+const getSortedTodos = (todos, key) => {
+  let callback = (typeof todos[0][key] === 'string')
+    ? (todoA, todoB) => todoA[key].localeCompare(todoB[key])
+    : (todoA, todoB) => todoA[key] - todoB[key];
 
-const getUsers = async() => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/users');
-  const usersFromServer = await response.json();
-  return usersFromServer;
+  if (key === 'user') {
+    callback = (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name);
+  }
+  return [...todos].sort(callback);
 };
 
 class App extends React.Component {
   state = {
     todos: [],
+    visibleTodos: [],
     isLoaded: false,
     isLoading: false,
+    sortField: 'id',
+  };
+
+  sortBy = (sortField) => {
+    this.setState(prevState => ({
+      visibleTodos: getSortedTodos(prevState.todos, sortField),
+      sortField,
+    }));
   };
 
   handleClick = async() => {
@@ -36,6 +45,7 @@ class App extends React.Component {
     setTimeout(() => {
       this.setState({
         todos: todosWithUser,
+        visibleTodos: getSortedTodos(todosWithUser, 'id'),
         isLoaded: true,
         isLoading: false,
       });
@@ -43,23 +53,72 @@ class App extends React.Component {
   };
 
   render() {
+    const {
+      visibleTodos, isLoaded, isLoading, sortField,
+    } = this.state;
+
     return (
       <div className="App">
-        {this.state.isLoaded
-          ? (<h1>Todo List</h1>
+        {isLoaded
+          ? (
+            <>
+              <h2>
+                {visibleTodos.length}
+                {' '}
+                todos were sorted by
+                {' '}
+                {sortField}
+              </h2>
+              <button
+                type="button"
+                className="button-sort"
+                onClick={() => this.sortBy('completed')}
+              >
+                completed
+              </button>
+
+              <button
+                type="button"
+                className="button-sort"
+                onClick={() => this.sortBy('id')}
+              >
+                ID
+              </button>
+
+              <button
+                type="button"
+                className="button-sort"
+                onClick={() => this.sortBy('title')}
+              >
+                title
+              </button>
+
+              <button
+                type="button"
+                className="button-sort"
+                onClick={() => this.sortBy('user')}
+              >
+                user
+              </button>
+
+              <TodoList
+                todos={visibleTodos}
+              />
+            </>
           ) : (
-            <button
-              type="button"
-              className="button-load"
-              onClick={this.handleClick}
-            >
-              {this.state.isLoading ? 'Loading...' : 'Load'}
-            </button>
+            <>
+              <h1>Todo List</h1>
+              <button
+                disabled={isLoading}
+                type="button"
+                className="button-load"
+                onClick={this.handleClick}
+              >
+                {isLoading ? 'Loading...' : 'Load'}
+              </button>
+            </>
           )
         }
-        <TodoList
-          todos={this.state.todos}
-        />
       </div>
     );
   }

@@ -2,15 +2,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TodoItem from './TodoItem';
 
-// в props свойствами попадают все
-// атрибуты Todolist (в данном случае только todos)
 function TodoList({ todos }) {
   return (
-    <ul className="todo-list">
-      {todos.map(todo => (
-        <TodoItem todo={todo} />
-      ))}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Completed</th>
+          <th>Title</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody>
+        {todos.map(todo => (
+          <TodoItem todo={todo} key={todo.id} />
+        ))}
+      </tbody>
+    </table>
   );
 }
 
