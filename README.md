@@ -2,7 +2,7 @@
 
 ## Demo link
 
-[DEMO LINK](https:///scandal0us.github.io/react_dynamic-list-of-todos/)
+[DEMO LINK](https://scandal0us.github.io/react_dynamic-list-of-todos/)
 
 
 ## Task
