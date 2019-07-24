@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import TodoList from './TodoList';
 
 let todosWithUser = [];
 
@@ -46,13 +47,42 @@ class App extends React.Component {
     }, 1000);
   };
 
+  sortByName = () => {
+    this.setState(prevState => ({
+      todos:
+        prevState.todos.sort((a, b) => (a.user.name > b.user.name) ? 1 : -1),
+    }));
+  };
+
+  sortByTodos = () => {
+    this.setState(prevState => ({
+      todos:
+        prevState.todos.sort((a, b) => (a.title > b.title) ? 1 : -1),
+    }));
+  };
+
+  sortByComplete = () => {
+    this.setState(prevState => ({
+      todos:
+        prevState.todos.sort((a, b) => (a.completed > b.completed) ? -1 : 1),
+    }));
+  };
+
   render() {
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
 
+
         {this.state.isLoaded
-        ? (<TodoList todos = {this.state.todos} />)
+        ? (
+          <div> Sort by: {' '}
+            <button onClick={this.sortByName}>Name</button>
+            <button onClick={this.sortByTodos}>Todos</button>
+            <button onClick={this.sortByComplete}>Complete</button>
+            <TodoList todo = {this.state.todos} />
+          </div>
+        )
         : (
           <button onClick = {this.handleClick}>
             {this.state.isLoading ? 'Loading...' : 'Load'}
@@ -62,25 +92,5 @@ class App extends React.Component {
     );
   }
 };
-
-const TodoList = (props) => (
-  <ul>
-    {props.todos.map(todo => (
-      <TodoItem todo = {todo}/>
-    ))}
-  </ul>
-);
-
-const TodoItem = (props) => (
-  <li>
-    <input type="checkbox" checked = {props.todo.completed} />
-    <div>{props.todo.title}</div>
-    <User user = {props.todo.user}/>
-  </li>
-);
-
-const User = (props) => (
-  <div>{props.user.name}</div>
-);
 
 export default App;
