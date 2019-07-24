@@ -16,12 +16,26 @@ const getData = async () => {
   });
 };
 
+const getSortedTodos = ({ todos, sortField }) => {
+ let callback = (typeof todos[0][sortField] === 'string')
+  ? (todoA, todoB) => todoA[sortField].localeCompare(todoB[sortField])
+  : (todoA, todoB) => todoA[sortField] - todoB[sortField]
+
+  if (sortField === 'user') {
+    callback = (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name)
+    }
+
+  return todos.sort(callback);
+};
+
+
 class App extends React.Component {
 
   state = {
     todos: [],
     isLoaded: false,
     isLoading: false,
+    sortField: 'id',
   };
 
   loadData = async () => {
@@ -40,6 +54,17 @@ class App extends React.Component {
 
   };
 
+  sortBy = (sortField) => {
+    const sortedTodos = getSortedTodos({
+      todos: this.state.todos,
+      sortField,
+    });
+    this.setState({
+      todos: sortedTodos,
+      sortField,
+    });
+  };
+
   render() {
     const { todos, isLoaded, isLoading } = this.state;
     return (
@@ -49,6 +74,22 @@ class App extends React.Component {
           {isLoaded ? (
             <div>
               <h2>({todos.length} items)</h2>
+              <button onClick={() => this.sortBy('id')}>
+                Sort by ID
+              </button>
+
+              <button onClick={() => this.sortBy('completed')}>
+                Sort by status
+              </button>
+
+              <button onClick={() => this.sortBy('title')}>
+                Sort by Title
+              </button>
+
+              <button onClick={() => this.sortBy('user')}>
+                Sort by User
+              </button>
+
               <TodoList todos={todos} />
             </div>
           ) : (

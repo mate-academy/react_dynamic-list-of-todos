@@ -1,4 +1,5 @@
 import React from 'react';
+import TodoItem from './TodoItem';
 
 const TodoList = ({ todos }) => (
   <table className="center">
@@ -16,15 +17,6 @@ const TodoList = ({ todos }) => (
       ))}
     </tbody>
   </table>
-);
-
-const TodoItem = ({ todo }) => (
-  <tr>
-    <td>{todo.id}</td>
-    <td>{todo.completed ? '+' : '-' }</td>
-    <td>{todo.title}</td>
-    <td>{todo.user.name}</td>
-  </tr>
 );
 
 export default TodoList
