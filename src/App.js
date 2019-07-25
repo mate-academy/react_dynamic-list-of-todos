@@ -54,8 +54,8 @@ class App extends React.Component {
   };
 
   getSortedTodos = (newSortField) => {
-    const { sortField, sortTodos } = this.state;
-    if (sortField === newSortField) {
+    const { sortField, sortTodos, visibleTodos } = this.state;
+    if (sortField === newSortField && sortTodos === visibleTodos) {
       return [...sortTodos].reverse();
     }
     const callbackMap = {
