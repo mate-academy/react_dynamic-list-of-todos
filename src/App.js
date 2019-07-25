@@ -3,46 +3,26 @@ import './App.css';
 import TodoList from './TodoList';
 import { getTodos, getUsers } from './getData';
 
-const getData = async() => {
-  const todos = await getTodos();
-  const users = await getUsers();
-
-  return todos.map(todo => ({
-    ...todo,
-    user: users.find(user => user.id === todo.userId),
-  }));
-};
-
-let currentKey = '';
-let currentTodos = [];
-let sortedTodos = [];
-
-const getSortedTodos = ({ todos, sortField }) => {
-  if (currentKey === sortField && currentTodos === todos) {
-    return sortedTodos.reverse();
-  }
-
-  currentKey = sortField;
-  currentTodos = todos;
-  const callbackMap = {
-    id: (a, b) => a.id - b.id,
-    completed: (a, b) => a.completed - b.completed,
-    title: (a, b) => a.title.localeCompare(b.title),
-    user: (a, b) => a.user.name.localeCompare(b.user.name),
-  };
-  const callback = callbackMap[sortField];
-  sortedTodos = [...todos].sort(callback);
-  return sortedTodos;
-};
-
 class App extends React.Component {
+  todos = [];
+
   state = {
-    todos: [],
     visibleTodos: [],
+    sortTodos: [],
     isLoaded: false,
     isLoading: false,
     sortField: 'id',
     disabled: false,
+  };
+
+  getData = async() => {
+    const todos = await getTodos();
+    const users = await getUsers();
+
+    return todos.map(todo => ({
+      ...todo,
+      user: users.find(user => user.id === todo.userId),
+    }));
   };
 
   handlerClick = async() => {
@@ -51,33 +31,51 @@ class App extends React.Component {
       disabled: true,
     });
     setTimeout(() => {
-      this.setState({
-        isLoaded: true,
-      });
+      this.loadData();
     }, 2000);
-    this.loadData();
   };
 
   loadData = async() => {
-    const todos = await getData();
-    this.state.todos = todos;
+    this.todos = await this.getData();
     this.setState(prevState => ({
-      visibleTodos: getSortedTodos(prevState),
-      isLoading: true,
+      visibleTodos: this.todos,
+      isLoaded: true,
+      isLoading: false,
     }));
   };
 
   sortBy = (sortField) => {
-    this.setState({
-      sortField,
-    });
+    const sortTodos = this.getSortedTodos(sortField);
     this.setState(prevState => ({
-      visibleTodos: getSortedTodos(prevState),
+      sortField,
+      visibleTodos: sortTodos,
+      sortTodos,
     }));
   };
 
+  getSortedTodos = (newSortField) => {
+    const { sortField, sortTodos } = this.state;
+    if (sortField === newSortField) {
+      return [...sortTodos].reverse();
+    }
+    const callbackMap = {
+      id: (a, b) => a.id - b.id,
+      completed: (a, b) => a.completed - b.completed,
+      title: (a, b) => a.title.localeCompare(b.title),
+      user: (a, b) => a.user.name.localeCompare(b.user.name),
+    };
+
+    const callback = callbackMap[newSortField];
+    return [...this.todos].sort(callback);
+  };
+
   render() {
-    const { visibleTodos, isLoading, isLoaded, disabled } = this.state;
+    const {
+      visibleTodos,
+      isLoading,
+      isLoaded,
+      disabled,
+    } = this.state;
 
     return (
       <main className="main">
