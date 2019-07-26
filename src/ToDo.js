@@ -24,19 +24,18 @@ class ToDo extends React.Component {
   }
 
   sortTodos = (sortField) => {
-    let copyTodos = this.state.todos;
 
     if (sortField === 'completed') {
-      completedSort(copyTodos, sortField)
+      completedSort(this.state.todos, sortField)
     }
     if (sortField === 'title') {
-      titleSort(copyTodos, sortField)
+      titleSort(this.state.todos, sortField)
     } else {
-      nameSort(copyTodos, sortField)
+      nameSort(this.state.todos, sortField)
     }
 
     this.setState({
-      todos: copyTodos
+      todos: this.state.todos
     })
   }
 
