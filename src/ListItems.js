@@ -22,7 +22,7 @@ function ListItems(props) {
                 {todos.map(todo => {
                     return <tr key={todo.id}>
                         <td>
-                            <input type='checkbox' checked={todo.completed} onChange={()=>[]} />
+                            <input type='checkbox' checked={todo.completed} onChange={() => []} />
                         </td>
 
                         <td>
