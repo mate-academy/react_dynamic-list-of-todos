@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
 const TodoList = ({ todos }) => (
@@ -12,11 +13,15 @@ const TodoList = ({ todos }) => (
       </tr>
     </thead>
     <tbody>
-      {todos.map(todo => (
+      {(todos).map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </tbody>
   </table>
 );
 
-export default TodoList
+TodoList.propTypes = {
+  todos: PropTypes.array.isRequired,
+};
+
+export default TodoList;

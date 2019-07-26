@@ -16,54 +16,58 @@ const getData = async() => {
   });
 };
 
-const getSortedTodos = ({ todos, sortField }) => {
-  let callback = (typeof todos[0][sortField] === 'string')
-    ? (todoA, todoB) => todoA[sortField].localeCompare(todoB[sortField])
-    : (todoA, todoB) => todoA[sortField] - todoB[sortField];
+const getSortedTodos = (todos, sortField) => {
+  const sortCallbacks = {
+    id: (a, b) => a.id - b.id,
+    completed: (a, b) => a.completed - b.completed,
+    title: (a, b) => a.title.localeCompare(b.title),
+    user: (a, b) => a.user.name.localeCompare(b.user.name),
+  };
 
-  if (sortField === 'user') {
-    callback = (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name);
-  }
-
-  return todos.sort(callback);
+  return [...todos].sort(sortCallbacks[sortField]);
 };
 
 class App extends React.Component {
   state = {
     todos: [],
+    visibleTodos: [],
     isLoaded: false,
-    isLoading: false,
+    isButtonDisabled: false,
     sortField: 'id',
   };
 
   loadData = async() => {
-    const todos = await getData();
     this.setState({
-      isLoading: true,
+      isButtonDisabled: true,
     });
 
-    setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        isLoaded: true,
-        todos,
-      });
-    }, 2000);
+    const todos = await getData();
+
+    this.setState({
+      isLoaded: true,
+      todos,
+      visibleTodos: getSortedTodos(todos, 'id'),
+    });
   };
 
   sortBy = (sortField) => {
-    const sortedTodos = getSortedTodos({
-      todos: this.state.todos,
-      sortField,
-    });
-    this.setState({
-      todos: sortedTodos,
-      sortField,
-    });
+    const sortedTodos = getSortedTodos(this.state.todos, sortField);
+    sortField !== this.state.sortField
+      ? this.setState(prevState => ({
+        visibleTodos: sortedTodos,
+        sortField,
+      }))
+      : this.reverseSort();
+  };
+
+  reverseSort = () => {
+    this.setState(prevState => ({
+      visibleTodos: getSortedTodos(prevState.visibleTodos).reverse(),
+    }));
   };
 
   render() {
-    const { todos, isLoaded, isLoading } = this.state;
+    const { visibleTodos, isLoaded } = this.state;
     return (
       <main>
         <div className="center">
@@ -72,32 +76,36 @@ class App extends React.Component {
             <div>
               <h2>
                 (
-                {todos.length}
+                {visibleTodos.length}
                  items)
               </h2>
-              <button onClick={() => this.sortBy('id')}>
+              <button type="submit" onClick={() => this.sortBy('id')}>
                 Sort by ID
               </button>
 
-              <button onClick={() => this.sortBy('completed')}>
+              <button type="submit" onClick={() => this.sortBy('completed')}>
                 Sort by status
               </button>
 
-              <button onClick={() => this.sortBy('title')}>
+              <button type="submit" onClick={() => this.sortBy('title')}>
                 Sort by Title
               </button>
 
-              <button onClick={() => this.sortBy('user')}>
+              <button type="submit" onClick={() => this.sortBy('user')}>
                 Sort by User
               </button>
 
-              <TodoList todos={todos} />
+              <TodoList todos={visibleTodos} />
             </div>
           ) : (
             <div>
-              <h2>({todos.length} items)</h2>
-              <button onClick={this.loadData}>
-                {isLoading ? 'Loading...' : 'Load'}
+              <h2>({visibleTodos.length} items)</h2>
+              <button
+                type="submit"
+                onClick={this.loadData}
+                disabled={this.state.isButtonDisabled}
+              >
+                Load
               </button>
             </div>
           )}
