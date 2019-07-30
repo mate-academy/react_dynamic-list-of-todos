@@ -9,23 +9,28 @@ const getTodos = async() => {
   return result;
 };
 
+const getUsers = async() => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const result = await response.json();
+
+  return result;
+};
+
 class App extends React.Component {
   state = {
     todos: [],
+    users: [],
     isLoaded: false,
     isLoading: false,
   }
 
-  async componentDidMount() {
+  handleClick = async() => {
     const todosInfo = await getTodos();
+    const usersInfo = await getUsers();
 
     this.setState({
       todos: todosInfo,
-    });
-  }
-
-  handleClick = () => {
-    this.setState({
+      users: usersInfo,
       isLoading: true,
     });
 
@@ -38,9 +43,11 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, isLoaded, isLoading } = this.state;
+    const {
+      todos, isLoaded, isLoading, users,
+    } = this.state;
     const todoItems = todos.map(
-      todo => <TodoItem key={todo.id} todo={todo} />
+      todo => <TodoItem key={todo.id} todo={todo} users={users} />
     );
 
     return (
@@ -49,9 +56,10 @@ class App extends React.Component {
           ? todoItems
           : (
             <button
-              type="submit"
+              type="button"
               onClick={() => this.handleClick()}
               className="button"
+              disabled={this.state.isLoading}
             >
               {(isLoading) ? 'Loading...' : 'Load'}
             </button>
