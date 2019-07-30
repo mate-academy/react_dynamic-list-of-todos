@@ -1,15 +1,65 @@
 import React from 'react';
 import './App.css';
+import TodoItem from './TodoItem';
 
-import todos from './api/todos';
-import users from './api/users';
+const getTodos = async() => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const result = await response.json();
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Dynamic list of todos</h1>
-    </div>
-  );
+  return result;
+};
+
+class App extends React.Component {
+  state = {
+    todos: [],
+    isLoaded: false,
+    isLoading: false,
+  }
+
+  async componentDidMount() {
+    const todosInfo = await getTodos();
+
+    this.setState({
+      todos: todosInfo,
+    });
+  }
+
+  handleClick = () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        isLoaded: true,
+        isLoading: false,
+      });
+    }, 2000);
+  }
+
+  render() {
+    const { todos, isLoaded, isLoading } = this.state;
+    const todoItems = todos.map(
+      todo => <TodoItem key={todo.id} todo={todo} />
+    );
+
+    return (
+      <div className="mainBlock">
+        {(isLoaded)
+          ? todoItems
+          : (
+            <button
+              type="submit"
+              onClick={() => this.handleClick()}
+              className="button"
+            >
+              {(isLoading) ? 'Loading...' : 'Load'}
+            </button>
+          )
+        }
+      </div>
+    );
+  }
 }
 
 export default App;

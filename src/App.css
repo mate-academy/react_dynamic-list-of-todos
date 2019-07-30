@@ -1,3 +1,41 @@
 .App {
   text-align: center;
 }
+
+.button {
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  background: rgb(64,199,129);
+  box-shadow: 0 3px rgb(53,167,110);
+  transition: 0.2s;
+}
+
+button:hover { background: rgb(53, 167, 110); }
+button:active {
+  background: rgb(33,147,90);
+  box-shadow: 0 3px rgb(33,147,90) inset;
+}
+
+.mainBlock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.todoBlock {
+  width: 200px;
+  border: 2px solid rgb(17, 21, 83);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.completed {
+  background-color: rgb(12, 155, 12)
+}
+
+.incompleted {
+  background-color: rgb(209, 85, 85)
+}
