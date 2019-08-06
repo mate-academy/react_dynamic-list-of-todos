@@ -21,6 +21,7 @@ class App extends React.Component {
     todos: [],
     isLoaded: false,
     isLoading: false,
+    direction: 1,
   };
 
   async componentDidMount() {
@@ -48,23 +49,29 @@ class App extends React.Component {
   };
 
   sortByName = () => {
+    const direction = this.state.direction > 0 ? -1 : 1;
     this.setState(prevState => ({
       todos:
-        prevState.todos.sort((a, b) => (a.user.name > b.user.name) ? 1 : -1),
+        prevState.todos.sort((a, b) => a.user.name.localeCompare(b.user.name) * direction),
+        direction: prevState.direction > 0 ? -1 : 1,
     }));
   };
 
   sortByTodos = () => {
+    const direction = this.state.direction > 0 ? -1 : 1;
     this.setState(prevState => ({
       todos:
-        prevState.todos.sort((a, b) => (a.title > b.title) ? 1 : -1),
+        prevState.todos.sort((a, b) => a.title.localeCompare (b.title) * direction),
+        direction: prevState.direction > 0 ? -1 : 1,
     }));
   };
 
   sortByComplete = () => {
-    this.setState(prevState => ({
-      todos:
-        prevState.todos.sort((a, b) => (a.completed > b.completed) ? -1 : 1),
+    const direction = this.state.direction > 0 ? -1 : 1;
+    this.setState((prevState) => ({
+      todosWithUser:
+        todosWithUser.sort((a, b) => (a.completed - b.completed) * direction),
+        direction: prevState.direction > 0 ? -1 : 1,
     }));
   };
 
@@ -76,12 +83,12 @@ class App extends React.Component {
 
         {this.state.isLoaded
         ? (
-          <div> Sort by: {' '}
-            <button onClick={this.sortByName}>Name</button>
-            <button onClick={this.sortByTodos}>Todos</button>
-            <button onClick={this.sortByComplete}>Complete</button>
-            <TodoList todo = {this.state.todos} />
-          </div>
+            <TodoList
+            todo={this.state.todos}
+            sortByName={this.sortByName}
+            sortByTodos={this.sortByTodos}
+            sortByComplete={this.sortByComplete}
+             />
         )
         : (
           <button onClick = {this.handleClick}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ todo }) => {
+const TodoList = ({ todo, sortByName, sortByTodos, sortByComplete }) => {
   const items = todo.map(item => (
     <TodoItem itemData={item} />
   ));
@@ -10,9 +10,9 @@ const TodoList = ({ todo }) => {
     <table className="TodoList">
       <thead>
         <tr>
-          <th>Status</th>
-          <th>Todos</th>
-          <th>Name</th>
+          <th onClick={sortByComplete}>Status</th>
+          <th onClick={sortByTodos}>Todos</th>
+          <th onClick={sortByName}>Name</th>
         </tr>
       </thead>
       <tbody>
