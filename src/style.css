@@ -1,0 +1,32 @@
+.top-menu li{
+	list-style:none;	
+	display:inline-block;
+	background:#ccc;
+	position:relative;
+    margin-left: 2px;
+}
+.top-menu li:hover{
+	background:#eee;
+}
+.top-menu li a{
+	color:#222;
+	padding:5px 7px;
+	text-decoration:none;
+	display:block;
+}
+.tab{
+	position:absolute;
+	margin-left:38px;
+	margin-top:-16px;
+	width:120px;
+    width: 330px;
+}
+.top-menu li:hover ul{
+	display:block;
+	left:0px;
+}
+
+.active {
+	background-color: aqua
+}
+
