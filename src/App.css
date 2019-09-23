@@ -1,3 +1,25 @@
 .App {
+  margin-top: 10px;
   text-align: center;
+}
+
+.App__title {
+  color: black;
+  margin-bottom: 5px;
+}
+
+.loading {
+  font-size: 30px;
+  color: #000;
+}
+
+.load {
+  margin-top: 40px;
+  width: 100px;
+  height: 50px;
+}
+
+.load-again {
+  width: 150px;
+  height: 70px;
 }
