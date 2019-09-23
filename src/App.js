@@ -14,31 +14,52 @@ export default class App extends Component {
     users: [],
   };
 
-  async onLoadClick() {
+  onLoadClick = async () => {
     this.setState({ isLoading: true });
 
     try {
-      const response = await Promise.all([
+      const [ todosResponse, usersResponse ] = await Promise.all([
         fetch(todosUrl),
         fetch(usersUrl)
       ]);
 
-      const todos = await response[0].json();
-      const users = await response[1].json();
+      const todos = await todosResponse.json();
+      const users = await usersResponse.json();
 
       this.setState({ todos, users, isLoaded: true });
     } catch (error) {
-      console.log('error');
+      console.warn(error);
     }
-  }
+  };
 
   getTodosWithUsers = (todoArr, userArr) => (todoArr.map(todo => ({
     ...todo,
     user: userArr.find(item => item.id === todo.userId),
   })));
 
+  showLoaderButton = () => (this.state.isLoading
+    ? (
+      <button className="btn btn-primary" type="button" disabled>
+        <span
+          className="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        />
+        Loading...
+      </button>
+    )
+    : (
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => this.onLoadClick()}
+      >
+        Load
+      </button>
+    ));
+
   render() {
-    const { isLoading, isLoaded, todos, users } = this.state;
+    const { isLoaded, todos, users } = this.state;
 
     return (
       <div className="App">
@@ -46,27 +67,7 @@ export default class App extends Component {
 
         {isLoaded
           ? <TodoList todos={this.getTodosWithUsers(todos, users)} />
-          : isLoading
-            ? (
-              <button className="btn btn-primary" type="button" disabled>
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true">
-                </span>
-                Loading...
-              </button>
-            )
-            : (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => this.onLoadClick()}
-              >
-                Load
-              </button>
-            )
-        }
+          : this.showLoaderButton()}
       </div>
     );
   }
