@@ -9,3 +9,7 @@
 .btn--start {
   align-self: center;
 }
+
+.btn {
+  margin-bottom: 1em;
+}

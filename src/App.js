@@ -71,14 +71,29 @@ class App extends Component {
               ? (
                 <>
                   {isLoading
-                    ? <p>Loading...</p>
+                    ? (
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span className="sr-only">Loading...</span>
+                      </button>
+                    )
                     : ''
                   }
-                  <Button
-                    className="btn--start"
-                    text="Load"
-                    onClick={this.handleShow}
-                  />
+                  <div>
+                    <Button
+                      className="btn--start"
+                      text="Load"
+                      onClick={this.handleShow}
+                    />
+                  </div>
                 </>
               )
               : (
