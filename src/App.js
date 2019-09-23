@@ -3,23 +3,19 @@ import './App.css';
 
 import TodoList from './component/TodoList/TodoList';
 
-function getTodosWithUsers(todoList, userList) {
-  return todoList.map(todo => {
-    return (
-      {
-        ...todo,
-        user: userList.find(user => user.id === todo.userId),
-      }
-    );
-  });
-}
+const getTodosWithUsers = (todoList, userList) => (
+  todoList.map(todo =>({
+    ...todo,
+    user: userList.find(user => user.id === todo.userId),
+  }))
+);
 
 class App extends React.Component {
   state = {
     todos: [],
     users: [],
     isLoading: false,
-    isLoad: false,
+    isLoaded: false,
     errors: '',
     countTryConnect: 0,
   };
@@ -30,7 +26,7 @@ class App extends React.Component {
       errors: '',
     });
 
-    setTimeout(() => Promise.all([
+    Promise.all([
       fetch('https://jsonplaceholder.typicode.com/todos'),
       fetch('https://jsonplaceholder.typicode.com/users'),
     ])
@@ -39,24 +35,24 @@ class App extends React.Component {
         todos: todosData,
         users: usersData,
         isLoading: false,
-        isLoad: true,
+        isLoaded: true,
         countTryConnect: 0,
       }))
       .catch((error) => {
         this.setState(prevState => ({
           errors: error.message,
           countTryConnect: prevState.countTryConnect + 1,
-          isLoad: false,
+          isLoaded: false,
           isLoading: false,
         }));
-      }), 500);
+      });
   }
 
   render() {
     const { todos,
       users,
       isLoading,
-      isLoad,
+      isLoaded,
       errors,
       countTryConnect,
     } = this.state;
@@ -77,7 +73,7 @@ class App extends React.Component {
 
         {isLoading
           && (
-            <div>
+            <div className="app__loading">
               <span>Loading...</span>
             </div>
           )
@@ -96,7 +92,7 @@ class App extends React.Component {
           )
         }
 
-        {isLoad && <TodoList todoList={todosWithUsers} />}
+        {isLoaded && <TodoList todoList={todosWithUsers} />}
       </>
     );
   }
