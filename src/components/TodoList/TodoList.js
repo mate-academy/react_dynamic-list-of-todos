@@ -11,7 +11,6 @@ class TodoList extends Component {
   sortByName = () => {
     this.setState(prevState => ({
       todos: [...prevState.todos].sort((todo1, todo2) => {
-        console.log(todo1.user.name);
         if (todo1.user.name < todo2.user.name) {
           return -1;
         }
