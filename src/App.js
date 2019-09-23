@@ -14,20 +14,6 @@ class App extends Component {
     isLoading: false,
   };
 
-  // componentDidMount() {
-  //   Promise.all([
-  //     fetch(TODOS_URL),
-  //     fetch(USERS_URL),
-  //   ])
-  //     .then(([resTodos, resUsers]) => Promise.all(
-  //       [resTodos.json(), resUsers.json()]
-  //     ))
-  //     .then(([dataTodos, dataUsers]) => this.setState({
-  //       todos: dataTodos,
-  //       users: dataUsers,
-  //     }));
-  // }
-
   getTodosWithUsers = (todosList, usersList) => todosList.map(todo => ({
     ...todo,
     user: usersList.find(user => user.id === todo.userId),
