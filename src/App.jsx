@@ -40,29 +40,35 @@ class App extends React.Component {
   }))
 
   render() {
-    console.log(this.state.todos);
-    const preparedTodos
-      = this.getTodoWithUser(this.state.todos, this.state.users);
+    const {
+      todos,
+      users,
+      hasError,
+      isLoaded,
+      isButtonShow,
+    } = this.state;
 
-    if (this.state.hasError) {
+    const preparedTodos
+      = this.getTodoWithUser(todos, users);
+
+    if (hasError) {
       return (
         <div>
           Error: omg wtf something wrong go away
         </div>
       );
     }
-    if (this.state.isLoaded) {
+    if (isLoaded) {
       return (
         <div className="loading">Loading...</div>
       );
     }
 
     return (
-
       <div className="App">
         <h1>Static list of todos</h1>
         <div className="wrapper">
-          {this.state.isButtonShow
+          {isButtonShow
             && (
               <button
                 className="btnLoad"
@@ -73,7 +79,6 @@ class App extends React.Component {
               </button>
             )
           }
-
           <TodosList todos={preparedTodos} />
         </div>
       </div>
