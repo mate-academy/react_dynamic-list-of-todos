@@ -42,6 +42,7 @@ class App extends Component {
       isLoading,
       hasError,
     } = this.state;
+    const buttonText = (hasError ? 'Try again' : 'Load todos');
 
     return (
       <div className="App">
@@ -61,30 +62,18 @@ class App extends Component {
                 )
                 : null
               }
-              {isLoading
-                ? (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={this.loadTodos}
-                    disabled
-                  >
-                    Loading...
-                  </button>
-                )
-                : (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={this.loadTodos}
-                  >
-                    {hasError
-                      ? 'Try again'
-                      : 'Load todos'
-                    }
-                  </button>
-                )
-              }
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.loadTodos}
+                disabled={isLoading}
+              >
+                {isLoading
+                  ? 'Loading...'
+                  : buttonText
+                }
+              </button>
             </>
           )
           : null}
