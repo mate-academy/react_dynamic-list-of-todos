@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import './App.css';
-import todos from './api/todos';
-import users from './api/users';
 import TodoList from './components/TodoList/TodoList';
 import DataFromServer from './components/DataFromServer/DataFromServer';
 import getTodosWithUsers from './dataMappers';
+import './App.css';
 
 const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
 const usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
 class App extends Component {
   state = {
-    todosWithUsers: getTodosWithUsers(todos, users),
+    todosWithUsers: [],
     isDataLoaded: false,
   }
 
