@@ -61,17 +61,30 @@ class App extends Component {
                 )
                 : null
               }
-
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.loadTodos}
-              >
-                {hasError
-                  ? 'Try again'
-                  : 'Load todos'
-                }
-              </button>
+              {isLoading
+                ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={this.loadTodos}
+                    disabled
+                  >
+                    Loading...
+                  </button>
+                )
+                : (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={this.loadTodos}
+                  >
+                    {hasError
+                      ? 'Try again'
+                      : 'Load todos'
+                    }
+                  </button>
+                )
+              }
             </>
           )
           : null}
