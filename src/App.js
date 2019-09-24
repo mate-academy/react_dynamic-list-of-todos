@@ -2,26 +2,15 @@ import React from 'react';
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
 
-const TODOS_URL = 'https://jsonplaceholder.typicode.com/todos';
-const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
+const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
-function getTodosWithUsers(todosList, usersList) {
-  return todosList.map(todo => ({
-    ...todo,
-    user: usersList.find(user => user.id === todo.userId),
-  }));
-}
-
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     todos: [],
-    users: [],
     isLoaded: false,
     isLoading: false,
     hasError: false,
   };
-
-  getApi = url => fetch(url).then(response => response.json());
 
   loadTodos = async () => {
     this.setState({
@@ -30,14 +19,20 @@ export default class App extends React.Component {
     });
 
     try {
-      const [todos, users] = await Promise.all([
-        this.getApi(TODOS_URL),
-        this.getApi(USERS_URL),
+      const [todosResponse, usersResponse] = await Promise.all([
+        fetch(`${BASE_URL}/todos`),
+        fetch(`${BASE_URL}/users`),
       ]);
 
+      const todos = await todosResponse.json();
+      const users = await usersResponse.json();
+      const todosWithUsers = todos.map(todo => ({
+        ...todo,
+        user: users.find(user => user.id === todo.userId),
+      }));
+
       this.setState({
-        todos,
-        users,
+        todos: todosWithUsers,
         isLoaded: true,
       });
     } catch (error) {
@@ -51,23 +46,43 @@ export default class App extends React.Component {
     });
   };
 
+  sortByTitle = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort((a, b) => (a.title > b.title ? 1 : -1)),
+    }));
+  };
+
+  sortByUser = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort((a, b) => a.userId - b.userId),
+    }));
+  };
+
+  sortByCompleteness = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort((a, b) => a.completed - b.completed),
+    }));
+  };
+
   render() {
     const {
       todos,
-      users,
       isLoaded,
       isLoading,
       hasError,
     } = this.state;
-    const preparedTodos = getTodosWithUsers(todos, users);
 
     return (
       <>
         <h1 className="header">Static list of todos</h1>
-
         {isLoaded ? (
           <div>
-            <TodoList todos={preparedTodos} />
+            <TodoList
+              todos={todos}
+              sortByTitle={this.sortByTitle}
+              sortByUser={this.sortByUser}
+              sortByCompleteness={this.sortByCompleteness}
+            />
           </div>
         ) : (
           <>
@@ -87,3 +102,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default App;
