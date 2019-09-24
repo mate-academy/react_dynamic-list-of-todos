@@ -1,3 +1,13 @@
+html {
+  background-color: lightblue;
+}
+
 .App {
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  margin-top: 20px;
+  background-color: lightblue;
+}
+.main {
   text-align: center;
 }

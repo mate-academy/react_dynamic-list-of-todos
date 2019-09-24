@@ -1,0 +1,40 @@
+.todo-item {
+  border: 1px solid blue;
+  width: 250px;
+  height: 300px;
+  border-radius: 50px;
+  background-color: cornflowerblue;
+}
+
+.todo-item:hover {
+  background-color: deepskyblue;
+}
+
+.completed:hover {
+  background-color: deepskyblue ;
+}
+
+.completed {
+  background-color: cadetblue;
+  margin-bottom: 10px;
+}
+
+.todo-item-list__item-article {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  height: 50px;
+}
+
+.todo-item-list {
+  text-align: left;
+}
+
+.item {
+  list-style-type: none;
+}
+
+.todo-item-list__item-status {
+  text-align: right;
+  margin-right: 30px;
+}
