@@ -66,8 +66,9 @@ class TodoList extends Component {
           by completed
         </button>
         <button type="submit" onClick={this.resetTodos}>Reset</button>
-
-        {todos.map(todo => <TodoItem key={todo.id} todo={todo} />)}
+        <div className="todo-items">
+          {todos.map(todo => <TodoItem key={todo.id} todo={todo} />)}
+        </div>
       </div>
     );
   }

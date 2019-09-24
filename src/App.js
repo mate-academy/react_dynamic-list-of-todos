@@ -3,19 +3,39 @@ import './App.css';
 import todos from './api/todos';
 import users from './api/users';
 import TodoList from './components/TodoList/TodoList';
+import DataFromServer from './components/DataFromServer/DataFromServer';
 import getTodosWithUsers from './dataMappers';
+
+const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
+const usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
 class App extends Component {
   state = {
     todosWithUsers: getTodosWithUsers(todos, users),
+    isDataLoaded: false,
   }
 
-  render() {
-    const { todosWithUsers } = this.state;
+  getDataFromServer = (todosFromServer, usersFromServer) => {
+    this.setState(prevState => ({
+      isDataLoaded: !prevState.isDataLoaded,
+      todosWithUsers: getTodosWithUsers(todosFromServer, usersFromServer),
+    }));
+  };
 
-    return (
-      <TodoList todos={todosWithUsers} />
-    );
+  render() {
+    const { todosWithUsers, isDataLoaded } = this.state;
+
+    return isDataLoaded
+      ? (
+        <TodoList todos={todosWithUsers} />
+      )
+      : (
+        <DataFromServer
+          todosUrl={todosUrl}
+          usersUrl={usersUrl}
+          getDataFromServer={this.getDataFromServer}
+        />
+      );
   }
 }
 
