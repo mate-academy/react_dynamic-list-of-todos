@@ -34,6 +34,7 @@ class App extends Component {
 
         this.setState({
           todos: preparedTodos,
+          sortedTodos: [...preparedTodos].sort(a => (a.completed ? 1 : -1)),
           isLoaded: true,
         });
       });
@@ -47,6 +48,7 @@ class App extends Component {
 
   render() {
     const {
+      sortedTodos,
       todos,
       isLoading,
       isLoaded,
@@ -66,7 +68,7 @@ class App extends Component {
               Sort
             </button>
             <TodoList todos={isSorted
-              ? [...todos].sort(a => (a.completed ? 1 : -1))
+              ? sortedTodos
               : todos}
             />
           </>
