@@ -2,16 +2,30 @@ import React, { Component } from 'react';
 
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
+import Dropdown from './components/Dropdown/Dropdown';
 
-const todosUrl = `https://jsonplaceholder.typicode.com/todos`;
-const usersUrl = `https://jsonplaceholder.typicode.com/users`;
+const BASE_URL = `https://jsonplaceholder.typicode.com`;
+const DROPDOWN_LIST = [
+  {
+    option: 'Title',
+    value: 'title',
+  },
+  {
+    option: 'User',
+    value: 'userName',
+  },
+  {
+    option: 'Status',
+    value: 'completed',
+  },
+];
 
 export default class App extends Component {
   state = {
     isLoaded: false,
     isLoading: false,
     todos: [],
-    users: [],
+    errorMessage: null,
   };
 
   onLoadClick = async () => {
@@ -19,25 +33,60 @@ export default class App extends Component {
 
     try {
       const [ todosResponse, usersResponse ] = await Promise.all([
-        fetch(todosUrl),
-        fetch(usersUrl)
+        fetch(`${BASE_URL}/todos`),
+        fetch(`${BASE_URL}/users`),
       ]);
+
+      if (!todosResponse.ok) {
+        this.isError('ToDo list fetch is broken');
+      }
+
+      if (!usersResponse.ok) {
+        this.isError('User list fetch is broken');
+      }
 
       const todos = await todosResponse.json();
       const users = await usersResponse.json();
 
-      this.setState({ todos, users, isLoaded: true });
+      this.setState({
+        todos: todos
+          .map(todo => ({
+            ...todo,
+            user: users.find(item => item.id === todo.userId),
+          }))
+          .map(todo => ({
+            ...todo,
+            userName: todo.user.name,
+          })),
+        isLoaded: true,
+        isLoading: false,
+      });
     } catch (error) {
-      console.warn(error);
+      this.setState({
+        errorMessage: error.message,
+      });
     }
   };
 
-  getTodosWithUsers = (todoArr, userArr) => (todoArr.map(todo => ({
-    ...todo,
-    user: userArr.find(item => item.id === todo.userId),
-  })));
+  isError = (errorMessage) => {
+    this.setState({
+      isLoaded: false,
+      isLoading: false,
+    });
+    throw new Error(errorMessage);
+  };
 
-  showLoaderButton = () => (this.state.isLoading
+  handleDropdownSelect = (value) => {
+    this.setState(({ todos }) => ({
+      todos: todos.sort((a, b) => {
+        if (a[value] > b[value]) return 1;
+        if (a[value] < b[value]) return -1;
+        return 0;
+      }),
+    }))
+  };
+
+    loaderButton = () => (this.state.isLoading
     ? (
       <button className="btn btn-primary" type="button" disabled>
         <span
@@ -56,18 +105,28 @@ export default class App extends Component {
       >
         Load
       </button>
-    ));
+    )
+  );
 
   render() {
-    const { isLoaded, todos, users } = this.state;
+    const { isLoaded, todos, errorMessage } = this.state;
 
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
+        <h2 className="error-message">{errorMessage}</h2>
 
         {isLoaded
-          ? <TodoList todos={this.getTodosWithUsers(todos, users)} />
-          : this.showLoaderButton()}
+          ? (
+            <>
+              <Dropdown
+                itemsList={DROPDOWN_LIST}
+                handleDropdownSelect={this.handleDropdownSelect}
+              />
+              <TodoList todos={todos} />
+            </>
+            )
+          : this.loaderButton()}
       </div>
     );
   }
