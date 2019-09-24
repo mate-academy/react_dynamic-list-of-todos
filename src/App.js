@@ -120,6 +120,7 @@ export default class App extends Component {
           ? (
             <>
               <Dropdown
+                title="Sort by"
                 itemsList={DROPDOWN_LIST}
                 handleDropdownSelect={this.handleDropdownSelect}
               />

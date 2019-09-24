@@ -21,7 +21,7 @@ export default class Dropdown extends Component {
   };
 
   render() {
-    const { itemsList } = this.props;
+    const { title, itemsList } = this.props;
 
     return (
       <div className="dropdown">
@@ -34,7 +34,7 @@ export default class Dropdown extends Component {
           aria-expanded="false"
           onClick={this.handleDropdownToggle}
         >
-          Pagination per page
+          {title}
         </button>
         <div
           className={classNames('dropdown-menu', {
@@ -58,6 +58,7 @@ export default class Dropdown extends Component {
 }
 
 Dropdown.propTypes = {
+  title: PropTypes.string.isRequired,
   itemsList: PropTypes.arrayOf(PropTypes.objectOf({
     option: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
