@@ -5,17 +5,17 @@ const Header = ({
   isLoading,
   isLoaded,
   hasError,
-  getData,
+  getData
 }) => {
   const buttonText = isLoading
     ? 'Okay, okay, already loading...'
-    : 'GET TODOS RIGHT NOW!';
+    : 'GET TODOS RIGHT NOW!!!';
 
   return (
     <div className="container mb-5">
     <div className="row">
       <header className="header col text-center">
-        <h1 className="mb-5">Static list of todos</h1>
+        <h1 className="mb-5">Dynamic list of todos</h1>
         {!isLoaded &&
           <button
             onClick={getData}
