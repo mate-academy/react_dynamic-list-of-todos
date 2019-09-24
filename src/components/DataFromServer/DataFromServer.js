@@ -5,13 +5,26 @@ class DataFromServer extends Component {
   state = {
     todos: [],
     users: [],
+    loadingText: 'You must load Data',
   }
 
   getTodosList = () => {
+    this.setState({
+      loadingText: 'loading...',
+    });
+
     fetch(this.props.todosUrl)
       .then(response => response.json())
       .then((data) => {
-        this.setState({ todos: data });
+        this.setState({
+          todos: data,
+          loadingText: 'Loading Complete',
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loadingText: 'Sorry, try again',
+        });
       });
 
     fetch(this.props.usersUrl)
@@ -22,20 +35,20 @@ class DataFromServer extends Component {
   }
 
   render() {
-    const { todos, users } = this.state;
+    const { todos, users, loadingText } = this.state;
     const { getDataFromServer } = this.props;
     if (todos.length === 0 || users.length === 0) {
       return (
         <div>
-          <p>no data</p>
-          <button type="submit" onClick={this.getTodosList}>Load</button>
+          <p>{loadingText}</p>
+          <button type="submit" onClick={this.getTodosList}>Load Data</button>
         </div>
       );
     }
 
     return (
       <div>
-        <p>Loading complete!</p>
+        <p>{loadingText}</p>
         <p>{`Todos ${todos.length}`}</p>
         <p>{`Todos ${users.length}`}</p>
         <button
@@ -44,7 +57,7 @@ class DataFromServer extends Component {
             getDataFromServer(todos, users);
           }}
         >
-          continue
+          Сontinue
         </button>
       </div>
     );

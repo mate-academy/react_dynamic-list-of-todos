@@ -18,7 +18,13 @@ TodoItem.propTypes = {
   todo: PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
+    user: PropTypes.shape({
+      name: PropTypes.string,
+      username: PropTypes.string,
+      email: PropTypes.string,
+    }).isRequired,
   }).isRequired,
+
 };
 
 export default TodoItem;
