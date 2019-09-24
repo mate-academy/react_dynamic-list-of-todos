@@ -6,8 +6,8 @@ import TodoList from './components/TodoList/TodoList';
 class App extends React.Component{
   state = {
     active:0,
+    activeSort:0,
     todosWithUsers:[],
-
   }
 
   loadDatas = () => {
@@ -26,46 +26,32 @@ class App extends React.Component{
     })
   }
 
-  sortAZ = () => {
-    this.setState( prevState => ({
-      todosWithUsers: [...prevState.todosWithUsers].sort()
-    }))
-  }
-
   render () {
-    const { todosWithUsers, active } = this.state;
+    const { todosWithUsers, active, activeSort } = this.state;
     return (
       <>
         <div className={active === 1 ? 'button-back down' : 'button-back' }>Loading...</div>
         <button
           onClick={this.loadDatas}
-          className="button-start"
+          className={active === 1 ? 'button-start down' : 'button-start' }
           type="button"
         >Load</button>
-        <button
-        type="button"
-         onClick={this.sortAZ}
-         className="sort"
-         >sort A-Z</button>
+        {!!active && (<button
+          type="button"
+          onClick={this.sortAZ}
+          className={activeSort === 1 ? 'sort down' : 'sort' }
+        >Title A-Z</button>)}
         <TodoList todos = {todosWithUsers} />
       </>
-      )
+    )
+  }
+  sortAZ = () => {
+    //console.log(this.state.todosWithUsers.sort((a,b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0 ));
+    this.setState(({
+      activeSort:1,
+      todosWithUsers: this.state.todosWithUsers.sort((a,b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0 ),
+    }))
   }
 }
-
-
-
-
-
-
-// function getTodosWithUsers(todosParam, usersParam) {
-//   return todosParam.map(todo => (
-//     {
-//       ...todo,
-//       user: usersParam.find(user => user.id === todo.userId),
-//     }
-//   ));
-//   }
-// const preparedTodos = getTodosWithUsers(todos, users);
 
 export default App;

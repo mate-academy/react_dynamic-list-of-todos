@@ -43,7 +43,7 @@
   background: rgb(236, 228, 255);
   border: 2px solid rgb(60, 98, 176);
   color: rgb(60, 98, 176);
-  transition: opacity 3s, transform 0.2s, background 0.3s, border 0.3s, color 0.3s;
+  transition: opacity 1.5s, transform 0.2s, background 0.3s, border 0.3s, color 0.3s;
   margin: auto;
 }
 .down {
@@ -62,10 +62,11 @@
   border-radius: 7px;
   margin-left: -173px;
   margin-top: 1px;
-  transition: transform 0.2s;
+  transition: transform 0.2s, opacity 0.5s;
 }
 
 .sort:active {
+  outline: none;
   transform: scale(0.96);
 }
 
