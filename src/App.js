@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from './components/Button/Button';
+import TodoItemSort from './components/TodoItemSort/TodoItemSort';
 import TodoList from './components/TodoList/TodoList';
 
 import './App.css';
@@ -11,6 +12,7 @@ class App extends Component {
   state = {
     todos: [],
     users: [],
+    sort: 'default',
     isLoading: false,
   };
 
@@ -38,14 +40,35 @@ class App extends Component {
       }));
   };
 
+  sort = (items, sort) => {
+    switch (sort) {
+      case 'default':
+        return items;
+      case 'title':
+        return items.sort((a, b) => (a.title > b.title ? 1 : -1));
+      case 'status':
+        return items.sort((a, b) => a.completed - b.completed);
+      case 'user':
+        return items.sort((a, b) => (a.user > b.user ? 1 : -1));
+      default:
+        return items;
+    }
+  };
+
+  onSortChange = (sort) => {
+    this.setState({ sort });
+  };
+
   render() {
     const {
       todos,
       users,
+      sort,
       isLoading,
     } = this.state;
 
     const preparedTodos = this.getTodosWithUsers(todos, users);
+    const visibleItems = this.sort(preparedTodos, sort);
 
     return (
       <div className="App">
@@ -93,7 +116,11 @@ class App extends Component {
                     <span>Users: </span>
                     {users.length}
                   </p>
-                  <TodoList todos={preparedTodos} />
+                  <TodoItemSort
+                    sort={sort}
+                    onSortChange={this.onSortChange}
+                  />
+                  <TodoList todos={visibleItems} />
                 </>
               )
             }

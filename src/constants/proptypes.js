@@ -12,6 +12,11 @@ export const UserProps = {
   user: userShape,
 };
 
+export const TodoItemSortProps = {
+  onSortChange: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
+};
+
 export const TodoItemProps = {
   todo: PropTypes.shape({
     title: PropTypes.string,
