@@ -1,39 +1,155 @@
 import React, { Component } from 'react';
 import TodoList from './components/TodoList/TodoList';
-import DataFromServer from './components/DataFromServer/DataFromServer';
 import getTodosWithUsers from './dataMappers';
 import './App.css';
 
-const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
-const usersUrl = 'https://jsonplaceholder.typicode.com/users';
+const API_URL = 'https://jsonplaceholder.typicode.com/';
+
+const getData = dataName => (
+  fetch(`${API_URL}${dataName}`)
+    .then(response => response.json())
+);
 
 class App extends Component {
   state = {
-    todosWithUsers: [],
-    isDataLoaded: false,
+    todosList: [],
+    sortedTodosList: [],
+    isLoaded: false,
+    isLoading: false,
+    isError: false,
+    buttonText: 'Load',
   }
 
-  getDataFromServer = (todosFromServer, usersFromServer) => {
+  loadDataFromServer = () => {
+    this.setState({
+      buttonText: 'loading...',
+      isLoading: true,
+    });
+
+    Promise.all([
+      getData('todos'),
+      getData('users'),
+    ]).then(([todos, users]) => this.setState({
+      todosList: getTodosWithUsers(todos, users),
+      sortedTodosList: getTodosWithUsers(todos, users),
+      isLoaded: true,
+      isLoading: false,
+    }))
+      .catch(() => this.setState({
+        buttonText: 'try again',
+        isError: true,
+        isLoading: false,
+      }));
+  }
+
+  resetList = () => {
     this.setState(prevState => ({
-      isDataLoaded: !prevState.isDataLoaded,
-      todosWithUsers: getTodosWithUsers(todosFromServer, usersFromServer),
+      sortedTodosList: [...prevState.todosList],
+    }));
+  };
+
+  sortByTitle = () => {
+    this.setState(prevState => ({
+      sortedTodosList: [
+        ...prevState.sortedTodosList
+          .sort((todo1, todo2) => {
+            if (todo1.title < todo2.title) {
+              return -1;
+            }
+            if (todo1.title > todo2.title) {
+              return 1;
+            }
+
+            return 0;
+          }),
+      ],
+    }));
+  };
+
+  sortByName = () => {
+    this.setState(prevState => ({
+      sortedTodosList: [
+        ...prevState.sortedTodosList
+          .sort((todo1, todo2) => {
+            if (todo1.user.name < todo2.user.name) {
+              return -1;
+            }
+            if (todo1.user.name < todo2.user.name) {
+              return 1;
+            }
+
+            return 0;
+          }),
+      ],
+    }));
+  };
+
+  sortCompleted = () => {
+    this.setState(prevState => ({
+      sortedTodosList: [
+        ...prevState.sortedTodosList.filter(todo => todo.completed),
+        ...prevState.sortedTodosList.filter(todo => !todo.completed),
+      ],
     }));
   };
 
   render() {
-    const { todosWithUsers, isDataLoaded } = this.state;
+    const {
+      sortedTodosList,
+      isLoaded,
+      isLoading,
+      buttonText,
+      isError,
+    } = this.state;
 
-    return isDataLoaded
-      ? (
-        <TodoList todos={todosWithUsers} />
-      )
-      : (
-        <DataFromServer
-          todosUrl={todosUrl}
-          usersUrl={usersUrl}
-          getDataFromServer={this.getDataFromServer}
-        />
+    if (!isLoaded) {
+      return (
+        <div>
+          {isError
+            ? <p>No Data :( Try again</p>
+            : null
+          }
+          <button
+            type="submit"
+            disabled={isLoading}
+            onClick={this.loadDataFromServer}
+          >
+            {buttonText}
+          </button>
+        </div>
       );
+    }
+
+    return (
+      <div>
+        <button
+          type="submit"
+          onClick={this.sortByName}
+        >
+          Sort by Name
+        </button>
+        <button
+          type="submit"
+          onClick={this.sortByTitle}
+        >
+          Sort by Title
+        </button>
+        <button
+          type="submit"
+          onClick={this.sortCompleted}
+        >
+          Sort by Comleted
+        </button>
+        <button
+          type="submit"
+          onClick={this.resetList}
+        >
+          Reset
+        </button>
+        <TodoList todos={sortedTodosList} />
+      </div>
+
+    );
   }
 }
 
