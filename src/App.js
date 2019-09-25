@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-
 import TodoList from './components/TodoList/TodoList';
 
-const todosUrl = `https://jsonplaceholder.typicode.com/todos`;
-const usersUrl = `https://jsonplaceholder.typicode.com/users`;
+const dataTodos = `https://jsonplaceholder.typicode.com/todos`;
+const dataUsers = `https://jsonplaceholder.typicode.com/users`;
+
 
 class App extends Component {
   state = {
@@ -13,24 +13,26 @@ class App extends Component {
     isLoading: false,
     isLoaded: false,
     hasError: false,
-  }
+  } // started oprions
 
-  getTodosWithUsers = (todoArr, userArr) => (todoArr.map(todo => ({
-    ...todo,
-    user: userArr.find(item => item.id === todo.userId),
-  })));
+  getTodosWithUsers = (todos, usersList) => (todos.map(
+    todo => ({
+      ...todo,
+      user: usersList.find(item => item.id === todo.userId),
+    })
+  ));
 
-  handleClick = async() => {
+  handleClick = async () => {
     this.setState({ isLoading: true });
-
+    // after click default p-r changes from - to +
     try {
-      const [todosResponse, usersResponse] = await Promise.all([
-        fetch(todosUrl),
-        fetch(usersUrl),
+      const [responseTodos, responseUsers] = await Promise.all([
+        fetch(dataTodos),
+        fetch(dataUsers),
       ]);
 
-      const todos = await todosResponse.json();
-      const users = await usersResponse.json();
+      const todos = await responseTodos.json();
+      const users = await responseUsers.json();// change to json format
 
       this.setState({
         todos,
@@ -39,8 +41,8 @@ class App extends Component {
       });
     } catch (error) {
       this.setState({
-        hasError: true,
-        isLoading: false,
+        hasError: true, // some error occured
+        isLoading: false, // not loading
       });
     }
   };
@@ -52,25 +54,28 @@ class App extends Component {
       isLoading,
       isLoaded,
       hasError,
-    } = this.state;
+    } = this.state // her options
+    const textOnButton = (hasError ? 'Try again' : 'Load todos');
+    // special parameter for button option
 
     return (
       <div className="App">
-        {isLoaded ? (
+        {isLoaded ? ( // first option if load was successfull
           <>
-            <h1 className="title">Static list of todos</h1>
+            <h1>Static list of todos</h1>
             <TodoList todos={this.getTodosWithUsers(todos, users)} />
           </>
         ) : (
           <>
             <h1>
-              {hasError ? 'Error: Failed to fetch' : 'Load Todos' }
+              {hasError ? 'Error - failed to fetch' : 'Load'}
             </h1>
             <button type="button" onClick={this.handleClick}>
-              {isLoading ? 'Loading...' : hasError ? 'Try Again' : 'Load'}
+              {isLoading ? 'Loading..' : textOnButton}
             </button>
           </>
-        )}
+        )
+        }
       </div>
     );
   }

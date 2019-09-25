@@ -1,23 +1,24 @@
-.todo-item {
-  box-sizing: border-box;
-  font-size: 22px;
-  color: rgb(43, 44, 44);
-  display: block;
-  width: 300px;
-  height: 400px;
-  border-radius: 20px;
-  background-color: rgb(29, 27, 28);
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  padding-top: 20px;
-  margin: 0 auto 30px;
+.bg--green{
+  background-color: rgb(28, 105, 28);
 }
 
-.todo-item__title {
-  text-align: center;
-  margin: 10px 0;
-  color: rgb(255, 255, 255);
+.bg--red{
+  background-color: rgb(199, 61, 61);
 }
 
-.todo-item__main-title {
-  text-align: center;
+.card{
+  padding: 20px;
 }
+
+.card:hover{
+  transform: scale(1.12);
+  transition: transform .6s;
+}
+
+.card-content{
+  padding-top: 25px;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+
