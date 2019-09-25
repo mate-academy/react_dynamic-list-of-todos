@@ -79,7 +79,6 @@ export default class App extends Component {
   handleDropdownSelect = (value) => {
     this.setState(({ todos }) => ({
       todos: todos.sort((a, b) => {
-        console.log(a, b);
         if (a[value] > b[value])  {
           return 1
         }

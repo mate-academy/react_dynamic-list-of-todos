@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classname';
+import shortid from 'shortid';
 
 import './Dropdown.scss';
 
@@ -44,6 +45,7 @@ export default class Dropdown extends Component {
         >
           {itemsList.map(item => (
             <p
+              key={shortid.generate()}
               className="dropdown-item"
               data-value={item.value}
               onClick={this.handleDropdownSelect}
@@ -59,7 +61,7 @@ export default class Dropdown extends Component {
 
 Dropdown.propTypes = {
   title: PropTypes.string.isRequired,
-  itemsList: PropTypes.arrayOf(PropTypes.objectOf({
+  itemsList: PropTypes.arrayOf(PropTypes.shape({
     option: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   })).isRequired,
