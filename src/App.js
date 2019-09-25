@@ -107,6 +107,7 @@ class App extends React.Component {
     if (isLoading) {
       return (
         <div className="App todo-list">
+          <h1>Dynamic list of todos</h1>
           <button
             className="button"
             type="button"
@@ -135,6 +136,7 @@ class App extends React.Component {
 
     return (
       <div className="App todo-list">
+        <h1>Dynamic list of todos</h1>
         {isShowButton && (
           <button
             className="button"
