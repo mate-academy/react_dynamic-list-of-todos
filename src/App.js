@@ -2,10 +2,12 @@ import React from 'react';
 import './App.css';
 import ToDoList from './components/ToDoList/ToDoList';
 
-// eslint-disable-next-line max-len
-const getTodos = () => fetch(`https://jsonplaceholder.typicode.com/todos`).then(response => response.json());
-// eslint-disable-next-line max-len
-const getUsers = () => fetch(`https://jsonplaceholder.typicode.com/users`).then(response => response.json());
+
+const getTodos = () => fetch(`https://jsonplaceholder.typicode.com/todos`)
+  .then(response => response.json());
+
+const getUsers = () => fetch(`https://jsonplaceholder.typicode.com/users`)
+  .then(response => response.json());
 
 function getTodosWithUsers(todos, users) {
   return todos.map(item => ({
@@ -21,6 +23,25 @@ class App extends React.Component {
     isLoading: false,
     isLoaded: false,
     hasError: false,
+  };
+
+  sortByCompleted = () => {
+    this.setState(prevState => ({
+      // eslint-disable-next-line max-len
+      todos: prevState.todos.sort((a, b) => (a.completed < b.completed ? 1 : -1)),
+    }));
+  };
+
+  sortByName = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
+    }));
+  };
+
+  sortByTitle = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
+    }));
   };
 
   getData = () => {
@@ -107,6 +128,9 @@ class App extends React.Component {
         {isLoaded && (
           <ToDoList
             todos={preparedTodos}
+            sortByCompleted={this.sortByCompleted}
+            sortByName={this.sortByName}
+            sortByTitle={this.sortByTitle}
           />
         )}
       </div>
