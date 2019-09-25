@@ -52,8 +52,3 @@ export const TodoItemProps = {
     user: PropTypes.shape(userShape),
   }),
 };
-
-export const newTodoPropTypes = {
-  users: PropTypes.arrayOf(PropTypes.shape(userShape)),
-  onAdd: PropTypes.func,
-};
