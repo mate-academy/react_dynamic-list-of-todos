@@ -79,14 +79,28 @@ export default class App extends Component {
   handleDropdownSelect = (value) => {
     this.setState(({ todos }) => ({
       todos: todos.sort((a, b) => {
-        if (a[value] > b[value]) return 1;
-        if (a[value] < b[value]) return -1;
+        console.log(a, b);
+        if (a[value] > b[value])  {
+          return 1
+        }
+
+        if (a[value] < b[value]) {
+          return -1
+        }
+
+        if (a.id > b.id)  {
+          return 1
+        }
+
+        if (a.id < b.id) {
+          return -1
+        }
         return 0;
       }),
-    }))
-  };
+    }
+  ))};
 
-    loaderButton = () => (this.state.isLoading
+  loaderButton = () => (this.state.isLoading
     ? (
       <button className="btn btn-primary" type="button" disabled>
         <span
