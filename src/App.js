@@ -15,10 +15,14 @@ function getTodosWithUsers(todosList, usersList) {
 
 class App extends React.Component {
   state = {
+    initPreparedTodos: [],
     preparedTodos: [],
     isLoading: false,
     error: null,
     isShowButton: true,
+    isShowOnlyCompleted: false,
+    isSortedByTitle: false,
+    isSortedByUserName: false,
   }
 
   loadTodos = () => {
@@ -35,6 +39,7 @@ class App extends React.Component {
       .then(([todosData, usersData]) => this.setState({
         isLoading: false,
         isShowButton: false,
+        initPreparedTodos: getTodosWithUsers(todosData, usersData),
         preparedTodos: getTodosWithUsers(todosData, usersData),
       }))
       .catch((err) => {
@@ -43,6 +48,48 @@ class App extends React.Component {
           error: err,
         });
       });
+  }
+
+  toggleCompleted = () => {
+    if (!this.state.isShowOnlyCompleted) {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.preparedTodos].filter(todo => todo.completed),
+        isShowOnlyCompleted: true,
+      }));
+    } else {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.initPreparedTodos],
+        isShowOnlyCompleted: false,
+      }));
+    }
+  }
+
+  toggleSortByTitle = () => {
+    if (!this.state.isSortedByTitle) {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.preparedTodos].sort((a, b) => a.title.localeCompare(b.title)),
+        isSortedByTitle: true,
+      }));
+    } else {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.initPreparedTodos],
+        isSortedByTitle: false,
+      }));
+    }
+  }
+
+  toggleSortByUserName = () => {
+    if (!this.state.isSortedByUserName) {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.preparedTodos].sort((a, b) => a.user.name.localeCompare(b.user.name)),
+        isSortedByUserName: true,
+      }));
+    } else {
+      this.setState(prevState => ({
+        preparedTodos: [...prevState.initPreparedTodos],
+        isSortedByUserName: false,
+      }));
+    }
   }
 
   render() {
@@ -90,7 +137,72 @@ class App extends React.Component {
           >
             Load
           </button>
-        )}
+        )
+          || (
+            <>
+              {this.state.isShowOnlyCompleted
+                ? (
+                  <button
+                    className="button"
+                    type="button"
+                    onClick={this.toggleCompleted}
+                  >
+                    show all
+
+                  </button>
+                )
+                : (
+                  <button
+                    className="button"
+                    type="button"
+                    onClick={this.toggleCompleted}
+                  >
+                    show completed
+                  </button>
+                )}
+              {this.state.isSortedByTitle
+                ? (
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={this.toggleSortByTitle}
+                  >
+                    show all
+                  </button>
+                )
+                : (
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={this.toggleSortByTitle}
+                  >
+                    sort by title
+                  </button>
+                )
+              }
+              {this.state.isSortedByUserName
+                ? (
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={this.toggleSortByUserName}
+                  >
+                    show all
+                  </button>
+                )
+                : (
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={this.toggleSortByUserName}
+                  >
+                    sort by User
+                  </button>
+                )
+              }
+            </>
+          )
+        }
         <TodoList todos={preparedTodos} />
       </div>
     );
