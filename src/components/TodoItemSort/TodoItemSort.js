@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import { TodoItemSortProps } from '../../constants/proptypes';
 
 import './TodoItemSort.css';
@@ -16,11 +17,16 @@ class TodoItemSort extends Component {
 
     const buttons = this.buttons.map(({ name, label }) => {
       const isActive = sort === name;
-      const clazz = isActive ? 'btn-info' : 'btn-outline-secondary';
+
+      const classes = classNames({
+        'btn-info': isActive,
+        'btn-outline-secondary': !isActive,
+      });
+
       return (
         <button
           type="button"
-          className={`btn ${clazz}`}
+          className={`btn ${classes}`}
           key={name}
           onClick={() => onSortChange(name)}
         >

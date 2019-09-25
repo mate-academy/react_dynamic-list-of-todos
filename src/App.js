@@ -21,7 +21,7 @@ class App extends Component {
     user: usersList.find(user => user.id === todo.userId),
   }))
 
-  handleShow = () => {
+  loadData = () => {
     this.setState({
       isLoading: true,
     });
@@ -40,18 +40,16 @@ class App extends Component {
       }));
   };
 
-  sort = (items, sort) => {
+  sort = (posts, sort) => {
     switch (sort) {
-      case 'default':
-        return items;
       case 'title':
-        return items.sort((a, b) => (a.title > b.title ? 1 : -1));
+        return posts.sort((a, b) => (a.title > b.title ? 1 : -1));
       case 'status':
-        return items.sort((a, b) => a.completed - b.completed);
+        return posts.sort((a, b) => a.completed - b.completed);
       case 'user':
-        return items.sort((a, b) => (a.user > b.user ? 1 : -1));
+        return posts.sort((a, b) => a.user.name.localeCompare(b.user.name));
       default:
-        return items;
+        return posts;
     }
   };
 
@@ -100,7 +98,7 @@ class App extends Component {
                     <Button
                       className="btn--start"
                       text="Load"
-                      onClick={this.handleShow}
+                      onClick={this.loadData}
                     />
                   </div>
                 </>
