@@ -60,6 +60,8 @@ class App extends React.Component {
       this.setState(prevState => ({
         preparedTodos: [...prevState.initPreparedTodos],
         isShowOnlyCompleted: false,
+        isSortedByTitle: false,
+        isSortedByUserName: false,
       }));
     }
   }
@@ -74,6 +76,8 @@ class App extends React.Component {
       this.setState(prevState => ({
         preparedTodos: [...prevState.initPreparedTodos],
         isSortedByTitle: false,
+        isSortedByUserName: false,
+        isShowOnlyCompleted: false,
       }));
     }
   }
@@ -88,6 +92,8 @@ class App extends React.Component {
       this.setState(prevState => ({
         preparedTodos: [...prevState.initPreparedTodos],
         isSortedByUserName: false,
+        isSortedByTitle: false,
+        isShowOnlyCompleted: false,
       }));
     }
   }
