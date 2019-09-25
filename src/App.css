@@ -70,3 +70,6 @@
   transform: scale(0.96);
 }
 
+.sort:focus {
+  outline: none;
+}

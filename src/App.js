@@ -1,56 +1,70 @@
 import React from 'react';
-import cx from 'classnames';
+
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
 
-class App extends React.Component{
+class App extends React.Component {
   state = {
-    active:0,
-    activeSort:0,
-    todosWithUsers:[],
+    active: 0,
+    sorted: false,
+    todosWithUsers: [],
+  }
+
+  sortAZ = () => {
+    this.setState(prevState => ({
+      todosWithUsers: prevState.sorted === false ? prevState.todosWithUsers
+        .sort((a, b) => a.title.localeCompare(b.title))
+        : prevState.todosWithUsers
+          .sort((a, b) => a.title.localeCompare(b.title)).reverse(),
+      sorted: !prevState.sorted,
+    }));
   }
 
   loadDatas = () => {
-       Promise.all([
-        fetch('https://jsonplaceholder.typicode.com/users').then(users => users.json()),
-        fetch('https://jsonplaceholder.typicode.com/todos').then(todos => todos.json()),
+    Promise.all([
+      fetch('https://jsonplaceholder.typicode.com/users')
+        .then(users => users.json()),
+      fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(todos => todos.json()),
     ])
-    .then(usersAndTodos => {
-      this.setState({
-        active:1,
-        todosWithUsers: usersAndTodos[1].map(todo => ({
-          ...todo,
-          user: usersAndTodos[0].find(user => user.id === todo.userId),
-        }))
-      })
-    })
+      .then(([users, todos]) => {
+        this.setState({
+          active: 1,
+          todosWithUsers: todos.map(todo => ({
+            ...todo,
+            user: users.find(user => user.id === todo.userId),
+          })),
+        });
+      });
   }
 
-  render () {
-    const { todosWithUsers, active, activeSort } = this.state;
+  render() {
+    const { todosWithUsers, active } = this.state;
     return (
       <>
-        <div className={active === 1 ? 'button-back down' : 'button-back' }>Loading...</div>
+        <h1 className="h1">Dynamic list of todos</h1>
+        <div className={active === 1 ? 'button-back down' : 'button-back'}>
+          Loading...
+        </div>
         <button
           onClick={this.loadDatas}
-          className={active === 1 ? 'button-start down' : 'button-start' }
+          className={active === 1 ? 'button-start down' : 'button-start'}
           type="button"
-        >Load</button>
-        {!!active && (<button
-          type="button"
-          onClick={this.sortAZ}
-          className={activeSort === 1 ? 'sort down' : 'sort' }
-        >Title A-Z</button>)}
-        <TodoList todos = {todosWithUsers} />
+        >
+          Load
+        </button>
+        {!!active && (
+          <button
+            type="button"
+            onClick={this.sortAZ}
+            className="sort"
+          >
+          Title A-Z
+          </button>
+        )}
+        <TodoList todos={todosWithUsers} />
       </>
-    )
-  }
-  sortAZ = () => {
-    //console.log(this.state.todosWithUsers.sort((a,b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0 ));
-    this.setState(({
-      activeSort:1,
-      todosWithUsers: this.state.todosWithUsers.sort((a,b) => a.title < b.title ? -1 : a.title > b.title ? 1 : 0 ),
-    }))
+    );
   }
 }
 
