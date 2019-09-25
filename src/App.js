@@ -7,6 +7,7 @@ const BASE_URL = 'https://jsonplaceholder.typicode.com';
 class App extends React.Component {
   state = {
     todos: [],
+    originalTodos: [],
     isLoaded: false,
     isLoading: false,
     hasError: false,
@@ -33,6 +34,7 @@ class App extends React.Component {
 
       this.setState({
         todos: todosWithUsers,
+        originalTodos: todosWithUsers,
         isLoaded: true,
       });
     } catch (error) {
@@ -47,21 +49,27 @@ class App extends React.Component {
   };
 
   sortByTitle = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].sort((a, b) => (a.title > b.title ? 1 : -1)),
-    }));
+    const { originalTodos } = this.state;
+
+    this.setState({
+      todos: [...originalTodos].sort((a, b) => (a.title > b.title ? 1 : -1)),
+    });
   };
 
   sortByUser = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].sort((a, b) => a.userId - b.userId),
-    }));
+    const { originalTodos } = this.state;
+
+    this.setState({
+      todos: [...originalTodos].sort((a, b) => a.userId - b.userId),
+    });
   };
 
   sortByCompleteness = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].sort((a, b) => a.completed - b.completed),
-    }));
+    const { originalTodos } = this.state;
+
+    this.setState({
+      todos: [...originalTodos].sort((a, b) => a.completed - b.completed),
+    });
   };
 
   render() {
