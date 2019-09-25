@@ -1,3 +1,75 @@
 .App {
   text-align: center;
 }
+
+#root {
+  text-align: center;
+  position: relative;
+}
+
+.button-start {
+  font-size: 41px;
+  width: 200px;
+  height: 75px;
+  border: 2px solid #f1deff;
+  border-radius: 10px;
+  color: #cdccce;
+  background: rgb(60, 98, 176);
+  margin: auto;
+  transform: scaleY(1);
+  position: relative;
+  top: -75px;
+  transition: opacity 0.5s, transform 0.2s;
+}
+
+.button-start:focus {
+  transform: scaleY(-1);
+  opacity: 0;
+}
+
+.button-back {
+  font-size: 34px;
+  padding-top: 15px;
+  box-sizing: border-box;
+  top: 75px;
+  transform: scaleY(180deg);
+  width: 200px;
+  border: 2px solid #f1deff;
+  border-radius: 10px;
+  color: #cdccce;
+  background: rgb(101, 68, 190);
+  height: 75px;
+  transform: scaleY(1);
+  background: rgb(236, 228, 255);
+  border: 2px solid rgb(60, 98, 176);
+  color: rgb(60, 98, 176);
+  transition: opacity 1.5s, transform 0.2s, background 0.3s, border 0.3s, color 0.3s;
+  margin: auto;
+}
+.down {
+  opacity: 0;
+}
+.sort {
+  position: absolute;
+  /* left: -1px; */
+  width: 150px;
+  font-size: 15px;
+  border: none;
+  padding: 12px;
+  background: #c9e4fa;
+  color: #4569c5;
+  border: 1px solid #a4b5df;
+  border-radius: 7px;
+  margin-left: -173px;
+  margin-top: 1px;
+  transition: transform 0.2s, opacity 0.5s;
+}
+
+.sort:active {
+  outline: none;
+  transform: scale(0.96);
+}
+
+.sort:focus {
+  outline: none;
+}
