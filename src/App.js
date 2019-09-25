@@ -16,6 +16,7 @@ class App extends React.Component {
     isLoading: false,
     hasError: false,
     isInitialized: false,
+    isSorted: false,
   };
 
   receiveTodosAndUsers = () => {
@@ -39,6 +40,16 @@ class App extends React.Component {
 
         this.setState({
           preparedTodos,
+          sortedTodos: [...preparedTodos].sort((a, b) => {
+            if (a.title < b.title) {
+              return -1;
+            }
+            if (a.title > b.title) {
+              return 1;
+            }
+
+            return 0;
+          }),
           isLoading: false,
         });
       })
@@ -50,8 +61,21 @@ class App extends React.Component {
       });
   }
 
+  sortTodos = () => {
+    this.setState(({ isSorted }) => ({
+      isSorted: !isSorted,
+    }));
+  }
+
   render() {
-    const { preparedTodos, isLoading, hasError, isInitialized } = this.state;
+    const {
+      preparedTodos,
+      isLoading,
+      hasError,
+      isInitialized,
+      isSorted,
+      sortedTodos,
+    } = this.state;
 
     if (isLoading) {
       return <p className="loading">Loading...</p>;
@@ -89,7 +113,17 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <TodoList todos={preparedTodos} />
+        <button
+          type="button"
+          onClick={this.sortTodos}
+          className="btn btn-primary load"
+        >
+          Sort
+        </button>
+        <TodoList todos={isSorted
+          ? sortedTodos
+          : preparedTodos}
+        />
       </div>
     );
   }
