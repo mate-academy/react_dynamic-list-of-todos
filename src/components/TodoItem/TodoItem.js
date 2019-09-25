@@ -8,12 +8,11 @@ const TodoItem = ({ todo }) => {
   } = todo;
 
   return (
-    <div className="todoList__item">
+    <div className="todo-list__item">
       <h2>{id}</h2>
       <h4>{title}</h4>
       <input type="checkbox" checked={completed} />
       <User user={user} />
-      <p>--------------------------------------</p>
     </div>
   );
 };

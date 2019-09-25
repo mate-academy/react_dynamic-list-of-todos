@@ -15,8 +15,7 @@ function getTodosWithUsers(todosList, usersList) {
 
 class App extends React.Component {
   state = {
-    todos: [],
-    users: [],
+    preparedTodos: [],
     isLoading: false,
     error: null,
     isShowButton: true,
@@ -31,38 +30,61 @@ class App extends React.Component {
       fetch(TODOS_URL),
       fetch(USERS_URL),
     ])
-      .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-      .then(([data1, data2]) => this.setState({
-        todos: data1,
-        users: data2,
+      .then(([todosResponse, usersResponse]) => (
+        Promise.all([todosResponse.json(), usersResponse.json()])))
+      .then(([todosData, usersData]) => this.setState({
         isLoading: false,
         isShowButton: false,
+        preparedTodos: getTodosWithUsers(todosData, usersData),
       }))
       .catch((err) => {
         this.setState({
+          isLoading: false,
           error: err,
         });
       });
   }
 
   render() {
+    console.log(this.state.preparedTodos);
     const {
-      todos, users, isLoading, error, isShowButton,
+      preparedTodos, isLoading, error, isShowButton,
     } = this.state;
-    const preparedTodos = getTodosWithUsers(todos, users);
 
     if (isLoading) {
-      return <div>...Loading</div>;
+      return (
+        <div className="App todo-list">
+          <button
+            className="button"
+            type="button"
+            disabled
+          >
+            Loading...
+          </button>
+        </div>
+      );
     }
 
     if (error) {
-      return <div>{`Error: ${error.message} data`}</div>;
+      return (
+        <div className="App todo-list">
+          <div>{`Error: ${error.message} data`}</div>
+          <button
+            className="button"
+            type="button"
+            onClick={this.loadTodos}
+          >
+            Reload
+          </button>
+        </div>
+      );
     }
 
     return (
       <div className="App todo-list">
         {isShowButton && (
           <button
+            className="button"
             type="button"
             onClick={this.loadTodos}
           >
