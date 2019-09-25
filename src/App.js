@@ -12,8 +12,9 @@ class App extends React.Component {
 
   sortAZ = () => {
     this.setState(prevState => ({
-      todosWithUsers: prevState.sorted === false ? prevState.todosWithUsers
-        .sort((a, b) => a.title.localeCompare(b.title))
+      todosWithUsers: prevState.sorted === false
+        ? prevState.todosWithUsers
+          .sort((a, b) => a.title.localeCompare(b.title))
         : prevState.todosWithUsers
           .sort((a, b) => a.title.localeCompare(b.title)).reverse(),
       sorted: !prevState.sorted,
