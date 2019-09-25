@@ -22,8 +22,7 @@ class App extends Component {
     });
     const dataTodos = getData('https://jsonplaceholder.typicode.com/todos');
     const dataUsers = getData('https://jsonplaceholder.typicode.com/users');
-    Promise.all([dataTodos, dataUsers]).then((data) => {
-      const [listTodo, listUsers] = data;
+    Promise.all([dataTodos, dataUsers]).then(([listTodo, listUsers]) => {
       this.setState({
         todos: listTodo
           .map(item => ({
@@ -80,11 +79,9 @@ class App extends Component {
 
         {isLoading
           ? (
-            <>
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </>
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
           )
           : null}
 
