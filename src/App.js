@@ -26,18 +26,14 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
-    todos().then(data => this.setState({
-      todos: data,
-      originTodos: data,
-    }));
-    users().then(data => this.setState({
-      users: data,
-    }));
 
     Promise.all([todos(), users()])
-      .then(() => {
+      .then(([todos, users]) => {
         this.setState({
           isLoaded: true,
+          todos: todos,
+          originTodos: todos,
+          users: users,
         });
       })
       .finally(() => {
