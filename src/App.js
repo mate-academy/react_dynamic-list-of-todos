@@ -29,12 +29,13 @@ class App extends Component {
     Promise.all([
       getData('todos'),
       getData('users'),
-    ]).then(([todos, users]) => this.setState({
-      todosList: getTodosWithUsers(todos, users),
-      sortedTodosList: getTodosWithUsers(todos, users),
-      isLoaded: true,
-      isLoading: false,
-    }))
+    ])
+      .then(([todos, users]) => this.setState({
+        todosList: getTodosWithUsers(todos, users),
+        sortedTodosList: getTodosWithUsers(todos, users),
+        isLoaded: true,
+        isLoading: false,
+      }))
       .catch(() => this.setState({
         buttonText: 'try again',
         isError: true,
@@ -50,45 +51,41 @@ class App extends Component {
 
   sortByTitle = () => {
     this.setState(prevState => ({
-      sortedTodosList: [
-        ...prevState.sortedTodosList
-          .sort((todo1, todo2) => {
-            if (todo1.title < todo2.title) {
-              return -1;
-            }
-            if (todo1.title > todo2.title) {
-              return 1;
-            }
+      sortedTodosList: [...prevState.todosList]
+        .sort((todo1, todo2) => {
+          if (todo1.title < todo2.title) {
+            return -1;
+          }
+          if (todo1.title > todo2.title) {
+            return 1;
+          }
 
-            return 0;
-          }),
-      ],
+          return 0;
+        }),
     }));
   };
 
   sortByName = () => {
     this.setState(prevState => ({
-      sortedTodosList: [
-        ...prevState.sortedTodosList
-          .sort((todo1, todo2) => {
-            if (todo1.user.name < todo2.user.name) {
-              return -1;
-            }
-            if (todo1.user.name < todo2.user.name) {
-              return 1;
-            }
+      sortedTodosList: [...prevState.todosList]
+        .sort((todo1, todo2) => {
+          if (todo1.user.name < todo2.user.name) {
+            return -1;
+          }
+          if (todo1.user.name < todo2.user.name) {
+            return 1;
+          }
 
-            return 0;
-          }),
-      ],
+          return 0;
+        }),
     }));
   };
 
   sortCompleted = () => {
     this.setState(prevState => ({
       sortedTodosList: [
-        ...prevState.sortedTodosList.filter(todo => todo.completed),
-        ...prevState.sortedTodosList.filter(todo => !todo.completed),
+        ...prevState.todosList.filter(todo => todo.completed),
+        ...prevState.todosList.filter(todo => !todo.completed),
       ],
     }));
   };
