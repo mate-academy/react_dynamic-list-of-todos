@@ -8,6 +8,7 @@ class App extends Component {
     isLoading: false,
     isLoaded: false,
     isSorted: false,
+    selectedSort: 'Do not sort',
   }
 
   getTodos = () => {
@@ -34,15 +35,29 @@ class App extends Component {
 
         this.setState({
           todos: preparedTodos,
-          sortedTodos: [...preparedTodos].sort(a => (a.completed ? 1 : -1)),
+          sortedTodos: preparedTodos,
           isLoaded: true,
         });
       });
   }
 
-  sort = () => {
-    this.setState(({ isSorted }) => ({
-      isSorted: !isSorted,
+  sortTodos = (value) => {
+    this.setState(({ todos }) => ({
+      isSorted: value !== 'Do not sort',
+      selectedSort: value,
+      sortedTodos: [...todos].sort((a, b) => {
+        if (value === 'By user name') {
+          return a.user.localeCompare(b.user);
+        }
+
+        if (value === 'By title') {
+          return a.title.localeCompare(b.title);
+        }
+
+        if (value === 'TODO/Completed') {
+          return a.completed ? 1 : -1;
+        }
+      }),
     }));
   }
 
@@ -53,6 +68,7 @@ class App extends Component {
       isLoading,
       isLoaded,
       isSorted,
+      selectedSort,
     } = this.state;
 
     return (
@@ -60,13 +76,19 @@ class App extends Component {
         <h1 className="title">Dynamic list of todos</h1>
         {(isLoaded && (
           <>
-            <button
+            Sort by:
+            {' '}
+            <select
               type="button"
-              onClick={this.sort}
+              value={selectedSort}
+              onChange={e => this.sortTodos(e.target.value)}
               className="mb-3"
             >
-              Sort
-            </button>
+              <option value="Do not sort">Do not sort</option>
+              <option value="By user name">By user name</option>
+              <option value="By title">By title</option>
+              <option value="TODO/Completed">TODO/Completed</option>
+            </select>
             <TodoList todos={isSorted
               ? sortedTodos
               : todos}
