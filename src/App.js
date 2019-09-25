@@ -40,10 +40,10 @@ class App extends Component {
       }));
   };
 
-  sort = (posts, sort) => {
+  sortPanel = (posts, sort) => {
     switch (sort) {
       case 'title':
-        return posts.sort((a, b) => (a.title > b.title ? 1 : -1));
+        return posts.sort((a, b) => (a.title.localeCompare(b.title)));
       case 'status':
         return posts.sort((a, b) => a.completed - b.completed);
       case 'user':
@@ -66,7 +66,7 @@ class App extends Component {
     } = this.state;
 
     const preparedTodos = this.getTodosWithUsers(todos, users);
-    const visibleItems = this.sort(preparedTodos, sort);
+    const visibleItems = this.sortPanel(preparedTodos, sort);
 
     return (
       <div className="App">

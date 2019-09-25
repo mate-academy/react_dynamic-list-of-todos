@@ -18,7 +18,7 @@ class TodoItemSort extends Component {
     const buttons = this.buttons.map(({ name, label }) => {
       const isActive = sort === name;
 
-      const classes = classNames({
+      const sortBtnClasses = classNames({
         'btn-info': isActive,
         'btn-outline-secondary': !isActive,
       });
@@ -26,7 +26,7 @@ class TodoItemSort extends Component {
       return (
         <button
           type="button"
-          className={`btn ${classes}`}
+          className={`btn ${sortBtnClasses}`}
           key={name}
           onClick={() => onSortChange(name)}
         >
