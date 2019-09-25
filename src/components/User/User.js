@@ -19,9 +19,3 @@ User.propTypes = {
   user: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string,
 }.isRequaired;
-
-// User.defaultProps = {
-
-// };
-
-export default User;

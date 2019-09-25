@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import './TodoItem.css';
 import { User } from '../User/User';
 
-// eslint-disable-next-line import/prefer-default-export
 export const TodoItem = (props) => {
   const { completed, user, title } = props;
 
@@ -21,5 +20,3 @@ TodoItem.propTypes = {
   user: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string,
 }.isRequaired;
-
-export default TodoItem;

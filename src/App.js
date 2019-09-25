@@ -4,15 +4,12 @@ import { TodoList } from './components/TodoList/TodoList';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
-class App extends React.Component {
+export class App extends React.Component {
   state = {
     todos: [],
     isLoading: false,
     isLoaded: false,
     error: null,
-  }
-
-  componentDidMount() {
   }
 
   loadData = async() => {
@@ -72,5 +69,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;
