@@ -52,32 +52,14 @@ class App extends Component {
   sortByTitle = () => {
     this.setState(prevState => ({
       sortedTodosList: [...prevState.todosList]
-        .sort((todo1, todo2) => {
-          if (todo1.title < todo2.title) {
-            return -1;
-          }
-          if (todo1.title > todo2.title) {
-            return 1;
-          }
-
-          return 0;
-        }),
+        .sort((todo1, todo2) => todo1.title.localeCompare(todo2.title)),
     }));
   };
 
   sortByName = () => {
     this.setState(prevState => ({
       sortedTodosList: [...prevState.todosList]
-        .sort((todo1, todo2) => {
-          if (todo1.user.name < todo2.user.name) {
-            return -1;
-          }
-          if (todo1.user.name < todo2.user.name) {
-            return 1;
-          }
-
-          return 0;
-        }),
+        .sort((todo1, todo2) => todo1.user.name.localeCompare(todo2.user.name)),
     }));
   };
 
