@@ -7,13 +7,13 @@ import { TodoItem } from '../TodoItem/TodoItem';
 export const TodoList = ({ todos, sortByName, sortByTitle, sortByCompleted }) => (
   <div>
     <div className="btn-group" role="group" aria-label="Basic example">
-      <button onClick={sortByName} className="btn btn-secondary">
+      <button onClick={sortByName} className="btn btn-dark text-warning">
         Sort by name
       </button>
-      <button onClick={sortByTitle} className="btn btn-secondary">
+      <button onClick={sortByTitle} className="btn btn-dark text-warning">
         Sort by title
       </button>
-      <button onClick={sortByCompleted} className="btn btn-secondary">
+      <button onClick={sortByCompleted} className="btn btn-dark text-warning">
         Completed
       </button>
     </div>

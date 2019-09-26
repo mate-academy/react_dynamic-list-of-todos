@@ -15,8 +15,8 @@ function getTodosWithUsers(todos, users) {
 
 class App extends React.Component {
   state = {
+    originTodos: [],
     todos: [],
-    users: [],
     isLoading: false,
     isLoaded: false,
     hasError: false
@@ -24,20 +24,28 @@ class App extends React.Component {
 
   sortByName = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1))
+      todos: prevState.originTodos.sort((a, b) =>
+        a.user.name.localeCompare(b.user.name)
+      )
     }));
   };
 
   sortByTitle = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1))
+      todos: prevState.originTodos.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      )
     }));
   };
 
   sortByCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) =>
-        a.completed < b.completed ? 1 : -1
+      todos: prevState.originTodos.sort((a, b) =>
+        a.completed < b.completed
+          ? 1
+          : a.completed === b.completed
+          ? a.user.name.localeCompare(b.user.name)
+          : -1
       )
     }));
   };
@@ -49,21 +57,12 @@ class App extends React.Component {
       hasError: false
     });
 
-    getTodos().then(data => {
-      this.setState({
-        todos: data
-      });
-    });
-
-    getUsers().then(data => {
-      this.setState({
-        users: data
-      });
-    });
-
     Promise.all([getTodos(), getUsers()])
-      .then(() => {
+      .then(data => {
+        console.log(data);
         this.setState({
+          todos: getTodosWithUsers(data[0], data[1]),
+          originTodos: getTodosWithUsers(data[0], data[1]),
           isLoaded: true
         });
       })
@@ -80,19 +79,11 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, users, isLoading, hasError, isLoaded } = this.state;
-    const preparedTodos = getTodosWithUsers(todos, users);
+    const { todos, isLoading, hasError, isLoaded } = this.state;
     return (
       <div className="main">
         <h1>Static list of todos</h1>
-        <p>
-          <span>Todos: </span>
-          {todos.length}
-          <br />
-          <span>Users: </span>
-          {users.length}
-        </p>
-        {!todos.length && !users.length && !isLoading && !hasError && (
+        {!todos.length && !isLoading && !hasError && (
           <button
             type="button"
             onClick={this.getData}
@@ -120,7 +111,7 @@ class App extends React.Component {
         )}
         {isLoaded && (
           <TodoList
-            todos={preparedTodos}
+            todos={todos}
             sortByName={this.sortByName}
             sortByTitle={this.sortByTitle}
             sortByCompleted={this.sortByCompleted}
