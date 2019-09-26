@@ -13,6 +13,8 @@ class App extends Component {
     isLoading: false,
     isLoaded: false,
     hasError: false,
+    isSorted: false,
+    selectedSort: 'Do not sort',
   } // started oprions
 
   getTodosWithUsers = (todos, usersList) => (todos.map(
@@ -62,13 +64,13 @@ class App extends Component {
       <div className="App">
         {isLoaded ? ( // first option if load was successfull
           <>
-            <h1>Static list of todos</h1>
+            <h1>Dynamic list of todos</h1>
             <TodoList todos={this.getTodosWithUsers(todos, users)} />
           </>
         ) : (
           <>
             <h1>
-              {hasError ? 'Error - failed to fetch' : 'Load'}
+              {hasError ? 'Error : Failed to fetch' : 'Dynamic list of todos'}
             </h1>
             <button type="button" onClick={this.handleClick}>
               {isLoading ? 'Loading..' : textOnButton}
