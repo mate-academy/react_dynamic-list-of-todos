@@ -5,7 +5,6 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList = (props) => {
   const { todos } = props;
-  console.log(typeof todos);
 
   return (
     <ul>

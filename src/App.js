@@ -28,8 +28,6 @@ export class App extends React.Component {
         user: users.find(({ id }) => id === userId),
       }));
 
-      console.log(todosWithUsers);
-
       this.setState({
         todos: todosWithUsers,
         isLoaded: true,

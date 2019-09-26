@@ -16,6 +16,4 @@ export const User = (props) => {
 
 User.propTypes = {
   name: PropTypes.string,
-  user: PropTypes.arrayOf(PropTypes.string),
-  title: PropTypes.string,
 }.isRequaired;
