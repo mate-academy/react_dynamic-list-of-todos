@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './TodoList.css';
 import TodoItem from '../TodoItem/TodoItem';
 
-const TodoList = ({ todoList: copyTodos }) => (
+const TodoList = ({ todos: copyTodos }) => (
   <div className="container">
     {copyTodos.map(todo => (
       <TodoItem todo={todo} key={todo.id} />
@@ -13,7 +13,7 @@ const TodoList = ({ todoList: copyTodos }) => (
 );
 
 TodoList.propTypes = {
-  todoList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TodoList;

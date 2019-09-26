@@ -13,55 +13,59 @@ const getTodosWithUsers = (todoList, userList) => (
 class App extends React.Component {
   state = {
     todos: [],
-    users: [],
+    originalTodos: [],
     isLoading: false,
     isLoaded: false,
     errors: '',
     countTryConnect: 0,
   };
 
-  handleData = () => {
+  handleData = async () => {
     this.setState({
       isLoading: true,
       errors: '',
     });
 
-    Promise.all([
-      fetch('https://jsonplaceholder.typicode.com/todos'),
-      fetch('https://jsonplaceholder.typicode.com/users'),
-    ])
-      .then(([todos, users]) => Promise.all([todos.json(), users.json()]))
-      .then(([todosData, usersData]) => this.setState({
-        todos: todosData,
-        users: usersData,
+    try {
+      const [todosResponse, usersResponse] = await Promise.all([
+        fetch('https://jsonplaceholder.typicode.com/todos'),
+        fetch('https://jsonplaceholder.typicode.com/users'),
+      ]);
+
+      const todos = await todosResponse.json();
+      const users = await usersResponse.json();
+      const todosWithUsers = getTodosWithUsers(todos, users);
+
+      this.setState({
+        todos: [...todosWithUsers],
+        originalTodos: [...todosWithUsers],
         isLoading: false,
         isLoaded: true,
         countTryConnect: 0,
-      }))
-      .catch((error) => {
-        this.setState(prevState => ({
-          errors: error.message,
-          countTryConnect: prevState.countTryConnect + 1,
-          isLoaded: false,
-          isLoading: false,
-        }));
       });
+    }
+    catch (error) {
+      this.setState(prevState => ({
+        errors: error.message,
+        countTryConnect: prevState.countTryConnect + 1,
+        isLoaded: false,
+        isLoading: false,
+      }));
+    }
   }
 
   render() {
     const { todos,
-      users,
       isLoading,
       isLoaded,
       errors,
       countTryConnect,
     } = this.state;
-    const todosWithUsers = getTodosWithUsers(todos, users);
 
     return (
       <>
         <h1 className="app__title">Static list of todos</h1>
-        {!todos.length && !users.length && !isLoading
+        {!todos.length && !isLoading
           && <button
             type="button"
             className="app__button-load"
@@ -92,7 +96,7 @@ class App extends React.Component {
           )
         }
 
-        {isLoaded && <TodoList todoList={todosWithUsers} />}
+        {isLoaded && <TodoList todos={todos} />}
       </>
     );
   }
