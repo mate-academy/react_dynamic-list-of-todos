@@ -10,7 +10,6 @@ const TodoList = (props) => {
       {todos.map(todo => (
         <TodoItem key={todo.id} {...todo} />
       ))}
-
     </ul>
   );
 };

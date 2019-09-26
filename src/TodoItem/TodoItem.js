@@ -15,7 +15,7 @@ const TodoItem = (props) => {
 
 TodoItem.propTypes = {
   completed: PropTypes.string,
-  user: PropTypes.arrayOf(PropTypes.string),
+  user: PropTypes.object,
   title: PropTypes.string,
 }.isRequaired;
 
