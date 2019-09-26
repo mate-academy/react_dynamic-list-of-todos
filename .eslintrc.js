@@ -22,5 +22,6 @@ module.exports = {
 
     "no-shadow": ["error", { "builtinGlobals": false }],
     "react/destructuring-assignment": 0,
+    "import/prefer-default-export": 0,
   }
 };
