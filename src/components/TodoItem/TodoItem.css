@@ -1,0 +1,24 @@
+.bg--green{
+  background-color: rgb(28, 105, 28);
+}
+
+.bg--red{
+  background-color: rgb(199, 61, 61);
+}
+
+.card{
+  padding: 20px;
+}
+
+.card:hover{
+  transform: scale(1.12);
+  transition: transform .6s;
+}
+
+.card-content{
+  padding-top: 25px;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+
