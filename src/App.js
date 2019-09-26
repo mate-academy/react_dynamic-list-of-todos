@@ -16,7 +16,7 @@ class App extends Component {
     sortedTodosList: [],
     isLoaded: false,
     isLoading: false,
-    isError: false,
+    errorText: null,
     buttonText: 'Load',
   }
 
@@ -38,38 +38,36 @@ class App extends Component {
       }))
       .catch(() => this.setState({
         buttonText: 'try again',
-        isError: true,
+        errorText: <p>No Data :( Try again</p>,
         isLoading: false,
       }));
   }
 
-  resetList = () => {
-    this.setState(prevState => ({
-      sortedTodosList: [...prevState.todosList],
-    }));
-  };
+  sortPosts = (event) => {
+    const { value } = event.target;
 
-  sortByTitle = () => {
-    this.setState(prevState => ({
-      sortedTodosList: [...prevState.todosList]
-        .sort((todo1, todo2) => todo1.title.localeCompare(todo2.title)),
-    }));
-  };
-
-  sortByName = () => {
-    this.setState(prevState => ({
-      sortedTodosList: [...prevState.todosList]
-        .sort((todo1, todo2) => todo1.user.name.localeCompare(todo2.user.name)),
-    }));
-  };
-
-  sortCompleted = () => {
-    this.setState(prevState => ({
-      sortedTodosList: [
-        ...prevState.todosList.filter(todo => todo.completed),
-        ...prevState.todosList.filter(todo => !todo.completed),
-      ],
-    }));
+    this.setState((prevState) => {
+      switch (value) {
+        case 'name': return {
+          sortedTodosList: [...prevState.todosList]
+            .sort((todo1, todo2) => (
+              todo1.user.name.localeCompare(todo2.user.name))),
+        };
+        case 'title': return {
+          sortedTodosList: [...prevState.todosList]
+            .sort((todo1, todo2) => todo1.title.localeCompare(todo2.title)),
+        };
+        case 'completed': return {
+          sortedTodosList: [
+            ...prevState.todosList.filter(todo => todo.completed),
+            ...prevState.todosList.filter(todo => !todo.completed),
+          ],
+        };
+        default: return {
+          sortedTodosList: [...prevState.todosList],
+        };
+      }
+    });
   };
 
   render() {
@@ -78,16 +76,13 @@ class App extends Component {
       isLoaded,
       isLoading,
       buttonText,
-      isError,
+      errorText,
     } = this.state;
 
     if (!isLoaded) {
       return (
         <div>
-          {isError
-            ? <p>No Data :( Try again</p>
-            : null
-          }
+          {errorText}
           <button
             type="submit"
             disabled={isLoading}
@@ -102,32 +97,34 @@ class App extends Component {
     return (
       <div>
         <button
+          value="name"
           type="submit"
-          onClick={this.sortByName}
+          onClick={this.sortPosts}
         >
           Sort by Name
         </button>
         <button
+          value="title"
           type="submit"
-          onClick={this.sortByTitle}
+          onClick={this.sortPosts}
         >
           Sort by Title
         </button>
         <button
+          value="completed"
           type="submit"
-          onClick={this.sortCompleted}
+          onClick={this.sortPosts}
         >
           Sort by Comleted
         </button>
         <button
           type="submit"
-          onClick={this.resetList}
+          onClick={this.sortPosts}
         >
           Reset
         </button>
         <TodoList todos={sortedTodosList} />
       </div>
-
     );
   }
 }
