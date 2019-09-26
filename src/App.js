@@ -43,8 +43,6 @@ class App extends React.Component {
       todos: prevState.originTodos.sort((a, b) =>
         a.completed < b.completed
           ? 1
-          : a.completed === b.completed
-          ? a.user.name.localeCompare(b.user.name)
           : -1
       )
     }));
