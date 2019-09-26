@@ -1,0 +1,18 @@
+.todo-item {
+  width: 30%;
+  background-color: #fff;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+  &__title {
+    color: rgb(10, 154, 173);
+    font-style: italic;
+  }
+
+  &__check {
+    color: black;
+  }
+}

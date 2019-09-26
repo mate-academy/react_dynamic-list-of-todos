@@ -1,3 +1,82 @@
-.App {
+body {
   text-align: center;
+  background-color: lightgrey;
+}
+
+.balls {
+  margin: 300px auto;
+  width: 4em;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.balls div {
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  background-color: #000;
+}
+
+.balls div:nth-of-type(1) {
+  transform: translateX(-100%);
+  animation: left-swing 0.5s ease-in alternate infinite;
+}
+
+.balls div:nth-of-type(3) {
+  transform: translateX(-95%);
+  animation: right-swing 0.5s ease-out alternate infinite;
+}
+
+@keyframes left-swing {
+  50%,
+  100% {
+    transform: translateX(95%);
+  }
+}
+
+@keyframes right-swing {
+  50% {
+    transform: translateX(-95%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.error {
+  padding-top: 200px;
+}
+
+.error__title {
+  font-size: 4em;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.error__text {
+  margin-top: 30px;
+  color: brown;
+  font-size: 1.5em;
+}
+
+.button {
+  margin-top: 20px;
+  height: 50px;
+  width: 150px;
+  font-size: 1em;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  background-color: rgb(33, 152, 192);
+}
+
+.button:hover {
+  box-shadow: 0 5px 5px grey;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 3em;
 }

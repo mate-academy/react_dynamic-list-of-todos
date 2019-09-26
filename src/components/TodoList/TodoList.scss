@@ -1,0 +1,10 @@
+.todo-list {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+  flex-wrap: wrap;
+  padding: 0 40px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
