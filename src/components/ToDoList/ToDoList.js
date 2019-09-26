@@ -7,7 +7,8 @@ function ToDoList({
   todos,
   sortByCompleted,
   sortByName,
-  sortByTitle,}) {
+  sortByTitle,
+}) {
   return (
     <div>
       <button onClick={sortByCompleted} type="button">

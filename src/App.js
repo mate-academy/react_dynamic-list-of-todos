@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import ToDoList from './components/ToDoList/ToDoList';
 
-
 const getTodos = () => fetch(`https://jsonplaceholder.typicode.com/todos`)
   .then(response => response.json());
 
@@ -27,8 +26,9 @@ class App extends React.Component {
 
   sortByCompleted = () => {
     this.setState(prevState => ({
-      // eslint-disable-next-line max-len
-      todos: prevState.todos.sort((a, b) => (a.completed < b.completed ? 1 : -1)),
+      todos: prevState.todos.sort(
+        (a, b) => (a.completed < b.completed ? 1 : -1)
+      ),
     }));
   };
 
@@ -51,22 +51,12 @@ class App extends React.Component {
       hasError: false,
     });
 
-    getTodos().then((values) => {
-      this.setState({
-        todos: values,
-      });
-    });
-
-    getUsers().then((values) => {
-      this.setState({
-        users: values,
-      });
-    });
-
     Promise.all([getTodos(), getUsers()])
-      .then(() => {
+      .then(([todos, users]) => {
         this.setState({
           isLoaded: true,
+          users,
+          todos,
         });
       })
       .catch(() => {
@@ -91,6 +81,7 @@ class App extends React.Component {
     } = this.state;
 
     const preparedTodos = getTodosWithUsers(todos, users);
+
     return (
       <div className="main">
         <h1>Static list of todos</h1>
