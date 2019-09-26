@@ -53,7 +53,7 @@ class App extends React.Component {
   toggleCompleted = () => {
     if (!this.state.isShowOnlyCompleted) {
       this.setState(prevState => ({
-        preparedTodos: [...prevState.preparedTodos].filter(todo => todo.completed),
+        preparedTodos: [...prevState.initPreparedTodos].filter(todo => todo.completed),
         isShowOnlyCompleted: true,
       }));
     } else {
@@ -69,7 +69,7 @@ class App extends React.Component {
   toggleSortByTitle = () => {
     if (!this.state.isSortedByTitle) {
       this.setState(prevState => ({
-        preparedTodos: [...prevState.preparedTodos].sort((a, b) => a.title.localeCompare(b.title)),
+        preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => a.title.localeCompare(b.title)),
         isSortedByTitle: true,
       }));
     } else {
@@ -85,7 +85,7 @@ class App extends React.Component {
   toggleSortByUserName = () => {
     if (!this.state.isSortedByUserName) {
       this.setState(prevState => ({
-        preparedTodos: [...prevState.preparedTodos].sort((a, b) => a.user.name.localeCompare(b.user.name)),
+        preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => a.user.name.localeCompare(b.user.name)),
         isSortedByUserName: true,
       }));
     } else {
@@ -155,8 +155,7 @@ class App extends React.Component {
                     type="button"
                     onClick={this.toggleCompleted}
                   >
-                    show all
-
+                    show initial list
                   </button>
                 )
                 : (
@@ -175,7 +174,7 @@ class App extends React.Component {
                     className="button"
                     onClick={this.toggleSortByTitle}
                   >
-                    show all
+                    show initial list
                   </button>
                 )
                 : (
@@ -195,7 +194,7 @@ class App extends React.Component {
                     className="button"
                     onClick={this.toggleSortByUserName}
                   >
-                    show all
+                    show initial list
                   </button>
                 )
                 : (
