@@ -24,7 +24,7 @@ class App extends React.Component {
 
   sortByName = () => {
     this.setState(prevState => ({
-      todos: prevState.originTodos.sort((a, b) =>
+      todos: [...prevState.originTodos].sort((a, b) =>
         a.user.name.localeCompare(b.user.name)
       )
     }));
@@ -32,7 +32,7 @@ class App extends React.Component {
 
   sortByTitle = () => {
     this.setState(prevState => ({
-      todos: prevState.originTodos.sort((a, b) =>
+      todos: [...prevState.originTodos].sort((a, b) =>
         a.title.localeCompare(b.title)
       )
     }));
@@ -40,10 +40,8 @@ class App extends React.Component {
 
   sortByCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.originTodos.sort((a, b) =>
-        a.completed < b.completed
-          ? 1
-          : -1
+      todos: [...prevState.originTodos].sort((a, b) =>
+        a.completed < b.completed ? 1 : -1
       )
     }));
   };
@@ -56,11 +54,10 @@ class App extends React.Component {
     });
 
     Promise.all([getTodos(), getUsers()])
-      .then(data => {
-        console.log(data);
+      .then(([todos, users]) => {
         this.setState({
-          todos: getTodosWithUsers(data[0], data[1]),
-          originTodos: getTodosWithUsers(data[0], data[1]),
+          todos: getTodosWithUsers(todos, users),
+          originTodos: getTodosWithUsers(todos, users),
           isLoaded: true
         });
       })
