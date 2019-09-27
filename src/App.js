@@ -15,6 +15,7 @@ class App extends React.Component {
 
   loadData = async() => {
     this.setState({ isLoading: true, hasError: false });
+
     try {
       const todos = await fetchData(`${API_URL}/todos`);
       const users = await fetchData(`${API_URL}/users`);
@@ -46,9 +47,11 @@ class App extends React.Component {
     const {
       todosList, isLoading, hasError, filter,
     } = this.state;
+
     const filteredTodoList = filter
       ? this.getFilteredTodos(todosList, filter)
       : todosList;
+
     const loadBtn = isLoading
       ? (
         <button type="button" className="btn btn-info" disabled>
@@ -70,7 +73,9 @@ class App extends React.Component {
         <h1 className="text-center">Dynamic list of todos</h1>
         <div className="container text-center">
           <div className="todo-list">
+
             {hasError ? <div>Error occurred!</div> : ''}
+
             {todosList.length === 0 ? loadBtn
               : (
                 <>
