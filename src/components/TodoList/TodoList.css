@@ -1,0 +1,10 @@
+.todo-list__item {
+  border: 1px solid #ccc;
+  box-shadow: 10px 10px 20px -12px rgba(0, 0, 0, 0.5);
+  margin: 20px;
+}
+
+.todo-list__item-name {
+  color: #292900;
+  font-size: 24px;
+}
