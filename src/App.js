@@ -50,51 +50,48 @@ class App extends React.Component {
       });
   }
 
-  toggleCompleted = () => {
-    if (!this.state.isShowOnlyCompleted) {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos].filter(todo => todo.completed),
-        isShowOnlyCompleted: true,
-      }));
-    } else {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos],
-        isShowOnlyCompleted: false,
-        isSortedByTitle: false,
-        isSortedByUserName: false,
-      }));
-    }
-  }
+  handleTodosSort = ({ target: { value } }) => {
+    switch (value) {
+      case 'completed':
+        this.setState(prevState => ({
+          preparedTodos: [...prevState.initPreparedTodos].filter(todo => (
+            prevState.isShowOnlyCompleted
+              ? !todo.completed
+              : todo.completed)),
+          isShowOnlyCompleted: !prevState.isShowOnlyCompleted,
+          isSortedByUserName: false,
+          isSortedByTitle: false,
+        }));
+        break;
 
-  toggleSortByTitle = () => {
-    if (!this.state.isSortedByTitle) {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => a.title.localeCompare(b.title)),
-        isSortedByTitle: true,
-      }));
-    } else {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos],
-        isSortedByTitle: false,
-        isSortedByUserName: false,
-        isShowOnlyCompleted: false,
-      }));
-    }
-  }
+      case 'title':
+        this.setState(prevState => ({
+          preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => (
+            prevState.isSortedByTitle
+              ? null
+              : a.title.localeCompare(b.title))),
+          isSortedByTitle: !prevState.isSortedByTitle,
+          isSortedByUserName: false,
+          isShowOnlyCompleted: false,
+        }));
+        break;
 
-  toggleSortByUserName = () => {
-    if (!this.state.isSortedByUserName) {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => a.user.name.localeCompare(b.user.name)),
-        isSortedByUserName: true,
-      }));
-    } else {
-      this.setState(prevState => ({
-        preparedTodos: [...prevState.initPreparedTodos],
-        isSortedByUserName: false,
-        isSortedByTitle: false,
-        isShowOnlyCompleted: false,
-      }));
+      case 'user':
+        this.setState(prevState => ({
+          preparedTodos: [...prevState.initPreparedTodos].sort((a, b) => (
+            prevState.isSortedByUserName
+              ? null
+              : a.user.name.localeCompare(b.user.name))),
+          isSortedByUserName: !prevState.isSortedByUserName,
+          isShowOnlyCompleted: false,
+          isSortedByTitle: false,
+        }));
+        break;
+
+      default:
+        this.setState(prevState => ({
+          preparedTodos: prevState.initPreparedTodos,
+        }));
     }
   }
 
@@ -157,7 +154,8 @@ class App extends React.Component {
               <button
                 className="button"
                 type="button"
-                onClick={this.toggleCompleted}
+                onClick={this.handleTodosSort}
+                value="completed"
               >
                 {isShowOnlyCompleted ? 'show initial list' : 'show completed'}
               </button>
@@ -165,7 +163,8 @@ class App extends React.Component {
               <button
                 type="button"
                 className="button"
-                onClick={this.toggleSortByTitle}
+                onClick={this.handleTodosSort}
+                value="title"
               >
                 {isSortedByTitle ? 'show initial list' : 'sort by title'}
               </button>
@@ -173,7 +172,8 @@ class App extends React.Component {
               <button
                 type="button"
                 className="button"
-                onClick={this.toggleSortByUserName}
+                onClick={this.handleTodosSort}
+                value="user"
               >
                 {isSortedByUserName ? 'show initial list' : 'sort by User'}
               </button>
