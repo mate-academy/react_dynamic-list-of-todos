@@ -99,9 +99,14 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.preparedTodos);
     const {
-      preparedTodos, isLoading, error, isShowButton,
+      preparedTodos,
+      isLoading,
+      error,
+      isShowButton,
+      isShowOnlyCompleted,
+      isSortedByTitle,
+      isSortedByUserName,
     } = this.state;
 
     if (isLoading) {
@@ -137,76 +142,41 @@ class App extends React.Component {
     return (
       <div className="App todo-list">
         <h1>Dynamic list of todos</h1>
-        {isShowButton && (
-          <button
-            className="button"
-            type="button"
-            onClick={this.loadTodos}
-          >
-            Load
-          </button>
-        )
-          || (
+        {isShowButton
+          ? (
+            <button
+              className="button"
+              type="button"
+              onClick={this.loadTodos}
+            >
+              Load
+            </button>
+          )
+          : (
             <>
-              {this.state.isShowOnlyCompleted
-                ? (
-                  <button
-                    className="button"
-                    type="button"
-                    onClick={this.toggleCompleted}
-                  >
-                    show initial list
-                  </button>
-                )
-                : (
-                  <button
-                    className="button"
-                    type="button"
-                    onClick={this.toggleCompleted}
-                  >
-                    show completed
-                  </button>
-                )}
-              {this.state.isSortedByTitle
-                ? (
-                  <button
-                    type="button"
-                    className="button"
-                    onClick={this.toggleSortByTitle}
-                  >
-                    show initial list
-                  </button>
-                )
-                : (
-                  <button
-                    type="button"
-                    className="button"
-                    onClick={this.toggleSortByTitle}
-                  >
-                    sort by title
-                  </button>
-                )
-              }
-              {this.state.isSortedByUserName
-                ? (
-                  <button
-                    type="button"
-                    className="button"
-                    onClick={this.toggleSortByUserName}
-                  >
-                    show initial list
-                  </button>
-                )
-                : (
-                  <button
-                    type="button"
-                    className="button"
-                    onClick={this.toggleSortByUserName}
-                  >
-                    sort by User
-                  </button>
-                )
-              }
+              <button
+                className="button"
+                type="button"
+                onClick={this.toggleCompleted}
+              >
+                {isShowOnlyCompleted ? 'show initial list' : 'show completed'}
+              </button>
+
+              <button
+                type="button"
+                className="button"
+                onClick={this.toggleSortByTitle}
+              >
+                {isSortedByTitle ? 'show initial list' : 'sort by title'}
+              </button>
+
+              <button
+                type="button"
+                className="button"
+                onClick={this.toggleSortByUserName}
+              >
+                {isSortedByUserName ? 'show initial list' : 'sort by User'}
+              </button>
             </>
           )
         }
