@@ -9,16 +9,10 @@ const usersUrl = `https://jsonplaceholder.typicode.com/users`;
 class App extends Component {
   state = {
     todos: [],
-    users: [],
     isLoading: false,
     isLoaded: false,
     hasError: false,
   }
-
-  getTodosWithUsers = (todoArr, userArr) => (todoArr.map(todo => ({
-    ...todo,
-    user: userArr.find(item => item.id === todo.userId),
-  })));
 
   handleClick = async() => {
     this.setState({ isLoading: true });
@@ -32,9 +26,14 @@ class App extends Component {
       const todos = await todosResponse.json();
       const users = await usersResponse.json();
 
+      const preparedTodos = todos.map(todo => ({
+        ...todo,
+        user: users.find(item => item.id === todo.userId),
+      }));
+
       this.setState({
-        todos,
-        users,
+        todos: preparedTodos,
+        originalTodos: preparedTodos,
         isLoaded: true,
       });
     } catch (error) {
@@ -45,10 +44,23 @@ class App extends Component {
     }
   };
 
+  sortByName = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort(
+        (a, b) => a.title.localeCompare(b.title)
+      ),
+    }));
+  }
+
+  resetTodos = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.originalTodos],
+    }));
+  }
+
   render() {
     const {
       todos,
-      users,
       isLoading,
       isLoaded,
       hasError,
@@ -58,13 +70,27 @@ class App extends Component {
       <div className="App">
         {isLoaded ? (
           <>
-            <h1 className="title">Static list of todos</h1>
-            <TodoList todos={this.getTodosWithUsers(todos, users)} />
+            <h1 className="title">Dynamic list of todos</h1>
+            <button
+              type="button"
+              onClick={this.sortByName}
+              className="button button__sort"
+            >
+              Sort
+            </button>
+            <button
+              type="button"
+              onClick={this.resetTodos}
+              className="button button__reset"
+            >
+              Reset
+            </button>
+            <TodoList todos={todos} />
           </>
         ) : (
           <>
             <h1 className="title">
-              {hasError ? 'Error: Failed to fetch' : 'Load Todos' }
+              {hasError ? 'Error: Failed to fetch' : 'Load todos' }
             </h1>
             <button type="button" onClick={this.handleClick}>
               {isLoading ? 'Loading...' : hasError ? 'Try Again' : 'Load'}
