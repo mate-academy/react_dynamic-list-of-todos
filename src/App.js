@@ -43,18 +43,9 @@ class App extends React.Component {
       hasError: false,
     });
 
-    getTodos()
-      .then((todos) => {
-        this.setState({ todos });
-      })
-      .catch(() => this.setState({
-        hasError: true,
-        isLoading: false,
-      }));
-
-    getUsers()
-      .then((users) => {
-        this.setState({ users, isLoading: false });
+    Promise.all([getTodos(), getUsers()])
+      .then(data => {
+        this.setState({ todos: data[0], users: data[1], isLoading: false });
       })
       .catch(() => this.setState({
         hasError: true,
@@ -63,7 +54,7 @@ class App extends React.Component {
   };
 
   render() {
-    const preparedTodos = getTodosWithUsers(this.state.todos, this.state.users);
+    const preparedTodos=getTodosWithUsers(this.state.todos, this.state.users)
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
