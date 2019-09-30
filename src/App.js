@@ -58,8 +58,8 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, isLoading } = this.state;
-    const preparedTodos = getTodosWithUsers(this.state.todos, this.state.users);
+    const { todos, isLoading, users } = this.state;
+    const preparedTodos = getTodosWithUsers(todos, users);
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
