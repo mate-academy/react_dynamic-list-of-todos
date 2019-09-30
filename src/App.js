@@ -56,17 +56,20 @@ class App extends React.Component {
 
     this.setState((prevState) => {
       switch (value) {
-        case 'name': return {
-          todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
-        };
-        case 'title': return {
-          todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
-        };
-        case 'completed': return {
-          todos: prevState.todos.sort(
-            (a, b) => (a.completed < b.completed ? 1 : -1)
-          ),
-        };
+        case 'name':
+          return {
+            todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
+          };
+        case 'title':
+          return {
+            todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
+          };
+        case 'completed':
+          return {
+            todos: [...prevState.todos].sort(
+              (a, b) => (a.completed < b.completed ? 1 : -1)
+            ),
+          };
         default:
           return 0;
       }
@@ -75,11 +78,7 @@ class App extends React.Component {
 
   render() {
     const {
-      todos,
-      users,
-      isLoading,
-      hasError,
-      isLoaded,
+      todos, users, isLoading, hasError, isLoaded,
     } = this.state;
 
     const preparedTodos = getTodosWithUsers(todos, users);
@@ -119,34 +118,10 @@ class App extends React.Component {
           </>
         )}
         {isLoaded && (
-
-          <>
-            <button
-              type="submit"
-              value="name"
-              onClick={this.sotring}
-            >
-          Sort by Name
-            </button>
-            <button
-              type="submit"
-              value="title"
-              onClick={this.sotring}
-            >
-          Sort by Title
-            </button>
-            <button
-              type="submit"
-              value="completed"
-              onClick={this.sotring}
-            >
-          Sort by Completed
-            </button>
-            <ToDoList
-              todos={preparedTodos}
-            />
-          </>
-
+          <ToDoList
+            todos={preparedTodos}
+            sotring={this.sotring}
+          />
         )}
       </div>
     );
