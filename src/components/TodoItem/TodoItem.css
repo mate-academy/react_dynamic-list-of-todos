@@ -1,0 +1,10 @@
+.todo-item {
+  display: block;
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 100px;
+}
+
+.item--title {
+  font-weight: bold;
+}
