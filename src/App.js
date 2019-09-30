@@ -44,8 +44,12 @@ class App extends React.Component {
     });
 
     Promise.all([getTodos(), getUsers()])
-      .then(data => {
-        this.setState({ todos: data[0], users: data[1], isLoading: false });
+      .then((data) => {
+        this.setState({
+          todos: data[0],
+          users: data[1],
+          isLoading: false,
+        });
       })
       .catch(() => this.setState({
         hasError: true,
@@ -54,7 +58,8 @@ class App extends React.Component {
   };
 
   render() {
-    const preparedTodos=getTodosWithUsers(this.state.todos, this.state.users)
+    const { todos, isLoading } = this.state;
+    const preparedTodos = getTodosWithUsers(this.state.todos, this.state.users);
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
@@ -66,7 +71,7 @@ class App extends React.Component {
               onClick={this.dataLoading}
               className="btn btn-info"
             >
-              {this.state.isLoading ? (
+              {isLoading ? (
                 <span className="spinner-border spinner-border-sm" />
               ) : (
                 <span>Try again</span>
@@ -75,7 +80,7 @@ class App extends React.Component {
             </button>
           </>
         )}
-        {this.state.todos.length === 0 ? (
+        {todos.length === 0 ? (
           <button
             type="button"
             onClick={this.dataLoading}
