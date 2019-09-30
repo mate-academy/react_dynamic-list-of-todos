@@ -28,7 +28,7 @@ class App extends Component {
 
       const preparedTodos = todos.map(todo => ({
         ...todo,
-        user: users.find(item => item.id === todo.userId),
+        user: users.find(user => user.id === todo.userId),
       }));
 
       this.setState({
@@ -44,10 +44,26 @@ class App extends Component {
     }
   };
 
-  sortByName = () => {
+  sortByTitle = () => {
     this.setState(prevState => ({
       todos: [...prevState.todos].sort(
         (a, b) => a.title.localeCompare(b.title)
+      ),
+    }));
+  }
+
+  sortByUser = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort(
+        (a, b) => a.user.name.localeCompare(b.user.name)
+      ),
+    }));
+  }
+
+  sortCompleted = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort(
+        todo => todo.completed ? 1 : -1
       ),
     }));
   }
@@ -73,10 +89,24 @@ class App extends Component {
             <h1 className="title">Dynamic list of todos</h1>
             <button
               type="button"
-              onClick={this.sortByName}
+              onClick={this.sortByTitle}
               className="button button__sort"
             >
-              Sort
+              Sort by title
+            </button>
+            <button
+              type="button"
+              onClick={this.sortByUser}
+              className="button button__sort"
+            >
+              Sort by user
+            </button>
+            <button
+              type="button"
+              onClick={this.sortCompleted}
+              className="button button__sort"
+            >
+              Sort by completed
             </button>
             <button
               type="button"
