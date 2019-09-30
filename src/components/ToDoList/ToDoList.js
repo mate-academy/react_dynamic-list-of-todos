@@ -5,22 +5,9 @@ import ToDoItem from '../ToDoItem/ToDoItem';
 
 function ToDoList({
   todos,
-  sortByCompleted,
-  sortByName,
-  sortByTitle,
 }) {
   return (
     <div>
-      <button onClick={sortByCompleted} type="button">
-        Completed
-      </button>
-      <button onClick={sortByName} type="button">
-        Sort by name
-      </button>
-      <button onClick={sortByTitle} type="button">
-        Sort by title
-      </button>
-
       <div className="todolist">
         {todos.map(item => (
           <ToDoItem todo={item} key={item.id} />

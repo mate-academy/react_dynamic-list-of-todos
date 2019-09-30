@@ -24,26 +24,6 @@ class App extends React.Component {
     hasError: false,
   };
 
-  sortByCompleted = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.sort(
-        (a, b) => (a.completed < b.completed ? 1 : -1)
-      ),
-    }));
-  };
-
-  sortByName = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
-    }));
-  };
-
-  sortByTitle = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
-    }));
-  };
-
   getData = () => {
     this.setState({
       todos: [],
@@ -69,6 +49,28 @@ class App extends React.Component {
           isLoading: false,
         });
       });
+  };
+
+  sotring = (event) => {
+    const { value } = event.target;
+
+    this.setState((prevState) => {
+      switch (value) {
+        case 'name': return {
+          todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
+        };
+        case 'title': return {
+          todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
+        };
+        case 'completed': return {
+          todos: prevState.todos.sort(
+            (a, b) => (a.completed < b.completed ? 1 : -1)
+          ),
+        };
+        default:
+          return 0;
+      }
+    });
   };
 
   render() {
@@ -117,12 +119,34 @@ class App extends React.Component {
           </>
         )}
         {isLoaded && (
-          <ToDoList
-            todos={preparedTodos}
-            sortByCompleted={this.sortByCompleted}
-            sortByName={this.sortByName}
-            sortByTitle={this.sortByTitle}
-          />
+
+          <>
+            <button
+              type="submit"
+              value="name"
+              onClick={this.sotring}
+            >
+          Sort by Name
+            </button>
+            <button
+              type="submit"
+              value="title"
+              onClick={this.sotring}
+            >
+          Sort by Title
+            </button>
+            <button
+              type="submit"
+              value="completed"
+              onClick={this.sotring}
+            >
+          Sort by Completed
+            </button>
+            <ToDoList
+              todos={preparedTodos}
+            />
+          </>
+
         )}
       </div>
     );
