@@ -21,19 +21,19 @@ class App extends React.Component {
 
   sortByUser = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.user > b.user ? 1 : -1)),
+      todos: [...prevState.todos].sort((a, b) => (a.user.localCompare(b.user) === 1 ? 1 : -1)),
     }));
   };
 
   sortByTitle = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.title > b.title ? 1 : -1)),
+      todos: [...prevState.todos].sort((a, b) => (a.title.localCompare(b.title) === 1 ? 1 : -1)),
     }));
   };
 
   sortByStatus = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort((a, b) => (a.completed < b.completed ? 1 : -1)),
+      todos: [...prevState.todos].sort((a, b) => (a.completed.localCompare(b.completed) === 1 ? 1 : -1)),
     }));
   };
 
@@ -58,12 +58,14 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, isLoading, users } = this.state;
+    const {
+      todos, isLoading, users, hasError,
+    } = this.state;
     const preparedTodos = getTodosWithUsers(todos, users);
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
-        {this.state.hasError && (
+        {hasError && (
           <>
             <h3>Errors occurred</h3>
             <button
@@ -86,7 +88,7 @@ class App extends React.Component {
             onClick={this.dataLoading}
             className="btn btn-info"
           >
-            {this.state.isLoading ? (
+            {isLoading ? (
               <span className="spinner-border spinner-border-sm" />
             ) : (
               <span>Load</span>

@@ -35,7 +35,12 @@ ToDoList.propTypes = {
         title: PropTypes.string,
         completed: PropTypes.bool,
         id: PropTypes.number,
-        user: PropTypes.object,
+        user: PropTypes.shape({
+          name: PropTypes.string,
+          username: PropTypes.string,
+          email: PropTypes.string,
+          phone: PropTypes.string,
+        }).isRequired,
       }).isRequired,
     })
   ).isRequired,
