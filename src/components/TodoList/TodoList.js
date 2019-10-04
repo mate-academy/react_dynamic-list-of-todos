@@ -3,16 +3,24 @@ import PropTypes from 'prop-types';
 import TodoItem from '../TodoItem/TodoItem';
 import './TodoList.css';
 
-function TodoList({ todos }) {
+function TodoList({ todos = [], todosSorted = [], isSorted }) {
   return (
     <>
       <p>
         <span className="todo-title">Todos: </span>
       </p>
       <ul className="todo-list__items">
-        {todos.map(todo => (
-          <TodoItem todo={todo} key={todo.id} />
-        ))}
+        {!isSorted
+          ? (
+            todos.map(todo => (
+              <TodoItem todo={todo} key={todo.id} />
+            ))
+          )
+          : (
+            todosSorted.map(todo => (
+              <TodoItem todo={todo} key={todo.id} />
+            ))
+          )}
       </ul>
     </>
   );
@@ -30,6 +38,13 @@ TodoList.propTypes = {
       todo: shape,
     }).isRequired,
   ).isRequired,
+  todosSorted: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      todo: shape,
+    }).isRequired,
+  ).isRequired,
+  isSorted: PropTypes.bool.isRequired,
 };
 
 export default TodoList;
