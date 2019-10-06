@@ -21,7 +21,7 @@ class App extends React.Component {
 
   sortByUser = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].sort((a, b) => (a.user.localCompare(b.user) === 1 ? 1 : -1)),
+      todos: [...prevState.todos].sort((a, b) => (a.user.name.localCompare(b.user.name) === 1 ? 1 : -1)),
     }));
   };
 

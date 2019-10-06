@@ -21,7 +21,12 @@ ToDoItem.propTypes = {
     title: PropTypes.string,
     completed: PropTypes.bool,
     id: PropTypes.number,
-    user: PropTypes.object,
+    user: PropTypes.object({
+      name: PropTypes.string,
+      username: PropTypes.string,
+      email: PropTypes.string,
+      phone: PropTypes.string,
+    }).isRequired,
   }).isRequired,
 };
 
