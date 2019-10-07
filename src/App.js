@@ -58,19 +58,16 @@ class App extends React.Component {
         this.setState({
           todos: getTodosWithUsers(todos, users),
           originTodos: getTodosWithUsers(todos, users),
+          isLoading: false,
           isLoaded: true
         });
       })
       .catch(() => {
         this.setState({
-          hasError: true
-        });
-      })
-      .finally(() => {
-        this.setState({
+          hasError: true,
           isLoading: false
         });
-      });
+      })
   };
 
   render() {
