@@ -107,6 +107,14 @@ function reducer(state = initialState, action = {}) {
       };
     }
 
+    case ACTION_TYPES.DELETE_TODO: {
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload),
+        todosSorted: state.todosSorted.filter(todo => todo.id !== action.payload),
+      };
+    }
+
     case ACTION_TYPES.ADD_SORTED_TODOS: {
       return {
         ...state,

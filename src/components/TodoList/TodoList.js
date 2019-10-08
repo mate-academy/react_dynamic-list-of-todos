@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TodoItem from '../TodoItem/TodoItem';
+import TodoItemHandler from '../TodoItem/TodoItemHandler';
 import './TodoList.css';
 
 function TodoList({ todos = [], todosSorted = [], isSorted }) {
@@ -13,12 +13,12 @@ function TodoList({ todos = [], todosSorted = [], isSorted }) {
         {!isSorted
           ? (
             todos.map(todo => (
-              <TodoItem todo={todo} key={todo.id} />
+              <TodoItemHandler todo={todo} key={todo.id} />
             ))
           )
           : (
             todosSorted.map(todo => (
-              <TodoItem todo={todo} key={todo.id} />
+              <TodoItemHandler todo={todo} key={todo.id} />
             ))
           )}
       </ul>

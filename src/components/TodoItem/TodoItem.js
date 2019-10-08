@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import User from '../User/User';
 import './TodoItem.css';
 
-function TodoItem({ todo }) {
+function TodoItem({ todo, deleteTodo }) {
+  console.log(todo.id)
   return (
     <li className="todo__list todo-card">
-      <a href="https://trello.com" className="todo-card">
+      <a href="#" className="todo-card">
         <h2>{todo.title}</h2>
         <p className="todo-list__completed">
           completed:
@@ -20,6 +21,7 @@ function TodoItem({ todo }) {
 
         <div className="todo-list__user">
           <User user={todo.user} />
+          <button type="button" onClick={() => deleteTodo(todo.id)}>Delete Todo</button>
         </div>
       </a>
     </li>
