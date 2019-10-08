@@ -8,7 +8,13 @@ const ACTION_TYPES = {
   HAS_ERROR: 'ERROR::HAS',
   IS_SORT: 'IS::SORT',
   ADD_SORTED_TODOS: 'SORTED_TODOS::ADD',
+  DELETE_TODO: 'TODO::DELETE',
 };
+
+export const deleteTodo = idTodo => ({
+  type: ACTION_TYPES.DELETE_TODO,
+  payload: idTodo,
+});
 
 export const addTodos = todos => ({
   type: ACTION_TYPES.ADD_TODOS,
