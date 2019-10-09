@@ -1,0 +1,31 @@
+.todo-list__completed {
+  display: block;
+  position: relative;
+  padding: 15px 45px;
+  margin: 0;
+}
+
+.todo-list__completed::before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 19px;
+  left: 12px;
+  background-image: url(../../images/ch.svg);
+}
+
+.todo-list_indent {
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.todo-list__title {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.todo__list {
+  width: 100%;
+}

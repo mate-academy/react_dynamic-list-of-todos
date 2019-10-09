@@ -1,0 +1,38 @@
+.user {
+  padding: 10px 45px;
+  font-size: 15px;
+}
+
+.user__responsible {
+  display: block;
+  position: relative;
+}
+
+.user__responsible::before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 2px;
+  left: -35px;
+  background-image: url(../../images/id-card.svg);
+}
+
+.user__email {
+  display: block;
+  position: relative;
+}
+
+.user__email::before {
+  content: "";
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 2px;
+  left: -35px;
+  background-image: url(../../images/folder.svg);
+}
+
+.user_indent {
+  padding-left: 10px;
+}
