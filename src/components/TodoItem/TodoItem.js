@@ -4,7 +4,6 @@ import User from '../User/User';
 import './TodoItem.css';
 
 function TodoItem({ todo, deleteTodo }) {
-  console.log(todo.id)
   return (
     <li className="todo__list todo-card">
       <a href="#" className="todo-card">
@@ -34,6 +33,7 @@ const shape = PropTypes.shape({
 });
 
 TodoItem.propTypes = {
+  deleteTodo: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,

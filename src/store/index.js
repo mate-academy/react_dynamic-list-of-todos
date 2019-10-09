@@ -68,16 +68,7 @@ export const receiveTodosAndUsers = () => (dispatch) => {
       }
 
       const preparedTodos = getTodosWithUsers(todos, usersMapApi);
-      const sortedTodos = getTodosWithUsers(todos, usersMapApi).sort((a, b) => {
-        if (a.title < b.title) {
-          return -1;
-        }
-        if (a.title > b.title) {
-          return 1;
-        }
-
-        return 0;
-      });
+      const sortedTodos = [...getTodosWithUsers(todos, usersMapApi)].sort((a, b) => a.title.localeCompare(b.title));
 
       dispatch(switchLoading(false));
       dispatch(addTodos(preparedTodos));
@@ -108,10 +99,13 @@ function reducer(state = initialState, action = {}) {
     }
 
     case ACTION_TYPES.DELETE_TODO: {
+      const deleteTodoWithList = list => list
+        .filter(todo => todo.id !== action.payload);
+
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.payload),
-        todosSorted: state.todosSorted.filter(todo => todo.id !== action.payload),
+        todos: deleteTodoWithList(state.todos),
+        todosSorted: deleteTodoWithList(state.todosSorted),
       };
     }
 
