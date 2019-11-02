@@ -5,3 +5,8 @@
 body {
   padding: 50px;
 }
+
+.sortButtonsContainer {
+  display: flex;
+  justify-content: space-between;
+}

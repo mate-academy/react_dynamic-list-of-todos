@@ -34,7 +34,6 @@ class App extends React.PureComponent {
 
   render() {
     const { todos, users, isLoading, successfulLoading, wasLoaded } = this.state;
-    console.log(this.state);
 
     if (isLoading) {
       return (
