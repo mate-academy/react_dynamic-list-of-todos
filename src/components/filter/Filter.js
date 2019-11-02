@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
 class Filter extends React.Component {
@@ -15,6 +16,10 @@ class Filter extends React.Component {
       </Button.Group>
     )
   }
+}
+
+Filter.propTypes = {
+  activeFilter: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default Filter;

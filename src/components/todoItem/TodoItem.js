@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function TodoItem({todo}) {
   const {title, completed, user: { name }} = todo;
@@ -21,6 +22,11 @@ function TodoItem({todo}) {
       <td className= {tdClassName}>{completedIcon}{completed.toString()}</td>
     </tr>
   )
+}
+
+TodoItem.propTypes = {
+  todo: PropTypes.object.isRequired,
+  key: PropTypes.number.isRequired,
 }
 
 export default TodoItem;

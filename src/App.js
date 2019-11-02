@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { getTodos, getUsers } from './Api';
-
 import { Button } from 'semantic-ui-react';
 
 import TodoList from './components/todoList/TodoList';

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TodoItem from '../todoItem/TodoItem';
 
 class TodoTable extends React.Component {
@@ -19,6 +20,10 @@ class TodoTable extends React.Component {
       </table>
     )
   }
+}
+
+TodoItem.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default TodoTable;

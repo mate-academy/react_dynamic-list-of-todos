@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Filter from '../filter/Filter';
 import TodoTable from '../todoTable/TodoTable';
 
@@ -32,7 +33,7 @@ class TodoList extends React.Component {
     if (typeOfFilter === 'status') {
       return sortList.sort((a, b) => b.completed - a.completed);
     } else if (typeOfFilter === 'name') {
-      return sortList.sort((a, b) => a.user.name.localeCompare(b.user.name)); 
+      return sortList.sort((a, b) => a.user.name.localeCompare(b.user.name));
     } else if (typeOfFilter === 'title') {
       return sortList.sort((a, b) => a.title.localeCompare(b.title));
     } else {
@@ -60,6 +61,11 @@ class TodoList extends React.Component {
       </>
     )
   }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayof(PropTypes.object).isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default TodoList;
