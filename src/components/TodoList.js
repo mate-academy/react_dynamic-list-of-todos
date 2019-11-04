@@ -1,43 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
+import SortButtons from './SortButtons';
 
-function TodoList({ todos, sortMethod, sortItems }) {
+function TodoList({ todos, sortMethod, changeSortMethod }) {
   let todoItems = [];
 
-  if (sortMethod === 'Sort by todo Id') {
-    todoItems = [...todos];
-  } else if (sortMethod === 'Sort by todo title') {
-    todoItems = [...todos]
-      .sort((a, b) => (
-        a.title > b.title ? 1 : -1
-      ));
-  } else if (sortMethod === 'Show undone todos first') {
-    todoItems = [...todos]
-      .sort(a => (
-        a.completed ? 1 : -1
-      ));
-  } else if (sortMethod === 'Sort by executant name') {
-    todoItems = [...todos]
-      .sort((a, b) => (
-        a.user.name > b.user.name ? 1 : -1
-      ));
+  switch (sortMethod) {
+    case 'Sort by todo Id':
+      todoItems = [...todos];
+      break;
+
+    case 'Sort by todo title':
+      todoItems = [...todos]
+        .sort((a, b) => (
+          a.title.localeCompare(b.title)
+        ));
+      break;
+
+    case 'Show undone todos first':
+      todoItems = [...todos]
+        .sort(a => (
+          a.completed ? 1 : -1
+        ));
+      break;
+
+    case 'Sort by executant name':
+      todoItems = [...todos]
+        .sort((a, b) => (
+          a.user.name.localeCompare(b.user.name)
+        ));
+      break;
+
+    default:
   }
 
   return (
     <>
-      <button type="button" onClick={sortItems}>
-        Sort by todo Id
-      </button>
-      <button type="button" onClick={sortItems}>
-        Sort by todo title
-      </button>
-      <button type="button" onClick={sortItems}>
-        Show undone todos first
-      </button>
-      <button type="button" onClick={sortItems}>
-        Sort by executant name
-      </button>
+      <SortButtons changeSortMethod={changeSortMethod} />
       <table className="table">
         <thead className="thead">
           <tr>
@@ -68,7 +68,7 @@ function TodoList({ todos, sortMethod, sortItems }) {
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortMethod: PropTypes.string.isRequired,
-  sortItems: PropTypes.func.isRequired,
+  changeSortMethod: PropTypes.func.isRequired,
 };
 
 export default TodoList;

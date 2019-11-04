@@ -22,12 +22,10 @@ class App extends React.Component {
       });
   }
 
-  sortItems = (event) => {
-    const btnName = event.target.innerText;
-
-    if (btnName !== this.state.sortMethod) {
+  changeSortMethod = (sortMethod) => {
+    if (sortMethod !== this.state.sortMethod) {
       this.setState({
-        sortMethod: btnName,
+        sortMethod,
       });
     }
   }
@@ -51,7 +49,7 @@ class App extends React.Component {
       <TodoList
         todos={todos}
         sortMethod={sortMethod}
-        sortItems={this.sortItems}
+        changeSortMethod={this.changeSortMethod}
       />
     );
   }
