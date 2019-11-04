@@ -13,33 +13,45 @@ class App extends React.Component {
     this.state = {
       todos: [],
       users: [],
+      todoList: [],
       isLoading: false,
       hasError: false,
       dataReceived: false,
     }
   }
 
+  getTodosWithUsers = (todos, users) => {
+
+    return todos.map(todo => ({
+      ...todo,
+      user: users.find(user => todo.userId === user.id),
+    }));
+  }
+
   loadTodos = async () => {
     this.setState({ isLoading: true });
-    const [ todos, users ] = await Promise.all([getTodos(), getUsers()])
+    Promise.all([getTodos(), getUsers()])
+      .then(resolve => {
+        this.setState({
+          todos: resolve[0],
+          users: resolve[1],
+          isLoading: false,
+          hasError: false,
+          dataReceived: true,
+          todoList:  this.getTodosWithUsers(resolve[0], resolve[1]),
+         })
+      })
       .catch(() => {
         this.setState({ hasError: true })
       })
       .finally(() => {
         this.setState({ isLoading: false })
       })
-
-    this.setState({
-      todos: todos,
-      users: users,
-      isLoading: false,
-      hasError: false,
-      dataReceived: true,
-    })
   }
 
   render() {
-    const { isLoading, dataReceived, todos, users, hasError } = this.state;
+    const { isLoading, dataReceived, todoList, hasError } = this.state;
+    console.log(todoList);
 
     if (!dataReceived && !hasError) {
       return (
@@ -69,7 +81,7 @@ class App extends React.Component {
 
       return (
         <>
-          <TodoList todos={todos} users={users} />
+          <TodoList todoList={todoList}/>
         </>
       )
     }

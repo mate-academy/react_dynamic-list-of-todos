@@ -7,12 +7,11 @@ const getData = async (url) => {
   return response.json();
 }
 
-export const getTodos = async () => {
-  return await getData(todosUrl)
+export const getTodos = () => {
+  return getData(todosUrl)
 }
 
-export const getUsers = async () => {
-  return await getData(usersUrl)
+export const getUsers = () => {
+  return getData(usersUrl)
 }
 
-//

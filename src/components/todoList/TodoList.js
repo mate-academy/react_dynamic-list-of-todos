@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Filter from '../filter/Filter';
 import TodoTable from '../todoTable/TodoTable';
 
@@ -8,38 +7,27 @@ class TodoList extends React.Component {
     super(props);
 
     this.state = {
-      todoList: [],
       typeOfFilter: 'standart',
     }
   }
 
-  componentDidMount() {
-    const { todos, users } = this.props;
-    this.setState({ todoList:  this.getTodosWithUsers(todos, users)})
-  }
-
-  getTodosWithUsers = (todos, users) => {
-
-    return todos.map(todo => {
-      const userObj = users.find(user => todo.userId === user.id);
-      todo.user = userObj;
-      return todo;
-    });
-  }
-
   filteredTodoList = () => {
-    const { todoList, typeOfFilter } = this.state;
+    const { typeOfFilter } = this.state;
+    const { todoList } = this.props; 
     const sortList = [...todoList];
-    if (typeOfFilter === 'status') {
-      return sortList.sort((a, b) => b.completed - a.completed);
-    } else if (typeOfFilter === 'name') {
-      return sortList.sort((a, b) => a.user.name.localeCompare(b.user.name));
-    } else if (typeOfFilter === 'title') {
-      return sortList.sort((a, b) => a.title.localeCompare(b.title));
-    } else {
-      return sortList;
+
+    switch(typeOfFilter) {
+      case 'status':
+        return sortList.sort((a, b) => b.completed - a.completed);
+      case 'name':
+        return sortList.sort((a, b) => a.user.name.localeCompare(b.user.name));
+      case 'title':
+        return sortList.sort((a, b) => a.title.localeCompare(b.title));
+      default:
+        return sortList;
     }
   }
+
 
   activeFilter = (type) => {
     this.setState(prev => {
@@ -61,11 +49,6 @@ class TodoList extends React.Component {
       </>
     )
   }
-}
-
-TodoList.propTypes = {
-  todos: PropTypes.arrayof(PropTypes.object).isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default TodoList;
