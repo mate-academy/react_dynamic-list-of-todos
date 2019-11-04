@@ -60,9 +60,9 @@ class TodoList extends React.Component {
       <table className="table">
         <thead>
           <tr>
-            <th className="title title-title" onClick={() => this.sortTodos('title')}>Task</th>
-            <th className="title title-user" onClick={() => this.sortTodos('user')}>User</th>
-            <th className="title title-completed" onClick={() => this.sortTodos('completed')}>Status</th>
+            <th className="title" onClick={() => this.sortTodos('title')}>Task</th>
+            <th className="title" onClick={() => this.sortTodos('user')}>User</th>
+            <th className="title" onClick={() => this.sortTodos('completed')}>Status</th>
           </tr>
         </thead>
         <tbody>
