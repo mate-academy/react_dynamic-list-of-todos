@@ -2,21 +2,12 @@ import React from 'react';
 import './App.css';
 import { Button } from 'semantic-ui-react';
 import TodoList from './components/table/TodoList';
-import todos from './api/todos';
-import users from './api/users';
-
-function getTodosWithUsers(todoList, userList) {
-  return todoList.map(todo => ({
-    ...todo,
-    user: userList.find(item => item.id === todo.userId),
-  }));
-}
+import { todos, users } from './api/api';
 
 class App extends React.Component {
   state = {
     isLoading: false,
-    todoList: [],
-    userList: [],
+    todosWithUsers: [],
     hasError: false,
   };
 
@@ -26,12 +17,13 @@ class App extends React.Component {
       hasError: false,
     });
 
-    Promise.all([todos(), users()])
+    Promise.all([todos, users])
       .then(([todoList, userList]) => {
-        this.setState({
-          todoList,
-          userList,
-        });
+        const todosWithUsers = todoList.map(todo => ({
+          ...todo,
+          user: userList.find(item => item.id === todo.userId),
+        }));
+        this.setState({ todosWithUsers });
       })
       .catch(() => {
         this.setState({
@@ -45,11 +37,26 @@ class App extends React.Component {
       });
   };
 
+  handleSort = (sort) => {
+    this.setState(prevState => ({
+      todosWithUsers: prevState.todosWithUsers.sort((a, b) => {
+        switch (sort) {
+          case 'userName':
+            return a.user.name.localeCompare(b.user.name);
+          case 'completed':
+            return b.completed - a.completed;
+          default:
+            return a.title.localeCompare(b.title);
+        }
+      }),
+    }));
+  };
+
   render() {
     const {
-      userList, todoList, isLoading, hasError,
+      todosWithUsers, isLoading, hasError,
     } = this.state;
-    const todosWithUsers = getTodosWithUsers(todoList, userList);
+    const sort = this.handleSort;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -64,11 +71,11 @@ class App extends React.Component {
       );
     }
 
-    if (!userList.length && !todoList.length) {
+    if (!todosWithUsers.length) {
       return <Button type="button" onClick={this.getData}>Load</Button>;
     }
 
-    return <TodoList todos={todosWithUsers} />;
+    return <TodoList todos={todosWithUsers} sort={sort} />;
   }
 }
 
