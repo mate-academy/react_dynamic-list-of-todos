@@ -9,7 +9,7 @@ class Buttons extends Component {
       <div>
         <Button.Group widths="4">
           {filters.map(filter => (
-              <Button onClick={() => changeFilter(filter.fil)} key={filter.id}>{`Sort By ${filter.fil}`}</Button>
+              <Button onClick={() => changeFilter(filter.fil)} key={filter.id}>{`Sort By ${filter.fil}` === 'Sort By Normal' ? 'Reset' : `Sort By ${filter.fil}`}</Button>
           ))}
         </Button.Group>
       </div>
