@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ToDoListItem from '../ToDoListItem/ToDoListItem';
 
-export default class ToDoList extends Component {
+export default function({ todos, sorting, sortType }) {
 
-  render() {
-    const { users, todos, sorting, sortType } = this.props;
+    let sortedList = [...todos];
 
-    const defaultList = todos.map((todo) => {
-      return {
-        ...todo,
-        user: users.find(user => user.id === todo.userId),
-      };
-    });
-
-    let sortedList = [...defaultList];
-    if (sortType === 'Sort by title') {
-      sortedList.sort((a, b) => a.title > b.title ? 1 : -1);
-    } else if (sortType === 'Sort by username') {
-      sortedList.sort((a, b) => a.user.name > b.user.name ? 1 : -1);
-    } else if (sortType === 'Sort by status') {
-      sortedList.sort((a, b) => a.completed - b.completed);
-    } else {
-      sortedList = [...defaultList];
+    switch(sortType) {
+      case 'Sort by title':
+        sortedList.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'Sort by username':
+        sortedList.sort((a, b) => a.user.name.localeCompare(b.user.name));
+        break;
+      case 'Sort by status':
+        sortedList.sort((a, b) => a.completed - b.completed);
+        break;
+      default:
+        sortedList = [...todos];
+        break;
     }
 
     return (
@@ -29,13 +25,13 @@ export default class ToDoList extends Component {
         <div className="btn-group col-sm-8 px-0 mx-auto" role="group" aria-label="Basic example">
           <button
           type="button"
-          className="btn btn-secondary" onClick={sorting}>Sort by title</button>
+          className="btn btn-secondary" onClick={() => sorting('Sort by title')}>Sort by title</button>
           <button type="button"
-          className="btn btn-secondary" onClick={sorting}>Sort by username</button>
+          className="btn btn-secondary" onClick={() => sorting('Sort by username')}>Sort by username</button>
           <button type="button"
-          className="btn btn-secondary" onClick={sorting}>Sort by status</button>
+          className="btn btn-secondary" onClick={() => sorting('Sort by status')}>Sort by status</button>
           <button type="button"
-          className="btn btn-secondary" onClick={sorting}>Show default list</button>
+          className="btn btn-secondary" onClick={() => sorting('Show default list')}>Show default list</button>
         </div>
         <table className="table table-bordered table-dark col-sm-8 m-auto">
           <thead>
@@ -47,14 +43,11 @@ export default class ToDoList extends Component {
             </tr>
           </thead>
           <tbody>
-            {sortedList.map(todo => <ToDoListItem
-                                      todo={todo}
-                                      users={todo.user}
-                                      key={todo.id}
-                                    />)}
+            {sortedList.map(todo => (
+              <ToDoListItem todo={todo} users={todo.user} key={todo.id} />
+            ))}
           </tbody>
         </table>
       </>
     );
-  }
 }

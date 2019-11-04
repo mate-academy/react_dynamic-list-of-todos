@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class User extends Component {
-  render() {
-    const { user } = this.props;
-    return (
-      <>
-        <td>{user.name}</td>
-        <td>
-          <a href={`mailto:${user.email}`}
-             className="text-white">{user.email}</a>
-        </td>
-      </>
-    );
-  }
+export default function({ user }) {
+  return (
+    <>
+      <td>{user.name}</td>
+      <td>
+        <a href={`mailto:${user.email}`}
+            className="text-white">{user.email}</a>
+      </td>
+    </>
+  );
 }

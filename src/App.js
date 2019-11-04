@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import getToDoList from './api/getToDoList';
-import getAllUsers from './api/getAllUsers';
+import { users, todos } from './api/getAllUsers';
+// import users from './api/getAllUsers';
 import ToDoList from './components/ToDoList/ToDoList';
 import Spinner from './components/spinner/Spinner';
 import Error from './components/error/Error';
@@ -9,7 +9,6 @@ import Error from './components/error/Error';
 export default class App extends Component {
 
   state = {
-    users: [],
     todos: [],
     isLoading: false,
     sortType: 'Show default list',
@@ -22,34 +21,38 @@ export default class App extends Component {
       hasError: false,
     });
 
-    const [users, todos] = await Promise.all([getAllUsers(), getToDoList()])
+    Promise.all([users, todos])
+      .then(response => {
+        this.setState({
+          todos: response[1].map(todo => {
+            return {
+              ...todo,
+              user: response[0].find(user => user.id === todo.userId)
+            }
+          }),
+        });
+      })
       .catch(() => {
         this.setState({ hasError: true, isLoading: false })
       })
       .finally(() => {
         this.setState({ isLoading: false });
       });
-
-    this.setState({
-      users: users,
-      todos: todos,
-    });
   };
 
-  sortItems = (event) => {
-    const sortingType = event.target.textContent;
+  sortItems = (sortingType) => {
     this.setState({
       sortType: sortingType,
     });
   };
 
   render() {
-    const { users, isLoading, todos, sortType, hasError } = this.state;
+    const { isLoading, todos, sortType, hasError } = this.state;
     if (isLoading) {
       return <Spinner />
-    } if (hasError) {
+    } else if (hasError) {
       return <Error load={this.loadData} />
-    } if (users.length === 0) {
+    } else if (!todos.length) {
       return (
         <button
           className="btn btn-dark mx-auto mt-5 btn-block w-25"
@@ -58,11 +61,10 @@ export default class App extends Component {
         </button>);
     }
 
-    return <ToDoList
-              users={users}
-              todos={todos}
-              sorting={this.sortItems}
-              sortType={sortType}
-            />
+    return (
+      <ToDoList todos={todos} sorting={this.sortItems}
+                sortType={sortType}
+      />
+      );
   }
 }

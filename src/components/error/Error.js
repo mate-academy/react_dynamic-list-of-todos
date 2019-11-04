@@ -2,6 +2,7 @@ import './error.css';
 import React from 'react';
 
 function Error({load}) {
+  console.log(1)
   return (
     <>
     <div className="lds-hourglass"></div>;
