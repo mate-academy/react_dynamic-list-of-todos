@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 import { Button } from 'semantic-ui-react';
 import TodoList from './components/TodoList';
-import { getTodo } from './API/getTodos';
-import { getUsers } from './API/users';
+import { getTodo, getUsers } from './API/getTodos';
 
 function getTodosWithUsers(todosList, usersList) {
   return todosList.map(todo => ({
@@ -22,7 +21,7 @@ class App extends React.Component {
       error: false,
       initialized: false,
       currentSorter: 'byUser',
-      preparedTodos: [],
+      preparedTodos: null,
       todosOnDisplay: [],
     };
   }
@@ -56,14 +55,13 @@ class App extends React.Component {
       });
   };
 
-  switcher = async(sorter) => {
-    await this.loadData();
+  switcher = (sorter) => {
     switch (sorter) {
       case 'byUser':
         this.setState(prevState => ({
           ...prevState,
           currentSorter: 'byUser',
-          todosOnDisplay: prevState.preparedTodos.sort(
+          preparedTodos: prevState.preparedTodos.sort(
             (a, b) => a.user.name.localeCompare(b.user.name)
           ),
         }));
@@ -72,7 +70,7 @@ class App extends React.Component {
         this.setState(prevState => ({
           ...prevState,
           currentSorter: 'byTitle',
-          todosOnDisplay: prevState.preparedTodos.sort(
+          preparedTodos: prevState.preparedTodos.sort(
             (a, b) => a.title.localeCompare(b.title)
           ),
         }));
@@ -81,7 +79,7 @@ class App extends React.Component {
         this.setState(prevState => ({
           ...prevState,
           currentSorter: 'byTitle',
-          todosOnDisplay: prevState.preparedTodos.sort(
+          preparedTodos: prevState.preparedTodos.sort(
             (a, b) => a.completed - b.completed
           ),
         }));
@@ -89,7 +87,7 @@ class App extends React.Component {
       default:
         this.setState(prevState => ({
           ...prevState,
-          todosOnDisplay: prevState.preparedTodos,
+          preparedTodos: prevState.preparedTodos,
         }));
         break;
     }
@@ -97,7 +95,7 @@ class App extends React.Component {
 
   render() {
     const {
-      isLoading, error, todosOnDisplay, preparedTodos,
+      isLoading, error, preparedTodos,
     } = this.state;
 
     if (isLoading) {
@@ -150,7 +148,7 @@ class App extends React.Component {
         >
           By Status!
         </Button>
-        <TodoList todos={todosOnDisplay} />
+        <TodoList todos={preparedTodos} />
       </div>
     );
   }
