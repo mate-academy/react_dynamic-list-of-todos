@@ -85,9 +85,6 @@ class App extends React.Component {
     let filteredList = [...todolist];
     let filteredUsers = [...users];
 
-    // eslint-disable-next-line no-debugger
-    debugger;
-
     switch (filter) {
       case 'Normal':
         filteredList = todolist;
@@ -105,8 +102,6 @@ class App extends React.Component {
       default:
         break;
     }
-    // eslint-disable-next-line no-debugger
-    debugger;
 
     return (
       <div className="App">
