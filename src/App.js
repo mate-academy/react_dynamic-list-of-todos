@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import { Button } from 'semantic-ui-react';
 import TodoList from './components/TodoList';
-import Buttons from './components/buttons';
 import { getTodo } from './API/getTodos';
 import { getUsers } from './API/users';
 
@@ -22,7 +21,9 @@ class App extends React.Component {
       isLoading: false,
       error: false,
       initialized: false,
-      currentFilter: 'byUser',
+      currentSorter: 'byUser',
+      preparedTodos: [],
+      todosOnDisplay: [],
     };
   }
 
@@ -38,6 +39,7 @@ class App extends React.Component {
         this.setState({
           todoList,
           userList,
+          preparedTodos: getTodosWithUsers(todoList, userList),
         });
       })
       .catch(() => {
@@ -54,32 +56,40 @@ class App extends React.Component {
       });
   };
 
-  filters = (e) => {
-    const tab = e.target;
-    const activefilter = tab.innerText;
-    switch (activefilter) {
-      case 'By User!':
+  switcher = async(sorter) => {
+    await this.loadData();
+    switch (sorter) {
+      case 'byUser':
         this.setState(prevState => ({
           ...prevState,
-          currentFilter: 'byUser',
+          currentSorter: 'byUser',
+          todosOnDisplay: prevState.preparedTodos.sort(
+            (a, b) => a.user.name.localeCompare(b.user.name)
+          ),
         }));
         break;
-      case 'By Title!':
+      case 'byTitle':
         this.setState(prevState => ({
           ...prevState,
-          currentFilter: 'byTitle',
+          currentSorter: 'byTitle',
+          todosOnDisplay: prevState.preparedTodos.sort(
+            (a, b) => a.title.localeCompare(b.title)
+          ),
         }));
         break;
-      case 'By Status!':
+      case 'byStatus':
         this.setState(prevState => ({
           ...prevState,
-          currentFilter: 'byStatus',
+          currentSorter: 'byTitle',
+          todosOnDisplay: prevState.preparedTodos.sort(
+            (a, b) => a.completed - b.completed
+          ),
         }));
         break;
       default:
         this.setState(prevState => ({
           ...prevState,
-          currentFilter: 'noFilters',
+          todosOnDisplay: prevState.preparedTodos,
         }));
         break;
     }
@@ -87,29 +97,8 @@ class App extends React.Component {
 
   render() {
     const {
-      todoList, userList, isLoading, error,
+      isLoading, error, todosOnDisplay, preparedTodos,
     } = this.state;
-
-    let todosOnDisplay;
-    const preparedTodos = getTodosWithUsers(todoList, userList);
-
-    switch (this.state.currentFilter) {
-      case 'byUser':
-        todosOnDisplay
-        = preparedTodos.sort((a, b) => a.user.name.localeCompare(b.user.name));
-        break;
-      case 'byTitle':
-        todosOnDisplay
-        = preparedTodos.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'byStatus':
-        todosOnDisplay
-        = preparedTodos.sort((a, b) => a.completed - b.completed);
-        break;
-      default:
-        todosOnDisplay = preparedTodos;
-        break;
-    }
 
     if (isLoading) {
       return <p>loading...</p>;
@@ -122,8 +111,6 @@ class App extends React.Component {
           <Button
             type="button"
             onClick={this.loadData}
-            inverted
-            color="red"
           >
             Try Again!
           </Button>
@@ -131,7 +118,7 @@ class App extends React.Component {
       );
     }
 
-    if (todoList.length === 0 && userList.length === 0) {
+    if (!preparedTodos) {
       return (
         <>
           <p>No users and todos yet!</p>
@@ -145,7 +132,24 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
-        <Buttons filters={this.filters} />
+        <Button
+          type="button"
+          onClick={() => this.switcher('byTitle')}
+        >
+          By User!
+        </Button>
+        <Button
+          type="button"
+          onClick={() => this.switcher('byUser')}
+        >
+          By Title!
+        </Button>
+        <Button
+          type="button"
+          onClick={() => this.switcher('byStatus')}
+        >
+          By Status!
+        </Button>
         <TodoList todos={todosOnDisplay} />
       </div>
     );
