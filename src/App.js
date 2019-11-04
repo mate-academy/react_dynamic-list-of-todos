@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
-import { Dimmer, Loader, Image, Segment, Button } from 'semantic-ui-react';
+import {
+  Dimmer, Loader, Image, Segment, Button,
+} from 'semantic-ui-react';
 import { getTodos } from './api/todos';
 import { getUsers } from './api/users';
 import TodoList from './components/TodoList';
@@ -20,25 +22,26 @@ class App extends React.Component {
       isLoading: true,
     });
 
-    const [serverTodoList, serverUsers] = await Promise.all([getTodos(), getUsers()])
+    Promise.all([getTodos(), getUsers()])
+      .then(([todos, users]) => {
+        this.setState(PrevState => ({
+          todolist: todos,
+          users,
+          isLoading: false,
+          hasError: false,
+        }));
+      })
       .catch(() => {
         this.setState({
           isLoading: false,
           hasError: true,
         });
       });
-
-    this.setState(PrevState => ({
-      todolist: serverTodoList,
-      users: serverUsers,
-      isLoading: false,
-      hasError: false,
-    }));
   };
 
-  // changeFilter = (filterName) => {
-  //   this.setState({ filter: filterName });
-  // };
+  changeFilter = (filterName) => {
+    this.setState({ filter: filterName });
+  };
 
   render() {
     const {
@@ -46,6 +49,7 @@ class App extends React.Component {
       users,
       isLoading,
       hasError,
+      filter,
     } = this.state;
 
     if (isLoading) {
@@ -78,32 +82,36 @@ class App extends React.Component {
       );
     }
 
-    // let filteredList;
-    // let filteredUsers;
-    //
-    // switch (this.state.filter) {
-    //   case 'Normal':
-    //     filteredList = todolist;
-    //     filteredUsers = users;
-    //     break;
-    //   case 'Todos':
-    //     filteredList = todolist.sort((a, b) => a.title.localeCompare(b.title));
-    //     break;
-    //   case 'Name':
-    //     filteredList = users.sort((a, b) => a.name.localeCompare(b.name));
-    //     break;
-    //   case 'Status':
-    //     filteredList = todolist.sort((a, b) => b.completed - a.completed);
-    //     break;
-    //   default:
-    //     filteredList = todolist;
-    //     filteredUsers = users;
-    // }
+    let filteredList = [...todolist];
+    let filteredUsers = [...users];
+
+    // eslint-disable-next-line no-debugger
+    debugger;
+
+    switch (filter) {
+      case 'Normal':
+        filteredList = todolist;
+        filteredUsers = users;
+        break;
+      case 'Todos':
+        filteredList = [...todolist].sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'Name':
+        filteredUsers = [...users].sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'Status':
+        filteredList = [...todolist].sort((a, b) => b.completed - a.completed);
+        break;
+      default:
+        break;
+    }
+    // eslint-disable-next-line no-debugger
+    debugger;
 
     return (
       <div className="App">
         <Buttons changeFilter={this.changeFilter} />
-        <TodoList users={users} todos={todolist} />
+        <TodoList users={filteredUsers} todos={filteredList} />
       </div>
     );
   }
