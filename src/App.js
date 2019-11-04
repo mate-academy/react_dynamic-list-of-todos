@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import TodoList from './components/TodoList';
-
+import Buttons from './components/buttons';
 import { getTodo } from './API/getTodos';
 import { getUsers } from './API/users';
 
@@ -22,6 +22,7 @@ class App extends React.Component {
       isLoading: false,
       error: false,
       initialized: false,
+      currentFilter: 'byUser',
     };
   }
 
@@ -53,11 +54,62 @@ class App extends React.Component {
       });
   };
 
+  filters = (e) => {
+    const tab = e.target;
+    const activefilter = tab.innerText;
+    switch (activefilter) {
+      case 'By User!':
+        this.setState(prevState => ({
+          ...prevState,
+          currentFilter: 'byUser',
+        }));
+        break;
+      case 'By Title!':
+        this.setState(prevState => ({
+          ...prevState,
+          currentFilter: 'byTitle',
+        }));
+        break;
+      case 'By Status!':
+        this.setState(prevState => ({
+          ...prevState,
+          currentFilter: 'byStatus',
+        }));
+        break;
+      default:
+        this.setState(prevState => ({
+          ...prevState,
+          currentFilter: 'noFilters',
+        }));
+        break;
+    }
+  }
+
   render() {
     const {
       todoList, userList, isLoading, error,
     } = this.state;
+
+    let todosOnDisplay;
     const preparedTodos = getTodosWithUsers(todoList, userList);
+
+    switch (this.state.currentFilter) {
+      case 'byUser':
+        todosOnDisplay
+        = preparedTodos.sort((a, b) => a.user.name.localeCompare(b.user.name));
+        break;
+      case 'byTitle':
+        todosOnDisplay
+        = preparedTodos.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'byStatus':
+        todosOnDisplay
+        = preparedTodos.sort((a, b) => a.completed - b.completed);
+        break;
+      default:
+        todosOnDisplay = preparedTodos;
+        break;
+    }
 
     if (isLoading) {
       return <p>loading...</p>;
@@ -67,7 +119,6 @@ class App extends React.Component {
       return (
         <>
           <p>Error occurred!!!</p>
-;
           <Button
             type="button"
             onClick={this.loadData}
@@ -94,7 +145,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
-        <TodoList todos={preparedTodos} />
+        <Buttons filters={this.filters} />
+        <TodoList todos={todosOnDisplay} />
       </div>
     );
   }

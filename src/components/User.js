@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 const User = ({ user }) => (
   <td>
-    <a href={`mailto:${user.id}`} />
     {user.name}
   </td>
 );
