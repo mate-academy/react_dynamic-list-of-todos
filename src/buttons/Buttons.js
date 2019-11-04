@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Buttons.css';
 
 function Buttons({ onSort }) {
   return (
-    <div>
+    <div className="buttons">
       <button
         type="button"
         className="ui primary basic button"

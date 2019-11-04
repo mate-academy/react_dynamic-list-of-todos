@@ -2,7 +2,7 @@
 
 ## Demo link
 
-[DEMO LINK](https://crazynoodl.github.io/react_dynamic-list-of-todos/)
+[DEMO LINK](https://crazynoodl.github.io/react_dynamic-list-of-todos/index.html)
 
 
 ## Task 
