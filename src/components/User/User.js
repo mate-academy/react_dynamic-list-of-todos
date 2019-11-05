@@ -6,7 +6,10 @@ export default function({ user }) {
       <td>{user.name}</td>
       <td>
         <a href={`mailto:${user.email}`}
-            className="text-white">{user.email}</a>
+            className="text-white"
+        >
+          {user.email}
+        </a>
       </td>
     </>
   );
