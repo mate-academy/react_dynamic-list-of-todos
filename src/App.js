@@ -6,7 +6,7 @@ import './App.css';
 class App extends Component {
   state = {
     loading: false,
-    tableList: null,
+    tableList: [],
     sortMethod: 'Reset',
   }
 
@@ -33,9 +33,14 @@ class App extends Component {
 
   render() {
     const { loading, tableList, sortMethod } = this.state;
-    if (tableList === null) {
+    if (!tableList.length) {
       if (loading) {
-        return `Loading...`;
+        return (
+          <button
+            type="button"
+            className="ui loading button"
+          />
+        );
       }
       return (
         <button
