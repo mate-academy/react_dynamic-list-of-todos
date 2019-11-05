@@ -1,7 +1,4 @@
-// const API_USERS = 'https://jsonplaceholder.typicode.com/users';
-// const API_TODOLIST = 'https://jsonplaceholder.typicode.com/todos';
-
- function getAllUsers(url) {
+function getAllUsers(url) {
   return fetch(url)
     .then(response => response.json());
 }
