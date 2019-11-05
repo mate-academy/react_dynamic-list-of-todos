@@ -7,18 +7,18 @@ const TodoItem = ({ todo }) => (
     <td>{todo.title}</td>
     <User user={todo.user} />
 
-    {todo.completed ? (
-      <td className="positive">
-        <i className="icon checkmark" />
-        Approved
-      </td>
-    ) : (
-      <td className="negative">
-        <i className="icon close" />
-        In procces
-      </td>
-    )
-    }
+    {todo.completed
+      ? (
+        <td className="positive">
+          <i className="icon checkmark" />
+          Approved
+        </td>
+      ) : (
+        <td className="negative">
+          <i className="icon close" />
+          In procces
+        </td>
+      )}
   </tr>
 );
 

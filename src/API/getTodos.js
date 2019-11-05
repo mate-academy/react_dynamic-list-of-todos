@@ -1,8 +1,9 @@
-const todosURL = 'https://jsonplaceholder.typicode.com/todos';
-const usersURL = 'https://jsonplaceholder.typicode.com/users';
+const todosURL = getFetch('https://jsonplaceholder.typicode.com/todos');
+const usersURL = getFetch('https://jsonplaceholder.typicode.com/users');
 
-export const getTodo = () => fetch(todosURL)
-  .then(response => response.json());
+function getFetch(url) {
+  return fetch(url)
+    .then(response => response.json());
+}
 
-export const getUsers = () => fetch(usersURL)
-  .then(response => response.json());
+export { todosURL, usersURL };

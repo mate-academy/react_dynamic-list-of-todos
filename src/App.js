@@ -2,21 +2,13 @@ import React from 'react';
 import './App.css';
 import { Button } from 'semantic-ui-react';
 import TodoList from './components/TodoList';
-import { getTodo, getUsers } from './API/getTodos';
-
-function getTodosWithUsers(todosList, usersList) {
-  return todosList.map(todo => ({
-    ...todo,
-    user: usersList.find(user => todo.userId === user.id),
-  }));
-}
+import { todosURL, usersURL } from './API/getTodos';
+import Buttons from './components/Buttons';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userList: [],
-      todoList: [],
       isLoading: false,
       error: false,
       initialized: false,
@@ -33,12 +25,13 @@ class App extends React.Component {
       initialized: true,
     });
 
-    Promise.all([getTodo(), getUsers()])
+    Promise.all([todosURL, usersURL])
       .then(([todoList, userList]) => {
         this.setState({
-          todoList,
-          userList,
-          preparedTodos: getTodosWithUsers(todoList, userList),
+          preparedTodos: todoList.map(todo => ({
+            ...todo,
+            user: userList.find(user => todo.userId === user.id)
+          })),
         });
       })
       .catch(() => {
@@ -130,24 +123,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Dynamic list of todos</h1>
-        <Button
-          type="button"
-          onClick={() => this.switcher('byTitle')}
-        >
-          By User!
-        </Button>
-        <Button
-          type="button"
-          onClick={() => this.switcher('byUser')}
-        >
-          By Title!
-        </Button>
-        <Button
-          type="button"
-          onClick={() => this.switcher('byStatus')}
-        >
-          By Status!
-        </Button>
+        <Buttons switcher={this.switcher} />
         <TodoList todos={preparedTodos} />
       </div>
     );
