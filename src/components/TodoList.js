@@ -4,7 +4,7 @@ import TableRow from './TableRow';
 
 class TodoList extends Component {
   render() {
-    const { users, todos } = this.props;
+    const { todos } = this.props;
     return (
       <Table celled selectable>
         <Table.Header>
@@ -16,7 +16,7 @@ class TodoList extends Component {
         </Table.Header>
 
         <Table.Body>
-          {todos.map(todo => <TableRow users={users} todo={todo} key={todo.id} />)}
+          {todos.map(todo => <TableRow user={todo.user} todo={todo} key={todo.id} />)}
         </Table.Body>
       </Table>
     );

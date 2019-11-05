@@ -3,15 +3,13 @@ import './App.css';
 import {
   Dimmer, Loader, Image, Segment, Button,
 } from 'semantic-ui-react';
-import { getTodos } from './api/todos';
-import { getUsers } from './api/users';
+import { users, todos } from './api/api-todos';
 import TodoList from './components/TodoList';
 import Buttons from './components/Buttons';
 
 class App extends React.Component {
   state = {
-    todolist: null,
-    users: null,
+    todosList: null,
     isLoading: false,
     hasError: false,
     filter: 'Normal',
@@ -22,11 +20,13 @@ class App extends React.Component {
       isLoading: true,
     });
 
-    Promise.all([getTodos(), getUsers()])
-      .then(([todos, users]) => {
+    Promise.all([todos, users])
+      .then(([todosList, usersList]) => {
         this.setState(PrevState => ({
-          todolist: todos,
-          users,
+          todosList: todosList.map(todo => ({
+            ...todo,
+            user: usersList.find(user => user.id === todo.userId),
+          })),
           isLoading: false,
           hasError: false,
         }));
@@ -45,8 +45,7 @@ class App extends React.Component {
 
   render() {
     const {
-      todolist,
-      users,
+      todosList,
       isLoading,
       hasError,
       filter,
@@ -73,7 +72,7 @@ class App extends React.Component {
       );
     }
 
-    if (!todolist && !users) {
+    if (!todosList) {
       return (
         <div className="before__load">
           <h2 className="before__load-text">WELCOME, YOU DON'T HAVE DATA YET</h2>
@@ -82,22 +81,20 @@ class App extends React.Component {
       );
     }
 
-    let filteredList = [...todolist];
-    let filteredUsers = [...users];
+    let filteredList = [...todosList];
 
     switch (filter) {
       case 'Normal':
-        filteredList = todolist;
-        filteredUsers = users;
+        filteredList = todosList;
         break;
       case 'Todos':
-        filteredList = [...todolist].sort((a, b) => a.title.localeCompare(b.title));
+        filteredList = [...todosList].sort((a, b) => a.title.localeCompare(b.title));
         break;
       case 'Name':
-        filteredUsers = [...users].sort((a, b) => a.name.localeCompare(b.name));
+        filteredList = [...todosList].sort((a, b) => a.user.name.localeCompare(b.user.name));
         break;
       case 'Status':
-        filteredList = [...todolist].sort((a, b) => b.completed - a.completed);
+        filteredList = [...todosList].sort((a, b) => b.completed - a.completed);
         break;
       default:
         break;
@@ -106,7 +103,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Buttons changeFilter={this.changeFilter} />
-        <TodoList users={filteredUsers} todos={filteredList} />
+        <TodoList todos={filteredList} />
       </div>
     );
   }
