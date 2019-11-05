@@ -55,14 +55,17 @@ export default class App extends Component {
       return (
         <button
           className="btn btn-dark mx-auto mt-5 btn-block w-25"
-          onClick={this.loadData}>
+          onClick={this.loadData}
+        >
             Load
         </button>);
     }
 
     return (
-      <ToDoList todos={todos} sorting={this.sortItems}
-                sortType={sortType}
+      <ToDoList 
+        todos={todos} 
+        sorting={this.sortItems}
+        sortType={sortType}
       />
       );
   }
