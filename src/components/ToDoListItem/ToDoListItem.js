@@ -6,10 +6,12 @@ export default function ToDoListItem({ todo, users }) {
     <tr>
       <td>{todo.title}</td>
       <User user={users} />
-      <td>{todo.completed
-        ? (<span><i className="fa fa-check text-success"></i> Done</span>)
-        : (<span><i className="fa fa-times text-danger"></i> Not Completed</span>)
-          }</td>
+      <td>
+        {todo.completed
+        ? <span><i className="fa fa-check text-success" /> Done</span>
+        : <span><i className="fa fa-times text-danger" /> Not Completed</span>
+        }
+      </td>
     </tr>
   );
 }
