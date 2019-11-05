@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { users, todos } from './api/getAllUsers';
-// import users from './api/getAllUsers';
 import ToDoList from './components/ToDoList/ToDoList';
 import Spinner from './components/spinner/Spinner';
 import Error from './components/error/Error';
