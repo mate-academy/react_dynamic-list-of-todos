@@ -21,12 +21,12 @@ export default class App extends Component {
     });
 
     Promise.all([users, todos])
-      .then(response => {
+      .then(([users, todos]) => {
         this.setState({
-          todos: response[1].map(todo => {
+          todos: todos.map(todo => {
             return {
               ...todo,
-              user: response[0].find(user => user.id === todo.userId)
+              user: users.find(user => user.id === todo.userId)
             }
           }),
         });
