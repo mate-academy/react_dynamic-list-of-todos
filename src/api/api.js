@@ -1,14 +1,12 @@
-export const getTodos = async() => {
-  const url = 'https://jsonplaceholder.typicode.com/todos';
+const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
+const usersUrl = 'https://jsonplaceholder.typicode.com/users';
+
+const getData = async(url) => {
   const response = await fetch(url);
-  const todos = await response.json();
-  return todos;
+
+  return response.json();
 };
 
-export const getUsers = async() => {
-  const url = 'https://jsonplaceholder.typicode.com/users';
-  const response = await fetch(url);
-  const users = await response.json();
+export const getTodos = () => getData(todosUrl);
 
-  return users;
-};
+export const getUsers = () => getData(usersUrl);

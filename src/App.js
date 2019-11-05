@@ -32,7 +32,7 @@ class App extends React.Component {
     });
     setTimeout(() => {
       this.loadData();
-    }, 2000);
+    }, 10);
   };
 
   loadData = async() => {
