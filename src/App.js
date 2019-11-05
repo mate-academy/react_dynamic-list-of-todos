@@ -12,11 +12,15 @@ class App extends React.Component {
     this.setState({
       loading: true,
     });
-    let todos = fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(response => response.json());
-    let users = fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json());
-    Promise.all([todos, users])
+
+    function getUrl(url) {
+      return fetch(url)
+        .then(response => response.json());
+    }
+    Promise.all([
+      getUrl('https://jsonplaceholder.typicode.com/todos'),
+      getUrl('https://jsonplaceholder.typicode.com/users')
+    ])
       .then(([todos, users]) => this.setState({
         serverData: todos.map(todo => ({
           ...todo,
