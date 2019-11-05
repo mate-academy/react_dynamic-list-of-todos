@@ -1,5 +1,5 @@
 import React from 'react';
-import {getData, todosUrl, usersUrl} from "./utils";
+import { getData, todosUrl, usersUrl } from "./utils";
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
@@ -52,7 +52,8 @@ class TodoList extends React.Component {
 
     if (!this.state.loaded) {
       return (
-        <button className={"btn btn-outline-dark btn-lg"} onClick={() => this.loadData()}>Load data</button>
+        <button className={"btn btn-outline-dark btn-lg"}
+                onClick={() => this.loadData()}>Load data </button>
       );
     }
 
