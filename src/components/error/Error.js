@@ -7,9 +7,9 @@ function Error({load}) {
     <>
     <div className="lds-hourglass"></div>;
     <button
-          className="btn btn-dark mx-auto mt-5 btn-block w-25"
-          onClick={load}>
-          Try again
+      className="btn btn-dark mx-auto mt-5 btn-block w-25"
+      onClick={load}>
+      Try again
     </button>
     </>
   );
