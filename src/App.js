@@ -6,12 +6,18 @@ import TodoTable from './components/todoTable/TodoTable';
 
 class App extends React.PureComponent {
   state = {
-    todos: [],
-    users: [],
+    todosWithUser: [],
     isLoading: false,
     successfulLoading: false,
     wasLoaded: false,
   };
+
+  getTodosWithUses(todos, users) {
+    return todos.map(todo => ({
+      ...todo,
+      user: users.find(user => user.id === todo.userId),
+    }));
+  }
 
   downloadInfoFromServer = async () => {
     this.setState({
@@ -21,8 +27,7 @@ class App extends React.PureComponent {
 
     Promise.all([getTodos(), getUsers()])
       .then(([serverTodos, serverUsers]) => this.setState({
-        todos: serverTodos,
-        users: serverUsers,
+        todosWithUser: this.getTodosWithUses(serverTodos, serverUsers),
         isLoading: false,
         successfulLoading: true,
       }))
@@ -31,8 +36,30 @@ class App extends React.PureComponent {
       });
   };
 
+  sortTodosByFilter = (filter) => {
+    this.setState((prevState) => {
+      const newTodoList = [...prevState.todosWithUser];
+
+      switch (filter) {
+        case 'title':
+          newTodoList.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case 'userName':
+          newTodoList.sort((a, b) => a.user.name.localeCompare(b.user.name));
+          break;
+        case 'completed':
+          newTodoList.sort((a, b) => b.completed - a.completed);
+          break;
+      }
+
+      return ({
+        todosWithUser: newTodoList,
+      });
+    });
+  };
+
   render() {
-    const { todos, users, isLoading, successfulLoading, wasLoaded } = this.state;
+    const { todosWithUser, isLoading, successfulLoading, wasLoaded } = this.state;
 
     if (isLoading) {
       return (
@@ -49,7 +76,12 @@ class App extends React.PureComponent {
     }
 
     if (successfulLoading) {
-      return <TodoTable todos={todos} users={users} />;
+      return <TodoTable
+        todosWithUser={todosWithUser}
+        titleSort={this.sortTodosByFilter.bind(this, 'title')}
+        userNameSort={this.sortTodosByFilter.bind(this, 'userName')}
+        completedSort={this.sortTodosByFilter.bind(this, 'completed')}
+      />;
     } else if (!successfulLoading && wasLoaded) {
       return (
         <>
