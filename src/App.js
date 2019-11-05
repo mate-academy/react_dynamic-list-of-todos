@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
+import {users, todos} from "./components/GetUrl/GetUrl";
 
 class App extends React.Component {
   state = {
@@ -13,15 +14,11 @@ class App extends React.Component {
       loading: true,
     });
 
-    function getUrl(url) {
-      return fetch(url)
-        .then(response => response.json());
-    }
     Promise.all([
-      getUrl('https://jsonplaceholder.typicode.com/todos'),
-      getUrl('https://jsonplaceholder.typicode.com/users')
+      todos,
+      users
     ])
-      .then(([todos, users]) => this.setState({
+      .then(([todos, users])=> this.setState({
         serverData: todos.map(todo => ({
           ...todo,
           user: users.find(person => person.id === todo.userId),
@@ -55,7 +52,13 @@ class App extends React.Component {
     if (this.state.serverData.length === 0) {
       return (
         <div className="start">
-          <button className="start-button ui primary button" type="button" onClick={this.getList}>Show</button>
+          <button
+            className="start-button ui primary button"
+            type="button"
+            onClick={this.getList}
+          >
+              Show
+          </button>
         </div>
       );
     }
@@ -65,13 +68,17 @@ class App extends React.Component {
         <button
           className="button-sort ui primary button"
           type="button"
-          onClick={this.handleSort}>
+          onClick={this.handleSort}
+        >
           Task
         </button>
         <button
           className="button-sort ui primary button"
           type="button"
-          onClick={this.handleSort}>Complete </button>
+          onClick={this.handleSort}
+        >
+            Complete
+        </button>
         </div>
           <TodoList serverData={this.state.serverData} />
       </div>
