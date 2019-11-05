@@ -10,3 +10,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+.filterContainer {
+  margin: 25px auto;
+}

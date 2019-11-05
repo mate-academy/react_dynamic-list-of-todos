@@ -19,17 +19,16 @@ class App extends React.PureComponent {
       wasLoaded: true,
     });
 
-    const [serverTodos, serverUsers] = await Promise.all([getTodos(), getUsers()])
+    Promise.all([getTodos(), getUsers()])
+      .then(([serverTodos, serverUsers]) => this.setState({
+        todos: serverTodos,
+        users: serverUsers,
+        isLoading: false,
+        successfulLoading: true,
+      }))
       .catch(() => {
         this.setState({ isLoading: false });
       });
-
-    this.setState({
-      todos: serverTodos,
-      users: serverUsers,
-      isLoading: false,
-      successfulLoading: true,
-    });
   };
 
   render() {

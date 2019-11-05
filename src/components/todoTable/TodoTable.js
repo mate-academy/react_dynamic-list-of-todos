@@ -1,52 +1,50 @@
 import React from 'react';
-import {Button, Table} from 'semantic-ui-react';
+import {Button, Table } from 'semantic-ui-react';
 import TodoItem from '../TodoItem/TodoItem';
+import SortButtons from '../sortButtons/SortButtons';
 
 class TodoTable extends React.PureComponent {
   state = {
-    todosWithUser: [],
+    todosWithUser: this.getTodosWithUses(this.props.todos, this.props.users),
   };
 
-  componentDidMount() {
-    const {todos, users} = this.props;
-    this.setState({
-      todosWithUser: this.getTodosWithUser(todos, users),
-    });
-  }
-
-  getTodosWithUser = (todos, users) => {
+  getTodosWithUses(todos, users){
     return todos.map(todo => ({
       ...todo,
       user: users.find(user => user.id === todo.userId),
     }));
-  };
+  }
 
   sortTodosByFilter = (filter) => {
     this.setState((prevState) => {
       const newTodoList = [...prevState.todosWithUser];
 
-      if (filter === 'title') {
-        newTodoList.sort((a, b) => a.title.localeCompare(b.title));
-      } else if (filter === 'userName') {
-        newTodoList.sort((a, b) => a.user.name.localeCompare(b.user.name));
-      } else if (filter === 'completed') {
-        newTodoList.sort((a, b) => b.completed - a.completed);
+      switch (filter) {
+        case 'title':
+          newTodoList.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case 'userName':
+          newTodoList.sort((a, b) => a.user.name.localeCompare(b.user.name));
+          break;
+        case 'completed':
+          newTodoList.sort((a, b) => b.completed - a.completed);
+          break;
       }
 
       return ({
         todosWithUser: newTodoList,
       });
     });
-  }
+  };
 
   render() {
     return (
       <>
-        <section className="sortButtonsContainer">
-          <Button secondary onClick={this.sortTodosByFilter.bind(this, 'title')}>Sort by title</Button>
-          <Button secondary onClick={this.sortTodosByFilter.bind(this, 'userName')}>Sort by user name</Button>
-          <Button secondary onClick={this.sortTodosByFilter.bind(this, 'completed')}>Sort by completed</Button>
-        </section>
+        <SortButtons
+          titleSort={this.sortTodosByFilter.bind(this, 'title')}
+          userNameSort={this.sortTodosByFilter.bind(this, 'userName')}
+          completedSort={this.sortTodosByFilter.bind(this, 'completed')}
+        />
         <Table celled>
           <Table.Header>
             <Table.Row>
