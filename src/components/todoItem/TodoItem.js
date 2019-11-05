@@ -8,8 +8,8 @@ function TodoItem({todo}) {
     : ('negative');
 
   const completedIcon = completed
-    ? (<i className="icon checkmark"></i>)
-    : (<i className="icon close"></i>);
+    ? <i className="icon checkmark" />
+    : <i className="icon close" />
 
   return (
     <tr>

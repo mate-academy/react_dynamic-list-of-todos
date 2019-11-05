@@ -11,8 +11,6 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      todos: [],
-      users: [],
       todoList: [],
       isLoading: false,
       hasError: false,
@@ -33,8 +31,6 @@ class App extends React.Component {
     Promise.all([getTodos(), getUsers()])
       .then(resolve => {
         this.setState({
-          todos: resolve[0],
-          users: resolve[1],
           isLoading: false,
           hasError: false,
           dataReceived: true,
@@ -51,7 +47,6 @@ class App extends React.Component {
 
   render() {
     const { isLoading, dataReceived, todoList, hasError } = this.state;
-    console.log(todoList);
 
     if (!dataReceived && !hasError) {
       return (
