@@ -55,7 +55,7 @@ class App extends React.Component {
     if (this.state.serverData.length === 0) {
       return (
         <div className="start">
-          <button className="start-button" class="ui primary button" type="button" onClick={this.getList}>Show</button>
+          <button className="start-button ui primary button" type="button" onClick={this.getList}>Show</button>
         </div>
       );
     }
@@ -63,15 +63,13 @@ class App extends React.Component {
       <div className="app">
         <div className="buttons">
         <button
-          className="button-sort"
-          class="ui primary button"
+          className="button-sort ui primary button"
           type="button"
           onClick={this.handleSort}>
           Task
         </button>
         <button
-          className="button-sort"
-          class="ui primary button"
+          className="button-sort ui primary button"
           type="button"
           onClick={this.handleSort}>Complete </button>
         </div>
