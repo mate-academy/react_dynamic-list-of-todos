@@ -1,0 +1,20 @@
+.title {
+  cursor: pointer;
+  transition: transform .5s;
+}
+
+.title:hover {
+  background: rgb(0, 0, 0);
+  transform: scale(1.1);
+  color: white;
+}
+
+.table {
+  margin: 0 auto;
+  background-color: lightgray;
+}
+
+h2 {
+  background-color: black;
+  color: white;
+}
