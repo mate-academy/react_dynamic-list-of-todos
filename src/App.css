@@ -1,3 +1,76 @@
-.App {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url(../src/dpg-top-background.svg);
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  background-position-y: 70px;
+  background-color: #12174b;
+  min-height: 100vh;
+}
+
+button,
+button:active,
+button:focus {
+  outline: none;
+}
+
+.load-button {
+  background: #00a99d;
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(0,169,157,.25);
+
+  white-space: nowrap;
+  border-radius: 10px;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  width: fit-content;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 15px 18px;
+  user-select: none;
+  border-color: #00a99d;
+  margin: 20px;
+}
+
+.spinner {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.spinner:after {
+  animation: changeContent .8s linear infinite;
+  display: block;
+  content: "⠋";
+  font-size: 80px;
+}
+
+@keyframes changeContent {
+  10% { content: "⠙"; }
+  20% { content: "⠹"; }
+  30% { content: "⠸"; }
+  40% { content: "⠼"; }
+  50% { content: "⠴"; }
+  60% { content: "⠦"; }
+  70% { content: "⠧"; }
+  80% { content: "⠇"; }
+  90% { content: "⠏"; }
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
 }
