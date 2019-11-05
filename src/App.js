@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { todos, users } from './helper/Helper';
+import { loadTodos, loadUsers } from './helper/Helper';
 import TodoList from './todolist/TodoList';
 import './App.css';
 
 class App extends Component {
   state = {
     loading: false,
-    tableList: [],
+    tableList: null,
     sortMethod: 'Reset',
   }
 
@@ -15,7 +15,7 @@ class App extends Component {
       loading: true,
     });
 
-    Promise.all([todos, users])
+    Promise.all([loadTodos(), loadUsers()])
       .then(([todoList, userList]) => {
         const tableList = todoList.map(todo => ({
           ...todo,
@@ -33,7 +33,7 @@ class App extends Component {
 
   render() {
     const { loading, tableList, sortMethod } = this.state;
-    if (!tableList.length) {
+    if (tableList === null) {
       if (loading) {
         return `Loading...`;
       }
