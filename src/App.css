@@ -1,3 +1,18 @@
 .App {
   text-align: center;
 }
+
+body {
+  margin: 50px !important;
+}
+
+.filter {
+  display: flex;
+  justify-content: center;
+}
+
+.start-button {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
