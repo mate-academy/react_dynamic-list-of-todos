@@ -12,11 +12,11 @@ class App extends React.Component {
     this.setState({
       loading: true,
     });
-    Promise.all([
-      fetch('https://jsonplaceholder.typicode.com/todos'),
-      fetch('https://jsonplaceholder.typicode.com/users'),
-    ])
-      .then(([result, result2]) => Promise.all([result.json(), result2.json()]))
+    let todos = fetch('https://jsonplaceholder.typicode.com/todos')
+      .then(response => response.json());
+    let users = fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json());
+    Promise.all([todos, users])
       .then(([todos, users]) => this.setState({
         serverData: todos.map(todo => ({
           ...todo,
@@ -25,15 +25,17 @@ class App extends React.Component {
         loading: false,
       }));
   };
-  sortCompletedTasks = () => {
-    this.setState(prevState => ({
-      serverData: prevState.serverData.sort((a, b) => b.completed - a.completed),
-    }));
-  };
 
-  sortTasks = () => {
+  handleSort = (sort) => {
     this.setState(prevState => ({
-      serverData: prevState.serverData.sort((a, b) => (a.title > b.title ? 1 : -1)),
+      serverData: prevState.serverData.sort((a, b) => {
+        switch (sort) {
+          case 'completed':
+            return b.completed - a.completed;
+          default:
+            return a.title.localeCompare(b.title);
+        }
+      }),
     }));
   };
 
@@ -56,8 +58,18 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="buttons">
-        <button className="button-sort" class="ui primary button" type="button" onClick={this.sortTasks}>Task </button>
-        <button className="button-sort" class="ui primary button" type="button" onClick={this.sortCompletedTasks}>Complete </button>
+        <button
+          className="button-sort"
+          class="ui primary button"
+          type="button"
+          onClick={this.handleSort}>
+          Task
+        </button>
+        <button
+          className="button-sort"
+          class="ui primary button"
+          type="button"
+          onClick={this.handleSort}>Complete </button>
         </div>
           <TodoList serverData={this.state.serverData} />
       </div>
