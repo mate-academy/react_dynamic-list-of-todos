@@ -50,8 +50,10 @@ class App extends React.Component {
   };
 
   render() {
-    if (!this.state.todoList.length) {
-      if (this.state.loading) {
+    const { todoList, loading } = this.state;
+
+    if (!todoList.length) {
+      if (loading) {
         return (
           <button
             className="ui basic loading button"
@@ -72,8 +74,8 @@ class App extends React.Component {
 
     return (
       <>
-        <Buttons todos={this.state.todoList} sort={this.getSortMethod} />
-        <TodoList todos={this.state.todoList} />
+        <Buttons todos={todoList} sort={this.getSortMethod} />
+        <TodoList todos={todoList} />
       </>
     );
   }
