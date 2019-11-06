@@ -1,13 +1,12 @@
 import React from 'react';
 import './App.css';
-
-import todos from './api/todos';
-import users from './api/users';
+import TodoLoad from './components/TodoLoad/TodoLoad';
 
 function App() {
   return (
     <div className="App">
       <h1>Dynamic list of todos</h1>
+      <TodoLoad />
     </div>
   );
 }
