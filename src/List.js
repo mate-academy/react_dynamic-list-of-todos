@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Content from './Content';
+import getUrl from './getUrl';
 
 class List extends React.Component {
   constructor (props) {
@@ -19,23 +20,23 @@ class List extends React.Component {
     this.setState({
       isLoaded: true,
     });
-    const responseTodos = await fetch('https://jsonplaceholder.typicode.com/todos');
-    const todos = await responseTodos.json();
-    const responseUsers = await fetch('https://jsonplaceholder.typicode.com/users');
-    const users = await responseUsers.json();
+    const todos = await getUrl('https://jsonplaceholder.typicode.com/todos');
+    const users = await getUrl('https://jsonplaceholder.typicode.com/users');
     this.setState({
       listTodos: todos,
       listUsers: users,
     });
   }
-  
+
   render() {
     return (
       <>
-        <button onClick={() => this.todos()}>Load</button>
-        <Content state={this.state} />
+        <button hidden={this.state.isLoaded} onClick={() => this.todos()}>
+          Load
+        </button>
+        <Content list={this.state} />
       </>
-    )
+    );
   }
 }
 

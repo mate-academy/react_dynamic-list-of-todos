@@ -3,12 +3,18 @@ import React from 'react';
 import ListTodos from './ListTodos';
 
 function Content(props) {
-  if(props.state.isLoaded && props.state.listUsers === null) {
+  if(props.list.isLoaded && props.list.listUsers === null) {
     return <p>...loading</p>
-  } else if (!props.state.isLoaded && props.state.listUsers === null) {
+  } else if (!props.list.isLoaded && props.list.listUsers === null) {
     return <p>not load</p>
-  } else if (props.state.isLoaded && props.state.listUsers !== null) {
-    return <table><tbody><ListTodos list={props.state} /></tbody></table>
+  } else if (props.list.isLoaded && props.list.listUsers !== null) {
+    return (
+      <table>
+        <tbody>
+          <ListTodos list={props.list} />
+        </tbody>
+      </table>
+    );
   }
 }
 
