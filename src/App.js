@@ -33,9 +33,7 @@ class App extends Component {
     this.setState({
       initialTable: todoList,
       currentTable: todoList,
-      todos: todoList.todos,
       users: todoList.users,
-      title: todoList.title,
     });
   };
 
@@ -67,8 +65,6 @@ class App extends Component {
     return (
       <TodoTable
         initialTable={this.state.initialTable}
-        todos={this.state.todos}
-        users={this.state.users}
         byTitle={() => this.sortTodos('title')}
         byUser={() => this.sortTodos('user')}
         byCompleteness={() => this.sortTodos('completed')}
