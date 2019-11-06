@@ -49,7 +49,8 @@ class App extends React.Component {
       );
     }
 
-    if (this.state.serverData.length === 0) {
+    const { serverData, loading } = this.state;
+    if (!serverData.length) {
       return (
         <div className="start">
           <button
