@@ -54,9 +54,9 @@ class App extends Component {
   }
 
   rendering = () => {
-    const { todos, users, loading } = this.state;
+    const { loading } = this.state;
 
-    if (users === null && todos === null) {
+    if (this.state.initialTable === null) {
       if (loading) {
         return <button className="ui loading primary button">Loading</button>;
       }
