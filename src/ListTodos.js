@@ -1,15 +1,14 @@
 import React from 'react';
 
 function ListTodos (props) {
-  const list = props.list.listTodos;
-  const users = props.list.listUsers;
+  const todos = props.todos;
   return (
     <>
-      {list.map((item, index) => (
-        <tr key={item.id + index}>
-          <td>{users.find(user => user.id === item.userId).name}:</td>
-          <td>{item.title}</td>
-          <td>{item.completed.toString()}</td>
+      {todos.map((todo, index) => (
+        <tr key={todo.title + index}>
+          <td>{todo.user.name}:</td>
+          <td>{todo.title}:</td>
+          <td>{todo.completed.toString()}:</td>
         </tr>
       ))}
     </>

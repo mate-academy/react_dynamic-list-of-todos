@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Content from './Content';
-import getUrl from './getUrl';
+import getData from './getData';
 
 class List extends React.Component {
   constructor (props) {
@@ -9,8 +9,8 @@ class List extends React.Component {
 
     this.state = {
       listTodos: null,
-      listUsers: null,
       isLoaded: false,
+      sortBy: null,
     };
 
     this.todos = this.todos.bind(this);
@@ -20,20 +20,39 @@ class List extends React.Component {
     this.setState({
       isLoaded: true,
     });
-    const todos = await getUrl('https://jsonplaceholder.typicode.com/todos');
-    const users = await getUrl('https://jsonplaceholder.typicode.com/users');
+    const todos = await getData('https://jsonplaceholder.typicode.com/todos');
+    const users = await getData('https://jsonplaceholder.typicode.com/users');
     this.setState({
-      listTodos: todos,
-      listUsers: users,
+      listTodos: todos.map(todo =>{
+        return {...todo, user: users.find(user => todo.userId === user.id)};
+      }),
     });
+  }
+
+  SortByName (sortBy) {
+    this.setState({ sortBy });
   }
 
   render() {
     return (
       <>
-        <button hidden={this.state.isLoaded} onClick={() => this.todos()}>
-          Load
-        </button>
+        <div className={"button"}>
+          <button hidden={this.state.isLoaded} onClick={() => this.todos()}>
+            Load
+          </button>
+          <button
+            disabled={this.state.sortBy === "Name"}
+            onClick={() => this.SortByName("Name")}
+          >
+            Name
+          </button>
+          <button
+            disabled={this.state.sortBy === "Status"}
+            onClick={() => this.SortByName("Status")}
+          >
+            Status
+          </button>
+        </div>
         <Content list={this.state} />
       </>
     );
