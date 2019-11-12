@@ -13,19 +13,25 @@ class List extends React.Component {
       sortBy: null,
     };
 
-    this.todos = this.todos.bind(this);
-  }
+    this.load = this.load.bind(this);
+  };
 
-  async todos() {
+  load = () => {
     this.setState({
-      isLoaded: true,
+      isLoaded: true
     });
-    const todos = await getData('https://jsonplaceholder.typicode.com/todos');
-    const users = await getData('https://jsonplaceholder.typicode.com/users');
-    this.setState({
-      listTodos: todos.map(todo =>{
-        return {...todo, user: users.find(user => todo.userId === user.id)};
-      }),
+    Promise.all([
+      getData("https://jsonplaceholder.typicode.com/todos"),
+      getData("https://jsonplaceholder.typicode.com/users")
+    ]).then(([todosItems, usersItems]) => {
+      const todoList = todosItems.map(todo => ({
+        ...todo,
+        user: usersItems.find(user => user.id === todo.userId)
+      }));
+      // console.log(todoList)
+      this.setState({
+        listTodos: todoList
+      });
     });
   }
 
@@ -37,16 +43,18 @@ class List extends React.Component {
     return (
       <>
         <div className={"button"}>
-          <button hidden={this.state.isLoaded} onClick={() => this.todos()}>
+          <button hidden={this.state.isLoaded} onClick={() => this.load()}>
             Load
           </button>
           <button
+            hidden={!this.state.isLoaded}
             disabled={this.state.sortBy === "Name"}
             onClick={() => this.SortByName("Name")}
           >
             Name
           </button>
           <button
+            hidden={!this.state.isLoaded}
             disabled={this.state.sortBy === "Status"}
             onClick={() => this.SortByName("Status")}
           >
