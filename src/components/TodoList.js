@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 
-function TodoList({ initialTable }) {
+function TodoList({ originalTable }) {
   return (
     <table className="todo ui celled table">
       <thead className="thead">
@@ -12,7 +12,7 @@ function TodoList({ initialTable }) {
         </tr>
       </thead>
       <tbody>
-        {initialTable.map(todo => <TodoItem todo={todo} key={todo.id} />)}
+        {originalTable.map(todo => <TodoItem todo={todo} key={todo.id} />)}
       </tbody>
     </table>
   );

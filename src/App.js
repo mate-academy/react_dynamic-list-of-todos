@@ -9,8 +9,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      initialTable: null,
-      currentTable: null,
+      originalTable: null,
+      visibleTable: null,
       isStarted: false,
       loading: false,
       todos: [],
@@ -31,15 +31,15 @@ class App extends Component {
       user: users.find(user => user.id === todo.userId).name,
     }));
     this.setState({
-      initialTable: todoList,
-      currentTable: todoList,
+      originalTable: todoList,
+      visibleTable: todoList,
       users: todoList.users,
     });
   };
 
   sortTodos = (val) => {
     this.setState(prevState => ({
-      currentTable: prevState.currentTable.sort((a, b) => {
+      visibleTable: prevState.visibleTable.sort((a, b) => {
         switch (val) {
           case 'title':
             return a.title.localeCompare(b.title);
@@ -55,7 +55,7 @@ class App extends Component {
   rendering = () => {
     const { loading } = this.state;
 
-    if (this.state.initialTable === null) {
+    if (this.state.originalTable === null) {
       if (loading) {
         return <button className="ui loading primary button">Loading</button>;
       }
@@ -63,7 +63,7 @@ class App extends Component {
     }
     return (
       <TodoTable
-        initialTable={this.state.initialTable}
+        originalTable={this.state.originalTable}
         byTitle={() => this.sortTodos('title')}
         byUser={() => this.sortTodos('user')}
         byCompleteness={() => this.sortTodos('completed')}

@@ -6,7 +6,7 @@ function TodoTable(props) {
     byTitle,
     byUser,
     byCompleteness,
-    initialTable,
+    originalTable,
   } = props;
 
   return (
@@ -20,7 +20,7 @@ function TodoTable(props) {
       <button onClick={byCompleteness} type="button" className="ui purple basic button">
         Sort by completeness
       </button>
-      <TodoList initialTable={initialTable} />
+      <TodoList originalTable={originalTable} />
     </>
   );
 }
