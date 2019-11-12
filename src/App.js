@@ -13,7 +13,7 @@ class App extends Component {
       currentTable: null,
       isStarted: false,
       loading: false,
-      todos: null,
+      todos: [],
       users: null,
     };
   }
@@ -39,7 +39,6 @@ class App extends Component {
 
   sortTodos = (val) => {
     this.setState(prevState => ({
-      ...prevState,
       currentTable: prevState.currentTable.sort((a, b) => {
         switch (val) {
           case 'title':
