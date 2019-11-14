@@ -9,18 +9,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-      originalTable: null,
       visibleTable: null,
-      isStarted: false,
       loading: false,
-      todos: [],
-      users: null,
     };
   }
 
   showList = async() => {
     this.setState({
-      isStarted: true,
+
       loading: true,
     });
     const [todos, users] = await data();
@@ -31,9 +27,7 @@ class App extends Component {
       user: users.find(user => user.id === todo.userId).name,
     }));
     this.setState({
-      originalTable: todoList,
       visibleTable: todoList,
-      users: todoList.users,
     });
   };
 
@@ -55,7 +49,7 @@ class App extends Component {
   rendering = () => {
     const { loading } = this.state;
 
-    if (this.state.originalTable === null) {
+    if (this.state.visibleTable === null) {
       if (loading) {
         return <button className="ui loading primary button">Loading</button>;
       }
@@ -63,7 +57,7 @@ class App extends Component {
     }
     return (
       <TodoTable
-        originalTable={this.state.originalTable}
+        visibleTable={this.state.visibleTable}
         byTitle={() => this.sortTodos('title')}
         byUser={() => this.sortTodos('user')}
         byCompleteness={() => this.sortTodos('completed')}
