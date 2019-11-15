@@ -31,7 +31,7 @@ class App extends Component {
 
   sortTodos = (val) => {
     this.setState(prevState => ({
-      ...prevState.visibleTable,
+      ...prevState,
       visibleTable: prevState.visibleTable.sort((a, b) => {
         switch (val) {
           case 'title':
