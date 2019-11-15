@@ -21,9 +21,7 @@ class App extends Component {
     });
     const [todos, users] = await data();
     const todoList = todos.map(todo => ({
-      id: todo.id,
-      completed: todo.completed,
-      title: todo.title,
+      ...todo,
       user: users.find(user => user.id === todo.userId).name,
     }));
     this.setState({
@@ -33,6 +31,7 @@ class App extends Component {
 
   sortTodos = (val) => {
     this.setState(prevState => ({
+      ...prevState.visibleTable,
       visibleTable: prevState.visibleTable.sort((a, b) => {
         switch (val) {
           case 'title':
@@ -49,7 +48,7 @@ class App extends Component {
   rendering = () => {
     const { loading } = this.state;
 
-    if (this.state.visibleTable === null) {
+    if (!this.state.visibleTable) {
       if (loading) {
         return <button className="ui loading primary button">Loading</button>;
       }
