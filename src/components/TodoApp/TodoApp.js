@@ -15,11 +15,6 @@ class TodoApp extends Component {
     this.changeSortingType = this.changeSortingType.bind(this);
   }
 
-  getTodosWithUsers = (todosList, usersList) => todosList.map(todo => ({
-    ...todo,
-    user: usersList.find(user => user.id === todo.userId),
-  }));
-
   getDatafromServer = async url => fetch(url)
     .then(response => response.json());
 
@@ -38,7 +33,10 @@ class TodoApp extends Component {
         this.getDatafromServer('https://jsonplaceholder.typicode.com/users'),
         this.getDatafromServer('https://jsonplaceholder.typicode.com/todos'),
       ]);
-      const todosWithUsers = this.getTodosWithUsers(todos, users);
+      const todosWithUsers = todos.map(todo => ({
+        ...todo,
+        user: users.find(user => user.id === todo.userId),
+      }));
       this.setState({ todos: todosWithUsers });
     } catch (e) {
       this.setState({ error: true });
