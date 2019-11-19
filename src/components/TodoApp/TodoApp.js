@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import TodoList from '../TodoList/TodoList';
+import SortingButtonGroup from '../SortingButtonGroup/SortingButtonGroup';
 
 class TodoApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: null,
       todos: null,
       isLoading: false,
       error: false,
@@ -38,7 +38,8 @@ class TodoApp extends Component {
         this.getDatafromServer('https://jsonplaceholder.typicode.com/users'),
         this.getDatafromServer('https://jsonplaceholder.typicode.com/todos'),
       ]);
-      this.setState({ users, todos });
+      const todosWithUsers = this.getTodosWithUsers(todos, users);
+      this.setState({ todos: todosWithUsers });
     } catch (e) {
       this.setState({ error: true });
     } finally {
@@ -48,10 +49,10 @@ class TodoApp extends Component {
 
   render() {
     const {
-      todos, users, isLoading, error, sortingType,
+      todos, isLoading, error, sortingType,
     } = this.state;
 
-    if (users === null || todos === null) {
+    if (todos === null) {
       return (
         <>
           {error ? <p>Opps...Try again later.</p> : null}
@@ -61,36 +62,14 @@ class TodoApp extends Component {
         </>
       );
     }
-    const todosWithUsers = this
-      .getTodosWithUsers(todos, users)
-      .sort((a, b) => {
-        if (a[sortingType] > b[sortingType]) { return 1; }
-        return -1;
-      });
+    const sortedTodos = this.state.todos.sort((a, b) => {
+      if (a[sortingType] > b[sortingType]) { return 1; }
+      return -1;
+    });
     return (
       <>
-        <button
-          type="button"
-          onClick={this.changeSortingType}
-          data-sorting-type="title"
-        >
-          Sort by title
-        </button>
-        <button
-          type="button"
-          onClick={this.changeSortingType}
-          data-sorting-type="user"
-        >
-          Sort by user
-        </button>
-        <button
-          type="button"
-          onClick={this.changeSortingType}
-          data-sorting-type="completed"
-        >
-          Sort by status
-        </button>
-        <TodoList todos={todosWithUsers} />
+        <SortingButtonGroup changeSortingType={this.changeSortingType} />
+        <TodoList todos={sortedTodos} />
       </>
     );
   }
