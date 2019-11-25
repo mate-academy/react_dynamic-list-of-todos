@@ -16,10 +16,16 @@ function getTodosWithUsers(todos, users) {
 }
 
 class App extends React.Component {
-  state = {
-    loading: false,
-    todosWithUsers: [],
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+      todosWithUsers: [],
+    };
+
+    this.sortByTitleLength = this.sortByTitleLength.bind(this);
+  }
 
   getDataFromServer = async(url) => {
     const response = await fetch(`${BaseUrl}${url}`);
@@ -35,7 +41,7 @@ class App extends React.Component {
     return getTodosWithUsers(todosandUser[0], todosandUser[1]);
   };
 
-  LoadTodos = async() => {
+  loadTodos = async() => {
     this.setState({
       loading: true,
     });
@@ -44,20 +50,41 @@ class App extends React.Component {
     });
   }
 
+  sortByTitleLength() {
+    console.log(this.state.todosWithUsers);
+    this.setState(prevState => ({
+      todosWithUsers: [...prevState.todosWithUsers].sort(
+        (a, b) => b.title.length - a.title.length
+      ),
+    }));
+  }
+
   render() {
     return (
       <>
         <div className="App">
           <h1>Dynamic list of todos</h1>
-          <button type="button" onClick={this.LoadTodos}>Download</button>
+          {(this.state.loading && this.state.todosWithUsers.length === 0)
+            ? 'loading...' : ''
+          }
+          {(!this.state.loading && this.state.todosWithUsers.length === 0)
+            ? <button type="button" onClick={this.loadTodos}>Download</button>
+            : ''
+          }
         </div>
-        <br />
-        {(this.state.loading && this.state.todosWithUsers.length === 0)
-          ? 'loading...' : ''
-        }
         {this.state.todosWithUsers.length === 0
           ? ''
-          : <TodoList todos={this.state.todosWithUsers} />}
+          : (
+            <>
+              <button
+                type="button"
+                onClick={this.sortByTitleLength}
+              >
+                sortByTitleLength
+              </button>
+              <TodoList todos={this.state.todosWithUsers} />
+            </>
+          )}
       </>
     );
   }
