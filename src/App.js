@@ -71,20 +71,20 @@ class App extends React.Component {
             ? <button type="button" onClick={this.loadTodos}>Download</button>
             : ''
           }
+          {this.state.todosWithUsers.length === 0
+            ? ''
+            : (
+              <>
+                <button
+                  type="button"
+                  onClick={this.sortByTitleLength}
+                >
+                  sortByTitleLength
+                </button>
+                <TodoList todos={this.state.todosWithUsers} />
+              </>
+            )}
         </div>
-        {this.state.todosWithUsers.length === 0
-          ? ''
-          : (
-            <>
-              <button
-                type="button"
-                onClick={this.sortByTitleLength}
-              >
-                sortByTitleLength
-              </button>
-              <TodoList todos={this.state.todosWithUsers} />
-            </>
-          )}
       </>
     );
   }
