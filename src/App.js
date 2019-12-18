@@ -1,9 +1,6 @@
 import React from 'react';
 import './App.css';
 
-// import todos from './api/todos';
-// import users from './api/users';
-
 import TodoList from './components/TodoList';
 
 const BaseUrl = 'https://jsonplaceholder.typicode.com/';
@@ -65,11 +62,10 @@ class App extends React.Component {
         <div className="App">
           <h1>Dynamic list of todos</h1>
           {(this.state.loading && this.state.todosWithUsers.length === 0)
-            ? 'loading...' : ''
+            && 'loading...'
           }
           {(!this.state.loading && this.state.todosWithUsers.length === 0)
-            ? <button type="button" onClick={this.loadTodos}>Download</button>
-            : ''
+            && <button type="button" onClick={this.loadTodos}>Download</button>
           }
           {this.state.todosWithUsers.length === 0
             ? ''
