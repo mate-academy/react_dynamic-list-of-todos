@@ -1,3 +1,26 @@
 .App {
   text-align: center;
 }
+
+.rowOfTasks {
+  width: 25%;
+}
+
+.head {
+  background-color: #8e8ee3;
+  font-weight: bold;
+  height: 15vh;
+}
+
+.row:nth-child(even) {
+  background-color: lightgray;
+}
+
+.row:nth-child(odd) {
+  background-color: lightgreen;
+}
+
+.sort-buttons {
+  display: flex;
+  justify-content: center;
+}
