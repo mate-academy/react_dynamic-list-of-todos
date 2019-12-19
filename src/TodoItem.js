@@ -18,5 +18,11 @@ const TodoItem = ({ todo }) => (
   </tr>
 );
 
-TodoItem.propTypes = { todo: PropTypes.string.isRequired };
+TodoItem.propTypes = { todo: PropTypes.shape({
+  userId: PropTypes.number,
+  id: PropTypes.number,
+  title: PropTypes.string,
+  completed: PropTypes.bool,
+  user: PropTypes.object,
+}).isRequired };
 export default TodoItem;

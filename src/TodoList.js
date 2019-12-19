@@ -1,138 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import TodoItem from './TodoItem';
 import { getTodos, getUsers } from './todosApi';
 
-class TodoList extends React.Component {
-  state = {
-    isLoading: false,
-    isShown: true,
-    defaultpreparedTodos: [],
-    preparedTodos: [],
-    todos: [],
-    users: [],
-  }
+const TodoList = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShown, setIsShown] = useState(true);
+  const [defaultpreparedTodos, setDefaultPreparedTodos] = useState([]);
+  const [preparedTodos, setPreparedTodos] = useState([]);
 
-    showPreparedTodos = async() => {
-      this.setState({
-        isLoading: true,
-      });
-      await this.loadAllData();
-      this.prepareData();
-    };
+  const showPreparedTodos = async() => {
+    setIsLoading(true);
 
-    loadAllData = async() => {
-      this.setState({
-        todos: await getTodos(),
-        users: await getUsers(),
-      });
-    }
+    const listOfTodos = await getTodos();
+    const listOfUsers = await getUsers();
+    const mergedTodos = listOfTodos.map((todo) => {
+      const user = listOfUsers.find(person => person.id === todo.userId);
 
-    prepareData = () => {
-      const { todos, users } = this.state;
+      return {
+        ...todo,
+        user,
+      };
+    });
 
-      const getPrepareTodos = () => todos.map((todo) => {
-        const user = users.find(person => person.id === todo.userId);
-
-        return {
-          ...todo,
-          user,
-        };
-      });
-
-      this.setState({
-        preparedTodos: getPrepareTodos(),
-        defaultpreparedTodos: getPrepareTodos(),
-        isLoading: false,
-        isShown: false,
-      });
-    }
-
-  sortByTitle = () => {
-    this.setState(prevState => ({
-      preparedTodos: [...prevState.defaultpreparedTodos]
-        .sort((a, b) => a.title.localeCompare(b.title)),
-    }));
+    setPreparedTodos(mergedTodos);
+    setDefaultPreparedTodos(mergedTodos);
+    setIsLoading(false);
+    setIsShown(false);
   };
 
-  sortByUser = () => {
-    this.setState(prevState => ({
-      preparedTodos: [...prevState.defaultpreparedTodos]
-        .sort((a, b) => a.user.name.localeCompare(b.user.name)),
-    }));
+  const sortByTitle = () => {
+    setPreparedTodos([...defaultpreparedTodos]
+      .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
-  sortByStatus = () => {
-    this.setState(prevState => ({
-      preparedTodos: [...prevState.defaultpreparedTodos]
-        .sort((a, b) => a.completed - b.completed),
-    }));
+  const sortByUser = () => {
+    setPreparedTodos([...defaultpreparedTodos]
+      .sort((a, b) => a.user.name.localeCompare(b.user.name)));
   };
 
-  sortById = () => {
-    this.setState(prevState => ({
-      preparedTodos: [...prevState.defaultpreparedTodos]
-        .sort((a, b) => a.id - b.id),
-    }));
+  const sortByStatus = () => {
+    setPreparedTodos([...defaultpreparedTodos]
+      .sort((a, b) => a.completed - b.completed));
   };
 
-  render() {
-    const { isShown, isLoading, preparedTodos } = this.state;
+  const sortById = () => {
+    setPreparedTodos([...defaultpreparedTodos]
+      .sort((a, b) => a.id - b.id));
+  };
+  const sortList = [
+    {
+      title: 'id', callback: sortById,
+    },
+    {
+      title: 'title', callback: sortByTitle,
+    },
+    {
+      title: 'status', callback: sortByStatus,
+    },
+    {
+      title: 'user', callback: sortByUser,
+    },
+  ];
 
-    const sortList = [
+  return (
+    <div className="App">
+      <h1>Dynamic list of todos</h1>
       {
-        title: 'id', callback: this.sortById,
-      },
-      {
-        title: 'title', callback: this.sortByTitle,
-      },
-      {
-        title: 'status', callback: this.sortByStatus,
-      },
-      {
-        title: 'user', callback: this.sortByUser,
-      },
-    ];
-
-    return (
-      <div className="App">
-        <h1>Dynamic list of todos</h1>
-        {
-          isShown ? (
-            <button
-              type="button"
-              onClick={() => {
-                this.showPreparedTodos();
-              }}
-            >
-              {isLoading ? 'Loading...' : 'Load'}
-            </button>
-          ) : (
-            <>
-              <table>
-                <thead>
-                  <tr>
-                    {sortList.map(sort => (
-                      <th
-                        onClick={sort.callback}
-                      >
-                        {sort.title}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {preparedTodos.map(todo => (
-                    <TodoItem todo={todo} />
+        isShown ? (
+          <button
+            type="button"
+            onClick={() => {
+              showPreparedTodos();
+            }}
+          >
+            {isLoading ? 'Loading...' : 'Load'}
+          </button>
+        ) : (
+          <>
+            <table>
+              <thead>
+                <tr>
+                  {sortList.map(sort => (
+                    <th
+                      onClick={sort.callback}
+                      key={sort.title}
+                    >
+                      {sort.title}
+                    </th>
                   ))}
-                </tbody>
+                </tr>
+              </thead>
+              <tbody>
+                {preparedTodos.map(todo => (
+                  <TodoItem
+                    todo={todo}
+                    key={todo.id}
+                  />
+                ))}
+              </tbody>
 
-              </table>
-            </>
-          )
-        }
-      </div>
-    );
-  }
-}
+            </table>
+          </>
+        )
+      }
+    </div>
+  );
+};
+
 export default TodoList;
