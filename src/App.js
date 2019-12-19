@@ -7,6 +7,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [loadedTodos, setLoadedTodos] = useState([]);
+  const [reverse, setReverse] = useState('');
+  const sortButtons = ['Sort by title', 'Sort by user', 'Sort By Status'];
 
   const handleLoading = async() => {
     setIsLoading(true);
@@ -27,25 +29,30 @@ function App() {
     return preparedTodos;
   };
 
-  const sortByTitle = () => {
-    const sortedTodos = loadedTodos
-      .sort((a, b) => (a.title.localeCompare(b.title)));
+  const sort = (index) => {
+    let sortedTodos = [];
 
-    setLoadedTodos([...sortedTodos]);
-  };
-
-  const sortByUser = () => {
-    const sortedTodos = loadedTodos
-      .sort((a, b) => (a.user.name.localeCompare(b.user.name)));
-
-    setLoadedTodos([...sortedTodos]);
-  };
-
-  const sortByStatus = () => {
-    const sortedTodos = loadedTodos
-      .sort((a, b) => (b.completed - a.completed));
-
-    setLoadedTodos([...sortedTodos]);
+    if (reverse === index) {
+      setLoadedTodos([...loadedTodos].reverse());
+    } else {
+      switch (index) {
+        case 0:
+          sortedTodos = loadedTodos
+            .sort((a, b) => (a.title.localeCompare(b.title)));
+          break;
+        case 1:
+          sortedTodos = loadedTodos
+            .sort((a, b) => (a.user.name.localeCompare(b.user.name)));
+          break;
+        case 2:
+          sortedTodos = loadedTodos
+            .sort((a, b) => (b.completed - a.completed));
+          break;
+        default:
+      }
+      setReverse(index);
+      setLoadedTodos([...sortedTodos]);
+    }
   };
 
   if (isLoading) {
@@ -69,27 +76,16 @@ function App() {
     : (
       <>
         <div className="button-block">
-          <button
-            type="button"
-            className="button"
-            onClick={sortByTitle}
-          >
-            Sort by title
-          </button>
-          <button
-            type="button"
-            className="button"
-            onClick={sortByUser}
-          >
-            Sort by user
-          </button>
-          <button
-            type="button"
-            className="button"
-            onClick={sortByStatus}
-          >
-            Sort by status
-          </button>
+          {sortButtons.map((button, i) => (
+            <button
+              type="button"
+              className="button"
+              onClick={() => sort(i)}
+              value={i}
+            >
+              {button}
+            </button>
+          ))}
         </div>
         <div className="App">
           <TodoList todos={loadedTodos} />
