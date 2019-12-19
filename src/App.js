@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.scss';
 
-import { getTodos } from './api';
+import { getTodosAndUsers } from './api';
 import TodoList from './TodoList';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
     setLoading(true);
 
     try {
-      const [usersFromServer, todosFromServer] = await getTodos();
+      const [usersFromServer, todosFromServer] = await getTodosAndUsers();
       const newTodos = todosFromServer.map(todo => ({
         ...todo,
         user: usersFromServer.find(user => user.id === todo.userId),
