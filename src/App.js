@@ -67,9 +67,8 @@ class App extends React.Component {
           {(!this.state.loading && this.state.todosWithUsers.length === 0)
             && <button type="button" onClick={this.loadTodos}>Download</button>
           }
-          {this.state.todosWithUsers.length === 0
-            ? ''
-            : (
+          {this.state.todosWithUsers.length !== 0
+            && (
               <>
                 <button
                   type="button"
@@ -79,7 +78,8 @@ class App extends React.Component {
                 </button>
                 <TodoList todos={this.state.todosWithUsers} />
               </>
-            )}
+            )
+          }
         </div>
       </>
     );
