@@ -12,7 +12,7 @@ const TodoItem = ({ todo: { user, id, title, completed } }) => (
         {completed ? 'completed' : 'not completed'}
       </span>
     </td>
-    <td style={{ color: '#cccc00' }}>
+    <td>
       <User
         user={user}
       />
