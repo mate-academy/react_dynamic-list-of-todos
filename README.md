@@ -2,7 +2,7 @@
 
 ## Demo link
 
-Add link here: `[DEMO LINK](https://OlehTereshchuk.github.io/react_dynamic-list-of-todos/)`
+Add link here: [DEMO LINK](https://OlehTereshchuk.github.io/react_dynamic-list-of-todos/)
 
 
 ## Task
