@@ -1,3 +1,60 @@
+body * {
+  outline: none;
+}
+
+body {
+  margin: 0;
+}
+
 .App {
   text-align: center;
+}
+
+.table {
+  margin: auto;
+  border: 3px solid #95cef0;
+  border-collapse: collapse;
+}
+
+.table__item,
+.table__heading {
+  padding: 5px;
+}
+
+.table__heading {
+  background-color: #95cef0;
+  transition: background-color 1s;
+}
+
+.table__heading:hover {
+  cursor: pointer;
+  background-color: #4f97f0;
+}
+
+.table__item {
+  border: 1px solid #95cef0;
+}
+
+.load {
+  width: 120px;
+  height: 80px;
+  margin: 100px auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 20px;
+  transition: background-color 1s;
+}
+
+.load--start {
+  background-color: #95cef0;
+}
+
+.load--start:hover {
+  cursor: pointer;
+  background-color: #4f97f0;
+}
+
+.loading-text {
+  font-size: 20px;
+  margin-top: 120px;
 }
