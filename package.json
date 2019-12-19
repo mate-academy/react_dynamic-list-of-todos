@@ -10,13 +10,11 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "^3.3.0"
   },
   "devDependencies": {
     "@mate-academy/eslint-config": "*",
     "@mate-academy/stylelint-config": "*",
-    "babel-eslint": "10.0.1",
-    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
