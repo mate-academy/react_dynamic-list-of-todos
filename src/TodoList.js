@@ -24,16 +24,19 @@ class TodoList extends React.Component {
         sortedField: sortingBy,
       }
       ));
-    } else if (sortingBy === 'completed') {
+    }
+
+    if (sortingBy === 'completed') {
       this.setState(prevState => ({
         todosList: [...prevState.todosList]
-          .sort((a, b) => Number(a.complete) - Number(b.complete)),
+          .sort((a, b) => (a[sortingBy].toString())
+            .localeCompare(b[sortingBy].toString())),
         sortedField: sortingBy,
       }
       ));
     }
 
-    if (sortedField === sortingBy) {
+    if ((sortedField === sortingBy)) {
       this.setState(prevState => ({
         todosList: [...prevState.todosList]
           .reverse(),
@@ -72,7 +75,7 @@ class TodoList extends React.Component {
             <tr>
               <th onClick={this.getSortedData}>Id</th>
               <th onClick={this.getSortedData}>Title</th>
-              <th onClick={this.getSortedData}>Comleted</th>
+              <th onClick={this.getSortedData}>Completed</th>
               <th onClick={this.getSortedData}>Name</th>
             </tr>
           </thead>
