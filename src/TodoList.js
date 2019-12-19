@@ -17,6 +17,22 @@ class TodoList extends React.Component {
     const sortingBy = event.target.valueOf().textContent.toLowerCase();
     const { sortedField } = this.state;
 
+    if (sortingBy === 'name') {
+      this.setState(prevState => ({
+        todosList: [...prevState.todosList]
+          .sort((a, b) => a.user.name.localeCompare(b.user.name)),
+        sortedField: sortingBy,
+      }
+      ));
+    } else if (sortingBy === 'completed') {
+      this.setState(prevState => ({
+        todosList: [...prevState.todosList]
+          .sort((a, b) => Number(a.complete) - Number(b.complete)),
+        sortedField: sortingBy,
+      }
+      ));
+    }
+
     if (sortedField === sortingBy) {
       this.setState(prevState => ({
         todosList: [...prevState.todosList]
@@ -46,6 +62,8 @@ class TodoList extends React.Component {
   render() {
     const { todosList } = this.state;
 
+    console.log(todosList.map(todo => todo.user.name));
+
     return (
       <div className="App">
         <h1 className="heading">Dynamic list of todos</h1>
@@ -54,8 +72,8 @@ class TodoList extends React.Component {
             <tr>
               <th onClick={this.getSortedData}>Id</th>
               <th onClick={this.getSortedData}>Title</th>
-              <th onClick={this.getSortedData}>Status</th>
-              <th onClick={this.getSortedData}>User</th>
+              <th onClick={this.getSortedData}>Comleted</th>
+              <th onClick={this.getSortedData}>Name</th>
             </tr>
           </thead>
           <tbody>

@@ -7,8 +7,7 @@ import { getUsers } from './api/users';
 
 class App extends React.Component {
   state = {
-    todos: [],
-    users: [],
+    data: [],
     isLoading: false,
     hasError: false,
   };
@@ -20,22 +19,22 @@ class App extends React.Component {
     });
 
     getTodos()
-      .then((todos) => {
-        this.setState({ todos });
+      .then((todosData) => {
+        getUsers().then((usersData) => {
+          this.setState({
+            data: todosData.map(todo => ({
+              ...todo,
+              user: usersData.find(user => user.id === todo.userId),
+            }
+            )),
+            isLoading: false,
+          });
+        });
       })
       .catch(() => {
-        this.setState({ hasError: true });
-      })
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
-
-    getUsers()
-      .then((users) => {
-        this.setState({ users });
-      })
-      .catch(() => {
-        this.setState({ hasError: true });
+        this.setState({
+          hasError: true,
+        });
       })
       .finally(() => {
         this.setState({ isLoading: false });
@@ -43,17 +42,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, users, isLoading, hasError } = this.state;
-
-    function getTodoWithUsers(ListOfTodo, ListOfUsers) {
-      return ListOfTodo.map(todo => (
-        {
-          ...todo,
-          user: ListOfUsers.find(user => user.id === todo.userId),
-        }));
-    }
-
-    const preparedTodos = getTodoWithUsers(todos, users);
+    const { data, isLoading, hasError } = this.state;
 
     if (isLoading) {
       return (
@@ -78,7 +67,7 @@ class App extends React.Component {
       );
     }
 
-    if ((todos.length === 0) || (users.length === 0)) {
+    if (data.length === 0) {
       return (
         <div className="App">
           <h1 className="heading">Dynamic list of todos</h1>
@@ -93,7 +82,7 @@ class App extends React.Component {
       );
     }
 
-    return <TodoList todos={preparedTodos} />;
+    return <TodoList todos={data} />;
   }
 }
 
