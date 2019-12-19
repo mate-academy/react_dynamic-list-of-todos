@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  background-color: aliceblue;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  text-align: center;
+}
+
+.button {
+  text-transform: uppercase;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 10px;
+  outline: none;
+  border: none;
+
+  &:enabled {
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #ffb3b3;
+    }
+
+    &:focus {
+      background-color: #fcc;
+    }
+  }
+
+  &_load {
+    width: 180px;
+    height: 70px;
+    margin-top: 40vh;
+    border-radius: 10px;
+    background-color: #324960;
+    color: white;
+
+    &:disabled {
+      background-color: lightgrey;
+    }
+  }
+
+  &_head {
+    width: 100%;
+    color: inherit;
+    background-color: inherit;
+  }
+}
+
+.table {
+  border-collapse: collapse;
+  width: 1050px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  margin: 20px auto;
+
+  &__heading {
+    color: #324960;
+    text-transform: uppercase;
+    margin-top: 40px;
+  }
+
+  &__cell {
+    padding: 10px;
+    font-size: 0.8em;
+  }
+
+  &__row:nth-child(even) {
+    background-color: #f8f8f8;
+  }
+
+  &__row:nth-child(odd) {
+    background-color: #fff;
+  }
+
+  &__head-cell {
+    color: #fff;
+    background: #324960;
+    padding: 0;
+  }
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 40vh;
+  font-size: 1.5em;
+}
