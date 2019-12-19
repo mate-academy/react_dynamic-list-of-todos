@@ -2,6 +2,10 @@ body * {
   outline: none;
 }
 
+body {
+  margin: 0;
+}
+
 .App {
   text-align: center;
 }
@@ -31,8 +35,7 @@ body * {
   border: 1px solid #95cef0;
 }
 
-.button--for-loading {
-  background-color: #95cef0;
+.load {
   width: 120px;
   height: 80px;
   margin: 100px auto;
@@ -42,14 +45,16 @@ body * {
   transition: background-color 1s;
 }
 
-.button--for-loading:hover {
+.load--start {
+  background-color: #95cef0;
+}
+
+.load--start:hover {
   cursor: pointer;
   background-color: #4f97f0;
 }
 
 .loading-text {
   font-size: 20px;
-  width: 120px;
-  height: 80px;
-  margin: 120px auto;
+  margin-top: 120px;
 }

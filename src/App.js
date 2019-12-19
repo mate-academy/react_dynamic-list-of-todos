@@ -18,33 +18,48 @@ let todos = [];
 const App = () => {
   const [isInitialized, setInitialized] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState(false);
 
   const loadTodosWithUsers = async() => {
-    setLoading(true);
+    try {
+      setError(false);
+      setLoading(true);
 
-    const todosList = await getData(todosURL);
-    const usersList = await getData(usersURL);
+      const todosList = await getData(todosURL);
+      const usersList = await getData(usersURL);
 
-    todos = [...getTodosWithUsers(todosList, usersList)];
+      todos = [...getTodosWithUsers(todosList, usersList)];
 
+      setInitialized(true);
+    } catch {
+      setError(true);
+    }
     setLoading(false);
-    setInitialized(true);
   };
 
   return (
     <div className="App">
-      {!isInitialized && !isLoading && (
+      {!isInitialized && !isLoading && !isError && (
         <button
           type="button"
-          className="button--for-loading"
+          className="load load--start"
           onClick={loadTodosWithUsers}
         >
           Load
         </button>
       )}
 
-      {isLoading && (
-        <p className="loading-text">Loading...</p>)}
+      {isLoading && !isError && (<p className="loading-text">Loading...</p>)}
+
+      {isError && (
+        <button
+          type="button"
+          className="load load--start"
+          onClick={loadTodosWithUsers}
+        >
+          Try again
+        </button>
+      )}
 
       {isInitialized && !isLoading && (
         <TodoList
