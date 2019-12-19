@@ -7,7 +7,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [loadedTodos, setLoadedTodos] = useState([]);
-  const [reverse, setReverse] = useState('');
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState(-1);
   const sortButtons = ['Sort by title', 'Sort by user', 'Sort By Status'];
 
   const handleLoading = async() => {
@@ -32,7 +32,7 @@ function App() {
   const sort = (index) => {
     let sortedTodos = [];
 
-    if (reverse === index) {
+    if (selectedButtonIndex === index) {
       setLoadedTodos([...loadedTodos].reverse());
     } else {
       switch (index) {
@@ -50,7 +50,7 @@ function App() {
           break;
         default:
       }
-      setReverse(index);
+      setSelectedButtonIndex(index);
       setLoadedTodos([...sortedTodos]);
     }
   };
@@ -79,7 +79,7 @@ function App() {
           {sortButtons.map((button, i) => (
             <button
               type="button"
-              className="button"
+              className={selectedButtonIndex === i ? 'button active' : 'button'}
               onClick={() => sort(i)}
               value={i}
             >
