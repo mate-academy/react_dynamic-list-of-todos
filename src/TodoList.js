@@ -71,7 +71,7 @@ class TodoList extends React.Component {
 
   sortById = () => {
     this.setState(prevState => ({
-      preparedTodos: [...prevState.preparedTodos]
+      preparedTodos: [...prevState.defaultpreparedTodos]
         .sort((a, b) => a.id - b.id),
     }));
   };
