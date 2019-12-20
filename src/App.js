@@ -1,15 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-import todos from './api/todos';
-import users from './api/users';
+import getTodos from './api/todosApi';
+import getUsers from './api/usersApi';
+import TodoList from './Components/todoList';
 
-function App() {
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  getUsers().then(setUsers);
+  getTodos().then(setTodos);
+
+  const todosWithUsers = todos.map(todo => (
+    {
+      ...todo,
+      user: users.find(person => person.id === todo.userId),
+    }));
+
   return (
-    <div className="App">
+    <section>
       <h1>Dynamic list of todos</h1>
-    </div>
+      <div className="App">
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Title</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <TodoList todos={todosWithUsers} />
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
-}
+};
 
 export default App;
