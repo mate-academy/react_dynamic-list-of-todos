@@ -11,7 +11,6 @@ const HEADERS = {
 
 const TodoList = ({ list }) => {
   const [todos, sortTodos] = useState(list);
-  const [isSorted, setSorted] = useState(false);
   const [activeField, setActiveField] = useState('id');
 
   const sortList = (field) => {
@@ -24,20 +23,15 @@ const TodoList = ({ list }) => {
       case 'object':
         callback = (a, b) => a[field].name.localeCompare(b[field].name);
         break;
-      case 'boolean':
-        callback = (a, b) => b[field] - a[field];
-        break;
       default:
         callback = (a, b) => a[field] - b[field];
     }
 
-    if (!isSorted || activeField !== field) {
+    if (activeField !== field) {
       sortTodos(todos.sort(callback));
-      setSorted(true);
       setActiveField(field);
     } else {
-      sortTodos(todos.reverse());
-      setSorted(false);
+      sortTodos([...todos].reverse());
     }
   };
 
