@@ -5,7 +5,7 @@ import { getTodos } from './api/todosApi';
 import { getUsers } from './api/usersApi';
 
 const App = () => {
-  const [todos, saveTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isLoaded, setLoaded] = useState(false);
   const [isSortedBy, setSortedBy] = useState('');
@@ -13,8 +13,9 @@ const App = () => {
   const loadTodos = async() => {
     setLoading(true);
 
-    const todosFromServer = await getTodos();
-    const usersFromServer = await getUsers();
+    const [todosFromServer, usersFromServer] = await Promise.all(
+      [getTodos(), getUsers()]
+    );
 
     const preparedTodos = todosFromServer.map((todo) => {
       const user = usersFromServer.find(item => item.id === todo.userId);
@@ -24,32 +25,32 @@ const App = () => {
       };
     });
 
-    saveTodos(preparedTodos);
+    setTodos(preparedTodos);
     setLoaded(true);
     setLoading(false);
   };
 
   const sortTodos = (sortBy) => {
     if (sortBy === isSortedBy) {
-      saveTodos([...todos].reverse());
+      setTodos([...todos].reverse());
     } else {
       switch (sortBy) {
         case 'title':
-          saveTodos([...todos]
+          setTodos([...todos]
             .sort((a, b) => a.title.localeCompare(b.title)));
           break;
         case 'user':
-          saveTodos([...todos]
+          setTodos([...todos]
             .sort((a, b) => a.user.name.localeCompare(b.user.name)));
           break;
         case 'status':
-          saveTodos([...todos]
+          setTodos([...todos]
             .sort((a, b) => b.completed.toString().localeCompare(
               a.completed.toString()
             )));
           break;
         default:
-          saveTodos([...todos]
+          setTodos([...todos]
             .sort((a, b) => a.id - b.id));
       }
       setSortedBy(sortBy);
