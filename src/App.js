@@ -46,14 +46,32 @@ class App extends React.Component {
             <button
               onClick={() => this.setState({
                 usersWithTodos: [...usersWithTodos]
-                  .sort((a, b) => (a.title).localeCompare(b.title)),
+                  .sort((a, b) => a.title.localeCompare(b.title))
               })}
               type="button"
             >
-              Sort
+              Sort title
+            </button>
+            <button
+              onClick={() => this.setState({
+                usersWithTodos: [...usersWithTodos]
+                .sort((a, b) => (a.user.username.localeCompare(b.user.username)))
+              })}
+              type="button"
+            >
+              Sort name
+            </button>
+            <button
+              onClick={() => this.setState({
+                usersWithTodos: [...usersWithTodos]
+                  .sort((a, b) => (b.id - a.id))
+              })}
+              type="button"
+            >
+              Sort id
             </button>
           </section>
-        ) : (
+        ) :(
           <button
             onClick={this.loadUsersAndTodos}
             type="button"
@@ -61,6 +79,7 @@ class App extends React.Component {
               Load
           </button>
         )}
+
         <TodoList todos={usersWithTodos} />
       </div>
     );
