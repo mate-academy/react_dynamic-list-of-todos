@@ -9,7 +9,7 @@ const TodoItem = ({ todo }) => (
       <td>{todo.title}</td>
       <User userData={todo.user} />
       <td
-        className={todo.completed ? ('completed') : ('not-completed')}
+        className={todo.completed ? 'completed' : 'not-completed'}
       >
         {todo.completed ? 'yes' : 'no'}
       </td>

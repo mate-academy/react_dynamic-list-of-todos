@@ -4,36 +4,30 @@ import { getTodos, getUsers } from './api';
 import TodoList from './Components/TodoList';
 
 const App = () => {
-  const [preparedTodos, setTodos] = useState([]);
+  const [preparedTodos, setPreparedTodos] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  const loadTodosAndUsers = () => {
+  const loadTodosAndUsers = async() => {
     setLoading(true);
 
-    getTodos().then((todos) => {
-      getUsers().then((users) => {
-        setTodos(todos.map(todo => ({
-          ...todo,
-          user: users.find(user => user.id === todo.userId),
-        })));
-        setLoading(false);
-      });
-    });
-  };
+    try {
+      const [todos, users] = await Promise.all([getTodos(), getUsers()]);
 
-  if (isLoading) {
-    return (
-      <div className="App">
-        <h1>Dynamic list of todos</h1>
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
+      setPreparedTodos(todos.map(todo => ({
+        ...todo,
+        user: users.find(user => user.id === todo.userId),
+      })));
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="App">
       <h1>Dynamic list of todos</h1>
-      {preparedTodos.length === 0 ? (
+      {isLoading && <h2>Loading...</h2>}
+      {!isLoading && (preparedTodos.length === 0 ? (
         <button
           type="button"
           onClick={loadTodosAndUsers}
@@ -44,7 +38,7 @@ const App = () => {
         <TodoList
           todos={preparedTodos}
         />
-      )}
+      ))}
     </div>
   );
 };
