@@ -8,6 +8,7 @@ const App = () => {
   const [todos, saveTodos] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isLoaded, setLoaded] = useState(false);
+  const [isSortedBy, setSortedBy] = useState('');
 
   const loadTodos = async() => {
     setLoading(true);
@@ -29,24 +30,29 @@ const App = () => {
   };
 
   const sortTodos = (sortBy) => {
-    switch (sortBy) {
-      case 'title':
-        saveTodos([...todos]
-          .sort((a, b) => a.title.localeCompare(b.title)));
-        break;
-      case 'user':
-        saveTodos([...todos]
-          .sort((a, b) => a.user.name.localeCompare(b.user.name)));
-        break;
-      case 'status':
-        saveTodos([...todos]
-          .sort((a, b) => b.completed.toString().localeCompare(
-            a.completed.toString()
-          )));
-        break;
-      default:
-        saveTodos([...todos]
-          .sort((a, b) => a.id - b.id));
+    if (sortBy === isSortedBy) {
+      saveTodos([...todos].reverse());
+    } else {
+      switch (sortBy) {
+        case 'title':
+          saveTodos([...todos]
+            .sort((a, b) => a.title.localeCompare(b.title)));
+          break;
+        case 'user':
+          saveTodos([...todos]
+            .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+          break;
+        case 'status':
+          saveTodos([...todos]
+            .sort((a, b) => b.completed.toString().localeCompare(
+              a.completed.toString()
+            )));
+          break;
+        default:
+          saveTodos([...todos]
+            .sort((a, b) => a.id - b.id));
+      }
+      setSortedBy(sortBy);
     }
   };
 
