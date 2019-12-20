@@ -1,3 +1,69 @@
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.todo {
+  padding: 5px 10px 0;
+  background-color: #000050;
+  width: 500px;
+  font-size: 18px;
+}
+
+.todo-list {
+  font-family: "Montserrat", sans-serif;
+  background-color: #000050;
+  color: #fcce33;
+}
+
+.todo__user,
+.todo__status {
+  text-align: right;
+}
+
+.todo__status {
+  color: white;
+}
+
+.todo__title {
+  font-size: 22px;
+}
+
+.todo__line {
+  background-color: #fcce33;
+  height: 5px;
+  border: 0;
+}
+
+.button {
+  background-color: #000050;
+  color: #fcce33;
+  font-size: 16px;
+  border: 0;
+  font-family: "Montserrat", sans-serif;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.button:hover {
+  background-color: #505050;
+  cursor: pointer;
+}
+
+.button-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start-page {
+  display: flex;
+  justify-content: center;
+}
+
+.active {
+  background-color: #505050;
 }
