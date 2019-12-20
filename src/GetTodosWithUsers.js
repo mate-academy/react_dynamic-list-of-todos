@@ -1,4 +1,4 @@
-function GetTodosWithUsers(todos, users) {
+function getTodosWithUsers(todos, users) {
   return (todos.map(todo => (
     {
       ...todo,
@@ -7,4 +7,4 @@ function GetTodosWithUsers(todos, users) {
   )));
 }
 
-export default GetTodosWithUsers;
+export default getTodosWithUsers;

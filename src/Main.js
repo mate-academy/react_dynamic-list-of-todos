@@ -1,50 +1,41 @@
 import React, { useState } from 'react';
 import TodoList from './TodoList';
-import todos from './api/todos';
-import users from './api/users';
-import GetTodosWithUsers from './GetTodosWithUsers';
+import getTodosWithUsers from './GetTodosWithUsers';
+import getURL from './api/getUrl';
 
 function Main() {
-  const [todoList, setTodoList] = useState([]);
-  const [usersList, setUsersList] = useState([]);
+  const [todosAndUser, setTodosAndUsers] = useState([[], []]);
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [sorByName, setSortByName] = useState(false);
-  const [sorByTitle, setSortByTitle] = useState(false);
-  const [sorByStatus, setSortByStatus] = useState(false);
+  const [sorts, setSorts] = useState([false, false, false]);
 
-  const preparedTodos = GetTodosWithUsers(todoList, usersList);
+  const preparedTodos
+  = getTodosWithUsers(todosAndUser[0], todosAndUser[1]);
 
   const LoadTodosAndUsers = async() => {
     setIsLoading(true);
 
-    const usersObject = await users();
+    const [usersObject, todosObject]
+    = await Promise.all([
+      getURL('https://jsonplaceholder.typicode.com/users'),
+      getURL('https://jsonplaceholder.typicode.com/todos'),
+    ]);
 
-    setUsersList(usersObject);
-
-    const todosObject = await todos();
-
-    setTodoList(todosObject);
+    setTodosAndUsers([todosObject, usersObject]);
     setIsLoading(false);
     setLoaded(true);
   };
 
   const sortByUsersName = () => {
-    setSortByName(true);
-    setSortByStatus(false);
-    setSortByTitle(false);
+    setSorts([true, false, false]);
   };
 
   const sortByTitle = () => {
-    setSortByName(false);
-    setSortByStatus(false);
-    setSortByTitle(true);
+    setSorts([false, true, false]);
   };
 
   const sortByStatus = () => {
-    setSortByName(false);
-    setSortByStatus(true);
-    setSortByTitle(false);
+    setSorts([false, false, true]);
   };
 
   if (isLoading === true) {
@@ -65,30 +56,22 @@ function Main() {
     );
   }
 
-  if (sorByName) {
+  if (sorts[0]) {
     preparedTodos.sort((itemA, itemB) => (
       itemA.user.name.localeCompare(itemB.user.name)
     ));
   }
 
-  if (sorByTitle) {
+  if (sorts[1]) {
     preparedTodos.sort((itemA, itemB) => (
       itemA.title.localeCompare(itemB.title)
     ));
   }
 
-  if (sorByStatus) {
-    preparedTodos.sort((itemA, itemB) => {
-      if (itemA.completed < itemB.completed) {
-        return -1;
-      }
-
-      if (itemA.completed > itemB.completed) {
-        return 1;
-      }
-
-      return 0;
-    });
+  if (sorts[2]) {
+    preparedTodos.sort((itemA, itemB) => (
+      itemA.completed - itemB.completed
+    ));
   }
 
   return (
