@@ -5,8 +5,13 @@ import TodoItem from './TodoItem';
 const TodoList = ({ getTodos, getUsers }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [isLoading, setLoading] = useState(false);
+<<<<<<< HEAD
   const [todosData, saveTodosData] = useState([]);
   const [usersData, saveUsersData] = useState([]);
+=======
+  const [todosData, setTodosData] = useState([]);
+  const [usersData, saveUsers] = useState([]);
+>>>>>>> 01e74b9114f439caf69dacca396572b7fb8d23b6
 
   const loadTodos = async() => {
     setLoading(true);
