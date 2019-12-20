@@ -5,21 +5,20 @@ import TodoItem from './TodoItem';
 const TodoList = ({ getTodos, getUsers }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [todosData, saveTodos] = useState([]);
-  const [usersData, saveUsers] = useState([]);
+  const [todosData, saveTodosData] = useState([]);
+  const [usersData, saveUsersData] = useState([]);
 
-  const loadTodos = () => {
+  const loadTodos = async() => {
     setLoading(true);
 
-    setTimeout(async() => {
-      const todos = await getTodos();
-      const users = await getUsers();
+    const [todos, users] = await Promise.all(
+      [getTodos(), getUsers()]
+    );
 
-      saveTodos(todos);
-      saveUsers(users);
-      setLoading(false);
-      setLoaded(true);
-    }, 500);
+    saveTodosData(todos);
+    saveUsersData(users);
+    setLoading(false);
+    setLoaded(true);
   };
 
   const todosWithUsers = todosData.map((todo) => {
@@ -48,7 +47,7 @@ const TodoList = ({ getTodos, getUsers }) => {
       sortData.reverse();
     }
 
-    saveTodos(sortData);
+    saveTodosData(sortData);
   };
 
   if (isLoading) {
