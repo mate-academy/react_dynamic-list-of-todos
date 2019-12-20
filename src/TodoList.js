@@ -2,14 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import User from './User';
 
-const TodoList = ({ todos }) => (
+const TodoList = ({ todos, sortTodos }) => (
   <table>
     <thead>
       <tr>
-        <th>#id</th>
-        <th>user name</th>
-        <th>what need to be done</th>
-        <th>completed or no</th>
+        <th
+          onClick={() => sortTodos('id')}
+        >
+          #id
+        </th>
+        <th
+          onClick={() => sortTodos('user')}
+        >
+          user name
+        </th>
+        <th
+          onClick={() => sortTodos('title')}
+        >
+          what need to be done
+        </th>
+        <th
+          onClick={() => sortTodos('completed')}
+        >
+          completed or no
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +41,9 @@ const TodoList = ({ todos }) => (
   </table>
 );
 
-TodoList.propTypes = { todos: PropTypes.arrayOf(PropTypes.object).isRequired };
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortTodos: PropTypes.func.isRequired,
+};
 
 export default TodoList;

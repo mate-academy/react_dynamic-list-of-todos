@@ -22,8 +22,15 @@ th {
 
 th {
   background: #e5dcdc;
+  cursor: pointer;
+}
+
+th:hover {
+  color: red;
 }
 
 tr:hover {
   background: #e5dcdc;
 }
+
+
