@@ -69,18 +69,3 @@ class App extends React.Component {
 
 export default App;
 
-/* state = {
-    users: [],
-    todos: []
-  }
-
-  render() {
-    const { users, todos } = this.state;
-    const getTodosWithUsers = (todosArr, usersArr) => (
-      todosArr.map((todo) => {
-        const user = usersArr.find(person => person.id === todo.userId);
-
-        return { ...todo, user };
-      })
-    );
-    const preparedTodos = getTodosWithUsers(); */
