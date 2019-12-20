@@ -11,7 +11,7 @@ class App extends React.Component {
     isStart: false,
   }
 
-  loadUsersAndTodos = async() => {
+  loadUsersAndTodos = async () => {
     this.setState({
       isLoading: true,
       isStart: true,
@@ -55,7 +55,7 @@ class App extends React.Component {
             <button
               onClick={() => this.setState({
                 usersWithTodos: [...usersWithTodos]
-                .sort((a, b) => (a.user.username.localeCompare(b.user.username)))
+                  .sort((a, b) => (a.user.username.localeCompare(b.user.username)))
               })}
               type="button"
             >
@@ -71,14 +71,14 @@ class App extends React.Component {
               Sort id
             </button>
           </section>
-        ) :(
-          <button
-            onClick={this.loadUsersAndTodos}
-            type="button"
-          >
+        ) : (
+            <button
+              onClick={this.loadUsersAndTodos}
+              type="button"
+            >
               Load
           </button>
-        )}
+          )}
 
         <TodoList todos={usersWithTodos} />
       </div>
