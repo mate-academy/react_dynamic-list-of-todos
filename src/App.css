@@ -11,6 +11,7 @@ th {
   color: white;
   background-color: navy;
   padding: 5px;
+  cursor: pointer;
 }
 
 td {
@@ -38,9 +39,4 @@ button:hover {
   height: 40px;
   background-color: rgb(167, 190, 248);
   cursor: pointer;
-}
-
-a {
-  color: white;
-  text-decoration: none;
 }

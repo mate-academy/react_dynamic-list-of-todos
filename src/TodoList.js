@@ -6,37 +6,17 @@ const TodoList = ({ todos, sortTodos }) => (
   <table>
     <tbody>
       <tr>
-        <th>
-          <a
-            href="#/"
-            onClick={() => sortTodos('id')}
-          >
-ID
-          </a>
+        <th onClick={() => sortTodos('id')}>
+          ID
         </th>
-        <th>
-          <a
-            href="#/"
-            onClick={() => sortTodos('title')}
-          >
-Title
-          </a>
+        <th onClick={() => sortTodos('title')}>
+          Title
         </th>
-        <th>
-          <a
-            href="#/"
-            onClick={() => sortTodos('user')}
-          >
-User
-          </a>
+        <th onClick={() => sortTodos('user')}>
+          User
         </th>
-        <th>
-          <a
-            href="#/"
-            onClick={() => sortTodos('status')}
-          >
-Status
-          </a>
+        <th onClick={() => sortTodos('status')}>
+          Status
         </th>
       </tr>
       {todos.map(todo => <TodoItem todo={todo} key={todo.id} />)}
