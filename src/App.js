@@ -7,7 +7,7 @@ const TODOS_URL = 'https://jsonplaceholder.typicode.com/todos';
 const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
 
 const App = () => {
-  const [combinedData, setCombinedData] = useState([]);
+  const [combinedPosts, setCombinedPosts] = useState([]);
   const [isLoaded, setLoaded] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
@@ -24,7 +24,7 @@ const App = () => {
         user: usersData.find(user => user.id === todo.userId),
       }));
 
-      setCombinedData(allData);
+      setCombinedPosts(allData);
       setLoading(false);
       setLoaded(true);
     } catch (e) {
@@ -38,14 +38,10 @@ const App = () => {
       <h1>Dynamic list of todos</h1>
 
       {isLoaded ? (
-        <TodoList list={combinedData} />
+        <TodoList list={combinedPosts} />
       ) : (
         <>
-          {isError ? (
-            <h2>Error occured!!!</h2>
-          ) : (
-            <h2>No TodoList yet!</h2>
-          )}
+          <h2>{isError ? 'Error occured!!!' : 'No TodoList yet!'}</h2>
 
           <button
             className="load-btn"
