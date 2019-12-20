@@ -18,19 +18,19 @@ class App extends React.Component {
       hasError: false,
     });
 
-    getTodos()
-      .then((todosData) => {
-        getUsers().then((usersData) => {
-          this.setState({
-            data: todosData.map(todo => ({
-              ...todo,
-              user: usersData.find(user => user.id === todo.userId),
-            }
-            )),
-            isLoading: false,
-          });
-        });
-      })
+    const dataTodos = getTodos();
+    const dataUsers = getUsers();
+
+    Promise.all([dataTodos, dataUsers]).then(([listOfTodos, listOfUsers]) => {
+      this.setState({
+        data: listOfTodos.map(todo => ({
+          ...todo,
+          user: listOfUsers.find(user => user.id === todo.userId),
+        }
+        )),
+        isLoading: false,
+      });
+    })
       .catch(() => {
         this.setState({
           hasError: true,

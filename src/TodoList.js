@@ -17,25 +17,6 @@ class TodoList extends React.Component {
     const sortingBy = event.target.valueOf().textContent.toLowerCase();
     const { sortedField } = this.state;
 
-    if (sortingBy === 'name') {
-      this.setState(prevState => ({
-        todosList: [...prevState.todosList]
-          .sort((a, b) => a.user.name.localeCompare(b.user.name)),
-        sortedField: sortingBy,
-      }
-      ));
-    }
-
-    if (sortingBy === 'completed') {
-      this.setState(prevState => ({
-        todosList: [...prevState.todosList]
-          .sort((a, b) => (a[sortingBy].toString())
-            .localeCompare(b[sortingBy].toString())),
-        sortedField: sortingBy,
-      }
-      ));
-    }
-
     if ((sortedField === sortingBy)) {
       this.setState(prevState => ({
         todosList: [...prevState.todosList]
@@ -53,6 +34,15 @@ class TodoList extends React.Component {
         ));
       }
 
+      if (sortingBy === 'name') {
+        this.setState(prevState => ({
+          todosList: [...prevState.todosList]
+            .sort((a, b) => a.user.name.localeCompare(b.user.name)),
+          sortedField: sortingBy,
+        }
+        ));
+      }
+
       this.setState(prevState => ({
         todosList: [...prevState.todosList]
           .sort((a, b) => a[sortingBy] - b[sortingBy]),
@@ -64,8 +54,6 @@ class TodoList extends React.Component {
 
   render() {
     const { todosList } = this.state;
-
-    console.log(todosList.map(todo => todo.user.name));
 
     return (
       <div className="App">
