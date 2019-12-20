@@ -1,3 +1,39 @@
 .App {
   text-align: center;
 }
+
+.table {
+  margin: auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.tbody {
+  background-color: lavenderblush;
+}
+
+.td:hover {
+  background-color: lightcoral;
+  cursor: pointer;
+}
+
+.title {
+  color: rgb(77, 13, 13);
+  font-size: 24px;
+}
+
+button {
+  border-radius: 50%;
+  width: 100px;
+  height: 50px;
+  border: none;
+  font-family: cursive;
+  background-color: antiquewhite;
+  outline: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: lightcoral;
+  cursor: pointer;
+}
