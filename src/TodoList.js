@@ -8,12 +8,14 @@ const TodoList = () => {
   const [isShown, setIsShown] = useState(true);
   const [defaultpreparedTodos, setDefaultPreparedTodos] = useState([]);
   const [preparedTodos, setPreparedTodos] = useState([]);
+  const [isSorting, setIsSorting] = useState('id');
 
   const showPreparedTodos = async() => {
     setIsLoading(true);
 
-    const listOfTodos = await getTodos();
-    const listOfUsers = await getUsers();
+    const [listOfTodos, listOfUsers] = await Promise
+      .all([getTodos(), getUsers()]);
+
     const mergedTodos = listOfTodos.map((todo) => {
       const user = listOfUsers.find(person => person.id === todo.userId);
 
@@ -29,24 +31,52 @@ const TodoList = () => {
     setIsShown(false);
   };
 
-  const sortByTitle = () => {
-    setPreparedTodos([...defaultpreparedTodos]
-      .sort((a, b) => a.title.localeCompare(b.title)));
+  const sortByTitle = (title) => {
+    if (isSorting !== title) {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => a.title.localeCompare(b.title)));
+      setIsSorting(title);
+    } else {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => b.title.localeCompare(a.title)));
+      setIsSorting('');
+    }
   };
 
-  const sortByUser = () => {
-    setPreparedTodos([...defaultpreparedTodos]
-      .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+  const sortByUser = (title) => {
+    if (isSorting !== title) {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+      setIsSorting(title);
+    } else {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => b.user.name.localeCompare(a.user.name)));
+      setIsSorting();
+    }
   };
 
-  const sortByStatus = () => {
-    setPreparedTodos([...defaultpreparedTodos]
-      .sort((a, b) => a.completed - b.completed));
+  const sortByStatus = (title) => {
+    if (isSorting !== title) {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => a.completed - b.completed));
+      setIsSorting(title);
+    } else {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => b.completed - a.completed));
+      setIsSorting();
+    }
   };
 
-  const sortById = () => {
-    setPreparedTodos([...defaultpreparedTodos]
-      .sort((a, b) => a.id - b.id));
+  const sortById = (title) => {
+    if (isSorting !== title) {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => a.id - b.id));
+      setIsSorting(title);
+    } else {
+      setPreparedTodos([...defaultpreparedTodos]
+        .sort((a, b) => b.id - a.id));
+      setIsSorting();
+    }
   };
   const sortList = [
     {
@@ -83,7 +113,7 @@ const TodoList = () => {
                 <tr>
                   {sortList.map(sort => (
                     <th
-                      onClick={sort.callback}
+                      onClick={() => sort.callback(sort.title)}
                       key={sort.title}
                     >
                       {sort.title}
