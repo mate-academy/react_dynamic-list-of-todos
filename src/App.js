@@ -37,21 +37,21 @@ function App() {
     } else {
       switch (index) {
         case 0:
-          sortedTodos = loadedTodos
+          sortedTodos = [...loadedTodos]
             .sort((a, b) => (a.title.localeCompare(b.title)));
           break;
         case 1:
-          sortedTodos = loadedTodos
+          sortedTodos = [...loadedTodos]
             .sort((a, b) => (a.user.name.localeCompare(b.user.name)));
           break;
         case 2:
-          sortedTodos = loadedTodos
+          sortedTodos = [...loadedTodos]
             .sort((a, b) => (b.completed - a.completed));
           break;
         default:
       }
       setSelectedButtonIndex(index);
-      setLoadedTodos([...sortedTodos]);
+      setLoadedTodos(sortedTodos);
     }
   };
 
