@@ -5,7 +5,7 @@ import TodoItem from './TodoItem';
 const TodoList = ({ getTodos, getUsers }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [todosData, saveTodos] = useState([]);
+  const [todosData, setTodosData] = useState([]);
   const [usersData, saveUsers] = useState([]);
 
   const loadTodos = () => {
