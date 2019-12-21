@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Todo from './Todo';
 
 const TodoList = (
-  { usersAndTodosArr, sortByTitle, sortByName, sortByProssecc }
+  { usersAndTodosArr, sortByTitle, sortByName, sortByProgress }
 ) => (
   <section>
     <button
@@ -20,9 +20,9 @@ const TodoList = (
     </button>
     <button
       type="button"
-      onClick={sortByProssecc}
+      onClick={sortByProgress}
     >
-        Sort by Prossecc
+        Sort by Progress
     </button>
     <ul>
       <Todo usersAndTodosArr={usersAndTodosArr} />
@@ -34,7 +34,7 @@ TodoList.propTypes = {
   usersAndTodosArr: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortByTitle: PropTypes.func.isRequired,
   sortByName: PropTypes.func.isRequired,
-  sortByProssecc: PropTypes.func.isRequired,
+  sortByProgress: PropTypes.func.isRequired,
 };
 
 export default TodoList;

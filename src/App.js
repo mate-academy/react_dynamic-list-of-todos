@@ -10,12 +10,15 @@ const App = () => {
   const [usersAndTodosArr, saveTodos] = useState([]);
   const [visibleContent, toggleState] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [reverseTitle, setReverseTitle] = useState(true);
+  const [reverseName, setReverseName] = useState(true);
+  const [reverseProgress, setReverseProgress] = useState(true);
 
   const loadAll = async() => {
     setLoading(true);
 
-    const todosArr = await getDataFromServer(urlTodos);
-    const usersArr = await getDataFromServer(urlUser);
+    const [todosArr, usersArr] = await
+    Promise.all([getDataFromServer(urlTodos), getDataFromServer(urlUser)]);
 
     const usersAndTodos = todosArr.map(todo => ({
       ...todo,
@@ -27,25 +30,51 @@ const App = () => {
   };
 
   const sortByTitle = () => {
-    const sortTitle = [...usersAndTodosArr]
-      .sort((a, b) => a.title.localeCompare(b.title));
+    if (!reverseTitle) {
+      const sortTitle = [...usersAndTodosArr].reverse();
 
-    saveTodos(sortTitle);
+      saveTodos(sortTitle);
+    }
+
+    if (reverseTitle) {
+      const sortTitle = [...usersAndTodosArr]
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+      saveTodos(sortTitle);
+      setReverseTitle(false);
+    }
   };
 
   const sortByName = () => {
-    const sortTitle = [...usersAndTodosArr]
-      .sort((a, b) => a.user.name.localeCompare(b.user.name));
+    if (!reverseName) {
+      const sortTitle = [...usersAndTodosArr].reverse();
 
-    saveTodos(sortTitle);
+      saveTodos(sortTitle);
+    }
+
+    if (reverseName) {
+      const sortTitle = [...usersAndTodosArr]
+        .sort((a, b) => a.user.name.localeCompare(b.user.name));
+
+      saveTodos(sortTitle);
+      setReverseName(false);
+    }
   };
 
-  const sortByProssecc = () => {
-    const sortTitle = [...usersAndTodosArr]
-      .sort((a, b) => a.completed - b.completed);
+  const sortByProgress = () => {
+    if (!reverseProgress) {
+      const sortTitle = [...usersAndTodosArr].reverse();
 
-    saveTodos(sortTitle);
-    console.log(sortTitle);
+      saveTodos(sortTitle);
+    }
+
+    if (reverseProgress) {
+      const sortTitle = [...usersAndTodosArr]
+        .sort((a, b) => a.completed - b.completed);
+
+      saveTodos(sortTitle);
+      setReverseProgress(false);
+    }
   };
 
   return (
@@ -61,7 +90,7 @@ const App = () => {
             usersAndTodosArr={usersAndTodosArr}
             sortByTitle={sortByTitle}
             sortByName={sortByName}
-            sortByProssecc={sortByProssecc}
+            sortByProgress={sortByProgress}
           />
         )
         }

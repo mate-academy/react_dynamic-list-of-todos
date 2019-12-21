@@ -13,7 +13,7 @@ const Todo = ({ usersAndTodosArr }) => (
       </h3>
       <h3>
         {`Todo status: `}
-        {todo.completed ? 'Done' : 'In prossecc'}
+        {todo.completed ? 'Done' : 'In progress'}
       </h3>
     </li>
   ))
