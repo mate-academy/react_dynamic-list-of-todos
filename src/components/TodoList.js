@@ -3,19 +3,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-function TodoList(props) {
+function TodoList(
+  {
+    todos, sortByTitleLength, sortByStatus, sortByMail,
+  }
+) {
   return (
     <table align="center">
       <thead>
         <tr>
-          <th>title</th>
-          <th>completed</th>
-          <th>email</th>
+          <th>
+            <button type="button" onClick={sortByTitleLength}>Title</button>
+          </th>
+          <th>
+            <button type="button" onClick={sortByStatus}>completed</button>
+          </th>
+          <th>
+            <button type="button" onClick={sortByMail}>email</button>
+          </th>
         </tr>
       </thead>
       <tbody>
         {
-          props.todos.map(item => <TodoItem todo={item} key={item.id} />)
+          todos.map(item => <TodoItem todo={item} key={item.id} />)
         }
       </tbody>
     </table>
@@ -24,6 +34,9 @@ function TodoList(props) {
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortByTitleLength: PropTypes.func.isRequired,
+  sortByStatus: PropTypes.func.isRequired,
+  sortByMail: PropTypes.func.isRequired,
 };
 
 export default TodoList;

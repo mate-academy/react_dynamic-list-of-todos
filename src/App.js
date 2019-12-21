@@ -20,8 +20,6 @@ class App extends React.Component {
       loading: false,
       todosWithUsers: [],
     };
-
-    this.sortByTitleLength = this.sortByTitleLength.bind(this);
   }
 
   getDataFromServer = async(url) => {
@@ -47,8 +45,15 @@ class App extends React.Component {
     });
   }
 
-  sortByTitleLength() {
-    console.log(this.state.todosWithUsers);
+  sortByStatus = () => {
+    this.setState(prevState => ({
+      todosWithUsers: [...prevState.todosWithUsers].sort(
+        (a, b) => b.completed - a.completed
+      ),
+    }));
+  }
+
+  sortByTitleLength = () => {
     this.setState(prevState => ({
       todosWithUsers: [...prevState.todosWithUsers].sort(
         (a, b) => b.title.length - a.title.length
@@ -56,28 +61,35 @@ class App extends React.Component {
     }));
   }
 
+  sortByMail = () => {
+    this.setState(prevState => ({
+      todosWithUsers: [...prevState.todosWithUsers].sort(
+        (a, b) => b.user.email.localeCompare(a.user.email)
+      ),
+    }));
+  }
+
   render() {
+    const { todosWithUsers, loading } = this.state;
+
     return (
       <>
         <div className="App">
           <h1>Dynamic list of todos</h1>
-          {(this.state.loading && this.state.todosWithUsers.length === 0)
+          {(loading && todosWithUsers.length === 0)
             && 'loading...'
           }
-          {(!this.state.loading && this.state.todosWithUsers.length === 0)
+          {(!loading && todosWithUsers.length === 0)
             && <button type="button" onClick={this.loadTodos}>Download</button>
           }
-          {this.state.todosWithUsers.length !== 0
+          {todosWithUsers.length !== 0
             && (
-              <>
-                <button
-                  type="button"
-                  onClick={this.sortByTitleLength}
-                >
-                  sortByTitleLength
-                </button>
-                <TodoList todos={this.state.todosWithUsers} />
-              </>
+              <TodoList
+                todos={todosWithUsers}
+                sortByTitleLength={this.sortByTitleLength}
+                sortByStatus={this.sortByStatus}
+                sortByMail={this.sortByMail}
+              />
             )
           }
         </div>
