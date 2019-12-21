@@ -6,8 +6,7 @@ import TodoList from './TodoList';
 
 const App = () => {
   const TodosUsers = async() => {
-    const todos = await getTodos();
-    const users = await getUsers();
+    const [todos, users] = await Promise.all([getTodos(), getUsers()]);
 
     return todos.map(todo => ({
       ...todo,
