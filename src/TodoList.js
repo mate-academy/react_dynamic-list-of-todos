@@ -6,7 +6,7 @@ const TodoList = ({ getTodos }) => {
   const [todos, setTodos] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [sortedColumn, setSortedColumn] = useState('');
+  const [sortedColumn, setSortedColumn] = useState('id');
   const [error, setError] = useState(false);
 
   const loadTodos = async() => {
@@ -26,7 +26,7 @@ const TodoList = ({ getTodos }) => {
 
   const sortByTitle = (title) => {
     if (sortedColumn !== title) {
-      setTodos([...todos].sort((s, b) => s.title.localeCompare(b.title)));
+      setTodos([...todos].sort((a, b) => a.title.localeCompare(b.title)));
       setSortedColumn(title);
     } else {
       setTodos([...todos].sort((a, b) => b.title.localeCompare(a.title)));
@@ -46,10 +46,10 @@ const TodoList = ({ getTodos }) => {
 
   const sortById = (id) => {
     if (sortedColumn !== id) {
-      setTodos([...todos].sort((a, b) => a.id - b.id));
+      setTodos([...todos].sort((a, b) => b.id - a.id));
       setSortedColumn(id);
     } else {
-      setTodos([...todos].sort((a, b) => b.id - a.id));
+      setTodos([...todos].sort((a, b) => a.id - b.id));
       setSortedColumn('');
     }
   };
