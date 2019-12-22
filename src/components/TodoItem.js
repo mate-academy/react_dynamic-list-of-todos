@@ -23,5 +23,10 @@ function TodoItem({ todo }) {
 export default TodoItem;
 
 TodoItem.propTypes = {
-  todo: PropTypes.arrayOf(PropTypes.any).isRequired,
+  todo: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+    user: PropTypes.objectOf(PropTypes.any),
+  }).isRequired,
 };

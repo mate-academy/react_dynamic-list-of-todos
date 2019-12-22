@@ -14,6 +14,7 @@ function User({ user }) {
 export default User;
 
 User.propTypes = {
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  name: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
 };

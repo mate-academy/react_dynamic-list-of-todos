@@ -1,41 +1,66 @@
 import React, { useState } from 'react';
-import TodoList from './TodoList';
-import './App.css';
+import TodoList from './components/TodoList';
+import './css/App.css';
 
-const USERS = 'https://jsonplaceholder.typicode.com/users';
-const TODOS = 'https://jsonplaceholder.typicode.com/todos';
+const SORT_TYPE = {
+  sortById: 'TODOS ID',
+  sortByTitle: 'TITLE',
+  sortByUsersName: 'USER NAME',
+  sortByStatus: 'STATUS',
+};
 
 function App() {
   const initialState = {
-    isClicked: false,
-    isActiveSortBtn: false,
+    isClickedLoadTodos: false,
+    isActiveSortBtn: {
+      clickedSortBtn: false,
+      sortValue: '',
+    },
   };
 
   const [state, setState] = useState(initialState);
 
   const getListTodos = () => {
-    if (!state.isClicked) {
+    if (!state.isClickedLoadTodos) {
       setState(prevState => ({
         ...prevState,
-        isClicked: true,
+        isClickedLoadTodos: true,
       }));
     }
   };
 
-  const handleSort = () => {
+  const handleSort = (idx, item) => {
     setState(prevState => ({
       ...prevState,
-      isActiveSortBtn: !prevState.isActiveSortBtn,
+      isActiveSortBtn: {
+        clickedSortBtn: isActiveSortBtn.sortValue === item
+          ? !isActiveSortBtn.clickedSortBtn
+          : true,
+        sortValue: item,
+      },
     }));
   };
 
-  const { isActiveSortBtn } = state;
+  const { isActiveSortBtn, isClickedLoadTodos } = state;
+  const { clickedSortBtn, sortValue } = isActiveSortBtn;
+
+  const activeIconBtn = (button) => {
+    if (sortValue === button && clickedSortBtn) {
+      return 'arrow_drop_down';
+    }
+
+    if (sortValue === button && !clickedSortBtn) {
+      return 'arrow_drop_up';
+    }
+
+    return 'sort_by_alpha';
+  };
 
   return (
     <div className="App">
 
       <h1 className="nav">Dynamic list of todos</h1>
-      {!state.isClicked && (
+      {!isClickedLoadTodos && (
         <button
           className="waves-effect waves-light btn-large"
           type="button"
@@ -49,33 +74,33 @@ function App() {
       )
       }
 
-      {state.isClicked
+      {isClickedLoadTodos
       && (
         <table className="highlight responsive-table centered">
           <thead>
-            <tr>
-              <th>TODOS ID</th>
-              <th>TITLE</th>
-              <th>USER NAME</th>
-              <th>
-                <button
-                  onClick={handleSort}
-                  className="waves-effect waves-light btn"
-                  type="button"
-                >
-              Sort by STATUS
-                  <i className="material-icons right">
-                    {isActiveSortBtn ? 'arrow_drop_up' : 'arrow_drop_down'}
-                  </i>
-                </button>
 
-              </th>
+            <tr>
+              {Object.values(SORT_TYPE).map((button, i) => (
+                <th key={button}>
+                  <button
+                    onClick={() => handleSort(i, button)}
+                    className="waves-effect waves-light btn"
+                    type="button"
+                  >
+
+                    {button}
+                    <i className="material-icons right">
+                      {activeIconBtn(button)}
+                    </i>
+                  </button>
+                </th>
+              ))}
+
             </tr>
           </thead>
           <TodoList
-            urlUsers={USERS}
-            urlTodos={TODOS}
-            isActiveSortBtn={isActiveSortBtn}
+            ActiveSortBtn={isActiveSortBtn}
+            filterType={SORT_TYPE}
           />
 
         </table>
