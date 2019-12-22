@@ -46,10 +46,10 @@ const TodoList = ({ getTodos }) => {
 
   const sortById = (id) => {
     if (sortedColumn !== id) {
-      setTodos([...todos].sort((a, b) => b.id - a.id));
+      setTodos([...todos].sort((a, b) => a.id - b.id));
       setSortedColumn(id);
     } else {
-      setTodos([...todos].sort((a, b) => a.id - b.id));
+      setTodos([...todos].sort((a, b) => b.id - a.id));
       setSortedColumn('');
     }
   };
