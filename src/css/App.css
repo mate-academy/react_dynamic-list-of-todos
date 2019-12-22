@@ -1,0 +1,23 @@
+.App {
+  text-align: center;
+}
+
+.nav {
+  width: 70vw;
+  background-color: #26a69a;
+  color: #fff;
+  text-align: center;
+  font-family: "Courier New", sans-serif;
+}
+
+.spiner {
+  color:  #26a69a;
+  text-align: center;
+  font-family: "Courier New", sans-serif;
+}
+
+tr {
+  border: 2px solid #26a69a;;
+}
+
+
