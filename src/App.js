@@ -39,9 +39,9 @@ const App = () => {
         const firstItem = a[value] || a.user[value];
         const secondItem = b[value] || b.user[value];
 
-        return typeof firstItem === 'string'
-          ? String(firstItem).localeCompare(String(secondItem))
-          : firstItem - secondItem;
+        return typeof firstItem === 'number'
+          ? firstItem - secondItem
+          : String(firstItem).localeCompare(String(secondItem));
       });
 
     saveTodos(todoListCopy);
@@ -62,7 +62,7 @@ const App = () => {
             onClick={loadTodos}
             disabled={loaded}
           >
-            {loaded ? 'Loading...' : 'Loaded'}
+            {loaded ? 'Loading...' : 'Load'}
           </button>
         </>
       )
