@@ -27,76 +27,26 @@ const App = () => {
       })));
   };
 
-  const sortedDataByTitle = async() => {
-    setIsStarted(true);
+  const sortBy = async(param1, param2) => {
+    if (typeof todos[0][param1] === 'number'
+      || typeof todos[0][param1] === 'boolean') {
+      const getMethod = (a, b) => a[param1] - b[param1];
 
-    const [
-      todosFromServer,
-      usersFromServer,
-    ] = await Promise.all([
-      getTodos(),
-      getUsers(),
-    ]);
+      setTodos([...todos].sort(getMethod));
+    }
 
-    setTodos([...todosFromServer.map(todo => (
-      {
-        ...todo,
-        user: usersFromServer.find(person => person.id === todo.userId),
-      }))].sort((a, b) => a.title.localeCompare(b.title)));
-  };
+    if (typeof todos[0][param1] === 'object') {
+      const getMethod = (a, b) => a[param1][param2]
+        .localeCompare(b[param1][param2]);
 
-  const sortedDataByName = async() => {
-    setIsStarted(true);
+      setTodos([...todos].sort(getMethod));
+    }
 
-    const [
-      todosFromServer,
-      usersFromServer,
-    ] = await Promise.all([
-      getTodos(),
-      getUsers(),
-    ]);
+    if (typeof todos[0][param1] === 'string') {
+      const getMethod = (a, b) => a[param1].localeCompare(b[param1]);
 
-    setTodos([...todosFromServer.map(todo => (
-      {
-        ...todo,
-        user: usersFromServer.find(person => person.id === todo.userId),
-      }))].sort((a, b) => a.user.name.localeCompare(b.user.name)));
-  };
-
-  const sortedDataByStatus = async() => {
-    setIsStarted(true);
-
-    const [
-      todosFromServer,
-      usersFromServer,
-    ] = await Promise.all([
-      getTodos(),
-      getUsers(),
-    ]);
-
-    setTodos([...todosFromServer.map(todo => (
-      {
-        ...todo,
-        user: usersFromServer.find(person => person.id === todo.userId),
-      }))].sort((a, b) => a.completed - b.completed));
-  };
-
-  const sortedDataById = async() => {
-    setIsStarted(true);
-
-    const [
-      todosFromServer,
-      usersFromServer,
-    ] = await Promise.all([
-      getTodos(),
-      getUsers(),
-    ]);
-
-    setTodos([...todosFromServer.map(todo => (
-      {
-        ...todo,
-        user: usersFromServer.find(person => person.id === todo.userId),
-      }))].sort((a, b) => a.id - b.id));
+      setTodos([...todos].sort(getMethod));
+    }
   };
 
   return (
@@ -104,42 +54,22 @@ const App = () => {
       ? (
         <section>
           <h1>Dynamic list of todos</h1>
-          <button
-            type="button"
-            onClick={sortedDataByTitle}
-          >
-              Sort by title
-          </button>
-
-          <button
-            type="button"
-            onClick={sortedDataByName}
-          >
-              Sort by name
-          </button>
-
-          <button
-            type="button"
-            onClick={sortedDataByStatus}
-          >
-            Sort by status
-          </button>
-
-          <button
-            type="button"
-            onClick={sortedDataById}
-          >
-            Sort by Id
-          </button>
-
           <div className="App">
             <table>
               <thead>
                 <tr>
-                  <th>Id</th>
-                  <th>Title</th>
-                  <th>Name</th>
-                  <th>Status</th>
+                  <th className="click" onClick={() => sortBy('id')}>
+                    Id
+                  </th>
+                  <th className="click" onClick={() => sortBy('title')}>
+                    Title
+                  </th>
+                  <th className="click" onClick={() => sortBy('user', 'name')}>
+                    Name
+                  </th>
+                  <th className="click" onClick={() => sortBy('completed')}>
+                    Status
+                  </th>
                   <th>Email</th>
                   <th>Phone</th>
                 </tr>

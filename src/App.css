@@ -4,6 +4,10 @@
   width: 100vw;
 }
 
+.click {
+  cursor: pointer;
+}
+
 h1 {
   text-align: center;
 }

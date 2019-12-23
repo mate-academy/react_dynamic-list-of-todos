@@ -13,6 +13,7 @@ const TodoList = ({ todos }) => (
           completed={todo.completed}
           email={todo.user.email}
           phone={todo.user.phone}
+          key={todo.id}
         />
       ))}
   </>
@@ -20,7 +21,13 @@ const TodoList = ({ todos }) => (
 );
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    userId: PropTypes.number,
+    id: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.boolean,
+    user: PropTypes.object,
+  })).isRequired,
 };
 
 export default TodoList;
