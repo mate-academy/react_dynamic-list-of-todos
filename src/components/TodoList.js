@@ -5,7 +5,7 @@ import TodoItem from './TodoItem';
 const thList = {
   id: 'ID',
   title: 'Definition',
-  user: 'Responsible',
+  'user.username': 'Responsible',
   completed: 'Status',
 };
 

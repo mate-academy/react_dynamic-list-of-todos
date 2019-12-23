@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import getTodos from './api/GetTodos';
-import getUsers from './api/GetUsers';
+import getData from './api/getData';
 
 import TodoList from './components/TodoList';
 
 function App() {
+  const todosURL = 'https://jsonplaceholder.typicode.com/todos';
+  const usersURL = 'https://jsonplaceholder.typicode.com/users';
+
   const [todos, saveTodos] = useState([]);
   const [visibleTodos, saveVisibleTodos] = useState([...todos]);
   const [isLoading, setLoading] = useState(false);
@@ -16,8 +18,9 @@ function App() {
   const loadTodos = async() => {
     setLoading(true);
 
-    const loadedTodos = await getTodos();
-    const loadedUsers = await getUsers()
+    const [loadedTodos, loadedUsers] = await Promise.all(
+      [getData(todosURL), getData(usersURL)]
+    )
       .finally(() => setLoaded(true));
 
     const TodosWithUsers = [...loadedTodos]
@@ -35,8 +38,24 @@ function App() {
   };
 
   const filter = (type) => {
+    console.log(type);
+    console.log(filterUsed);
+
+    // console.log(todos[0].user.username);
     if (filterUsed) {
-      saveVisibleTodos([...todos].sort((a, b) => b[type] - a[type]));
+      switch (type) {
+        case 'id': saveVisibleTodos([...todos]
+          .sort((a, b) => b.id - a.id));
+          break;
+        case 'completed': saveVisibleTodos([...todos]
+          .sort(a => (a.completed ? -1 : 1)));
+          break;
+        case 'user.username': saveVisibleTodos([...todos]
+          .sort((a, b) => b.user.username.localeCompare(a.user.username)));
+          break;
+        default: saveVisibleTodos([...todos]
+          .sort((a, b) => b.title.localeCompare(a.title)));
+      }
       setFilterUsed(false);
     } else {
       saveVisibleTodos(visibleTodos.reverse());
