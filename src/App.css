@@ -1,6 +1,7 @@
 .App {
   display: flex;
   justify-content: center;
+  width: 100vw;
 }
 
 h1 {
@@ -58,4 +59,12 @@ tr:last-child td:last-child {
 
 tr td:last-child {
   border-right: none;
+}
+
+button {
+  margin: 20px 10px;
+}
+
+button:first-of-type {
+  margin-left: 100px;
 }
