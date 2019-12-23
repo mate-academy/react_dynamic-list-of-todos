@@ -1,13 +1,26 @@
 import React from 'react';
 import './App.css';
 
-import todos from './api/todos';
-import users from './api/users';
+const todosURL = 'https://jsonplaceholder.typicode.com/todos';
+const getTodosFromServer = () => {
+  return fetch(todosURL)
+    .then(response => response.json());
+};
+const usersURL = 'https://jsonplaceholder.typicode.com/users';
+const getUsersFromServer = () => {
+  return fetch(usersURL)
+    .then(response => response.json());
+};
 
-function App() {
+const App = () => {
+  state = {
+    data: [],
+    isLoading: false,
+    hasError: false,
+  }
   return (
-    <div className="App">
-      <h1>Dynamic list of todos</h1>
+    <div>
+      <h1>List of todos</h1>
     </div>
   );
 }
