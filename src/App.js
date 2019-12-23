@@ -41,7 +41,6 @@ function App() {
     console.log(type);
     console.log(filterUsed);
 
-    // console.log(todos[0].user.username);
     if (filterUsed) {
       switch (type) {
         case 'id': saveVisibleTodos([...todos]
