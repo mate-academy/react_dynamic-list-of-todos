@@ -5,7 +5,7 @@ import TodoItem from './TodoItem';
 
 function TodoList(
   {
-    todos, sortByTitleLength, sortByStatus, sortByMail,
+    todos, sortTableBy,
   }
 ) {
   return (
@@ -13,13 +13,28 @@ function TodoList(
       <thead>
         <tr>
           <th>
-            <button type="button" onClick={sortByTitleLength}>Title</button>
+            <button
+              type="button"
+              onClick={() => sortTableBy('title')}
+            >
+              title
+            </button>
           </th>
           <th>
-            <button type="button" onClick={sortByStatus}>completed</button>
+            <button
+              type="button"
+              onClick={() => sortTableBy('completed')}
+            >
+              completed
+            </button>
           </th>
           <th>
-            <button type="button" onClick={sortByMail}>email</button>
+            <button
+              type="button"
+              onClick={() => sortTableBy('email')}
+            >
+              email
+            </button>
           </th>
         </tr>
       </thead>
@@ -34,9 +49,7 @@ function TodoList(
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  sortByTitleLength: PropTypes.func.isRequired,
-  sortByStatus: PropTypes.func.isRequired,
-  sortByMail: PropTypes.func.isRequired,
+  sortTableBy: PropTypes.func.isRequired,
 };
 
 export default TodoList;

@@ -13,14 +13,10 @@ function getTodosWithUsers(todos, users) {
 }
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      todosWithUsers: [],
-    };
-  }
+  state = {
+    loading: false,
+    todosWithUsers: [],
+  };
 
   getDataFromServer = async(url) => {
     const response = await fetch(`${BaseUrl}${url}`);
@@ -28,12 +24,12 @@ class App extends React.Component {
   };
 
   getTodosList = async() => {
-    const todosandUser = await Promise.all([
+    const [todos, users] = await Promise.all([
       this.getDataFromServer('todos'),
       this.getDataFromServer('users'),
     ]);
 
-    return getTodosWithUsers(todosandUser[0], todosandUser[1]);
+    return getTodosWithUsers(todos, users);
   };
 
   loadTodos = async() => {
@@ -45,28 +41,40 @@ class App extends React.Component {
     });
   }
 
-  sortByStatus = () => {
-    this.setState(prevState => ({
-      todosWithUsers: [...prevState.todosWithUsers].sort(
-        (a, b) => b.completed - a.completed
-      ),
-    }));
-  }
+  sortTableBy = (title) => {
+    console.log();
+    if (title === 'title') {
+      this.setState(prevState => ({
+        todosWithUsers: [...prevState.todosWithUsers].sort(
+          (a, b) => {
+            console.log(b[title]);
+            return b[title].length - a[title].length;
+          }
+        ),
+      }));
+    }
 
-  sortByTitleLength = () => {
-    this.setState(prevState => ({
-      todosWithUsers: [...prevState.todosWithUsers].sort(
-        (a, b) => b.title.length - a.title.length
-      ),
-    }));
-  }
+    if (title === 'completed') {
+      this.setState(prevState => ({
+        todosWithUsers: [...prevState.todosWithUsers].sort(
+          (a, b) => {
+            console.log(b[title]);
+            return b[title] - a[title];
+          }
+        ),
+      }));
+    }
 
-  sortByMail = () => {
-    this.setState(prevState => ({
-      todosWithUsers: [...prevState.todosWithUsers].sort(
-        (a, b) => b.user.email.localeCompare(a.user.email)
-      ),
-    }));
+    if (title === 'email') {
+      this.setState(prevState => ({
+        todosWithUsers: [...prevState.todosWithUsers].sort(
+          (a, b) => {
+            console.log(b[title]);
+            return b.user[title].length - a.user[title].length;
+          }
+        ),
+      }));
+    }
   }
 
   render() {
@@ -86,8 +94,8 @@ class App extends React.Component {
             && (
               <TodoList
                 todos={todosWithUsers}
-                sortByTitleLength={this.sortByTitleLength}
-                sortByStatus={this.sortByStatus}
+                sortTableBy={this.sortTableBy}
+                // sortByStatus={this.sortByStatus}
                 sortByMail={this.sortByMail}
               />
             )

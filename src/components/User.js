@@ -8,7 +8,5 @@ export default function User(props) {
 }
 
 User.propTypes = {
-  user: PropTypes.shape({
-    email: PropTypes.string,
-  }).isRequired,
+  user: PropTypes.objectOf({ email: PropTypes.string }).isRequired,
 };
