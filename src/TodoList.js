@@ -24,51 +24,19 @@ const TodoList = ({ getTodos }) => {
     }
   };
 
-  const sortByTitle = (title) => {
-    if (sortedColumn !== title) {
-      setTodos([...todos].sort((a, b) => a.title.localeCompare(b.title)));
-      setSortedColumn(title);
-    } else {
-      setTodos([...todos].sort((a, b) => b.title.localeCompare(a.title)));
-      setSortedColumn();
-    }
-  };
+  const sortBy = (field) => {
+    const by = {
+      title: (a, b) => a.title.localeCompare(b.title),
+      status: (a, b) => b.completed - a.completed,
+      user: (a, b) => a.user.name.localeCompare(b.user.name),
+      id: (a, b) => a.id - b.id,
+    };
 
-  const sortByStatus = (status) => {
-    if (sortedColumn !== status) {
-      setTodos([...todos].sort((a, b) => a.completed - b.completed));
-      setSortedColumn(status);
-    } else {
-      setTodos([...todos].sort((a, b) => b.completed - a.completed));
-      setSortedColumn();
-    }
-  };
+    setSortedColumn(field);
 
-  const sortById = (id) => {
-    if(id !== 0) {
-      id = 0;
-    }
-    if (sortedColumn !== id) {
-      setTodos([...todos].sort((a, b) => a.id - b.id));
-      setSortedColumn(id);
-    } else {
-      setTodos([...todos].sort((a, b) => b.id - a.id));
-      setSortedColumn();
-    }
-  };
-
-  const sortByUser = (user) => {
-    if (sortedColumn !== user) {
-      setTodos(
-        [...todos].sort((a, b) => a.user.name.localeCompare(b.user.name))
-      );
-      setSortedColumn(user);
-    } else {
-      setTodos(
-        [...todos].sort((a, b) => b.user.name.localeCompare(a.user.name))
-      );
-      setSortedColumn();
-    }
+    sortedColumn !== field
+      ? setTodos([...todos].sort(by[field]))
+      : setTodos([...todos].reverse());
   };
 
   return (
@@ -83,10 +51,10 @@ const TodoList = ({ getTodos }) => {
         <table className="table">
           <thead>
             <tr>
-              <th onClick={sortById}>ID</th>
-              <th onClick={sortByTitle}>TITLE</th>
-              <th onClick={sortByUser}>USER</th>
-              <th onClick={sortByStatus}>STATUS</th>
+              <th onClick={() => sortBy('id')}>ID</th>
+              <th onClick={() => sortBy('title')}>TITLE</th>
+              <th onClick={() => sortBy('user')}>USER</th>
+              <th onClick={() => sortBy('status')}>STATUS</th>
             </tr>
           </thead>
           <tbody>

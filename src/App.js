@@ -5,13 +5,13 @@ import TodoList from './TodoList';
 
 const App = () => {
   const todoWithUsers = async() => {
-    const [users,todos] = await fetchTodosAndUsers();
+    const [users, todos] = await fetchTodosAndUsers();
 
     return todos.map(todo => ({
       ...todo,
-      user:users.find(user => user.id === todo.userId)
-    }))
-  }
+      user: users.find(user => user.id === todo.userId),
+    }));
+  };
 
   return (
     <div className="App">
