@@ -3,38 +3,41 @@ import PropTypes from 'prop-types';
 import Todo from './Todo';
 
 const TodoList = (
-  { usersAndTodosArr, sortByTitle, sortByName, sortByProgress }
+  { todos, sortTodos }
 ) => (
   <section>
-    <button
-      type="button"
-      onClick={sortByTitle}
-    >
+    <div className="listTodos__sort">
+      <button
+        type="button"
+        className="button"
+        onClick={() => sortTodos('title')}
+      >
         Sort by Title
-    </button>
-    <button
-      type="button"
-      onClick={sortByName}
-    >
+      </button>
+      <button
+        type="button"
+        className="button"
+        onClick={() => sortTodos('name')}
+      >
         Sort by Name
-    </button>
-    <button
-      type="button"
-      onClick={sortByProgress}
-    >
+      </button>
+      <button
+        type="button"
+        className="button"
+        onClick={() => sortTodos('progress')}
+      >
         Sort by Progress
-    </button>
-    <ul>
-      <Todo usersAndTodosArr={usersAndTodosArr} />
+      </button>
+    </div>
+    <ul className="listTodos__body">
+      <Todo todos={todos} />
     </ul>
   </section>
 );
 
 TodoList.propTypes = {
-  usersAndTodosArr: PropTypes.arrayOf(PropTypes.object).isRequired,
-  sortByTitle: PropTypes.func.isRequired,
-  sortByName: PropTypes.func.isRequired,
-  sortByProgress: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortTodos: PropTypes.func.isRequired,
 };
 
 export default TodoList;

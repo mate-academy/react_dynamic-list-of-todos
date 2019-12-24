@@ -7,12 +7,10 @@ const urlTodos = 'https://jsonplaceholder.typicode.com/todos';
 const urlUser = 'https://jsonplaceholder.typicode.com/users';
 
 const App = () => {
-  const [usersAndTodosArr, saveTodos] = useState([]);
-  const [visibleContent, toggleState] = useState(false);
+  const [todos, setTodos] = useState([]);
+  const [contentHidden, setContentHidden] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [reverseTitle, setReverseTitle] = useState(true);
-  const [reverseName, setReverseName] = useState(true);
-  const [reverseProgress, setReverseProgress] = useState(true);
+  const [selectedButton, setValueButton] = useState('');
 
   const loadAll = async() => {
     setLoading(true);
@@ -25,77 +23,62 @@ const App = () => {
       user: usersArr.find(human => human.id === todo.userId),
     }));
 
-    saveTodos(usersAndTodos);
-    toggleState(true);
+    setTodos(usersAndTodos);
+    setContentHidden(true);
   };
 
-  const sortByTitle = () => {
-    if (!reverseTitle) {
-      const sortTitle = [...usersAndTodosArr].reverse();
+  const sortTodos = (x) => {
+    switch (x) {
+      case 'title':
+        if (x !== selectedButton) {
+          setTodos([...todos]
+            .sort((a, b) => a.title.localeCompare(b.title)));
+          setValueButton(x);
+        }
+        break;
 
-      saveTodos(sortTitle);
+      case 'name':
+        if (x !== selectedButton) {
+          setTodos([...todos]
+            .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+          setValueButton(x);
+        }
+        break;
+
+      case 'progress':
+        if (x !== selectedButton) {
+          setTodos([...todos]
+            .sort((a, b) => a.completed - b.completed));
+          setValueButton(x);
+        }
+        break;
+      default: setTodos([...todos]);
     }
 
-    if (reverseTitle) {
-      const sortTitle = [...usersAndTodosArr]
-        .sort((a, b) => a.title.localeCompare(b.title));
+    if (x === selectedButton) {
+      const sortTitle = [...todos].reverse();
 
-      saveTodos(sortTitle);
-      setReverseTitle(false);
-    }
-  };
-
-  const sortByName = () => {
-    if (!reverseName) {
-      const sortTitle = [...usersAndTodosArr].reverse();
-
-      saveTodos(sortTitle);
-    }
-
-    if (reverseName) {
-      const sortTitle = [...usersAndTodosArr]
-        .sort((a, b) => a.user.name.localeCompare(b.user.name));
-
-      saveTodos(sortTitle);
-      setReverseName(false);
-    }
-  };
-
-  const sortByProgress = () => {
-    if (!reverseProgress) {
-      const sortTitle = [...usersAndTodosArr].reverse();
-
-      saveTodos(sortTitle);
-    }
-
-    if (reverseProgress) {
-      const sortTitle = [...usersAndTodosArr]
-        .sort((a, b) => a.completed - b.completed);
-
-      saveTodos(sortTitle);
-      setReverseProgress(false);
+      setTodos(sortTitle);
     }
   };
 
   return (
-    <div className="App">
-      <h1>Dynamic list of todos</h1>
+    <section className="listTodos">
+      <h1 className="listTodos__title">Dynamic list of todos</h1>
       <section>
-        {!visibleContent ? (
-          <button type="button" onClick={loadAll}>
+        {!contentHidden ? (
+          <button type="button" onClick={loadAll} className="button">
             {!isLoading ? 'Load All' : 'Is loading...' }
           </button>
         ) : (
           <TodoList
-            usersAndTodosArr={usersAndTodosArr}
-            sortByTitle={sortByTitle}
-            sortByName={sortByName}
-            sortByProgress={sortByProgress}
+            todos={todos}
+            sortTodos={sortTodos}
           />
         )
         }
       </section>
-    </div>
+    </section>
   );
 };
 

@@ -1,19 +1,26 @@
+/* eslint-disable react/jsx-curly-brace-presence */
 import React from 'react';
 
-const Todo = ({ usersAndTodosArr }) => (
-  usersAndTodosArr.map(todo => (
-    <li key={todo.id}>
+const Todo = ({ todos }) => (
+  todos.map(todo => (
+    <li key={todo.id} className="listTodos__todo" type="none">
       <h2>
-        {`Todo: `}
+        <span className="listTodos__todo__label">
+          {`Todo: `}
+        </span>
         {todo.title}
       </h2>
       <h3>
-        {`Name: `}
+        <span className="listTodos__todo__label">
+          {`Name: `}
+        </span>
         {todo.user.name}
       </h3>
       <h3>
-        {`Todo status: `}
-        {todo.completed ? 'Done' : 'In progress'}
+        <span className="listTodos__todo__label">
+          {`Todo completed: `}
+        </span>
+        {todo.completed ? '✅' : '❌'}
       </h3>
     </li>
   ))
