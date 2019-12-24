@@ -7,7 +7,6 @@ const delay = () => new Promise((resolve) => {
 });
 
 const getTodos = () => {
-  console.log('Loading todos');
   return delay()
     .then(() => fetch(`${API_URL}/todos`))
     .then(response => response.ok ? response.json() : [])
@@ -15,11 +14,9 @@ const getTodos = () => {
 };
 
 const getUsers = () => {
-  console.log('Loading users');
   return delay()
     .then(() => fetch(`${API_URL}/users`))
     .then(response => {
-      console.log('Users are loaded');
       return response.ok ? response.json() : []
     })
     .catch(() => []);
@@ -28,6 +25,7 @@ const getUsers = () => {
 function App() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setLoaing] = useState(false);
+  const [sortType, setSort] = useState('');
   const loadData = async () => {
     setLoaing(true);
     const [
@@ -43,15 +41,33 @@ function App() {
     })));
   };
 
-  const sortTodosById = () => setTodos([...todos]
-    .sort((a, b) => a.id - b.id));
-  const sortTodosByTitle = () => setTodos([...todos]
-    .sort((a, b) => a.title.localeCompare(b.title)));
-  const sortTodosByCompleted = () => setTodos([...todos]
-    .sort((a, b) => b.completed.toString().localeCompare(
-      a.completed.toString())));
-  const sortTodosByName = () => setTodos([...todos]
-    .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+  const sortTableBy = (title) => {
+    if (sortType === title) {
+      setTodos([...todos].reverse());
+    } else {
+      switch (title) {
+        case 'id':
+          setTodos([...todos]
+            .sort((a, b) => a.id - b.id));
+          break;
+        case 'title':
+          setTodos([...todos]
+            .sort((a, b) => a.title.localeCompare(b.title)));
+          break;
+        case 'user':
+          setTodos([...todos]
+            .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+          break;
+        case 'completed':
+          setTodos([...todos]
+            .sort((a, b) => b.completed.toString().localeCompare(
+              a.completed.toString())));
+          break;
+        default:
+      }
+      setSort(title);
+    }
+  };
 
   return (
     <div className="App">
@@ -59,25 +75,17 @@ function App() {
       {todos.length > 0 ? (
         <table>
           <tr>
-            <th>
-              <button type="button" onClick={sortTodosById}>
-                Sort by Id
-        </button>
+            <th style={{ cursor: 'pointer' }} onClick={() => sortTableBy('id')} >
+              Sort by Id
             </th>
-            <th>
-              <button type="button" onClick={sortTodosByTitle}>
-                Sort by Title
-        </button>
+            <th style={{ cursor: 'pointer' }} onClick={() => sortTableBy('title')}>
+              Sort by Title
             </th>
-            <th>
-              <button type="button" onClick={sortTodosByCompleted}>
-                Sort if is completed
-        </button>
+            <th style={{ cursor: 'pointer' }} onClick={() => sortTableBy('completed')}>
+              Sort if is completed
             </th>
-            <th>
-              <button type="button" onClick={sortTodosByName}>
-                Sort by Name
-        </button>
+            <th style={{ cursor: 'pointer' }} onClick={() => sortTableBy('user')}>
+              Sort by Name
             </th>
           </tr>
           {todos.map(todo => (
