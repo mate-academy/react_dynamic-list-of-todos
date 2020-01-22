@@ -4,9 +4,9 @@
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
-Basing on [Static list of TODOs](https://github.com/mate-academy/react_dynamic-list-of-todos#react-dynamic-list-of-todos)
+Basing on [Static list of TODOs](https://github.com/mate-academy/react_static-list-of-todos)
 create the App downloading the [TODOs](https://jsonplaceholder.typicode.com/todos)
-and [Users](https://jsonplaceholder.typicode.com/users) from API.
+and [Users](https://jsonplaceholder.typicode.com/users) from API (follow the links).
 
 1. Initially `TodoList` shows a `Load` button.
 1. After click disable the button, change its text to `Loading...` and download the data.
