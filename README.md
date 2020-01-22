@@ -9,7 +9,7 @@ create the App downloading the [TODOs](https://jsonplaceholder.typicode.com/todo
 and [Users](https://jsonplaceholder.typicode.com/users) from API (follow the links).
 
 1. Initially `TodoList` shows a `Load` button.
-1. After click disable the button, change its text to `Loading...` and download the data.
+1. After a click disable the button, change its text to `Loading...` and download the data.
 1. Once the data has been loaded, hide the button and display the list of TODOs instead.
 1. Additionally, you should provide a capability of sorting the TODOs by:
     - `todo.title`
