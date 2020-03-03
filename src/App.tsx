@@ -5,7 +5,7 @@ import { getTodosFromServer } from './api/todosFromServer';
 import './App.css';
 
 const App: FC = () => {
-  const [userList, setUserList] = useState<any>([]);
+  const [userList, setUserList] = useState<TodoWithUser[]>([]);
   const [loadingCondition, setLoadingConditon] = useState(false);
   const loadUsers = () => {
     setLoadingConditon(true);
@@ -21,11 +21,11 @@ const App: FC = () => {
         const todoWithUser = todo.map(todoItem => (
           {
             ...todoItem,
-            user: user.find(userItem => userItem.id === todoItem.userId),
+            user: user.find(userItem => userItem.id === todoItem.userId) as User,
           }
         ));
 
-        console.log(todoWithUser);
+        // console.log(todoWithUser);
 
         setUserList(todoWithUser);
       });
