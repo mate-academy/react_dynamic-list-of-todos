@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { SortOption } from '../constants/types';
 
 interface Props {
   onClick(key: SortOption): void;
 }
 
-export const SortOptions = (props: Props): JSX.Element => {
+export const SortOptions: FC<Props> = (props) => {
   const { onClick } = props;
 
   return (

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { CompleteTodo } from '../constants/types';
 
 interface Props {
   todos: CompleteTodo[];
 }
 
-export const TodosList = (props: Props): JSX.Element => {
+export const TodosList: FC<Props> = (props) => {
   const { todos } = props;
 
   return (
