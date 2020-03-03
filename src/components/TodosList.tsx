@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { CompleteTodo } from '../constants/types';
+import './TodoList.css';
 
 interface Props {
   todos: CompleteTodo[];

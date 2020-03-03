@@ -12,12 +12,11 @@ import {
 } from './constants/types';
 import './App.css';
 
-let initialPreparedTodos: CompleteTodo[] = [];
-
 export const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataWasLoaded, setDataWasLoaded] = useState<boolean>(false);
-  const [filteredTodos, setFilteredTodos] = useState<CompleteTodo[]>([]);
+  const [sortedTodos, setSortedTodos] = useState<CompleteTodo[]>([]);
+  const [sortOption, setSortOption] = useState<SortOption>(null);
 
   const handleLoadButtonClick = async () => {
     setIsLoading(true);
@@ -27,17 +26,16 @@ export const App = () => {
       loadUsers(),
     ]);
 
-    initialPreparedTodos = initialTodos.map((todo: Todo) => {
+    setSortedTodos(initialTodos.map((todo: Todo) => {
       const user = initialUsers
-        .find((currentUser: User) => currentUser.id === todo.userId);
+        .find((currentUser: User) => currentUser.id === todo.userId) as User;
 
       return {
         ...todo,
         user,
       };
-    });
+    }));
 
-    setFilteredTodos(initialPreparedTodos);
     setDataWasLoaded(true);
     setIsLoading(false);
   };
@@ -54,46 +52,58 @@ export const App = () => {
     return <Button text="Load" onClick={handleLoadButtonClick} />;
   };
 
-  const handleSortButtonClick = (key: SortOption): void => {
-    switch (key) {
+  const handleSortButtonClick = (option: SortOption): void => {
+    if (option === sortOption) {
+      return;
+    }
+
+    switch (option) {
       case 'title':
       case 'completed': {
-        setFilteredTodos(initialPreparedTodos
-          .slice()
-          .sort((todoA, todoB) => {
-            if (todoA[key] > todoB[key]) {
-              return 1;
-            }
+        setSortedTodos(prevTodos => {
+          return prevTodos
+            .slice()
+            .sort((todoA, todoB) => {
+              if (todoA[option] >= todoB[option]) {
+                return 1;
+              }
 
-            return -1;
-          }));
+              return -1;
+            });
+        });
+
         break;
       }
 
       case 'name': {
-        setFilteredTodos(initialPreparedTodos
-          .slice()
-          .sort((todoA, todoB) => {
-            if (todoA.user.name > todoB.user.name) {
-              return 1;
-            }
+        setSortedTodos(prevTodos => {
+          return prevTodos
+            .slice()
+            .sort((todoA, todoB) => {
+              if (todoA.user.name >= todoB.user.name) {
+                return 1;
+              }
 
-            return -1;
-          }));
+              return -1;
+            });
+        });
+
         break;
       }
 
       default: {
-        setFilteredTodos(initialPreparedTodos);
+        setSortedTodos(sortedTodos);
       }
     }
+
+    setSortOption(option);
   };
 
   return (
     <div>
       {renderLoadButton()}
       {dataWasLoaded ? <SortOptions onClick={handleSortButtonClick} /> : null}
-      {dataWasLoaded ? <TodosList todos={filteredTodos} /> : null}
+      {dataWasLoaded ? <TodosList todos={sortedTodos} /> : null}
     </div>
   );
 };

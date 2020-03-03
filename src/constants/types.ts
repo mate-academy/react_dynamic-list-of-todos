@@ -33,4 +33,4 @@ export interface CompleteTodo extends Todo {
   user: User;
 }
 
-export type SortOption = 'title' | 'completed' | 'name';
+export type SortOption = 'title' | 'completed' | 'name' | null;
