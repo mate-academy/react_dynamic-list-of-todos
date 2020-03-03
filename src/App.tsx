@@ -58,17 +58,28 @@ export const App = () => {
     }
 
     switch (option) {
-      case 'title':
+      case 'title': {
+        setSortedTodos(prevTodos => {
+          return prevTodos
+            .slice()
+            .sort((todoA, todoB) => {
+              return todoA[option] >= todoB[option]
+                ? 1
+                : -1;
+            });
+        });
+
+        break;
+      }
+
       case 'completed': {
         setSortedTodos(prevTodos => {
           return prevTodos
             .slice()
             .sort((todoA, todoB) => {
-              if (todoA[option] >= todoB[option]) {
-                return 1;
-              }
-
-              return -1;
+              return +todoA[option] >= +todoB[option]
+                ? 1
+                : -1;
             });
         });
 
@@ -80,11 +91,9 @@ export const App = () => {
           return prevTodos
             .slice()
             .sort((todoA, todoB) => {
-              if (todoA.user.name >= todoB.user.name) {
-                return 1;
-              }
-
-              return -1;
+              return todoA.user.name >= todoB.user.name
+                ? 1
+                : -1;
             });
         });
 
