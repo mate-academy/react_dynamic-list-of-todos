@@ -1,1 +1,18 @@
+.App {
+  text-align: center;
+}
 
+table {
+  border-collapse: collapse;
+  margin: auto;
+}
+
+thead {
+  background-color: lightblue;
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 10px 20px;
+}
