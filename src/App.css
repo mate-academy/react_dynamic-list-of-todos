@@ -16,3 +16,24 @@ td {
   border: 1px solid black;
   padding: 10px 20px;
 }
+
+.sortedBtn {
+  border: none;
+  height: 25px;
+  width: 100px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 9px lightsteelblue;
+  cursor: pointer;
+}
+
+.sortedBtn:hover {
+  background-color: white;
+}
+
+.succesLoad {
+  background-color: lightgreen;
+}
+
+.faildLoad {
+  background-color: lightcoral;
+}
