@@ -1,19 +1,24 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 
-import { loadTodos, loadUsers, TodoWithName } from './utils';
+import {
+  TodoWithUser, loadData, Todo, User,
+} from './utils';
 import { TodoList } from './components/TodoList';
+
+const URL_TODOS = 'https://jsonplaceholder.typicode.com/todos';
+const URL_USERS = 'https://jsonplaceholder.typicode.com/users';
 
 
 const App: FC<{}> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<string>('');
-  const [todos, setTodos] = useState<TodoWithName[]>([]);
+  const [todos, setTodos] = useState<TodoWithUser[]>([]);
   const clickHandler = () => {
     setIsLoading(true);
     Promise.all([
-      loadTodos(),
-      loadUsers(),
+      loadData<Todo[]>(URL_TODOS),
+      loadData<User[]>(URL_USERS),
     ])
       .then(responses => {
         const preparedTodos = responses[0].map(todo => {

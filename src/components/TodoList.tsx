@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 import { Todo } from './Todo';
-import { TodoWithName } from '../utils';
+import { TodoWithUser } from '../utils';
 
 interface Props {
-  todos: TodoWithName[];
+  todos: TodoWithUser[];
   onNameButton(): void;
   onTitleButton(): void;
   onConditionButton(): void;
@@ -30,7 +30,7 @@ export const TodoList: FC<Props> = (props) => {
               onClick={onTaskButton}
               className="headerButton"
             >
-number task
+              number task
             </button>
           </th>
           <th>
@@ -39,7 +39,7 @@ number task
               onClick={onTitleButton}
               className="headerButton"
             >
-Title
+              Title
             </button>
           </th>
           <th>
@@ -48,7 +48,7 @@ Title
               onClick={onNameButton}
               className="headerButton"
             >
-Name
+              Name
             </button>
           </th>
           <th>
@@ -57,7 +57,7 @@ Name
               onClick={onConditionButton}
               className="headerButton"
             >
-Condition
+              Condition
             </button>
           </th>
         </tr>

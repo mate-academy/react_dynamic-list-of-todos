@@ -5,7 +5,7 @@ export interface Todo {
   completed: boolean;
 }
 
-export interface TodoWithName extends Todo {
+export interface TodoWithUser extends Todo {
   user: User | undefined;
 }
 
