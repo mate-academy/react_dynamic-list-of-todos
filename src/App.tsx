@@ -44,12 +44,7 @@ const App: FC<{}> = () => {
   const handlerSortByComleted = () => {
     const newTodos = [...todos];
 
-    setTodos(newTodos.sort((item1, item2) => {
-      const value1 = item1.completed ? 1 : 0;
-      const value2 = item2.completed ? 1 : 0;
-
-      return value1 - value2;
-    }));
+    setTodos(newTodos.sort((item1, item2) => Number(item1.completed) - Number(item2.completed)));
   };
 
   const handlerSortByTitle = () => {
