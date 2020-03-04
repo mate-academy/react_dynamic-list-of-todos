@@ -37,5 +37,5 @@ interface User {
 }
 
 interface TodoWithUser extends Todo {
-  user: User | undefined;
+  user: User;
 }

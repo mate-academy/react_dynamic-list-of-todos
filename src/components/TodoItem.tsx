@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { User } from './User';
 
-interface TodoProps {
+interface TodoItemProps {
   todo: TodoWithUser;
 }
 
-export const TodoItem: FC<TodoProps> = ({ todo }) => {
+export const TodoItem: FC<TodoItemProps> = ({ todo }) => {
   return (
     <li className="list__item">
       <h4 className="title">{todo.title}</h4>
