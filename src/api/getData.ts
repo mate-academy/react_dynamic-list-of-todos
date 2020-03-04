@@ -1,3 +1,5 @@
+import { URL_TODOS, URL_USES } from './constatns';
+
 async function getData <T>(url: string): Promise<T> {
   const response = await fetch(url);
 
@@ -5,9 +7,9 @@ async function getData <T>(url: string): Promise<T> {
 }
 
 export const getTodos = (): Promise<Todo[]> => {
-  return getData('https://jsonplaceholder.typicode.com/todos');
+  return getData(URL_TODOS);
 };
 
 export const getUsers = (): Promise<User[]> => {
-  return getData('https://jsonplaceholder.typicode.com/users');
+  return getData(URL_USES);
 };

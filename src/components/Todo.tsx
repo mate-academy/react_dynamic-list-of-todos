@@ -15,7 +15,7 @@ export const Todo: FC<Props> = ({
       <p className="title">{`${id} ${title}`}</p>
       {completed
         ? (<p className="completed">Yes</p>)
-        : (<p className="notCompleted">No</p>)}
+        : (<p className="not-completed">No</p>)}
       {user && (<p>{user.name}</p>)}
     </>
   );
