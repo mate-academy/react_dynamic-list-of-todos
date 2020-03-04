@@ -1,12 +1,11 @@
-const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
-const TODOS_URL = 'https://jsonplaceholder.typicode.com/todos';
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 export const getUsers = (): Promise<User[]> => {
-  return fetch(USERS_URL)
+  return fetch(`${API_URL}users`)
     .then(response => response.json());
 };
 
 export const getTodos = (): Promise<Todo[]> => {
-  return fetch(TODOS_URL)
+  return fetch(`${API_URL}todos`)
     .then(response => response.json());
 };

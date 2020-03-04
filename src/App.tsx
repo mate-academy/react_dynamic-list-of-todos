@@ -24,8 +24,13 @@ const App: FC = () => {
   };
 
   const sortByName = () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    setTodos([...todos].sort((a, b) => a.user!.name.localeCompare(b.user!.name)));
+    setTodos([...todos].sort((a, b) => {
+      if (a.user && b.user) {
+        a.user.name.localeCompare(b.user.name);
+      }
+
+      return 0;
+    }));
   };
 
   const sortByStatus = () => {
@@ -46,7 +51,6 @@ const App: FC = () => {
         {isLoading && (
           <p className="text">Loading...</p>
         )}
-
       </>
     );
   }
