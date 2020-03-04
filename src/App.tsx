@@ -49,15 +49,16 @@ const App: FC<{}> = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <p>Loading...</p>
-    );
-  }
-
   if (!todos.length) {
     return (
-      <button className="button" type="button" onClick={showTodos}>Load todos</button>
+      <button
+        className="start-button"
+        type="button"
+        onClick={showTodos}
+        disabled={isLoading}
+      >
+        {isLoading ? 'Loading...' : 'Start Load'}
+      </button>
     );
   }
 
