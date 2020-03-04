@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 import { TodoList } from './TodoList/TodoList';
 import { getTodos, getUsers } from './Api/Api';
@@ -6,10 +6,11 @@ import { getTodos, getUsers } from './Api/Api';
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-  const [preparedTodos, setPreparedTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
+  const loadTodos = () => {
+    setIsLoading(true);
+
     const usersPropmise = getUsers();
 
     usersPropmise
@@ -23,24 +24,20 @@ export const App = () => {
       .then(result => {
         return setTodos(result);
       });
-  }, []);
-
-  const loadTodos = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const bufferTodos = todos.map(todo => {
-        const targetUser = users.find(user => user.id === todo.userId) as User;
-
-        return {
-          ...todo,
-          userName: targetUser.name,
-        };
-      });
-
-      setPreparedTodos(bufferTodos);
-    }, 1000);
   };
+
+  const mergeTodosWithUserNames = (todoList: Todo[], userList: User[]): Todo[] => {
+    return todoList.map(todo => {
+      const targetUser = userList.find(user => user.id === todo.userId) as User;
+
+      return {
+        ...todo,
+        userName: targetUser.name,
+      };
+    });
+  };
+
+  const preparedTodos = useMemo(() => mergeTodosWithUserNames(todos, users), [todos, users]);
 
   return (
     <div className="App">
