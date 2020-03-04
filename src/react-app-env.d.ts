@@ -43,5 +43,5 @@ interface PreparedTodo {
   id: number;
   title: string;
   completed: boolean;
-  user: User | undefined;
+  user: User;
 }
