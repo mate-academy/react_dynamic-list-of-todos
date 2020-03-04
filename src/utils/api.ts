@@ -6,12 +6,12 @@ export const getData = async <T>(url: string): Promise<T> => {
     .then(response => response.json());
 };
 
-export const getUsers = async (): Promise<Users> => {
+export const getUsers = async (): Promise<User[]> => {
   return getData<User[]>(USERS_URL);
 };
 
-export const getTodos = async (): Promise<Todos> => {
-  return getData<Todos>(TODOS_URL);
+export const getTodos = async (): Promise<Todo[]> => {
+  return getData<Todo[]>(TODOS_URL);
 };
 
 export const getCorrectTodos = async (): Promise<PreparedTodo[]> => {

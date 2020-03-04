@@ -3,9 +3,26 @@
   margin-bottom: 40px;
 }
 
-.button {
+.button-load {
   display: block;
-  margin-bottom: 20px;
+  width: 50%;
+  margin: 0 auto 20px;
+  line-height: 50px;
+  color: #fff;
+  background: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 1.1em;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.button-load:hover {
+  background: #000;
+}
+
+.button-load:focus,
+.button-load:active,
+.button-load:visited {
+  outline: none;
 }
 
 .primary-bg {

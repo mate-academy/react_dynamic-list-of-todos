@@ -8,38 +8,32 @@ import './App.css';
 
 const App: FC = () => {
   const [todoList, setTodoList] = useState<PreparedTodo[]>([]);
-  const [todoVisibleList, setVisibleList] = useState<PreparedTodo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
 
   const handleClick = () => {
     getCorrectTodos().then(list => {
       setIsLoading(true);
-      setTodoList(list);
-      setVisibleList(list);
-    }).then(list => {
+
       // setTimeout for demo only
       setTimeout(() => {
-        setIsLoaded(true);
+        setTodoList(list);
+        setIsLoading(false);
       }, 500);
-
-      return list;
     });
   };
 
   const idSorter = () => {
-    setVisibleList([...todoList]
+    setTodoList([...todoList]
       .sort((a, b) => a.id - b.id));
   };
 
   const titleSorter = () => {
-    setVisibleList([...todoList]
+    setTodoList([...todoList]
       .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
   const userNameSorter = () => {
-    setVisibleList([...todoList]
+    setTodoList([...todoList]
       .sort((a, b) => {
         if (a.user && b.user) {
           return a.user.name.localeCompare(b.user.name);
@@ -50,7 +44,7 @@ const App: FC = () => {
   };
 
   const completedSorter = () => {
-    setVisibleList([...todoList]
+    setTodoList([...todoList]
       .sort((a, b) => {
         const isCompletedA = a.completed ? 1 : 0;
         const isCompletedB = b.completed ? 1 : 0;
@@ -62,14 +56,15 @@ const App: FC = () => {
   return (
     <div className="container">
       <h1 className="title text-center">Dynamic list of TODOs</h1>
-      {!isLoaded
-      && (
-        <button type="button" className="button" onClick={handleClick}>
-          {isLoading ? 'Loading...' : 'Load'}
-        </button>
-      )}
 
-      {isLoaded
+      {todoList.length === 0
+        && (
+          <button type="button" className="button-load" onClick={handleClick}>
+            {isLoading ? 'Loading...' : 'Load'}
+          </button>
+        )}
+
+      {todoList.length !== 0
         && (
           <>
             <Controller
@@ -78,7 +73,7 @@ const App: FC = () => {
               userNameSorter={userNameSorter}
               completedSorter={completedSorter}
             />
-            <TodoList todos={todoVisibleList} />
+            <TodoList todos={todoList} />
           </>
         )}
     </div>
