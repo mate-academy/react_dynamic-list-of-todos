@@ -7,8 +7,8 @@ import { TodoList } from './components/TodoList/TodoList';
 
 export const App = () => {
   const [isLoading, setIsLoadind] = useState<boolean>(false);
-  const [preparedTodos, setpreparedTodos] = useState<PreparedTodo[]>([]);
-  const [typeOfSort, settypeOfSort] = useState<string>('');
+  const [preparedTodos, setPreparedTodos] = useState<PreparedTodo[]>([]);
+  const [typeOfSort, setTypeOfSort] = useState<string>('');
 
   const handleLoadButton = async () => {
     setIsLoadind(true);
@@ -20,7 +20,7 @@ export const App = () => {
       user: users.find(user => user.id === todo.userId) as User,
     }));
 
-    setpreparedTodos(addUserForTodos());
+    setPreparedTodos(addUserForTodos());
   };
 
   const handleTypeOfSort = () => {
@@ -56,21 +56,21 @@ export const App = () => {
             <button
               className={cn({ selected: typeOfSort === 'title' })}
               type="button"
-              onClick={() => settypeOfSort('title')}
+              onClick={() => setTypeOfSort('title')}
             >
               sort by title
             </button>
             <button
               className={cn({ selected: typeOfSort === 'completed' })}
               type="button"
-              onClick={() => settypeOfSort('completed')}
+              onClick={() => setTypeOfSort('completed')}
             >
               sort by status
             </button>
             <button
               className={cn({ selected: typeOfSort === 'user' })}
               type="button"
-              onClick={() => settypeOfSort('user')}
+              onClick={() => setTypeOfSort('user')}
             >
               by user name
             </button>
