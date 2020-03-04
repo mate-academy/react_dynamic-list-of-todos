@@ -3,12 +3,12 @@ import './App.css';
 import { TodosList } from './components/TodosList/TodosList';
 import { getUsers, getTodos } from './api';
 
-const App: FC<{}> = () => {
-  const [isLoaded, setLoaded] = useState<boolean>(false);
+const App: FC = () => {
+  const [isLoading, setLoading] = useState(false);
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
 
   const loadTodos = async () => {
-    setLoaded(true);
+    setLoading(true);
     const [todosLoaded, users] = await Promise.all([getTodos(), getUsers()]);
 
     const todosWithUsers = todosLoaded.map(todo => ({
@@ -39,11 +39,14 @@ const App: FC<{}> = () => {
           type="button"
           className="btn-load"
           onClick={loadTodos}
-          disabled={isLoaded}
+          disabled={isLoading}
         >
           Load
         </button>
-        <p className="text">{isLoaded ? 'Loading...' : ''}</p>
+        {isLoading && (
+          <p className="text">Loading...</p>
+        )}
+
       </>
     );
   }
