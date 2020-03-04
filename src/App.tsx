@@ -5,7 +5,7 @@ import { getTodos, getUsers } from './Api/Api';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadTodos = async () => {
     setIsLoading(true);
