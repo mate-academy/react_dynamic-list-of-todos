@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { UserItem } from '../UserItem/UserItem';
 
 interface Props {
   userList: TodoWithUser[];
@@ -51,11 +52,7 @@ export const UserList: FC<Props> = ({ userList }) => {
       <tbody>
         {
           visibleUserList.map(todo => (
-            <tr key={todo.id}>
-              <td style={{ backgroundColor: 'darkorange' }}>{todo.user.name}</td>
-              <td style={{ backgroundColor: 'aquamarine' }}>{todo.title}</td>
-              <td className={todo.completed ? 'succesLoad' : 'faildLoad'}>{todo.completed.toString()}</td>
-            </tr>
+            <UserItem key={todo.id} todo={todo} />
           ))
         }
       </tbody>

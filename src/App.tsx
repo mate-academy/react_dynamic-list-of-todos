@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
-import { getUsers } from './api/usersFromServer';
-import { getTodos } from './api/todosFromServer';
+import { getUsers, getTodos } from './api/DataFromServer';
 import { UserList } from './components/UserList/UserList';
 import './App.css';
 
@@ -9,25 +8,19 @@ const App: FC = () => {
   const [loadingCondition, setLoadingConditon] = useState(false);
   const loadUsers = () => {
     setLoadingConditon(true);
-    const users = getUsers();
-    const todos = getTodos();
 
-    users.then(user => {
-      setLoadingConditon(false);
-
-      return user;
-    }).then(user => {
-      todos.then(todo => {
-        const todoWithUser = todo.map(todoItem => (
+    Promise.all([getUsers(), getTodos()])
+      .then(response => {
+        const todoWithUser = response[1].map(todoItem => (
           {
             ...todoItem,
-            user: user.find(userItem => userItem.id === todoItem.userId) as User,
+            user: response[0].find(userItem => userItem.id === todoItem.userId) as User,
           }
         ));
 
+        setLoadingConditon(false);
         setUserList(todoWithUser);
       });
-    });
   };
 
   return (
