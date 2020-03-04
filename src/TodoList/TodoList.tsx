@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { TodoWithUser } from '../api';
+import { TodoWithUser } from '../api/apiInterfaces';
 
 interface Props {
   todos: TodoWithUser[];
@@ -53,7 +53,7 @@ export const TodoList: FC<Props> = (props) => {
                 {todo.title}
               </td>
               <td>
-                {todo.completed ? 'Doned' : 'In process'}
+                {todo.completed ? 'Done' : 'In process'}
               </td>
             </tr>
           ))}

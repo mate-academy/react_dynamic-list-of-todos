@@ -1,12 +1,8 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 import { TodoList } from './TodoList/TodoList';
-import {
-  getTodo,
-  getUser,
-  TodoWithUser,
-  User,
-} from './api';
+import { getTodo, getUser } from './api/apiData';
+import { User, TodoWithUser } from './api/apiInterfaces';
 
 const App: FC = () => {
   const [todos, setTodo] = useState<TodoWithUser[]>([]);
@@ -54,7 +50,7 @@ const App: FC = () => {
     setTodo(newTodo);
   };
 
-  if (todos.length === 0) {
+  if (!todos.length) {
     return (
       <div>
         <button
