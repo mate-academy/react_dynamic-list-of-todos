@@ -11,7 +11,7 @@ export const TodoList: FC<Props> = ({ todos }) => {
         const {
           id,
           userId,
-          userName,
+          user: { name },
           title,
           completed,
         } = todo;
@@ -31,7 +31,7 @@ export const TodoList: FC<Props> = ({ todos }) => {
             <p className="todo__item">
               User:
               {' '}
-              {userName}
+              {name}
             </p>
             <p className="todo__item">
               Task:
