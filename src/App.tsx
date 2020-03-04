@@ -5,13 +5,13 @@ import { getTodos, getUsers } from './api/getData';
 import { Actions } from './components/Actions';
 
 export const  App:FC = () => {
-  let [isLoaded, setIsLoaded] = useState<boolean>(false);
-  let [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   async function handleStart() {
-    setIsLoaded(isLoaded = true);
-    setIsLoading(isLoaded = true);
+    setIsLoaded(true);
+    setIsLoading(true);
     const [
       todosFromServer,
       usersFromServer,
@@ -25,7 +25,7 @@ export const  App:FC = () => {
         user: usersFromServer
         .find((user) => user.id === todo.userId),
       })));
-    setIsLoading(isLoaded = false);
+    setIsLoading(false);
   }
 
   function sortByTitle() {    
