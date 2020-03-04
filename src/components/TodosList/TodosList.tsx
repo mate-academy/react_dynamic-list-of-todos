@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import { Todo } from '../Todo/Todo';
 
-interface State {
+interface Props{
   todos: TodoWithUser[];
   onSortTask: () => void;
   onSortName: () => void;
   onSortStatus: () => void;
 }
 
-export const TodosList: FC<State> = ({
+export const TodosList: FC<Props> = ({
   todos,
   onSortTask,
   onSortName,
