@@ -10,10 +10,10 @@ import {
 
 const App: FC = () => {
   const [todos, setTodo] = useState<TodoWithUser[]>([]);
-  const [isLoad, setLoad] = useState<boolean>();
+  const [isLoaded, setLoading] = useState<boolean>();
 
   const loadTodo = () => {
-    setLoad(true);
+    setLoading(true);
     Promise.all([getTodo(), getUser()])
       .then(response => {
         const todo = response[0].map(item => ({
@@ -24,7 +24,7 @@ const App: FC = () => {
         setTodo(todo);
       })
       .catch(() => {
-        setLoad(false);
+        setLoading(false);
       });
   };
 
@@ -63,7 +63,7 @@ const App: FC = () => {
         >
             Load todo
         </button>
-        <p>{isLoad ? 'Loading...' : ''}</p>
+        {isLoaded && <p>Loading...</p>}
       </div>
     );
   }
