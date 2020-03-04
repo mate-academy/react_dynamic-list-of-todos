@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { TodoWithUser } from '../api/apiInterfaces';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   todos: TodoWithUser[];
-  sort(string: string): void;
+  sort(field: string): void;
 }
 
 export const TodoList: FC<Props> = (props) => {
@@ -13,52 +13,24 @@ export const TodoList: FC<Props> = (props) => {
     <>
       <button
         type="button"
-        onClick={() => sort('by title')}
+        onClick={() => sort('title')}
       >
       Sort by title
       </button>
       <button
         type="button"
-        onClick={() => sort('by completed')}
+        onClick={() => sort('completed')}
       >
       Sort by completed
       </button>
       <button
         type="button"
-        onClick={() => sort('by name')}
+        onClick={() => sort('name')}
       >
       Sort by name
       </button>
-      <table>
-        <thead>
-          <tr>
-            <th>
-              USER
-            </th>
-            <th>
-              TITLE
-            </th>
-            <th>
-              COMPLETED
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {todos.map(todo => (
-            <tr key={todo.id}>
-              <td>
-                {todo.user.name}
-              </td>
-              <td>
-                {todo.title}
-              </td>
-              <td>
-                {todo.completed ? 'Done' : 'In process'}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TodoItem todos={todos} />
+
 
     </>
   );
