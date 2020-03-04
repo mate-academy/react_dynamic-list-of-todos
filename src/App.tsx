@@ -40,7 +40,7 @@ export const App = () => {
   return (
     <>
       <h1>Dynamic list of TODOs</h1>
-      {!isLoading
+      {(preparedTodos.length === 0)
         ? (
           <button
             type="button"

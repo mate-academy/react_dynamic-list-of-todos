@@ -1,19 +1,19 @@
-.filters {
-  bottom: 5px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: absolute;
-  right: 0;
-  left: 0;
+* {
+  color: #2c3437;
+  background-color: #f5f9fb;
 }
 
-.filters li {
-  display: inline;
+body {
+  text-align: center;
 }
 
-.filters li button {
-  color: inherit;
+table {
+  margin: auto;
+}
+
+button {
+  color: #2c3437;
+  background-color: #ddeef5;
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
@@ -21,10 +21,11 @@
   border-radius: 3px;
 }
 
-.filters li button:hover {
+button:hover {
   border-color: rgba(175, 47, 47, 0.1);
+  cursor: pointer;
 }
 
-.filters li button.selected {
+.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }

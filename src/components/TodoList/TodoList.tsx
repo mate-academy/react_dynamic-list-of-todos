@@ -5,22 +5,20 @@ interface Props {
   todos: PreparedTodo[];
 }
 
-export const TodoList: FC<Props> = ({ todos }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>User</th>
-          <th>Task</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {todos.map(todo => (
-          <Todo key={todo.id} todo={todo} />
-        ))}
-      </tbody>
-    </table>
-  );
-};
+export const TodoList: FC<Props> = ({ todos }) => (
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Task</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {todos.map(todo => (
+        <Todo key={todo.id} todo={todo} />
+      ))}
+    </tbody>
+  </table>
+);
