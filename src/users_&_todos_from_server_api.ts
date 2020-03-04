@@ -1,7 +1,6 @@
 import { User,Users, Todo, Todos, PreparedTodos } from './types';
 
-const API_Todos = 'https://jsonplaceholder.typicode.com/todos';
-const API_Users = 'https://jsonplaceholder.typicode.com/users';
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 export const getData = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
@@ -10,11 +9,11 @@ export const getData = async <T>(url: string): Promise<T> => {
 }
 
 export const getTodos = () => {
-  return getData<Todo[]>(API_Todos);
+  return getData<Todo[]>(`${API_URL}todos`);
 };
 
 export const getUsers = () => {
-  return getData<User[]>(API_Users);
+  return getData<User[]>(`${API_URL}users`);
 };
 
 export const getPreparedTodos = async (): Promise<PreparedTodos> => {
