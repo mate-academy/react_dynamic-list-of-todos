@@ -49,10 +49,7 @@ export const  App:FC = () => {
     setTodos([...todos
       .sort((a, b) => a.id - b.id)
       .sort((a, b) => {
-      const a1 = a.completed ? 1 : 0;
-      const b1 = b.completed ? 1 : 0;
-
-      return a1 - b1;
+      return Number(a.completed) - Number(b.completed);
     })]);
   }
       
