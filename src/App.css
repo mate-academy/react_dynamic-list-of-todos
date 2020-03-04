@@ -1,15 +1,15 @@
-td,
-th {
+.cell,
+.table__title {
   padding: 5px;
   border: 1px solid black;
   text-align: center;
 }
 
-th {
+.table__title {
   padding: 0;
 }
 
-table {
+.todo__table {
   border-collapse: collapse;
 }
 

@@ -1,28 +1,23 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 
-import {
-  TodoWithUser, loadData, Todo, User,
-} from './utils';
+import { TodoWithUser, loadTodos, loadUsers } from './utils';
 import { TodoList } from './components/TodoList';
 
-const URL_TODOS = 'https://jsonplaceholder.typicode.com/todos';
-const URL_USERS = 'https://jsonplaceholder.typicode.com/users';
-
-
 const App: FC<{}> = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState('');
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
+
   const clickHandler = () => {
     setIsLoading(true);
     Promise.all([
-      loadData<Todo[]>(URL_TODOS),
-      loadData<User[]>(URL_USERS),
+      loadTodos(),
+      loadUsers(),
     ])
-      .then(responses => {
-        const preparedTodos = responses[0].map(todo => {
-          const user = responses[1].find(person => todo.userId === person.id);
+      .then(([todosFromApi, usersFromApi]) => {
+        const preparedTodos = todosFromApi.map(todo => {
+          const user = usersFromApi.find(person => todo.userId === person.id);
 
           return { ...todo, user };
         });

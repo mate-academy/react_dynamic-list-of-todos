@@ -21,10 +21,10 @@ export const TodoList: FC<Props> = (props) => {
   } = props;
 
   return (
-    <table>
+    <table className='todo__table'>
       <thead>
         <tr>
-          <th>
+          <th className='table__title'>
             <button
               type="button"
               onClick={onTaskButton}
@@ -33,7 +33,7 @@ export const TodoList: FC<Props> = (props) => {
               number task
             </button>
           </th>
-          <th>
+          <th className='table__title'>
             <button
               type="button"
               onClick={onTitleButton}
@@ -42,7 +42,7 @@ export const TodoList: FC<Props> = (props) => {
               Title
             </button>
           </th>
-          <th>
+          <th  className='table__title'>
             <button
               type="button"
               onClick={onNameButton}
@@ -51,7 +51,7 @@ export const TodoList: FC<Props> = (props) => {
               Name
             </button>
           </th>
-          <th>
+          <th className='table__title'>
             <button
               type="button"
               onClick={onConditionButton}

@@ -1,3 +1,5 @@
+const URL = 'https://jsonplaceholder.typicode.com/';
+
 export interface Todo {
   userId: number;
   id: number;
@@ -43,11 +45,11 @@ export async function loadData<T>(url: string): Promise<T> {
 }
 
 export async function loadTodos(): Promise<Todo[]> {
-  return fetch('https://jsonplaceholder.typicode.com/todos')
+  return fetch(URL + 'todos')
     .then(response => response.json());
 }
 
 export async function loadUsers(): Promise<User[]> {
-  return fetch('https://jsonplaceholder.typicode.com/users')
+  return fetch(URL + 'users')
     .then(response => response.json());
 }

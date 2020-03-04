@@ -5,13 +5,12 @@ interface Props {
   todo: TodoWithUser;
 }
 
-export const Todo: FC<Props> = ({ todo }) => {
-  return (
-    <tr>
-      <td>{todo.id}</td>
-      <td>{todo.title}</td>
-      <td>{todo.user ? todo.user.name : ' - '}</td>
-      <td>{todo.completed ? 'pending' : 'completed'}</td>
-    </tr>
-  );
-};
+export const Todo: FC<Props> = ({ todo }) => (
+  <tr>
+    <td className='cell'>{todo.id}</td>
+    <td className='cell'>{todo.title}</td>
+    <td className='cell'>{todo.user ? todo.user.name : ' - '}</td>
+    <td className='cell'>{todo.completed ? 'pending' : 'completed'}</td>
+  </tr>
+);
+
