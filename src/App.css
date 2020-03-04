@@ -1,5 +1,15 @@
 .app {
   text-align: center;
+  margin: 20px auto;
+}
+
+.buttons-box {
+  width: 60vw;
+  margin: 0 auto;
+}
+
+.button {
+  margin: 10px;
 }
 
 .table {

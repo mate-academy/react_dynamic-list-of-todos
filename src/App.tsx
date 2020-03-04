@@ -4,7 +4,7 @@ import { getData } from './components/getData/getData';
 import { TodoList } from './components/TodoList';
 
 const App = () => {
-  const [allTodos, setAllTodos] = useState<TodoWithUser[]>([]);
+  const [todos, setAllTodos] = useState<TodoWithUser[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
@@ -17,17 +17,17 @@ const App = () => {
   };
 
   const handleFilterTitle = () => {
-    setAllTodos([...allTodos]
+    setAllTodos([...todos]
       .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
   const handleFilterName = () => {
-    setAllTodos([...allTodos]
+    setAllTodos([...todos]
       .sort((a, b) => a.user.name.localeCompare(b.user.name)));
   };
 
   const handleFilterComplited = () => {
-    setAllTodos([...allTodos]
+    setAllTodos([...todos]
       .sort((a, b) => +a.completed - +b.completed));
   };
 
@@ -39,22 +39,40 @@ const App = () => {
     );
   }
 
-  if (!allTodos.length) {
+  if (!todos.length) {
     return (
       <div className="app">
-        <button type="button" onClick={handleStart}>Add</button>
+        <button className="button is-info" type="button" onClick={handleStart}>Add</button>
       </div>
     );
   }
 
   return (
     <div className="app">
-      <h1>Dynamic list of TODOs</h1>
-
-      <button type="button" onClick={handleFilterTitle}>Filter Title</button>
-      <button type="button" onClick={handleFilterName}>Filter Name</button>
-      <button type="button" onClick={handleFilterComplited}>Filter Complited</button>
-      <TodoList allTodos={allTodos} />
+      <div className="buttons-box">
+        <button
+          className="button is-info"
+          type="button"
+          onClick={handleFilterTitle}
+        >
+          Filter Title
+        </button>
+        <button
+          className="button is-info"
+          type="button"
+          onClick={handleFilterName}
+        >
+          Filter Name
+        </button>
+        <button
+          className="button is-info"
+          type="button"
+          onClick={handleFilterComplited}
+        >
+          Filter Complited
+        </button>
+      </div>
+      <TodoList todos={todos} />
     </div>
   );
 };
