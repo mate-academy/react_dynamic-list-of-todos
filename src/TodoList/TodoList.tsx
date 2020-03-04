@@ -24,23 +24,19 @@ export const TodoList: FC<Props> = ({ todos }) => {
               {id}
             </p>
             <p className="todo__item">
-              UserID:
-              {' '}
+              UserID:&nbsp;
               {userId}
             </p>
             <p className="todo__item">
-              User:
-              {' '}
+              User:&nbsp;
               {name}
             </p>
             <p className="todo__item">
-              Task:
-              {' '}
+              Task:&nbsp;
               {title}
             </p>
             <p className="todo__item">
-              Completed:
-              {' '}
+              Completed:&nbsp;
               {completed ? '✔' : '❌'}
             </p>
           </div>

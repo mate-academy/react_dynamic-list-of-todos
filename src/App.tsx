@@ -34,15 +34,15 @@ export const App: FC = () => {
   return (
     <div className="App">
       <h1>Add todo form</h1>
-      {todos.length === 0 && (
+      {!todos.length && (
         <button type="button" onClick={loadTodos} disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Load Todos'}
         </button>
       )}
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <button type="button" onClick={sortByTitle}>
-        Sort by title
+            Sort by title
           </button>
           <button type="button" onClick={sortByStatus}>
           Sort by Status
