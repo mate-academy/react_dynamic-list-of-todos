@@ -13,6 +13,7 @@ export const TodoList: FC<Props> = ({ todos }) => {
           <th>ID</th>
           <th>User</th>
           <th>Task</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>

@@ -9,6 +9,7 @@ export const App = () => {
   const [isLoading, setIsLoadind] = useState<boolean>(false);
   const [preparedTodos, setpreparedTodos] = useState<PreparedTodo[]>([]);
   const [typeOfSort, settypeOfSort] = useState<string>('');
+
   const handleLoadButton = async () => {
     setIsLoadind(true);
     const todos = await getTodos();
@@ -21,12 +22,6 @@ export const App = () => {
 
     setpreparedTodos(addUserForTodos());
   };
-
-  /*   handleFilter = (filter) => {
-    this.setState({
-      filter,
-    });
-  } */
 
   const handleTypeOfSort = () => {
     switch (typeOfSort) {
@@ -41,26 +36,6 @@ export const App = () => {
         return preparedTodos;
     }
   };
-
-  /*   useEffect(() => {
-    getTodos().then(setTodos);
-    getUsers().then(setUsers);
-  }, []); */
-
-  /*   const addUserForTodos = () => todos.map(todo => ({
-    ...todo,
-    user: users.find(user => user.id === todo.userId),
-  }));
-
-  const preparedTodos = useMemo(() => {
-    if (todos.length || users.length) {
-      return addUserForTodos();
-    }
-
-    return [];
-  }, [users, todos]); */
-
-  /* console.log(preparedTodos); */
 
   return (
     <>
