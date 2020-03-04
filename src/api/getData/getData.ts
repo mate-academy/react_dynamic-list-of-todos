@@ -1,4 +1,7 @@
-import { TODOS_URL, USERS_URL } from '../../constants/constants';
+import { BASE_URL } from '../../constants/constants';
+
+const todos = 'todos';
+const users = 'users';
 
 const getData = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
@@ -7,9 +10,9 @@ const getData = async <T>(url: string): Promise<T> => {
 };
 
 export const getTodos = async () => {
-  return getData<Todo[]>(TODOS_URL);
+  return getData<Todo[]>(`${BASE_URL}${todos}`);
 };
 
 export const getUsers = async () => {
-  return getData<User[]>(USERS_URL);
+  return getData<User[]>(`${BASE_URL}${users}`);
 };

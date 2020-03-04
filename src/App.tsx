@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { getTodos, getUsers } from './api/todos&users/todos&users';
+import React, { FC, useState } from 'react';
+import { getTodos, getUsers } from './api/getData/getData';
 import { TodoList } from './components/TodoList';
 import './App.css';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const [todos, setTodos] = useState<PreparedTodo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // useEffect(() => {
   //   getTodos().then(setTodos);

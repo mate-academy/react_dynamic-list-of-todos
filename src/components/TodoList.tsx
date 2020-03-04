@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Todo } from './Todo';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: FC<Props> = ({
   todos,
   sortByTitle,
   showCompleted,
