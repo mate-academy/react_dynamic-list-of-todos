@@ -1,5 +1,4 @@
-const usersURL = 'https://jsonplaceholder.typicode.com/users';
-const todosURL = 'https://jsonplaceholder.typicode.com/todos';
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 export const getData = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
@@ -8,9 +7,9 @@ export const getData = async <T>(url: string): Promise<T> => {
 };
 
 export const getTodos = (): Promise<Todos> => {
-  return getData<Todos>(todosURL);
+  return getData<Todos>(`${API_URL}todos`);
 };
 
 export const getUsers = (): Promise<Users> => {
-  return getData<Users>(usersURL);
+  return getData<Users>(`${API_URL}users`);
 };

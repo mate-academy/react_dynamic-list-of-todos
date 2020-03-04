@@ -42,11 +42,7 @@ interface Company {
 
 type Users = User[];
 
-interface TodoWithUser {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
+interface TodoWithUser extends Todo {
   user: User;
 }
 

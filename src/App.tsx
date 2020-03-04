@@ -4,19 +4,19 @@ import { TodoList } from './components/TodoList/TodoList';
 
 import './App.css';
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [todos, setTodos] = useState<TodosWithUser>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [isStarted, setStarted] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState(false);
+  const [isStarted, setStarted] = useState(true);
 
   const loadData = () => {
     setLoading(true);
 
     Promise.all([getTodos(), getUsers()])
-      .then(response => {
-        const preparedTodos = response[0].map(todo => ({
+      .then(([todosFromApi, usersFromApi]) => {
+        const preparedTodos = todosFromApi.map(todo => ({
           ...todo,
-          user: response[1].find(person => todo.userId === person.id) as User,
+          user: usersFromApi.find(person => todo.userId === person.id) as User,
         }));
 
         setTodos(preparedTodos);
@@ -39,26 +39,24 @@ const App: FC<{}> = () => {
 
   return (
     <>
-      {
-        isStarted
-          ? (
-            <button
-              type="button"
-              className="button button-load"
-              disabled={isLoading}
-              onClick={loadData}
-            >
-              {isLoading ? 'Loading...' : 'Load'}
-            </button>
-          ) : (
-            <TodoList
-              todos={todos}
-              sortByName={sortByName}
-              sortByTitle={sortByTitle}
-              sortByComplete={sortByComplete}
-            />
-          )
-      }
+      {isStarted
+        ? (
+          <button
+            type="button"
+            className="button button-load"
+            disabled={isLoading}
+            onClick={loadData}
+          >
+            {isLoading ? 'Loading...' : 'Load'}
+          </button>
+        ) : (
+          <TodoList
+            todos={todos}
+            sortByName={sortByName}
+            sortByTitle={sortByTitle}
+            sortByComplete={sortByComplete}
+          />
+        )}
     </>
   );
 };
