@@ -19,11 +19,11 @@ export const  App:FC = () => {
       getTodos(),
       getUsers(),
     ]);
-    setTodos(todosFromServer.map((todo: { userId: number; }) => (
+    setTodos(todosFromServer.map((todo) => (
       {
         ...todo,
         user: usersFromServer
-        .find((user: { id: number; }) => user.id === todo.userId),
+        .find((user) => user.id === todo.userId),
       })));
     setIsLoading(isLoaded = false);
   }
