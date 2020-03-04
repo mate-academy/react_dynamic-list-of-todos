@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
+
 import { Button } from './components/Button';
 import { TodosList } from './components/TodosList';
 import { SortOptions } from './components/SortOptions';
+
 import { loadTodos } from './utils/todos';
 import { loadUsers } from './utils/users';
 import {
@@ -10,9 +12,10 @@ import {
   User,
   SortOption,
 } from './constants/types';
+import { sortTodosByTitle, sortTodosByCompleteness, sortTodosByName } from './utils/helpers';
 import './App.css';
 
-export const App = () => {
+export const App: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataWasLoaded, setDataWasLoaded] = useState<boolean>(false);
   const [sortedTodos, setSortedTodos] = useState<CompleteTodo[]>([]);
@@ -57,46 +60,24 @@ export const App = () => {
       return;
     }
 
+    let newSortedTodos: CompleteTodo[];
+
     switch (option) {
       case 'title': {
-        setSortedTodos(prevTodos => {
-          return prevTodos
-            .slice()
-            .sort((todoA, todoB) => {
-              return todoA[option] >= todoB[option]
-                ? 1
-                : -1;
-            });
-        });
-
+        newSortedTodos = sortTodosByTitle(sortedTodos);
+        setSortedTodos(newSortedTodos);
         break;
       }
 
       case 'completed': {
-        setSortedTodos(prevTodos => {
-          return prevTodos
-            .slice()
-            .sort((todoA, todoB) => {
-              return +todoA[option] >= +todoB[option]
-                ? 1
-                : -1;
-            });
-        });
-
+        newSortedTodos = sortTodosByCompleteness(sortedTodos);
+        setSortedTodos(newSortedTodos);
         break;
       }
 
       case 'name': {
-        setSortedTodos(prevTodos => {
-          return prevTodos
-            .slice()
-            .sort((todoA, todoB) => {
-              return todoA.user.name >= todoB.user.name
-                ? 1
-                : -1;
-            });
-        });
-
+        newSortedTodos = sortTodosByName(sortedTodos);
+        setSortedTodos(newSortedTodos);
         break;
       }
 
@@ -111,8 +92,8 @@ export const App = () => {
   return (
     <div>
       {renderLoadButton()}
-      {dataWasLoaded ? <SortOptions onClick={handleSortButtonClick} /> : null}
-      {dataWasLoaded ? <TodosList todos={sortedTodos} /> : null}
+      {dataWasLoaded && <SortOptions onClick={handleSortButtonClick} />}
+      {dataWasLoaded && <TodosList todos={sortedTodos} />}
     </div>
   );
 };

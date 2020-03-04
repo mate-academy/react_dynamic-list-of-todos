@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 interface Props {
   text: string;
@@ -6,7 +6,7 @@ interface Props {
   onClick?(): void;
 }
 
-export const Button: React.FC<Props> = props => {
+export const Button: FC<Props> = props => {
   const { text, disabled, onClick } = props;
 
   return (
