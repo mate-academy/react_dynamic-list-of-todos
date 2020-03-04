@@ -1,8 +1,80 @@
-import React from 'react';
+import React, {FC, useState} from 'react';
+import TodoList from './components/TodoList';
 import './App.css';
+import { getTodos, getUsers } from './api/getData';       
+import { Actions } from './components/Actions';
 
-const App = () => (
-  <h1>Dynamic list of TODOs</h1>
-);
+export const  App:FC = () => {
+  let [isLoaded, setIsLoaded] = useState<boolean>(false);
+  let [isLoading, setIsLoading] = useState<boolean>(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-export default App;
+  async function handleStart() {
+    setIsLoaded(isLoaded = true);
+    setIsLoading(isLoaded = true);
+    const [
+      todosFromServer,
+      usersFromServer,
+    ] = await Promise.all([
+      getTodos(),
+      getUsers(),
+    ]);
+    setTodos(todosFromServer.map((todo: { userId: number; }) => (
+      {
+        ...todo,
+        user: usersFromServer
+        .find((user: { id: number; }) => user.id === todo.userId),
+      })));
+    setIsLoading(isLoaded = false);
+  }
+
+  function sortByTitle() {    
+    setTodos([...todos
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => a.title.localeCompare(b.title))]);  
+  }
+
+  function sortByUserName() {
+    setTodos([...todos
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => {
+          if (a.user && b.user) {
+            return a.user.name.localeCompare(b.user.name)
+          }
+          else return 0;
+      })]);  
+  }
+
+  function sortByCompleted() {
+    setTodos([...todos
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => {
+      const a1 = a.completed ? 1 : 0;
+      const b1 = b.completed ? 1 : 0;
+
+      return a1 - b1;
+    })]);
+  }
+      
+return (
+   <>
+   {isLoaded && 
+    <Actions 
+       sortByCompleted={sortByCompleted} 
+       sortByTitle={sortByTitle} 
+       sortByUserName={sortByUserName} 
+    />}
+   
+   {!isLoaded && 
+     <button 
+       className="button" 
+       type="button" 
+       onClick={handleStart}
+     >
+       Press to start
+    </button>}   
+   {isLoading ? <p>Loading...</p> : <TodoList data={todos} />}   
+   </>
+  );
+}
+  
