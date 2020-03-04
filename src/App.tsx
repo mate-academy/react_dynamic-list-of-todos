@@ -16,8 +16,8 @@ import { sortTodosByTitle, sortTodosByCompleteness, sortTodosByName } from './ut
 import './App.css';
 
 export const App: FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [dataWasLoaded, setDataWasLoaded] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
   const [sortedTodos, setSortedTodos] = useState<CompleteTodo[]>([]);
   const [sortOption, setSortOption] = useState<SortOption>(null);
 
