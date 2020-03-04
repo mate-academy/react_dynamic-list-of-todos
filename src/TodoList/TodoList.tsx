@@ -54,7 +54,7 @@ export const TodoList: FC<Props> = (props) => {
       <tbody className="table__body">
         {todos.map(todo => (
           <Todo
-            currentTodo={todo}
+            todo={todo}
             key={todo.id}
           />
         ))}

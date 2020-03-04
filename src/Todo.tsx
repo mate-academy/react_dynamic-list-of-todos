@@ -2,15 +2,15 @@ import React, { FC } from 'react';
 import { TodoWithUser } from './types';
 
 interface Props {
-  currentTodo: TodoWithUser;
+  todo: TodoWithUser;
 }
 
-export const Todo: FC<Props> = ({ currentTodo }) => {
+export const Todo: FC<Props> = ({ todo }) => {
   return (
     <tr>
-      <td>{currentTodo.user.name}</td>
-      <td>{currentTodo.title}</td>
-      <td>{currentTodo.completed ? 'Complete' : 'Do it!'}</td>
+      <td>{todo.user.name}</td>
+      <td>{todo.title}</td>
+      <td>{todo.completed ? 'Complete' : 'Do it!'}</td>
     </tr>
   );
 };

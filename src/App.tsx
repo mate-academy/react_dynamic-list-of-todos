@@ -4,21 +4,22 @@ import { TodoWithUser, User, Todo } from './types';
 import { TodoList } from './TodoList/TodoList';
 import './App.css';
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFiltred, setIsFiltred] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
 
-  const showTodos = () => {
+  const handleLoadTodos = () => {
     setIsLoading(true);
-    setIsFiltred(false);
+    setIsFiltered(false);
+
     Promise.all([
       loadTodos,
       loadUsers,
     ])
-      .then(res => {
-        const todoWithUser = res[0].map((todo: Todo) => {
-          const user = res[1].find(
+      .then(([todosFromApi, usersFromApi]) => {
+        const todoWithUser = todosFromApi.map((todo: Todo) => {
+          const user = usersFromApi.find(
             (person: User) => todo.userId === person.id,
           ) as User;
 
@@ -34,21 +35,21 @@ const App: FC<{}> = () => {
     setTodos([...todos].sort(
       (a, b) => a.user.name.localeCompare(b.user.name),
     ));
-    setIsFiltred(true);
+    setIsFiltered(true);
   };
 
   const handleSortByTitle = () => {
     setTodos([...todos].sort(
       (a, b) => a.title.localeCompare(b.title),
     ));
-    setIsFiltred(true);
+    setIsFiltered(true);
   };
 
   const handleSortByCompleted = () => {
     setTodos([...todos].sort(
       (a, b) => Number(a.completed) - Number(b.completed),
     ));
-    setIsFiltred(true);
+    setIsFiltered(true);
   };
 
   return (
@@ -60,7 +61,7 @@ const App: FC<{}> = () => {
             <button
               className="button"
               type="button"
-              onClick={showTodos}
+              onClick={handleLoadTodos}
               disabled={isLoading}
             >
               Load Todo
@@ -68,19 +69,15 @@ const App: FC<{}> = () => {
           )
           : (
             <>
-              {
-                isFiltred
-                  ? (
-                    <button
-                      className="button reset-filter"
-                      type="button"
-                      onClick={showTodos}
-                    >
-                      Reset filter
-                    </button>
-                  )
-                  : null
-              }
+              {isFiltered && (
+                <button
+                  className="button reset-filter"
+                  type="button"
+                  onClick={handleLoadTodos}
+                >
+                  Reset filter
+                </button>
+              )}
               <div className="app">
                 <TodoList
                   todos={todos}
@@ -92,13 +89,9 @@ const App: FC<{}> = () => {
             </>
           )
       }
-      {
-        isLoading
-          ? (
-            <p className="loading-text">Loading...</p>
-          )
-          : null
-      }
+      {isLoading && (
+        <p className="loading-text">Loading...</p>
+      )}
     </>
   );
 };
