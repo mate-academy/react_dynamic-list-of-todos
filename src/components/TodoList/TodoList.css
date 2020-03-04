@@ -1,0 +1,24 @@
+.todo-list {
+  margin: 0 auto;
+  max-width: 800px;
+  border: 5px solid #d65db1;
+  border-collapse: collapse;
+}
+
+.todo-list__header {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 3px solid #d65db1;
+}
+
+.todo-list__sort-btn {
+  width: 100%;
+  border: none;
+  background-color: #845ec2;
+  cursor: pointer;
+  outline: none;
+}
+
+td {
+  padding: 10px;
+}
