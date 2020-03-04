@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import './App.css';
 import { TodoList } from './TodoList/TodoList';
 import { getTodos, getUsers } from './Api/Api';
 
-export const App = () => {
+export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
