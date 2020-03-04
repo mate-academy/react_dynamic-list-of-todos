@@ -11,11 +11,20 @@
   border-bottom: 3px solid #d65db1;
 }
 
-.todo-list__sort-btn {
-  width: 100%;
-  border: none;
+.todo-list__header th {
   background-color: #845ec2;
   cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.3s;
+}
+
+.todo-list__header th:hover {
+  background-color: #d65db1;
+}
+
+.todo-list__sort-btn {
+  border: none;
+  background-color: transparent;
   outline: none;
 }
 
