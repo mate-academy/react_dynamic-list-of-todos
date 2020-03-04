@@ -6,7 +6,6 @@ interface Todo {
   id: number;
   title: string;
   completed: boolean;
-  user: UserProps;
 }
 
 interface Company {
@@ -38,5 +37,5 @@ interface User {
 }
 
 interface TodoWithUser extends Todo {
-  user: User;
+  user: User | undefined;
 }
