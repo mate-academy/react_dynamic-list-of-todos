@@ -1,1 +1,60 @@
+.App {
+  text-align: center;
+}
 
+.table {
+  margin: 0 auto;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  border: 2px solid #8992b1;
+  border-collapse: collapse;
+}
+
+.head-column {
+  height: 50px;
+  padding: 0;
+  margin: 0;
+  border: 2px solid #8992b1;
+}
+
+.row {
+  border: 2px solid #8992b1;
+}
+
+.column {
+  padding: 5px;
+  border: 2px solid #8992b1;
+}
+
+.column:first-child {
+  width: 200px;
+}
+
+.column:nth-child(2) {
+  text-align: left;
+  width: 600px;
+}
+
+.column:last-child {
+  width: 100px;
+}
+
+.button {
+  display: block;
+  height: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  background-color: #07613b;
+  border-style: none;
+  cursor: pointer;
+}
+
+.button-load {
+  width: 100px;
+  border-radius: 5px;
+  margin: 0 auto;
+}
+
+.button-sort {
+  width: 100%;
+}
