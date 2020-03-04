@@ -1,1 +1,43 @@
+.title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
 
+.button {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.primary-bg {
+  background: #1a1a1a;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.todo__cell:not(:first-child) {
+  border-left: 1px solid #ccc;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo__id {
+  flex-basis: 50px;
+}
+
+.todo__title {
+  flex-basis: calc(100% - 100px - 30% );
+}
+
+.todo__user {
+  flex-basis: 30%;
+}
+
+.todo__completed {
+  flex-basis: 50px;
+}
