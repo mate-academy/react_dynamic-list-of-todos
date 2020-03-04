@@ -6,8 +6,6 @@ interface Props {
   user: UserType;
 }
 
-export const User: FC<Props> = ({ user }) => {
-  return (
-    <p className="user">{user.name}</p>
-  );
-};
+export const User: FC<Props> = ({ user }) => (
+  <p className="user">{user.name}</p>
+);

@@ -4,10 +4,11 @@ import { TodoList } from './components/TodoList/TodoList';
 import { TodoType, UserType, TodoWithUsers } from './types';
 import { getUsers, getTodos } from './api';
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [todos, setTodos] = useState<TodoWithUsers[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
   const [filteredTodos, setFilteredTodos] = useState<TodoWithUsers[]>([...todos]);
+  const [isLoading, setLoading] = useState(false);
+
 
   const showTodos = async () => {
     setLoading(true);
@@ -66,9 +67,27 @@ const App: FC<{}> = () => {
     <div className="App">
       <h1 className="title">Static list of todos</h1>
       <div className="buttons">
-        <button className="button" type="button" onClick={() => filter('sortByTitle')}>Sort by title</button>
-        <button className=" button" type="button" onClick={() => filter('sortByName')}>Sort by name</button>
-        <button className="button" type="button" onClick={() => filter('sortByCompleted')}>Sort by completed</button>
+        <button
+          className="button"
+          type="button"
+          onClick={() => filter('sortByTitle')}
+        >
+          Sort by title
+        </button>
+        <button
+          className=" button"
+          type="button"
+          onClick={() => filter('sortByName')}
+        >
+          Sort by name
+        </button>
+        <button
+          className="button"
+          type="button"
+          onClick={() => filter('sortByCompleted')}
+        >
+          Sort by completed
+        </button>
       </div>
       <TodoList todos={filteredTodos} />
     </div>

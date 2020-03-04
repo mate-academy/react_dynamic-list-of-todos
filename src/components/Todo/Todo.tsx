@@ -7,7 +7,9 @@ interface Props {
   todo: TodoWithUsers;
 }
 
-export const Todo: FC<Props> = ({ todo: { title, user, completed } }) => {
+export const Todo: FC<Props> = ({ todo }) => {
+  const { title, user, completed } = todo;
+
   return (
     <>
       <p className="todo__title">{title}</p>

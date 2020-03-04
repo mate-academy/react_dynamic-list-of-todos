@@ -1,7 +1,6 @@
 import { TodoType, UserType } from './types';
 
-const usersUrl = 'https://jsonplaceholder.typicode.com/users';
-const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 async function getData<T>(url: string): Promise<T> {
   const response = await fetch(url);
@@ -10,9 +9,9 @@ async function getData<T>(url: string): Promise<T> {
 }
 
 export const getUsers = () => {
-  return getData<UserType[]>(usersUrl);
+  return getData<UserType[]>(`${API_URL}users`);
 };
 
 export const getTodos = () => {
-  return getData<TodoType[]>(todosUrl);
+  return getData<TodoType[]>(`${API_URL}todos`);
 };
