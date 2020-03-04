@@ -5,7 +5,7 @@ import { getTodos } from './api/getTodos';
 import { getUsers } from './api/getUsers';
 
 import { TodoList } from './components/TodoList';
-import { PreparedTodo } from './utils/interfaces';
+import { PreparedTodo, UserType } from './utils/interfaces';
 
 const App: FC<{}> = () => {
   const [todos, saveTodos] = useState<PreparedTodo[]>([]);
@@ -24,7 +24,7 @@ const App: FC<{}> = () => {
 
     const preparedTodos = [...loadedTodos]
       .map((todo) => {
-        const user = loadedUsers.find(person => person.id === todo.userId);
+        const user = loadedUsers.find(person => person.id === todo.userId) as UserType;
 
         return {
           ...todo,
@@ -47,7 +47,7 @@ const App: FC<{}> = () => {
           .sort(a => (a.completed ? -1 : 1)));
           break;
         case 'username': saveVisibleTodos([...todos]
-          .sort((a, b) => ((a.user && b.user) ? b.user.name.localeCompare(a.user.name) : 0)));
+          .sort((a, b) => (b.user.name.localeCompare(a.user.name))));
           break;
         default: saveVisibleTodos([...todos]
           .sort((a, b) => b.title.localeCompare(a.title)));

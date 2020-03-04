@@ -16,7 +16,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
   return (
     <tr>
       <td>{id}</td>
-      <td>{user ? user.name : ''}</td>
+      <td>{user.name}</td>
       <td>{title}</td>
       <td>{completed ? 'Yes' : 'No'}</td>
     </tr>

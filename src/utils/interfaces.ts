@@ -30,5 +30,5 @@ export interface UserType {
 }
 
 export interface PreparedTodo extends TodoType {
-  user: UserType | undefined;
+  user: UserType;
 }
