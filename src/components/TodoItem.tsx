@@ -14,11 +14,11 @@ export const TodoItem: FC<Props> = ({ todo }) => {
   } = todo;
 
   return (
-    <tr>
-      <td>{id}</td>
-      <td>{user.name}</td>
-      <td>{title}</td>
-      <td>{completed ? 'Yes' : 'No'}</td>
+    <tr className="table__row">
+      <td className="table__cell">{id}</td>
+      <td className="table__cell">{user.name}</td>
+      <td className="table__cell">{title}</td>
+      <td className="table__cell">{completed ? 'Yes' : 'No'}</td>
     </tr>
   );
 };

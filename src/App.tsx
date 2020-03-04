@@ -7,7 +7,7 @@ import { getUsers } from './api/getUsers';
 import { TodoList } from './components/TodoList';
 import { PreparedTodo, UserType } from './utils/interfaces';
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [todos, saveTodos] = useState<PreparedTodo[]>([]);
   const [visibleTodos, saveVisibleTodos] = useState<PreparedTodo[]>([...todos]);
   const [isLoading, setLoading] = useState(false);
@@ -17,10 +17,10 @@ const App: FC<{}> = () => {
   const loadTodos = async () => {
     setLoading(true);
 
-    const [loadedTodos, loadedUsers] = await Promise.all(
-      [getTodos(), getUsers()],
-    )
-      .finally(() => setLoaded(true));
+    const [loadedTodos, loadedUsers] = await Promise.all([
+      getTodos(),
+      getUsers(),
+    ]).finally(() => setLoaded(true));
 
     const preparedTodos = [...loadedTodos]
       .map((todo) => {

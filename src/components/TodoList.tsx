@@ -9,19 +9,19 @@ interface Props {
 }
 
 export const TodoList: FC<Props> = ({ todos, filter }) => (
-  <table>
-    <thead>
-      <tr>
-        <th onClick={() => filter('id')}>
+  <table className="table">
+    <thead className="table__head">
+      <tr className="table__row">
+        <th className="table__heading" onClick={() => filter('id')}>
           No
         </th>
-        <th onClick={() => filter('username')}>
+        <th className="table__heading" onClick={() => filter('username')}>
           Name
         </th>
-        <th onClick={() => filter('title')}>
+        <th className="table__heading" onClick={() => filter('title')}>
           Title
         </th>
-        <th onClick={() => filter('completed')}>
+        <th className="table__heading" onClick={() => filter('completed')}>
           Status
         </th>
       </tr>

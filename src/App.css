@@ -2,35 +2,35 @@
   text-align: center;
 }
 
-table {
+.table {
   margin: 0 auto;
   font-family: Arial, sans-serif;
   border: 2px solid lightcoral;
   border-collapse: collapse;
 }
 
-th {
+.table__heading {
   padding: 5px;
   border: 2px solid lightcoral;
   background-color: crimson;
   cursor: pointer;
 }
 
-tr {
+.table__row {
   border: 2px solid lightcoral;
   background-color: lightgoldenrodyellow;
 }
 
-td {
+.table__cell {
   padding: 5px;
   border: 2px solid lightcoral;
 }
 
-td:nth-child(3) {
+.table__cell:nth-child(3) {
   text-align: left;
   width: 50vw;
 }
 
-td:last-child {
+.table__cell:last-child {
   width: 100px;
 }
