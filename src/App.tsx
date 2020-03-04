@@ -1,13 +1,13 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 import { TodoList } from './components/TodoList/TodoList';
-import { TodoType, UserType } from './types';
+import { TodoType, UserType, TodoWithUsers } from './types';
 import { getUsers, getTodos } from './api';
 
 const App: FC<{}> = () => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [todos, setTodos] = useState<TodoWithUsers[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [visibleTodos, setVisibleTodos] = useState<TodoType[]>([...todos]);
+  const [filteredTodos, setFilteredTodos] = useState<TodoWithUsers[]>([...todos]);
 
   const showTodos = async () => {
     setLoading(true);
@@ -27,21 +27,21 @@ const App: FC<{}> = () => {
 
     setTodos(preparedTodos);
     setLoading(false);
-    setVisibleTodos(preparedTodos);
+    setFilteredTodos(preparedTodos);
   };
 
   const filter = (typeOfFilter: string) => {
     switch (typeOfFilter) {
       case 'sortByTitle':
-        setVisibleTodos([...todos]
+        setFilteredTodos([...todos]
           .sort((a, b) => a.title.localeCompare(b.title)));
         break;
       case 'sortByName':
-        setVisibleTodos([...todos]
+        setFilteredTodos([...todos]
           .sort((a, b) => a.user.name.localeCompare(b.user.name)));
         break;
       case 'sortByCompleted':
-        setVisibleTodos([...todos]
+        setFilteredTodos([...todos]
           .sort((a, b) => b.completed.toString()
             .localeCompare(a.completed.toString())));
         break;
@@ -57,17 +57,19 @@ const App: FC<{}> = () => {
 
   if (!todos.length) {
     return (
-      <button type="button" onClick={showTodos}>Load todos</button>
+      <button className="button" type="button" onClick={showTodos}>Load todos</button>
     );
   }
 
   return (
     <div className="App">
-      <h1>Static list of todos</h1>
-      <button type="button" onClick={() => filter('sortByTitle')}>Sort by title</button>
-      <button type="button" onClick={() => filter('sortByName')}>Sort by name</button>
-      <button type="button" onClick={() => filter('sortByCompleted')}>Sort by completed</button>
-      <TodoList todos={visibleTodos} />
+      <h1 className="title">Static list of todos</h1>
+      <div className="buttons">
+        <button className="button" type="button" onClick={() => filter('sortByTitle')}>Sort by title</button>
+        <button className=" button" type="button" onClick={() => filter('sortByName')}>Sort by name</button>
+        <button className="button" type="button" onClick={() => filter('sortByCompleted')}>Sort by completed</button>
+      </div>
+      <TodoList todos={filteredTodos} />
     </div>
   );
 };

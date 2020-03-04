@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { User } from '../User/User';
-import { TodoType } from '../../types';
+import { TodoWithUsers } from '../../types';
 import './Todo.css';
 
 interface Props {
-  todo: TodoType;
+  todo: TodoWithUsers;
 }
 
 export const Todo: FC<Props> = ({ todo: { title, user, completed } }) => {

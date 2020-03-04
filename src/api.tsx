@@ -1,16 +1,18 @@
+import { TodoType, UserType } from './types';
+
 const usersUrl = 'https://jsonplaceholder.typicode.com/users';
 const todosUrl = 'https://jsonplaceholder.typicode.com/todos';
 
-export const getUsers = () => {
-  const users = fetch(usersUrl)
-    .then(response => response.json());
+async function getData<T>(url: string): Promise<T> {
+  const response = await fetch(url);
 
-  return users;
+  return response.json();
+}
+
+export const getUsers = () => {
+  return getData<UserType[]>(usersUrl);
 };
 
 export const getTodos = () => {
-  const todos = fetch(todosUrl)
-    .then(response => response.json());
-
-  return todos;
+  return getData<TodoType[]>(todosUrl);
 };
