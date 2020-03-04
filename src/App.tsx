@@ -36,7 +36,6 @@ const App: FC = () => {
   };
 
   const handleSortName = () => {
-
     setTodosWithUsers([...todosWithUsers].sort((a, b) => {
       if (a.user && b.user) {
         return a.user.name.localeCompare(b.user.name);
@@ -47,14 +46,12 @@ const App: FC = () => {
   };
 
   const handleSortTitle = () => {
-
     setTodosWithUsers([...todosWithUsers].sort((a, b) => {
       return a.title.localeCompare(b.title);
     }));
   };
 
   const handleSortReadiness = () => {
-
     setTodosWithUsers([...todosWithUsers].sort((a, b) => {
       return Number(a.completed) - Number(b.completed);
     }));

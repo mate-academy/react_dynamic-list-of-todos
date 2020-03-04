@@ -19,7 +19,7 @@ export const Todo: FC<Props> = ({ todo }) => {
       <td className="table__cell">{id}</td>
       <td className="table__cell">{user ? user.name : ''}</td>
       <td className="table__cell">{title}</td>
-      <td className="table__cell">{`${completed}`}</td>
+      <td className="table__cell">{completed ? 'done' : 'not done'}</td>
     </>
   );
 };
