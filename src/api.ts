@@ -1,15 +1,11 @@
-const BASE_URL = 'https://jsonplaceholder.typicode.com';
+const API_URL = 'https://jsonplaceholder.typicode.com';
 
-async function getData<T>(url: string): Promise<T> {
-  const response = await fetch(url);
-
-  return response.json();
-}
-
-export const getUsers = () => {
-  return getData<User[]>(`${BASE_URL}/users`);
+export const getUsers = (): Promise<User[]> => {
+  return fetch(`${API_URL}/users`)
+    .then(response => response.json());;
 };
 
-export const getTodos = () => {
-  return getData<Todo[]>(`${BASE_URL}/todos`);
+export const getTodos = (): Promise<Todo[]> => {
+  return fetch(`${API_URL}/todos`)
+    .then(response => response.json());;
 };

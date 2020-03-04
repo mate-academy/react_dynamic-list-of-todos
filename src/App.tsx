@@ -56,44 +56,44 @@ const App: FC = () => {
     <>
       {isLoaded ? (
         <>
-              <div className="buttons-wrapper">
-              <button
-                type="button"
-                onClick={() => filter('sortByTitle')}
-              >
-                Sort by title
+          <div className="buttons-wrapper">
+            <button
+              type="button"
+              onClick={() => filter('sortByTitle')}
+            >
+              Sort by title
               </button>
-              <button
-                type="button"
-                onClick={() => filter('sortByName')}
-              >
-                Sort by user
+            <button
+              type="button"
+              onClick={() => filter('sortByName')}
+            >
+              Sort by user
               </button>
-              <button
-                type="button"
-                onClick={() => filter('sortByCompleted')}
-              >
-                Sort by completeness
+            <button
+              type="button"
+              onClick={() => filter('sortByCompleted')}
+            >
+              Sort by completeness
               </button>
-            </div>
-        <TodoList
-          todos={filteredTodos}
-        />
+          </div>
+          <TodoList
+            todos={filteredTodos}
+          />
         </>
       ) : (
-        <div className="wrapper">
-          {hasError && (
-            <h2 className="error-title">Error loading data occured.</h2>
-          )}
-          <button
-            type="button"
-            onClick={loadTodos}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Loading...' : 'Load todos'}
-          </button>
-        </div>
-      )}
+          <div className="wrapper">
+            {hasError && (
+              <h2 className="error-title">Error loading data occured.</h2>
+            )}
+            <button
+              type="button"
+              onClick={loadTodos}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Load todos'}
+            </button>
+          </div>
+        )}
     </>
   );
 };
