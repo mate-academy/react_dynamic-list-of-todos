@@ -7,7 +7,7 @@ interface Props {
   user?: User;
 }
 
-const Todo: FC<Props> = ({
+export const Todo: FC<Props> = ({
   id, title, completed, user,
 }) => {
   return (

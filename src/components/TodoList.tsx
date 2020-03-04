@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
-import Todo from './Todo';
+import { Todo } from './Todo';
 
 interface Props {
   data: Todo[];
 }
 
-const TodoList: FC<Props> = ({ data }) => {
+export const TodoList: FC<Props> = ({ data }) => {
   return (
     <>
       <h1>Todo List</h1>
@@ -21,5 +21,3 @@ const TodoList: FC<Props> = ({ data }) => {
     </>
   );
 }
-
-export default TodoList;

@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import TodoList from './components/TodoList';
+import { TodoList } from './components/TodoList';
 import './App.css';
 import { getTodos, getUsers } from './api/getData';       
 import { Actions } from './components/Actions';
