@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import './App.css';
 import { getData } from './components/getData/getData';
 import { TodoList } from './components/TodoList';
 
-const App = () => {
-  const [todos, setAllTodos] = useState<TodoWithUser[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const App: FC = () => {
+  const [todos, setTodos] = useState<TodoWithUser[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleStart = async () => {
     setIsLoading(true);
-    const dataFromServer = await getData();
+    const todosFromServer = await getData();
 
-    setAllTodos(dataFromServer);
+    setTodos(todosFromServer);
     setIsLoading(false);
   };
 
-  const handleFilterTitle = () => {
-    setAllTodos([...todos]
-      .sort((a, b) => a.title.localeCompare(b.title)));
-  };
-
-  const handleFilterName = () => {
-    setAllTodos([...todos]
-      .sort((a, b) => a.user.name.localeCompare(b.user.name)));
-  };
-
-  const handleFilterComplited = () => {
-    setAllTodos([...todos]
-      .sort((a, b) => +a.completed - +b.completed));
+  const filterForAll = (filterType: string) => {
+    switch (filterType) {
+      case 'title':
+        setTodos([...todos]
+          .sort((a, b) => a.title.localeCompare(b.title)));
+        break;
+      case 'name':
+        setTodos([...todos]
+          .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+        break;
+      case 'completed':
+        setTodos([...todos]
+          .sort((a, b) => +a.completed - +b.completed));
+        break;
+      default:
+    }
   };
 
   if (isLoading) {
@@ -53,23 +56,23 @@ const App = () => {
         <button
           className="button is-info"
           type="button"
-          onClick={handleFilterTitle}
+          onClick={() => filterForAll('title')}
         >
           Filter Title
         </button>
         <button
           className="button is-info"
           type="button"
-          onClick={handleFilterName}
+          onClick={() => filterForAll('name')}
         >
           Filter Name
         </button>
         <button
           className="button is-info"
           type="button"
-          onClick={handleFilterComplited}
+          onClick={() => filterForAll('completed')}
         >
-          Filter Complited
+          Filter Completed
         </button>
       </div>
       <TodoList todos={todos} />
