@@ -10,10 +10,10 @@ async function getData<T>(url: string): Promise<T> {
   return response.json();
 }
 
-export const getUsers = () => {
+export const getUsers = (): Promise<User[]> => {
   return getData<User[]>(USERS_URL);
 };
 
-export const getTodos = () => {
+export const getTodos = (): Promise<Todo[]> => {
   return getData<Todo[]>(TODOS_URL);
 };
