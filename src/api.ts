@@ -1,5 +1,4 @@
-const API_TODOS = 'https://jsonplaceholder.typicode.com/todos';
-const API_USERS = 'https://jsonplaceholder.typicode.com/users';
+import { API_TODOS, API_USERS } from './constants';
 
 const getData = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);

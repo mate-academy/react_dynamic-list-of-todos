@@ -5,7 +5,6 @@ interface Props {
 }
 
 export const Todo: React.FC<Props> = ({ todo }) => {
-  // const { user, title, completed } = todo;
 
   return (
     <tr>

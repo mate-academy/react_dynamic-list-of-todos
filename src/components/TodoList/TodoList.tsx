@@ -14,8 +14,6 @@ export const TodoList: React.FC<Props> = ({
   onNameBtn,
   onCompletedBtn,
 }) => {
-  // let [status, setStatus] = useState('');
-
   return (
     <div className="table-wrapper">
       <table className="table table-striped w-100 w-50">
