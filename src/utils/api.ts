@@ -15,8 +15,8 @@ export const getTodos = async (): Promise<Todo[]> => {
 };
 
 export const getCorrectTodos = async (): Promise<PreparedTodo[]> => {
-  const todos: Todos = await getTodos();
-  const users: Users = await getUsers();
+  const todos: Todo[] = await getTodos();
+  const users: User[] = await getUsers();
 
   return todos.map(todo => ({
     ...todo,

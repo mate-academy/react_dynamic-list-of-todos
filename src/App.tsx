@@ -11,9 +11,8 @@ const App: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
+    setIsLoading(true);
     getCorrectTodos().then(list => {
-      setIsLoading(true);
-
       // setTimeout for demo only
       setTimeout(() => {
         setTodoList(list);
@@ -46,10 +45,7 @@ const App: FC = () => {
   const completedSorter = () => {
     setTodoList([...todoList]
       .sort((a, b) => {
-        const isCompletedA = a.completed ? 1 : 0;
-        const isCompletedB = b.completed ? 1 : 0;
-
-        return isCompletedA - isCompletedB;
+        return Number(a.completed) - Number(b.completed);
       }));
   };
 
@@ -57,25 +53,23 @@ const App: FC = () => {
     <div className="container">
       <h1 className="title text-center">Dynamic list of TODOs</h1>
 
-      {todoList.length === 0
-        && (
-          <button type="button" className="button-load" onClick={handleClick}>
-            {isLoading ? 'Loading...' : 'Load'}
-          </button>
-        )}
+      {todoList.length === 0 && (
+        <button type="button" className="button-load" onClick={handleClick}>
+          {isLoading ? 'Loading...' : 'Load'}
+        </button>
+      )}
 
-      {todoList.length !== 0
-        && (
-          <>
-            <Controller
-              idSorter={idSorter}
-              titleSorter={titleSorter}
-              userNameSorter={userNameSorter}
-              completedSorter={completedSorter}
-            />
-            <TodoList todos={todoList} />
-          </>
-        )}
+      {todoList.length !== 0 && (
+        <>
+          <Controller
+            idSorter={idSorter}
+            titleSorter={titleSorter}
+            userNameSorter={userNameSorter}
+            completedSorter={completedSorter}
+          />
+          <TodoList todos={todoList} />
+        </>
+      )}
     </div>
   );
 };
