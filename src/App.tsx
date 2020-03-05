@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { PreparedTodos } from './types';
+import React, { useState, FC, useMemo } from 'react';
+import { PreparedTodo } from './types';
 import { TodoList } from './components/TodoList/TodoList';
-import { getPreparedTodos } from './users_&_todos_from_server_api'
+import { getPreparedTodos } from './helpers_api'
 import './App.css';
 
-export const App: React.FC = () => {
-  const [todos, setTodos] = useState<PreparedTodos>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedSort, setSelectedSort] = useState<string>('choose');
+export const App: FC = () => {
+  const [todos, setTodos] = useState<PreparedTodo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
+  const [selectedSort, setSelectedSort] = useState('choose');
 
   const showedAllTodos = async () => {
     setIsLoading(true);
@@ -15,7 +16,9 @@ export const App: React.FC = () => {
     const todosFromApi = await getPreparedTodos();
 
     setTodos(todosFromApi);
-    setIsLoading(false)
+    setIsLoading(false);
+    setLoaded(true);
+
   }
 
   const sorted = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -23,20 +26,24 @@ export const App: React.FC = () => {
     setSelectedSort(typeOfSort);
   }
 
-  const sortedTodos = selectedSort === 'initual'
-    ? [...todos]
-    : [...todos].sort((aTodo, bTodo) => {
-      switch(selectedSort) {
-        case 'title':
-          return aTodo.title.localeCompare(bTodo.title);
-        case 'name':
-          return aTodo.user && bTodo.user ? aTodo.user.name.localeCompare(bTodo.user.name) : 0;
-        case 'completed':
-          return Number(aTodo.completed) - Number(bTodo.completed);
-        default:
-        return 0;
-      }
-    });
+  const sortedTodos = useMemo(() => {
+    return selectedSort === 'initual'
+        ? [...todos]
+        : [...todos].sort((aTodo, bTodo) => {
+          switch(selectedSort) {
+            case 'title':
+              return aTodo.title.localeCompare(bTodo.title);
+            case 'name':
+              return aTodo.user && bTodo.user ? aTodo.user.name.localeCompare(bTodo.user.name) : 0;
+            case 'completed':
+              return Number(aTodo.completed) - Number(bTodo.completed);
+            default:
+            return 0;
+          }
+        })
+
+  }, [todos, selectedSort]);
+
 
   if (isLoading) {
     return (
@@ -50,7 +57,7 @@ export const App: React.FC = () => {
     <div className="app">
       <h1 className="title">Dynamic list of TODOs</h1>
       {(
-        todos.length === 0
+        !isLoaded
         ? (
             <>
               <p className="initual_loading">

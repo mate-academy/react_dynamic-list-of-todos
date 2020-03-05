@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { PreparedTodos } from '../../types';
+import { PreparedTodo } from '../../types';
 import { Todo } from '../Todo/Todo';
 
 interface Props {
-  todosList: PreparedTodos
+  todosList: PreparedTodo[]
 }
 
 export const TodoList: FC<Props> = ({ todosList }) => (

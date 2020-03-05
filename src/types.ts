@@ -5,8 +5,6 @@ export interface Todo {
   completed: boolean
 }
 
-export type Todos = Todo[]
-
 export interface Geo {
   lat: string
   lng: string
@@ -37,8 +35,6 @@ export interface User {
   company: Сompany
 }
 
-export type Users = User[]
-
 export interface PreparedTodo {
   userId: number
   id: number
@@ -46,5 +42,3 @@ export interface PreparedTodo {
   completed: boolean
   user: User | undefined
 }
-
-export type PreparedTodos = PreparedTodo[]
