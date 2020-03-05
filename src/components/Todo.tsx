@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { TodoWithUser } from '../utils';
+import { TodoWithUser } from '../utils/types'
 
 interface Props {
   todo: TodoWithUser;

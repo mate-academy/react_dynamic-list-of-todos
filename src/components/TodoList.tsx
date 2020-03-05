@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Todo } from './Todo';
-import { TodoWithUser } from '../utils';
+import { TodoWithUser } from '../utils/types';
 
 interface Props {
   todos: TodoWithUser[];
@@ -28,7 +28,7 @@ export const TodoList: FC<Props> = (props) => {
             <button
               type="button"
               onClick={onTaskButton}
-              className="headerButton"
+              className="table__button"
             >
               number task
             </button>
@@ -37,7 +37,7 @@ export const TodoList: FC<Props> = (props) => {
             <button
               type="button"
               onClick={onTitleButton}
-              className="headerButton"
+              className="table__button"
             >
               Title
             </button>
@@ -46,7 +46,7 @@ export const TodoList: FC<Props> = (props) => {
             <button
               type="button"
               onClick={onNameButton}
-              className="headerButton"
+              className="table__button"
             >
               Name
             </button>
@@ -55,7 +55,7 @@ export const TodoList: FC<Props> = (props) => {
             <button
               type="button"
               onClick={onConditionButton}
-              className="headerButton"
+              className="table__button"
             >
               Condition
             </button>

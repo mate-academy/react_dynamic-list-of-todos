@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 
-import { TodoWithUser, loadTodos, loadUsers } from './utils';
+import { loadTodos, loadUsers } from './utils/utils';
+import { TodoWithUser } from './utils/types'
 import { TodoList } from './components/TodoList';
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState('');
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
@@ -23,6 +24,7 @@ const App: FC<{}> = () => {
         });
 
         setTodos(preparedTodos);
+        setIsLoading(false);
       })
       .catch(() => {
         setIsError('Download error, try again.');
@@ -52,10 +54,10 @@ const App: FC<{}> = () => {
     const newTodos = [...todos];
 
     setTodos(newTodos.sort((item1, item2) => {
-      const nameItem1 = item1.user ? item1.user.name : '';
-      const nameItem2 = item2.user ? item2.user.name : '';
+      const a = item1.user ? item1.user.name : '';
+      const b = item2.user ? item2.user.name : '';
 
-      return nameItem1.localeCompare(nameItem2);
+      return a.localeCompare(b);
     }));
   };
 
@@ -68,7 +70,7 @@ const App: FC<{}> = () => {
           onClick={clickHandler}
           disabled={isLoading}
         >
-load data
+          load data
         </button>
         <p>{isLoading ? 'Loading...' : ''}</p>
         <p>{isError || ''}</p>
