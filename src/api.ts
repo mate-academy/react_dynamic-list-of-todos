@@ -1,4 +1,4 @@
-import { API_TODOS, API_USERS } from './constants';
+import { API_URL } from './constants';
 
 const getData = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
@@ -7,11 +7,11 @@ const getData = async <T>(url: string): Promise<T> => {
 };
 
 const getUsers = async () => {
-  return getData<Users>(API_USERS);
+  return getData<Users>(`${API_URL}/users`);
 };
 
 const getTodos = async () => {
-  return getData<Todos>(API_TODOS);
+  return getData<Todos>(`${API_URL}/todos`);
 };
 
 export const getPreparedTodos = async (): Promise<PreparedTodos[]> => {
