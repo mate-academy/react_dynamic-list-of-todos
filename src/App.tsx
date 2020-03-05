@@ -4,8 +4,8 @@ import { getPreparedTodos } from './api';
 import { TodoList } from './components/TodoList/TodoList';
 
 export const App: React.FC = () => {
-  const [isLoaded, setLoad] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoaded, setLoad] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [todos, setTodos] = useState<PreparedTodos>([]);
 
   const handleLoad = () => {
@@ -17,18 +17,20 @@ export const App: React.FC = () => {
     });
   };
 
-  const sortByTitle = () => {
-    setTodos([...todos].sort((todoA, todoB) => todoA.title.localeCompare(todoB.title)));
-  };
-
-  const sortByName = () => {
-    setTodos([...todos]
-      .sort((todoA, todoB) => todoA.user.username
-        .localeCompare(todoB.user.username)));
-  };
-
-  const sortByCompleted = () => {
-    setTodos([...todos].sort((todoA, todoB) => Number(todoB.completed) - Number(todoA.completed)));
+  const handleSort = (filter: string) => {
+    switch (filter) {
+      case 'completed':
+        return setTodos([...todos]
+          .sort((todoA, todoB) => Number(todoB.completed) - Number(todoA.completed)));
+      case 'name':
+        return setTodos([...todos]
+          .sort((todoA, todoB) => todoA.user.username
+            .localeCompare(todoB.user.username)));
+      case 'title':
+        return setTodos([...todos].sort((todoA, todoB) => todoA.title.localeCompare(todoB.title)));
+      default:
+        return todos;
+    }
   };
 
   return (
@@ -37,9 +39,7 @@ export const App: React.FC = () => {
         ? (
           <TodoList
             todos={todos}
-            onTitleBtn={sortByTitle}
-            onNameBtn={sortByName}
-            onCompletedBtn={sortByCompleted}
+            handleSort={handleSort}
           />
         )
         : (

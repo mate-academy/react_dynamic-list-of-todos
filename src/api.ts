@@ -6,11 +6,11 @@ const getData = async <T>(url: string): Promise<T> => {
   return response.json();
 };
 
-const getUsers = async () => {
+const getUsers = async (): Promise<Users> => {
   return getData<Users>(`${API_URL}/users`);
 };
 
-const getTodos = async () => {
+const getTodos = async (): Promise<Todos> => {
   return getData<Todos>(`${API_URL}/todos`);
 };
 
