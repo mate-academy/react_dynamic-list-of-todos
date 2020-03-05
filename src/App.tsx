@@ -5,15 +5,15 @@ import { getTodos, getUsers } from './api';
 import { TodosList } from './components/TodosList';
 
 const App: FC = () => {
-  const [preparedTodos, setPreparedTodos] = useState<PreparedTodos[]>([]);
+  const [todos, setPreparedTodos] = useState<PreparedTodos[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const loadTodos = async () => {
     setLoading(true);
 
-    const [todos, users] = await Promise.all([getTodos(), getUsers()]);
+    const [todosFromServer, users] = await Promise.all([getTodos(), getUsers()]);
 
-    const todosWithUsers = todos.map((todo: Todo) => {
+    const todosWithUsers = todosFromServer.map((todo: Todo) => {
       const user = users.find((person: User) => person.id === todo.userId) as User;
 
       return {
@@ -26,21 +26,21 @@ const App: FC = () => {
   };
 
   const sortByTitle = () => {
-    setPreparedTodos([...preparedTodos]
+    setPreparedTodos([...todos]
       .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
   const sortByName = () => {
-    setPreparedTodos([...preparedTodos]
+    setPreparedTodos([...todos]
       .sort((a, b) => a.user.name.localeCompare(b.user.name)));
   };
 
   const sortByStatus = () => {
-    setPreparedTodos([...preparedTodos]
+    setPreparedTodos([...todos]
       .sort((a, b) => Number(b.completed) - Number(a.completed)));
   };
 
-  if (preparedTodos.length === 0) {
+  if (todos.length === 0) {
     return (
       <>
         <button
@@ -60,7 +60,7 @@ const App: FC = () => {
     <>
       <h1>Dynamic list of TODOs</h1>
       <TodosList
-        todos={preparedTodos}
+        todos={todos}
         onSortTitle={sortByTitle}
         onSortName={sortByName}
         onSortStatus={sortByStatus}
