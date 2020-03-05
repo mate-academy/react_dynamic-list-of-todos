@@ -1,39 +1,65 @@
+.load-btn {
+  display: block;
+  margin: auto;
+  margin-top: calc(50% - 40px);
+  width: 100px;
+  height: 40px;
+  background-color: yellow;
+  border-radius: 5px;
+}
+
+.loading-text {
+  text-align: center;
+}
+
 .App {
   text-align: center;
 }
 
-table {
+.user-list {
   border-collapse: collapse;
   margin: auto;
+  padding: 20px;
+  display: block;
 }
 
-thead {
+.user-list-title {
   background-color: lightblue;
 }
 
-th,
-td {
+.user-list-title-item-row {
+  border: 1px solid black;
+}
+
+.user-list-title-item-column {
+  min-width: 130px;
+  padding: 10px 0;
+}
+
+.user-item {
   border: 1px solid black;
   padding: 10px 20px;
 }
 
-.sortedBtn {
+.sorted-btn {
   border: none;
-  height: 25px;
+  height: 30px;
   width: 100px;
   border-radius: 5px;
   box-shadow: 1px 1px 9px lightsteelblue;
   cursor: pointer;
+  background-color: yellow;
+  font-weight: bold;
 }
 
-.sortedBtn:hover {
+.sorted-btn:hover {
   background-color: white;
 }
 
-.succesLoad {
+.succes-load {
   background-color: lightgreen;
 }
 
-.faildLoad {
+.faild-load {
   background-color: lightcoral;
 }
