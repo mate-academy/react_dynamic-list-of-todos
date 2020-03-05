@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface Props {
-  todo: PreparedTodos;
+  todo: PreparedTodo;
 }
 
 export const Todo: React.FC<Props> = ({ todo }) => {

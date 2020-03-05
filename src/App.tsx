@@ -6,7 +6,7 @@ import { TodoList } from './components/TodoList/TodoList';
 export const App: React.FC = () => {
   const [isLoaded, setLoad] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [todos, setTodos] = useState<PreparedTodos[]>([]);
+  const [todos, setTodos] = useState<PreparedTodos>([]);
 
   const handleLoad = () => {
     setLoading(true);

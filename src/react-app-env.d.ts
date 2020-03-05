@@ -41,6 +41,8 @@ interface User {
 
 type Users = User[];
 
-interface PreparedTodos extends Todo {
+interface PreparedTodo extends Todo {
   user: User;
 }
+
+type PreparedTodos = PreparedTodo[];

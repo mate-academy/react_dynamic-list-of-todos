@@ -3,7 +3,7 @@ import { Todo } from '../Todo/Todo';
 import './TodoList.css';
 
 interface Props {
-  todos: PreparedTodos[];
+  todos: PreparedTodos;
   onTitleBtn: () => void;
   onNameBtn: () => void;
   onCompletedBtn: () => void;

@@ -14,7 +14,7 @@ const getTodos = async () => {
   return getData<Todos>(`${API_URL}/todos`);
 };
 
-export const getPreparedTodos = async (): Promise<PreparedTodos[]> => {
+export const getPreparedTodos = async (): Promise<PreparedTodos> => {
   const todos: Todos = await getTodos();
   const users: Users = await getUsers();
 
