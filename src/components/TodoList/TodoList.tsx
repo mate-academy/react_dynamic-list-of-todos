@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const TodoList: FC<Props> = ({ todos }) => (
-  <table>
+  <table className="table">
     <thead>
       <tr>
         <th>ID</th>

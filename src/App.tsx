@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import cn from 'classnames';
+import React, { useState, FC } from 'react';
 import './App.css';
 import { getTodos } from './api/utils/getTodos';
 import { getUsers } from './api/utils/getUsers';
 import { TodoList } from './components/TodoList/TodoList';
 
-export const App = () => {
-  const [isLoading, setIsLoadind] = useState<boolean>(false);
+export const App: FC = () => {
+  const [isLoading, setIsLoadindg] = useState(false);
   const [preparedTodos, setPreparedTodos] = useState<PreparedTodo[]>([]);
-  const [typeOfSort, setTypeOfSort] = useState<string>('');
+  const [typeOfSort, setTypeOfSort] = useState('');
 
   const handleLoadButton = async () => {
-    setIsLoadind(true);
+    setIsLoadindg(true);
     const todos = await getTodos();
     const users = await getUsers();
 
@@ -40,7 +39,7 @@ export const App = () => {
   return (
     <>
       <h1>Dynamic list of TODOs</h1>
-      {(preparedTodos.length === 0)
+      {preparedTodos.length === 0
         ? (
           <button
             type="button"
@@ -54,21 +53,21 @@ export const App = () => {
         : (
           <>
             <button
-              className={cn({ selected: typeOfSort === 'title' })}
+              className="button"
               type="button"
               onClick={() => setTypeOfSort('title')}
             >
               sort by title
             </button>
             <button
-              className={cn({ selected: typeOfSort === 'completed' })}
+              className="button"
               type="button"
               onClick={() => setTypeOfSort('completed')}
             >
               sort by status
             </button>
             <button
-              className={cn({ selected: typeOfSort === 'user' })}
+              className="button"
               type="button"
               onClick={() => setTypeOfSort('user')}
             >

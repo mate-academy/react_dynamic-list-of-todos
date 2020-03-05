@@ -7,11 +7,12 @@ body {
   text-align: center;
 }
 
-table {
+.table {
   margin: auto;
+  background-color: #edf2f5;
 }
 
-button {
+.button {
   color: #2c3437;
   background-color: #ddeef5;
   margin: 3px;
@@ -21,7 +22,7 @@ button {
   border-radius: 3px;
 }
 
-button:hover {
+.button:hover {
   border-color: rgba(175, 47, 47, 0.1);
   cursor: pointer;
 }
