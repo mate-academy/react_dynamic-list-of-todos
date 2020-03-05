@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 
-// import User from '../user/User';
-
 interface Props{
-  todo: TodosWithUsers;
+  todo: TodoWithUsers;
 }
 
 export const Todo: FC<Props> = ({ todo }) => {

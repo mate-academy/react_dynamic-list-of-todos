@@ -4,7 +4,7 @@ import './TodoList.css';
 import { Todo } from '../Todo/Todo';
 
 interface Props{
-  todos: TodosWithUsers[];
+  todos: TodoWithUsers[];
 }
 
 export const TodoList: FC<Props> = ({ todos }) => {

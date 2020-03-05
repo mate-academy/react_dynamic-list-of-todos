@@ -5,8 +5,8 @@ import { getUsers, getTodos } from './utils/api';
 import { TodoList } from './components/TodoList/TodoList';
 
 const App: FC = () => {
-  const [todosWithUsers, setTodosWithUsers] = useState<TodosWithUsers[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [todosWithUsers, setTodosWithUsers] = useState<TodoWithUsers[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClickLoad = () => {
     setIsLoading(true);

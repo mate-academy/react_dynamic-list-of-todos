@@ -19,6 +19,6 @@ interface Todo {
   completed: boolean;
 }
 
-interface TodosWithUsers extends Todo {
+interface TodoWithUsers extends Todo {
   user?: User;
 }
