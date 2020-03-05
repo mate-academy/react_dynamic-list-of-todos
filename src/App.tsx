@@ -30,9 +30,6 @@ export const App: FC = () => {
   const sortFilter = (option: string) => {
     if (filterUsed) {
       switch (option) {
-        case 'name': setSortedTodos([...todos]
-          .sort((a, b) => ((a.user && b.user) ? b.user.name.localeCompare(a.user.name) : 0)));
-          break;
         case 'task': setSortedTodos([...todos]
           .sort((a, b) => b.title.localeCompare(a.title)));
           break;
@@ -40,7 +37,7 @@ export const App: FC = () => {
           .sort((a, b) => Number(b.completed) - Number(a.completed)));
           break;
         default: setSortedTodos([...todos]
-          .sort((a, b) => a.id - b.id));
+          .sort((a, b) => ((a.user && b.user) ? b.user.name.localeCompare(a.user.name) : 0)));
       }
 
       setFilterUsed(false);

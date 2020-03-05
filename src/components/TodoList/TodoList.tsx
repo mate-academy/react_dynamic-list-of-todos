@@ -17,7 +17,6 @@ export const TodoList: FC<Props> = ({
         <th>
           <button
             type="button"
-            onClick={() => onSort('id')}
             className="todo-list__sort-btn"
           >
             Sort by Id
