@@ -1,22 +1,10 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 
-import { USERS_URL, TODOS_URL } from './constants/urls';
-import { getData } from './utils/api';
-
+import { getUsers, getTodos } from './utils/api';
 import { TodoList } from './components/TodoList/TodoList';
 
-const getUsers = async (): Promise<User[]> => {
-  return getData<User[]>(USERS_URL);
-};
-
-const getTodos = async (): Promise<Todo[]> => {
-  return getData<Todo[]>(TODOS_URL);
-};
-
 const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [, setUsers] = useState<User[]>([]);
   const [todosWithUsers, setTodosWithUsers] = useState<TodosWithUsers[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -25,8 +13,6 @@ const App: FC = () => {
 
     Promise.all([getUsers(), getTodos()])
       .then(([usersFromApi, todosFromApi]) => {
-        setUsers(usersFromApi);
-        setTodos(todosFromApi);
         setTodosWithUsers(todosFromApi.map(todo => ({
           ...todo,
           user: usersFromApi.find(user => user.id === todo.userId),
@@ -57,7 +43,7 @@ const App: FC = () => {
     }));
   };
 
-  if (!todos.length) {
+  if (!todosWithUsers.length) {
     return (
       <div className="App">
         <h1 className="title">Dynamic list of TODOs</h1>
@@ -105,6 +91,12 @@ const App: FC = () => {
         </button>
       </div>
       <TodoList todos={todosWithUsers} />
+
+      {!todosWithUsers.length && (
+        <button type="button" onClick={handleClickLoad} disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Load Todos'}
+        </button>
+      )}
     </div>
   );
 };
