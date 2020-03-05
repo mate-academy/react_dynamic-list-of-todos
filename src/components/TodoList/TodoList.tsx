@@ -4,18 +4,12 @@ import './TodoList.css';
 
 interface Props {
   todos: TodoWithUser[];
-  onSortId: () => void;
-  onSortTask: () => void;
-  onSortName: () => void;
-  onSortStatus: () => void;
+  onSort: (option: string) => void;
 }
 
 export const TodoList: FC<Props> = ({
   todos,
-  onSortId,
-  onSortTask,
-  onSortName,
-  onSortStatus,
+  onSort,
 }) => (
   <table className="todo-list">
     <thead>
@@ -23,7 +17,7 @@ export const TodoList: FC<Props> = ({
         <th>
           <button
             type="button"
-            onClick={onSortId}
+            onClick={() => onSort('id')}
             className="todo-list__sort-btn"
           >
             Sort by Id
@@ -32,7 +26,7 @@ export const TodoList: FC<Props> = ({
         <th>
           <button
             type="button"
-            onClick={onSortName}
+            onClick={() => onSort('name')}
             className="todo-list__sort-btn"
           >
             Sort by User name
@@ -41,7 +35,7 @@ export const TodoList: FC<Props> = ({
         <th>
           <button
             type="button"
-            onClick={onSortTask}
+            onClick={() => onSort('task')}
             className="todo-list__sort-btn"
           >
             Sort by task name
@@ -50,7 +44,7 @@ export const TodoList: FC<Props> = ({
         <th>
           <button
             type="button"
-            onClick={onSortStatus}
+            onClick={() => onSort('status')}
             className="todo-list__sort-btn"
           >
             Sort by status
