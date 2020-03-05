@@ -10,7 +10,7 @@ const App: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('');
   const todosToSort = [...todos];
 
-  const clickHandler = () => {
+  const loadHandler = () => {
     setIsLoading(true);
     getPreparedTodos().then(todosWithUsers => {
       setTodos(todosWithUsers);
@@ -19,7 +19,7 @@ const App: React.FC = () => {
     });
   };
 
-  const sortHandler = (event: MouseEvent<HTMLButtonElement>) => {
+  const sortByHandler = (event: MouseEvent<HTMLButtonElement>) => {
     setSortBy(event.currentTarget.name);
   };
 
@@ -32,7 +32,7 @@ const App: React.FC = () => {
         <button
           type="button"
           disabled={isLoading}
-          onClick={clickHandler}
+          onClick={loadHandler}
         >
           {isLoading ? 'Loading...' : 'Load Todos'}
         </button>
@@ -51,21 +51,21 @@ const App: React.FC = () => {
         <button
           name="title"
           type="button"
-          onClick={sortHandler}
+          onClick={sortByHandler}
         >
           Sort by title
         </button>
         <button
           name="name"
           type="button"
-          onClick={sortHandler}
+          onClick={sortByHandler}
         >
           Sort by name
         </button>
         <button
           name="completed"
           type="button"
-          onClick={sortHandler}
+          onClick={sortByHandler}
         >
           Sort by completed
         </button>
