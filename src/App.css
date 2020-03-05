@@ -1,1 +1,39 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+body {
+  background-color: #ff9671;
+}
+
+.App {
+  text-align: center;
+}
+
+.app__load-btn {
+  top: 50%;
+  padding: 10px 30px;
+  font-size: 30px;
+  color: #d65db1;
+  border: 3px solid #d65db1;
+  background-color: #845ec2;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+.app__loading-text {
+  font-size: 35px;
+  top: 60%;
+  color: #845ec2;
+}
+
+.app__loading-text,
+.app__load-btn {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
