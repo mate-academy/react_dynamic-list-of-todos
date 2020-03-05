@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { PreparedTodos } from '../interfaces';
+import { PreparedTodo } from '../interfaces';
 
 interface Props {
-  todo: PreparedTodos;
+  todo: PreparedTodo;
 }
 
 export const Todo: FC<Props> = ({ todo }) => {

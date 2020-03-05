@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { PreparedTodos } from '../interfaces';
+import { PreparedTodo } from '../interfaces';
 import { Todo } from './Todo';
 
 
 interface Props {
-  todos: PreparedTodos[];
+  todos: PreparedTodo[];
   onSortTitle: () => void;
   onSortName: () => void;
   onSortStatus: () => void;

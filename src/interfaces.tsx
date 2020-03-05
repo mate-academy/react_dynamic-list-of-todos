@@ -26,6 +26,6 @@ export interface User {
   address: Address;
 }
 
-export interface PreparedTodos extends Todo {
+export interface PreparedTodo extends Todo {
   user: User;
 }

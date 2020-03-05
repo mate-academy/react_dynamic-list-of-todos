@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import './App.css';
-import { Todo, User, PreparedTodos } from './interfaces';
+import { Todo, User, PreparedTodo } from './interfaces';
 import { getTodos, getUsers } from './api';
 import { TodosList } from './components/TodosList';
 
 const App: FC = () => {
-  const [todos, setPreparedTodos] = useState<PreparedTodos[]>([]);
+  const [todos, setTodos] = useState<PreparedTodo[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const loadTodos = async () => {
@@ -22,21 +22,21 @@ const App: FC = () => {
       };
     });
 
-    setPreparedTodos(todosWithUsers);
+    setTodos(todosWithUsers);
   };
 
   const sortByTitle = () => {
-    setPreparedTodos([...todos]
+    setTodos([...todos]
       .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
   const sortByName = () => {
-    setPreparedTodos([...todos]
+    setTodos([...todos]
       .sort((a, b) => a.user.name.localeCompare(b.user.name)));
   };
 
   const sortByStatus = () => {
-    setPreparedTodos([...todos]
+    setTodos([...todos]
       .sort((a, b) => Number(b.completed) - Number(a.completed)));
   };
 
