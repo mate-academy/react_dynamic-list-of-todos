@@ -1,17 +1,16 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { FC, useState, MouseEvent } from 'react';
 import { getPreparedTodos } from './api/api';
 import { TodoList } from './components/TodoList/TodoList';
 import { sortTodos } from './utils/utils';
 import './App.css';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [sortBy, setSortBy] = useState<string>('');
-  const todosToSort = [...todos];
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadHandler = () => {
     setIsLoading(true);
+
     getPreparedTodos().then(todosWithUsers => {
       setTodos(todosWithUsers);
     }).finally(() => {
@@ -19,17 +18,18 @@ const App: React.FC = () => {
     });
   };
 
-  const sortByHandler = (event: MouseEvent<HTMLButtonElement>) => {
-    setSortBy(event.currentTarget.name);
-  };
+  const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    const sortedTodos = sortTodos([...todos], event.currentTarget.name);
 
-  sortTodos(todosToSort, sortBy);
+    setTodos(sortedTodos);
+  };
 
   if (!todos.length) {
     return (
       <div className="button-container">
         <h1>Dynamic list of TODOs</h1>
         <button
+          className="button"
           type="button"
           disabled={isLoading}
           onClick={loadHandler}
@@ -47,30 +47,33 @@ const App: React.FC = () => {
         <span>Todos: </span>
         {todos.length}
       </p>
-      <div className="button-container">
+      <div className="buttons-container">
         <button
+          className="button"
           name="title"
           type="button"
-          onClick={sortByHandler}
+          onClick={clickHandler}
         >
           Sort by title
         </button>
         <button
+          className="button"
           name="name"
           type="button"
-          onClick={sortByHandler}
+          onClick={clickHandler}
         >
           Sort by name
         </button>
         <button
+          className="button"
           name="completed"
           type="button"
-          onClick={sortByHandler}
+          onClick={clickHandler}
         >
           Sort by completed
         </button>
       </div>
-      <TodoList todos={todosToSort} />
+      <TodoList todos={todos} />
     </div>
   );
 };

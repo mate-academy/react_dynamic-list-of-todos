@@ -1,24 +1,24 @@
-export const sortTodos = (todos: TodoWithUser[], sortBy: string) => {
+export const sortTodos = (todos: TodoWithUser[], sortBy: string): TodoWithUser[] => {
   switch (sortBy) {
     case 'name': {
-      todos.sort((todoA, todoB) => (
+      return todos.sort((todoA, todoB) => (
         todoA.user.name.localeCompare(todoB.user.name)
       ));
       break;
     }
 
     case 'title': {
-      todos.sort((todoA, todoB) => (
+      return todos.sort((todoA, todoB) => (
         todoA.title.localeCompare(todoB.title)
       ));
       break;
     }
 
     case 'completed': {
-      todos.sort((todoA, todoB) => (+todoA.completed - +todoB.completed));
+      return todos.sort((todoA, todoB) => (+todoA.completed - +todoB.completed));
       break;
     }
 
-    default: break;
+    default: return todos;
   }
 };

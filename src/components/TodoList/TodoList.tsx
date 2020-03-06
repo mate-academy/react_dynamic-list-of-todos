@@ -8,13 +8,13 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
-    <table>
+    <table className="table">
       <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Title</th>
-          <th>Status</th>
+        <tr className="table__row table__row_thead">
+          <th className="table__cell">#</th>
+          <th className="table__cell">Name</th>
+          <th className="table__cell">Title</th>
+          <th className="table__cell">Status</th>
         </tr>
       </thead>
       <tbody>
