@@ -5,56 +5,50 @@ import { TodoWithUser } from '../utils/types';
 
 interface Props {
   todos: TodoWithUser[];
-  onNameButton(): void;
-  onTitleButton(): void;
-  onConditionButton(): void;
-  onTaskButton(): void;
+  onClickSortButton(option: string): void;
 }
 
 export const TodoList: FC<Props> = (props) => {
   const {
     todos,
-    onNameButton,
-    onTitleButton,
-    onConditionButton,
-    onTaskButton,
+    onClickSortButton,
   } = props;
 
   return (
-    <table className='todo__table'>
+    <table className="todo__table">
       <thead>
         <tr>
-          <th className='table__title'>
+          <th className="table__title">
             <button
               type="button"
-              onClick={onTaskButton}
+              onClick={() => onClickSortButton('ID')}
               className="table__button"
             >
               number task
             </button>
           </th>
-          <th className='table__title'>
+          <th className="table__title">
             <button
               type="button"
-              onClick={onTitleButton}
+              onClick={() => onClickSortButton('title')}
               className="table__button"
             >
               Title
             </button>
           </th>
-          <th  className='table__title'>
+          <th className="table__title">
             <button
               type="button"
-              onClick={onNameButton}
+              onClick={() => onClickSortButton('name')}
               className="table__button"
             >
               Name
             </button>
           </th>
-          <th className='table__title'>
+          <th className="table__title">
             <button
               type="button"
-              onClick={onConditionButton}
+              onClick={() => onClickSortButton('condition')}
               className="table__button"
             >
               Condition

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import './App.css';
 
 import { loadTodos, loadUsers } from './utils/utils';
-import { TodoWithUser } from './utils/types'
+import { TodoWithUser } from './utils/types';
 import { TodoList } from './components/TodoList';
 
 const App: FC = () => {
@@ -32,34 +32,48 @@ const App: FC = () => {
       });
   };
 
-  const handlerSortByID = () => {
-    const newTodos = [...todos];
+  function handlerSort(option: string): void {
+    switch (option) {
+      case 'title': {
+        const newTodos = [...todos];
 
-    setTodos(newTodos.sort((item1, item2) => item1.id - item2.id));
-  };
+        setTodos(newTodos.sort((item1, item2) => item1.title.localeCompare(item2.title)));
+        break;
+      }
 
-  const handlerSortByComleted = () => {
-    const newTodos = [...todos];
+      case 'ID': {
+        const newTodos = [...todos];
 
-    setTodos(newTodos.sort((item1, item2) => Number(item1.completed) - Number(item2.completed)));
-  };
+        setTodos(newTodos.sort((item1, item2) => item1.id - item2.id));
+        break;
+      }
 
-  const handlerSortByTitle = () => {
-    const newTodos = [...todos];
+      case 'condition': {
+        const newTodos = [...todos];
 
-    setTodos(newTodos.sort((item1, item2) => item1.title.localeCompare(item2.title)));
-  };
+        setTodos(newTodos.sort((item1, item2) => (
+          Number(item1.completed) - Number(item2.completed)
+        )));
+        break;
+      }
 
-  const handlerSortByName = () => {
-    const newTodos = [...todos];
+      case 'name': {
+        const newTodos = [...todos];
 
-    setTodos(newTodos.sort((item1, item2) => {
-      const a = item1.user ? item1.user.name : '';
-      const b = item2.user ? item2.user.name : '';
+        setTodos(newTodos.sort((item1, item2) => {
+          const a = item1.user ? item1.user.name : '';
+          const b = item2.user ? item2.user.name : '';
 
-      return a.localeCompare(b);
-    }));
-  };
+          return a.localeCompare(b);
+        }));
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+  }
 
   if (!todos.length) {
     return (
@@ -81,10 +95,7 @@ const App: FC = () => {
   return (
     <TodoList
       todos={todos}
-      onNameButton={handlerSortByName}
-      onTitleButton={handlerSortByTitle}
-      onConditionButton={handlerSortByComleted}
-      onTaskButton={handlerSortByID}
+      onClickSortButton={handlerSort}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { Todo, User } from './types'
+import { Todo, User } from './types';
 
 const URL = 'https://jsonplaceholder.typicode.com/';
 
@@ -8,11 +8,11 @@ export async function loadData<T>(url: string): Promise<T> {
 }
 
 export async function loadTodos(): Promise<Todo[]> {
-  return fetch(URL + 'todos')
+  return fetch(`${URL}todos`)
     .then(response => response.json());
 }
 
 export async function loadUsers(): Promise<User[]> {
-  return fetch(URL + 'users')
+  return fetch(`${URL}users`)
     .then(response => response.json());
 }
