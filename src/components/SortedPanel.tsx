@@ -8,7 +8,7 @@ interface Props {
 export const SortedPanel: React.FC<Props> = ({ sortedPanelInfo }) => (
   <ul className="list">
     {sortedPanelInfo.map(panel => (
-      <li className="item">
+      <li className="item" key={panel.link}>
         <a
           href={panel.link}
           className="link"
