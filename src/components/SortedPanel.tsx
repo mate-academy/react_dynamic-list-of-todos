@@ -12,7 +12,7 @@ export const SortedPanel: React.FC<Props> = ({ sortedPanelInfo }) => (
         <a
           href={panel.link}
           className="link"
-          onClick={panel.clickEvent}
+          onClick={() => panel.clickEvent(panel.sortedName)}
         >
           {panel.name}
         </a>

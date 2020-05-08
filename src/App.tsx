@@ -9,111 +9,73 @@ import { SortedPanel } from './components/SortedPanel';
 class App extends React.Component {
   state: AppState = {
     todos: [],
-    order: {
-      sortId: true,
-      sortName: false,
-      sortTitle: false,
-      sortStatus: false,
-    },
+    sortedBy: 'id',
     isLoading: false,
-    isLoadDatas: false,
+    isLoaded: false,
   };
 
   getTodos = () => {
     this.setState({ isLoading: true });
     allTodosDatas()
-      .then(todos => this.setState({ todos, isLoadDatas: true }))
+      .then(todos => this.setState({ todos, isLoaded: true }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  sortByName = () => {
+  sortByField = (field: string) => {
     const { todos } = this.state;
-    const { sortName } = this.state.order;
-    let sortedTodos: Todo[];
 
-    if (!sortName) {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => a.user?.username.localeCompare(b.user?.username)),
-      ];
-    } else {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => b.user?.username.localeCompare(a.user?.username)),
-      ];
-    }
+    const newTodos = [...todos
+      .sort((a: Todo, b: Todo): number => {
+        const comperator1 = a[field] || a.user[field] || false;
+        const comperator2 = b[field] || b.user[field] || false;
 
-    const changeOrder = !sortName;
+        if (typeof comperator1 === 'number' || typeof comperator1 === 'boolean') {
+          return Number(comperator1) - Number(comperator2);
+        }
 
-    this.setState(({ todos: sortedTodos, order: { sortName: changeOrder } }));
+        if (typeof comperator1 === 'string') {
+          return comperator1.localeCompare(comperator2 as string);
+        }
+
+        return 0;
+      })];
+
+    this.setState({ todos: newTodos });
   };
 
-  sortByTitle = () => {
-    const { todos } = this.state;
-    const { sortTitle } = this.state.order;
-    let sortedTodos: Todo[];
+  changeSortPage = (page: string) => {
+    const { sortedBy, todos } = this.state;
 
-    if (!sortTitle) {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => a.title.localeCompare(b.title)),
-      ];
+    if (sortedBy === page) {
+      const reverseTodos: Todo[] = [...todos].reverse();
+
+      this.setState({ todos: reverseTodos });
     } else {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => b.title.localeCompare(a.title)),
-      ];
+      this.setState(() => ({ sortedBy: page }),
+        () => this.sortByField(this.state.sortedBy));
     }
-
-    const changeOrder = !sortTitle;
-
-    this.setState(({ todos: sortedTodos, order: { sortTitle: changeOrder } }));
-  };
-
-  sortByStatus = () => {
-    const { todos } = this.state;
-    const { sortStatus } = this.state.order;
-    let sortedTodos: Todo[];
-    const completedTodos: Todo[] = todos.filter(todo => todo.completed);
-    const activeTodos: Todo[] = todos.filter(todo => !todo.completed);
-
-    if (!sortStatus) {
-      sortedTodos = [...activeTodos, ...completedTodos];
-    } else {
-      sortedTodos = [...completedTodos, ...activeTodos];
-    }
-
-    const changeOrder = !sortStatus;
-
-    this.setState(({ todos: sortedTodos, order: { sortStatus: changeOrder } }));
-  };
-
-  sortById = () => {
-    const { todos } = this.state;
-    const { sortId } = this.state.order;
-    let sortedTodos: Todo[];
-
-    if (!sortId) {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => a.id - b.id)];
-    } else {
-      sortedTodos = [...todos
-        .sort((a: Todo, b: Todo) => b.id - a.id)];
-    }
-
-    const changeOrder = !sortId;
-
-    this.setState(({ todos: sortedTodos, order: { sortId: changeOrder } }));
   };
 
   render() {
-    const { todos, isLoadDatas, isLoading } = this.state;
+    const { todos, isLoaded, isLoading } = this.state;
     const sortedPanelInfo: ControlPanel[] = [
-      { name: 'ID', link: '#id', clickEvent: this.sortById },
-      { name: 'Sort by name', link: '#name', clickEvent: this.sortByName },
-      { name: 'Sort by title', link: '#title', clickEvent: this.sortByTitle },
-      { name: 'Sort by status', link: '#status', clickEvent: this.sortByStatus },
+      {
+        name: 'ID', link: '#id', sortedName: 'id', clickEvent: this.changeSortPage,
+      },
+      {
+        name: 'Sort by name', link: '#name', sortedName: 'username', clickEvent: this.changeSortPage,
+      },
+      {
+        name: 'Sort by title', link: '#title', sortedName: 'title', clickEvent: this.changeSortPage,
+      },
+      {
+        name: 'Sort by status', link: '#status', sortedName: 'completed', clickEvent: this.changeSortPage,
+      },
     ];
 
     return (
       <>
-        {!isLoadDatas && (
+        {!isLoaded && (
           <DownloadButton
             getTodos={this.getTodos}
             isLoading={isLoading}
@@ -122,7 +84,7 @@ class App extends React.Component {
         {isLoading && (
           <p className="loading">Loading data...</p>
         )}
-        {isLoadDatas && !isLoading && (
+        {isLoaded && !isLoading && (
           <>
             <h1 className="header">List Todos</h1>
             <SortedPanel

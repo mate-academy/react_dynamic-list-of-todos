@@ -1,48 +1,44 @@
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
+interface Address {
+  street: string;
+  suite: string;
+  city: string;
+  zipcode: string;
+  geo: {
+    lat: string;
+    lng: string;
   };
 }
 
+interface Company {
+  name: string;
+  catchPhrase: string;
+  bs: string;
+}
+
+export interface User {
+  [key: string]: number | string | Address | Company;
+  username: string;
+  address: Address;
+  company: Company;
+}
+
 export interface Todo {
-  userId: number;
-  id: number;
+  [key: string]: number | string | boolean | User;
   title: string;
-  completed: boolean;
+  id: number;
   user: User;
 }
 
 export interface AppState {
   todos: Todo[];
-  order: {
-    sortId: boolean;
-    sortName: boolean;
-    sortTitle: boolean;
-    sortStatus: boolean;
-  };
+  sortedBy: string;
   isLoading: boolean;
-  isLoadDatas: boolean;
+  isLoaded: boolean;
 }
 
 export interface ControlPanel {
   name: string;
+  sortedName: string;
   link: string;
-  clickEvent: () => void;
+  clickEvent: (field: string) => void;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Todo } from './interfaces';
 
 interface Props {
@@ -9,7 +10,13 @@ const ListTodos: React.FC<Props> = ({ todos }) => {
   return (
     <>
       {todos.map(todo => (
-        <div className={todo.completed ? 'todo completed' : 'todo'} key={todo.id}>
+        <div
+          key={todo.id}
+          className={cn({
+            'todo completed': todo.completed,
+            todo: !todo.completed,
+          })}
+        >
           <div className="id-todo">
             <p className="id__text">
               {todo.id}
