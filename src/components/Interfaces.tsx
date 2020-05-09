@@ -1,4 +1,7 @@
 export interface Todo extends TodoFromServer {
+  [key: string]: string | number | boolean | User;
+  id: number;
+  title: string;
   user: User;
 }
 
@@ -10,12 +13,10 @@ export interface TodoFromServer {
 }
 
 export interface User {
-  id: number;
-  name: string;
+  [key: string]: string | number | AddressType | CompanyType;
   username: string;
-  email: string;
-  address?: AddressType;
-  company?: CompanyType;
+  address: AddressType;
+  company: CompanyType;
 }
 
 export interface SortButton {

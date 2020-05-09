@@ -14,7 +14,7 @@ interface State {
 }
 const SORT_FIELDS: SortFields = {
   id: 'id',
-  name: 'name',
+  name: 'username',
   title: 'title',
   completed: 'completed',
 };
@@ -56,7 +56,7 @@ class App extends Component {
 
   handleSortButton = (field: string) => {
     const { sortField, sortReverse } = this.state;
-    const reversStatus = (sortField === field) ? !sortReverse : sortReverse;
+    const reversStatus = (sortField === field) ? !sortReverse : false;
 
     this.setState(() => ({
       sortField: field,
@@ -68,39 +68,25 @@ class App extends Component {
     const { todos, sortField, sortReverse } = this.state;
     const sortDirection = (sortReverse) ? -1 : 1;
 
-    if (sortField === SORT_FIELDS.id) {
-      return [...todos].sort((a, b) => (
-        this.compareNumbers(a.id, b.id) * sortDirection));
-    }
+    return [...todos].sort((a: Todo, b: Todo): number => {
+      const aField = a[sortField] || a.user[sortField] || false;
+      const bField = b[sortField] || b.user[sortField] || false;
 
-    if (sortField === SORT_FIELDS.title) {
-      return [...todos].sort((a, b) => (
-        this.compareStrings(a.title, b.title) * sortDirection));
-    }
 
-    if (sortField === SORT_FIELDS.name) {
-      return [...todos].sort((a, b) => (
-        this.compareStrings(a.user.username, b.user.username) * sortDirection));
-    }
+      if (typeof aField === 'number') {
+        return (aField - (bField as number)) * sortDirection;
+      }
 
-    if (sortField === SORT_FIELDS.completed) {
-      return [...todos].sort((a, b) => (
-        this.compareBoolean(a.completed, b.completed) * sortDirection));
-    }
+      if (typeof aField === 'boolean') {
+        return (Number(aField) - Number(bField)) * -sortDirection;
+      }
 
-    return todos;
-  };
+      if (typeof aField === 'string') {
+        return aField.localeCompare(bField as string) * sortDirection;
+      }
 
-  compareNumbers = (a: number, b: number) => {
-    return (a - b);
-  };
-
-  compareStrings = (a: string, b: string) => {
-    return (a.localeCompare(b));
-  };
-
-  compareBoolean= (a: boolean, b: boolean) => {
-    return (Number(b) - Number(a));
+      return 0;
+    });
   };
 
   render() {
