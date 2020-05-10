@@ -1,0 +1,8 @@
+.user {
+  display: inline-block;
+  color: rgb(22, 2, 2);
+}
+
+.user:hover {
+  cursor: pointer;
+}

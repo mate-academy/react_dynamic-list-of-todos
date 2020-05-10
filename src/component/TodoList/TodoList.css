@@ -1,0 +1,17 @@
+.list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list__item {
+  display: inline-block;
+  width: 300px;
+  border: 2px solid red;
+  border-radius: 5%;
+  margin: 1px;
+}
+
+.completed {
+  border: 2px solid green;
+}
