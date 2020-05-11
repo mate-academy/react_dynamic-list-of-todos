@@ -113,7 +113,7 @@ class App extends Component {
       <section className="section">
         <div className="container">
           <h1 className="title is-1">List of TODOs</h1>
-          {!isLoading && !isLoaded && (
+          {!isLoading && !isLoaded && !hasError && (
             <Button
               text="Load ToDos"
               className="button"
