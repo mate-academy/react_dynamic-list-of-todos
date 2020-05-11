@@ -11,6 +11,7 @@ interface State {
   sortReverse: boolean;
   isLoading: boolean;
   isLoaded: boolean;
+  hasError: boolean;
 }
 const SORT_FIELDS: SortFields = {
   id: 'id',
@@ -44,14 +45,29 @@ class App extends Component {
     sortReverse: false,
     isLoading: false,
     isLoaded: false,
+    hasError: false,
   };
 
-  loadGoods = () => {
-    this.setState({ isLoading: true });
+  loadGoods = async () => {
+    this.setState({
+      isLoading: true,
+      hasError: false,
+    });
 
-    getTodos()
-      .then(todos => this.setState({ todos, isLoaded: true }))
-      .finally(() => this.setState({ isLoading: false }));
+    try {
+      const data = await getTodos();
+
+      this.setState({
+        todos: data,
+        isLoaded: true,
+      });
+    } catch {
+      this.setState({
+        hasError: true,
+      });
+    }
+
+    this.setState({ isLoading: false });
   };
 
   handleSortButton = (field: string) => {
@@ -90,7 +106,7 @@ class App extends Component {
   };
 
   render() {
-    const { isLoading, isLoaded } = this.state;
+    const { isLoading, isLoaded, hasError } = this.state;
     const sortedTodos: Todo[] = this.sortTodos();
 
     return (
@@ -105,6 +121,16 @@ class App extends Component {
             />
           )}
           {isLoading && <progress className="progress is-primary is-info" max="100" />}
+          {hasError && (
+            <>
+              <div className="notification is-warning">Something went wrong...</div>
+              <Button
+                text="Try Again"
+                className="button"
+                handleClick={this.loadGoods}
+              />
+            </>
+          )}
           {isLoaded && (
             <TodoList
               todos={sortedTodos}

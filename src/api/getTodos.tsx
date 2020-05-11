@@ -14,7 +14,7 @@ export const getTodos = async () => {
   const todos: Todo[] = await getData(API_URL_TODOS);
   const users: User[] = await getData(API_URL_USERS);
 
-  const preparedTodos = await todos.map((todo) => {
+  const preparedTodos = todos.map((todo) => {
     return {
       ...todo,
       user: users.find((user) => user.id === todo.userId),
