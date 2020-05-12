@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { getPreparedData } from './api/data';
 import './App.css';
+import { getPreparedData } from './api/data';
 import { TodoList } from './components/TodoList';
+import { Loader } from './components/Loader';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState([]);
@@ -25,11 +26,15 @@ const App: React.FC = () => {
         <h1>Dynamic list of TODOs</h1>
         {!isLoading && !isLoaded
         && (
-          <p className="waves-effect waves-light btn-large mgb20" onClick={loadTodos}>
+          <button
+            type="button"
+            className="waves-effect waves-light btn-large mgb20"
+            onClick={loadTodos}
+          >
             load todos
-          </p>
+          </button>
         )}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Loader />}
       </div>
       {isLoaded && todos.length > 0 && (
         <TodoList todos={todos} />)}

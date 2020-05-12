@@ -18,3 +18,8 @@ export interface Todos {
 export type SortPanelProps = {
   handleSort: Function;
 };
+
+export interface ButtonProps {
+  handleSort: Function;
+  sortType: string;
+}

@@ -1,32 +1,15 @@
 import React from 'react';
 import { SortPanelProps } from '../interfaces/interfaces';
+import { Button } from './Button';
 
 export const SortPanel: React.FC<SortPanelProps> = ({
   handleSort,
 }) => {
   return (
     <div className="sort-panel">
-      <button
-        type="button"
-        className="waves-effect waves-light btn mgb20"
-        onClick={() => handleSort('title')}
-      >
-        Sort by title
-      </button>
-      <button
-        type="button"
-        className="waves-effect waves-light btn mgb20"
-        onClick={() => handleSort('status')}
-      >
-        Sort by status
-      </button>
-      <button
-        type="button"
-        className="waves-effect waves-light btn mgb20"
-        onClick={() => handleSort('name')}
-      >
-        Sort by name
-      </button>
+      <Button handleSort={handleSort} sortType="title" />
+      <Button handleSort={handleSort} sortType="status" />
+      <Button handleSort={handleSort} sortType="name" />
     </div>
   );
 };
