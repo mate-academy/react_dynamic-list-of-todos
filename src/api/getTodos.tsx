@@ -1,9 +1,8 @@
 import { Todo, User } from '../components/Interfaces';
 
-const API_URL = 'https://jsonplaceholder.typicode.com';
-
-const API_URL_TODOS = `${API_URL}/todos/`;
-const API_URL_USERS = `${API_URL}/users/`;
+const API_URL = '../api';
+const API_URL_TODOS = `${API_URL}/todos.json`;
+const API_URL_USERS = `${API_URL}/users.json`;
 
 export const getData = async (url: string) => {
   const response = await fetch(url);

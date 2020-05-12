@@ -120,7 +120,7 @@ class App extends Component {
               handleClick={this.loadGoods}
             />
           )}
-          {isLoading && <progress className="progress is-primary is-info" max="100" />}
+          {isLoading && <progress className="progress is-primary" max="100" />}
           {hasError && (
             <>
               <div className="notification is-warning">Something went wrong...</div>
