@@ -3,12 +3,12 @@ import { Todo, User } from '../interfaces/interfaces';
 const API_URL = 'https://jsonplaceholder.typicode.com';
 
 export const getTodos = () => {
-  return fetch(`${API_URL}/todos`)
+  return fetch(`${API_URL}/todos`, { mode: 'no-cors' })
     .then(response => response.json());
 };
 
 export const getUsers = () => {
-  return fetch(`${API_URL}/users`)
+  return fetch(`${API_URL}/users`, { mode: 'no-cors' })
     .then(response => response.json());
 };
 
