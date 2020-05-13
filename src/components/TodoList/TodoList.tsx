@@ -5,20 +5,20 @@ import { SortFields } from '../Enums';
 
 type Props = {
   todos: Todo[];
-  SORT_BUTTONS: SortButton[];
+  headers: SortButton[];
   handleSortButton: (type: SortFields) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, SORT_BUTTONS, handleSortButton }) => (
+export const TodoList: React.FC<Props> = ({ todos, headers, handleSortButton }) => (
   <table className="table">
     <thead>
       <tr>
-        {SORT_BUTTONS.map((button) => (
-          <th key={button.name} className="bd-callout is-primary">
+        {headers.map((header) => (
+          <th key={header.name} className="bd-callout is-primary">
             <Button
-              text={button.name}
+              text={header.name}
               className="button is-primary is-inverted is-outlined is-medium is-fullwidth"
-              handleClick={() => handleSortButton(button.field)}
+              handleClick={() => handleSortButton(header.field)}
             />
           </th>
         ))}

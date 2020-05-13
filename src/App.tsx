@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { Button } from './components/Button';
 import { SortFields } from './components/Enums';
 
-const SORT_BUTTONS: SortButton[] = [
+const HEADERS: SortButton[] = [
   {
     name: 'Id',
     field: SortFields.Id,
@@ -41,7 +41,7 @@ const App = () => {
 
       setTodos(data);
       setIsLoaded(true);
-    } catch {
+    } catch (err) {
       setHasError(true);
     }
 
@@ -49,56 +49,35 @@ const App = () => {
   };
 
   const handleSortButton = (field: SortFields) => {
-    const reversStatus = (sortField === field) ? !sortReverse : false;
+    const reverseStatus = (sortField === field) ? !sortReverse : false;
 
     setSortField(field);
-    setSortReverse(reversStatus);
+    setSortReverse(reverseStatus);
   };
 
-  const getSortField = (todo: Todo) => {
+  const getSortField = (a: Todo, b: Todo) => {
+    const sortDirection = (sortReverse) ? -1 : 1;
+
     switch (sortField) {
       case SortFields.Id:
-        return todo.id;
+        return (a.id as number) - (b.id as number) * sortDirection;
 
       case SortFields.Name:
-        return todo.user.username;
+        return (a.user.username).localeCompare(b.user.username) * sortDirection;
 
       case SortFields.Title:
-        return todo.title;
+        return (a.title).localeCompare(b.title) * sortDirection;
 
       case SortFields.Completed:
-        return Number(todo.completed);
+        return (Number(a.completed) - Number(b.completed)) * -sortDirection;
 
       default:
-        return todo.id;
+        return (a.id as number) - (b.id as number) * sortDirection;
     }
   };
 
   const sortTodos = () => {
-    const sortDirection = (sortReverse) ? -1 : 1;
-
-    return [...todos].sort((a, b) => {
-      if (sortField === SortFields.Id) {
-        const diff = (getSortField(a) as number) - (getSortField(b) as number);
-
-        return diff * sortDirection;
-      }
-
-      if (sortField === SortFields.Title || sortField === SortFields.Name) {
-        const diff = (getSortField(a) as string)
-          .localeCompare(getSortField(b) as string);
-
-        return diff * sortDirection;
-      }
-
-      if (sortField === SortFields.Completed) {
-        const diff = ((getSortField(a) as number) - (getSortField(b) as number));
-
-        return diff * -sortDirection;
-      }
-
-      return 0;
-    });
+    return [...todos].sort(getSortField);
   };
 
   const sortedTodos: Todo[] = sortTodos();
@@ -128,7 +107,7 @@ const App = () => {
         {isLoaded && (
           <TodoList
             todos={sortedTodos}
-            SORT_BUTTONS={SORT_BUTTONS}
+            headers={HEADERS}
             handleSortButton={handleSortButton}
           />
         )}
