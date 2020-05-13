@@ -6,9 +6,21 @@ export const SortPanel: FC<SortPanelProps> = ({
 }) => {
   return (
     <div className="sort-panel">
-      <Button handleSort={handleSort} sortType="title" />
-      <Button handleSort={handleSort} sortType="status" />
-      <Button handleSort={handleSort} sortType="name" />
+      <Button
+        handleSort={handleSort}
+        title="sort by title"
+        sortType="title"
+      />
+      <Button
+        handleSort={handleSort}
+        title="sort by status"
+        sortType="status"
+      />
+      <Button
+        handleSort={handleSort}
+        title="sort by name"
+        sortType="name"
+      />
     </div>
   );
 };

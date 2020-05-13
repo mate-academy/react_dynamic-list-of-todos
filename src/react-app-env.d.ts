@@ -24,5 +24,6 @@ type SortPanelProps = {
 
 interface ButtonProps {
   handleSort: (sortType: string) => void;
+  title: string;
   sortType: string;
 }
