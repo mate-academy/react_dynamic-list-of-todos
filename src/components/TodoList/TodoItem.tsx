@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'classnames';
-import { Todo } from '../Interfaces';
 
 interface Props {
   todo: Todo;

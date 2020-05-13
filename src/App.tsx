@@ -1,147 +1,140 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { Todo, SortFields, SortButton } from './components/Interfaces';
 import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { Button } from './components/Button';
+import { SortFields } from './components/Enums';
 
-interface State {
-  todos: Todo[];
-  sortField: string;
-  sortReverse: boolean;
-  isLoading: boolean;
-  isLoaded: boolean;
-  hasError: boolean;
-}
-const SORT_FIELDS: SortFields = {
-  id: 'id',
-  name: 'username',
-  title: 'title',
-  completed: 'completed',
-};
 const SORT_BUTTONS: SortButton[] = [
   {
     name: 'Id',
-    field: SORT_FIELDS.id,
+    field: SortFields.Id,
   },
   {
     name: 'Name',
-    field: SORT_FIELDS.name,
+    field: SortFields.Name,
   },
   {
     name: 'Title',
-    field: SORT_FIELDS.title,
+    field: SortFields.Title,
   },
   {
     name: 'Completed',
-    field: SORT_FIELDS.completed,
+    field: SortFields.Completed,
   },
 ];
 
-class App extends Component {
-  state: State = {
-    todos: [],
-    sortField: SORT_FIELDS.id,
-    sortReverse: false,
-    isLoading: false,
-    isLoaded: false,
-    hasError: false,
-  };
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [sortField, setSortField] = useState(SortFields.Id);
+  const [sortReverse, setSortReverse] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  loadGoods = async () => {
-    this.setState({
-      isLoading: true,
-      hasError: false,
-    });
+  const loadGoods = async () => {
+    setIsLoading(true);
+    setHasError(false);
 
     try {
       const data = await getTodos();
 
-      this.setState({
-        todos: data,
-        isLoaded: true,
-      });
+      setTodos(data);
+      setIsLoaded(true);
     } catch {
-      this.setState({
-        hasError: true,
-      });
+      setHasError(true);
     }
 
-    this.setState({ isLoading: false });
+    setIsLoading(false);
   };
 
-  handleSortButton = (field: string) => {
-    const { sortField, sortReverse } = this.state;
+  const handleSortButton = (field: SortFields) => {
     const reversStatus = (sortField === field) ? !sortReverse : false;
 
-    this.setState(() => ({
-      sortField: field,
-      sortReverse: reversStatus,
-    }));
+    setSortField(field);
+    setSortReverse(reversStatus);
   };
 
-  sortTodos = () => {
-    const { todos, sortField, sortReverse } = this.state;
+  const getSortField = (todo: Todo) => {
+    switch (sortField) {
+      case SortFields.Id:
+        return todo.id;
+
+      case SortFields.Name:
+        return todo.user.username;
+
+      case SortFields.Title:
+        return todo.title;
+
+      case SortFields.Completed:
+        return Number(todo.completed);
+
+      default:
+        return todo.id;
+    }
+  };
+
+  const sortTodos = () => {
     const sortDirection = (sortReverse) ? -1 : 1;
 
-    return [...todos].sort((a: Todo, b: Todo): number => {
-      const aField = a[sortField] || a.user[sortField] || false;
-      const bField = b[sortField] || b.user[sortField] || false;
+    return [...todos].sort((a, b) => {
+      if (sortField === SortFields.Id) {
+        const diff = (getSortField(a) as number) - (getSortField(b) as number);
 
-
-      if (typeof aField === 'number') {
-        return (aField - (bField as number)) * sortDirection;
+        return diff * sortDirection;
       }
 
-      if (typeof aField === 'boolean') {
-        return (Number(aField) - Number(bField)) * -sortDirection;
+      if (sortField === SortFields.Title || sortField === SortFields.Name) {
+        const diff = (getSortField(a) as string)
+          .localeCompare(getSortField(b) as string);
+
+        return diff * sortDirection;
       }
 
-      if (typeof aField === 'string') {
-        return aField.localeCompare(bField as string) * sortDirection;
+      if (sortField === SortFields.Completed) {
+        const diff = ((getSortField(a) as number) - (getSortField(b) as number));
+
+        return diff * -sortDirection;
       }
 
       return 0;
     });
   };
 
-  render() {
-    const { isLoading, isLoaded, hasError } = this.state;
-    const sortedTodos: Todo[] = this.sortTodos();
+  const sortedTodos: Todo[] = sortTodos();
 
-    return (
-      <section className="section">
-        <div className="container">
-          <h1 className="title is-1">List of TODOs</h1>
-          {!isLoading && !isLoaded && !hasError && (
+  return (
+    <section className="section">
+      <div className="container">
+        <h1 className="title is-1">List of TODOs</h1>
+        {!isLoading && !isLoaded && !hasError && (
+          <Button
+            text="Load ToDos"
+            className="button"
+            handleClick={loadGoods}
+          />
+        )}
+        {isLoading && <progress className="progress is-primary" max="100" />}
+        {hasError && (
+          <>
+            <div className="notification is-warning">Something went wrong...</div>
             <Button
-              text="Load ToDos"
+              text="Try Again"
               className="button"
-              handleClick={this.loadGoods}
+              handleClick={loadGoods}
             />
-          )}
-          {isLoading && <progress className="progress is-primary" max="100" />}
-          {hasError && (
-            <>
-              <div className="notification is-warning">Something went wrong...</div>
-              <Button
-                text="Try Again"
-                className="button"
-                handleClick={this.loadGoods}
-              />
-            </>
-          )}
-          {isLoaded && (
-            <TodoList
-              todos={sortedTodos}
-              SORT_BUTTONS={SORT_BUTTONS}
-              handleSortButton={this.handleSortButton}
-            />
-          )}
-        </div>
-      </section>
-    );
-  }
-}
+          </>
+        )}
+        {isLoaded && (
+          <TodoList
+            todos={sortedTodos}
+            SORT_BUTTONS={SORT_BUTTONS}
+            handleSortButton={handleSortButton}
+          />
+        )}
+      </div>
+    </section>
+  );
+};
 
 export default App;

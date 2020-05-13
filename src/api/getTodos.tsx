@@ -1,6 +1,4 @@
-import { Todo, User } from '../components/Interfaces';
-
-const API_URL = '../api';
+const API_URL = 'https://seialek.github.io/react_dynamic-list-of-todos/api';
 const API_URL_TODOS = `${API_URL}/todos.json`;
 const API_URL_USERS = `${API_URL}/users.json`;
 

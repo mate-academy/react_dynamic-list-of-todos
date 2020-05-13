@@ -1,13 +1,13 @@
 import React from 'react';
-import { Todo, SortButton } from '../Interfaces';
 import { TodoItem } from './TodoItem';
 import { Button } from '../Button';
+import { SortFields } from '../Enums';
 
-interface Props {
+type Props = {
   todos: Todo[];
   SORT_BUTTONS: SortButton[];
-  handleSortButton: (type: string) => void;
-}
+  handleSortButton: (type: SortFields) => void;
+};
 
 export const TodoList: React.FC<Props> = ({ todos, SORT_BUTTONS, handleSortButton }) => (
   <table className="table">
