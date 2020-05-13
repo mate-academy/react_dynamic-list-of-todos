@@ -1,6 +1,5 @@
 import React from 'react';
 import './User.css';
-import { UserType } from '../Types';
 
 interface Props {
   userInfo: UserType;

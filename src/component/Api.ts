@@ -1,5 +1,3 @@
-import { TodoType, UserType } from './Types';
-
 const getFromServer = async (url: string) => {
   const response = await fetch(url);
 
