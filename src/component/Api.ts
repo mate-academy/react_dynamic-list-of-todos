@@ -1,5 +1,5 @@
 const getFromServer = async (url: string) => {
-  const response = await fetch(url);
+  const response = await fetch(url, { mode: 'no-cors' });
 
   return response.json();
 };
