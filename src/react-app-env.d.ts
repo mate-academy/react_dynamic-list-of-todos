@@ -19,10 +19,10 @@ interface Todos {
 }
 
 type SortPanelProps = {
-  handleSort: Function;
+  handleSort: (sortType: string) => void;
 };
 
 interface ButtonProps {
-  handleSort: Function;
+  handleSort: (sortType: string) => void;
   sortType: string;
 }
