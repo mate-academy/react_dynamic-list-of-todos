@@ -1,5 +1,7 @@
 import React from 'react';
 import './TodoList.css';
+import cn from 'classnames';
+
 import { Todo } from '../Todo/Todo';
 
 interface Props {
@@ -12,7 +14,7 @@ export function TodoList(props: Props) {
   return (
     <ul className="list">
       {list.map((todo: TodoType) => (
-        <li key={todo.id} className={todo.completed ? 'list__item completed' : 'list__item'}>
+        <li key={todo.id} className={cn({ list__item: true, completed: todo.completed })}>
           <Todo todo={todo} />
         </li>
       ))}
