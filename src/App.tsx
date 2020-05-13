@@ -10,7 +10,7 @@ const App = () => {
   const [preparedTodos, setPreparedTodos] = useState<TodoType[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const onLoadClick = () => {
+  const LoadData = () => {
     setIsInitialized(true);
     let TempTodos: TodoType[] = [];
 
@@ -31,13 +31,16 @@ const App = () => {
 
   const onSort = (sortBy: string): void => {
     const sortedTodos = [...preparedTodos];
+    const title = 'title';
+    const status = 'status';
+    const name = 'name';
 
     switch (sortBy) {
-      case 'title':
+      case title:
         sortedTodos.sort((a, b) => a.title.localeCompare(b.title));
         break;
 
-      case 'status':
+      case status:
         sortedTodos.sort((a, b) => {
           if (a.completed === b.completed) {
             return 0;
@@ -51,7 +54,7 @@ const App = () => {
         });
         break;
 
-      case 'name':
+      case name:
         sortedTodos.sort((a, b) => {
           if (a.user !== undefined && b.user !== undefined) {
             return a.user.name.localeCompare(b.user.name);
@@ -74,7 +77,7 @@ const App = () => {
         <p>Loading...</p>
       )}
       {!isInitialized && (
-        <button type="button" onClick={onLoadClick}>
+        <button type="button" onClick={LoadData}>
           Load
         </button>
       )}
