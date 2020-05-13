@@ -1,5 +1,5 @@
 import React from 'react';
-
+import classNames from 'classnames';
 import './App.css';
 
 import { getTodos, getUsers } from './api';
@@ -45,18 +45,15 @@ class App extends React.Component {
       isButtonDisabled: true,
       buttonText: 'Loading...',
     });
-    getTodos().then(todos => {
-      this.setState({
-        todosFromServer: todos,
+
+    Promise.all([getTodos(), getUsers()])
+      .then((dataFromServer) => {
+        this.setState({
+          todosFromServer: dataFromServer[0],
+          usersFromServer: dataFromServer[1],
+        });
+        this.preparedTodosGenerate();
       });
-      this.preparedTodosGenerate();
-    });
-    getUsers().then(users => {
-      this.setState({
-        usersFromServer: users,
-      });
-      this.preparedTodosGenerate();
-    });
   };
 
 
@@ -94,27 +91,27 @@ class App extends React.Component {
         <button
           type="button"
           disabled={isButtonDisabled}
-          className={isButtonVisible ? 'visible' : 'un-visible'}
+          className={classNames({ visible: isButtonVisible }, { 'un-visible': !isButtonVisible })}
           onClick={this.handleLoadButtonClick}
         >
           {this.state.buttonText}
         </button>
         <button
-          className={isButtonVisible ? 'un-visible' : 'visible'}
+          className={classNames({ visible: !isButtonVisible }, { 'un-visible': isButtonVisible })}
           type="button"
           onClick={this.handleSortByNameButtonClick}
         >
           Sort by user name
         </button>
         <button
-          className={isButtonVisible ? 'un-visible' : 'visible'}
+          className={classNames({ visible: !isButtonVisible }, { 'un-visible': isButtonVisible })}
           type="button"
           onClick={this.handleSortByTitleButtonClick}
         >
           Sort by description
         </button>
         <button
-          className={isButtonVisible ? 'un-visible' : 'visible'}
+          className={classNames({ visible: !isButtonVisible }, { 'un-visible': isButtonVisible })}
           type="button"
           onClick={this.handleSortByCompletedButtonClick}
         >
