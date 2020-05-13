@@ -1,7 +1,6 @@
 import React from 'react';
 import { User } from '../User/User';
 import { Completed } from '../Completed/Completed';
-import { TodoType } from '../Types';
 
 interface Props {
   todo: TodoType;

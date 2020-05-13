@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import { TodoList } from './component/TodoList/TodoList';
 import { getTodos } from './component/Api';
-import { TodoType, UserType } from './component/Types';
 import { SortButtons } from './component/SortButtons/SortButtons';
 
 
