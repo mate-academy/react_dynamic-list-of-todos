@@ -1,7 +1,6 @@
-import React from 'react';
-import { ButtonProps } from '../interfaces/interfaces';
+import React, { FC } from 'react';
 
-export const Button: React.FC <ButtonProps> = ({
+export const Button: FC <ButtonProps> = ({
   handleSort, sortType,
 }) => (
   <button

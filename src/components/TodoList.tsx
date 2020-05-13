@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Todos } from '../interfaces/interfaces';
+import React, { FC, useState } from 'react';
 import { SortPanel } from './SortPanel';
 
-export const TodoList: React.FC<Todos> = ({ todos }) => {
+export const TodoList: FC<Todos> = ({ todos }) => {
   const [sortedTodos, setTodos] = useState([...todos]);
 
   const [isSortedByTitle, setSortedByTitle] = useState(0);

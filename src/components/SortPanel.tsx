@@ -1,8 +1,7 @@
-import React from 'react';
-import { SortPanelProps } from '../interfaces/interfaces';
+import React, { FC } from 'react';
 import { Button } from './Button';
 
-export const SortPanel: React.FC<SortPanelProps> = ({
+export const SortPanel: FC<SortPanelProps> = ({
   handleSort,
 }) => {
   return (

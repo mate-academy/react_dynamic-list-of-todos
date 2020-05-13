@@ -5,7 +5,7 @@ import { getPreparedData } from './api/data';
 import { TodoList } from './components/TodoList';
 import { Loader } from './components/Loader';
 
-const App: React.FC = () => {
+const App = () => {
   const [todos, setTodos] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isLoaded, setLoaded] = useState(false);
