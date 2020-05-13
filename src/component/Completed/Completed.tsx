@@ -9,15 +9,15 @@ export function Completed(props: Props) {
 
   if (isCompleted === true) {
     return (
-      <p className="done">
+      <span className="done">
         Completed
-      </p>
+      </span>
     );
   }
 
   return (
-    <p className="not-done">
+    <span className="not-done">
       Uncompleted
-    </p>
+    </span>
   );
 }
