@@ -1,45 +1,7 @@
 import React from 'react';
 
 import { getUsersFromServer, getTodosFromServer } from './api';
-
-
-interface Geo {
-  lat: string;
-  lng: string;
-}
-
-interface Address {
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
-  geo: Geo;
-
-}
-
-interface Company {
-  name: string;
-  catchPhrase: string;
-  bs: string;
-}
-
-interface Users {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: Address;
-  phone: string;
-  website: string;
-  company: Company;
-}
-
-interface Todos {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { Todos, Users } from './interface';
 
 type State = {
   todos: Todos[];
@@ -74,14 +36,14 @@ export default class TodoList extends React.PureComponent<{},
     }));
   };
 
-  loadTodosFromSrver = () => {
-    getUsersFromServer().then(users => {
-      this.setState({ users });
+  loadTodosFromServer = () => {
+    Promise.all([getUsersFromServer(), getTodosFromServer()]).then((data) => {
+      this.setState({
+        users: data[0],
+        todos: data[1],
+        dataLoaded: true,
+      });
     });
-    getTodosFromServer().then(todos => {
-      this.setState({ todos });
-    });
-    this.setState({ dataLoaded: true });
   };
 
   render() {
@@ -92,7 +54,7 @@ export default class TodoList extends React.PureComponent<{},
             type="button"
             className="button button__load"
             style={{ display: this.state.dataLoaded ? 'none' : 'initial' }}
-            onClick={this.loadTodosFromSrver}
+            onClick={this.loadTodosFromServer}
           >
             Load Todos from Server
           </button>
@@ -125,6 +87,7 @@ export default class TodoList extends React.PureComponent<{},
 
           {this.state.todos.map(todo => (
             <div
+              key={todo.id}
               className="todo"
             >
               <span className="todo__user">
