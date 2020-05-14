@@ -1,1 +1,27 @@
 
+body {
+  font-family: Roboto, sans-serif;
+  background-color: #d7e1e9;
+}
+
+.todo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.todo__sort {
+  display: flex;
+  text-align: center;
+}
+
+.todo__list {
+  list-style: none;
+}
+
+.todo__item {
+  background-color: #f2f8fd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
