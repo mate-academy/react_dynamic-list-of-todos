@@ -22,6 +22,7 @@ body {
 }
 
 .button {
+  outline: gray;
   color: #f9f9f9;
   opacity: 1;
   border: none;
@@ -32,4 +33,9 @@ body {
   border-radius: 10px;
   box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
     inset rgba(0,0,0,0.5)      -8px -8px 18px 5px;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background: gray;
 }
