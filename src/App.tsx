@@ -4,8 +4,8 @@ import { getPreparedTodos } from './api';
 import { TodoList } from './components/TodoList';
 
 const App: React.FC = () => {
-  const [isLoaded, setLoad] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoaded, setLoad] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<PreparedTodos>([]);
 
   const downloadData = () => {
