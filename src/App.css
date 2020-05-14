@@ -1,1 +1,61 @@
+html {
+  font-family: sans-serif;
+}
 
+body {
+  margin: 0;
+}
+
+.head {
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  margin: 30px auto;
+  width: 50%;
+  justify-content: space-around;
+}
+
+.button {
+  display: block;
+  margin: 0 auto;
+  width: 20%;
+  height: 50px;
+
+  border: none;
+  border-radius: 20px;
+
+  background-color: tomato;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+
+  font-size: 17px;
+  color: #fff;
+
+  cursor: pointer;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+.button:hover {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+.list {
+  width: 90%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px 20px;
+}
+
+.list-item {
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+
+  text-align: center;
+}
