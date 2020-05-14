@@ -7,6 +7,9 @@ const App = () => {
   const [isLoading, setIsLoadind] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setPreparedTodos] = useState([]);
+  const [sortTitle, setSortTitle] = useState(false);
+  const [sortStatus, setSortStatus] = useState(false);
+  const [sortName, setSortName] = useState(false);
 
   const loadGoods = async () => {
     setIsLoadind(true);
@@ -26,18 +29,39 @@ const App = () => {
   };
 
   const sortByTitle = () => {
-    setPreparedTodos(prevState => [...prevState]
-      .sort((a: TodoProps, b: TodoProps) => (a.title.localeCompare(b.title))));
+    if (!sortTitle) {
+      setSortTitle(true);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (a.title.localeCompare(b.title))));
+    } else {
+      setSortTitle(false);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (b.title.localeCompare(a.title))));
+    }
   };
 
   const sortByStatus = () => {
-    setPreparedTodos(prevState => [...prevState]
-      .sort((a: TodoProps, b: TodoProps) => (+b.completed - +a.completed)));
+    if (!sortStatus) {
+      setSortStatus(true);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (+b.completed - +a.completed)));
+    } else {
+      setSortStatus(false);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (+a.completed - +b.completed)));
+    }
   };
 
   const sortByName = () => {
-    setPreparedTodos(prevState => [...prevState]
-      .sort((a: TodoProps, b: TodoProps) => (a.user.name.localeCompare(b.user.name))));
+    if (!sortName) {
+      setSortName(true);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (a.user.name.localeCompare(b.user.name))));
+    } else {
+      setSortName(false);
+      setPreparedTodos(prevState => [...prevState]
+        .sort((a: TodoProps, b: TodoProps) => (b.user.name.localeCompare(a.user.name))));
+    }
   };
 
   return (
