@@ -21,7 +21,7 @@ const App: React.FC = () => {
     switch (sort) {
       case 'name':
         return setTodos([...todos]
-          .sort((a, b) => a.user.name.localeCompare(b.user.name)));
+          .sort((a, b) => a.users.name.localeCompare(b.users.name)));
 
       case 'title':
         return setTodos([...todos]

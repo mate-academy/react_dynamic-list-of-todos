@@ -7,7 +7,7 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div>
-      <p>{todo.user.name}</p>
+      <p>{todo.users.name}</p>
       <p>{todo.title}</p>
       <p>{todo.completed ? 'completed' : 'uncompleted'}</p>
     </div>

@@ -27,7 +27,7 @@ interface PreparedTodo {
   id: number;
   title: string;
   userId: number;
-  user: User;
+  users: User;
 }
 
 type PreparedTodos = PreparedTodo[];
