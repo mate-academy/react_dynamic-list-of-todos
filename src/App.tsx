@@ -21,19 +21,16 @@ const App: FC = () => {
         return todosList.sort((todoA, todoB) => (
           todoA.user.name.localeCompare(todoB.user.name)
         ));
-        break;
       }
 
       case 'title': {
         return todosList.sort((todoA, todoB) => (
           todoA.title.localeCompare(todoB.title)
         ));
-        break;
       }
 
       case 'completed': {
         return todosList.sort((todoA, todoB) => (+todoA.completed - +todoB.completed));
-        break;
       }
 
       default: return todosList;
