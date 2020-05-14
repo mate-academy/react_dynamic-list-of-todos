@@ -1,1 +1,35 @@
+body {
+  background: #404040;
+  color: #f9f9f9;
+  opacity: 0.5;
+}
 
+.wrapper {
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.todo__list {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 20px;
+  justify-content: center;
+}
+
+.todo__item {
+  list-style: none;
+}
+
+.button {
+  color: #f9f9f9;
+  opacity: 1;
+  border: none;
+  height: 50px;
+  width: 120px;
+  margin: 10px;
+  background: #404040;
+  border-radius: 10px;
+  box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
+    inset rgba(0,0,0,0.5)      -8px -8px 18px 5px;
+}
