@@ -21,6 +21,6 @@ export const getPreparedTodos = async (): Promise<PreparedTodos> => {
 
   return todos.map((todo) => ({
     ...todo,
-    users: users.find((user) => user.id === todo.userId) as User,
+    user: users.find((user) => user.id === todo.userId) as User,
   }));
 };
