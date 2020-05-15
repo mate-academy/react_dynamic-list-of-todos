@@ -8,13 +8,6 @@ interface TodoFromServer {
 interface UserFromServer {
   id: number;
   name: string;
-  // username: string;
-  // email: string;
-  // address: Address;
-  // geo: Geo;
-  // phone: string;
-  // website: string;
-  // company: Company;
 }
 
 interface TodosFromServer {
