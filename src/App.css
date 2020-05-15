@@ -1,1 +1,59 @@
+#root {
+  width: 90%;
+  margin: 16px auto;
+}
 
+h1 {
+  text-align: center;
+}
+
+.todo__button {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  width: 150px;
+  height: 50px;
+  margin: 8px;
+  background-color: grey;
+  border-radius: 4px;
+  outline: none;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: lightgrey;
+}
+
+.button__loadTodo,
+.loading {
+  display: flex;
+  margin: 16px auto;
+  justify-content: center;
+}
+
+.todo__list {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-gap: 12px;
+  padding: 0;
+  margin: 16px auto;
+}
+
+.todo__item {
+  padding: 8px;
+  border: 1px solid grey;
+  border-radius: 4px;
+}
+
+.item__status {
+  color: blue;
+}
+
+.item__completed {
+  color: red;
+}
