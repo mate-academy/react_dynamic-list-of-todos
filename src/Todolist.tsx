@@ -6,17 +6,21 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
-    <>
+    <div className="todos_container">
       {todos.map(todo => (
         <div
           key={todo.id}
           className="todo"
         >
-          <p>{todo.title}</p>
-          <p>{todo.user}</p>
-          {todo.completed ? <p>completed</p> : <p>In process</p>}
+          <p className="todo_title">
+            {todo.title}
+          </p>
+          <p className="todo_user">{todo.user}</p>
+          {todo.completed
+            ? <p className="todo_completed">completed</p>
+            : <p className="todo_inprocess">in process</p>}
         </div>
       ))}
-    </>
+    </div>
   );
 };
