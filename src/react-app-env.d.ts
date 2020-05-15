@@ -2,6 +2,7 @@
 /// <reference types="react-scripts" />
 
 type Todo = {
+  [index: string];
   userId: number;
   id: number;
   title: string;

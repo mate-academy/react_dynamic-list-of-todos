@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './App.css';
 import { getTodos } from './api/api';
 import { TodoList } from './Todolist';
+import { Buttons } from './Buttons';
 
 const App = () => {
   const [todosList, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [sortField, setSortField] = useState<string>('');
 
   const loadTodos = () => {
     setIsLoading(!isLoading);
@@ -22,21 +22,15 @@ const App = () => {
     1000);
   };
 
-  switch (sortField) {
-    case 'completed':
-      getTodos()
-        .then((todosFromServer) => setTodos(todosFromServer
-          .sort((a: Todo, b: Todo) => +a.completed - +b.completed)));
-      break;
-    case 'user':
-    case 'title':
-      getTodos()
-        .then(todosFromServer => setTodos(todosFromServer
-          .sort((a: Todo, b: Todo) => a[sortField].localeCompare(b[sortField]))));
-      break;
-    default:
-      break;
-  }
+  const sortByFilter = (filter: string) => {
+    setTodos([...todosList]
+      .sort((a, b) => a[filter].localeCompare(b[filter])));
+  };
+
+  const sortByCompleted = () => {
+    setTodos([...todosList]
+      .sort((a: Todo, b: Todo) => +a.completed - +b.completed));
+  };
 
   return (
     <div className="container">
@@ -56,29 +50,10 @@ const App = () => {
         : (isVisible
           && (
             <>
-              <div className="buttons">
-                <button
-                  className="button"
-                  type="button"
-                  onClick={() => setSortField('user')}
-                >
-                  Sort by Name
-                </button>
-                <button
-                  className="button"
-                  type="button"
-                  onClick={() => setSortField('title')}
-                >
-                  Sort by Title
-                </button>
-                <button
-                  className="button"
-                  type="button"
-                  onClick={() => setSortField('completed')}
-                >
-                  Sort by Completed
-                </button>
-              </div>
+              <Buttons
+                sortByFilter={sortByFilter}
+                sortByCompleted={sortByCompleted}
+              />
               <TodoList todos={todosList} />
             </>
           )
