@@ -6,7 +6,6 @@ import TodoList from './TodoList';
 import ButtonsSort from './ButtonsSort';
 
 const App: React.FC = () => {
-  // const [text, setText] = useState('Load');
   const [isToggle, setIsToggle] = useState(false);
   const [todos, setTodos] = useState<PrepareTodo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,8 +14,6 @@ const App: React.FC = () => {
   const visibleTodos = [...todos];
 
   const loadTodos = () => {
-    // !isToggle ? setText('Loading...') : setText('Load');
-
     setIsToggle(!isToggle);
 
     setTimeout(() => {
@@ -85,7 +82,7 @@ const App: React.FC = () => {
             <thead className="has-background-grey-lighter">
               <ButtonsSort setSortField={setSortField} />
             </thead>
-            <tfoot>
+            <tfoot className="has-background-grey-lighter">
               <ButtonsSort setSortField={setSortField} />
             </tfoot>
             <tbody>
