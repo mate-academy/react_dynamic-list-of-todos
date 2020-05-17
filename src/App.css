@@ -11,5 +11,8 @@ body {
 
 .ui.table .table__button {
   cursor: pointer;
+}
 
+.ui.table .table__button:hover {
+  background-color: #721c8e;
 }

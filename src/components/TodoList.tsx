@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Table } from 'semantic-ui-react';
 import TodoItem from './TodoItem';
 
-interface SortButton {
-  [key: string]: string;
+interface SortButton extends Ikey {
+  id: string;
   user: string;
   title: string;
   completed: string;
