@@ -1,1 +1,76 @@
+.button {
+  background: lightsteelblue;
+  cursor: pointer;
+  color: darkslategray;
+  height: 35px;
+  width: 100%;
+  font-size: 16px;
+}
 
+.button:hover {
+  background: cornflowerblue;
+}
+
+.head {
+  text-align: center;
+  color: darkblue;
+}
+
+.download {
+  width: 30%;
+  margin-left: 35%;
+}
+
+.list-item {
+  height: 35px;
+  background: aquamarine;
+}
+
+.title {
+  text-align: center;
+  color: black;
+  font-size: 16px;
+  font-weight: bolder;
+  border: midnightblue 1px solid;
+}
+
+.user {
+  text-align: left;
+  color: midnightblue;
+  font-size: 16px;
+  font-weight: bold;
+  border: midnightblue 1px solid;
+  background: lightsteelblue;
+}
+
+.ready {
+  background: green;
+  font-size: 16px;
+  font-style: italic;
+  text-align: center;
+  border: midnightblue 1px solid;
+  width: 200px;
+}
+
+.work {
+  background: red;
+  font-size: 16px;
+  font-style: italic;
+  text-align: center;
+  border: midnightblue 1px solid;
+  width: 200px;
+}
+
+.header {
+  text-align: center;
+}
+
+.id {
+  padding: 10px;
+  text-align: center;
+  border: midnightblue 1px solid;
+}
+
+.data_table {
+  margin-left: 50px;
+}
