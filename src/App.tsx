@@ -13,12 +13,12 @@ const App = () => {
   const getNewTasks = () => {
     setLoading(true);
     switchButton(false);
-    setTimeout(() => {
-      fullTaskList()
-        .then(data => setTodos(data));
-      setdataLoaded(!dataLoaded);
-      setLoading(false);
-    }, 1000);
+    fullTaskList()
+      .then(data => {
+        setdataLoaded(!dataLoaded);
+        setLoading(false);
+        setTodos(data);
+      });
   };
 
   const sortBy = (action: string) => {
