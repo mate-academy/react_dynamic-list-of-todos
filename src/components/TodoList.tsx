@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
-import Todo from './Todo';
+import TodoItem from './TodoItem';
 
-const headers = {
+interface SortButton {
+  [key: string]: string;
+  user: string;
+  title: string;
+  completed: string;
+}
+
+const headers: SortButton = {
   id: 'Id',
   user: 'Person',
   title: 'Description',
   completed: 'Completed',
 };
 
-const TodoList = ({ list }) => {
+declare type MyCallback = (myArgument: string) => (a: Todo, b: Todo) => number;
+
+type PropsTodoList = {
+  list: Todo[];
+};
+
+const TodoList: React.FC<PropsTodoList> = ({ list }) => {
   const [todos, sortTodos] = useState(list);
   const [active, setActive] = useState('id');
   const [isSorted, setSorted] = useState(true);
 
-  const sortType = (field) => {
+  const sortType: MyCallback = (field) => {
     switch (typeof list[0][field]) {
       case 'string':
         return (a, b) => a[field].localeCompare(b[field]);
@@ -26,7 +38,7 @@ const TodoList = ({ list }) => {
     }
   };
 
-  const sortList = (field) => {
+  const sortList = (field: string) => {
     const callback = sortType(field);
 
     if (active !== field) {
@@ -57,14 +69,10 @@ const TodoList = ({ list }) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {list.map(todo => <Todo key={todo.id} {...todo} />)}
+        {list.map(todo => <TodoItem key={todo.id} {...todo} />)}
       </Table.Body>
     </Table>
   );
-};
-
-TodoList.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TodoList;

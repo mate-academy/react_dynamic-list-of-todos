@@ -1,8 +1,8 @@
 # React dynamic list of TODOs
 - Replace `<your_account>` with your Github username in the links
 
-    - [DEMO LINK](https://andreas-just.github.io/react_dynamic-list-of-goods/)
-    - [PULL REQUEST](https://github.com/mate-academy/react_dynamic-list-of-goods/pull/82)
+    - [DEMO LINK](https://andreas-just.github.io/react_dynamic-list-of-todos/)
+    - [PULL REQUEST](https://github.com/mate-academy/react_dynamic-list-of-todos/pull/182)
 
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
