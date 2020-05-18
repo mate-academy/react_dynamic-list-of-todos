@@ -13,10 +13,10 @@ export const getTodos = () => {
 };
 
 export const getPreparedTodos = async () => {
-  const [todos, users] = await Promise.all([getTodos(), getUsers()]);
-  const preparedTodos = todos.map((todo: Todo) => ({
+  const [todosFromServer , usersFromServer] = await Promise.all([getTodos(), getUsers()]);
+  const preparedTodos = todosFromServer.map((todo: Todo) => ({
     ...todo,
-    user: users.find((user: User) => user.id === todo.userId),
+    user: usersFromServer.find((user: User) => user.id === todo.userId),
   }));
 
   return preparedTodos;

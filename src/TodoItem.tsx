@@ -29,7 +29,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             {todo.completed ? 'completed' : 'in procces'}
           </p>
         </div>
-
       </div>
     </>
   );
