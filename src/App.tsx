@@ -17,8 +17,6 @@ const App = () => {
       const todosFromServer = await getTodos();
       const usersFromServer = await getUsers();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-
       const todosWithUsers: Todo[] = todosFromServer.map((todo: Todo) => ({
         ...todo,
         user: usersFromServer.find(user => user.id === todo.userId),
@@ -26,7 +24,7 @@ const App = () => {
 
       setTodos(todosWithUsers);
     } catch (e) {
-      setError('Loading error');
+      setError(`Loading error: ${e}`);
     }
 
     setLoading(false);
@@ -63,7 +61,14 @@ const App = () => {
             {loading ? 'Loading...' : 'Load'}
           </button>
 
-          {error && <span>{error}</span>}
+          {error && (
+            <>
+              <span>{error}</span>
+              <button type="button" onClick={handleLoadClick} disabled={loading}>
+                try again
+              </button>
+            </>
+          )}
         </>
       ) : (
         <>
