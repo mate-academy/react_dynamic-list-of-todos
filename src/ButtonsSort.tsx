@@ -9,7 +9,7 @@ type Props = {
 const ButtonsSort: React.FC<Props> = ({ setSortField }) => {
   const hendleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     const { name } = (e.target as HTMLButtonElement);
-git    setSortField(name);
+    setSortField(name);
   };
 
   return (
