@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 interface Todo {
   title: string;
   id: number;
@@ -11,7 +10,7 @@ interface User {
   id: number;
 }
 
-interface TodoNormalize {
+interface TodoNormalized {
   title: string;
   id: number;
   userId: number;

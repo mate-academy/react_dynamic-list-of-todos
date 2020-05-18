@@ -18,8 +18,8 @@ const normalizeTodos = async () => {
 
 const App = () => {
   const [loading, setLoading] = useState(false);
-  const [visibleContent, setVisibleContent] = useState(false);
-  const [todos, setTodos] = useState<TodoNormalize[]>([]);
+  const [isContentVisible, setContentVisible] = useState(false);
+  const [todos, setTodos] = useState<TodoNormalized[]>([]);
 
   const onLoadClick = () => {
     setLoading(true);
@@ -27,11 +27,11 @@ const App = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
         setLoading(false);
-        setVisibleContent(true);
+        setContentVisible(true);
       });
   };
 
-  const sorted = (sortName: string|boolean) => {
+  const sortTodos = (sortName: string|boolean) => {
     switch (sortName) {
       case 'title':
         setTodos([...todos].sort((a, b) => {
@@ -57,10 +57,11 @@ const App = () => {
   };
 
 
-  const changeStatus = (id: number) => {
+  const changeTodoStatus = (id: number) => {
     const actualTodos = todos.map(todo => {
       if (todo.id === id) {
-        return { ...todo, completed: !todo.completed };
+        return { ...todo,
+          completed: !todo.completed };
       }
 
       return todo;
@@ -75,7 +76,7 @@ const App = () => {
 
   return (
     <>
-      {!visibleContent ? (
+      {!isContentVisible ? (
         <button
           type="button"
           onClick={onLoadClick}
@@ -86,8 +87,8 @@ const App = () => {
       )
         : (
           <>
-            <SortPanel sorted={sorted} />
-            <TodoList changeStatus={changeStatus} todos={todos} />
+            <SortPanel sorted={sortTodos} />
+            <TodoList changeStatus={changeTodoStatus} todos={todos} />
           </>
         )}
     </>

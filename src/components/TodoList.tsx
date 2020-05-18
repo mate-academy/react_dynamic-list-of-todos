@@ -9,7 +9,8 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, changeStatus }) => {
       }) => (
         <button
           type="button"
-          className= {cn('alert', { 'alert-success': completed, 'alert-primary': !completed })}
+          className= {cn('alert',
+            { 'alert-success': completed, 'alert-primary': !completed })}
           key={id}
           onClick={() => changeStatus(id)}
         >
@@ -22,6 +23,6 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, changeStatus }) => {
 };
 
 type TodoListProps = {
-  todos: TodoNormalize[];
+  todos: TodoNormalized[];
   changeStatus(id: number): void;
 };

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 const buttons = [
-  { name: 'Sort by Name', sorted: 'title' },
-  { name: 'Sort by Completed', sorted: 'completed' },
-  { name: 'Sort by User Name', sorted: 'user' },
+  { name: 'Sort by Name', sortType: 'title' },
+  { name: 'Sort by Completed', sortType: 'completed' },
+  { name: 'Sort by User Name', sortType: 'user' },
 ];
 
 type PropsSort = {
@@ -21,10 +21,10 @@ export const SortPanel: React.FC<PropsSort> = ({ sorted }) => {
             type="button"
             key={button.name}
             onClick={() => {
-              setActiveBtn(button.sorted);
-              sorted(button.sorted);
+              setActiveBtn(button.sortType);
+              sorted(button.sortType);
             }}
-            className={button.sorted === activeBtn ? 'btn btn-warning active' : 'btn btn-warning'}
+            className={button.sortType === activeBtn ? 'btn btn-warning active' : 'btn btn-warning'}
           >
             {button.name}
           </button>
