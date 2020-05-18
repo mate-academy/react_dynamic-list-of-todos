@@ -7,6 +7,7 @@ import { Todos } from './interfaces';
 
 const App = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
+  const [initialTodos, setInitialTodos] = useState<Todos[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const loadData = () => {
@@ -24,21 +25,22 @@ const App = () => {
 
         setIsLoaded(true);
         setTodos(preparedTodosList);
+        setInitialTodos(preparedTodosList);
       });
   };
 
   const sortTitles = () => {
-    setTodos([...todos]
+    setTodos([...initialTodos]
       .sort((a, b) => a.title.localeCompare(b.title)));
   };
 
   const sortComplete = () => {
-    setTodos([...todos]
+    setTodos([...initialTodos]
       .sort((a, b) => +b.completed - +a.completed));
   };
 
   const sortNames = () => {
-    setTodos([...todos]
+    setTodos([...initialTodos]
       .sort((a, b) => {
         const result = (a.user && b.user)
           ? a.user.name.localeCompare(b.user.name)
