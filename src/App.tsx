@@ -5,6 +5,7 @@ import { getPreparedTodos } from './api';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<PreparedTodo[]>([]);
+  const [initialTodos, setInitialTodos] = useState<PreparedTodo[]>([]);
   const [isLoaded, setLoad] = useState<boolean>(false);
   const [isloading, setLoading] = useState<boolean>(false);
 
@@ -12,6 +13,7 @@ const App: React.FC = () => {
     setLoading(true);
       getPreparedTodos().then((todosFromServer) => {
         setTodos(todosFromServer);
+        setInitialTodos(todosFromServer);
         setLoad(true);
         setLoading(false);
       });
@@ -32,6 +34,10 @@ const App: React.FC = () => {
       .sort((a, b) => a.user.name.localeCompare(b.user.name)));
   };
 
+  const resetAllTodos = () => {
+    setTodos(initialTodos);
+  };
+
   return (
     <div className="container">
       <h1>Dynamic list of TODOs</h1>
@@ -48,6 +54,12 @@ const App: React.FC = () => {
         : (
           <>
             <div className="button__container">
+              <button
+                className="button"
+                type="button"
+                onClick={resetAllTodos}
+                >Reset All Todos
+              </button>
               <button
                 className="button"
                 type="button"
