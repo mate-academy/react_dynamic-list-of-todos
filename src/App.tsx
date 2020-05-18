@@ -6,6 +6,7 @@ import TodoList from './components/TodoList';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ApdateTodo[]>([]);
+  const [initialTodos, setInitialTodos] = useState<ApdateTodo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,9 +14,11 @@ const App: React.FC = () => {
     setIsLoaded(!isLoaded);
 
     getPrepareTodos()
-      .then(todosFromServe => {
-        setTodos(todosFromServe);
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
         setIsLoading(true);
+        setInitialTodos(todosFromServer);
+        setTodos(todosFromServer);
       });
   };
 
@@ -27,27 +30,18 @@ const App: React.FC = () => {
   };
 
   const sortByTodosName = () => {
-    const sortedTodos = [...todos].sort((todoPrew, todoCurr) => (
-      (todoPrew.title).localeCompare(todoCurr.title)
-    ));
-
-    setTodos(sortedTodos);
+    setTodos([...initialTodos].sort((todoPrev, todoCurr) => (
+      (todoPrev.title).localeCompare(todoCurr.title))));
   };
 
   const sortByCompleted = () => {
-    const sortedTodos = [...todos].sort((todoPrew, todoCurr) => (
-      (+todoPrew.completed) - (+todoCurr.completed)
-    ));
-
-    setTodos(sortedTodos);
+    setTodos([...initialTodos].sort((todoPrev, todoCurr) => (
+      (+todoPrev.completed) - (+todoCurr.completed))));
   };
 
   const sortByUserName = () => {
-    const sortedTodos = [...todos].sort((todoPrew, todoCurr) => (
-      (todoPrew.user.name).localeCompare(todoCurr.user.name)
-    ));
-
-    setTodos(sortedTodos);
+    setTodos([...initialTodos].sort((todoPrev, todoCurr) => (
+      (todoPrev.user.name).localeCompare(todoCurr.user.name))));
   };
 
   return (
