@@ -9,13 +9,22 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingFirstPage, setLoadingFirstPage] = useState<boolean>(false);
 
+  // const downloadTodos = () => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     getPreparedTodos().then(todo => setTodos(todo));
+  //     setLoading(false);
+  //     setLoadingFirstPage(true);
+  //   }, 2000);
+  // };
+
   const downloadTodos = () => {
     setLoading(true);
-    setTimeout(() => {
-      getPreparedTodos().then(todo => setTodos(todo));
+    getPreparedTodos().then(todo => {
+      setTodos(todo);
       setLoading(false);
       setLoadingFirstPage(true);
-    }, 2000);
+    });
   };
 
   const sortByTitle = () => {
@@ -36,13 +45,13 @@ const App: React.FC = () => {
       {loadingFirstPage
         ? (
           <div className="todo__button">
-            <button type="button" className="button button__title" onClick={sortByTitle}>Sort By Title</button>
-            <button type="button" className="button button__name" onClick={sortByUserName}>Sort By Title</button>
-            <button type="button" className="button button__status" onClick={sortByStatus}>Sort By Status</button>
+            <button type="button" className="button info button__title" onClick={sortByTitle}>Sort By Title</button>
+            <button type="button" className="button info button__name" onClick={sortByUserName}>Sort By Name</button>
+            <button type="button" className="button info button__status" onClick={sortByStatus}>Sort By Status</button>
           </div>
         )
         : (
-          <button type="button" className="button button__loadTodo" onClick={downloadTodos}>
+          <button type="button" className="button info button__loadTodo" onClick={downloadTodos}>
             {loading ? 'Loading...' : 'Load Todos'}
           </button>
         )}
