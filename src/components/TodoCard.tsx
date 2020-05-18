@@ -6,9 +6,13 @@ type Props = {
 };
 
 export const TodoCard: React.FC<Props> = ({ todo }) => (
-  <div>
-    <h2>{todo.title}</h2>
-    <input type="checkbox" checked={todo.completed} disabled />
-    <strong className="Todo__user">{todo.user ? todo.user.name : 'Unknown'}</strong>
-  </div>
+  <>
+    <h5 className="todo__user">{todo.user ? todo.user.name : 'Unknown'}</h5>
+    <span>{todo.title}</span>
+    <i className="secondary-content">
+      {todo.completed
+        ? <i className="material-icons">Completed</i>
+        : <i className="material-icons color-red">In Process</i>}
+    </i>
+  </>
 );

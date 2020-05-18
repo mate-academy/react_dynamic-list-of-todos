@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import './App.scss';
 
 import { getUsers, getTodos, Todo } from './helpers/api';
 import { TodoCard } from './components/TodoCard';
+import { Button } from './components/Button';
 
 const getVisibleTodos = (todos: Todo[], sortType: string) => {
 
@@ -28,8 +29,10 @@ const getVisibleTodos = (todos: Todo[], sortType: string) => {
 const App = () => {
   const [sortType, setSortType] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   const loadData = async () => {
+    setLoading(true);
     const todosFromServer = await getTodos();
     const usersFromServer = await getUsers();
 
@@ -41,29 +44,41 @@ const App = () => {
     setTodos(todosWithUsers);
   };
 
-  useEffect(() => {
-    loadData();
-  }, [])
-
   const visibleTodos = useMemo(() => {
     return getVisibleTodos(todos, sortType);
   }, [todos, sortType]);
 
   return (
-    <>
-      <button type="button" onClick={() => setTodos(todos)}>Reset</button>
-      <button type="button" onClick={() => setSortType('title')}>Sort by title</button>
-      <button type="button" onClick={() => setSortType('id')}>Sort by id</button>
-      <button type="button" onClick={() => setSortType('userName')}>Sort by user</button>
+    <div className="wrapper">
+      <h1>Dynamic list of TODOs</h1>
+      {!isLoading
+        ? (
+          <button
+            type="button"
+            className="button waves-effect waves-light btn mgb20"
+            onClick={loadData}
+          >
+            load todos
+          </button>
+        )
+        : (
+          <>
+            <div className="buttons">
+              <Button setSortType={setSortType} title="Sort by title" sortType="title" />
+              <Button setSortType={setSortType} title="Sort by id" sortType="id" />
+              <Button setSortType={setSortType} title="Sort by name" sortType="userName" />
+            </div>
 
-      <ul className="TodoList">
-        {visibleTodos.map(todo => (
-          <li key={todo.id}>
-            <TodoCard todo={todo} />
-          </li>
-        ))}
-      </ul>
-    </>
+            <ul className="todo-list">
+              {visibleTodos.map(todo => (
+                <li key={todo.id} className="todo-list__item">
+                  <TodoCard todo={todo} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+    </div>
   );
 };
 
