@@ -1,4 +1,4 @@
-const API_URL = 'https://jsonplaceholder.typicode.com/todos';
+const API_URL = 'https://jsonplaceholder.typicode.com';
 
 export interface User {
   id: number;
