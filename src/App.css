@@ -19,6 +19,7 @@
   background-color: khaki;
   outline: none;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .app__button:hover {

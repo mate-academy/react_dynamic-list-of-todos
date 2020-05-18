@@ -9,14 +9,14 @@ const users = fetch(USERS_API)
       return data;
     }));
 const todos = fetch(TODOS_API)
-  .then((response): Promise<Todos[]> => response.json()
+  .then((response): Promise<Todo[]> => response.json()
     .then(data => {
       return data;
     }));
 
-export const promise = Promise.all<User[], Todos[]>([users, todos])
+export const todosFromServer = Promise.all<User[], Todo[]>([users, todos])
   .then(result => {
-    return result[1].map((todo: Todos) => (
+    return result[1].map((todo: Todo) => (
       {
         ...todo,
         user: ensure(result[0].find((user: User) => (

@@ -3,7 +3,7 @@ import ClassNames from 'classnames';
 import './todo.css';
 
 type Props = {
-  todos: TodosWithUsers[];
+  todos: TodoWithUser[];
 };
 
 const TodosList: React.FC<Props> = (props) => {

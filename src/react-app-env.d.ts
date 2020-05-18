@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-/// <reference types="react-scripts" />
 interface Geo {
   lat: string;
   lng: string;
@@ -30,14 +28,14 @@ interface User {
   company: Company;
 }
 
-interface Todos {
+interface Todo {
   userId: number;
   id: number;
   title: string;
   completed: boolean;
 }
 
-interface TodosWithUsers {
+interface TodoWithUser {
   userId: number;
   id: number;
   title: string;

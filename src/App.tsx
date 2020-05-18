@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import TodosList from './TodosList';
 import './App.css';
-import { promise } from './API';
+import { todosFromServer } from './API';
 
 const App = () => {
-  const [todos, setTodos] = useState<TodosWithUsers[]>([]);
+  const [todos, setTodos] = useState<TodoWithUser[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [upAlphabetName, setUpAlphabetName] = useState<boolean>(false);
-  const [upAlphabetTitle, setUpAlphabetTitle] = useState<boolean>(false);
+  const [isFormFirstLettertName, setUpAlphabetName] = useState<boolean>(false);
+  const [isFormFirstLetterTitle, setUpAlphabetTitle] = useState<boolean>(false);
   const [isCompletedTodo, setIsCompletedTodo] = useState<boolean>(false)
 
   const fetchData = (): void => {
     setLoading(true);
-    promise.then(data => {
+    todosFromServer.then(data => {
       setLoading(false);
 
       return setTodos(data);
@@ -22,33 +22,33 @@ const App = () => {
   const nameFilter = () => {
     let newTodos = [];
 
-    if (!upAlphabetName) {
-      newTodos = todos.sort((a, b) => a.user.name.localeCompare(b.user.name));
+    if (!isFormFirstLettertName) {
+      newTodos = [...todos].sort((a, b) => a.user.name.localeCompare(b.user.name));
       setUpAlphabetName(true);
 
-      return setTodos([...newTodos]);
+      return setTodos(newTodos);
     }
 
-    newTodos = todos.sort((a, b) => b.user.name.localeCompare(a.user.name));
+    newTodos = [...todos].sort((a, b) => b.user.name.localeCompare(a.user.name));
     setUpAlphabetName(false);
 
-    return setTodos([...newTodos]);
+    return setTodos(newTodos);
   };
 
   const titleFilter = () => {
     let newTodos = [];
 
-    if (!upAlphabetTitle) {
-      newTodos = todos.sort((a, b) => a.title.localeCompare(b.title));
+    if (!isFormFirstLetterTitle) {
+      newTodos = [...todos].sort((a, b) => a.title.localeCompare(b.title));
       setUpAlphabetTitle(true);
 
-      return setTodos([...newTodos]);
+      return setTodos(newTodos);
     }
 
-    newTodos = todos.sort((a, b) => b.title.localeCompare(a.title));
+    newTodos = [...todos].sort((a, b) => b.title.localeCompare(a.title));
     setUpAlphabetTitle(false);
 
-    return setTodos([...newTodos]);
+    return setTodos(newTodos);
   };
 
   const completedFilter = () => {
