@@ -1,51 +1,33 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
+
+const buttonsSort = ['id', 'title', 'completed', 'name'];
 
 type Props = {
   setSortField: (sortField: string) => void;
 };
 
 const ButtonsSort: React.FC<Props> = ({ setSortField }) => {
+  const hendleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const { name } = (e.target as HTMLButtonElement);
+git    setSortField(name);
+  };
+
   return (
     <tr>
-      <th>
-        <button
-          type="button"
-          className="btnSort "
-          onClick={() => setSortField('id')}
-        >
-          By Id
-        </button>
-      </th>
-
-      <th>
-        <button
-          type="button"
-          className="btnSort"
-          onClick={() => setSortField('title')}
-        >
-          By Title
-        </button>
-      </th>
-
-      <th>
-        <button
-          type="button"
-          className="btnSort"
-          onClick={() => setSortField('completed')}
-        >
-          By Completed
-        </button>
-      </th>
-
-      <th>
-        <button
-          type="button"
-          className="btnSort"
-          onClick={() => setSortField('name')}
-        >
-          By Performer
-        </button>
-      </th>
+      {buttonsSort.map(item => (
+        <th>
+          <button
+            type="button"
+            name={item}
+            className="btnSort"
+            onClick={e => hendleOnClick(e)}
+          >
+            By
+            {' '}
+            {item}
+          </button>
+        </th>
+      ))}
     </tr>
   );
 };

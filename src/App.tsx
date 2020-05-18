@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
-import classNames from 'classnames/bind';
 import { getPrepareTodos } from './helpers/api';
 import './App.css';
 import TodoList from './TodoList';
 import ButtonsSort from './ButtonsSort';
+import Loading from './Loading';
 
 const App: React.FC = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [todos, setTodos] = useState<PrepareTodo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [sortField, setSortField] = useState<string>('id');
-
   const visibleTodos = [...todos];
 
   const loadTodos = () => {
     setIsToggle(!isToggle);
-
-    setTimeout(() => {
-      getPrepareTodos()
-        .then(todosFromServe => {
-          setTodos(todosFromServe);
-          setIsLoading(true);
-        });
-    }, 1000);
+    getPrepareTodos()
+      .then(todosFromServe => {
+        setTodos(todosFromServe);
+        setLoaded(true);
+      });
   };
 
   switch (sortField) {
@@ -64,26 +60,21 @@ const App: React.FC = () => {
           </button>
         )
         : (
-          <div className={classNames({ 'lds-roller': !isLoading }, { 'has-background-success': isLoading })}>
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>
+          <Loading loaded={loaded} />
         )}
 
-      {isLoading && (
+      {loaded && (
         <div className="bd-snippet-preview ">
           <table className="table is-striped is-hoverable">
             <thead className="has-background-grey-lighter">
-              <ButtonsSort setSortField={setSortField} />
+              <ButtonsSort
+                setSortField={setSortField}
+              />
             </thead>
             <tfoot className="has-background-grey-lighter">
-              <ButtonsSort setSortField={setSortField} />
+              <ButtonsSort
+                setSortField={setSortField}
+              />
             </tfoot>
             <tbody>
               <TodoList todos={visibleTodos} />
