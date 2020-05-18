@@ -9,7 +9,6 @@ interface Props {
 export const TodoList: React.FC<Props> = ({ todos, handleSort }) => {
   return (
     <>
-
       <table className="data_table">
         <tr className="button-container">
           <td>
