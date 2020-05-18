@@ -7,7 +7,6 @@ import { Todos } from './interfaces';
 
 const App = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
-  const [initialTodos, setInitialTodos] = useState<Todos[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const loadData = () => {
@@ -25,29 +24,32 @@ const App = () => {
 
         setIsLoaded(true);
         setTodos(preparedTodosList);
-        setInitialTodos(preparedTodosList);
       });
   };
 
-  const sortTitles = () => {
-    setTodos([...initialTodos]
-      .sort((a, b) => a.title.localeCompare(b.title)));
-  };
+  const sortingMethod = (sort: string) => {
+    switch (sort) {
+      case 'title':
+        return setTodos([...todos]
+          .sort((a, b) => a.title.localeCompare(b.title)));
 
-  const sortComplete = () => {
-    setTodos([...initialTodos]
-      .sort((a, b) => +b.completed - +a.completed));
-  };
+      case 'completed':
+        return setTodos([...todos]
+          .sort((a, b) => +a.completed - +b.completed));
 
-  const sortNames = () => {
-    setTodos([...initialTodos]
-      .sort((a, b) => {
-        const result = (a.user && b.user)
-          ? a.user.name.localeCompare(b.user.name)
-          : -1;
+      case 'name':
+        return setTodos([...todos]
+          .sort((a, b) => {
+            const result = (a.user && b.user)
+              ? a.user.name.localeCompare(b.user.name)
+              : -1;
 
-        return result;
-      }));
+            return result;
+          }));
+
+      default:
+        return todos;
+    }
   };
 
   return (
@@ -55,9 +57,7 @@ const App = () => {
       {isLoaded && (
         <>
           <TodoFilter
-            sortTitles={sortTitles}
-            sortComplete={sortComplete}
-            sortNames={sortNames}
+            sortingMethod={sortingMethod}
           />
           <TodoList todos={todos} />
         </>

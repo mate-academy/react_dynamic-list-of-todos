@@ -1,30 +1,28 @@
 import React from 'react';
 
 type Props = {
-  sortTitles: () => void;
-  sortComplete: () => void;
-  sortNames: () => void;
+  sortingMethod: (sort: string) => void;
 };
 
-const TodoFilter: React.FC<Props> = ({ sortTitles, sortComplete, sortNames }) => {
+const TodoFilter: React.FC<Props> = ({ sortingMethod }) => {
   return (
     <div className="todo__filter">
       Sort by:
       <button
         type="button"
-        onClick={sortTitles}
+        onClick={() => sortingMethod('title')}
       >
         Title
       </button>
       <button
         type="button"
-        onClick={sortComplete}
+        onClick={() => sortingMethod('completed')}
       >
         Status
       </button>
       <button
         type="button"
-        onClick={sortNames}
+        onClick={() => sortingMethod('name')}
       >
         Name
       </button>
