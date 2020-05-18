@@ -9,22 +9,14 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingFirstPage, setLoadingFirstPage] = useState<boolean>(false);
 
-  // const downloadTodos = () => {
-  //   setLoading(true);
-  //   setTimeout(() => {
-  //     getPreparedTodos().then(todo => setTodos(todo));
-  //     setLoading(false);
-  //     setLoadingFirstPage(true);
-  //   }, 2000);
-  // };
-
   const downloadTodos = () => {
     setLoading(true);
-    getPreparedTodos().then(todo => {
-      setTodos(todo);
-      setLoading(false);
-      setLoadingFirstPage(true);
-    });
+    getPreparedTodos()
+      .then(todo => setTodos(todo))
+      .finally(() => {
+        setLoading(false);
+        setLoadingFirstPage(true);
+      });
   };
 
   const sortByTitle = () => {
