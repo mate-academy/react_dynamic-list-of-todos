@@ -17,27 +17,20 @@ const App: React.FC = () => {
     });
   };
 
-  const handleSort = (sort: string) => {
-    switch (sort) {
-      case 'name':
-        return setTodos([...todos]
-          .sort((a, b) => a.users.name.localeCompare(b.users.name)));
+  const sortTodoByTytle = () => {
+    setTodos([...todos].sort((a, b) => a.title.localeCompare(b.title)));
+  };
 
-      case 'title':
-        return setTodos([...todos]
-          .sort((a, b) => a.title.localeCompare(b.title)));
+  const sortTodoByStatus = () => {
+    setTodos([...todos].sort((a, b) => +a.completed - +b.completed));
+  };
 
-      case 'completed':
-        return setTodos([...todos]
-          .sort((a, b) => +a.completed - +b.completed));
+  const sortTodoByName = () => {
+    setTodos([...todos].sort((a, b) => a.users.name.localeCompare(b.users.name)));
+  };
 
-      case 'id':
-        return setTodos([...todos]
-          .sort((a, b) => a.id - b.id));
-
-      default:
-        return todos;
-    }
+  const sortTodoById = () => {
+    setTodos([...todos].sort((a, b) => a.id - b.id));
   };
 
   return (
@@ -55,10 +48,52 @@ const App: React.FC = () => {
             {isLoading ? 'Loading...' : 'Download Data'}
           </button>
         ) : (
-          <TodoList
-            todos={todos}
-            handleSort={handleSort}
-          />
+          <table className="data_table">
+            <tr className="button-container">
+              <td>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={sortTodoById}
+                >
+                  Sort by id
+                </button>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={sortTodoByTytle}
+                >
+                  Sort by title
+                </button>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={sortTodoByName}
+                >
+                  Sort by name
+                </button>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={sortTodoByStatus}
+                >
+                  Sort by completed
+                </button>
+              </td>
+            </tr>
+
+            <TodoList todos={todos} />
+
+          </table>
+
+
         )
       }
     </>
