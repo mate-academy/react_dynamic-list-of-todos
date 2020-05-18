@@ -11,7 +11,7 @@ const getTasksFromServer = () => {
     .then(data => data.json());
 };
 
-export const fullTaskList = async () => {
+export const getFullTaskList = async () => {
   const users = await getUsersFromServer().then(data => data);
   const tasks = await getTasksFromServer().then(data => data);
 

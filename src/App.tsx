@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TodosList } from './TodosList';
 
-import { fullTaskList } from './api';
+import { getFullTaskList } from './api';
 import './App.scss';
 
 const App = () => {
   const [todos, setTodos] = useState<FullTaskList>([]);
   const [dataLoaded, setdataLoaded] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [button, switchButton] = useState<boolean>(true);
+  const [isButtonVisible, setButtonVisibility] = useState<boolean>(true);
 
   const getNewTasks = () => {
     setLoading(true);
-    switchButton(false);
-    fullTaskList()
+    setButtonVisibility(false);
+    getFullTaskList()
       .then(data => {
         setdataLoaded(!dataLoaded);
         setLoading(false);
@@ -21,33 +22,34 @@ const App = () => {
       });
   };
 
+  const switchStatus = (str: string) => {
+    setStatus(str);
+  };
+
   const sortBy = (action: string) => {
     switch (action) {
       case 'title':
-        setTodos(
-          [...todos].sort((a: { title: string }, b: { title: string }) => (
-            a.title.localeCompare(b.title)
-          )),
-        );
-        break;
+        return [...todos].sort((a: { title: string }, b: { title: string }) => (
+          a.title.localeCompare(b.title)
+        ));
       case 'completed':
-        setTodos(
-          [...todos].sort((a: { completed: boolean }, b: { completed: boolean }) => (
-            +b.completed - +a.completed
-          )),
-        );
-        break;
+        return [...todos].sort((a: { completed: boolean }, b: { completed: boolean }) => (
+          +b.completed - +a.completed
+        ));
       case 'name':
-        setTodos(
-          [...todos].sort((a: { user: { name: string} }, b: { user: { name: string} }) => (
+        return [...todos].sort(
+          (a: { user: { name: string} }, b: { user: { name: string} }) => (
             +a.user.name.localeCompare(b.user.name)
-          )),
+          ),
         );
-        break;
       default:
-        throw new Error('Ты все поломал!');
+        return [...todos];
     }
   };
+
+  const resultTodos = useMemo(() => {
+    return sortBy(status);
+  }, [status, todos]);
 
   return (
     <>
@@ -57,7 +59,7 @@ const App = () => {
       }
 
       {
-        button
+        isButtonVisible
         && (
           <button
             type="button"
@@ -74,19 +76,19 @@ const App = () => {
           <>
             <button
               type="button"
-              onClick={() => sortBy('title')}
+              onClick={() => switchStatus('title')}
             >
               Sort by title
             </button>
             <button
               type="button"
-              onClick={() => sortBy('completed')}
+              onClick={() => switchStatus('completed')}
             >
               Sort by status
             </button>
             <button
               type="button"
-              onClick={() => sortBy('name')}
+              onClick={() => switchStatus('name')}
             >
               Sort by users name
             </button>
@@ -95,8 +97,8 @@ const App = () => {
       }
 
       {
-        !!todos.length
-        && <TodosList list={todos} />
+        !!resultTodos.length
+        && <TodosList list={resultTodos} />
       }
     </>
   );
