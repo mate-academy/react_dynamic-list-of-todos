@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import './App.css';
 import { getTodos } from './api/api';
 import { TodoList } from './Todolist';
@@ -10,26 +10,31 @@ const App = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const loadTodos = () => {
-    setIsLoading(!isLoading);
-    setIsVisible(!isVisible);
-    setTimeout(() => {
-      getTodos()
-        .then((data) => setTodos(data))
-        .finally(() => {
-          setIsLoading(false);
-        });
-    },
-    1000);
+    setIsLoading(true);
+    setIsVisible(true);
+    getTodos()
+      .then((data) => setTodos(data))
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
-  const sortByFilter = (filter: string) => {
-    setTodos([...todosList]
-      .sort((a, b) => a[filter].localeCompare(b[filter])));
-  };
+  const sortByColumn = (event: MouseEvent<HTMLButtonElement>) => {
+    const { name } = event.currentTarget;
 
-  const sortByCompleted = () => {
-    setTodos([...todosList]
-      .sort((a: Todo, b: Todo) => +a.completed - +b.completed));
+    switch (name) {
+      case 'title':
+      case 'user':
+        setTodos([...todosList]
+          .sort((a, b) => a[name].localeCompare(b[name])));
+        break;
+      case 'completed':
+        setTodos([...todosList]
+          .sort((a: Todo, b: Todo) => +a.completed - +b.completed));
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -51,8 +56,7 @@ const App = () => {
           && (
             <>
               <Buttons
-                sortByFilter={sortByFilter}
-                sortByCompleted={sortByCompleted}
+                sortByFilter={sortByColumn}
               />
               <TodoList todos={todosList} />
             </>

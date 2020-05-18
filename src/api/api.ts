@@ -1,19 +1,19 @@
 const URL = 'https://jsonplaceholder.typicode.com/';
 
 
-const responceTodos = () => {
+const responseTodos = () => {
   return fetch(`${URL}todos`)
     .then(response => response.json());
 };
 
-const responceUsers = () => {
+const responseUsers = () => {
   return fetch(`${URL}users`)
     .then(response => response.json());
 };
 
 export const getTodos = async () => {
-  const todosData = await responceTodos();
-  const usersData = await responceUsers();
+  const todosData = await responseTodos();
+  const usersData = await responseUsers();
 
 
   return todosData.map((todo: Todo) => {
@@ -25,3 +25,18 @@ export const getTodos = async () => {
     };
   });
 };
+
+export const BUTTONS = [
+  {
+    name: 'title',
+    text: ' Sort by Title',
+  },
+  {
+    name: 'user',
+    text: ' Sort by Name',
+  },
+  {
+    name: 'completed',
+    text: ' Sort by Completed',
+  },
+];

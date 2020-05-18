@@ -1,34 +1,23 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { BUTTONS } from './api/api';
 
 type Props = {
-  sortByCompleted: () => void;
-  sortByFilter: (arg0: string) => void;
+  sortByFilter: (arg: MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const Buttons: React.FC<Props> = ({ sortByCompleted, sortByFilter }) => {
+export const Buttons: React.FC<Props> = ({ sortByFilter }) => {
   return (
     <div className="buttons">
-      <button
-        className="button"
-        type="button"
-        onClick={() => sortByFilter('user')}
-      >
-        Sort by Name
-      </button>
-      <button
-        className="button"
-        type="button"
-        onClick={() => sortByFilter('title')}
-      >
-        Sort by Title
-      </button>
-      <button
-        className="button"
-        type="button"
-        onClick={sortByCompleted}
-      >
-        Sort by Completed
-      </button>
+      {BUTTONS.map(button => (
+        <button
+          className="button"
+          type="button"
+          name={button.name}
+          onClick={(event) => sortByFilter(event)}
+        >
+          {button.text}
+        </button>
+      ))}
     </div>
   );
 };
