@@ -19,4 +19,4 @@ const getAll = <T>(url: string): Promise<T[]> => {
 }
 
 export const getTodos = () => getAll<Todo>('/todos');
-export const getUsers= () => getAll<User>('/users');
+export const getUsers = () => getAll<User>('/users');

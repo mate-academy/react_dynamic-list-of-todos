@@ -28,7 +28,7 @@ const App = () => {
 
       <ul>
         {todos.map(todo => (
-          <li>
+          <li key={todo.id}>
             <input type="checkbox" checked={todo.completed} disabled />
             {todo.title + ' '} 
             ({todo.user? todo.user.name : 'Unknown'})
