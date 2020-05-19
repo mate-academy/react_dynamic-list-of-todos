@@ -6,12 +6,34 @@ import {
 
 import './App.css';
 
+const getVisibleTodos = (todos: Todo[], sortType: string) => {
+  switch (sortType) {
+    case 'title':
+      return [...todos].sort((a, b) => {
+        return a.title.localeCompare(b.title);
+      });
+
+    case 'completion':
+      return [...todos].sort((a) => (a.completed ? 1 : -1));
+
+    case 'name':
+      return [...todos].sort((a, b) => {
+        return a.user && b.user
+          ? a.user.name.localeCompare(b.user.name)
+          : 0;
+      });
+
+    default:
+      return todos;
+  }
+}
+
 const App: React.FC = () => {
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [sortType, setSortType] = useState('');
 
   const startLoadingFromServer = async () => {
     setLoading(true);
@@ -25,7 +47,6 @@ const App: React.FC = () => {
         user: usersFromServer.find(user => user.id === todo.userId),
       }));
 
-      setInitialTodos(preparedTodos);
       setTodos(preparedTodos);
       setIsLoaded(true);
     } catch (error) {
@@ -33,33 +54,12 @@ const App: React.FC = () => {
     }
   };
 
-  const reset = () => {
-    setTodos(initialTodos);
-  };
+  // const reset = () => {
+  //   console.log('reset');
+  //   setTodos(todos);
+  // };
 
-  const handleSortByName = () => {
-    const sortedNames = [...initialTodos].sort((a, b) => {
-      return a.user && b.user
-        ? a.user.name.localeCompare(b.user.name)
-        : 0;
-    });
-
-    setTodos(sortedNames);
-  };
-
-  const handleSortByTitle = () => {
-    const sortedTitles = [...initialTodos].sort((a, b) => {
-      return a.title.localeCompare(b.title);
-    });
-
-    setTodos(sortedTitles);
-  };
-
-  const handleSortByCompletion = () => {
-    const sortedCompleted = [...initialTodos].sort((a) => (a.completed ? 1 : -1));
-
-    setTodos(sortedCompleted);
-  };
+  const visibleTodos = getVisibleTodos(todos, sortType);
 
   return (
     <div className="App">
@@ -75,21 +75,21 @@ const App: React.FC = () => {
           && (
             <>
               <div className="buttons__list">
-                <button type="button" onClick={reset}>
+                <button type="button" onClick={() => setSortType('')}>
                   <span>reset</span>
                 </button>
-                <button type="button" onClick={handleSortByName}>
+                <button type="button" onClick={() => setSortType('name')}>
                   <span>sort by name</span>
                 </button>
-                <button type="button" onClick={handleSortByTitle}>
+                <button type="button" onClick={() => setSortType('title')}>
                   <span>sort by title</span>
                 </button>
-                <button type="button" onClick={handleSortByCompletion}>
+                <button type="button" onClick={() => setSortType('completion')}>
                   <span>sort by completion</span>
                 </button>
               </div>
 
-              <TodosList todos={todos} />
+              <TodosList todos={visibleTodos} />
             </>
           )
         )}
