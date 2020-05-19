@@ -1,0 +1,20 @@
+.todo__list {
+  border: 1px solid green;
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  padding-left: 0;
+}
+
+.todo__item {
+  width: 100%;
+  border: 1px solid red;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
