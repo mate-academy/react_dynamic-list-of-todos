@@ -3,31 +3,7 @@ import './App.css';
 
 import { getUsers, getTodos, Todo } from './helpers/api';
 import TodoCard from './Components/TodoCard';
-
-const getVisibleTodos = (todos: Todo[], sortType: string) => {
-  switch (sortType) {
-    case 'title':
-      return [...todos].sort((a, b) => a.title.localeCompare(b.title));
-
-    case 'id':
-      return [...todos].sort((a, b) => a.id - b.id);
-
-    case 'userName':
-      return [...todos].sort((a, b) => {
-        return (a.user && b.user)
-          ? a.user.name.localeCompare(b.user.name)
-          : 0;
-      });
-
-    case 'status':
-      return [...todos].sort((a, b) => {
-        return +a.completed - +b.completed;
-      });
-
-    default:
-      return todos;
-  }
-};
+import { getVisibleTodos } from './Components/FilterButtons';
 
 const App: React.FC = () => {
   const [sortType, setSortType] = useState('');
@@ -40,7 +16,7 @@ const App: React.FC = () => {
     const todosFromServer = await getTodos();
     const usersFromServer = await getUsers();
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     const todosWithUsers = todosFromServer.map(todo => ({
       ...todo,
@@ -57,16 +33,41 @@ const App: React.FC = () => {
   return (
     <>
       <h1 className="title">Dynamic list of TODOs</h1>
-      {todos.length === 0 ? (
+      {!todos.length ? (
         <button className="btn load-btn" type="button" onClick={handleLoadClick} disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Load'}
         </button>
       ) : (
         <>
-          <button className="btn sort-title-btn" type="button" onClick={() => setSortType('title')}>Sort by title</button>
-          <button className="btn sort-user-btn" type="button" onClick={() => setSortType('userName')}>Sort by user</button>
-          <button className="btn sort-status-btn" type="button" onClick={() => setSortType('status')}>Sort by status</button>
-          <button className="btn reset-btn" type="button" onClick={() => setSortType('id')}>Reset</button>
+          <button
+            className="btn sort-title-btn"
+            type="button"
+            onClick={() => setSortType('title')}
+          >
+            Sort by title
+          </button>
+          <button
+            className="btn sort-user-btn"
+            type="button"
+            onClick={() => setSortType('userName')}
+          >
+            Sort by user
+          </button>
+          <button
+            className="btn sort-status-btn"
+            type="button"
+            onClick={() => setSortType('status')}
+          >
+            Sort by status
+          </button>
+          <button
+            className="btn reset-btn"
+            type="button"
+            onClick={() => setSortType('id')}
+          >
+            Reset
+          </button>
+
           <ul className="list">
             {visibleTodos.map(todo => (
               <li key={todo.id}>

@@ -17,6 +17,7 @@ body {
   width: 100px;
   border: none;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .load-btn {
