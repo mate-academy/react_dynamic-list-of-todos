@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-  todo: Todos;
+  todo: Todo;
 };
 
 const TodoItem: React.FC<Props> = ({ todo }) => {

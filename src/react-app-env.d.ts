@@ -1,15 +1,15 @@
 // eslint-disable-next-line
 /// <reference types="react-scripts" />
 
-interface Todos {
+interface Todo {
   userId: number;
   id: number;
   title: string;
   completed: boolean;
-  user?: Users;
+  user?: User;
 }
 
-interface Users {
+interface User {
   id: number;
   name: string;
   username: string;

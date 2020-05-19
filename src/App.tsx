@@ -5,7 +5,7 @@ import TodoSort from './components/TodoSort';
 import './App.css';
 
 const App = () => {
-  const [todos, setTodos] = useState<Todos[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const loadAllTodos = () => {
     const todosPromise = getTodos();
@@ -26,17 +26,21 @@ const App = () => {
   };
 
   const sortByTitle = () => {
-    setTodos([...todos]
+    const sorterTodos = ([...todos]
       .sort((a, b) => a.title.localeCompare(b.title)));
+
+    setTodos(sorterTodos);
   };
 
   const sortByStatus = () => {
-    setTodos([...todos]
+    const sorterTodos = ([...todos]
       .sort((a, b) => +b.completed - +a.completed));
+
+    setTodos(sorterTodos);
   };
 
   const sortByName = () => {
-    setTodos([...todos]
+    const sorterTodos = ([...todos]
       .sort((a, b) => {
         const result = (a.user && b.user)
           ? a.user.name.localeCompare(b.user.name)
@@ -44,6 +48,8 @@ const App = () => {
 
         return result;
       }));
+
+    setTodos(sorterTodos);
   };
 
   return (

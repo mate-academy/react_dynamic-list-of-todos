@@ -2,7 +2,7 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 type Props = {
-  todos: Todos[];
+  todos: Todo[];
 };
 
 const TodoList: React.FC<Props> = ({ todos }) => {
