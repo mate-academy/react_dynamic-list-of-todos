@@ -1,4 +1,4 @@
-const API_URL = 'https://jsonplaceholder.typicode.com';
+const API_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
 export interface User {
   id: number;
@@ -18,5 +18,5 @@ const getAll = <T>(url: string): Promise<T[]> => {
     .then(response => response.json());
 }
 
-export const getTodos = () => getAll<Todo>('/todos');
-export const getUsers = () => getAll<User>('/users');
+export const getTodos = () => getAll<Todo>('/todos.json');
+export const getUsers = () => getAll<User>('/users.json');
