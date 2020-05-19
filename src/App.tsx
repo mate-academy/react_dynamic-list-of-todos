@@ -16,8 +16,6 @@ const App: React.FC = () => {
     const todosFromServer = await getTodos();
     const usersFromServer = await getUsers();
 
-    await new Promise(resolve => setTimeout(resolve, 10));
-
     const todosWithUsers = todosFromServer.map(todo => ({
       ...todo,
       user: usersFromServer.find(user => user.id === todo.userId),
