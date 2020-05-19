@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 
 import { getUsers, getTodos, Todo } from './helpers/api';
@@ -78,7 +78,9 @@ const App = () => {
     setSortType('status');
   }
 
-  const sortedTodos = getSortedTodos(todos, sortType);
+  const sortedTodos = useMemo(() => {
+    return getSortedTodos(todos, sortType);
+  }, [todos, sortType]);
 
   return (
     <div className="todo">
