@@ -1,1 +1,47 @@
+body {
+  margin: 0;
+  background-color: rgb(200, 255, 250);
+}
 
+.todo__start-btn {
+  background-color: rgb(62, 249, 255);
+  width: 150px;
+  height: 30px;
+  margin: 30px;
+  border: 3px solid grey;
+}
+
+.todo__sort-btn {
+  background-color: rgb(62, 249, 255);
+  width: 150px;
+  height: 30px;
+  margin-left: 15px;
+  border: 3px solid grey;
+  text-transform: uppercase;
+}
+
+.todo__sort {
+  margin: 30px;
+}
+
+.todo__list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.todo__item {
+  text-align: center;
+  margin: 5px;
+  padding: 5px;
+  border: 2px solid aqua;
+  width: 150px;
+  height: 150px;
+}
+
+.todo__info {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 3px;
+}
