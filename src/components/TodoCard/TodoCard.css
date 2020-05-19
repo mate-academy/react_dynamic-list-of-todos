@@ -3,11 +3,13 @@
   flex-direction: column;
   margin-bottom: 48px;
   padding: 10px 20px 24px;
-  width: 480px;
+  width: 100%;
+  box-sizing: border-box;
 
   color: #34275f;
   background-color: #d0c8e9;
   border: 2px solid #7b59e9;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.35s;
 }

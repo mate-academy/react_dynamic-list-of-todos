@@ -13,5 +13,5 @@ export const TodoList: React.FC<Props> = ({ todoList }) => (
       <TodoCard todo={todo} key={todo.id} />
     ))}
   </ul>
-)
+);
 
