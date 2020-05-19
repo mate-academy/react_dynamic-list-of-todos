@@ -1,7 +1,7 @@
 .todo__item {
   display: flex;
   flex-direction: column;
-  margin-bottom: 48px;
+  margin: 24px 0;
   padding: 10px 20px 24px;
   width: 100%;
   box-sizing: border-box;
