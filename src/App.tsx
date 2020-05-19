@@ -11,23 +11,26 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const startLoadingFromServer = async () => {
     setLoading(true);
 
-    const todosFromServer = await getTodos();
-    const usersFromServer = await getUsers();
+    try {
+      const todosFromServer = await getTodos();
+      const usersFromServer = await getUsers();
 
-    const preparedTodos = todosFromServer.map(todo => ({
-      ...todo,
-      user: usersFromServer.find(user => user.id === todo.userId),
-    }));
+      const preparedTodos = todosFromServer.map(todo => ({
+        ...todo,
+        user: usersFromServer.find(user => user.id === todo.userId),
+      }));
 
-    setTimeout(() => {
       setInitialTodos(preparedTodos);
       setTodos(preparedTodos);
       setIsLoaded(true);
-    }, 500);
+    } catch (error) {
+      setIsError(true);
+    }
   };
 
   const reset = () => {
@@ -61,11 +64,14 @@ const App: React.FC = () => {
   return (
     <div className="App">
       {!isLoaded ? (
-        <button type="button" onClick={startLoadingFromServer} disabled={loading}>
-          <span>{!loading ? 'Load' : 'Loading...'}</span>
-        </button>
+        <>
+          <button type="button" onClick={startLoadingFromServer} disabled={loading}>
+            <span>{!loading ? 'Load' : 'Loading...'}</span>
+          </button>
+          <p>{isError && 'Please reload the page'}</p>
+        </>
       ) : (
-        (todos !== [])
+          (todos.length > 0)
           && (
             <>
               <div className="buttons__list">
@@ -86,7 +92,7 @@ const App: React.FC = () => {
               <TodosList todos={todos} />
             </>
           )
-      )}
+        )}
     </div>
   );
 };
