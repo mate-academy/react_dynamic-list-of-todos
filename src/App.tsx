@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 import { getPreparedTodos } from './api';
 import { TodoList } from './ToDoList';
+
+const getVisibleTodos = (todos: PreparedTodos, sortType: string) => {
+  switch (sortType) {
+    case 'title':
+      return [...todos].sort((a, b) => a.title.localeCompare(b.title));
+
+    case 'completed':
+      return [...todos].sort((a, b) => +a.completed - +b.completed);
+
+    case 'userName':
+      return [...todos].sort((a, b) => a.users.name.localeCompare(b.users.name));
+
+    default:
+      return todos;
+  }
+};
 
 const App: React.FC = () => {
   const [isLoaded, setLoad] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<PreparedTodos>([]);
+  const [sortType, setSortType] = useState('');
 
   const downloadData = () => {
     setLoading(true);
@@ -17,21 +34,9 @@ const App: React.FC = () => {
     });
   };
 
-  const sortTodoByTytle = () => {
-    setTodos([...todos].sort((a, b) => a.title.localeCompare(b.title)));
-  };
-
-  const sortTodoByStatus = () => {
-    setTodos([...todos].sort((a, b) => +a.completed - +b.completed));
-  };
-
-  const sortTodoByName = () => {
-    setTodos([...todos].sort((a, b) => a.users.name.localeCompare(b.users.name)));
-  };
-
-  const sortTodoById = () => {
-    setTodos([...todos].sort((a, b) => a.id - b.id));
-  };
+  const visibleTodos = useMemo(() => {
+    return getVisibleTodos(todos, sortType);
+  }, [todos, sortType]);
 
   return (
     <>
@@ -50,13 +55,23 @@ const App: React.FC = () => {
         ) : (
           <table className="data_table">
             <tr className="button-container">
+
               <td>
                 <button
                   type="button"
                   className="button"
-                  onClick={sortTodoById}
+                  onClick={() => setSortType(' ')}
                 >
-                  Sort by id
+                  Reset
+                </button>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => setSortType('title')}
+                >
+                  Sort by title
                 </button>
               </td>
 
@@ -64,32 +79,23 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   className="button"
-                  onClick={sortTodoByTytle}
+                  onClick={() => setSortType('userName')}
                 >
-                  Sort by title
+                  Sort by user
                 </button>
               </td>
               <td>
                 <button
                   type="button"
                   className="button"
-                  onClick={sortTodoByName}
-                >
-                  Sort by name
-                </button>
-              </td>
-              <td>
-                <button
-                  type="button"
-                  className="button"
-                  onClick={sortTodoByStatus}
+                  onClick={() => setSortType('completed')}
                 >
                   Sort by completed
                 </button>
               </td>
             </tr>
 
-            <TodoList todos={todos} />
+            <TodoList todos={visibleTodos} />
 
           </table>
 

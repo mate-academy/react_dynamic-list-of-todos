@@ -4,7 +4,7 @@ interface Props {
   todo: PreparedTodo;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo}) => {
   return (
     <>
       <td className="id">{todo.id}</td>

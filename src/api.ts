@@ -25,4 +25,5 @@ export const getPreparedTodos = async (): Promise<PreparedTodos> => {
     ...todo,
     users: users.find((user) => user.id === todo.userId) as User,
   }));
+
 };
