@@ -29,19 +29,30 @@ const getVisibleTodos = (todos: Todo[], sortType: string) => {
 const App = () => {
   const [sortType, setSortType] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const loadData = async () => {
     setLoading(true);
-    const todosFromServer = await getTodos();
-    const usersFromServer = await getUsers();
 
-    const todosWithUsers = todosFromServer.map(todo => ({
-      ...todo,
-      user: usersFromServer.find(user => user.id === todo.userId),
-    }));
+    try {
+      const [todosFromServer, usersFromServer] = await Promise.all(
+        [getTodos(), getUsers()],
+      );
 
-    setTodos(todosWithUsers);
+      const todosWithUsers = todosFromServer.map((todo) => ({
+        ...todo,
+        user: usersFromServer.find((user) => user.id === todo.userId),
+      }));
+
+      setTodos(todosWithUsers);
+    } catch (error) {
+      setErrorMessage('Loading error, please try again later');
+    }
+
+    setLoading(false);
+    setIsLoaded(true);
   };
 
   const visibleTodos = useMemo(() => {
@@ -51,24 +62,29 @@ const App = () => {
   return (
     <div className="wrapper">
       <h1>Dynamic list of TODOs</h1>
-      {!isLoading
-        ? (
-          <button
-            type="button"
-            className="button waves-effect waves-light btn mgb20"
-            onClick={loadData}
-          >
-            load todos
-          </button>
-        )
-        : (
+      {!isLoaded
+        && (
+          <>
+            <button
+              type="button"
+              disabled={isLoading}
+              className="button waves-effect waves-light btn mgb20"
+              onClick={loadData}
+            >
+              {isLoading ? 'Loading...' : 'load todos'}
+            </button>
+            {errorMessage && <span className="error">{errorMessage}</span>}
+          </>
+        )}
+
+      {isLoaded
+        && (
           <>
             <div className="buttons">
               <Button setSortType={setSortType} title="Sort by title" sortType="title" />
               <Button setSortType={setSortType} title="Sort by id" sortType="id" />
               <Button setSortType={setSortType} title="Sort by name" sortType="userName" />
             </div>
-
             <ul className="todo-list">
               {visibleTodos.map(todo => (
                 <li key={todo.id} className="todo-list__item">
