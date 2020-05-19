@@ -6,8 +6,8 @@ import { todosFromServer } from './API';
 const App = () => {
   const [todos, setTodos] = useState<TodoWithUser[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [isFirstLetterAlphabettName, setUpAlphabetName] = useState<boolean>(false);
-  const [isFirstLetterAlphabetTitle, setUpAlphabetTitle] = useState<boolean>(false);
+  const [isFormBeginningAlphabetName, setUpAlphabetName] = useState<boolean>(false);
+  const [isFormBeginningAlphabetTitle, setUpAlphabetTitle] = useState<boolean>(false);
   const [isCompletedTodo, setIsCompletedTodo] = useState<boolean>(false)
 
   const fetchData = (): void => {
@@ -22,7 +22,7 @@ const App = () => {
   const nameFilter = () => {
     let newTodos = [];
 
-    if (!isFirstLetterAlphabettName) {
+    if (!isFormBeginningAlphabetName) {
       newTodos = [...todos].sort((a, b) => a.user.name.localeCompare(b.user.name));
       setUpAlphabetName(true);
 
@@ -38,7 +38,7 @@ const App = () => {
   const titleFilter = () => {
     let newTodos = [];
 
-    if (!isFirstLetterAlphabetTitle) {
+    if (!isFormBeginningAlphabetTitle) {
       newTodos = [...todos].sort((a, b) => a.title.localeCompare(b.title));
       setUpAlphabetTitle(true);
 
@@ -55,16 +55,16 @@ const App = () => {
     let newTodos = [];
 
     if (!isCompletedTodo) {
-      newTodos = todos.sort((a, b) => Number(a.completed) - Number(b.completed));
+      newTodos = [...todos].sort((a, b) => Number(a.completed) - Number(b.completed));
       setIsCompletedTodo(true);
 
-      return setTodos([...newTodos]);
+      return setTodos(newTodos);
     }
 
-    newTodos = todos.sort((a, b) => Number(b.completed) - Number(a.completed));
+    newTodos = [...todos].sort((a, b) => Number(b.completed) - Number(a.completed));
     setIsCompletedTodo(false);
 
-    return setTodos([...newTodos]);
+    return setTodos(newTodos);
   };
 
   return (
