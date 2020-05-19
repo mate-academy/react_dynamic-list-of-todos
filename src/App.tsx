@@ -8,6 +8,7 @@ import { Todos } from './interfaces';
 const App = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [sortingMethod, setSortingMethod] = useState('');
 
   const loadData = () => {
     const todosPromise = getTodos();
@@ -27,39 +28,40 @@ const App = () => {
       });
   };
 
-  const sortingMethod = (sort: string) => {
+  const sortTodos = (sort: string) => {
     switch (sort) {
       case 'title':
-        return setTodos([...todos]
-          .sort((a, b) => a.title.localeCompare(b.title)));
+        return [...todos].sort((a, b) => a.title.localeCompare(b.title));
 
       case 'completed':
-        return setTodos([...todos]
-          .sort((a, b) => +a.completed - +b.completed));
+        return [...todos]
+          .sort((a, b) => +a.completed - +b.completed);
 
       case 'name':
-        return setTodos([...todos]
+        return [...todos]
           .sort((a, b) => {
             const result = (a.user && b.user)
               ? a.user.name.localeCompare(b.user.name)
               : -1;
 
             return result;
-          }));
+          });
 
       default:
         return todos;
     }
   };
 
+  const sortedTodos = sortTodos(sortingMethod);
+
   return (
     <div className="todo">
       {isLoaded && (
         <>
           <TodoFilter
-            sortingMethod={sortingMethod}
+            setSortingMethod={setSortingMethod}
           />
-          <TodoList todos={todos} />
+          <TodoList todos={sortedTodos} />
         </>
       )}
       {!isLoaded && (

@@ -1,28 +1,28 @@
 import React from 'react';
 
 type Props = {
-  sortingMethod: (sort: string) => void;
+  setSortingMethod: (sort: string) => void;
 };
 
-const TodoFilter: React.FC<Props> = ({ sortingMethod }) => {
+const TodoFilter: React.FC<Props> = ({ setSortingMethod }) => {
   return (
     <div className="todo__filter">
       Sort by:
       <button
         type="button"
-        onClick={() => sortingMethod('title')}
+        onClick={() => setSortingMethod('title')}
       >
         Title
       </button>
       <button
         type="button"
-        onClick={() => sortingMethod('completed')}
+        onClick={() => setSortingMethod('completed')}
       >
         Status
       </button>
       <button
         type="button"
-        onClick={() => sortingMethod('name')}
+        onClick={() => setSortingMethod('name')}
       >
         Name
       </button>
