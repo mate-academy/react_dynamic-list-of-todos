@@ -20,15 +20,12 @@
   &__item {
     display: flex;
     flex-direction: column;
-    border: 2px solid green;
+    border: 2px solid slategrey;
     border-radius: 20px;
     padding-bottom: 15px;
-    background-color: #8ccb5e;
   }
 
   .color-red {
-    background-color: khaki;
     color: red;
-    border-color: slategrey;
   }
 }
