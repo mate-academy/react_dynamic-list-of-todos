@@ -7,14 +7,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => (
   <div
-    className="card text-white bg-primary mb-3"
-    style={
-      {
-        width: '400px',
-        height: '175px',
-        margin: '15px',
-      }
-    }
+    className="card text-white bg-primary mb-3 item"
   >
     <div className="card-header">
       Status:

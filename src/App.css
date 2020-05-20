@@ -18,3 +18,9 @@
   margin: 5px;
   outline: none;
 }
+
+.item {
+  width: 400px;
+  height: 175px;
+  margin: 15px;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 import { TodoItem } from './components/TodoItem';
 import LoadingButtons from './components/LoadingButtons';
@@ -6,10 +6,10 @@ import SortButtons from './components/SortButtons';
 import { getUsers, getTodos, Todo } from './helpers/api';
 
 const App = () => {
-  const [defaultTodos, setDefaultTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [typeOfSort, setTypeOfSort] = useState('');
 
   const handleLoadClick = async () => {
     setIsLoading(true);
@@ -23,7 +23,6 @@ const App = () => {
         user: usersFromServer.find(user => user.id === todo.userId),
       }));
 
-      setDefaultTodos(todosWithUsers);
       setTodos(todosWithUsers);
     } catch (error) {
       setErrorMessage('Errors happens, try to reload');
@@ -32,31 +31,27 @@ const App = () => {
     setIsLoading(false);
   };
 
-  const sortByTitle = () => {
-    const sortedTodos = [...defaultTodos].sort((a, b) => a.title.localeCompare(b.title));
+  const getVisibleTodos = (sortType: string) => {
+    switch (sortType) {
+      case 'title':
+        return [...todos].sort((a, b) => a.title.localeCompare(b.title));
 
-    setTodos(sortedTodos);
+      case 'id':
+        return [...todos].sort((a, b) => a.id - b.id);
+
+      case 'user':
+        return [...todos].sort((a, b) => {
+          return a.user && b.user
+            ? a.user?.name.localeCompare(b.user.name)
+            : 0;
+        });
+
+      default:
+        return [...todos];
+    }
   };
 
-  const sortById = () => {
-    const sortedTodos = [...defaultTodos].sort((a, b) => a.id - b.id);
-
-    setTodos(sortedTodos);
-  };
-
-  const sortByUser = () => {
-    const sortedTodos = [...defaultTodos].sort((a, b) => {
-      return a.user && b.user
-        ? a.user?.name.localeCompare(b.user.name)
-        : 0;
-    });
-
-    setTodos(sortedTodos);
-  };
-
-  const makeDefaultOrder = () => {
-    setTodos(defaultTodos);
-  };
+  const visibleTodos = useMemo(() => getVisibleTodos(typeOfSort), [typeOfSort, todos]);
 
   return (
     <div className="app">
@@ -71,46 +66,12 @@ const App = () => {
 
       <SortButtons
         todos={todos}
-        sortByTitle={sortByTitle}
-        sortById={sortById}
-        sortByUser={sortByUser}
-        makeDefaultOrder={makeDefaultOrder}
+        setTypeOfSort={setTypeOfSort}
       />
 
-      {/* <div className="sorting-btns" hidden={todos.length === 0}>
-        <button
-          type="button"
-          className="btn btn-success btn-sort"
-          onClick={sortByTitle}
-        >
-          Sort by Title
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger btn-sort"
-          onClick={sortById}
-        >
-          Sort by ID
-        </button>
-        <button
-          type="button"
-          className="btn btn-warning btn-sort"
-          onClick={sortByUser}
-        >
-          Sort by User
-        </button>
-        <button
-          type="button"
-          className="btn btn-secondary btn-sort"
-          onClick={makeDefaultOrder}
-        >
-          RESET
-        </button>
-      </div> */}
-
       <ul className="cards__list">
-        {todos.map(todo => (
-          <li key={todo.title}>
+        {visibleTodos.map(todo => (
+          <li key={todo.id}>
             <TodoItem todo={todo} />
           </li>
         ))}

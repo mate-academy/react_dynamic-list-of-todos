@@ -32,7 +32,13 @@ const LoadingButtons: React.FC<Props> = (
             <span role="status" aria-hidden="true" />
             Load
           </button>
-          <p className="alert alert-primary mt5" hidden={errorMessage === ''} role="alert">{`¯\\_(ツ)_/¯ ${errorMessage}`}</p>
+          <p
+            className="alert alert-primary mt5"
+            hidden={errorMessage === ''}
+            role="alert"
+          >
+            {`¯\\_(ツ)_/¯ ${errorMessage}`}
+          </p>
         </>
       )
   );

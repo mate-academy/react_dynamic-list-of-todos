@@ -3,42 +3,39 @@ import { Todo } from '../helpers/api';
 
 type SortProps = {
   todos: Todo[];
-  sortByTitle: () => void;
-  sortById: () => void;
-  sortByUser: () => void;
-  makeDefaultOrder: () => void;
+  setTypeOfSort: (param: string) => void;
 };
 
 const SortButtons: React.FC<SortProps> = ({
-  todos, sortById, sortByTitle, sortByUser, makeDefaultOrder,
+  todos, setTypeOfSort,
 }) => {
   return (
     <div className="sorting-btns" hidden={todos.length === 0}>
       <button
         type="button"
         className="btn btn-success btn-sort"
-        onClick={sortByTitle}
+        onClick={() => setTypeOfSort('title')}
       >
         Sort by Title
       </button>
       <button
         type="button"
         className="btn btn-danger btn-sort"
-        onClick={sortById}
+        onClick={() => setTypeOfSort('id')}
       >
         Sort by ID
       </button>
       <button
         type="button"
         className="btn btn-warning btn-sort"
-        onClick={sortByUser}
+        onClick={() => setTypeOfSort('user')}
       >
         Sort by User
       </button>
       <button
         type="button"
         className="btn btn-secondary btn-sort"
-        onClick={makeDefaultOrder}
+        onClick={() => setTypeOfSort('')}
       >
         RESET
       </button>
