@@ -9,17 +9,20 @@ const getVisibleTodos = (todos: Todo[], sortType: string) => {
 
   switch (sortType) {
     case 'title':
-      return [...todos].sort((a, b) => a.title.localeCompare(b.title));
+      return [...todos]
+        .sort((a, b) => a.title.localeCompare(b.title));
 
     case 'id':
-      return [...todos].sort((a, b) => a.id - b.id);
+      return [...todos]
+        .sort((a, b) => a.id - b.id);
 
     case 'userName':
-      return [...todos].sort((a, b) => {
-        return (a.user && b.user)
-          ? a.user.name.localeCompare(b.user.name)
-          : 0;
-      });
+      return [...todos]
+        .sort((a, b) => {
+          return (a.user && b.user)
+            ? a.user.name.localeCompare(b.user.name)
+            : 0;
+        });
 
     default:
       return todos;
@@ -81,9 +84,21 @@ const App = () => {
         && (
           <>
             <div className="buttons">
-              <Button setSortType={setSortType} title="Sort by title" sortType="title" />
-              <Button setSortType={setSortType} title="Sort by id" sortType="id" />
-              <Button setSortType={setSortType} title="Sort by name" sortType="userName" />
+              <Button
+                setSortType={setSortType}
+                title="Sort by title"
+                sortType="title"
+              />
+              <Button
+                setSortType={setSortType}
+                title="Sort by id"
+                sortType="id"
+              />
+              <Button
+                setSortType={setSortType}
+                title="Sort by name"
+                sortType="userName"
+              />
             </div>
             <ul className="todo-list">
               {visibleTodos.map(todo => (

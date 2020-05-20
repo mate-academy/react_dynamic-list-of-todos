@@ -6,7 +6,13 @@ interface ButtonProps {
   sortType: string;
 }
 
-export const Button: FC <ButtonProps> = ({ setSortType, sortType, title }) => (
+export const Button: FC <ButtonProps> = (
+  {
+    setSortType,
+    sortType,
+    title,
+  },
+) => (
   <button
     type="button"
     className="sort-button waves-effect waves-light btn mgb20"
