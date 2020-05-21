@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import './App.css';
 
 import { getUsers, getTodos, Todo } from './helpers/api';
+import { TodoList } from './components/TodoList';
+import { SortButtons } from './components/SortButtons';
 
 const App = () => {
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortBy, setSortBy] = useState(0);
 
   const handleLoadClick = async () => {
     setIsLoading(true);
@@ -20,38 +22,43 @@ const App = () => {
     }));
 
     setInitialTodos(todosWithUsers);
-    setTodos(todosWithUsers);
   };
 
   const reset = () => {
-    setTodos(initialTodos);
-  };
-
-  const sortByTitle = () => {
-    const sortedTodos = [...initialTodos].sort((a, b) => {
-      return a.title.localeCompare(b.title);
-    });
-
-    setTodos(sortedTodos);
-  };
-
-  const sortByCompleted = () => {
-    const sortedTodos = [...initialTodos].sort((a, b) => {
-      return Number(a.completed) - Number(b.completed);
-    });
-
-    setTodos(sortedTodos);
+    setSortBy(0);
   };
 
   const sortByUserName = () => {
-    const sortedTodos = [...initialTodos].sort((a, b) => {
-      return (a.user && b.user)
-        ? a.user.name.localeCompare(b.user.name)
-        : 0;
-    });
-
-    setTodos(sortedTodos);
+    setSortBy(1);
   };
+
+  const sortByTitle = () => {
+    setSortBy(2);
+  };
+
+  const sortByCompleted = () => {
+    setSortBy(3);
+  };
+
+  const todos = [...initialTodos].sort((a, b) => {
+    if (a.user === undefined || b.user === undefined) {
+      return 0;
+    }
+
+    switch (sortBy) {
+      case 1:
+        return a.user.name.localeCompare(b.user.name);
+
+      case 2:
+        return a.title.localeCompare(b.title);
+
+      case 3:
+        return Number(b.completed) - Number(a.completed);
+
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="container">
@@ -62,52 +69,15 @@ const App = () => {
         </button>
       ) : (
         <>
-          <p>
-            <button
-              className="button button-sort"
-              onClick={reset}
-              type="button"
-            >
-              Reset
-            </button>
-            <button
-              className="button button-sort"
-              onClick={sortByTitle}
-              type="button"
-            >
-              Sort by title
-            </button>
-            <button
-              className="button button-sort"
-              onClick={sortByCompleted}
-              type="button"
-            >
-              Sort by completed
-            </button>
-            <button
-              className="button button-sort"
-              onClick={sortByUserName}
-              type="button"
-            >
-              Sort by user name
-            </button>
-
-          </p>
-          <ul className="todos">
-            {todos.map(todo => (
-              <li className="todo">
-                <input type="checkbox" checked={todo.completed} disabled />
-                {`${todo.title} `}
-                <span className="user">
-                  {todo.user ? todo.user.name : 'Unknown'}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <SortButtons
+            reset={reset}
+            sortByTitle={sortByTitle}
+            sortByCompleted={sortByCompleted}
+            sortByUserName={sortByUserName}
+          />
+          <TodoList todos={todos} />
         </>
       )}
-
-
     </div>
   );
 };
