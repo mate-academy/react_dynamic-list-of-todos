@@ -13,10 +13,10 @@ export interface Todo {
   user?: User;
 }
 
-const getAll = <T>(url: string): Promise<T[]> => {
+const getInfo = <T>(url: string): Promise<T[]> => {
   return fetch(API_URL + url)
     .then(response => response.json());
 };
 
-export const getUsers = () => getAll<User>('/users');
-export const getTodos = () => getAll<Todo>('/todos');
+export const getUsers = () => getInfo<User>('/users');
+export const getTodos = () => getInfo<Todo>('/todos');
