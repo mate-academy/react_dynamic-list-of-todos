@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 
 import { getTodos, getUsers, Todos } from './api/api';
@@ -34,20 +34,25 @@ const App = () => {
   const handleLoadClick = async () => {
     setIsLoading(true);
 
-    const todosFromServer = await getTodos();
-    const usersFromServer = await getUsers();
+    try {
+      const todosFromServer = await getTodos();
+      const usersFromServer = await getUsers();
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+      const todosWithUsers = todosFromServer.map(todo => ({
+        ...todo,
+        user: usersFromServer.find(user => user.id === todo.userId),
+      }));
 
-    const todosWithUsers = todosFromServer.map(todo => ({
-      ...todo,
-      user: usersFromServer.find(user => user.id === todo.userId),
-    }));
-
-    setTodos(todosWithUsers);
+      setTodos(todosWithUsers);
+    } catch (e) {
+      setIsLoading(false);
+    }
   }
 
-  const visibleTodos = getVisibleTodos(todos, sortType);
+  const visibleTodos = useMemo(
+    () => getVisibleTodos(todos, sortType),
+    [sortType, todos]
+  )
 
   if (todos.length === 0) {
     return (
@@ -99,25 +104,5 @@ const App = () => {
   );
 }
 
-export default App;        /**/
-/*
-Що таке React і в чому полягають його переваги?
-Зачем нужен JSX? Можно ли писать на Реакте без JSX?
-В чём разница между компонентом и JSX элементом?
-В чём разница между функциональным и клас-компонентом?
-Результат яких типів може повертати метод render (або компонент-функція)?
-Що таке props? Як їх прочитати або поміняти?
-Для чого потрібні PropTypes?
-Що таке state? Як його прочитати або поміняти?
-Як зберігати стан в функціональному компоненті?
-Что такое имутабельность? Почему это важно?
-Навіщо потрібен Functional setState
-Що таке Virtual DOM?
-Які є методи життєвого циклу React-компонента?
-Когда и зачем нужен key? Каким он должен быть и почему?
-Що таке React.Fragment і в яких випадках ними варто користуватися?
-Як можна навісити обробник події на JSX-елемент? Чи можна навішувати події на компоненти?
-Що таке контрольовані компоненти?
-В каком случае нельзя сделать input контролируемым? (file)
-Чем отличается поведение select в React от JS?
-*/
+export default App;
+
