@@ -4,6 +4,7 @@ import { getTodos, getUsers, Todo } from './helpers/api';
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,6 +22,7 @@ const App = () => {
       }));
 
       setTodos(todosWithUsers);
+      setSortedTodos(todosWithUsers);
       setIsLoaded(true);
     } catch (error) {
       setErrorMessage('Loading error, please try again later.');
@@ -32,13 +34,13 @@ const App = () => {
       return a.title.localeCompare(b.title);
     });
 
-    setTodos(sortedTodods);
+    setSortedTodos(sortedTodods);
   };
 
   const sortByCompleted = () => {
-    const sortedTodods = [...todos].filter(todo => todo.completed);
+    const sortedTodods = todos.filter(todo => todo.completed);
 
-    setTodos(sortedTodods);
+    setSortedTodos(sortedTodods);
   };
 
   const sortByUserName = () => {
@@ -48,7 +50,11 @@ const App = () => {
         : 0;
     });
 
-    setTodos(sortedTodods);
+    setSortedTodos(sortedTodods);
+  };
+
+  const resetAllTodos = () => {
+    setSortedTodos(todos);
   };
 
   return (
@@ -71,10 +77,10 @@ const App = () => {
             <button type="button" onClick={sortByTitle}>Sort by title</button>
             <button type="button" onClick={sortByCompleted}>Sort completed</button>
             <button type="button" onClick={sortByUserName}>Sort by user name</button>
-            <button type="button" onClick={handleLoadClick}>Reload All TODOs</button>
+            <button type="button" onClick={resetAllTodos}>Reset All TODOs</button>
           </div>
           <ul className="todo__list">
-            {todos.map(todo => (
+            {sortedTodos.map(todo => (
               <li
                 key={todo.id}
                 className={todo.completed ? 'completed todo__list-item' : 'todo__list-item'}
