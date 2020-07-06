@@ -5,8 +5,8 @@
 
 ## Description
 Basing on [Static list of TODOs](https://github.com/mate-academy/react_static-list-of-todos)
-create the App downloading the [TODOs](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json)
-and [Users](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users.json) from API (follow the links).
+create the App downloading the [TODOs](https://mate.academy/students-api/todos)
+and [Users](https://mate.academy/students-api/users) from API (follow the links).
 
 1. Initially the user sees a `Load` button.
 1. After a click disable the button, change its text to `Loading...` and download the data.
