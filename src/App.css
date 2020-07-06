@@ -1,1 +1,25 @@
+.todo__list {
+  list-style: none;
+  text-align: center;
+  width: 50%;
+}
 
+.todo__list-item {
+  border: 2px solid greenyellow;
+  border-radius: 20px;
+  background-color: khaki;
+  margin-bottom: 5px;
+}
+
+.todo__list-author {
+  border: 1px solid seashell;
+  border-radius: 5px;
+}
+
+.completed {
+  color: green;
+}
+
+.error {
+  color: red;
+}
