@@ -10,13 +10,8 @@ export const Table: React.FC<preparedListType> = ({ preparedList, sortTodos }) =
       const aValue = a[value];
       const bValue = b[value];
 
-      if (typeof bValue === 'string' && typeof aValue === 'string') {
-        return aValue.localeCompare(bValue);
-      }
-
-      if ((typeof aValue === 'number' && typeof bValue === 'number')
-      || (typeof aValue === 'boolean' && typeof bValue === 'boolean')) {
-        return +aValue - +bValue;
+      if (aValue !== undefined && bValue !== undefined && typeof aValue === typeof bValue) {
+        return (aValue > bValue) ? 1 : -1;
       }
 
       return 1;
