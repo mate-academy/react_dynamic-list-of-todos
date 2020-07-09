@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { TodoWithUserInterface } from '../../interfaces/TodoInterface';
+import React, { useState, FC } from 'react';
+import { TodoInterface } from '../../interfaces/TodoInterface';
 import { TodoItem } from '../TodoItem.tsx/TodoItem';
 import { SortField } from '../SortField';
 
 type TodoListProps = {
-  todos: TodoWithUserInterface[];
+  todos: TodoInterface[];
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+export const TodoList: FC<TodoListProps> = ({ todos }) => {
   const [activeSortName, setActiveSortName] = useState<string>('userName');
-  const todosSorted = [...todos].sort((a: TodoWithUserInterface, b: TodoWithUserInterface) => {
+  const todosSorted = [...todos].sort((a, b) => {
     if (activeSortName === 'completed') {
       return Number(a.completed) - Number(b.completed);
     }
 
-    if (activeSortName === 'title') {
-      return a.title.localeCompare(b.title);
+    if (activeSortName === 'userName' && (a.user && b.user)) {
+      return a.user.name.localeCompare(b.user.name);
     }
 
-    return a.user.name.localeCompare(b.user.name);
+    return a.title.localeCompare(b.title);
   });
 
   const sortTodos = (sortName: string) => {
@@ -48,14 +48,16 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
         />
       </li>
       {
-        todosSorted.map((todo: TodoWithUserInterface) => (
-          <TodoItem
-            id={todo.id}
-            key={todo.id}
-            completed={todo.completed}
-            userName={todo.user.name}
-            title={todo.title}
-          />
+        todosSorted.map((todo: TodoInterface) => (
+          todo.user && (
+            <TodoItem
+              id={todo.id}
+              key={todo.id}
+              completed={todo.completed}
+              userName={todo.user.name}
+              title={todo.title}
+            />
+          )
         ))
       }
     </ul>

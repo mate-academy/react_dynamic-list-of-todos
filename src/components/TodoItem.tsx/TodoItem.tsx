@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 interface TodoItemProps {
   id: number;
@@ -7,7 +7,7 @@ interface TodoItemProps {
   title: string;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({
+export const TodoItem: FC<TodoItemProps> = ({
   id,
   title,
   userName,

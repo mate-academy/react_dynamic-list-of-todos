@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import { loadData } from '../../api/api';
 import { TodoList } from '../TodoList';
-import { TodoWithUserInterface } from '../../interfaces/TodoInterface';
+import { TodoInterface } from '../../interfaces/TodoInterface';
 import { UserInterface } from '../../interfaces/UserInterface';
 
-export const TodoApp: React.FC = () => {
-  const [todos, setTodos] = useState([]);
+export const TodoApp: FC = () => {
+  const [todos, setTodos] = useState<TodoInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetched, setIsFetched] = useState<boolean>(false);
 
   const load = async () => {
     setIsLoading(true);
-    const usersFromServer = await loadData('users');
-    const todosFromServer = await loadData('todos');
+    const usersFromServer = await loadData<UserInterface>('users');
+    const todosFromServer = await loadData<TodoInterface>('todos');
 
-    setTodos(todosFromServer.map((todo: TodoWithUserInterface) => ({
+    setTodos(todosFromServer.map((todo) => ({
       ...todo,
-      user: usersFromServer.find((user: UserInterface) => user.id === todo.userId),
+      user: usersFromServer.find((user) => user.id === todo.userId),
     })));
 
     setIsLoading(false);

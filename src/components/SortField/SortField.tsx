@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 interface SortFieldProps {
   name: string;
@@ -7,7 +7,7 @@ interface SortFieldProps {
   isActive: boolean;
 }
 
-export const SortField: React.FC<SortFieldProps> = ({
+export const SortField: FC<SortFieldProps> = ({
   name,
   position,
   isActive,
