@@ -1,31 +1,31 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './App.css';
-import { PreparedProps } from './interfaces';
+import { preparedType } from './interfaces';
 import { Table } from './Table';
 import { Button } from './Button';
 
-let initialState: PreparedProps[];
+let initialState: preparedType[];
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [preparedList, setPreparedList] = useState<PreparedProps[]>([]);
-  const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [isStarted, setIsStarted] = useState(false);
+  const [preparedList, setPreparedList] = useState<preparedType[]>([]);
 
   const beforeLoaded = () => {
     setIsLoading(true);
     setIsStarted(true);
   };
 
-  const afterLoaded = (list: PreparedProps[]) => {
+  const afterLoaded = (list: preparedType[]) => {
     setPreparedList(list);
     initialState = [...list];
     setIsLoading(false);
     setIsLoaded(true);
   };
 
-  function sortTodos(sorted: PreparedProps[]) {
+  function sortTodos(sorted: preparedType[]) {
     setPreparedList([...sorted]);
   }
 

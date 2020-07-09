@@ -1,20 +1,20 @@
-export interface TodoProps {
+export type todoType = {
   id: number;
   userId: number;
   title: string;
   completed: boolean;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export type PreparedProps = {
+export type preparedType = {
   completed: boolean;
   title: string;
   user: string | undefined;
   id: number;
 };
 
-export interface UserProps {
+export type userType = {
   id: number;
   name: string;
   username: string;
@@ -33,11 +33,9 @@ export interface UserProps {
   };
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface PreparedListProps {
-  preparedList: PreparedProps[];
-  sortTodos: (list: PreparedProps[]) => void;
-}
-
-export type SortValue = 'title' | 'completed' | 'id' | 'user';
+export type preparedListType = {
+  preparedList: preparedType[];
+  sortTodos: (list: preparedType[]) => void;
+};

@@ -1,18 +1,25 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { uuid } from 'uuidv4';
-import { PreparedProps, SortValue, PreparedListProps } from './interfaces';
+import { preparedType, preparedListType } from './interfaces';
 
-export const Table: React.FC<PreparedListProps> = ({ preparedList, sortTodos }) => {
-  const getKeyValue = <T extends {}, U extends keyof T>(key: U, obj: T) => obj[key];
-
-  const sortBy = (event: { preventDefault: () => void }, value: SortValue) => {
+export const Table: React.FC<preparedListType> = ({ preparedList, sortTodos }) => {
+  const sortBy = (event: { preventDefault: () => void }, value: keyof preparedType) => {
     event.preventDefault();
-    const sorted: PreparedProps[] = preparedList.sort((a: PreparedProps, b: PreparedProps) => {
-      const aValue = getKeyValue<PreparedProps, SortValue>(value, a) || {};
-      const bValue = getKeyValue<PreparedProps, SortValue>(value, b) || {};
+    const sorted: preparedType[] = [...preparedList].sort((a, b) => {
+      const aValue = a[value];
+      const bValue = b[value];
 
-      return (aValue >= bValue) ? 1 : -1;
+      if (typeof bValue === 'string' && typeof aValue === 'string') {
+        return aValue.localeCompare(bValue);
+      }
+
+      if ((typeof aValue === 'number' && typeof bValue === 'number')
+      || (typeof aValue === 'boolean' && typeof bValue === 'boolean')) {
+        return +aValue - +bValue;
+      }
+
+      return 1;
     });
 
     sortTodos(sorted);
