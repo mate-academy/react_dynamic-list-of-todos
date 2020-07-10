@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useState } from 'react';
 import { uuid } from 'uuidv4';
 import { preparedType, preparedListType } from './interfaces';
 
 export const Table: React.FC<preparedListType> = ({ preparedList, sortTodos }) => {
+  const [direction, setDirection] = useState(false);
   const sortBy = (event: { preventDefault: () => void }, value: keyof preparedType) => {
     event.preventDefault();
     const sorted: preparedType[] = [...preparedList].sort((a, b) => {
@@ -11,12 +12,17 @@ export const Table: React.FC<preparedListType> = ({ preparedList, sortTodos }) =
       const bValue = b[value];
 
       if (aValue !== undefined && bValue !== undefined && typeof aValue === typeof bValue) {
-        return (aValue > bValue) ? 1 : -1;
+        if (direction) {
+          return (aValue <= bValue) ? 1 : -1;
+        }
+
+        return (aValue >= bValue) ? 1 : -1;
       }
 
       return 1;
     });
 
+    setDirection(!direction);
     sortTodos(sorted);
   };
 
