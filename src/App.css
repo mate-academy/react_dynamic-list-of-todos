@@ -1,1 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.task-wrap {
+  margin: 0 auto;
+  min-width: 320px;
+  width: 90%;
+  max-width: 1200px;
+}
+
+h1 {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.init-btn {
+  display: block;
+  margin: 0 auto;
+  width: 280px;
+  padding: 15px 0;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  border: 3px solid #333;
+  border-radius: 20px;
+  background-color: #e6f7ec;
+  cursor: pointer;
+}
+
+.init-btn:disabled {
+  color: #787e7e;
+  border-color: #999;
+  background-color: #cfcfcf;
+  cursor: initial;
+}
+
+.sort {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sort__btn {
+  margin-bottom: 20px;
+  width: 220px;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid #333;
+  border-radius: 10px;
+  background-color: #e6f7ec;
+  cursor: pointer;
+}
+
+.todos {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
+
+.todos > li {
+  margin-bottom: 20px;
+  width: 100%;
+  align-self: stretch;
+}
+
+.todos__item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 15px;
+  background-color: #eaa;
+  border: 1px dashed #333;
+  border-radius: 10px;
+}
+
+.todos__item--completed {
+  background-color: #aea;
+}
+
+.todos__item > p:not(:last-of-type) {
+  margin-bottom: 15px;
+}
+
+.todos__item > p:first-of-type {
+  font-style: italic;
+  font-size: 18px;
+}
+
+.todos__item > p:last-of-type {
+  margin-top: auto;
+  font-size: 14px;
+  text-align: right;
+}
+
+.todos__item span {
+  text-decoration: underline;
+}
+
+@media screen and (min-width: 450px) {
+  .todos > li {
+    width: calc((100% - 20px) / 2);
+  }
+  .todos > li:nth-of-type(2n + 1) {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .sort {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .sort__btn {
+    align-self: stretch;
+  }
+  .sort__btn:not(:last-of-type) {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (min-width: 896px) {
+  .todos > li {
+    width: calc((100% - 40px) / 3);
+  }
+  .todos > li:nth-of-type(2n + 1) {
+    margin-right: 0;
+  }
+  .todos > li:not(:nth-of-type(3n)) {
+    margin-right: 20px;
+  }
+}
