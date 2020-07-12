@@ -1,1 +1,48 @@
+h1 {
+  font-size: 30px;
+  text-align: center;
+}
 
+button {
+  width: 100%;
+  padding: 10px;
+  color: white;
+  font-size: 24px;
+  background-color: rgb(34, 34, 34);
+  border-right: 1px dotted #666;
+  border-top: 1px solid #666;
+  -moz-box-shadow: 0 -1px 4px #000;
+  -webkit-box-shadow: 0 -1px 4px #000;
+  box-shadow: 0 -1px 4px #000;
+  text-shadow: 1px 1px 1px #000;
+  box-sizing: border-box;
+}
+
+button:hover,
+button:focus {
+  background-color: #666;
+}
+
+li,
+.buttons_panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.todo {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f3f3f3;
+}
+
+.material-icons {
+  justify-self: end;
+}
+
+.buttons_panel {
+  margin: 0;
+  background: rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 7px;
+  border-radius: 7px;
+}
