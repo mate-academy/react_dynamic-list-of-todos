@@ -1,9 +1,14 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { uuid } from 'uuidv4';
-import { preparedType, preparedListType } from './interfaces';
+import { preparedType } from './interfaces';
 
-export const Table: React.FC<preparedListType> = ({ preparedList, sortTodos }) => {
+type Props = {
+  preparedList: preparedType[];
+  sortTodos: (list: preparedType[]) => void;
+};
+
+export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
   const [direction, setDirection] = useState(false);
   const sortBy = (event: { preventDefault: () => void }, value: keyof preparedType) => {
     event.preventDefault();

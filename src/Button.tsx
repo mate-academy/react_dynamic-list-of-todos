@@ -2,12 +2,12 @@ import React from 'react';
 import { todoType, userType, preparedType } from './interfaces';
 import { getData, URLTodos, URLUsers } from './api';
 
-type ButtonType = {
+type Props= {
   beforeLoaded: () => void;
   afterLoaded: (list: preparedType[]) => void;
 };
 
-export const Button: React.FC<ButtonType> = ({ beforeLoaded, afterLoaded }) => {
+export const Button: React.FC<Props> = ({ beforeLoaded, afterLoaded }) => {
   const getTodoList = async () => {
     beforeLoaded();
 

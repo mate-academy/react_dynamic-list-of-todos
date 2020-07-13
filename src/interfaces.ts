@@ -34,8 +34,3 @@ export type userType = {
   createdAt: string;
   updatedAt: string;
 };
-
-export type preparedListType = {
-  preparedList: preparedType[];
-  sortTodos: (list: preparedType[]) => void;
-};
