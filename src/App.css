@@ -8,3 +8,16 @@ body {
   padding: 50px;
   background-color: aliceblue;
 }
+
+.table th {
+  padding: 0;
+}
+
+.sort_btn {
+  border: none;
+  outline: none;
+  color: aliceblue;
+  background-color: rgb(69, 77, 85);
+  width: 100%;
+  height: 100%;
+}

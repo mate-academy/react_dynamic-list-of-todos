@@ -1,18 +1,18 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { uuid } from 'uuidv4';
-import { preparedType } from './interfaces';
+import { TodoWithUserInterface } from './interfaces';
 
-type Props = {
-  preparedList: preparedType[];
-  sortTodos: (list: preparedType[]) => void;
-};
+interface Props {
+  preparedList: TodoWithUserInterface[];
+  sortTodos: (list: TodoWithUserInterface[]) => void;
+}
 
 export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
   const [direction, setDirection] = useState(false);
-  const sortBy = (event: { preventDefault: () => void }, value: keyof preparedType) => {
+  const sortBy = (event: { preventDefault: () => void }, value: keyof TodoWithUserInterface) => {
     event.preventDefault();
-    const sorted: preparedType[] = [...preparedList].sort((a, b) => {
+    const sorted: TodoWithUserInterface[] = [...preparedList].sort((a, b) => {
       const aValue = a[value];
       const bValue = b[value];
 

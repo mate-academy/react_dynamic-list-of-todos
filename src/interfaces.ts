@@ -1,20 +1,20 @@
-export type todoType = {
+export interface TodoInterface {
   id: number;
   userId: number;
   title: string;
   completed: boolean;
   createdAt: string;
   updatedAt: string;
-};
+}
 
-export type preparedType = {
+export interface TodoWithUserInterface {
   completed: boolean;
   title: string;
   user: string | undefined;
   id: number;
-};
+}
 
-export type userType = {
+export interface UserInterface {
   id: number;
   name: string;
   username: string;
@@ -33,4 +33,4 @@ export type userType = {
   };
   createdAt: string;
   updatedAt: string;
-};
+}
