@@ -4,8 +4,8 @@ import { TodoList } from './components/TodoList';
 import LoadButton from './components/LoadButton';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [todosWithUsers, setTodosWithUsers] = useState<TodosWithUsers[]>([]);
   const [isStarted, setIsStarted] = useState<boolean>(false);
 
