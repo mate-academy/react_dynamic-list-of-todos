@@ -10,7 +10,7 @@ const App: React.FC = () => {
   const API_URL_TODOS = 'https://mate.academy/students-api/todos';
   const API_URL_USERS = 'https://mate.academy/students-api/users';
 
-  const [todos, setTodos] = useState<TodoModified[] | []>([]);
+  const [todos, setTodos] = useState<TodoModified[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [hasError, setError] = useState(false);
 

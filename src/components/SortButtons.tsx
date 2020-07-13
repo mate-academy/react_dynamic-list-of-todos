@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from './Button';
 
-interface SortButtonsProps {
+interface Props {
   sortBy(value: string): void;
 }
 
-export const SortButtons: React.FC<SortButtonsProps> = ({ sortBy }) => (
+export const SortButtons: React.FC<Props> = ({ sortBy }) => (
   <div className="sort">
     <Button
       name="Sort by title"

@@ -2,11 +2,11 @@ import React from 'react';
 import { TodoItem } from './TodoItem';
 import { TodoModified } from '../interfaces/todoModified';
 
-interface TodoListProps {
+interface Props {
   todos: TodoModified[];
 }
 
-export const TodoList: React.FC<TodoListProps> = (props) => {
+export const TodoList: React.FC<Props> = (props) => {
   const { todos } = props;
 
   return (

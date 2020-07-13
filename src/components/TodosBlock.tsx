@@ -3,14 +3,14 @@ import { SortButtons } from './SortButtons';
 import { TodoList } from './TodoList';
 import { TodoModified } from '../interfaces/todoModified';
 
-interface TodosBlockProps {
+interface Props {
   todosList: TodoModified[];
 }
 
-export const TodosBlock: React.FC<TodosBlockProps> = (props) => {
+export const TodosBlock: React.FC<Props> = (props) => {
   const { todosList } = props;
 
-  const [todos, setTodos] = useState<TodoModified[] | []>(todosList);
+  const [todos, setTodos] = useState<TodoModified[]>(todosList);
 
   const sortBy = (value: string) => {
     const updatedList = todosList.sort((a, b) => {
