@@ -1,6 +1,6 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
-import { TodoModified } from '../interfaces/todoModified';
+import { TodoModified } from '../interfaces/data';
 
 interface Props {
   todos: TodoModified[];

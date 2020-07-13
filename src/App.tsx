@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { fetchData } from './api/fetchData';
 import { TodosBlock } from './components/TodosBlock';
-import { Todo } from './interfaces/todo';
-import { User } from './interfaces/user';
-import { TodoModified } from './interfaces/todoModified';
+import { Todo, User, TodoModified } from './interfaces/data';
 
 const App: React.FC = () => {
   const API_URL_TODOS = 'https://mate.academy/students-api/todos';

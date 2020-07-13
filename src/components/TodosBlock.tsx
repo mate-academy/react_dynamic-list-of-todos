@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SortButtons } from './SortButtons';
 import { TodoList } from './TodoList';
-import { TodoModified } from '../interfaces/todoModified';
+import { TodoModified } from '../interfaces/data';
 
 interface Props {
   todosList: TodoModified[];

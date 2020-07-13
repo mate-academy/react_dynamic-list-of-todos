@@ -1,5 +1,5 @@
 import React from 'react';
-import { TodoModified } from '../interfaces/todoModified';
+import { TodoModified } from '../interfaces/data';
 
 export const TodoItem: React.FC<TodoModified> = (props) => {
   const { title, completed, userName } = props;
