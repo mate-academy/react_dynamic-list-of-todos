@@ -10,7 +10,7 @@ interface Props {
 
 export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
   const [direction, setDirection] = useState(false);
-  const sortBy = (event: MouseEvent<HTMLAnchorElement>, value: keyof TodoWithUser) => {
+  const sortBy = (event: MouseEvent<HTMLButtonElement>, value: keyof TodoWithUser) => {
     event.preventDefault();
     const sorted: TodoWithUser[] = [...preparedList].sort((a, b) => {
       const aValue = a[value];
@@ -36,19 +36,31 @@ export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
       <thead className="thead-dark">
         <tr>
           <th scope="col">
-            <a href="/" onClick={(event) => sortBy(event, 'completed')}>
+            <button
+              className="sort_btn"
+              type="button"
+              onClick={(event) => sortBy(event, 'completed')}
+            >
               Completed
-            </a>
+            </button>
           </th>
           <th scope="col">
-            <a href="/" onClick={(event) => sortBy(event, 'title')}>
+            <button
+              type="button"
+              className="sort_btn"
+              onClick={(event) => sortBy(event, 'title')}
+            >
               Title
-            </a>
+            </button>
           </th>
           <th scope="col">
-            <a href="/" onClick={(event) => sortBy(event, 'user')}>
+            <button
+              type="button"
+              className="sort_btn"
+              onClick={(event) => sortBy(event, 'user')}
+            >
               User
-            </a>
+            </button>
           </th>
         </tr>
       </thead>
