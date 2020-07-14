@@ -1,1 +1,28 @@
+.App {
+  text-align: center;
+}
 
+.container {
+  margin: auto;
+}
+
+.state {
+  font-weight: 600;
+}
+
+th {
+  text-transform: uppercase;
+}
+
+thead th {
+  border: 2px solid #000;
+}
+
+tr {
+  background-color: rgb(0, 255, 255);
+}
+
+th,
+td {
+  padding: 10px 50px;
+}
