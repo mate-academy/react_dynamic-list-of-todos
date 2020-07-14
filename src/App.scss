@@ -1,0 +1,31 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .button {
+    margin: 20px auto;
+  }
+
+  .sort-button {
+    margin: 0 10px;
+  }
+}
+
+.todo-list {
+  display: grid;
+  justify-content: center;
+  grid-gap: 20px;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid slategrey;
+    border-radius: 20px;
+    padding-bottom: 15px;
+  }
+
+  .color-red {
+    color: red;
+  }
+}
