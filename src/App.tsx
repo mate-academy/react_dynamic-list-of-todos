@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 import './App.css';
-import { TodoWithUserInterface } from './interfaces';
+import { TodoWithUser } from './interfaces';
 import { Table } from './Table';
 import { Button } from './Button';
 
-let initialState: TodoWithUserInterface[];
+let initialState: TodoWithUser[];
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [preparedList, setPreparedList] = useState<TodoWithUserInterface[]>([]);
+  const [preparedList, setPreparedList] = useState<TodoWithUser[]>([]);
 
   const beforeLoaded = () => {
     setIsLoading(true);
     setIsStarted(true);
   };
 
-  const afterLoaded = (list: TodoWithUserInterface[]) => {
+  const afterLoaded = (list: TodoWithUser[]) => {
     setPreparedList(list);
     initialState = [...list];
     setIsLoading(false);
     setIsLoaded(true);
   };
 
-  function sortTodos(sorted: TodoWithUserInterface[]) {
+  function sortTodos(sorted: TodoWithUser[]) {
     setPreparedList([...sorted]);
   }
 

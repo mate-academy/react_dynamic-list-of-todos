@@ -1,24 +1,24 @@
 import React from 'react';
-import { TodoInterface, UserInterface, TodoWithUserInterface } from './interfaces';
+import { Todo, User, TodoWithUser } from './interfaces';
 import { getData, URLTodos, URLUsers } from './api';
 
 interface Props {
   beforeLoaded: () => void;
-  afterLoaded: (list: TodoWithUserInterface[]) => void;
+  afterLoaded: (list: TodoWithUser[]) => void;
 }
 
 export const Button: React.FC<Props> = ({ beforeLoaded, afterLoaded }) => {
   const getTodoList = async () => {
     beforeLoaded();
 
-    const todos = await getData<TodoInterface>(URLTodos);
-    const users = await getData<UserInterface>(URLUsers);
+    const todos = await getData<Todo>(URLTodos);
+    const users = await getData<User>(URLUsers);
 
     function findUserById(id: number) {
       return users.find(user => user.id === id)?.name;
     }
 
-    const list: TodoWithUserInterface[] = todos.map(todo => {
+    const list: TodoWithUser[] = todos.map(todo => {
       return {
         id: todo.id,
         title: todo.title,

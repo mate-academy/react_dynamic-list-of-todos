@@ -1,4 +1,4 @@
-export interface TodoInterface {
+export interface Todo {
   id: number;
   userId: number;
   title: string;
@@ -7,14 +7,14 @@ export interface TodoInterface {
   updatedAt: string;
 }
 
-export interface TodoWithUserInterface {
+export interface TodoWithUser {
   completed: boolean;
   title: string;
   user: string | undefined;
   id: number;
 }
 
-export interface UserInterface {
+export interface User {
   id: number;
   name: string;
   username: string;
