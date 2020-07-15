@@ -12,46 +12,44 @@ const App: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [hasError, setError] = useState(false);
 
-  const loadData = () => {
+  const loadData = async () => {
     let initTodos: Todo[];
     let users: User[];
 
     setError(false);
     setLoading(true);
 
-    fetchData<Todo>(API_URL_TODOS)
-      .then(data => {
-        initTodos = data.data;
+    try {
+      const [todosData, usersData] = await Promise.all([
+        fetchData<Todo>(API_URL_TODOS),
+        fetchData<User>(API_URL_USERS),
+      ]);
 
-        return fetchData<User>(API_URL_USERS);
-      })
-      .then(data => {
-        users = data.data;
+      [initTodos, users] = [todosData.data, usersData.data];
 
-        const preparedTodos: TodoModified[] = initTodos.map(({
+      const preparedTodos: TodoModified[] = initTodos.map(({
+        id,
+        title,
+        completed,
+        userId,
+      }) => {
+        const userObj = users.find(user => user.id === userId)!;
+
+        return {
           id,
           title,
           completed,
-          userId,
-        }) => {
-          const userObj = users.find(user => user.id === userId)!;
-
-          return {
-            id,
-            title,
-            completed,
-            userName: userObj.name,
-          };
-        });
-
-        setTodos(preparedTodos);
-
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
+          userName: userObj.name,
+        };
       });
+
+      setTodos(preparedTodos);
+
+      setLoading(false);
+    } catch (e) {
+      setError(true);
+      setLoading(false);
+    }
   };
 
   return (
