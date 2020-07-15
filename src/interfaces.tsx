@@ -1,17 +1,17 @@
-interface GeoInt {
+interface Geo {
   lat: string;
   lng: string;
 }
 
-interface AddressInt {
+interface Address {
   street: string;
   suite: string;
   city: string;
   zipcode: string;
-  geo: GeoInt;
+  geo: Geo;
 }
 
-interface CompanyInt {
+interface Company {
   name: string;
   catchPhrase: string;
   bs: string;
@@ -22,10 +22,10 @@ export interface UserInterface {
   name: string;
   username: string;
   email: string;
-  address: AddressInt;
+  address: Address;
   phone: string;
   website: string;
-  company: CompanyInt;
+  company: Company;
 }
 
 export interface TodoInterface {
