@@ -50,11 +50,11 @@ const App: React.FC = () => {
       }
 
       {
-        isLoading&&<p className="ml">Loading....</p>
+        isLoading && <p className="ml">Loading....</p>
 
       }
       {
-        isLoaded&&<Table preparedList={preparedList} sortTodos={sortTodos} />
+        isLoaded && <Table preparedList={preparedList} sortTodos={sortTodos} />
       }
     </section>
   );
