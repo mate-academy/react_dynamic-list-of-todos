@@ -1,0 +1,19 @@
+.Todo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 600px;
+  height: 100px;
+  margin: 25px;
+  padding: 25px;
+
+  background-color: rgb(247, 247, 255);
+  border: 1px solid rgb(53, 53, 53);
+
+  transition: transform 0.2s ease-in-out;
+}
+
+.Todo:hover {
+  transform: scale(1.1);
+}

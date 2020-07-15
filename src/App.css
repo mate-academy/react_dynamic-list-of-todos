@@ -1,1 +1,21 @@
+/* .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} */
 
+.App__heading {
+  text-align: center;
+}
+
+.App__menu {
+  display: flex;
+  justify-content: center;
+}
+
+.App__menu-btn {
+  margin: 15px;
+
+  background-color: rgb(247, 247, 255);
+  border: 1px solid rgb(53, 53, 53);
+}

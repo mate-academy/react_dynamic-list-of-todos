@@ -1,0 +1,11 @@
+.TodoList {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  color: rgb(53, 53, 53);
+}
