@@ -18,7 +18,6 @@ export const Todo: FC<Props> = ({ todo }) => {
       </small>
       <p>{title}</p>
       <small>
-        <br />
         {`For: ${user.name}`}
       </small>
     </div>
