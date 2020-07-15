@@ -1,12 +1,12 @@
 import React from 'react';
 import { Todo } from '../Todo/Todo';
-import { PreparedTodoInterface } from '../../interfaces';
+import { TodoWithUserInterface } from '../../interfaces';
 
-interface TodoListInterface {
-  todos: PreparedTodoInterface[];
+interface Props {
+  todos: TodoWithUserInterface[];
 }
 
-export const TodoList: React.FC<TodoListInterface> = (props) => {
+export const TodoList: React.FC<Props> = (props) => {
   const { todos } = props;
 
   return (

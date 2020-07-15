@@ -35,7 +35,7 @@ export interface TodoInterface {
   completed: boolean;
 }
 
-export interface PreparedTodoInterface {
+export interface TodoWithUserInterface {
   userId: number;
   id: number;
   title: string;

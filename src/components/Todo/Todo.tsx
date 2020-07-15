@@ -1,11 +1,11 @@
 import React from 'react';
-import { PreparedTodoInterface } from '../../interfaces';
+import { TodoWithUserInterface } from '../../interfaces';
 
-interface TodoItemInterface {
-  todo: PreparedTodoInterface;
+interface Props {
+  todo: TodoWithUserInterface;
 }
 
-export const Todo: React.FC<TodoItemInterface> = (props) => {
+export const Todo: React.FC<Props> = (props) => {
   const { todo } = props;
 
   return (

@@ -1,4 +1,4 @@
-import { TodoInterface, UserInterface, PreparedTodoInterface } from './interfaces';
+import { TodoInterface, UserInterface, TodoWithUserInterface } from './interfaces';
 
 const API_USERS = 'https://mate.academy/students-api/users';
 const API_TODOS = 'https://mate.academy/students-api/todos';
@@ -9,7 +9,7 @@ const fetchData = async (url: string) => {
   return dataObject.data;
 };
 
-export const getData = async (): Promise<PreparedTodoInterface[]> => {
+export const getData = async (): Promise<TodoWithUserInterface[]> => {
   const todos: TodoInterface[] = await fetchData(API_TODOS);
   const users: UserInterface[] = await fetchData(API_USERS);
 

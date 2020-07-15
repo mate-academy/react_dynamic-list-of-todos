@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ButtonInterface {
+interface Props {
   disabled: boolean;
   isLoaded: boolean;
   listLoad: boolean;
@@ -10,7 +10,7 @@ interface ButtonInterface {
   sortByName: () => void;
 }
 
-export const Button: React.FC<ButtonInterface> = (props) => {
+export const Button: React.FC<Props> = (props) => {
   const {
     disabled,
     isLoaded,
