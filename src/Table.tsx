@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState, MouseEvent } from 'react';
+import React, { useState } from 'react';
 import { uuid } from 'uuidv4';
 import { TodoWithUser } from './interfaces';
 
@@ -10,8 +10,7 @@ interface Props {
 
 export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
   const [direction, setDirection] = useState(false);
-  const sortBy = (event: MouseEvent<HTMLButtonElement>, value: keyof TodoWithUser) => {
-    event.preventDefault();
+  const sortBy = (value: keyof TodoWithUser) => {
     const sorted: TodoWithUser[] = [...preparedList].sort((a, b) => {
       const aValue = a[value];
       const bValue = b[value];
@@ -39,7 +38,7 @@ export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
             <button
               className="sort_btn"
               type="button"
-              onClick={(event) => sortBy(event, 'completed')}
+              onClick={() => sortBy('completed')}
             >
               Completed
             </button>
@@ -48,7 +47,7 @@ export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
             <button
               type="button"
               className="sort_btn"
-              onClick={(event) => sortBy(event, 'title')}
+              onClick={() => sortBy('title')}
             >
               Title
             </button>
@@ -57,7 +56,7 @@ export const Table: React.FC<Props> = ({ preparedList, sortTodos }) => {
             <button
               type="button"
               className="sort_btn"
-              onClick={(event) => sortBy(event, 'user')}
+              onClick={() => sortBy('user')}
             >
               User
             </button>

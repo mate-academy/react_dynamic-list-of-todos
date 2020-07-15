@@ -7,7 +7,7 @@ interface Props {
   afterLoaded: (list: TodoWithUser[]) => void;
 }
 
-export const Button: React.FC<Props> = ({ beforeLoaded, afterLoaded }) => {
+export const ButtonLoading: React.FC<Props> = ({ beforeLoaded, afterLoaded }) => {
   const getTodoList = async () => {
     beforeLoaded();
 

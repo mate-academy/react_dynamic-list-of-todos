@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { TodoWithUser } from './interfaces';
 import { Table } from './Table';
-import { Button } from './Button';
+import { ButtonLoading } from './ButtonLoading';
 
 let initialState: TodoWithUser[];
 
@@ -33,7 +33,7 @@ const App: React.FC = () => {
       {
         !isStarted
           ? (
-            <Button
+            <ButtonLoading
               beforeLoaded={beforeLoaded}
               afterLoaded={afterLoaded}
             />
@@ -44,21 +44,17 @@ const App: React.FC = () => {
               className="btn btn-dark ml shadow p-3 mb-5  rounded"
               onClick={() => setPreparedList([...initialState])}
             >
-              <i className="material-icons left" />
               Reset
             </button>
           )
       }
 
       {
-        isLoading
-          ? <p className="ml">Loading....</p>
-          : <></>
+        isLoading&&<p className="ml">Loading....</p>
+
       }
       {
-        isLoaded
-          ? <Table preparedList={preparedList} sortTodos={sortTodos} />
-          : <></>
+        isLoaded&&<Table preparedList={preparedList} sortTodos={sortTodos} />
       }
     </section>
   );
