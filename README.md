@@ -10,7 +10,7 @@ and [Users](https://mate.academy/students-api/users) from API (follow the links)
 
 1. Initially the user sees a `Load` button.
 1. After a click disable the button, change its text to `Loading...` and download the data.
-1. Once the data has been loaded, hide the button and display the list of TODOs instead.
+1. Once the data has been loade d, hide the button and display the list of TODOs instead.
 1. Additionally, you should provide a capability of sorting the TODOs by:
     - `todo.title`
     - `todo.completed` (whether the item is completed or not)
