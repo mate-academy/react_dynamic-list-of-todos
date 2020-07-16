@@ -1,62 +1,62 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { TodosWithUser } from './interfaces';
 import { getPrepearedTodos } from './api/api';
 import { TodoList } from './components/TodoList/TodoList';
+import { Buttons } from './components/Buttons/Buttons';
 import './App.css';
 
-interface State {
-  isLoading: boolean;
-  todoList: TodosWithUser[];
-}
+const App: FC = () => {
+  const [todoList, setTodoList] = useState<TodosWithUser[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
-class App extends React.Component<{}, State> {
-  state = {
-    isLoading: false,
-    todoList: [],
+  const getList = async () => {
+    setLoading(true);
+    await getPrepearedTodos().then(data => setTodoList(data));
+    setLoading(false);
   };
 
-  getList = async () => {
-    this.setState({
-      isLoading: true,
-    });
-    const combinedData = await getPrepearedTodos();
-    // console.log(combinedData)
-
-    this.setState({
-      isLoading: false,
-      todoList: combinedData,
-    });
+  const getNewData = (title: string, data: TodosWithUser[]): TodosWithUser[] => {
+    switch (title) {
+      case 'Sort by title':
+        return [...data].sort((todoA, todoB) => todoA.title.localeCompare(todoB.title));
+      case 'Sort by completed':
+        return [...data].sort((todoA, todoB) => Number(todoB.completed) - Number(todoA.completed));
+      default:
+        return [...data].sort((todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name));
+    }
   };
 
-  render() {
-    const { isLoading, todoList } = this.state;
+  const handleFilter = (title: string) => {
+    setLoading(true);
 
-    return (
-      <>
-        {isLoading
-          ? <h1>Dynamic list of TODOs</h1>
-          : ''}
-        <h1>Static list of todos</h1>
-        <p>
-          <span>Todos: </span>
-          {todoList.length}
-        </p>
-        {todoList.length === 0
-          ? (
-            <button
-              type="button"
-              onClick={this.getList}
-              disabled={isLoading}
-            >
-              {isLoading ? 'loading' : 'Load'}
-            </button>
-          )
-          : ''}
+    const newList = getNewData(title, todoList);
 
-        <TodoList todos={todoList} />
-      </>
-    );
-  }
-}
+    setTodoList(newList);
+    setLoading(false);
+  };
+
+  return (
+    <div className="heading">
+      <h1>Dynamic list of TODOs</h1>
+      <p>
+        <span>Todos: </span>
+        {todoList.length}
+      </p>
+      {!todoList.length
+        ? (
+          <button
+            type="button"
+            onClick={getList}
+            disabled={isLoading}
+          >
+            {isLoading ? 'loading' : 'Load'}
+          </button>
+        )
+        : <Buttons onFilter={handleFilter} />}
+
+      <TodoList todos={todoList} />
+    </div>
+  );
+};
 
 export default App;
