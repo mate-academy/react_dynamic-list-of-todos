@@ -1,1 +1,12 @@
+.box {
+  width: 600px;
+  margin: auto;
+}
 
+.buttons,
+.title {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
