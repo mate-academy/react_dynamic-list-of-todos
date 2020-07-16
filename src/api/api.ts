@@ -13,6 +13,6 @@ export const getPrepearedTodos = async (): Promise<TodosWithUser[]> => {
 
   return todos.map(todo => ({
     ...todo,
-    user: users.find(person => person.id === todo.userId)!,
+    user: users.find(person => person.id === todo.userId) as User,
   }));
 };
