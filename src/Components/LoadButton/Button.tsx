@@ -10,6 +10,7 @@ export const Button: FC<Props> = (props) => {
 
   return (
     <button
+      className="btn btn-primary"
       type="button"
       onClick={onLoadData}
     >

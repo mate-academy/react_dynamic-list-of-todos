@@ -9,13 +9,16 @@ export const TodoList: FC<Props> = (props) => {
   const { todosList } = props;
 
   return (
-    <ul>
-      {todosList.map(todo => (
-        <li key={todo.id}>
-          {todo.title}
-          {todo.user.name}
-        </li>
-      ))}
-    </ul>
+    <table className="table table-hover">
+      <tbody>
+        {todosList.map(todo => (
+          <tr key={todo.id}>
+            <th scope="row">{todo.completed ? 'Done' : 'Undone'}</th>
+            <td>{todo.title}</td>
+            <td>{todo.user.name}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
