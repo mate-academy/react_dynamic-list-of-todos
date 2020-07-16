@@ -10,15 +10,7 @@ type State = {
   filterBy: string;
 };
 
-class App extends React.Component<{}, State, Todo[]> {
-  todosCopy: Todo[];
-
-  constructor() {
-    super({});
-
-    this.todosCopy = [];
-  }
-
+class App extends React.Component<{}, State> {
   state: State = {
     todos: [],
     isLoading: false,
@@ -51,24 +43,21 @@ class App extends React.Component<{}, State, Todo[]> {
             return todoCopy;
           }),
           isLoading: false,
-        },
-        () => {
-          this.todosCopy = [...this.state.todos];
         });
       });
   };
 
   handleFilter = (value: string) => {
     if (value === 'title') {
-      this.setState({
-        todos: this.todosCopy.sort((a, b) => a.title.localeCompare(b.title)),
+      this.setState(prevState => ({
+        todos: prevState.todos.sort((a, b) => a.title.localeCompare(b.title)),
         filterBy: value,
-      });
+      }));
     }
 
     if (value === 'userName') {
-      this.setState({
-        todos: this.todosCopy.sort((a, b) => {
+      this.setState(prevState => ({
+        todos: prevState.todos.sort((a, b) => {
           if (a.userName && b.userName) {
             return a.userName.localeCompare(b.userName);
           }
@@ -76,12 +65,12 @@ class App extends React.Component<{}, State, Todo[]> {
           return 0;
         }),
         filterBy: value,
-      });
+      }));
     }
 
     if (value === 'completed') {
-      this.setState({
-        todos: this.todosCopy.sort((a, b) => {
+      this.setState(prevState => ({
+        todos: prevState.todos.sort((a, b) => {
           if (a.completed === b.completed) {
             return 0;
           }
@@ -93,7 +82,7 @@ class App extends React.Component<{}, State, Todo[]> {
           return 1;
         }),
         filterBy: value,
-      });
+      }));
     }
   };
 
@@ -120,8 +109,10 @@ class App extends React.Component<{}, State, Todo[]> {
         <select
           name="filterBy"
           value={this.state.filterBy}
+          defaultValue=""
           onChange={event => this.handleFilter(event.target.value)}
         >
+          <option value="" disabled={Boolean(this.state.filterBy)}> </option>
           <option value="title">Title</option>
           <option value="completed">Completed</option>
           <option value="userName">User name</option>
