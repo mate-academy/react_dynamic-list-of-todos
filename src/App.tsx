@@ -33,13 +33,14 @@ const App: React.FC = () => {
         completed,
         userId,
       }) => {
-        const userObj = users.find(user => user.id === userId)!;
+        const userObj = users.find(user => user.id === userId);
+        const name = (userObj) ? userObj.name : 'Undefined user';
 
         return {
           id,
           title,
           completed,
-          userName: userObj.name,
+          userName: name,
         };
       });
 

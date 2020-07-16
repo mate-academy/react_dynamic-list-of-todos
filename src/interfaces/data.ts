@@ -1,15 +1,15 @@
 export interface Todo {
-  readonly id: number;
-  readonly userId: number;
-  readonly title: string;
-  readonly completed: boolean;
+  id: number;
+  userId: number;
+  title: string;
+  completed: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface User {
-  readonly id: number;
-  readonly name: string;
+  id: number;
+  name: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -19,8 +19,8 @@ interface TodoModifiedType {
 }
 
 export interface TodoModified extends TodoModifiedType {
-  readonly id: number;
-  readonly title: string;
-  readonly completed: boolean;
-  readonly userName: string;
+  id: number;
+  title: string;
+  completed: boolean;
+  userName: string;
 }
