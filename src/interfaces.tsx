@@ -17,7 +17,7 @@ interface Company {
   bs: string;
 }
 
-export interface UserInterface {
+export interface User {
   id: number;
   name: string;
   username: string;
@@ -28,17 +28,17 @@ export interface UserInterface {
   company: Company;
 }
 
-export interface TodoInterface {
+export interface Todo {
   userId: number;
   id: number;
   title: string;
   completed: boolean;
 }
 
-export interface TodoWithUserInterface {
+export interface TodoWithUser {
   userId: number;
   id: number;
   title: string;
   completed: boolean;
-  user: UserInterface;
+  user: User;
 }

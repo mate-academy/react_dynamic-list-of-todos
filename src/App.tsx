@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { TodoWithUserInterface } from './interfaces';
+import { TodoWithUser } from './interfaces';
 import { getData } from './api';
 import { TodoList } from './components/TodoList/TodoList';
 import { Button } from './components/Button/Button';
 import './App.css';
 
 const App: React.FC = () => {
-  const [todos, setTodos] = useState<TodoWithUserInterface[]>([]);
+  const [todos, setTodos] = useState<TodoWithUser[]>([]);
   const [disabled, setDisabled] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [listLoad, setListLoad] = useState(false);

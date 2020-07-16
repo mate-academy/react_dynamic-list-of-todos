@@ -1,8 +1,8 @@
 import React from 'react';
-import { TodoWithUserInterface } from '../../interfaces';
+import { TodoWithUser } from '../../interfaces';
 
 interface Props {
-  todo: TodoWithUserInterface;
+  todo: TodoWithUser;
 }
 
 export const Todo: React.FC<Props> = (props) => {
