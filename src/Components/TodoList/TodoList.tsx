@@ -13,6 +13,7 @@ export const TodoList: FC<Props> = (props) => {
       {todosList.map(todo => (
         <li key={todo.id}>
           {todo.title}
+          {todo.user.name}
         </li>
       ))}
     </ul>

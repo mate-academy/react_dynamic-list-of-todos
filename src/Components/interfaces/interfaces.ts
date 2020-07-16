@@ -5,7 +5,7 @@ export interface Todo {
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;
-  user?: User;
+  user: User;
 }
 
 interface Address {
@@ -28,5 +28,7 @@ export interface User {
   website: string;
   createdAt: Date;
   updatedAt: Date;
-  address: Address;
+  address: Address | null;
 }
+
+export type Sorting = (itemA: Todo, itemB: Todo) => number;

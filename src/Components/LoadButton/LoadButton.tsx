@@ -2,20 +2,18 @@ import React, { FC } from 'react';
 
 interface Props {
   onLoadData: () => void;
-  // isLoad: boolean;
+  title: string;
 }
 
-export const LoadButton: FC<Props> = (props) => {
-  const { onLoadData } = props;
+export const Button: FC<Props> = (props) => {
+  const { onLoadData, title } = props;
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={onLoadData}
-      >
-        Load
-      </button>
-    </>
+    <button
+      type="button"
+      onClick={onLoadData}
+    >
+      {title}
+    </button>
   );
 };
