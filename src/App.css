@@ -1,1 +1,16 @@
+.button {
+  background: none;
+  border: none;
+  color: #fff;
+  transition: transform 300ms ease;
 
+  margin: 5px;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button:active {
+  transform: translateY(3px);
+}
