@@ -8,10 +8,10 @@ interface Props {
 
 export const TodoList: FC<Props> = ({ todos }) => {
   return (
-    <ul>
+    <ol>
       {todos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
-    </ul>
+    </ol>
   );
 };
