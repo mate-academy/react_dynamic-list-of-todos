@@ -17,7 +17,7 @@ export const filterButtonsData: ButtonData[] = [
   {
     title: 'By name',
     sortingPattern: (itemA: Todo, itemB: Todo) => (
-      itemA.user.username.localeCompare(itemB.user.username)
+      itemA.user.name.localeCompare(itemB.user.name)
     ),
   },
 ];
