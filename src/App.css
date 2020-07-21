@@ -1,1 +1,22 @@
+.App {
+  text-align: center;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  padding: 0 500px;
+}
 
+.table {
+  margin: auto;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 40px;
+}
