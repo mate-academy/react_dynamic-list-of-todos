@@ -40,5 +40,13 @@ export interface PreparedTodo {
   id: number;
   title: string;
   completed: boolean;
-  user: User;
+  user: User | undefined;
 }
+
+export interface Props {
+  preparedTodos: PreparedTodo[];
+}
+
+export interface UserProps {
+  name: string | undefined;
+ }

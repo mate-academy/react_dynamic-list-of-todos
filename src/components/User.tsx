@@ -1,5 +1,6 @@
 import React from 'react';
+import { UserProps } from "./types"
 
-export const User: React.FC<{name: string | undefined}> = ({ name }) => (
+export const User: React.FC<UserProps> = ({ name }) => (
   <td>{name}</td>
 );

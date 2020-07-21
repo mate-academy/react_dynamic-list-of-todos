@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList from './components/TodoList';
 import { PreparedTodo, Todo } from './components/types';
-import { todosWithUsers } from './components/api'
+import { loadTodosWithUsers } from './components/api'
 
 
 const App: React.FC = () => {
@@ -14,8 +14,8 @@ const App: React.FC = () => {
   const handleButtonClick = async () => {
     setIsLoading(true);
 
-    await todosWithUsers().then(data => setTodos(data));
-    await todosWithUsers().then(data => setSortedTodos(data));
+    await loadTodosWithUsers().then(data => setTodos(data));
+    await loadTodosWithUsers().then(data => setSortedTodos(data));
 
     setLoaded(true);
   };
@@ -27,13 +27,19 @@ const App: React.FC = () => {
 
   const sortByCompleted = () => {
     const sortedTodos = [...todos].sort((a: Todo, b: Todo) => {
-      return( Number(a.completed) - Number(b.completed))
+      return Number(a.completed) - Number(b.completed)
     });
     setSortedTodos(sortedTodos);
   }
 
   const sortByName = () => {
-    const sortedTodos = [...todos].sort((a,b) => a.user.name.localeCompare(b.user.name));
+    const sortedTodos = [...todos].sort((a,b) => {
+      if (a.user && b.user) {
+        return a.user.name.localeCompare(b.user.name)
+      } else {
+        return 0
+      }
+    });
     setSortedTodos(sortedTodos);
   }
 

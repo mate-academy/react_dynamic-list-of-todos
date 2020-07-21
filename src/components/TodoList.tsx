@@ -1,8 +1,10 @@
 import React from 'react';
 import { Todo } from './Todo';
-import { PreparedTodo } from './types';
+import { Props } from './types';
 
-const TodoList: React.FC<{preparedTodos: PreparedTodo[]}> = (props) => {
+
+
+const TodoList: React.FC<Props> = (props) => {
   const { preparedTodos } = props;
 
   return (
