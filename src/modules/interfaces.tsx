@@ -7,6 +7,10 @@ export interface Task {
   userId: number;
 }
 
+export interface Prepared extends Task {
+  user: User;
+}
+
 export interface Address {
   city: string;
   createdAt: string;
@@ -32,11 +36,11 @@ export interface User {
 
 export interface DownloadTaskElements {
   setButtonText: Function;
-  getTask: Function;
+  getData: Function;
   buttonText: string;
 }
 
-export interface DownloadRenderTaskList {
-  users: User[] | [];
-  tasks: Task[] | [];
+export interface SetPrepared {
+  prepared: Prepared | [];
+  setPrepared: Function;
 }

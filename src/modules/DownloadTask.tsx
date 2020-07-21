@@ -3,7 +3,7 @@ import { DownloadTaskElements } from './interfaces';
 
 export const DownloadTask = ({
   setButtonText,
-  getTask,
+  getData,
   buttonText,
 }: DownloadTaskElements) => {
   const [buttonDisable, setButtonDisable] = useState(false);
@@ -16,7 +16,7 @@ export const DownloadTask = ({
         () => {
           setButtonDisable(true);
           setButtonText('Loading');
-          getTask();
+          getData();
         }
       }
     >
