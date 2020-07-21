@@ -8,7 +8,7 @@ const tasksLink = 'https://mate.academy/students-api/todos';
 const usersLink = 'https://mate.academy/students-api/users';
 
 const App = () => {
-  const [prepared, setPrepared] = useState<any>();
+  const [prepared, setPrepared] = useState<Prepared[]>([]);
   const [isDataDownloaded, setDataDownloaded] = useState(false);
   const [buttonText, setButtonText] = useState('Download tasks');
 
@@ -23,30 +23,17 @@ const App = () => {
     const tasks = await fetchData<Task[]>(tasksLink);
     const users = await fetchData<User[]>(usersLink);
 
-    console.log("getData -> tasks", tasks)
-    console.log("getData -> users", users)
-
     setPrepared(
       tasks.map((task) => {
         return {
           ...task,
           user: users.find(person => person.id === task.userId),
-        };
+        } as Prepared;
       }),
     );
 
-    // setPrepared(
-    //   tasks.map(task => {
-    //     return {
-    //       ...task,
-    //       user: users.find(person => person.id === task.userId),
-    //     };
-    //   }),
-    // );
     setDataDownloaded(true);
   }
-
-  console.log("App -> prepared", prepared)
 
   const sorting = (sortType: string) => {
     switch (sortType) {
@@ -71,7 +58,7 @@ const App = () => {
 
               return 0;
             }),
-          ]
+          ],
         );
 
       case 'userName':
