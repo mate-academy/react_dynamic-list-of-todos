@@ -4,8 +4,8 @@ import { DownloadTask } from './modules/DownloadTask';
 import { RenderTaskList } from './modules/RenderTaskList';
 import { Prepared, User, Task } from './modules/interfaces';
 
-const tasksLink = 'https://mate.academy/students-api/';
-const usersLink = 'https://mate.academy/students-api/';
+const tasksLink = 'https://mate.academy/students-api/todos';
+const usersLink = 'https://mate.academy/students-api/users';
 
 const App = () => {
   const [prepared, setPrepared] = useState<Prepared[]>([]);
