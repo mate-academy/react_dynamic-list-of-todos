@@ -1,17 +1,21 @@
 import React, { useState, FC } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { getData } from './api/api';
 import './App.css';
 import { Todo } from './interfaces/TodoInterface';
 import { User } from './interfaces/UserInterface';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 
 const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [completedCounter, setCompletedCounter] = useState(0);
   const [titleCounter, setTitleCounter] = useState(0);
   const [userCounter, setUserCounter] = useState(0);
 
   const loadData = async () => {
+    setLoading(true);
+
     const allTodos = await getData<Todo>('todos');
     const allUsers = await getData<User>('users');
 
@@ -19,6 +23,8 @@ const App: FC = () => {
       ...todo,
       user: allUsers.find(user => user.id === todo.userId),
     })));
+
+    setLoading(false);
   };
 
   const sortCompleted = () => {
@@ -71,10 +77,19 @@ const App: FC = () => {
     setUserCounter(userCounter + 1);
   };
 
+  if (isLoading) {
+    return (
+      <div className="spinner-border text-success" role="status">
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
+  }
+
   if (todos.length === 0) {
     return (
       <button
         type="button"
+        className="loading__button btn btn-success"
         onClick={loadData}
       >
         Load todos
@@ -83,12 +98,14 @@ const App: FC = () => {
   }
 
   return (
-    <TodoList
-      todos={todos}
-      sortCompleted={sortCompleted}
-      sortByTitle={sortByTitle}
-      sortByUser={sortByUser}
-    />
+    <div className="wrapper">
+      <TodoList
+        todos={todos}
+        sortCompleted={sortCompleted}
+        sortByTitle={sortByTitle}
+        sortByUser={sortByUser}
+      />
+    </div>
   );
 };
 
