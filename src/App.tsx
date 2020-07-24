@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import './App.css';
 
 interface Todo {
@@ -34,9 +35,13 @@ class App extends React.Component<{}, State> {
         {
           (!setLoaded)
             ? (
-              <button type="button">
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+              >
                 {setLoading ? 'Loading...' : 'Load'}
-              </button>
+              </Button>
             ) : (
               <div>
                 here will be some list of
