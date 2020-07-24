@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
 import { DownloadTask } from './modules/DownloadTask';
+import { fetchData } from './modules/fetchData';
 import { RenderTaskList } from './modules/RenderTaskList';
 import { Prepared, User, Task } from './modules/interfaces';
-
-const tasksLink = 'https://mate.academy/students-api/todos';
-const usersLink = 'https://mate.academy/students-api/users';
 
 const App = () => {
   const [prepared, setPrepared] = useState<Prepared[]>([]);
   const [isDataDownloaded, setDataDownloaded] = useState(false);
   const [buttonText, setButtonText] = useState('Download tasks');
 
-  async function fetchData<T>(url: string): Promise<T> {
-    const data = await fetch(url);
-    const response = await data.json();
-
-    return response.data;
-  }
-
   async function getData() {
-    const tasks = await fetchData<Task[]>(tasksLink);
-    const users = await fetchData<User[]>(usersLink);
+    const tasks = await fetchData<Task[]>('todos');
+    const users = await fetchData<User[]>('users');
 
     setPrepared(
       tasks.map((task) => {
@@ -39,14 +30,14 @@ const App = () => {
     switch (sortType) {
       case 'title':
         return setPrepared(
-          [...(prepared as Prepared[])
+          [...prepared
             .sort((a, b) => a.title.localeCompare(b.title)),
           ],
         );
 
       case 'completed':
         return setPrepared(
-          [...(prepared as Prepared[])
+          [...prepared
             .sort((a, b) => {
               if (a.completed === true && b.completed === false) {
                 return -1;
@@ -64,7 +55,7 @@ const App = () => {
       case 'userName':
 
         return setPrepared(
-          [...(prepared as Prepared[])
+          [...prepared
             .sort((a, b) => a.user.name.localeCompare(b.user.name)),
           ],
         );
@@ -91,33 +82,21 @@ const App = () => {
       <>
         <button
           type="button"
-          onClick={
-            () => {
-              sorting('title');
-            }
-          }
+          onClick={() => sorting('title')}
         >
           By title
         </button>
 
         <button
           type="button"
-          onClick={
-            () => {
-              sorting('completed');
-            }
-          }
+          onClick={() => sorting('completed')}
         >
           By completed
         </button>
 
         <button
           type="button"
-          onClick={
-            () => {
-              sorting('userName');
-            }
-          }
+          onClick={() => sorting('userName')}
         >
           By User Name
         </button>
