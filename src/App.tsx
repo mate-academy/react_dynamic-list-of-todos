@@ -1,18 +1,14 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import './App.css';
-
-interface Todo {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { Todo, User } from './types';
+import { loadUsers, loadTodos } from './api';
 
 interface State {
   setLoading: boolean;
   setLoaded: boolean;
   todos: Todo[];
+  users: User[];
 }
 
 class App extends React.Component<{}, State> {
@@ -20,6 +16,26 @@ class App extends React.Component<{}, State> {
     setLoading: false,
     setLoaded: false,
     todos: [],
+    users: [],
+  };
+
+  onLoading = (): void => {
+    loadUsers()
+      .then((users) => {
+        console.log(users);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        loadTodos()
+          .then((todos) => {
+            console.log(todos);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
   };
 
   render() {
@@ -27,6 +43,7 @@ class App extends React.Component<{}, State> {
       setLoading,
       setLoaded,
       todos,
+      users,
     } = this.state;
 
     return (
@@ -39,12 +56,14 @@ class App extends React.Component<{}, State> {
                 variant="contained"
                 color="primary"
                 type="button"
+                onClick={this.onLoading}
               >
                 {setLoading ? 'Loading...' : 'Load'}
               </Button>
             ) : (
               <div>
                 here will be some list of
+                {users}
                 {todos}
               </div>
             )
