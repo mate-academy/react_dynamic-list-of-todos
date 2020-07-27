@@ -1,25 +1,27 @@
 import React, { FC, useState } from 'react';
 
-import Header from './components/Header/Header';
-import View from './components/View/View';
-import Error from './components/Error/Error';
-import LoadButton from './components/LoadButton/LoadButton';
+import { Header } from './components/Header/Header';
+import { View } from './components/View/View';
+import { Error } from './components/Error/Error';
+import { LoadButton } from './components/LoadButton/LoadButton';
 import './App.css';
 
 const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingError, setIsLoadingError] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   return (
     <>
       <Header />
-      {todos.length > 0 && <View todos={todos} />}
+      {isLoaded && <View todos={todos} />}
       {isLoadingError && <Error />}
       {
-        todos.length === 0
+        !isLoaded
         && (
           <LoadButton
             setTodos={setTodos}
+            setIsLoaded={setIsLoaded}
             setIsLoadingError={setIsLoadingError}
           />
         )

@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 
-import TodoList from '../TodosList/TodosList';
+import { TodosList } from '../TodosList/TodosList';
 
 interface Props {
   todos: Todo[];
 }
 
-const View: FC<Props> = ({ todos }) => {
+export const View: FC<Props> = ({ todos }) => {
   const [todosSortBy, setTodosSortBy] = useState<string>('title');
 
   switch (todosSortBy) {
@@ -56,9 +56,7 @@ const View: FC<Props> = ({ todos }) => {
       >
         Sort by name
       </button>
-      <TodoList todos={todos} />
+      <TodosList todos={todos} />
     </div>
   );
 };
-
-export default View;

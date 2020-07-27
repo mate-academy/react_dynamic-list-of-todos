@@ -1,13 +1,14 @@
 import React, { FC, useState } from 'react';
 
-import getData from '../../api';
+import { getData } from '../../api';
 
 interface Props {
   setTodos: (param: Todo[]) => void;
+  setIsLoaded: (param: boolean) => void;
   setIsLoadingError: (param: boolean) => void;
 }
 
-const LoadButton: FC<Props> = ({ setTodos, setIsLoadingError }) => {
+export const LoadButton: FC<Props> = ({ setTodos, setIsLoaded, setIsLoadingError }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const load = async (): Promise<void> => {
@@ -35,6 +36,7 @@ const LoadButton: FC<Props> = ({ setTodos, setIsLoadingError }) => {
         ...todo,
         user: users.find(user => user.id === todo.userId),
       })));
+      setIsLoaded(true);
     }
   };
 
@@ -48,5 +50,3 @@ const LoadButton: FC<Props> = ({ setTodos, setIsLoadingError }) => {
     </button>
   );
 };
-
-export default LoadButton;
