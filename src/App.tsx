@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import './App.css';
 import { Todo, User } from './types';
 import { loadUsers, loadTodos } from './api';
@@ -10,18 +11,48 @@ interface State {
   gotError: boolean;
   error: string;
   todos: Todo[];
+  sortedTodos: Todo[];
   users: User[];
 }
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    setLoading: false,
-    setLoaded: false,
-    gotError: false,
-    error: '',
-    todos: [],
-    users: [],
+const initState: State = {
+  setLoading: false,
+  setLoaded: false,
+  gotError: false,
+  error: '',
+  todos: [],
+  sortedTodos: [],
+  users: [],
+};
+
+const compareByTitle = (a: Todo, b: Todo) => (
+  a.title.localeCompare(b.title)
+);
+
+const compareByCompleted = (a: Todo, b: Todo) => (
+  (a.completed && !b.completed) ? -1 : 1
+);
+
+const compareByUser = (users: User[]) => {
+  return (a: Todo, b: Todo) => {
+    const userA = users
+      .find((user) => (user.id === a.userId));
+    const userB = users
+      .find((user) => (user.id === b.userId));
+
+    if (userA && userB) {
+      const nameA = userA.name;
+      const nameB = userB.name;
+
+      return nameA.localeCompare(nameB);
+    }
+
+    return 0;
   };
+};
+
+class App extends React.Component<{}, State> {
+  state: State = initState;
 
   loadData = async (): Promise<[User[], Todo[]]> => {
     const loadedData = await Promise.all([
@@ -40,12 +71,11 @@ class App extends React.Component<{}, State> {
 
     this.loadData()
       .then(([users, todos]) => {
-        console.log(users);
-        console.log(todos);
         this.setState((prevState: State) => ({
           ...prevState,
           users,
           todos,
+          sortedTodos: todos,
           setLoading: false,
           setLoaded: true,
           error: '',
@@ -53,7 +83,6 @@ class App extends React.Component<{}, State> {
         }));
       })
       .catch(error => {
-        console.log('error on data loading', error.message);
         this.setState(prevState => ({
           ...prevState,
           error: error.message,
@@ -62,11 +91,45 @@ class App extends React.Component<{}, State> {
       });
   };
 
+  onSortByTitle = (): void => {
+    const {
+      todos,
+    } = this.state;
+
+    this.setState((prevState: State) => ({
+      ...prevState,
+      sortedTodos: todos.sort(compareByTitle),
+    }));
+  };
+
+  onSortByComplete = (): void => {
+    const {
+      todos,
+    } = this.state;
+
+    this.setState((prevState: State) => ({
+      ...prevState,
+      sortedTodos: todos.sort(compareByCompleted),
+    }));
+  };
+
+  onSortByUser = (): void => {
+    const {
+      todos,
+      users,
+    } = this.state;
+
+    this.setState((prevState: State) => ({
+      ...prevState,
+      sortedTodos: todos.sort(compareByUser(users)),
+    }));
+  };
+
   render() {
     const {
       setLoading,
       setLoaded,
-      todos,
+      sortedTodos,
       users,
       gotError,
       error,
@@ -117,10 +180,33 @@ class App extends React.Component<{}, State> {
                 <h2>TODO:</h2>
                 <div>
                   <h3>Sorting by:</h3>
-
+                  <ButtonGroup
+                    color="primary"
+                    variant="outlined"
+                    aria-label="outlined primary button group"
+                  >
+                    <Button
+                      onClick={this.onSortByTitle}
+                      disabled={setLoading}
+                    >
+                      Sort by title
+                    </Button>
+                    <Button
+                      onClick={this.onSortByComplete}
+                      disabled={setLoading}
+                    >
+                      Sort by completed
+                    </Button>
+                    <Button
+                      onClick={this.onSortByUser}
+                      disabled={setLoading}
+                    >
+                      Sort by user
+                    </Button>
+                  </ButtonGroup>
                 </div>
                 <ol>
-                  {todos.map((todo: Todo) => (
+                  {sortedTodos.map((todo: Todo) => (
                     <li
                       key={todo.id}
                     >
