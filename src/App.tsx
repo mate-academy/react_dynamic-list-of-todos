@@ -7,6 +7,8 @@ import { loadUsers, loadTodos } from './api';
 interface State {
   setLoading: boolean;
   setLoaded: boolean;
+  gotError: boolean;
+  error: string;
   todos: Todo[];
   users: User[];
 }
@@ -15,26 +17,48 @@ class App extends React.Component<{}, State> {
   state: State = {
     setLoading: false,
     setLoaded: false,
+    gotError: false,
+    error: '',
     todos: [],
     users: [],
   };
 
+  loadData = async (): Promise<[User[], Todo[]]> => {
+    const loadedData = await Promise.all([
+      loadUsers(),
+      loadTodos(),
+    ]);
+
+    return loadedData;
+  };
+
   onLoading = (): void => {
-    loadUsers()
-      .then((users) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      setLoading: true,
+    }));
+
+    this.loadData()
+      .then(([users, todos]) => {
         console.log(users);
+        console.log(todos);
+        this.setState((prevState: State) => ({
+          ...prevState,
+          users,
+          todos,
+          setLoading: false,
+          setLoaded: true,
+          error: '',
+          gotError: false,
+        }));
       })
       .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        loadTodos()
-          .then((todos) => {
-            console.log(todos);
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        console.log('error on data loading', error.message);
+        this.setState(prevState => ({
+          ...prevState,
+          error: error.message,
+          gotError: true,
+        }));
       });
   };
 
@@ -44,6 +68,8 @@ class App extends React.Component<{}, State> {
       setLoaded,
       todos,
       users,
+      gotError,
+      error,
     } = this.state;
 
     return (
@@ -52,19 +78,60 @@ class App extends React.Component<{}, State> {
         {
           (!setLoaded)
             ? (
-              <Button
-                variant="contained"
-                color="primary"
-                type="button"
-                onClick={this.onLoading}
-              >
-                {setLoading ? 'Loading...' : 'Load'}
-              </Button>
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="button"
+                  onClick={this.onLoading}
+                  disabled={setLoading}
+                >
+                  {setLoading ? 'Loading...' : 'Load'}
+                </Button>
+                {gotError === true
+                  && (
+                    <p>
+                      {error}
+                      {' '}
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        type="button"
+                        onClick={this.onLoading}
+                      >
+                        Retry Loading
+                      </Button>
+                    </p>
+                  )}
+              </>
             ) : (
               <div>
-                here will be some list of
-                {users}
-                {todos}
+                <h2>Users</h2>
+                {users.map((user: User) => (
+                  <p
+                    key={user.id}
+                  >
+                    {user.name}
+                  </p>
+                ))}
+                <h2>TODO:</h2>
+                <div>
+                  <h3>Sorting by:</h3>
+
+                </div>
+                <ol>
+                  {todos.map((todo: Todo) => (
+                    <li
+                      key={todo.id}
+                    >
+                      <input
+                        type="checkbox"
+                        defaultChecked={todo.completed}
+                      />
+                      {todo.title}
+                    </li>
+                  ))}
+                </ol>
               </div>
             )
         }

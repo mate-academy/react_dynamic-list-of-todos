@@ -25,9 +25,16 @@ export function loadUsers(): Promise<User[]> {
       // eslint-disable-next-line no-console
       console.error(error.message);
 
-      throw new Error('Failed to Fetch Users');
+      throw new Error('Failed to Fetch Users, press button again');
     });
 }
+
+// export async function loadUsers2(): Promise<User[]> {
+//   const response = await fetch(URL_USERS);
+//   const data = await response.json();
+
+//   return data;
+// }
 
 export function loadTodos(): Promise<Todo[]> {
   return fetch(URL_TODOS)
@@ -43,6 +50,6 @@ export function loadTodos(): Promise<Todo[]> {
       // eslint-disable-next-line no-console
       console.error(error.message);
 
-      throw new Error('Failed to Fetch Todos');
+      throw new Error('Failed to Fetch Todos, press button again');
     });
 }
