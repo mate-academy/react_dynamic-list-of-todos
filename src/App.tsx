@@ -3,61 +3,55 @@ import './App.css';
 import { DownloadTask } from './modules/DownloadTask';
 import { fetchData } from './modules/fetchData';
 import { RenderTaskList } from './modules/RenderTaskList';
-import { Prepared, User, Task } from './modules/interfaces';
+import { PreparedTasks, User, Task } from './modules/interfaces';
 
 const App = () => {
-  const [prepared, setPrepared] = useState<Prepared[]>([]);
-  const [isDataDownloaded, setDataDownloaded] = useState(false);
+  const [preparedTasks, setPreparedTasks] = useState<PreparedTasks[]>([]);
+  const [isLoaded, setLoaded] = useState(false);
   const [buttonText, setButtonText] = useState('Download tasks');
 
   async function getData() {
     const tasks = await fetchData<Task[]>('todos');
     const users = await fetchData<User[]>('users');
 
-    setPrepared(
-      tasks.map((task) => {
-        return {
-          ...task,
-          user: users.find(person => person.id === task.userId),
-        } as Prepared;
-      }),
+    setPreparedTasks(
+      tasks.map(task => ({
+        ...task,
+        user: users.find(person => person.id === task.userId),
+      }) as PreparedTasks),
     );
 
-    setDataDownloaded(true);
+    setLoaded(true);
   }
 
   const sorting = (sortType: string) => {
     switch (sortType) {
       case 'title':
-        return setPrepared(
-          [...prepared
-            .sort((a, b) => a.title.localeCompare(b.title)),
+        return setPreparedTasks(
+          [...preparedTasks.sort((a, b) => a.title.localeCompare(b.title)),
           ],
         );
 
       case 'completed':
-        return setPrepared(
-          [...prepared
-            .sort((a, b) => {
-              if (a.completed === true && b.completed === false) {
-                return -1;
-              }
+        return setPreparedTasks(
+          [...preparedTasks.sort((a, b) => {
+            if (a.completed === true && b.completed === false) {
+              return -1;
+            }
 
-              if (b.completed === true && a.completed === false) {
-                return 1;
-              }
+            if (b.completed === true && a.completed === false) {
+              return 1;
+            }
 
-              return 0;
-            }),
+            return 0;
+          }),
           ],
         );
 
       case 'userName':
 
-        return setPrepared(
-          [...prepared
-            .sort((a, b) => a.user.name.localeCompare(b.user.name)),
-          ],
+        return setPreparedTasks(
+          [...preparedTasks.sort((a, b) => a.user.name.localeCompare(b.user.name))],
         );
 
       default:
@@ -65,7 +59,7 @@ const App = () => {
     }
   };
 
-  if (!isDataDownloaded) {
+  if (!isLoaded) {
     return (
       <>
         <DownloadTask
@@ -77,7 +71,7 @@ const App = () => {
     );
   }
 
-  if (isDataDownloaded) {
+  if (isLoaded) {
     return (
       <>
         <button
@@ -102,7 +96,7 @@ const App = () => {
         </button>
 
         <RenderTaskList
-          prepared={prepared}
+          preparedTasks={preparedTasks}
         />
       </>
     );

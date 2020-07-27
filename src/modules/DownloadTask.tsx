@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { DownloadTaskElements } from './interfaces';
+
+interface DownloadTaskProps {
+  setButtonText: Function;
+  getData: Function;
+  buttonText: string;
+}
 
 export const DownloadTask = ({
   setButtonText,
   getData,
   buttonText,
-}: DownloadTaskElements) => {
+}: DownloadTaskProps) => {
   const [buttonDisable, setButtonDisable] = useState(false);
 
   return (

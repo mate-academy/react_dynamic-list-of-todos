@@ -19,7 +19,7 @@ export interface User {
   address: Address;
 }
 
-export interface Prepared extends Task {
+export interface PreparedTasks extends Task {
   user: User;
 }
 
@@ -32,10 +32,4 @@ export interface Address {
   updatedAt: string;
   userId: number;
   zipcode: string;
-}
-
-export interface DownloadTaskElements {
-  setButtonText: Function;
-  getData: Function;
-  buttonText: string;
 }
