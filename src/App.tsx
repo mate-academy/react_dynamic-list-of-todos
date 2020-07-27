@@ -11,7 +11,9 @@ const App: FC = () => {
   const handleStart = async () => {
     setIsLoaded(true);
 
-    await getPreparedTodos().then(data => setTodos(data));
+    const data = await getPreparedTodos();
+
+    setTodos(data);
   };
 
   return (

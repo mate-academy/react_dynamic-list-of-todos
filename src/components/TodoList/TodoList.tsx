@@ -9,19 +9,19 @@ type TodoListProps = {
 export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
   const [sortedTodos, setSortedTodos] = useState<Todo[]>([...todos]);
 
-  const sortByTitle = (): void => {
+  const sortByTitle = () => {
     setSortedTodos(prev => (
       [...prev].sort((first, second) => first.title.localeCompare(second.title))
     ));
   };
 
-  const sortByCompleted = (): void => {
+  const sortByCompleted = () => {
     setSortedTodos(prev => (
       [...prev].sort((first, second) => Number(second.completed) - Number(first.completed))
     ));
   };
 
-  const sortByUserName = (): void => {
+  const sortByUserName = () => {
     setSortedTodos(prev => (
       [...prev].sort((first, second) => first.user.name.localeCompare(second.user.name))
     ));
