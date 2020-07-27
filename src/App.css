@@ -1,1 +1,29 @@
+.app {
+  text-align: center;
+}
 
+.app__error {
+  color: red;
+}
+
+.app__view-button {
+  margin-right: 5%;
+}
+
+.app__view-button:nth-child(3) {
+  margin-right: 0;
+}
+
+.app__list {
+  list-style: none;
+  padding: 0;
+}
+
+.app__item {
+  margin-bottom: 25px;
+  border: 1px solid black;
+}
+
+.app__item:last-child {
+  margin-bottom: 0;
+}
