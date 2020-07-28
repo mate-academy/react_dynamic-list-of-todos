@@ -1,18 +1,15 @@
 import { User, Todo, PreparedTodos } from './interfaces';
 
-export const URL_USERS = 'https://mate.academy/students-api/users';
-export const URL_TODOS = 'https://mate.academy/students-api/todos';
-
-const fetchedData = async <T>(url: string): Promise<T[]> => {
-  const response = await fetch(url);
+const fetchedData = async <T>(nameData: string): Promise<T[]> => {
+  const response = await fetch(`https://mate.academy/students-api/${nameData}`);
   const result = await response.json();
 
   return result.data;
 };
 
 export const getTodos = async (): Promise<PreparedTodos[]> => {
-  const users = await fetchedData<User>(URL_USERS);
-  const todos = await fetchedData<Todo>(URL_TODOS);
+  const users = await fetchedData<User>('users');
+  const todos = await fetchedData<Todo>('todos');
 
   return todos.map(todo => ({
     ...todo,
