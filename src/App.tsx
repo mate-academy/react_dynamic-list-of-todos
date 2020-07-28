@@ -10,24 +10,25 @@ const App: FC = () => {
 
   const prepared = async () => {
     setLoading(true);
-    await getTodos().then(result => setTodos(result));
-    setLoading(false);
+    const fetchedTodos = await getTodos();
+
+    setTodos(fetchedTodos);
   };
 
   const sortedByName = () => (
-    setTodos(prev => [...prev].sort(
+    setTodos(prevTodos => [...prevTodos].sort(
       (todoA, todoB) => todoA.user.name.localeCompare(todoB.user.name),
     ))
   );
 
   const sortedByTitle = () => (
-    setTodos(prev => [...prev].sort(
+    setTodos(prevTodos => [...prevTodos].sort(
       (todoA, todoB) => todoA.title.localeCompare(todoB.title),
     ))
   );
 
   const sortedByCompleted = () => (
-    setTodos(prev => [...prev].sort(
+    setTodos(prevTodos => [...prevTodos].sort(
       (todoA, todoB) => Number(todoA.completed) - Number(todoB.completed),
     ))
   );

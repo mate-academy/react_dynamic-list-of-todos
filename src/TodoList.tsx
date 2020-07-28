@@ -6,12 +6,12 @@ interface Props {
   todos: PreparedTodos[];
 }
 
-export const TodoList: FC<Props> = ({ todos }) => {
-  return (
+export const TodoList: FC<Props> = ({ todos }) => (
+  <>
     <ol>
       {todos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </ol>
-  );
-};
+  </>
+);
