@@ -1,60 +1,21 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import './App.css';
+import React, { useState, FC } from 'react';
 import { Todo, User } from './types';
 import { loadUsers, loadTodos } from './api';
+import { ListOfTodos } from './components/ListOfTodos';
+import { SortingButtons } from './components/SortingButtons';
+import { LoadingButtons } from './components/LoadingButtons';
+import { Users } from './components/Users';
 
-interface State {
-  setLoading: boolean;
-  setLoaded: boolean;
-  gotError: boolean;
-  error: string;
-  todos: Todo[];
-  sortedTodos: Todo[];
-  users: User[];
-}
+const App: FC<{}> = () => {
+  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [gotError, setGotError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
 
-const initState: State = {
-  setLoading: false,
-  setLoaded: false,
-  gotError: false,
-  error: '',
-  todos: [],
-  sortedTodos: [],
-  users: [],
-};
-
-const compareByTitle = (a: Todo, b: Todo) => (
-  a.title.localeCompare(b.title)
-);
-
-const compareByCompleted = (a: Todo, b: Todo) => (
-  (a.completed && !b.completed) ? -1 : 1
-);
-
-const compareByUser = (users: User[]) => {
-  return (a: Todo, b: Todo) => {
-    const userA = users
-      .find((user) => (user.id === a.userId));
-    const userB = users
-      .find((user) => (user.id === b.userId));
-
-    if (userA && userB) {
-      const nameA = userA.name;
-      const nameB = userB.name;
-
-      return nameA.localeCompare(nameB);
-    }
-
-    return 0;
-  };
-};
-
-class App extends React.Component<{}, State> {
-  state: State = initState;
-
-  loadData = async (): Promise<[User[], Todo[]]> => {
+  const loadData = async (): Promise<[User[], Todo[]]> => {
     const loadedData = await Promise.all([
       loadUsers(),
       loadTodos(),
@@ -63,167 +24,96 @@ class App extends React.Component<{}, State> {
     return loadedData;
   };
 
-  onLoading = (): void => {
-    this.setState((prevState) => ({
-      ...prevState,
-      setLoading: true,
-    }));
+  const onLoading = (): void => {
+    setLoading(true);
 
-    this.loadData()
-      .then(([users, todos]) => {
-        this.setState((prevState: State) => ({
-          ...prevState,
-          users,
-          todos,
-          sortedTodos: todos,
-          setLoading: false,
-          setLoaded: true,
-          error: '',
-          gotError: false,
-        }));
+    loadData()
+      .then((data) => {
+        const [usersData, todosData] = data;
+
+        setUsers(usersData);
+        setTodos(todosData);
+        setSortedTodos(todosData);
+        setLoading(false);
+        setLoaded(true);
+        setErrorMessage('');
+        setGotError(false);
       })
       .catch(error => {
-        this.setState(prevState => ({
-          ...prevState,
-          error: error.message,
-          gotError: true,
-        }));
+        setGotError(true);
+        setErrorMessage(error.message);
       });
   };
 
-  onSortByTitle = (): void => {
-    const {
-      todos,
-    } = this.state;
+  const compareByTitle = (a: Todo, b: Todo) => (
+    a.title.localeCompare(b.title)
+  );
 
-    this.setState((prevState: State) => ({
-      ...prevState,
-      sortedTodos: todos.sort(compareByTitle),
-    }));
+  const compareByCompleted = (a: Todo, b: Todo) => (
+    (a.completed && !b.completed) ? -1 : 1
+  );
+
+  const compareByUser = (comparingUsers: User[]) => {
+    return (a: Todo, b: Todo) => {
+      const userA = comparingUsers
+        .find((user) => (user.id === a.userId));
+      const userB = comparingUsers
+        .find((user) => (user.id === b.userId));
+
+      if (userA && userB) {
+        const nameA = userA.name;
+        const nameB = userB.name;
+
+        return nameA.localeCompare(nameB);
+      }
+
+      return 0;
+    };
   };
 
-  onSortByComplete = (): void => {
-    const {
-      todos,
-    } = this.state;
-
-    this.setState((prevState: State) => ({
-      ...prevState,
-      sortedTodos: todos.sort(compareByCompleted),
-    }));
+  const onSortByTitle = (): void => {
+    setSortedTodos([...todos].sort(compareByTitle));
   };
 
-  onSortByUser = (): void => {
-    const {
-      todos,
-      users,
-    } = this.state;
-
-    this.setState((prevState: State) => ({
-      ...prevState,
-      sortedTodos: todos.sort(compareByUser(users)),
-    }));
+  const onSortByComplete = (): void => {
+    setSortedTodos([...todos].sort(compareByCompleted));
   };
 
-  render() {
-    const {
-      setLoading,
-      setLoaded,
-      sortedTodos,
-      users,
-      gotError,
-      error,
-    } = this.state;
+  const onSortByUser = (): void => {
+    setSortedTodos([...todos].sort(compareByUser(users)));
+  };
 
-    return (
-      <>
-        <h1>Dynamic list of TODOs</h1>
-        {
-          (!setLoaded)
-            ? (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={this.onLoading}
-                  disabled={setLoading}
-                >
-                  {setLoading ? 'Loading...' : 'Load'}
-                </Button>
-                {gotError === true
-                  && (
-                    <p>
-                      {error}
-                      {' '}
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        type="button"
-                        onClick={this.onLoading}
-                      >
-                        Retry Loading
-                      </Button>
-                    </p>
-                  )}
-              </>
-            ) : (
-              <div>
-                <h2>Users</h2>
-                {users.map((user: User) => (
-                  <p
-                    key={user.id}
-                  >
-                    {user.name}
-                  </p>
-                ))}
-                <h2>TODO:</h2>
-                <div>
-                  <h3>Sorting by:</h3>
-                  <ButtonGroup
-                    color="primary"
-                    variant="outlined"
-                    aria-label="outlined primary button group"
-                  >
-                    <Button
-                      onClick={this.onSortByTitle}
-                      disabled={setLoading}
-                    >
-                      Sort by title
-                    </Button>
-                    <Button
-                      onClick={this.onSortByComplete}
-                      disabled={setLoading}
-                    >
-                      Sort by completed
-                    </Button>
-                    <Button
-                      onClick={this.onSortByUser}
-                      disabled={setLoading}
-                    >
-                      Sort by user
-                    </Button>
-                  </ButtonGroup>
-                </div>
-                <ol>
-                  {sortedTodos.map((todo: Todo) => (
-                    <li
-                      key={todo.id}
-                    >
-                      <input
-                        type="checkbox"
-                        defaultChecked={todo.completed}
-                      />
-                      {todo.title}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )
-        }
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <h1>Dynamic list of TODOs</h1>
+      {
+        (!loaded)
+          ? (
+            <LoadingButtons
+              onLoading={onLoading}
+              loading={loading}
+              gotError={gotError}
+              errorMessage={errorMessage}
+            />
+          ) : (
+            <>
+              <Users
+                users={users}
+              />
+              <SortingButtons
+                onSortByTitle={onSortByTitle}
+                onSortByComplete={onSortByComplete}
+                onSortByUser={onSortByUser}
+                loading={loading}
+              />
+              <ListOfTodos
+                sortedTodos={sortedTodos}
+              />
+            </>
+          )
+      }
+    </>
+  );
+};
 
 export default App;
