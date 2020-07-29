@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Todo, User } from './types';
 import { loadUsers, loadTodos } from './api';
-import { ListOfTodos } from './ListOfTodos';
+import { ListOfTodos } from './components/ListOfTodos';
 
 const App: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
