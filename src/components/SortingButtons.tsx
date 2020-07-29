@@ -18,7 +18,7 @@ export const SortingButtons: FC<SortingProps> = (props) => {
   } = props;
 
   return (
-    <div>
+    <>
       <h3>Sorting by:</h3>
       <ButtonGroup
         color="primary"
@@ -44,6 +44,6 @@ export const SortingButtons: FC<SortingProps> = (props) => {
           Sort by user
         </Button>
       </ButtonGroup>
-    </div>
+    </>
   );
 };

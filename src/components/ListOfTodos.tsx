@@ -10,6 +10,7 @@ export const ListOfTodos: FC<TodosProps> = (props) => {
 
   return (
     <ol>
+      <h2>TODOs:</h2>
       {sortedTodos.map((todo: Todo) => (
         <li
           key={todo.id}

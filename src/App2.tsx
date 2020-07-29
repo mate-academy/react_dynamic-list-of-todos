@@ -1,9 +1,10 @@
 import React, { useState, FC } from 'react';
-import Button from '@material-ui/core/Button';
 import { Todo, User } from './types';
 import { loadUsers, loadTodos } from './api';
 import { ListOfTodos } from './components/ListOfTodos';
 import { SortingButtons } from './components/SortingButtons';
+import { LoadingButtons } from './components/LoadingButtons';
+import { Users } from './components/Users';
 
 const App: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -88,43 +89,17 @@ const App: FC<{}> = () => {
       {
         (!loaded)
           ? (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                type="button"
-                onClick={onLoading}
-                disabled={loading}
-              >
-                {loading ? 'Loading...' : 'Load'}
-              </Button>
-              {gotError === true
-                && (
-                  <p>
-                    {errorMessage}
-                    {' '}
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      type="button"
-                      onClick={onLoading}
-                    >
-                      Retry Loading
-                    </Button>
-                  </p>
-                )}
-            </>
+            <LoadingButtons
+              onLoading={onLoading}
+              loading={loading}
+              gotError={gotError}
+              errorMessage={errorMessage}
+            />
           ) : (
-            <div>
-              <h2>Users</h2>
-              {users.map((user: User) => (
-                <p
-                  key={user.id}
-                >
-                  {user.name}
-                </p>
-              ))}
-              <h2>TODO:</h2>
+            <>
+              <Users
+                users={users}
+              />
               <SortingButtons
                 onSortByTitle={onSortByTitle}
                 onSortByComplete={onSortByComplete}
@@ -134,7 +109,7 @@ const App: FC<{}> = () => {
               <ListOfTodos
                 sortedTodos={sortedTodos}
               />
-            </div>
+            </>
           )
       }
     </>
