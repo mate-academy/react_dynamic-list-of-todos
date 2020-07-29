@@ -19,6 +19,7 @@ export const ListOfTodos: FC<TodosProps> = (props) => {
             type="checkbox"
             defaultChecked={todo.completed}
           />
+          <span>{` uID = ${todo.userId} `}</span>
           {todo.title}
         </li>
       ))}

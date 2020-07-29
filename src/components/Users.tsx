@@ -17,7 +17,7 @@ export const Users: FC<UsersProps> = (props) => {
         <p
           key={user.id}
         >
-          {user.name}
+          <span>{`id = ${user.id}, ${user.name}`}</span>
         </p>
       ))}
     </>
