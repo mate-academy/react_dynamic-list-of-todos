@@ -71,15 +71,15 @@ const App: FC<{}> = () => {
   };
 
   const onSortByTitle = (): void => {
-    setSortedTodos(todos.sort(compareByTitle));
+    setSortedTodos([...todos].sort(compareByTitle));
   };
 
   const onSortByComplete = (): void => {
-    setSortedTodos(todos.sort(compareByCompleted));
+    setSortedTodos([...todos].sort(compareByCompleted));
   };
 
   const onSortByUser = (): void => {
-    setSortedTodos(todos.sort(compareByUser(users)));
+    setSortedTodos([...todos].sort(compareByUser(users)));
   };
 
   return (
