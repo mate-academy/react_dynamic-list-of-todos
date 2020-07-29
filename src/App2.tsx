@@ -1,9 +1,9 @@
 import React, { useState, FC } from 'react';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Todo, User } from './types';
 import { loadUsers, loadTodos } from './api';
 import { ListOfTodos } from './components/ListOfTodos';
+import { SortingButtons } from './components/SortingButtons';
 
 const App: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -125,33 +125,12 @@ const App: FC<{}> = () => {
                 </p>
               ))}
               <h2>TODO:</h2>
-              <div>
-                <h3>Sorting by:</h3>
-                <ButtonGroup
-                  color="primary"
-                  variant="outlined"
-                  aria-label="outlined primary button group"
-                >
-                  <Button
-                    onClick={onSortByTitle}
-                    disabled={loading}
-                  >
-                    Sort by title
-                  </Button>
-                  <Button
-                    onClick={onSortByComplete}
-                    disabled={loading}
-                  >
-                    Sort by completed
-                  </Button>
-                  <Button
-                    onClick={onSortByUser}
-                    disabled={loading}
-                  >
-                    Sort by user
-                  </Button>
-                </ButtonGroup>
-              </div>
+              <SortingButtons
+                onSortByTitle={onSortByTitle}
+                onSortByComplete={onSortByComplete}
+                onSortByUser={onSortByUser}
+                loading={loading}
+              />
               <ListOfTodos
                 sortedTodos={sortedTodos}
               />
