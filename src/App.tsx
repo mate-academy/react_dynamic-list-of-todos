@@ -24,25 +24,23 @@ const App: FC<{}> = () => {
     return loadedData;
   };
 
-  const onLoading = (): void => {
+  const onLoading = async (): Promise<void> => {
     setLoading(true);
 
-    loadData()
-      .then((data) => {
-        const [usersData, todosData] = data;
+    try {
+      const [usersData, todosData] = await loadData();
 
-        setUsers(usersData);
-        setTodos(todosData);
-        setSortedTodos(todosData);
-        setLoading(false);
-        setLoaded(true);
-        setErrorMessage('');
-        setGotError(false);
-      })
-      .catch(error => {
-        setGotError(true);
-        setErrorMessage(error.message);
-      });
+      setUsers(usersData);
+      setTodos(todosData);
+      setSortedTodos(todosData);
+      setLoading(false);
+      setLoaded(true);
+      setErrorMessage('');
+      setGotError(false);
+    } catch (error) {
+      setGotError(true);
+      setErrorMessage(error.message);
+    }
   };
 
   const compareByTitle = (a: Todo, b: Todo) => (
