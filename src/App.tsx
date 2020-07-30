@@ -24,7 +24,7 @@ const App: FC<{}> = () => {
     return loadedData;
   };
 
-  const onLoading = async (): Promise<void> => {
+  const onLoading = async () => {
     setLoading(true);
 
     try {
@@ -69,47 +69,44 @@ const App: FC<{}> = () => {
     };
   };
 
-  const onSortByTitle = (): void => {
+  const onSortByTitle = () => {
     setSortedTodos([...todos].sort(compareByTitle));
   };
 
-  const onSortByComplete = (): void => {
+  const onSortByComplete = () => {
     setSortedTodos([...todos].sort(compareByCompleted));
   };
 
-  const onSortByUser = (): void => {
+  const onSortByUser = () => {
     setSortedTodos([...todos].sort(compareByUser(users)));
   };
 
   return (
     <>
       <h1>Dynamic list of TODOs</h1>
-      {
-        (!loaded)
-          ? (
-            <LoadingButtons
-              onLoading={onLoading}
-              loading={loading}
-              gotError={gotError}
-              errorMessage={errorMessage}
-            />
-          ) : (
-            <>
-              <Users
-                users={users}
-              />
-              <SortingButtons
-                onSortByTitle={onSortByTitle}
-                onSortByComplete={onSortByComplete}
-                onSortByUser={onSortByUser}
-                loading={loading}
-              />
-              <ListOfTodos
-                sortedTodos={sortedTodos}
-              />
-            </>
-          )
-      }
+      { !loaded ? (
+        <LoadingButtons
+          onLoading={onLoading}
+          loading={loading}
+          gotError={gotError}
+          errorMessage={errorMessage}
+        />
+      ) : (
+        <>
+          <Users
+            users={users}
+          />
+          <SortingButtons
+            onSortByTitle={onSortByTitle}
+            onSortByComplete={onSortByComplete}
+            onSortByUser={onSortByUser}
+            loading={loading}
+          />
+          <ListOfTodos
+            sortedTodos={sortedTodos}
+          />
+        </>
+      )}
     </>
   );
 };
