@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import './App.css';
 import { makeTodoList } from './utilities/prepareTodos';
-import { PreparedTodo } from './interfaces';
+import { PreparedTodo, SortCallback } from './interfaces';
 import { TodoList } from './components/TodoList/TodoList';
 import { Button } from './components/Button/Button';
+import { FilterButtons } from './components/FilterButtons/FilterButtons';
 
 const App: FC = () => {
   const [todoList, setTodoList] = useState<PreparedTodo[]>([]);
@@ -19,15 +20,19 @@ const App: FC = () => {
     });
   };
 
+  const sortTodo = (callback: SortCallback) => {
+    setTodoList(callback([...todoList]));
+  };
+
   return (
     <>
       <h1>Dynamic list of TODOs</h1>
       {
         isLoaded
-          ? null
+          ? <FilterButtons sortTodos={sortTodo} />
           : (
             <Button
-              isLoading={isLoading}
+              content={isLoading ? 'Loading...' : 'Load'}
               onClick={loadData}
             />
           )

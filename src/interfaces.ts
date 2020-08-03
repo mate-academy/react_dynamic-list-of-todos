@@ -34,3 +34,11 @@ export interface PreparedTodo {
   todo: Todo;
   user: User;
 }
+
+export type SortCallback = (todos: PreparedTodo[]) => PreparedTodo[];
+
+export interface SortButtons {
+  id: number;
+  title: string;
+  callback: SortCallback;
+}

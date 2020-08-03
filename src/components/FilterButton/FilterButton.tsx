@@ -5,9 +5,9 @@ interface Props {
   onClick: () => void;
 }
 
-export const Button: FC<Props> = ({ content, onClick }) => {
+export const FilterButton: FC<Props> = ({ content, onClick }) => {
   return (
-    <button type="button" onClick={onClick}>
+    <button type="button" onClick={() => onClick()}>
       {content}
     </button>
   );
