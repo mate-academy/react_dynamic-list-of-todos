@@ -29,7 +29,12 @@ const App: FC = () => {
       <h1>Dynamic list of TODOs</h1>
       {
         isLoaded
-          ? <FilterButtons sortTodos={sortTodo} />
+          ? (
+            <>
+              <FilterButtons sortTodos={sortTodo} />
+              <TodoList todos={todoList} />
+            </>
+          )
           : (
             <Button
               content={isLoading ? 'Loading...' : 'Load'}
@@ -37,12 +42,6 @@ const App: FC = () => {
             />
           )
       }
-      {
-        isLoaded
-          ? <TodoList todos={todoList} />
-          : null
-      }
-
     </>
   );
 };
