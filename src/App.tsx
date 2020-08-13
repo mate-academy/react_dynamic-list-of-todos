@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TodoList from './components/TodoList';
 import { Todo, User } from './interfaces';
 import './App.scss';
@@ -6,22 +6,28 @@ import './App.scss';
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [show, setShow] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    fetch('https://mate.academy/students-api/todos')
-      .then(response => response.json())
-      .then(response => {
-        setTodos(response.data);
-      });
-  }, []);
+  async function start() {
+    setLoading(true);
+    const load = await Promise.all([
+      fetch('https://mate.academy/students-api/todos')
+        .then(response => response.json())
+        .then(response => {
+          setTodos(response.data);
+        }),
+      fetch('https://mate.academy/students-api/users')
+        .then(response => response.json())
+        .then(response => {
+          setUsers(response.data);
+        }),
+    ]);
 
-  useEffect(() => {
-    fetch('https://mate.academy/students-api/users')
-      .then(response => response.json())
-      .then(response => {
-        setUsers(response.data);
-      });
-  }, []);
+    if (load) {
+      setShow(true);
+    }
+  }
 
   const onSortbyTitle = () => {
     const sorted = [...todos].sort((a: Todo, b: Todo) => (a.title).localeCompare(b.title));
@@ -69,12 +75,19 @@ const App: React.FC = () => {
       </header>
 
       <section
-        className={todos.length > 0 ? 'main' : 'main hide'}
+        className="main"
       >
-        <TodoList
-          todos={todos}
-          users={users}
-        />
+        {show && (
+          <TodoList
+            todos={todos}
+            users={users}
+          />
+        )}
+        {loading
+          && (<button type="button">Loading...</button>)}
+        {!show && !loading
+          && (<button type="button" onClick={start}>Load</button>)}
+
       </section>
 
       <footer className={todos.length > 0 ? 'footer' : 'footer hide'}>
