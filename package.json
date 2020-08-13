@@ -12,6 +12,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "sass-node": "^4.11.2",
     "typescript": "^3.7.5"
   },
   "devDependencies": {
