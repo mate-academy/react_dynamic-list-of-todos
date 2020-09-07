@@ -4,15 +4,13 @@
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
-Basing on [Static list of TODOs](https://github.com/mate-academy/react_static-list-of-todos)
-create the App downloading the [TODOs](https://mate.academy/students-api/todos)
-and [Users](https://mate.academy/students-api/users) from API (follow the links).
+You are given a basic markup for the App, TodosList and CurrentUser components and [the API](https://github.com/mate-academy/fe-students-api#mate-students-api).
 
-1. Initially the user sees a `Load` button.
-1. After a click disable the button, change its text to `Loading...` and download the data.
-1. Once the data has been loaded, hide the button and display the list of TODOs instead.
-1. Additionally, you should provide a capability of sorting the TODOs by:
-    - `todo.title`
-    - `todo.completed` (whether the item is completed or not)
-    - `user.name`
-1. There should not be extra requests to the server except the first one
+Add the data loading, so the App works as described below:
+
+1. Create a separate file `api.js` to put all the API call there.
+1. Todos are fetched on page load from [GET todos endpoint](https://mate-api.herokuapp.com/todos). (Use `componentDidMount`)
+1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
+1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate-api.herokuapp.com/users/1) (replace 1 with a given `userId`).
+1. If I select another user the details should be updated. (use `componentDidUpdate`).
+1. If I select the same user there should not be a request to the server.

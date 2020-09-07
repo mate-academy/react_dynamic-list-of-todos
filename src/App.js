@@ -1,8 +1,31 @@
 import React from 'react';
 import './App.scss';
+import { TodoList } from './components/TodoList';
+import { CurrentUser } from './components/CurrentUser';
 
-const App = () => (
-  <h1>Dynamic list of TODOs</h1>
-);
+class App extends React.Component {
+  state = {
+    todos: [],
+    selectedUserId: 0,
+  };
+
+  render() {
+    const { todos, selectedUserId } = this.state;
+
+    return (
+      <div className="App">
+        <div className="App__sidebar">
+          <TodoList todos={todos} selectUser={this.selectUser} />
+        </div>
+
+        <div className="App__content">
+          {selectedUserId ? (
+            <CurrentUser userId={selectedUserId} />
+          ) : 'No user selected'}
+        </div>
+      </div>
+    );
+  }
+}
 
 export default App;
