@@ -1,13 +1,19 @@
 import React from 'react';
 
-export const CurrentUser = () => (
+export const CurrentUser = ({ user, onClear }) => (
   <div className="CurrentUser">
-    <h2>Selected user: 2</h2>
-
+    <h2>Selected user: {user.id}</h2>
     <ul>
-      <li>Ervin Howell</li>
-      <li>Shanna@melissa.tv</li>
-      <li>010-692-6593 x09125</li>
+      <li>{user.name}</li>
+      <li>{user.email}</li>
+      <li>{user.phone}</li>
     </ul>
+    <button
+      type="button"
+      onClick={onClear}
+    >
+      Clear
+    </button>
   </div>
-);
+)
+
