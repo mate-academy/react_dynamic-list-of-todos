@@ -1,13 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export const CurrentUser = () => (
+export const CurrentUser = ({ resetUser, id, name, email, phone }) => (
   <div className="CurrentUser">
-    <h2>Selected user: 2</h2>
-
+    <h2>
+      Selected user:
+      {id}
+    </h2>
     <ul>
-      <li>Ervin Howell</li>
-      <li>Shanna@melissa.tv</li>
-      <li>010-692-6593 x09125</li>
+      <li>{name}</li>
+      <li>{email}</li>
+      <li>{phone}</li>
     </ul>
+    <button type="button" onClick={resetUser}>Clear</button>
   </div>
 );
+
+CurrentUser.propTypes = {
+  resetUser: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
+};
