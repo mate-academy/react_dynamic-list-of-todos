@@ -1,13 +1,12 @@
 import React from 'react';
+import './CurrentUser.scss';
 
 export const CurrentUser = () => (
   <div className="CurrentUser">
-    <h2>Selected user: 2</h2>
+    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
 
-    <ul>
-      <li>Ervin Howell</li>
-      <li>Shanna@melissa.tv</li>
-      <li>010-692-6593 x09125</li>
-    </ul>
+    <h3 className="CurrentUser__name">Ervin Howell</h3>
+    <p className="CurrentUser__email">Shanna@melissa.tv</p>
+    <p className="CurrentUser__phone">010-692-6593 x09125</p>
   </div>
 );

@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.scss';
+import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -19,9 +20,11 @@ class App extends React.Component {
         </div>
 
         <div className="App__content">
-          {selectedUserId ? (
-            <CurrentUser userId={selectedUserId} />
-          ) : 'No user selected'}
+          <div className="App__content-container">
+            {selectedUserId ? (
+              <CurrentUser userId={selectedUserId} />
+            ) : 'No user selected'}
+          </div>
         </div>
       </div>
     );
