@@ -7,7 +7,7 @@ export const TodoList = ({ todos, changeUser, changeInput, filterTodos, check })
       type="text"
       placeholder="Type search todo"
       onChange={(event) => {
-        changeInput(event.target.value)
+        changeInput(event.target.value);
       }}
     />
     <select
@@ -32,9 +32,12 @@ export const TodoList = ({ todos, changeUser, changeInput, filterTodos, check })
     </select>
     <h2>Todos:</h2>
     <ul className="TodoList__list">
-      {todos.map(todo=>(
+      {todos.map(todo => (
         <li className="TodoList__item">
-          <p>ID : {todo.id}</p>
+          <p>
+            ID :
+            {todo.id}
+          </p>
           <label>
             <input
               type="checkbox"
@@ -48,9 +51,12 @@ export const TodoList = ({ todos, changeUser, changeInput, filterTodos, check })
           </label>
           <button
             type="button"
-            onClick={()=>{changeUser(todo.userId)}}
+            onClick={() => {
+              changeUser(todo.userId);
+            }}
           >
-            User&nbsp;#{todo.userId}
+            User&nbsp;#
+            {todo.userId}
           </button>
         </li>
       ))}

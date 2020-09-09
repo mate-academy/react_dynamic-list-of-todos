@@ -5,7 +5,7 @@ export const getTodos = () => (
     .then(response => response.json())
 );
 
-export const getUser = (userId) => (
+export const getUser = userId => (
   fetch(`https://mate-api.herokuapp.com/users/${userId}`)
     .then(response => response.json())
 );
