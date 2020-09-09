@@ -10,6 +10,7 @@ class App extends React.Component {
     saveId: 0,
     selectedUserId: 0,
     todoStart: '',
+    id: 0,
   };
 
   resetUser = () => {
@@ -28,7 +29,12 @@ class App extends React.Component {
   }
 
   selectUser = (userId) => {
-    if (userId) {
+    if (!userId) {
+      this.setState({
+        saveId: 0,
+        selectedUserId: 0,
+      });
+    } else {
       this.setState(state => ({
         saveId: state.selectedUserId,
         selectedUserId: userId,
@@ -41,13 +47,15 @@ class App extends React.Component {
       const getUserProps = async() => {
         const items = await getUser(this.state.selectedUserId);
 
-        this.setState(state => ({
-          id: items.data.id,
-          name: items.data.name,
-          email: items.data.email,
-          phone: items.data.phone,
-          saveId: state.selectedUserId,
-        }));
+        if (items.data) {
+          this.setState(state => ({
+            id: items.data.id,
+            name: items.data.name,
+            email: (items.data.email) ? items.data.email : 'no email',
+            phone: (items.data.phone) ? items.data.phone : 'no phone',
+            saveId: state.selectedUserId,
+          }));
+        }
       };
 
       getUserProps();
