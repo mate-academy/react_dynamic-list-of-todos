@@ -41,26 +41,6 @@ class App extends React.Component {
     }
   }
 
-  // componentDidUpdate = async() => {
-  //   const { selectedUserId, selectedUser } = this.state;
-
-  //   if (selectedUserId !== 0
-  //     && selectedUserId
-  //     && selectedUserId !== selectedUser.id) {
-  //     const user = await getUser();
-
-  //     if (user.data === null) {
-  //       return [];
-  //     }
-
-  //     return this.setState({
-  //       selectedUser: user.data,
-  //     });
-  //     // getUser(selectedUserId)
-  //     //   .then(user => this.setState({ selectedUser: user.data }));
-  //   }
-  // }
-
   render() {
     const { todos, selectedUserId, selectedUser } = this.state;
 
