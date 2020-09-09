@@ -11,6 +11,7 @@ class App extends React.Component {
     selectedUserId: 0,
     todoStart: '',
     id: 0,
+    noUserError: false,
   };
 
   resetUser = () => {
@@ -33,11 +34,13 @@ class App extends React.Component {
       this.setState({
         saveId: 0,
         selectedUserId: 0,
+        noUserError: true,
       });
     } else {
       this.setState(state => ({
         saveId: state.selectedUserId,
         selectedUserId: userId,
+        noUserError: false,
       }));
     }
   }
@@ -47,7 +50,13 @@ class App extends React.Component {
       const getUserProps = async() => {
         const items = await getUser(this.state.selectedUserId);
 
-        if (items.data) {
+        if (!items.data) {
+          this.setState({
+            saveId: 0,
+            selectedUserId: 0,
+            noUserError: true,
+          });
+        } else {
           this.setState(state => ({
             id: items.data.id,
             name: items.data.name,
@@ -99,6 +108,7 @@ class App extends React.Component {
       phone,
       todoStart,
       completed,
+      noUserError,
     } = this.state;
 
     return (
@@ -115,7 +125,7 @@ class App extends React.Component {
         </div>
 
         <div className="App__content">
-          {selectedUserId && name ? (
+          {(selectedUserId && name) || noUserError ? (
             <CurrentUser
               userId={selectedUserId}
               resetUser={this.resetUser}
@@ -123,6 +133,7 @@ class App extends React.Component {
               name={name}
               email={email}
               phone={phone}
+              noUserError={noUserError}
             />
           ) : 'No user selected'}
         </div>
