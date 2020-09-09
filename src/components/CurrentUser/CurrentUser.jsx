@@ -8,7 +8,7 @@ export const CurrentUser = ({ resetUser,
   noUserError }) => (
   <div className="CurrentUser">
       {noUserError
-      ? <p>No info about this user</p>
+      ? <span>No info about this user</span>
       : (
         <>
           <h2>
@@ -26,12 +26,17 @@ export const CurrentUser = ({ resetUser,
     }
   </div>
 );
-
+CurrentUser.defaultProps = {
+  id: '',
+  name: '',
+  email: '',
+  phone: '',
+}
 CurrentUser.propTypes = {
   resetUser: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  email: PropTypes.string,
+  phone: PropTypes.string,
   noUserError: PropTypes.bool.isRequired,
 };
