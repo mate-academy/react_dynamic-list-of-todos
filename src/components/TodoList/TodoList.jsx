@@ -23,27 +23,18 @@ export class TodoList extends React.Component {
           .includes(searchTodoByTitle.toLowerCase());
       }
 
-      if (searchTodoByCompleteness === 'active') {
-        return !todo.completed;
-      }
-
-      if (searchTodoByCompleteness === 'completed') {
-        return todo.completed;
-      }
-
       return null;
     });
 
     sortedTodos = sortedTodos.filter((todo) => {
-      if (searchTodoByCompleteness === 'active') {
-        return !todo.completed;
+      switch (searchTodoByCompleteness) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return todo;
       }
-
-      if (searchTodoByCompleteness === 'completed') {
-        return todo.completed;
-      }
-
-      return todo;
     });
 
     return (

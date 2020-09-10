@@ -13,9 +13,7 @@ export const CurrentUser = ({
   <div className="CurrentUser">
     <h2 className="CurrentUser__title">
       <span>
-        Selected user:
-        { }
-        {id}
+        {`Selected user: ${id}`}
       </span>
     </h2>
 

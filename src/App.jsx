@@ -27,7 +27,7 @@ class App extends React.Component {
   componentDidMount = async() => {
     const todos = await getTodos();
 
-    this.setState({ todos: todos.data });
+    this.setState({ todos });
   };
 
   componentDidUpdate = () => {
@@ -37,7 +37,7 @@ class App extends React.Component {
       && selectedUserId
       && selectedUserId !== selectedUser.id) {
       getUser(selectedUserId)
-        .then(user => this.setState({ selectedUser: user.data }));
+        .then(user => this.setState({ selectedUser: user }));
     }
   }
 

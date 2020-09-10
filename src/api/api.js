@@ -1,9 +1,10 @@
 const API_TODOS = `https://mate-api.herokuapp.com/todos`;
-// const USERS = `https://mate-api.herokuapp.com/users/`;
+const USERS = `https://mate-api.herokuapp.com/users/`;
 
 export const getTodos = () => fetch(API_TODOS)
-  .then(response => response.json());
+  .then(response => response.json())
+  .then(result => result.data);
 
-// eslint-disable-next-line max-len
-export const getUser = userId => fetch(`https://mate-api.herokuapp.com/users/${userId}`)
-  .then(response => response.json());
+export const getUser = userId => fetch(`${USERS}${userId}`)
+  .then(response => response.json())
+  .then(result => result.data);
