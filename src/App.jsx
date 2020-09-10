@@ -41,7 +41,7 @@ class App extends React.Component {
     const { todos, selectedUserId, query, filterOfTodos } = this.state;
     const queryToFind = query.toLowerCase();
     const todosToShow = todos.filter(
-      todo => todo.title
+      todo => todo.title && todo.userId
       && todo.title.toLowerCase().includes(queryToFind),
     );
 
