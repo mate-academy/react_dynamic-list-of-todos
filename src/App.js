@@ -2,47 +2,23 @@ import React from 'react';
 import './App.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUsers } from './api/api';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
-    todos: [],
     todosFromServer: [],
+    todos: [],
     selectedUserId: 0,
-    person: [],
   };
 
   componentDidMount() {
     getTodos()
-      .then((result) => {
+      .then((todo) => {
         this.setState({
-          todos: result.filter(elem => elem.userId),
-          todosFromServer: result.filter(elem => elem.userId),
+          todosFromServer: todo.filter(elem => elem.title),
+          todos: todo.filter(elem => elem.title),
         });
       });
-  }
-
-  componentDidUpdate() {
-    if (this.state.selectedUserId
-      && this.state.selectedUserId !== this.state.person.id) {
-      getUsers(this.state.selectedUserId)
-        .then((person) => {
-          if (person !== null) {
-            this.setState({
-              person,
-            });
-          } else {
-            this.setState(state => ({
-              person: {
-                id: state.selectedUserId,
-                name: 'No name',
-                email: 'No email',
-                phone: 'No phone',
-              },
-            }));
-          }
-        });
-    }
   }
 
   selectUser = (userId) => {
@@ -54,7 +30,6 @@ class App extends React.Component {
   clearUser = () => {
     this.setState({
       selectedUserId: 0,
-      person: [],
     });
   }
 
@@ -88,7 +63,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, person } = this.state;
+    const { todos, selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -104,7 +79,7 @@ class App extends React.Component {
         <div className="App__content">
           {selectedUserId ? (
             <CurrentUser
-              {...person}
+              userId={selectedUserId}
               clearUser={this.clearUser}
             />
           ) : 'No user selected'}

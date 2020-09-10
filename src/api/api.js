@@ -1,14 +1,14 @@
 const TODO_API = 'https://mate-api.herokuapp.com/todos';
 const USERS_API = 'https://mate-api.herokuapp.com/users';
 
-export const getTodos = async() => {
-  const todos = await (await fetch(TODO_API)).json();
+export const getTodos = () => (
+  fetch(TODO_API)
+    .then(response => response.json())
+    .then(result => result.data)
+);
 
-  return todos.data;
-};
-
-export const getUsers = async(userId) => {
-  const users = await (await fetch(`${USERS_API}/${userId}`)).json();
-
-  return users.data;
-};
+export const getUser = userId => (
+  fetch(`${USERS_API}/${userId}`)
+    .then(response => response.json())
+    .then(result => result.data)
+);

@@ -1,35 +1,55 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getUser } from '../../api/api';
 
-export const CurrentUser = ({ id, name, email, phone, clearUser }) => (
-  <div className="CurrentUser">
-    <h2>{`Selected user: ${id}`}</h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: {},
+  }
 
-    <div>
-      <p>{name}</p>
-      <p>{email}</p>
-      <p>{phone}</p>
-      <button
-        type="button"
-        onClick={() => clearUser()}
-      >
-        Clear
-      </button>
-    </div>
-  </div>
-);
+  componentDidMount() {
+    getUser(this.props.userId)
+      .then(user => this.setState({ user }));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId === this.props.userId) {
+      return;
+    }
+
+    getUser(this.props.userId)
+      .then((user) => {
+        if (user) {
+          this.setState({ user });
+        }
+      });
+  }
+
+  render() {
+    const { user } = this.state;
+    const { clearUser } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        <h2>{`Selected user: ${user.id}`}</h2>
+
+        <div>
+          <p>{user.name}</p>
+          <p>{user.email}</p>
+          <p>{user.phone}</p>
+          <button
+            type="button"
+            onClick={clearUser}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
 
 CurrentUser.propTypes = {
-  id: PropTypes.number,
-  name: PropTypes.string,
-  email: PropTypes.string,
-  phone: PropTypes.string,
+  userId: PropTypes.number.isRequired,
   clearUser: PropTypes.func.isRequired,
-};
-
-CurrentUser.defaultProps = {
-  id: 0,
-  name: '',
-  email: '',
-  phone: '',
 };
