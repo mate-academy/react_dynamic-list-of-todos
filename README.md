@@ -4,7 +4,7 @@
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
-You are given a basic markup for the App, TodosList and CurrentUser components and [the API](https://github.com/mate-academy/fe-students-api#mate-students-api).
+You are given a basic markup for the App, TodosList and CurrentUser components and [the API](https://mate-academy.github.io/fe-students-api/).
 
 Add the data loading, so the App works as described below:
 
