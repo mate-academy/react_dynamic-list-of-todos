@@ -91,4 +91,22 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__search {
+    width: 60%;
+    margin-right: 10px;
+    height: 20px;
+    border-radius: 15px;
+    outline: none;
+    border: 2px solid #4D457A;
+    padding-left: 10px;
+  }
+
+  &__select-visible {
+    cursor: pointer;
+    outline: none;
+    width: 25%;
+    border-radius: 15px;
+    border: 2px solid #4D457A;
+  }
 }

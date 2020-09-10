@@ -1,6 +1,6 @@
 # React dynamic list of TODOs
 - Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/)
+  [DEMO LINK](https://tykhan.github.io/react_dynamic-list-of-todos/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -17,4 +17,4 @@ Add the data loading, so the App works as described below:
 1. Add a button `Clear` into the `CurrentUser` to clear the selectedUser in the `App`
 1. Add an `<input>` to the `TodoList` to filter the todos by title
 1. Add a `<select>` to the `TodoList` to show `all`, `active`(not completed) or `completed` todos.
-1. (*) Add `Randomize` button to the `TodoList` to show the todos in a random order.
+1. (*) Add `Randomize` button to the `TodoList` to show the todos in a random order.]
