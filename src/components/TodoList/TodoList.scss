@@ -28,4 +28,13 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__input {
+    width: 50%;
+  }
 }

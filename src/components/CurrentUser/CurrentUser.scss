@@ -27,3 +27,15 @@
     margin: 20px auto 0;
   }
 }
+
+.button-clear {
+  margin-left: 15px;
+  padding: 5px;
+  background-color: white;
+  color: #4d457b;
+
+    &:hover {
+      background-color: #4d457b;
+      color: white;
+    }
+}
