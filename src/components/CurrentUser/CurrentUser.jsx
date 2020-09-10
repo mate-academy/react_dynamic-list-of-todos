@@ -5,17 +5,17 @@ export const CurrentUser = ({ id, name, email, phone, clearUser }) => (
   <div className="CurrentUser">
     <h2>{`Selected user: ${id}`}</h2>
 
-    <ul>
-      <li>{name}</li>
-      <li>{email}</li>
-      <li>{phone}</li>
+    <div>
+      <p>{name}</p>
+      <p>{email}</p>
+      <p>{phone}</p>
       <button
         type="button"
         onClick={() => clearUser()}
       >
         Clear
       </button>
-    </ul>
+    </div>
   </div>
 );
 

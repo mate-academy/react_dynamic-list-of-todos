@@ -16,8 +16,8 @@ class App extends React.Component {
     getTodos()
       .then((result) => {
         this.setState({
-          todos: result.filter(elem => elem.title !== null),
-          todosFromServer: result.filter(elem => elem.title !== null),
+          todos: result.filter(elem => elem.userId),
+          todosFromServer: result.filter(elem => elem.userId),
         });
       });
   }
@@ -27,10 +27,21 @@ class App extends React.Component {
       && this.state.selectedUserId
       && this.state.selectedUserId !== this.state.person.id) {
       getUsers(this.state.selectedUserId)
-        .then((user) => {
-          this.setState({
-            person: user,
-          });
+        .then((person) => {
+          if (person !== null) {
+            this.setState({
+              person,
+            });
+          } else {
+            this.setState(state => ({
+              person: {
+                id: state.selectedUserId,
+                name: 'No name',
+                email: 'No email',
+                phone: 'No phone',
+              },
+            }));
+          }
         });
     }
   }
