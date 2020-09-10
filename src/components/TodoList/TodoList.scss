@@ -28,4 +28,23 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__search,
+  &__select {
+    height: 40px;
+    padding-left: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 2px rgba(221, 221, 221, 0.5);
+  }
+
+  &__search {
+    box-sizing: border-box;
+    width: 250px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+
+  &__select {
+    width: 150px;
+  }
 }

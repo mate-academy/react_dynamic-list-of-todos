@@ -25,5 +25,19 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    width: 100px;
+    height: 30px;
+    font-weight: 600;
+    background-color: #fff;
+    color: #4d457b;
+    border: 3px solid #4d457b;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+
+    &:hover {
+      background-color: #4d457b;
+      color: #fff;
+    }
   }
 }
