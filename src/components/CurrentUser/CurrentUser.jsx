@@ -1,4 +1,5 @@
 import React from 'react';
+import './CurrentUser.scss';
 import PropTypes from 'prop-types';
 
 export const CurrentUser = ({ user, handleClearButton }) => (

@@ -82,10 +82,6 @@ class App extends React.Component {
         };
       }),
     }));
-
-    this.setState(state => ({
-      todosFromServer: state.todos,
-    }));
   }
 
   render() {
