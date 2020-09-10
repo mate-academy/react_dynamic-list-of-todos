@@ -3,106 +3,71 @@ import './TodoList.scss';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-export class TodoList extends React.Component {
-  state = {
-    searchTodoByTitle: '',
-    searchTodoByCompleteness: 'all',
-  };
+export const TodoList = ({
+  todos,
+  selectedUser,
+  selectedUserId,
+  onTitle,
+  onSelect,
+}) => (
+  <div className="TodoList">
+    <h2>Todos:</h2>
 
-  render() {
-    const { todos, onSelectUser, selectedUserId } = this.props;
-    const { searchTodoByTitle, searchTodoByCompleteness } = this.state;
+    <section className="TodoList__filters">
+      <input
+        className="TodoList__find"
+        type="text"
+        name="search"
+        autoComplete="off"
+        onChange={event => onTitle(event.target.value)}
+      />
 
-    let sortedTodos = todos.filter((todo) => {
-      if (!searchTodoByTitle) {
-        return todo;
-      }
+      <select
+        className="TodoList__select"
+        onChange={event => onSelect(event.target.value)}
+      >
+        <option value="all">All</option>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+      </select>
+    </section>
 
-      if (todo.title !== null) {
-        return todo.title.toLowerCase()
-          .includes(searchTodoByTitle.toLowerCase());
-      }
-
-      return null;
-    });
-
-    sortedTodos = sortedTodos.filter((todo) => {
-      switch (searchTodoByCompleteness) {
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return todo;
-      }
-    });
-
-    return (
-      <div className="TodoList">
-        <h2>Todos:</h2>
-
-        <section className="TodoList__filters">
-          <input
-            className="TodoList__find"
-            type="text"
-            name="search"
-            autoComplete="off"
-            onChange={event => this.setState({
-              searchTodoByTitle: event.target.value,
-            })}
-          />
-
-          <select
-            className="TodoList__select"
-            value={searchTodoByCompleteness}
-            onChange={event => this.setState({
-              searchTodoByCompleteness: event.target.value,
+    <div className="TodoList__list-container">
+      <ul className="TodoList__list">
+        {todos.map(todo => (
+          <li
+            key={todo.id}
+            className={cn('TodoList__item', {
+              'TodoList__item--unchecked': !todo.completed,
+              'TodoList__item--checked': todo.completed,
             })}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </select>
-        </section>
+            <label>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                readOnly
+              />
+              <p>{todo.title}</p>
+            </label>
 
-        <div className="TodoList__list-container">
-          <ul className="TodoList__list">
-            {sortedTodos.map(todo => (
-              <li
-                key={todo.id}
-                className={cn('TodoList__item', {
-                  'TodoList__item--unchecked': !todo.completed,
-                  'TodoList__item--checked': todo.completed,
-                })}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    readOnly
-                  />
-                  <p>{todo.title}</p>
-                </label>
-
-                <button
-                  className={cn('TodoList__user-button', 'button', {
-                    'TodoList__user-button--selected':
-                    selectedUserId === todo.userId,
-                  })}
-                  type="button"
-                  onClick={() => onSelectUser(todo.userId)}
-                >
-                  User&nbsp;
-                  {todo.userId}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-}
+            <button
+              className={cn('TodoList__user-button', 'button', {
+                'TodoList__user-button--selected':
+                selectedUserId === todo.userId,
+              })}
+              type="button"
+              onClick={() => selectedUser(todo.userId)}
+            >
+              User&nbsp;
+              {todo.userId}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
@@ -113,8 +78,10 @@ TodoList.propTypes = {
       completed: PropTypes.bool,
     }),
   ),
-  onSelectUser: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number,
+  selectedUser: PropTypes.func.isRequired,
+  onTitle: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {
