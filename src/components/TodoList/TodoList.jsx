@@ -80,7 +80,7 @@ export const TodoList = ({
                   getUserId(todo.userId);
                 }}
               >
-                {`User# ${todo.id}`}
+                {`User# ${todo.userId}`}
               </button>
             </li>
           ))}
