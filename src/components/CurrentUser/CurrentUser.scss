@@ -25,5 +25,16 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #4d457b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
   }
 }

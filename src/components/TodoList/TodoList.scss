@@ -28,4 +28,32 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    height: 38px;
+    padding-left: 5px;
+
+    &::placeholder {
+      font-size: 1rem;
+      color: black;
+    }
+  }
+
+  &__select {
+    height: 42px;
+    margin-left: 20px;
+    font-size: 1rem;
+  }
+
+  &__input,
+  &__select {
+    width: 250px;
+    border: 2px solid #4d457b;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
 }
