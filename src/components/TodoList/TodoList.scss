@@ -1,6 +1,28 @@
 .TodoList {
   width: 100%;
 
+  &__filters {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__find,
+  &__select {
+    padding: 10px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__find {
+    flex: 3 1 auto;
+  }
+
+  &__select {
+    flex: 2 1 auto;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
