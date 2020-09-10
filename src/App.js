@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -9,12 +9,11 @@ class App extends React.Component {
     todosFromServer: [],
     todos: [],
     selectedUserId: 0,
-    selectedUser: {},
   };
 
   componentDidMount() {
     getTodos().then((list) => {
-      const initialTodos = list.data.filter(todo => todo.title);
+      const initialTodos = list.filter(todo => todo.title);
 
       this.setState({
         todosFromServer: initialTodos,
@@ -28,15 +27,14 @@ class App extends React.Component {
       return;
     }
 
-    getUser(userId).then(user => this.setState({
-      selectedUser: user.data,
+    this.setState({
       selectedUserId: userId,
-    }));
+    });
   }
 
   clearUser = () => {
     this.setState({
-      selectedUserId: 0, selectedUser: {},
+      selectedUserId: 0,
     });
   }
 
@@ -85,7 +83,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, selectedUser } = this.state;
+    const { todos, selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -102,7 +100,7 @@ class App extends React.Component {
         <div className="App__content">
           {selectedUserId ? (
             <CurrentUser
-              user={selectedUser}
+              userId={selectedUserId}
               handleClearButton={this.clearUser}
             />
           ) : 'No user selected'}
