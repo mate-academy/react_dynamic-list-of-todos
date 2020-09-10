@@ -17,7 +17,7 @@ class App extends React.Component {
     const todos = await getTodos();
 
     this.setState({
-      todos: todos.data,
+      todos: todos.data.filter(todo => todo.title && todo.id && todo.userId),
     });
   }
 
