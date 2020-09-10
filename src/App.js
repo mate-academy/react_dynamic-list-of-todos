@@ -23,8 +23,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.selectedUserId !== 0
-      && this.state.selectedUserId
+    if (this.state.selectedUserId
       && this.state.selectedUserId !== this.state.person.id) {
       getUsers(this.state.selectedUserId)
         .then((person) => {
