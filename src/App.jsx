@@ -13,12 +13,10 @@ class App extends React.Component {
     filterOfTodos: 'all',
   };
 
-  componentDidMount() {
-    (async() => {
-      const allTodos = await getAllTodos();
+  componentDidMount = async() => {
+    const allTodos = await getAllTodos();
 
-      this.setState({ todos: allTodos });
-    })();
+    this.setState({ todos: allTodos });
   }
 
   selectUser = (userId) => {
