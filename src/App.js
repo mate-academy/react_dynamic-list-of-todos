@@ -14,9 +14,7 @@ class App extends React.Component {
   };
 
   resetUser = () => {
-    this.setState({
-      selectedUserId: 0,
-    });
+    this.setState({ selectedUserId: 0 });
   }
 
   componentDidMount = () => {
@@ -27,9 +25,7 @@ class App extends React.Component {
 
   selectUser = (userId) => {
     if (!userId) {
-      this.setState({
-        noUserError: true,
-      });
+      this.setState({ noUserError: true });
     } else {
       this.setState({
         selectedUserId: userId,
@@ -44,9 +40,7 @@ class App extends React.Component {
         const items = await getUser(this.state.selectedUserId);
 
         if (!items.data) {
-          this.setState({
-            noUserError: true,
-          });
+          this.setState({ noUserError: true });
         } else {
           this.setState({
             id: items.data.id,
@@ -62,29 +56,21 @@ class App extends React.Component {
   }
 
   filterTodosByTitle = (value) => {
-    this.setState({
-      todoStart: value,
-    });
+    this.setState({ todoStart: value });
   }
 
   filterTodosByCompleteness = (value) => {
     switch (value) {
       case 'Active':
-        this.setState({
-          completed: false,
-        });
+        this.setState({ completed: false });
         break;
 
       case 'Completed':
-        this.setState({
-          completed: true,
-        });
+        this.setState({ completed: true });
         break;
 
       default:
-        this.setState({
-          completed: null,
-        });
+        this.setState({ completed: null });
     }
   }
 

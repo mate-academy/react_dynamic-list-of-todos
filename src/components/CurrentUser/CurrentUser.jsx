@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const CurrentUser = ({ resetUser,
-  id, name,
+export const CurrentUser = ({ 
+  resetUser,
+  id,
+  name,
   email,
   phone,
   noUserError }) => (
