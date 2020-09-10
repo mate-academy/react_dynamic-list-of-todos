@@ -35,7 +35,8 @@ class App extends React.Component {
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.selectedUserId !== this.state.selectedUserId) {
+    if (prevState.selectedUserId !== this.state.selectedUserId
+        && this.state.selectedUserId) {
       const getUserProps = async() => {
         const items = await getUser(this.state.selectedUserId);
 
