@@ -1,12 +1,45 @@
 .TodoList {
   width: 100%;
 
+  &__lable {
+    padding: 10px;
+  }
+
+  &__title {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__head {
+    margin: 5px;
+  }
+
+  &__text {
+    margin: 5px;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #fff;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
+
+  &__button {
+    height: 40px;
+    width: 80px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   &__user-button {
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 5px;
     font-weight: bold;
-  
+
     &:hover {
       background-color: lightblue;
     }
@@ -18,9 +51,14 @@
   }
 
   &__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px dashed lightgray;
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-bottom: 3px dashed lightgray;
+
+    &--completed {
+      background-color: rgb(214, 255, 168);
+    }
   }
 }

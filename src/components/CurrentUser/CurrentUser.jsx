@@ -1,13 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export const CurrentUser = () => (
+export const CurrentUser = ({ users, userId, clearInfo }) => (
   <div className="CurrentUser">
-    <h2>Selected user: 2</h2>
+    <h2>
+      Selected user:
+      {userId}
+    </h2>
 
     <ul>
-      <li>Ervin Howell</li>
-      <li>Shanna@melissa.tv</li>
-      <li>010-692-6593 x09125</li>
+      <li>{users[userId - 1].name}</li>
+      <li>{users[userId - 1].email}</li>
+      <li>{users[userId - 1].phone}</li>
     </ul>
+
+    <button
+      type="button"
+      onClick={clearInfo}
+    >
+      Clear
+    </button>
   </div>
 );
+
+CurrentUser.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  userId: PropTypes.string.isRequired,
+  clearInfo: PropTypes.func.isRequired,
+};
