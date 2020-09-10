@@ -1,13 +1,55 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { getUser } from '../api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2>Selected user: 2</h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: '',
+  }
 
-    <ul>
-      <li>Ervin Howell</li>
-      <li>Shanna@melissa.tv</li>
-      <li>010-692-6593 x09125</li>
-    </ul>
-  </div>
-);
+  componentDidMount() {
+    const { userId } = this.props;
+
+    getUser(userId)
+      .then(user => this.setState({ user }));
+  }
+
+  componentDidUpdate() {
+    const { userId } = this.props;
+
+    if (this.state.user.id === userId) {
+      return;
+    }
+
+    getUser(userId)
+      .then(user => this.setState({ user }));
+  }
+
+  render() {
+    const { userId, clearUser } = this.props;
+    const { user } = this.state;
+
+    return (
+      <div className="CurrentUser">
+        <h2>{`Selected user: ${userId}`}</h2>
+
+        <ul>
+          <li>{user.name}</li>
+          <li>{user.email}</li>
+          <li>{user.phone}</li>
+        </ul>
+        <button
+          type="button"
+          onClick={() => clearUser()}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  clearUser: PropTypes.func.isRequired,
+};
