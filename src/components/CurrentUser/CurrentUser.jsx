@@ -24,14 +24,14 @@ export const CurrentUser = ({ resetUser,
         </>
       )
     }
-  </div>
+    </div>
 );
 CurrentUser.defaultProps = {
   id: '',
   name: '',
   email: '',
   phone: '',
-}
+};
 CurrentUser.propTypes = {
   resetUser: PropTypes.func.isRequired,
   id: PropTypes.number,

@@ -7,7 +7,6 @@ import { getAll, getUser } from './api';
 class App extends React.Component {
   state = {
     todos: [],
-    saveId: 0,
     selectedUserId: 0,
     todoStart: '',
     id: 0,
@@ -17,53 +16,44 @@ class App extends React.Component {
   resetUser = () => {
     this.setState({
       selectedUserId: 0,
-      saveId: 0,
     });
   }
 
   componentDidMount = () => {
     getAll().then(todo => (
-      this.setState(
-        { todos: todo.data },
-      )
+      this.setState({ todos: todo.data })
     ));
   }
 
   selectUser = (userId) => {
     if (!userId) {
       this.setState({
-        saveId: 0,
-        selectedUserId: 0,
         noUserError: true,
       });
     } else {
-      this.setState(state => ({
-        saveId: state.selectedUserId,
+      this.setState({
         selectedUserId: userId,
         noUserError: false,
-      }));
+      });
     }
   }
 
-  componentDidUpdate = () => {
-    if (this.state.saveId !== this.state.selectedUserId) {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.selectedUserId !== this.state.selectedUserId) {
       const getUserProps = async() => {
         const items = await getUser(this.state.selectedUserId);
 
         if (!items.data) {
           this.setState({
-            saveId: 0,
-            selectedUserId: 0,
             noUserError: true,
           });
         } else {
-          this.setState(state => ({
+          this.setState({
             id: items.data.id,
             name: items.data.name,
             email: (items.data.email) ? items.data.email : 'no email',
             phone: (items.data.phone) ? items.data.phone : 'no phone',
-            saveId: state.selectedUserId,
-          }));
+          });
         }
       };
 
