@@ -17,18 +17,30 @@ class App extends React.Component {
     getTodos()
       .then(todos => (
         this.setState({
-          todos: todos.data,
-          preparedTodos: todos.data,
+          todos: todos.data
+            .filter(todo => todo.userId),
+          preparedTodos: todos.data
+            .filter(todo => todo.userId),
         })
       ));
   }
 
   componentDidUpdate = () => {
     if (this.state.selectedUserId !== 0
-      && this.state.selectedUserId !== this.state.user.id) {
+      && this.state.selectedUserId !== this.state.user.id
+      && this.state.selectedUserId) {
       getUser(this.state.selectedUserId)
         .then((user) => {
-          this.setState({ user: user.data });
+          if (user.data !== null) {
+            this.setState({ user: user.data });
+          } else {
+            this.setState(state => ({ user: {
+              id: state.selectedUserId,
+              name: 'No name',
+              email: 'No email',
+              phone: 'No phone',
+            } }));
+          }
         });
     }
   }
@@ -79,16 +91,15 @@ class App extends React.Component {
             selectUser={this.selectUser}
             filterByTitle={this.filterByTitle}
             filterByCompleted={this.filterByCompleted}
-            onComplete={this.onComplete}
           />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
+            {selectedUserId && user ? (
               <CurrentUser
                 onClear={this.onClear}
-                user={user}
+                {...user}
               />
             ) : 'No user selected'}
           </div>

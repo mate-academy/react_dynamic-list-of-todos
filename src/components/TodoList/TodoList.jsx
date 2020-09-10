@@ -28,36 +28,37 @@ export const TodoList = ({
         </option>
       </select>
       <ul className="TodoList__list">
-        {todos.map(todo => (
-          <li
-            className={todo.completed
-              ? 'TodoList__item TodoList__item--checked'
-              : 'TodoList__item TodoList__item--unchecked'
-            }
-            key={todo}
-          >
-            <label>
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                readOnly
-              />
-              <p>{todo.title}</p>
-            </label>
-
-            <button
-              className="
-                TodoList__user-button
-                button
-              "
-              type="button"
-              onClick={() => selectUser(todo.userId)}
+        {todos
+          .map(todo => (
+            <li
+              className={todo.completed
+                ? 'TodoList__item TodoList__item--checked'
+                : 'TodoList__item TodoList__item--unchecked'
+              }
+              key={todo.id}
             >
-              User&nbsp;#
-              {todo.userId}
-            </button>
-          </li>
-        ))}
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className="
+                  TodoList__user-button
+                  button
+                "
+                type="button"
+                onClick={() => selectUser(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   </div>

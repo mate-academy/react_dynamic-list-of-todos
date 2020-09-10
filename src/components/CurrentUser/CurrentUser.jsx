@@ -2,18 +2,18 @@ import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
 
-export const CurrentUser = ({ user, onClear }) => (
+export const CurrentUser = ({ id, name, email, phone, onClear }) => (
   <div className="CurrentUser">
     <h2 className="CurrentUser__title">
       <span>
         Selected user:
-        {user.id}
+        {id}
       </span>
     </h2>
 
-    <h3 className="CurrentUser__name">{user.name}</h3>
-    <p className="CurrentUser__email">{user.email}</p>
-    <p className="CurrentUser__phone">{user.phone}</p>
+    <h3 className="CurrentUser__name">{name}</h3>
+    <p className="CurrentUser__email">{email}</p>
+    <p className="CurrentUser__phone">{phone}</p>
     <button
       type="button"
       onClick={onClear}
@@ -24,11 +24,16 @@ export const CurrentUser = ({ user, onClear }) => (
 );
 
 CurrentUser.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-  }).isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  email: PropTypes.string,
+  phone: PropTypes.string,
   onClear: PropTypes.func.isRequired,
+};
+
+CurrentUser.defaultProps = {
+  id: 0,
+  name: '',
+  email: '',
+  phone: '',
 };
