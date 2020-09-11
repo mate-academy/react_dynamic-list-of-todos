@@ -23,7 +23,7 @@ export class CurrentUser extends React.Component {
   render() {
     const { clearUser } = this.props;
     const { user } = this.state;
-console.log(user)
+
     return (
       <div className="CurrentUser">
       <h2 className="CurrentUser__title"><span>Selected user: {user.id}</span></h2>
