@@ -35,6 +35,21 @@ class App extends React.Component {
     this.setState({ valueForFilter: filter });
   }
 
+  handleChecked = (todoId) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }),
+    }));
+  }
+
   render() {
     const { todos, selectedUserId, query, valueForFilter } = this.state;
     const queryToFind = query.toLowerCase();
@@ -60,6 +75,7 @@ class App extends React.Component {
             selectUser={this.selectUser}
             setQuery={this.setQuery}
             selectTodos={this.selectTodos}
+            onChecked={this.handleChecked}
           />
         </div>
 

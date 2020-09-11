@@ -8,6 +8,7 @@ export const TodoList = ({
   setQuery,
   selectTodos,
   selectUser,
+  onChecked,
 }) => (
 
   <div className="TodoList">
@@ -46,6 +47,7 @@ export const TodoList = ({
                 type="checkbox"
                 readOnly
                 checked={todo.completed}
+                onChange={() => onChecked(todo.id)}
               />
               <p>{todo.title}</p>
             </label>
@@ -79,4 +81,5 @@ TodoList.propTypes = {
   setQuery: PropTypes.func.isRequired,
   selectTodos: PropTypes.func.isRequired,
   selectUser: PropTypes.func.isRequired,
+  onChecked: PropTypes.func.isRequired,
 };
