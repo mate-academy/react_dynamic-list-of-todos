@@ -55,9 +55,7 @@ class App extends React.Component {
   filterTodos = target => {
     this.setState(prevState => ({
       todosCopy: prevState.todos.filter(el => (
-        el.title
-          ? el.title.includes(target.value)
-          : '' 
+        el.title && el.title.includes(target.value)
       )),
     }));
   }
