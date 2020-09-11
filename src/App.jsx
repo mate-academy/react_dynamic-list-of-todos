@@ -48,6 +48,7 @@ class App extends React.Component {
     this.setState({
       selectedUserId: 0,
       user: null,
+      selectedTodo: 0,
     });
   }
 
