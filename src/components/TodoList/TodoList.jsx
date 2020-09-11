@@ -8,6 +8,7 @@ export const TodoList = ({
   selectedUserId,
   filterByTitle,
   selectByCompleted,
+  changeCompleted,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -39,7 +40,11 @@ export const TodoList = ({
               : 'TodoList__item--unchecked'}`}
           >
             <label>
-              <input type="checkbox" checked={completed} readOnly />
+              <input
+                type="checkbox"
+                checked={completed}
+                onChange={() => changeCompleted(id)}
+              />
               <p>{title}</p>
             </label>
             <button
@@ -72,4 +77,5 @@ TodoList.propTypes = {
   selectedUserId: PropTypes.number.isRequired,
   filterByTitle: PropTypes.func.isRequired,
   selectByCompleted: PropTypes.func.isRequired,
+  changeCompleted: PropTypes.func.isRequired,
 };

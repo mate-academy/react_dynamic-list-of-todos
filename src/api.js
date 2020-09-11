@@ -6,7 +6,7 @@ export function getTodos() {
     .then(result => result.data);
 }
 
-export function getUsers(userId) {
+export function getUser(userId) {
   return fetch(`${BASE_URL}/users/${userId}`)
     .then(response => response.json())
     .then(result => result.data);

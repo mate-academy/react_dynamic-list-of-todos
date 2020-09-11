@@ -14,6 +14,7 @@ class App extends React.Component {
 
   componentDidMount() {
     getTodos()
+      .then(todos => todos.filter(todo => todo.title))
       .then(todos => this.setState({
         todos,
         todosForRender: todos,
@@ -34,7 +35,7 @@ class App extends React.Component {
 
   handleChange = (query) => {
     this.setState(state => ({
-      todosForRender: [...state.todos]
+      todosForRender: state.todos
         .filter(todo => (todo.title
           ? todo.title.toLowerCase().includes(query.toLowerCase())
           : '')),
@@ -43,21 +44,41 @@ class App extends React.Component {
   }
 
   selectByCompleted = (value) => {
-    if (value === 'active') {
-      this.setState(state => ({
-        todosForRender: [...state.todos]
-          .filter(todo => !todo.completed),
-      }));
-    } else if (value === 'completed') {
-      this.setState(state => ({
-        todosForRender: [...state.todos]
-          .filter(todo => todo.completed),
-      }));
-    } else {
-      this.setState(state => ({
-        todosForRender: [...state.todos],
-      }));
+    switch (value) {
+      case 'active':
+        this.setState(state => ({
+          todosForRender: state.todos
+            .filter(todo => !todo.completed),
+        }));
+        break;
+
+      case 'completed':
+        this.setState(state => ({
+          todosForRender: state.todos
+            .filter(todo => todo.completed),
+        }));
+        break;
+
+      default:
+        this.setState(state => ({
+          todosForRender: state.todos,
+        }));
     }
+  }
+
+  changeCompleted = (id) => {
+    this.setState(state => ({
+      todosForRender: state.todosForRender.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
   }
 
   render() {
@@ -72,6 +93,7 @@ class App extends React.Component {
             selectedUserId={selectedUserId}
             filterByTitle={this.handleChange}
             selectByCompleted={this.selectByCompleted}
+            changeCompleted={this.changeCompleted}
           />
         </div>
 
