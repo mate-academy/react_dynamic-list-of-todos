@@ -5,9 +5,9 @@ import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    name: null,
-    email: null,
-    phone: null,
+    name: '',
+    email: '',
+    phone: '',
   }
 
   componentDidMount() {

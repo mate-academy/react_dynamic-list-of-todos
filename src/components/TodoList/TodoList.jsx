@@ -34,7 +34,11 @@ export const TodoList = ({ todos, onUser, onSearch, onFilter }) => (
             })}
           >
             <label>
-              <input type="checkbox" checked={completed} readOnly />
+              <input
+                type="checkbox"
+                checked={completed}
+                readOnly={true}
+              />
               <p>{title}</p>
             </label>
 
