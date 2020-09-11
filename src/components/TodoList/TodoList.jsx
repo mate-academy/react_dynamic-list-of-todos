@@ -1,6 +1,6 @@
 import React from 'react';
 import './TodoList.scss';
-import ClassName from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 export class TodoList extends React.Component {
@@ -87,7 +87,7 @@ export class TodoList extends React.Component {
             {todos.map(todo => (
               <li
                 key={todo.id}
-                className={ClassName({
+                className={classNames({
                   TodoList__item: true,
                   'TodoList__item--checked': todo.completed,
                   'TodoList__item--unchecked': !todo.completed,
@@ -99,11 +99,13 @@ export class TodoList extends React.Component {
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={classNames({
+                    'TodoList__user-button': true,
+                    'TodoList__user-button--selected': (
+                      this.props.userId && this.props.userId === todo.userId
+                    ),
+                    button: true,
+                  })}
                   type="button"
                   onClick={() => {
                     changeSelectedUser(todo.userId);
@@ -129,4 +131,5 @@ TodoList.propTypes = {
     completed: PropTypes.bool.isRequired,
   })).isRequired,
   changeSelectedUser: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };

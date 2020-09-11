@@ -54,6 +54,7 @@ class App extends React.Component {
               <TodoList
                 todos={todos}
                 changeSelectedUser={this.changeSelectedUser}
+                userId={this.state.selectedUserId}
               />
             ) : ''}
           {/* how to fix this crutch? (crutch above)
