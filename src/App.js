@@ -32,11 +32,15 @@ class App extends React.Component {
     }
   }
 
-  changeUser = (id) => {
+  changeUserId = (id) => {
     this.setState({ selectedUserId: id });
   }
 
-  changeInput = (val) => {
+  changeUser= (newUser) => {
+    this.setState({ user: newUser });
+  }
+
+  searchTodos = (val) => {
     this.setState(prevState => ({
       todosCopy: prevState.todos.filter(todo => (
         todo.title
@@ -46,7 +50,7 @@ class App extends React.Component {
     }));
   }
 
-  check = (event) => {
+  checkCompleted = (event) => {
     const { value } = event.target;
 
     this.setState(prevState => ({
@@ -96,16 +100,18 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todosCopy}
-            changeUser={this.changeUser}
-            changeInput={this.changeInput}
+            changeUser={this.changeUserId}
+            changeInput={this.searchTodos}
             filterTodos={this.filterTodos}
-            check={this.check}
+            check={this.checkCompleted}
           />
         </div>
         <div className="App__content">
           {selectedUserId ? (
             <CurrentUser
               user={user}
+              changeUser={this.changeUser}
+              selectedUserId={selectedUserId}
               onClear={this.onClear}
             />
           ) : 'No user selected'}
