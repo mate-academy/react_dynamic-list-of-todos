@@ -30,9 +30,8 @@ class App extends React.Component {
   selectByTitle = (text) => {
     this.setState(state => ({
       filteredTodos: state.todos
-        .filter(todo => !!todo.title)
         .filter(todo => todo.title.toLowerCase()
-          .startsWith(text.toLowerCase())),
+          .includes(text.toLowerCase())),
     }));
   }
 

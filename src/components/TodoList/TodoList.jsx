@@ -10,15 +10,14 @@ export const TodoList = ({
   choosedByComplete,
 }) => {
   const todolist = todos.filter((todo) => {
-    if (choosedByComplete === 'all') {
-      return todo;
+    switch (choosedByComplete) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return todo;
     }
-
-    if (choosedByComplete === 'active') {
-      return !todo.completed;
-    }
-
-    return !!todo.completed;
   });
 
   return (

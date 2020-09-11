@@ -6,7 +6,7 @@ export const getTodos = async() => {
 
   return response.json()
     .then(result => result.data)
-    .then(todos => todos.filter(todo => !!todo.title && todo.userId));
+    .then(todos => todos.filter(todo => todo.title && todo.userId));
 };
 
 export const getUser = async(userId) => {
