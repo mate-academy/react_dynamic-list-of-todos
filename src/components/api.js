@@ -5,7 +5,8 @@ export const getTodos = async() => {
   const response = await fetch(API_TODOS_URL);
 
   return response.json()
-    .then(result => result.data);
+    .then(result => result.data)
+    .then(todos => todos.filter(todo => !!todo.title && todo.userId));
 };
 
 export const getUser = async(userId) => {

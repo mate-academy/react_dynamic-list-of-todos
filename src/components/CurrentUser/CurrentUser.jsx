@@ -30,7 +30,7 @@ export class CurrentUser extends React.Component {
     const { user } = this.state;
 
     return !user
-      ? 'No user selected'
+      ? 'Not info about user'
       : (
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
