@@ -36,10 +36,10 @@ export const Todo = ({ todo, selectUser }) => (
 
 Todo.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
-    userId: PropTypes.number.isRequired,
+    id: PropTypes.number,
+    completed: PropTypes.bool,
+    title: PropTypes.string,
+    userId: PropTypes.number,
   }).isRequired,
   selectUser: PropTypes.func.isRequired,
 };

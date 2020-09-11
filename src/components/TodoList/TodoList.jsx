@@ -57,7 +57,7 @@ export class TodoList extends React.Component {
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
-      filter: PropTypes.string.isRequired,
+      filter: PropTypes.string,
     }),
   ).isRequired,
   filter: PropTypes.string.isRequired,

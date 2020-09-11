@@ -9,8 +9,10 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    getUser(this.props.userId)
-      .then(result => this.setState({ user: result }));
+    if (this.state.user !== '') {
+      getUser(this.props.userId)
+        .then(result => this.setState({ user: result }));
+    }
   }
 
   componentDidUpdate(props) {
@@ -32,9 +34,15 @@ export class CurrentUser extends React.Component {
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{this.state.user.name}</h3>
-        <p className="CurrentUser__email">{this.state.user.email}</p>
-        <p className="CurrentUser__phone">{this.state.user.phone}</p>
+        <h3 className="CurrentUser__name">
+          {this.state.user.name}
+        </h3>
+        <p className="CurrentUser__email">
+          {this.state.user.email}
+        </p>
+        <p className="CurrentUser__phone">
+          {this.state.user.phone}
+        </p>
         <button
           type="button"
           className="button"

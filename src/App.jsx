@@ -8,7 +8,7 @@ import { getTodos } from './components/API/api';
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: '',
     filter: '',
   };
 
