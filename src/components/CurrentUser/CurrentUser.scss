@@ -23,7 +23,17 @@
   }
 
   &__clear {
+    width: 40%;
+    height: 20px;
+    background: #b8b3d2;
+    border: none;
+    border-radius: 3px;
     display: block;
     margin: 20px auto 0;
+    transition: 0.2s;
+
+    &:hover {
+      background: #4d457b;
+    }
   }
 }
