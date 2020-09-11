@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import './TodoList.scss';
 
 export const TodoList = ({ todos, selectUser, updateCompleted, filterTodos, handleSelect }) => {
@@ -27,7 +28,15 @@ export const TodoList = ({ todos, selectUser, updateCompleted, filterTodos, hand
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
         {todos.map(todo => (
-          <li className="TodoList__item TodoList__item--unchecked" key={todo.id}>
+          <li
+            className={cn(
+              "TodoList__item",
+              todo.completed
+                ? "TodoList__item--checked"
+                : "TodoList__item--unchecked"
+            )}
+            key={todo.id}
+          >
             <label>
               <input
                 type="checkbox"

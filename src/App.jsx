@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { getTodos, getUser } from './api/api';
+import { getTodos} from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -35,16 +35,6 @@ class App extends React.Component {
           todosCopy: result.data,
         })
       })
-  }
-
-  componentDidUpdate = () => {
-    if (this.state.selectedUserId !== 0
-      && this.state.selectedUserId !== this.state.user.id) {
-      getUser(this.state.selectedUserId)
-        .then((user) => {
-          this.setState({ user: user.data });
-        });
-    }
   }
 
   updateCompleted = target => {
