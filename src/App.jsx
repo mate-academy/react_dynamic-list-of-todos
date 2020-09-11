@@ -13,8 +13,10 @@ const App = () => {
   const [filteredTodos, setFilteredTodos] = useState([]);
 
   useEffect(() => {
-    todosAPI.getTodos().then(res => setTodos(res));
-    todosAPI.getTodos().then(res => setFilteredTodos(res));
+    todosAPI.getTodos().then((res) => {
+      setTodos(res);
+      setFilteredTodos(res);
+    });
   }, []);
 
   const handleUserSelection = (userId) => {
@@ -43,8 +45,10 @@ const App = () => {
 
     setFilterValue(value);
 
-    setTodos(filteredTodos.filter(todo => todo.title.toLowerCase()
-      .includes(value.toLowerCase())));
+    setTodos(
+      filteredTodos.filter(todo => (
+        todo.title.toLowerCase().includes(value.toLowerCase()))),
+    );
   };
 
   let todosToRender = todos;
