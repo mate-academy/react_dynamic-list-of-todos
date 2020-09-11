@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { todosPromis, userFromServer } from './api/todos';
+import { todosPromis } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -22,19 +22,15 @@ class App extends React.Component {
   }
 
   currentUserId = (userId) => {
-    userFromServer(userId)
-      .then(result => this.setState({
-        selectedUser: result,
-        selectedUserId: userId,
-      }));
-  }
+    this.setState({ selectedUserId: userId });
+  };
 
   clearUserinfo = () => {
     this.setState({
       selectedUserId: 0,
       selectedUser: {},
     });
-  }
+  };
 
   render() {
     const { todos, selectedUserId, selectedUser } = this.state;
