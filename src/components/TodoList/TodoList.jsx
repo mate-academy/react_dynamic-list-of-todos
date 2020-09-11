@@ -5,7 +5,7 @@ import './TodoList.scss';
 
 export const TodoList = ({
   todos,
-  filterTodos,
+  setQuery,
   selectTodos,
   selectUser,
 }) => (
@@ -16,7 +16,7 @@ export const TodoList = ({
       type="text"
       className="TodoList__search"
       placeholder="Find todo by title"
-      onChange={event => filterTodos(event.target.value)}
+      onChange={event => setQuery(event.target.value)}
     />
 
     <select
@@ -76,7 +76,7 @@ TodoList.propTypes = {
       completed: PropTypes.bool,
     }).isRequired,
   ).isRequired,
-  filterTodos: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
   selectTodos: PropTypes.func.isRequired,
   selectUser: PropTypes.func.isRequired,
 };

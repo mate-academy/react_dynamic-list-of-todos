@@ -58,7 +58,7 @@ class App extends React.Component {
           <TodoList
             todos={selectedTodosToSHow}
             selectUser={this.selectUser}
-            filterTodos={this.setQuery}
+            setQuery={this.setQuery}
             selectTodos={this.selectTodos}
           />
         </div>
