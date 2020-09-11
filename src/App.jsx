@@ -27,7 +27,7 @@ class App extends React.Component {
     });
   }
 
-  handleChange = (input) => {
+  handleInputChange = (input) => {
     this.setState({
       titleFilter: input,
     });
@@ -78,9 +78,9 @@ class App extends React.Component {
           <TodoList
             todos={preparedTodos}
             handleSelect={this.handleSelect}
-            handleChange={this.handleChange}
-            statusFilter={this.state.statusFilter}
-            titleFilter={this.state.titleFilter}
+            handleChange={this.handleInputChange}
+            statusFilter={statusFilter}
+            titleFilter={titleFilter}
             setUser={this.setUser}
           />
         </div>

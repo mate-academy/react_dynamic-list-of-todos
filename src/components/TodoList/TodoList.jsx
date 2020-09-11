@@ -4,19 +4,17 @@ import PropTypes from 'prop-types';
 
 import './TodoList.scss';
 
-export const TodoList = (
-  {
-    statusFilter,
-    handleSelect,
-    handleChange,
-    todos,
-    setUser,
-  },
-) => (
+export const TodoList = ({
+  statusFilter,
+  handleSelect,
+  handleChange,
+  todos,
+  setUser,
+}) => (
   <div className="TodoList">
     <select
       value={statusFilter}
-      onChange={event => handleSelect(event)}
+      onChange={handleSelect}
     >
       <option value="All">All</option>
       <option value="Completed">Completed</option>
@@ -41,7 +39,11 @@ export const TodoList = (
             })}
           >
             <label>
-              <input type="checkbox" readOnly />
+              <input
+                type="checkbox"
+                readOnly
+                checked={todo.completed}
+              />
               <p>{todo.title}</p>
             </label>
 
