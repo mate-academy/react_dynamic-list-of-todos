@@ -10,7 +10,7 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     query: '',
-    filterOfTodos: 'all',
+    valueForFilter: 'all',
   };
 
   componentDidMount = async() => {
@@ -27,27 +27,28 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  filterTodosByTitle = (value) => {
+  setQuery = (value) => {
     this.setState({ query: value });
   }
 
   selectTodos = (filter) => {
-    this.setState({ filterOfTodos: filter });
+    this.setState({ valueForFilter: filter });
   }
 
   render() {
-    const { todos, selectedUserId, query, filterOfTodos } = this.state;
+    const { todos, selectedUserId, query, valueForFilter } = this.state;
     const queryToFind = query.toLowerCase();
     const todosToShow = todos.filter(
-      todo => todo.title && todo.userId
+      todo => todo.title
+      && todo.userId
       && todo.title.toLowerCase().includes(queryToFind),
     );
 
     let selectedTodosToSHow = todosToShow;
 
-    if (filterOfTodos === 'completed') {
+    if (valueForFilter === 'completed') {
       selectedTodosToSHow = todosToShow.filter(todo => todo.completed);
-    } else if (filterOfTodos === 'active') {
+    } else if (valueForFilter === 'active') {
       selectedTodosToSHow = todosToShow.filter(todo => !todo.completed);
     }
 
@@ -57,7 +58,7 @@ class App extends React.Component {
           <TodoList
             todos={selectedTodosToSHow}
             selectUser={this.selectUser}
-            filterTodos={this.filterTodosByTitle}
+            filterTodos={this.setQuery}
             selectTodos={this.selectTodos}
           />
         </div>
