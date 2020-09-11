@@ -16,8 +16,8 @@ export class CurrentUser extends React.Component {
     if (prevProps.user.userId === this.props.user.userId) {
       return;
     }
-    getUser(this.props.userId)
-      .then(user => this.setState({ user }));
+    getUser(this.props.user.userId)
+      .then(user => this.setState({ user: user.data }));
   }
 
   render() {

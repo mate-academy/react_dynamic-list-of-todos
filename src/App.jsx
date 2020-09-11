@@ -15,6 +15,7 @@ class App extends React.Component {
   };
 
   selectUser = (user) => {
+    console.log(user)
     this.setState({
       user: user,
       selectedUserId: user.userId,
