@@ -8,12 +8,12 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    getUser(this.props.userId)
-      .then(user => this.setState({ user }));
+    getUser(this.props.user.userId)
+      .then(user => this.setState({ user: user.data }));
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.userId === this.props.userId) {
+    if (prevProps.user.userId === this.props.user.userId) {
       return;
     }
     getUser(this.props.userId)
@@ -23,7 +23,7 @@ export class CurrentUser extends React.Component {
   render() {
     const { clearUser } = this.props;
     const { user } = this.state;
-
+console.log(user)
     return (
       <div className="CurrentUser">
       <h2 className="CurrentUser__title"><span>Selected user: {user.id}</span></h2>
