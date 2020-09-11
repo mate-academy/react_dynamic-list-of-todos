@@ -40,8 +40,4 @@ export class CurrentUser extends React.Component {
      </div>
     )
   }
-
 }
-
- 
-
