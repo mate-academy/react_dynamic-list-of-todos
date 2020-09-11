@@ -45,6 +45,21 @@ class App extends React.Component {
     });
   }
 
+  changeStatus = (id) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
+        if (todo.id === +id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return { ...todo };
+      }),
+    }));
+  }
+
   render() {
     const { todos, selectedUserId, statusFilter, titleFilter } = this.state;
 
@@ -79,6 +94,7 @@ class App extends React.Component {
             todos={preparedTodos}
             handleSelect={this.handleSelect}
             handleChange={this.handleInputChange}
+            changeStatus={this.changeStatus}
             statusFilter={statusFilter}
             titleFilter={titleFilter}
             setUser={this.setUser}

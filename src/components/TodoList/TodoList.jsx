@@ -8,6 +8,7 @@ export const TodoList = ({
   statusFilter,
   handleSelect,
   handleChange,
+  changeStatus,
   todos,
   setUser,
 }) => (
@@ -43,6 +44,7 @@ export const TodoList = ({
                 type="checkbox"
                 readOnly
                 checked={todo.completed}
+                onClick={() => changeStatus(todo.id)}
               />
               <p>{todo.title}</p>
             </label>
@@ -69,6 +71,7 @@ TodoList.propTypes = {
   statusFilter: PropTypes.string.isRequired,
   handleSelect: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
   setUser: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
