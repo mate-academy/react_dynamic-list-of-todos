@@ -24,12 +24,8 @@ class App extends React.Component {
     });
   };
 
-  setSelectedUser = (user) => {
-    this.setState({ selectedUserId: user });
-  }
-
-  clear = () => {
-    this.setState({ selectedUserId: 0 });
+  setSelectedUser = (userId) => {
+    this.setState({ selectedUserId: userId });
   }
 
   randomizeOrder = () => {
@@ -60,7 +56,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                clear={this.clear}
+                setSelectedUser={this.setSelectedUser}
               />
             ) : 'No user selected'}
           </div>

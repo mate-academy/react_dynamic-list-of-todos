@@ -31,9 +31,8 @@ export class CurrentUser extends React.Component {
   }
 
   render() {
-    const { userId, clear } = this.props;
-    const { user } = this.state;
-    const { name, email, phone } = user;
+    const { userId, setSelectedUser } = this.props;
+    const { name, email, phone } = this.state.user;
 
     return (
       <div className="CurrentUser">
@@ -45,7 +44,7 @@ export class CurrentUser extends React.Component {
           <button
             className="button button-clear"
             type="button"
-            onClick={clear}
+            onClick={() => setSelectedUser(0)}
           >
             Clear
           </button>
@@ -61,5 +60,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  clear: PropTypes.func.isRequired,
+  setSelectedUser: PropTypes.func.isRequired,
 };
