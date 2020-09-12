@@ -25,5 +25,12 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    background-color: #4d457b;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
   }
 }
