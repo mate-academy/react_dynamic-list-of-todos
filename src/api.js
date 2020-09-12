@@ -1,14 +1,13 @@
-const url = 'https://mate-api.herokuapp.com/todos';
-const users = 'https://mate-api.herokuapp.com/users';
+const url = 'https://mate-api.herokuapp.com';
 
 export function getAll() {
-  return fetch(url)
+  return fetch(`${url}/todos`)
     .then(response => response.json())
     .then(result => result.data);
 }
 
 export function getUsers(userId) {
-  return fetch(`${users}/${userId}`)
+  return fetch(`${url}/users/${userId}`)
     .then(response => response.json())
     .then(result => result.data);
 }
