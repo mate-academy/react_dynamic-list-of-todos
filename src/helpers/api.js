@@ -4,9 +4,7 @@ export function getTodos() {
   return fetch(`${BASE_URL}/todos`)
     .then(response => response.json())
     .then(result => result.data
-      .filter(todo => todo.title !== null
-        && todo.userId !== null
-        && todo.completed !== null));
+      .filter(todo => todo.title && todo.userId && todo.completed !== null));
 }
 
 export function getUser(userId) {

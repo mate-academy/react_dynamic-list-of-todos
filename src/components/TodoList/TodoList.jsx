@@ -15,26 +15,22 @@ export class TodoList extends React.Component {
 
     let filteredTodos = todos;
 
-    if (query) {
-      const lowerCaseQuery = query.toLowerCase();
-
-      filteredTodos = todos
-        .filter(todo => (
-          todo.title.toLowerCase().includes(lowerCaseQuery)
-        ));
-    }
-
     if (selectedOption === 'active') {
       filteredTodos = todos
-        .filter(todo => (
-          todo.completed === false
-        ));
+        .filter(todo => !todo.completed);
     }
 
     if (selectedOption === 'completed') {
       filteredTodos = todos
+        .filter(todo => todo.completed);
+    }
+
+    if (query) {
+      const lowerCaseQuery = query.toLowerCase();
+
+      filteredTodos = filteredTodos
         .filter(todo => (
-          todo.completed === true
+          todo.title.toLowerCase().includes(lowerCaseQuery)
         ));
     }
 
@@ -82,15 +78,15 @@ export class TodoList extends React.Component {
               <li
                 key={todo.id}
                 className={classNames('TodoList__item', {
-                  'TodoList__item--unchecked': todo.completed === false,
-                  'TodoList__item--checked': todo.completed === true,
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
                 })}
               >
                 <label>
                   <input
                     type="checkbox"
-                    readOnly
-                    checked={todo.completed === true}
+                    checked={todo.completed}
+                    onClick={!todo.completed}
                   />
                   <p>{todo.title}</p>
                 </label>
