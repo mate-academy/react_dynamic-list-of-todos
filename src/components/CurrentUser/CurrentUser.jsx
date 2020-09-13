@@ -15,10 +15,6 @@ export const CurrentUser = ({ userId, user, clearUser }) => (
   </div>
 );
 
-CurrentUser.PropTypes = {
-  user: PropTypes.object({
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string
-  }).isRequired
+CurrentUser.propTypes = {
+  user: PropTypes.object.isRequired,
 }
