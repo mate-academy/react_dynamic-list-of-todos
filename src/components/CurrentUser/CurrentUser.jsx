@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getUser } from '../api/api';
+import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -10,10 +11,14 @@ export class CurrentUser extends React.Component {
 
   componentDidMount() {
     getUser(this.props.userId)
-      .then((users) => {
+      .then((user) => {
+        if (!user) {
+          return;
+        }
+
         this.setState({
           currentId: this.props.userId,
-          user: users.data,
+          user,
         });
       });
   }
@@ -24,11 +29,17 @@ export class CurrentUser extends React.Component {
     }
 
     getUser(this.props.userId)
-      .then((users) => {
-        this.setState({
-          currentId: this.props.userId,
-          user: users.data,
-        });
+      .then((user) => {
+        if (!user) {
+          this.setState({
+            user: {},
+          });
+        } else {
+          this.setState({
+            currentId: this.props.userId,
+            user,
+          });
+        }
       });
   }
 
@@ -44,19 +55,19 @@ export class CurrentUser extends React.Component {
 
         <ul className="CurrentUser__list">
           <li className="CurrentUser__name">
-            {user.name}
+            {!user.name ? 'No name' : user.name}
           </li>
           <li className="CurrentUser__email">
-            {user.email}
+            {!user.email ? 'No email' : user.email}
           </li>
           <li className="CurrentUser__phone">
-            {user.phone}
+            {!user.phone ? 'No phone' : user.phone}
           </li>
           <li className="CurrentUser__website">
-            {user.website}
+            {!user.website ? 'No website' : user.website}
           </li>
           <li className="CurrentUser__createdAt">
-            {user.createdAt}
+            {!user.createdAt ? 'No time when created' : user.createdAt}
           </li>
         </ul>
         <button

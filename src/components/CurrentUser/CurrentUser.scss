@@ -1,0 +1,40 @@
+.CurrentUser {
+  &__heading {
+    // font-size: 1rem;
+    // color: white;
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__name {
+    margin: 30px 0 10px;
+    font-size: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: #2a3d66;
+    font-weight: bold;
+  }
+
+  &__email,
+  &__phone,
+  &__website,
+  &__createdAt {
+    text-align: center;
+    font-weight: bold;
+    margin: 5px;
+  }
+
+  &__clear-user {
+    display: block;
+    margin: 20px auto 0;
+    background-color: #2a3d66;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}

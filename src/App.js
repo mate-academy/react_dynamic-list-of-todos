@@ -21,10 +21,6 @@ class App extends React.Component {
       });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if ()
-  // }
-
   handleSelect = (event) => {
     this.setState({
       filterByChoise: event.target.value,

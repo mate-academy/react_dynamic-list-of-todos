@@ -8,5 +8,6 @@ export function getTodos() {
 
 export function getUser(userId) {
   return fetch(`${BASE_URL}/users/${userId}/`)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then(result => result.data);
 }
