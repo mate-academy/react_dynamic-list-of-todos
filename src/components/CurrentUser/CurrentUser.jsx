@@ -10,6 +10,10 @@ export class CurrentUser extends React.Component {
 
   componentDidMount() {
     getUsers(this.props.userId).then((user) => {
+      if (!user) {
+        return;
+      }
+
       this.setState({ user });
     });
   }
@@ -20,7 +24,13 @@ export class CurrentUser extends React.Component {
     }
 
     getUsers(this.props.userId).then((user) => {
-      this.setState({ user });
+      if (!user) {
+        this.setState({
+          user: {},
+        });
+      } else {
+        this.setState({ user });
+      }
     });
   }
 

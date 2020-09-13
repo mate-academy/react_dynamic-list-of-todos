@@ -98,6 +98,7 @@ TodoList.propTypes = {
       title: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
       completed: PropTypes.bool.isRequired,
+      userId: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
   getUserId: PropTypes.func.isRequired,
