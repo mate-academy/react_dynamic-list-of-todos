@@ -20,12 +20,25 @@
   }
 
   &__item--checked {
-    background-color: #cde4e4;
-    color: #459595;
+    background-color: #9fdda4;
+    color: #175a11;
   }
 
   &__item--unchecked {
-    background-color: #ffe0db;
-    color: #ff3626;
+    background-color: #f5d4ff;
+    color: #4d457b;
+  }
+
+  &__search {
+    padding: 5px;
+    border: 2px solid #4d457b;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+
+  &__select {
+    padding: 4px;
+    border: 2px solid #4d457b;
+    border-radius: 5px;
   }
 }
