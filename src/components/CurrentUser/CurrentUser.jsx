@@ -27,6 +27,7 @@ export class CurrentUser extends React.Component {
 
   render() {
     const { user } = this.state;
+    const { clearUser } = this.props;
 
     return (
       <>
@@ -42,6 +43,12 @@ export class CurrentUser extends React.Component {
             <h3 className="CurrentUser__name">{user.name}</h3>
             <p className="CurrentUser__email">{user.email}</p>
             <p className="CurrentUser__phone">{user.phone}</p>
+            <button
+              type="button"
+              onClick={clearUser}
+            >
+              Clear
+            </button>
           </div>
         )
         }
@@ -53,4 +60,5 @@ export class CurrentUser extends React.Component {
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
   getUser: PropTypes.func.isRequired,
+  clearUser: PropTypes.func.isRequired,
 };
