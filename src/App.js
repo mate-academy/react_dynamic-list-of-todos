@@ -63,7 +63,7 @@ class App extends React.Component {
 
     if (filterByInput) {
       filteredByTitle = todos.filter(todo => todo.title
-        && todo.title.includes(filterByInput));
+        && todo.title.includes(filterByInput.toLowerCase()));
     } else {
       filteredByTitle = todos;
     }
