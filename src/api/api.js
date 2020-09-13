@@ -1,5 +1,4 @@
 const API_URL = 'https://mate-api.herokuapp.com/';
-// https://mate-api.herokuapp.com/users/1
 
 export const getTodos = () => fetch(`${API_URL}todos`)
   .then(response => response.json())

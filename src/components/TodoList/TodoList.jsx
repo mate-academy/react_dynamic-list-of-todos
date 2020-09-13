@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './TodoList.scss';
 
-export const TodoList = ({ setId, todos, filterByTitle, filterByStatus }) => (
+export const TodoList = ({
+  setId,
+  todos,
+  setTitle,
+  setStatus,
+  toggleChange,
+}) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
@@ -13,7 +19,7 @@ export const TodoList = ({ setId, todos, filterByTitle, filterByStatus }) => (
       className="TodoList__input"
       placeholder="Enter the title"
       onChange={(event) => {
-        filterByTitle(event.target.value);
+        setTitle(event.target.value);
       }}
     />
 
@@ -21,7 +27,7 @@ export const TodoList = ({ setId, todos, filterByTitle, filterByStatus }) => (
       name="select"
       className="TodoList__select"
       onChange={(event) => {
-        filterByStatus(event.target.value);
+        setStatus(event.target.value);
       }}
     >
       <option value="">
@@ -49,7 +55,13 @@ export const TodoList = ({ setId, todos, filterByTitle, filterByStatus }) => (
             })}
           >
             <label>
-              <input type="checkbox" checked={todo.completed} readOnly />
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => {
+                  toggleChange(todo.id);
+                }}
+              />
               <p>{todo.title}</p>
             </label>
 
@@ -84,8 +96,9 @@ TodoList.propTypes = {
     }),
   ),
   setId: PropTypes.func.isRequired,
-  filterByTitle: PropTypes.func.isRequired,
-  filterByStatus: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  setStatus: PropTypes.func.isRequired,
+  toggleChange: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {

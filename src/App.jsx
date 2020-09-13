@@ -28,12 +28,27 @@ class App extends React.Component {
     this.setState({ selectedUserId: '' });
   }
 
-  filteredByTitle = (subtitle) => {
+  setNewTitle = (subtitle) => {
     this.setState({ title: subtitle });
   }
 
-  filteredByStatus = (status) => {
+  setNewStatus = (status) => {
     this.setState({ isCompleted: status });
+  }
+
+  toggleChange = (todoId) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
   }
 
   render() {
@@ -54,8 +69,9 @@ class App extends React.Component {
           <TodoList
             todos={visibleTodos}
             setId={this.setUserId}
-            filterByTitle={this.filteredByTitle}
-            filterByStatus={this.filteredByStatus}
+            setTitle={this.setNewTitle}
+            setStatus={this.setNewStatus}
+            toggleChange={this.toggleChange}
           />
         </div>
 
