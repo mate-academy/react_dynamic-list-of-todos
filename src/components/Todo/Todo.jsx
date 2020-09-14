@@ -8,7 +8,10 @@ export class Todo extends React.PureComponent {
     return (
       <>
         <label>
-          <input type="checkbox" readOnly />
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            readOnly />
           <p>{todo.title}</p>
         </label>
 
@@ -34,6 +37,7 @@ Todo.propTypes = {
     title: PropTypes.string.isRequired,
     userId: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
   }),
 };
 Todo.defaultProps = {

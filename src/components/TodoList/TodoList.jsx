@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo/Todo';
@@ -24,11 +25,14 @@ export class TodoList extends React.PureComponent {
           {filteredTodos.map(todo => (
             <li
               key={todo.id}
-              className={
-                `TodoList__item TodoList__item--${todo.completed
-                  ? 'checked'
-                  : 'unchecked'}`
-              }
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--checked': todo.completed },
+                {
+                  'TodoList__item--unchecked':
+                      !todo.completed,
+                },
+              )}
             >
               <Todo
                 todo={todo}
