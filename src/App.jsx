@@ -8,7 +8,9 @@ import { getTodos } from './api';
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: '',
+    query: '',
+    status: '',
   };
 
   componentDidMount() {
@@ -23,11 +25,19 @@ class App extends React.Component {
   }
 
   clear = () => {
-    this.setState({ selectedUserId: 0 });
+    this.setState({ selectedUserId: '' });
+  }
+
+  queryChange = (event) => {
+    this.setState({ query: event.target.value.trimLeft() });
+  }
+
+  statusChange = (event) => {
+    this.setState({ status: event.target.value });
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, query, status } = this.state;
 
     return (
       <div className="App">
@@ -35,6 +45,10 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectUser={this.selectUser}
+            query={query}
+            status={status}
+            statusChange={this.statusChange}
+            queryChange={this.queryChange}
           />
         </div>
 
