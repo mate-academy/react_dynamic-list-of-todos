@@ -1,24 +1,63 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
+import { getUser } from '../../api';
 
-export const CurrentUser = ({ user, clear }) => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title">
-      <span>
-        Selected user :&nbsp;
-        {user.id}
-      </span>
-    </h2>
+export class CurrentUser extends React.Component {
+  state = {
+    currentUser: {},
+  }
 
-    <h3 className="CurrentUser__name">{user.name}</h3>
-    <p className="CurrentUser__email">{user.email}</p>
-    <p className="CurrentUser__phone">{user.phone}</p>
-    <button
-      type="button"
-      onClick={() => clear()}
-    >
-      Clear
-    </button>
-  </div>
-);
+  componentDidMount = async() => {
+    const user = await getUser(this.props.selectedUserId);
+
+    if (user.data) {
+      this.updateUser(user.data);
+    }
+  }
+
+  componentDidUpdate = async(prevProps) => {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      const user = await getUser(this.props.selectedUserId);
+
+      if (user.data) {
+        this.updateUser(user.data);
+      }
+    }
+  }
+
+  updateUser = (currentUser) => {
+    this.setState({ currentUser });
+  }
+
+  render() {
+    const { clear } = this.props;
+    const { currentUser } = this.state;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user :&nbsp;
+            {currentUser.id}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{currentUser.name}</h3>
+        <p className="CurrentUser__email">{currentUser.email}</p>
+        <p className="CurrentUser__phone">{currentUser.phone}</p>
+        <button
+          type="button"
+          onClick={() => clear()}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  clear: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+};

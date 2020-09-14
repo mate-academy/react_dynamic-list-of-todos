@@ -1,21 +1,16 @@
-/* eslint-disable react/no-did-update-set-state */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable react/no-access-state-in-setstate */
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
 
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 
 class App extends React.Component {
   state = {
     todos: [],
-    prevTodos: [],
-    selectedUserId: undefined,
+    selectedUserId: 0,
     selectedTodoId: null,
-    currentUser: {},
     filter: 'all',
   };
 
@@ -25,14 +20,6 @@ class App extends React.Component {
     this.setState({
       todos: todos.filter(todo => todo.title && todo.id && todo.userId),
     });
-  }
-
-  componentDidUpdate = async() => {
-    if (this.state.currentUser.id !== this.state.selectedUserId) {
-      const user = await getUser(this.state.selectedUserId);
-
-      this.updateUser(user.data);
-    }
   }
 
   checkboxChange = (id) => {
@@ -57,15 +44,10 @@ class App extends React.Component {
     });
   }
 
-  updateUser = (currentUser) => {
-    this.setState({ currentUser });
-  }
-
   clear = () => {
     this.setState({
       selectedUserId: undefined,
       selectedTodoId: null,
-      currentUser: {},
     });
   }
 
@@ -86,7 +68,6 @@ class App extends React.Component {
     const { todos,
       selectedUserId,
       selectedTodoId,
-      currentUser,
       filter } = this.state;
 
     let filteredTodos = [];
@@ -119,8 +100,8 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                user={currentUser}
                 clear={this.clear}
+                selectedUserId={selectedUserId}
               />
             ) : 'No user selected'}
           </div>
