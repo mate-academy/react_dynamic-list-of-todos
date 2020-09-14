@@ -1,44 +1,65 @@
 import React from 'react';
+import classNames from 'classnames';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import { Todo } from '../Todo/Todo';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  render() {
+    const { todos, selectUser, selectedUserId, query, status } = this.props;
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+    let filteredTodos = todos.filter(todo => todo.title
+      .toLowerCase()
+      .includes(query
+        .toLowerCase()));
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    if (status === 'In progress') {
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    } else if (status === 'Done') {
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+    }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    return (
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {filteredTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--checked': todo.completed },
+                {
+                  'TodoList__item--unchecked':
+                      !todo.completed,
+                },
+              )}
+            >
+              <Todo
+                todo={todo}
+                selectUser={selectUser}
+                selectedUserId={selectedUserId}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+  })),
+  query: PropTypes.string,
+  status: PropTypes.string,
+  selectedUserId: PropTypes.number.isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  query: '',
+  status: '',
+  todos: [],
+};
