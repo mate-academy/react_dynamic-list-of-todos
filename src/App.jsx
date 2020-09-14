@@ -5,8 +5,6 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getAllToodos, selectedUser } from './api';
 
-// getAll().then(result => console.log(result.data))
-
 class App extends React.Component {
   state = {
     todos: [],

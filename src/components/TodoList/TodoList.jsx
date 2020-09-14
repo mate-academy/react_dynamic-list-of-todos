@@ -13,19 +13,26 @@ export class TodoList extends React.Component {
   render() {
     const { todos, selectUser, onToggleToDo } = this.props;
 
-    const filteredTodosByTitle = todos
-      .filter(todo => (todo.title !== null))
-      .filter(todo => (
-        (todo.title).toLowerCase()
-          .includes((this.state.filter).toLowerCase())
-      ));
-
     const selectedTodosByCompleteStatus = todos
       .filter(todo => (
         (this.state.showTodosSelector === 'Completed')
           ? todo.completed === true
           : todo.completed === false
       ));
+
+    const filteredTodosByTitle = this.state.showTodosSelector === 'All'
+      ? todos
+        .filter(todo => (todo.title !== null))
+        .filter(todo => (
+          (todo.title).toLowerCase()
+            .includes((this.state.filter).toLowerCase())
+        ))
+      : selectedTodosByCompleteStatus
+        .filter(todo => (todo.title !== null))
+        .filter(todo => (
+          (todo.title).toLowerCase()
+            .includes((this.state.filter).toLowerCase())
+        ));
 
     return (
       <div className="TodoList">
@@ -68,15 +75,7 @@ export class TodoList extends React.Component {
             )
             : (
               <Todos
-                todos={
-                  this.state.showTodosSelector === 'All'
-                    ? filteredTodosByTitle
-                    : filteredTodosByTitle
-                      .filter(todo => (
-                        (this.state.showTodosSelector === 'Completed')
-                          ? todo.completed === true
-                          : todo.completed === false
-                      ))}
+                todos={filteredTodosByTitle}
                 selectUser={selectUser}
                 onToggleToDo={onToggleToDo}
               />

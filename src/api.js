@@ -7,8 +7,6 @@ export async function getAllToodos() {
   const result = await data.data;
 
   return result;
-  // return fetch(`${BASE_URL}/todos`)
-  // .then(response => response.json()).then(result => result.data);
 }
 
 export function selectedUser(userId) {
