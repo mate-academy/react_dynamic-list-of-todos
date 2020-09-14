@@ -47,7 +47,8 @@ export const TodoList = ({ todos, userDeteil }) => (
             value={+todo.userId}
             onClick={userDeteil}
           >
-            User&nbsp;#1
+            User&nbsp;
+            {todo.userId}
           </button>
         </li>
       ))}

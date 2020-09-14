@@ -48,12 +48,15 @@ class App extends React.Component {
     }
 
     if (name === 'select') {
-      if (value === 'active') {
-        this.setState({ todosNew: todos.filter(todo => !todo.completed) });
-      } else if (value === 'completed') {
-        this.setState({ todosNew: todos.filter(todo => todo.completed) });
-      } else if (value === 'all') {
-        this.setState({ todosNew: todos });
+      switch (value) {
+        case 'active':
+          this.setState({ todosNew: todos.filter(todo => !todo.completed) });
+          break;
+        case 'completed':
+          this.setState({ todosNew: todos.filter(todo => todo.completed) });
+          break;
+        default:
+          this.setState({ todosNew: todos });
       }
     }
   }
