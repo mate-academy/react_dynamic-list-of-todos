@@ -1,13 +1,25 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
 
-export const TodoList = ({ todos, selectedFilter, handleSelect }) => (
+export const TodoList = ({
+  todos,
+  handleSelect,
+  handleFilter,
+  viewUser,
+  onChecked,
+}) => (
+
   <div className="TodoList">
     <h2>Todos:</h2>
     <form>
       <label htmlFor="filter">
         Filter
-        <input type="text" name="filter" />
+        <input
+          type="text"
+          name="filter"
+          onChange={event => handleFilter(event.target.value)}
+        />
       </label>
       <label>
         <select
@@ -33,17 +45,23 @@ export const TodoList = ({ todos, selectedFilter, handleSelect }) => (
             key={item.id}
           >
             <label>
-              <input type="checkbox" checked={item.completed} />
+              <input
+                type="checkbox"
+                readOnly
+                checked={item.completed}
+                onChange={() => onChecked(item.id)}
+              />
               <p>{item.title}</p>
             </label>
 
             <button
               className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+            TodoList__user-button
+            TodoList__user-button--selected
+            button
+          "
               type="button"
+              onClick={() => viewUser(item.userId)}
             >
               User&nbsp;#
               {item.userId}
@@ -54,3 +72,17 @@ export const TodoList = ({ todos, selectedFilter, handleSelect }) => (
     </div>
   </div>
 );
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
+    }).isRequired,
+  ).isRequired,
+  viewUser: PropTypes.func.isRequired,
+  handleFilter: PropTypes.func.isRequired,
+  handleSelect: PropTypes.func.isRequired,
+  onChecked: PropTypes.func.isRequired,
+};
