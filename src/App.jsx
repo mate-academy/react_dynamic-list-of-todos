@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
+import { getAll } from './api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -10,6 +11,14 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
+  componentDidMount = async() => {
+    const todos = await getAll();
+
+    this.setState({
+      todos: todos.data.filter(item => item.title && item.id && item.userId),
+    });
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
@@ -18,7 +27,6 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList todos={todos} />
         </div>
-
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
