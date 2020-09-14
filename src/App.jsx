@@ -9,8 +9,9 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    preparedTodos: [],
-    user: [],
+    user: {},
+    status: 'all',
+    query: '',
   };
 
   componentDidMount = async() => {
@@ -18,7 +19,6 @@ class App extends React.Component {
 
     this.setState({
       todos: todos.data.filter(todo => todo.userId),
-      preparedTodos: todos.data.filter(todo => todo.userId),
     });
   }
 
@@ -48,49 +48,43 @@ class App extends React.Component {
 
   onClear = () => {
     this.setState({
-      user: [],
+      user: {},
       selectedUserId: 0,
     });
   }
 
-  findTodo = (query) => {
-    this.setState(state => ({
-      preparedTodos: [...state.todos].filter(todo => (todo.title
-        ? todo.title.includes(query)
-        : '')),
-    }));
-  }
-
-  filterByCompleted = (event) => {
-    switch (event.target.value) {
-      case 'completed':
-        this.setState(state => ({
-          preparedTodos: [...state.todos].filter(todo => todo.completed),
-        }));
-        break;
-      case 'active':
-        this.setState(state => ({
-          preparedTodos: [...state.todos].filter(todo => !todo.completed),
-        }));
-        break;
-      default:
-        this.setState(state => ({
-          preparedTodos: [...state.todos],
-        }));
-    }
-  }
-
   render() {
-    const { selectedUserId, preparedTodos, user } = this.state;
+    const { selectedUserId, todos, user, query, status } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
+
+          <select
+            onChange={event => this.setState({ status: event.target.value })
+            }
+          >
+            <option value="all">
+              All
+            </option>
+            <option value="active">
+              Active
+            </option>
+            <option value="completed">
+              Completed
+            </option>
+          </select>
+
+          <input
+            type="text"
+            placeholder="Find todo"
+            onChange={event => this.setState({ query: event.target.value })}
+          />
           <TodoList
-            todos={preparedTodos}
+            todos={todos}
             selectUser={this.selectUser}
-            findTodo={this.findTodo}
-            filterByCompleted={this.filterByCompleted}
+            query={query}
+            status={status}
           />
         </div>
 
