@@ -35,7 +35,7 @@ componentDidUpdate(prevProps) {
 }
 
 render() {
-  const { name, email, phone } = this.state.user;
+  const { user } = this.state;
 
   return (
     <div className="CurrentUser">
@@ -48,9 +48,15 @@ render() {
         </span>
       </h2>
 
-      <h3 className="CurrentUser__name">{name}</h3>
-      <p className="CurrentUser__email">{email}</p>
-      <p className="CurrentUser__phone">{phone}</p>
+      <h3 className="CurrentUser__name">
+        {user ? user.name : 'No user name'}
+      </h3>
+      <p className="CurrentUser__email">
+        {user ? user.email : 'No user mail'}
+      </p>
+      <p className="CurrentUser__phone">
+        {user ? user.phone : 'No user phone'}
+      </p>
 
       <button
         className="CurrentUser__clear-btn"
