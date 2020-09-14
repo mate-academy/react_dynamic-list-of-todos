@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export class TodoList extends Component {
   state = {
     status: 'All',
-    title: '',
+    query: '',
   }
 
   handleSelect = (event) => {
@@ -14,12 +14,12 @@ export class TodoList extends Component {
   }
 
   handleChange = (event) => {
-    this.setState({ title: event.target.value.toLowerCase() });
+    this.setState({ query: event.target.value.toLowerCase() });
   }
 
   render() {
     const { setUser, changeStatus } = this.props;
-    const { status, title } = this.state;
+    const { status, query } = this.state;
     let { todos } = this.props;
 
     switch (status) {
@@ -33,8 +33,8 @@ export class TodoList extends Component {
         break;
     }
 
-    if (title) {
-      todos = todos.filter(todo => todo.title.includes(title));
+    if (query) {
+      todos = todos.filter(todo => todo.title.includes(query));
     }
 
     return (
