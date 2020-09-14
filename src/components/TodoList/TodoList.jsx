@@ -12,9 +12,9 @@ export class TodoList extends React.PureComponent {
       .includes(query
         .toLowerCase()));
 
-    if (status === 'Active') {
+    if (status === 'In progress') {
       filteredTodos = filteredTodos.filter(todo => !todo.completed);
-    } else if (status === 'Finished') {
+    } else if (status === 'Done') {
       filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
