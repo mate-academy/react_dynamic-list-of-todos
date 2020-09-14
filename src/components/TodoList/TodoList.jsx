@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
@@ -23,7 +23,7 @@ export const TodoList = ({ text,
       onChange={(event) => {
         const { value } = event.target;
 
-        filterByTitle(value);
+        filterByTitle(value.trimLeft());
       }}
     />
     <select
@@ -31,7 +31,6 @@ export const TodoList = ({ text,
       value={status}
       onChange={(event) => {
         const { value } = event.target;
-
         selectStatus(value);
       }}
     >
