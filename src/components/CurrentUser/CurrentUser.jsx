@@ -1,12 +1,55 @@
 import React from 'react';
 import './CurrentUser.scss';
+import propTypes from 'prop-types';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: {},
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.setUserData();
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.userId !== this.props.userId) {
+      this.setUserData();
+    }
+  }
+
+  setUserData() {
+    this.props.getUserData(this.props.userId)
+      .then(userData => this.setState({ user: userData }));
+  }
+
+  render() {
+    const { id, name, phone, email } = this.state.user;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:&nbsp;
+            {id}
+          </span>
+        </h2>
+        <h3 className="CurrentUser__name">{ name }</h3>
+        <p className="CurrentUser__email">{ email }</p>
+        <p className="CurrentUser__phone">{ phone }</p>
+        <button
+          className="CurrentUser__clearButton"
+          type="button"
+          onClick={() => this.props.clearUser()}
+        >
+          Clear User
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  userId: propTypes.number.isRequired,
+  getUserData: propTypes.func.isRequired,
+  clearUser: propTypes.func.isRequired,
+};
