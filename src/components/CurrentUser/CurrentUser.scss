@@ -26,4 +26,15 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__clear-btn {
+    display: block;
+    background-color: #4d457b;
+    padding: 5px 15px;
+    margin: 0 auto;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+  }
 }
