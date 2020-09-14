@@ -7,25 +7,51 @@ import { CurrentUser } from './components/CurrentUser';
 
 class App extends React.Component {
   state = {
+    todosFromServer: [],
     todos: [],
     selectedUserId: 0,
+    selectedFilter: 'All',
   };
 
   componentDidMount = async() => {
-    const todos = await getAll();
+    const getTodos = await getAll();
 
     this.setState({
-      todos: todos.data.filter(item => item.title && item.id && item.userId),
+      todosFromServer: getTodos.data
+        .filter(item => item.title && item.id && item.userId),
+
+      todos: getTodos.data.filter(item => item.title && item.id && item.userId),
     });
   }
 
+  handleSelect = (event) => {
+    if (event === 'Completed') {
+      this.setState(prevState => ({
+        todos: prevState.todosFromServer.filter(item => item.completed),
+      }));
+    } else if (event === 'Not completed') {
+      this.setState(prevState => ({
+        todos: prevState.todosFromServer.filter(item => !item.completed),
+      }));
+    } else {
+      this.setState(prevState => ({
+        todos: prevState.todosFromServer,
+      }));
+    }
+  }
+
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, selectedFilter } = this.state;
 
     return (
       <div className="App">
+        {console.log(this.state.todos)}
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          <TodoList
+            todos={todos}
+            handleSelect={this.handleSelect}
+            selectedFilter={selectedFilter}
+          />
         </div>
         <div className="App__content">
           <div className="App__content-container">
