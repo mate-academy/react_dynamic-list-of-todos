@@ -25,6 +25,16 @@ export class CurrentUser extends React.Component {
   render() {
     const { user } = this.state;
 
+    if (!user) {
+      return (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>No user details</span>
+          </h2>
+        </div>
+      );
+    }
+
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
