@@ -1,20 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './CurrentUser.scss';
-import { userFromServer } from '../../api/todos';
+import { getUser } from '../../api/todos';
 
 export class CurrentUser extends React.Component {
   state = {
     selectedUser: {},
   }
 
+  foundUser
+
   componentDidMount() {
     const { userId } = this.props;
 
-    userFromServer(userId)
-      .then(result => this.setState({
-        selectedUser: result,
-      }));
+    getUser(userId)
+      .then((result) => {
+        if (!result) {
+          this.setState({
+            selectedUser: { name: 'User not found!' },
+          });
+
+          return;
+        }
+
+        this.setState({
+          selectedUser: result,
+        });
+      });
   }
 
   componentDidUpdate(prevProps) {
@@ -24,15 +36,29 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    userFromServer(userId)
-      .then(result => this.setState({
-        selectedUser: result,
-      }));
+    getUser(userId)
+      .then((result) => {
+        if (!result) {
+          this.setState({
+            selectedUser: { name: 'User not found!' },
+          });
+
+          return;
+        }
+
+        this.setState({
+          selectedUser: result,
+        });
+      });
   }
 
   render() {
-    const { userId, clear } = this.props;
+    const { userId, clearSelection } = this.props;
     const { selectedUser } = this.state;
+
+    if (!selectedUser) {
+      return 'Loading...';
+    }
 
     return (
       <div className="CurrentUser">
@@ -45,7 +71,7 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__phone">{selectedUser.phone}</p>
         <button
           type="button"
-          onClick={() => clear()}
+          onClick={() => clearSelection()}
           className="CurrentUser__button"
         >
           Clear
@@ -57,5 +83,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  clear: PropTypes.func.isRequired,
+  clearSelection: PropTypes.func.isRequired,
 };

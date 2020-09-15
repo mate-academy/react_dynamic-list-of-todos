@@ -6,27 +6,28 @@ import './TodoList.scss';
 export class TodoList extends React.Component {
   state = {
     showTodos: 'all',
-    serchByTitle: '',
+    searchByTitle: '',
   }
 
   chooseTodos = (selectBy, arr) => {
-    const { serchByTitle } = this.state;
-    const newArr = arr.filter(item => item.title.includes(serchByTitle));
+    const { searchByTitle } = this.state;
+    const newArr = arr.filter(item => item.title.includes(searchByTitle));
 
-    if (selectBy === 'active') {
-      return newArr.filter(item => !item.completed);
+    switch (selectBy) {
+      case 'active':
+        return newArr.filter(item => !item.completed);
+
+      case 'completed':
+        return newArr.filter(item => item.completed);
+
+      default:
+        return newArr;
     }
-
-    if (selectBy === 'completed') {
-      return newArr.filter(item => item.completed);
-    }
-
-    return newArr;
   }
 
   render() {
     const { todos, takeUserId } = this.props;
-    const { serchByTitle, showTodos } = this.state;
+    const { searchByTitle, showTodos } = this.state;
     const newTodos = this.chooseTodos(showTodos, todos);
 
     return (
@@ -35,10 +36,10 @@ export class TodoList extends React.Component {
 
         <input
           type="text"
-          value={serchByTitle}
+          value={searchByTitle}
           placeholder="Search todo"
           onChange={({ target }) => (
-            this.setState({ serchByTitle: target.value.trimLeft() })
+            this.setState({ searchByTitle: target.value.trimLeft() })
           )}
         />
 

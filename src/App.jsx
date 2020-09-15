@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { todosPromis } from './api/todos';
+import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -13,7 +13,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    todosPromis()
+    getTodos()
       .then(todos => (
         this.setState({
           todos: todos.filter(item => (item.title && item.userId)),
@@ -28,7 +28,7 @@ class App extends React.Component {
   clearUserinfo = () => {
     this.setState({
       selectedUserId: 0,
-      selectedUser: {},
+      selectedUser: null,
     });
   };
 
@@ -50,7 +50,7 @@ class App extends React.Component {
               <CurrentUser
                 user={selectedUser}
                 userId={selectedUserId}
-                clear={this.clearUserinfo}
+                clearSelection={this.clearUserinfo}
               />
             ) : 'No user selected'}
           </div>
