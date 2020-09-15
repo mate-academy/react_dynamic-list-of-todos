@@ -13,10 +13,8 @@ class App extends React.Component {
 
   componentDidMount() {
     getTodos().then((todos) => {
-      const incomeData = todos.data;
-
       this.setState({
-        todos: incomeData,
+        todos,
       });
     });
   }
