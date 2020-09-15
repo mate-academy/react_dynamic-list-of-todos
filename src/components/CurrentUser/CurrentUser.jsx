@@ -23,11 +23,7 @@ export class CurrentUser extends Component {
     }
 
     fetchUser(userId)
-      .then((user) => {
-        if (user !== null) {
-          this.setState({ user });
-        }
-      });
+      .then(user => this.setState({ user }));
   }
 
   render() {
