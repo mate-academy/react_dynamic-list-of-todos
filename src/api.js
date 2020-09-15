@@ -5,4 +5,5 @@ export const getTodos = () => fetch(`${url}/todos`)
   .then(todos => todos.data);
 
 export const getUser = userId => fetch(`${url}/users/${userId}`)
-  .then(response => response.json());
+  .then(response => response.json())
+  .then(user => user.data);

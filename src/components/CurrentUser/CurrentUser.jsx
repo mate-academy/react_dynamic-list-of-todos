@@ -11,8 +11,8 @@ export class CurrentUser extends React.Component {
   componentDidMount = async() => {
     const user = await getUser(this.props.selectedUserId);
 
-    if (user.data) {
-      this.updateUser(user.data);
+    if (user) {
+      this.updateUser(user);
     }
   }
 
@@ -20,8 +20,10 @@ export class CurrentUser extends React.Component {
     if (prevProps.selectedUserId !== this.props.selectedUserId) {
       const user = await getUser(this.props.selectedUserId);
 
-      if (user.data) {
-        this.updateUser(user.data);
+      if (user) {
+        this.updateUser(user);
+      } else {
+        this.updateUser(null);
       }
     }
   }
@@ -34,25 +36,28 @@ export class CurrentUser extends React.Component {
     const { clear } = this.props;
     const { currentUser } = this.state;
 
-    return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user :&nbsp;
-            {currentUser.id}
-          </span>
-        </h2>
+    return ((currentUser !== null)
+      ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user :&nbsp;
+              {currentUser.id}
+            </span>
+          </h2>
 
-        <h3 className="CurrentUser__name">{currentUser.name}</h3>
-        <p className="CurrentUser__email">{currentUser.email}</p>
-        <p className="CurrentUser__phone">{currentUser.phone}</p>
-        <button
-          type="button"
-          onClick={() => clear()}
-        >
-          Clear
-        </button>
-      </div>
+          <h3 className="CurrentUser__name">{currentUser.name}</h3>
+          <p className="CurrentUser__email">{currentUser.email}</p>
+          <p className="CurrentUser__phone">{currentUser.phone}</p>
+          <button
+            type="button"
+            onClick={() => clear()}
+          >
+            Clear
+          </button>
+        </div>
+      )
+      : <p>User not found</p>
     );
   }
 }

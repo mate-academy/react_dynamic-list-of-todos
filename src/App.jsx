@@ -46,7 +46,7 @@ class App extends React.Component {
 
   clear = () => {
     this.setState({
-      selectedUserId: undefined,
+      selectedUserId: 0,
       selectedTodoId: null,
     });
   }
@@ -72,14 +72,15 @@ class App extends React.Component {
 
     let filteredTodos = [];
 
-    if (filter) {
-      if (filter === 'all') {
-        filteredTodos = todos;
-      } else if (filter === 'completed') {
+    switch (filter) {
+      case 'completed':
         filteredTodos = todos.filter(todo => todo.completed);
-      } else if (filter === 'active') {
+        break;
+      case 'active':
         filteredTodos = todos.filter(todo => !todo.completed);
-      }
+        break;
+      default:
+        filteredTodos = todos;
     }
 
     return (
