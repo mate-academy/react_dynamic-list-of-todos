@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './TodoList.scss';
 
 export const TodoList = ({
@@ -35,9 +36,10 @@ export const TodoList = ({
         {todos.map(({ id, title, completed, userId }) => (
           <li
             key={id}
-            className={`TodoList__item ${(completed)
-              ? 'TodoList__item--checked'
-              : 'TodoList__item--unchecked'}`}
+            className={classNames('TodoList__item', {
+              'TodoList__item--checked': completed,
+              'TodoList__item--unchecked': !completed,
+            })}
           >
             <label>
               <input
@@ -48,9 +50,10 @@ export const TodoList = ({
               <p>{title}</p>
             </label>
             <button
-              className={`button ${(selectedUserId === userId)
-                ? 'TodoList__user-button--selected'
-                : 'TodoList__user-button'}`}
+              className={classNames('button', {
+                'TodoList__user-button--selected': selectedUserId === userId,
+                'TodoList__user-button': selectedUserId !== userId,
+              })}
               type="button"
               onClick={() => selectUser(userId)}
             >
