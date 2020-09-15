@@ -22,7 +22,15 @@ export class CurrentUser extends React.Component {
     }
 
     getUser(userId)
-      .then(user => this.setState({ user }));
+      .then(user => ((user !== null)
+        ? this.setState({ user })
+        : this.setState({
+          user: {
+            name: 'No name',
+            email: 'No email',
+            phone: 'No phone',
+          },
+        })));
   }
 
   render() {
@@ -37,9 +45,9 @@ export class CurrentUser extends React.Component {
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
+        <h3 className="CurrentUser__name">{user.name || 'No name'}</h3>
+        <p className="CurrentUser__email">{user.email || 'No email'}</p>
+        <p className="CurrentUser__phone">{user.phone || 'No phone'}</p>
 
         <button
           type="button"

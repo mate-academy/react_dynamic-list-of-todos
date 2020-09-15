@@ -64,10 +64,7 @@ export const TodoList = ({
             </label>
 
             <button
-              className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button"
+              className="button TodoList__user-button"
               type="button"
               onClick={() => (
                 setUserId(todo.userId)
