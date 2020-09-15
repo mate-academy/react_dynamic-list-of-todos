@@ -7,9 +7,9 @@ import { getTodos, getUsers } from './api/api';
 
 class App extends React.Component {
   state = {
-    todosNew: [],
     todos: [],
     users: [],
+    user: {},
     selectedUserId: 0,
     input: '',
     select: '',
@@ -17,54 +17,37 @@ class App extends React.Component {
 
   componentDidMount = () => {
     getTodos()
-      .then(todos => this.setState({
-        todos,
-        todosNew: todos,
-      }));
+      .then(todos => this.setState({ todos }));
 
     getUsers()
       .then(users => this.setState({ users }));
   }
 
   changeSelectedUserId = (event) => {
-    this.setState({ selectedUserId: event.target.value });
+    const { users } = this.state;
+    const { value } = event.target;
+    const user = { ...users.find(us => us.id === +value) };
+
+    this.setState({
+      user,
+      selectedUserId: value,
+    });
   }
 
   clearUserInfo = () => {
     this.setState({ selectedUserId: false });
   }
 
-  hendleFilter = (event) => {
+  handleFilter = (event) => {
     const { name, value } = event.target;
-    const { todos } = this.state;
 
     this.setState({ [name]: value });
-
-    if (name === 'input') {
-      this.setState({
-        todosNew: todos.filter(todo => todo.title !== null
-          && todo.title.includes(value)),
-      });
-    }
-
-    if (name === 'select') {
-      switch (value) {
-        case 'active':
-          this.setState({ todosNew: todos.filter(todo => !todo.completed) });
-          break;
-        case 'completed':
-          this.setState({ todosNew: todos.filter(todo => todo.completed) });
-          break;
-        default:
-          this.setState({ todosNew: todos });
-      }
-    }
   }
 
   render() {
     const {
-      todosNew,
-      users,
+      todos,
+      user,
       selectedUserId,
       input,
       select,
@@ -75,20 +58,21 @@ class App extends React.Component {
         <div className="App__sidebar">
           <Search
             text={input}
-            changeList={this.hendleFilter}
+            changeList={this.handleFilter}
             selectValue={select}
           />
           <TodoList
-            todos={todosNew}
+            todos={todos}
             userDeteil={this.changeSelectedUserId}
+            input={input}
+            select={select}
           />
         </div>
 
         <div className="App__content">
           {selectedUserId ? (
             <CurrentUser
-              userId={selectedUserId}
-              users={users}
+              {...user}
               clearInfo={this.clearUserInfo}
             />
           ) : 'No user selected'}

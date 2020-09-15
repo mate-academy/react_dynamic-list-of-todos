@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const CurrentUser = ({ users, userId, clearInfo }) => (
+export const CurrentUser = ({ id, name, email, phone, clearInfo }) => (
   <div className="CurrentUser">
     <h2>
       Selected user:
-      {userId}
+      {id}
     </h2>
 
     <ul>
-      <li>{users[userId - 1].name}</li>
-      <li>{users[userId - 1].email}</li>
-      <li>{users[userId - 1].phone}</li>
+      <li>{name}</li>
+      <li>{email}</li>
+      {phone && <li>{phone}</li>}
     </ul>
 
     <button
@@ -23,8 +23,14 @@ export const CurrentUser = ({ users, userId, clearInfo }) => (
   </div>
 );
 
+CurrentUser.defaultProps = {
+  phone: false,
+};
+
 CurrentUser.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
-  userId: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  phone: PropTypes.string,
   clearInfo: PropTypes.func.isRequired,
 };
