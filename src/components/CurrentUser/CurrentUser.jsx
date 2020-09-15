@@ -23,7 +23,11 @@ export class CurrentUser extends Component {
     }
 
     fetchUser(userId)
-      .then(user => this.setState({ user }));
+      .then((user) => {
+        if (user !== null) {
+          this.setState({ user });
+        }
+      });
   }
 
   render() {
@@ -33,7 +37,7 @@ export class CurrentUser extends Component {
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
-          {`Selected user: ${this.props.userId}`}
+          <span>Selected user: {this.props.userId}</span>
         </h2>
         <h3 className="CurrentUser__name">{user.name}</h3>
         <p className="CurrentUser__email">{user.email}</p>
