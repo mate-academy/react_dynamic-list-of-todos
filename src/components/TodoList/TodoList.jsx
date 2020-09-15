@@ -9,12 +9,12 @@ export class TodoList extends Component {
     query: '',
   }
 
-  handleSelect = (event) => {
-    this.setState({ status: event.target.value });
+  handleSelect = ({ target }) => {
+    this.setState({ status: target.value });
   }
 
-  handleChange = (event) => {
-    this.setState({ query: event.target.value.toLowerCase() });
+  handleChange = ({ target }) => {
+    this.setState({ query: target.value.toLowerCase() });
   }
 
   render() {

@@ -12,7 +12,13 @@ export class CurrentUser extends Component {
     const { userId } = this.props;
 
     fetchUser(userId)
-      .then(user => this.setState({ user }));
+      .then((user) => {
+        if (!user) {
+          return;
+        }
+
+        this.setState({ user });
+      });
   }
 
   componentDidUpdate() {
@@ -23,17 +29,23 @@ export class CurrentUser extends Component {
     }
 
     fetchUser(userId)
-      .then(user => this.setState({ user }));
+      .then(user => (
+        !user ? this.setState({ user: {} }) : this.setState({ user })
+      ));
   }
 
   render() {
     const { user } = this.state;
-    const { clearUser } = this.props;
+    const { userId, clearUser } = this.props;
 
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
-          <span>Selected user: {this.props.userId}</span>
+          <span>
+            Selected user:
+            {' '}
+            {userId}
+          </span>
         </h2>
         <h3 className="CurrentUser__name">{user.name}</h3>
         <p className="CurrentUser__email">{user.email}</p>
