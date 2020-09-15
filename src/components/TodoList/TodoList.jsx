@@ -9,6 +9,7 @@ export const TodoList = ({
   setTitle,
   setStatus,
   toggleChange,
+  userId,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -66,11 +67,9 @@ export const TodoList = ({
             </label>
 
             <button
-              className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
+              className={classNames('button', {
+                'TodoList__user-button--selected': userId === todo.userId,
+              })}
               type="button"
               onClick={() => {
                 setId(todo.userId);
@@ -99,6 +98,7 @@ TodoList.propTypes = {
   setTitle: PropTypes.func.isRequired,
   setStatus: PropTypes.func.isRequired,
   toggleChange: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };
 
 TodoList.defaultProps = {

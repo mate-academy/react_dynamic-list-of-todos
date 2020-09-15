@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUserInfo } from './api/api';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -72,6 +72,7 @@ class App extends React.Component {
             setTitle={this.setNewTitle}
             setStatus={this.setNewStatus}
             toggleChange={this.toggleChange}
+            userId={selectedUserId}
           />
         </div>
 
@@ -80,7 +81,6 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                getInfo={getUserInfo}
                 clearUserId={this.clearUserId}
               />
             ) : 'No user selected'}

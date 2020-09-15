@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { getUserInfo } from '../../api/api';
 import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: '',
+    user: {},
   }
 
   componentDidMount() {
-    this.props.getInfo(this.props.userId)
+    getUserInfo(this.props.userId)
       .then((user) => {
-        this.setState({ user });
+        this.setUser(user);
       });
   }
 
@@ -19,10 +21,18 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    this.props.getInfo(this.props.userId)
+    getUserInfo(this.props.userId)
       .then((user) => {
-        this.setState({ user });
+        this.setUser(user);
       });
+  }
+
+  setUser = (user) => {
+    if (user) {
+      this.setState({ user });
+    } else {
+      this.setState({ user: { name: 'No name provided' } });
+    }
   }
 
   render() {
@@ -44,11 +54,7 @@ export class CurrentUser extends React.Component {
         <button
           type="button"
           className="CurrentUser__clear"
-          onClick={() => {
-            this.setState({ user: '' });
-
-            clearUserId();
-          }}
+          onClick={() => clearUserId()}
         >
           Clear
         </button>
@@ -59,6 +65,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  getInfo: PropTypes.func.isRequired,
   clearUserId: PropTypes.func.isRequired,
 };
