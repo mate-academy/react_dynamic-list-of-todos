@@ -1,23 +1,13 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { getTodos } from './api/api';
 import { TodoList } from './components/TodoList/TodoList';
 import { CurrentUser } from './components/CurrentUser/CurrentUser';
 
 class App extends React.Component {
   state = {
-    todos: [],
     selectedUserId: 0,
   };
-
-  componentDidMount() {
-    getTodos().then((todos) => {
-      this.setState({
-        todos,
-      });
-    });
-  }
 
   setUserId = (userId) => {
     this.setState({
@@ -26,16 +16,12 @@ class App extends React.Component {
   }
 
   render() {
-    const {
-      todos,
-      selectedUserId,
-    } = this.state;
+    const { selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
             setUserId={this.setUserId}
           />
         </div>
