@@ -1,6 +1,21 @@
 .TodoList {
   width: 100%;
 
+  &__inputContainer {
+    display: grid;
+    margin-bottom: 15px;
+  }
+
+  &__inputField {
+    max-width: 500px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  &__inputSelection {
+    max-width: 100px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
