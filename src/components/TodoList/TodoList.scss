@@ -28,4 +28,15 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__filter {
+    display: flex;
+    justify-content: space-between;
+
+    input,
+    select {
+      padding: 10px 15px;
+      margin-left: 15px;
+    }
+  }
 }
