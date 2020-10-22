@@ -25,7 +25,7 @@ class App extends React.Component {
 
   randomize = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.sort(() => 0.5 - Math.random()),
+      todos: [...prevState.todos].sort(() => 0.5 - Math.random()),
     }));
   }
 
