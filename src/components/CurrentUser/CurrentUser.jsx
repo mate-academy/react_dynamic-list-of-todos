@@ -41,7 +41,7 @@ export class CurrentUser extends React.Component {
         <button
           className="CurrentUser__clear button"
           type="submit"
-          onClick={() => selectUser(0)}
+          onClick={() => selectUser(null)}
         >
           Clear
         </button>

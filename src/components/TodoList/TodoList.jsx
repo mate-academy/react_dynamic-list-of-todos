@@ -4,10 +4,16 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
 
+const STATUS = {
+  all: 'all',
+  active: 'active',
+  complited: 'complited',
+};
+
 export class TodoList extends React.Component {
   state = {
     search: '',
-    status: '',
+    status: STATUS.all,
   }
 
   handleChange = (event) => {
@@ -22,23 +28,16 @@ export class TodoList extends React.Component {
     });
   }
 
-  render() {
-    let { todos } = this.props;
-    const {
-      selectedUserId,
-      selectUser,
-      handleChecked,
-      randomizeTodos,
-    } = this.props;
+  getFilteredTodos = () => {
+    const { todos } = this.props;
     const { search, status } = this.state;
-    const statusArr = ['all', 'active', 'complited'];
 
-    todos = todos.filter(
+    return todos.filter(
       (todo) => {
         switch (status) {
-          case statusArr[1]:
+          case STATUS.active:
             return !todo.completed;
-          case statusArr[2]:
+          case STATUS.complited:
             return todo.completed;
           default:
             return todo;
@@ -47,6 +46,16 @@ export class TodoList extends React.Component {
     ).filter(
       todo => todo.title.toLowerCase().includes(search.toLowerCase()),
     );
+  }
+
+  render() {
+    const {
+      selectedUserId,
+      selectUser,
+      handleChecked,
+      randomizeTodos,
+    } = this.props;
+    const { search, status } = this.state;
 
     return (
       <div className="TodoList">
@@ -71,14 +80,9 @@ export class TodoList extends React.Component {
                 value={status}
                 onChange={this.handleSelect}
               >
-                {statusArr.map(option => (
-                  <option
-                    key={option}
-                    value={option}
-                  >
-                    {option}
-                  </option>
-                ))}
+                <option value={STATUS.all}>{STATUS.all}</option>
+                <option value={STATUS.active}>{STATUS.active}</option>
+                <option value={STATUS.complited}>{STATUS.complited}</option>
               </select>
             </label>
 
@@ -93,7 +97,7 @@ export class TodoList extends React.Component {
 
           <ul className="TodoList__list">
 
-            {todos.map(todo => (
+            {this.getFilteredTodos().map(todo => (
               <li
                 key={todo.id}
                 className={classNames(
@@ -125,8 +129,12 @@ TodoList.propTypes = {
     completed: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
-  selectedUserId: PropTypes.number.isRequired,
+  selectedUserId: PropTypes.number,
   selectUser: PropTypes.func.isRequired,
   handleChecked: PropTypes.func.isRequired,
   randomizeTodos: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  selectedUserId: PropTypes.null,
 };

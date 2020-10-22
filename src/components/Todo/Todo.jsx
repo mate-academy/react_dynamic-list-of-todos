@@ -37,7 +37,11 @@ Todo.propTypes = {
     completed: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  selectedUserId: PropTypes.number.isRequired,
+  selectedUserId: PropTypes.number,
   selectUser: PropTypes.func.isRequired,
   handleChecked: PropTypes.func.isRequired,
+};
+
+Todo.defaultProps = {
+  selectedUserId: PropTypes.null,
 };
