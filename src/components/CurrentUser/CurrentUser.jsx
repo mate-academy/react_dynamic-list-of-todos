@@ -4,8 +4,9 @@ import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: null,
+    user: {},
     isLoading: false,
+    userError: false,
   }
 
   async componentDidMount() {
@@ -13,9 +14,14 @@ export class CurrentUser extends React.Component {
 
     this.updateIsLoading();
 
-    const user = await getUser(userId);
+    try {
+      const user = await getUser(userId);
+      const userData = await user.json();
 
-    this.updateUser(user);
+      this.updateUser(userData.data);
+    } catch (error) {
+      this.updateError();
+    }
   }
 
   async componentDidUpdate(prevProps) {
@@ -27,14 +33,27 @@ export class CurrentUser extends React.Component {
 
     this.updateIsLoading();
 
-    const user = await getUser(userId);
+    try {
+      const user = await getUser(userId);
+      const userData = await user.json();
 
-    this.updateUser(user);
+      this.updateUser(userData.data);
+    } catch (error) {
+      this.updateError();
+    }
+  }
+
+  updateError() {
+    this.setState({
+      isLoading: false,
+      userError: true,
+    });
   }
 
   updateUser(user) {
     this.setState({
       isLoading: false,
+      userError: false,
       user,
     });
   }
@@ -46,7 +65,11 @@ export class CurrentUser extends React.Component {
   }
 
   render() {
-    if (!this.state.user || this.state.isLoading) {
+    if (this.state.userError || !this.state.user) {
+      return <h2>User not found</h2>;
+    }
+
+    if (!this.state.user.id || this.state.isLoading) {
       return (
         <h1 className="loading">Loading...</h1>
       );

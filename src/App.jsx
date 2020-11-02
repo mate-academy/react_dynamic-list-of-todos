@@ -16,7 +16,7 @@ class App extends React.Component {
     const todos = await getTodos();
 
     this.setState(prevState => ({
-      todos: [...prevState.todos, ...todos],
+      todos: [...prevState.todos, ...this.validateTodos(todos)],
     }));
   }
 
@@ -26,6 +26,11 @@ class App extends React.Component {
       selectedTodoId: todoId,
     });
   }
+
+  validateTodos = todos => todos.filter(todo => todo.userId
+        && todo.id
+        && todo.title
+        && typeof todo.completed === 'boolean')
 
   render() {
     const { todos, selectedUserId, selectedTodoId } = this.state;

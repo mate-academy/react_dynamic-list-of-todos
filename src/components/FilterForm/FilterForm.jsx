@@ -25,7 +25,7 @@ export const FilterForm = (props) => {
       >
         <option value="all">All</option>
         <option value="active">Active</option>
-        <option value="completed">completed</option>
+        <option value="completed">Completed</option>
       </select>
     </form>
   );
