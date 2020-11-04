@@ -1,44 +1,124 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import SearchTodo from '../SearchTodo/SearchTodo';
+import { TodoShape } from '../TodoShape/TodoShape';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  state = {
+    search: '',
+    visibleTodos: 'All',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (e) => {
+    const { name, value } = e.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({
+      [name]: value,
+    });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  filterBySelect = (todo, status) => {
+    if (status === 'Completed') {
+      return todo.completed;
+    }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    if (status === 'Active') {
+      return !todo.completed;
+    }
+
+    return true;
+  };
+
+  render() {
+    const {
+      todos,
+      selectUser,
+      selectedUserId,
+      isError,
+      isLoading,
+    } = this.props;
+    const { search, visibleTodos } = this.state;
+
+    if (isLoading) {
+      return (
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div>
+          <h1>Server has problem</h1>
+        </div>
+      );
+    }
+
+    const filteredTodos = todos.filter(todo => todo.title.includes(search)
+      && this.filterBySelect(todo, visibleTodos));
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__list-container">
+          <SearchTodo
+            todos={todos}
+            handleChange={this.handleChange}
+            search={search}
+            visibleTodos={visibleTodos}
+          />
+
+          <ul className="TodoList__list">
+            {filteredTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={
+                  `TodoList__item ${todo.completed
+                    ? 'TodoList__item--checked'
+                    : 'TodoList__item--unchecked'}`
+                }
+              >
+                <label>
+                  <input type="checkbox" checked={todo.completed} readOnly />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      // eslint-disable-next-line max-len
+                      'TodoList__user-button--selected': todo.userId === selectedUserId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => selectUser((todo.userId))}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape(TodoShape)),
+  selectUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+  isError: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
+
+TodoList.defaultProps = {
+  todos: [],
+};
