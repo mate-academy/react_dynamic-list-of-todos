@@ -1,0 +1,14 @@
+.search-bar {
+  &__input {
+    font-family: inherit;
+    width: 25vw;
+    border: 0;
+    border-bottom: 2px solid #ce4646;
+    outline: 0;
+    font-size: 1.2rem;
+    color: rgb(10, 6, 6);
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+}

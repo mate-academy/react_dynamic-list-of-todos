@@ -1,12 +1,52 @@
 import React from 'react';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
+import { Spinner } from 'react-bootstrap';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: {},
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  async loadData() {
+    const user = await getUser(this.props.userId);
+    this.setState({ user })
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.userId !== this.props.userId) {
+      this.loadData()
+    }
+  }
+
+  render() {
+    const { user } = this.state;
+
+    return !user ? (
+      <h1>User not found</h1>
+    ) :
+    (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>Selected user:{user.id} </span>
+        </h2>
+        <button
+          className="CurrentUser__clear"
+          onClick={this.props.clickHandler}
+        >
+          Clear
+        </button>
+  
+        <h3 className="CurrentUser__name">{user.name}</h3>
+        <p className="CurrentUser__email">{user.email}</p>
+        <p className="CurrentUser__phone">{user.phone}</p>
+      </div>
+    )
+  }
+  
+};
+

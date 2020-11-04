@@ -74,6 +74,13 @@ input[type="checkbox"]:checked + p:before {
   justify-content: stretch;
   align-content: stretch;
 
+  &__tools {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 20px
+  }
+
   &__sidebar {
     @extend %stretch-panel;
 
