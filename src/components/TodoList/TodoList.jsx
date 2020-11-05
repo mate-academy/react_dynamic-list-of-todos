@@ -35,31 +35,33 @@ export class TodoList extends React.PureComponent {
 
     return (
       <div className="TodoList">
-        <input
-          className="input"
-          type="text"
-          name="query"
-          value={query}
-          onChange={this.handleChange}
-        />
+        <div>
+          <input
+            className="input"
+            type="text"
+            name="query"
+            value={query}
+            onChange={this.handleChange}
+          />
 
-        <select
-          name="status"
-          value={status}
-          onChange={this.handleChange}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
+          <select
+            name="status"
+            value={status}
+            onChange={this.handleChange}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
 
-        <button
-          className="button"
-          type="button"
-          onClick={shuffleTodos}
-        >
-          Shuffle
-        </button>
+          <button
+            className="button"
+            type="button"
+            onClick={shuffleTodos}
+          >
+            Shuffle
+          </button>
+        </div>
 
         <h2>Todos:</h2>
 
