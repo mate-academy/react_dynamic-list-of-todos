@@ -43,9 +43,10 @@ export const TodoList = ({
             <li
               key={id}
               className={classNames(
-                'TodoList__item',
-                { 'TodoList__item--unchecked': completed === false },
-                { 'TodoList__item--checked': completed === true },
+                'TodoList__item', {
+                  'TodoList__item--unchecked': !completed,
+                  'TodoList__item--checked': completed,
+                },
               )}
             >
               <label>

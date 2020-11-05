@@ -56,12 +56,12 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser
+            {!selectedUserId
+            ? 'No user selected'
+            : <CurrentUser
                 userId={selectedUserId}
                 handleUser={handleUser}
-              />
-            ) : 'No user selected'}
+              />}
           </div>
         </div>
       </div>
