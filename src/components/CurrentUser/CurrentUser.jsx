@@ -7,7 +7,6 @@ import './CurrentUser.scss';
 export class CurrentUser extends React.PureComponent {
   state = {
     user: {},
-    err: null,
   }
 
   async componentDidMount() {
@@ -30,14 +29,9 @@ export class CurrentUser extends React.PureComponent {
     try {
       const user = await getUser(userId);
 
-      user
-        ? this.setState({
-          user,
-          err: null,
-        })
-        : this.setState({
-          err: 'User not found',
-        });
+      this.setState({
+        user,
+      });
     } catch (error) {
       console.warn(error);
     }
@@ -45,36 +39,33 @@ export class CurrentUser extends React.PureComponent {
 
   render() {
     const { userId, resetUserId } = this.props;
-    const { user, err } = this.state;
+    const { user } = this.state;
 
-    return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {' '}
-            {userId}
-          </span>
-        </h2>
+    return !user
+      ? <p>User not found</p>
+      : (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {userId}
+            </span>
+          </h2>
 
-        {err || (
-          <>
-            <h3 className="CurrentUser__name">{user.name}</h3>
-            <p className="CurrentUser__email">{user.email}</p>
-            <p className="CurrentUser__phone">{user.phone}</p>
-          </>
-        )
-        }
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
 
-        <button
-          type="button"
-          className="CurrentUser__button button"
-          onClick={resetUserId}
-        >
-          Clear
-        </button>
-      </div>
-    );
+          <button
+            type="button"
+            className="CurrentUser__button button"
+            onClick={resetUserId}
+          >
+            Clear
+          </button>
+        </div>
+      );
   }
 }
 
