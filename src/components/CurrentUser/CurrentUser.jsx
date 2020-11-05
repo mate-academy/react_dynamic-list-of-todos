@@ -1,7 +1,6 @@
 import React from 'react';
 import { getUser } from '../../api/api';
 import './CurrentUser.scss';
-import { Spinner } from 'react-bootstrap';
 
 export class CurrentUser extends React.Component {
   state = {
