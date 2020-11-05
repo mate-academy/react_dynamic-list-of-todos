@@ -23,7 +23,7 @@
   }
 
   &__clear {
-    background-color: #4d457b;
+    background-color: rgba(54, 9, 68, 0.5);
     font-size: 16px;
     font-weight: bold;
     color: #fff;
@@ -32,5 +32,6 @@
     display: block;
     width: 100px;
     margin: 20px auto 0;
+    cursor: pointer;
   }
 }

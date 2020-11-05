@@ -18,16 +18,21 @@ class App extends React.Component {
     selectedPost: 0,
     selectedUserId: 0,
     isLoading: true,
+    hasLoadinsErros: false,
   };
 
   componentDidMount() {
     getTodos()
       .then((todos) => {
-        this.setState({
-          todos: todos
-            .filter(todo => todo.title !== ''),
-          isLoading: false,
-        });
+        try {
+          this.setState({
+            todos: todos
+              .filter(todo => todo.title !== ''),
+            isLoading: false,
+          });
+        } catch {
+          this.setState({ hasLoadinsErros: true });
+        }
       });
   }
 
@@ -105,7 +110,11 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedUserId, isLoading } = this.state;
+    const {
+      selectedUserId,
+      isLoading,
+      hasLoadinsErros,
+    } = this.state;
 
     return (
       <div className="App">
@@ -128,6 +137,7 @@ class App extends React.Component {
               />
             )
           }
+          {hasLoadinsErros && (<h1> Error </h1>)}
         </div>
 
         <div className="App__content">
