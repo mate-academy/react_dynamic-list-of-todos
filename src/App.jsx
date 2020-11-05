@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { SearchBar } from './components/SearchBar';
@@ -15,6 +17,7 @@ class App extends React.Component {
     todos: [],
     selectedPost: 0,
     selectedUserId: 0,
+    isLoading: true,
   };
 
   componentDidMount() {
@@ -22,22 +25,24 @@ class App extends React.Component {
       .then((todos) => {
         this.setState({
           todos: todos
-            .filter(todo => todo.title !== '')
+            .filter(todo => todo.title !== ''),
+          isLoading: false,
         });
       });
-
   }
 
   selectPost = (postId, userId) => {
-    this.setState({ selectedUserId: userId,
-      selectedPost: postId });
+    this.setState({
+      selectedUserId: userId,
+      selectedPost: postId,
+    });
   }
 
   clear = () => {
     this.setState({
       selectedPost: 0,
       selectedUserId: 0,
-    })
+    });
   }
 
   handleChange = (event) => {
@@ -54,42 +59,53 @@ class App extends React.Component {
     ));
   }
 
-
   filterBySelect = (todos) => {
     const { select } = this.state;
-    switch(select) {
+
+    switch (select) {
       case 'All': return this.state.todos;
       case 'Active': return todos
-        .filter(todo => !todo.completed)
+        .filter(todo => !todo.completed);
       case 'Completed': return todos
-      .filter(todo => todo.completed)
+        .filter(todo => todo.completed);
+      default: break;
     }
-  }
 
-  filter(todos) {
-    if(!todos) {
-      const todos = this.filterBySelect(this.state.todos);
-      return this.filterBySearch(todos);
-    }
+    return this.state.todos;
   }
 
   random = () => {
     this.setState(prevState => (
       {
         todos: [...prevState.todos]
-          .sort(function(){
-          return Math.random() - 0.5;
-        })
+          .sort(() => Math.random() - 0.5),
       }
-    ))
+    ));
   }
 
-  componentDidUpdate() {
-    console.log(1);
+  loader = () => (
+    <Loader
+      className="App__loader"
+      type="Oval"
+      color="#4d457b"
+      height={70}
+      width={70}
+      timeout={1500}
+    />
+  )
+
+  filter() {
+    const todos = this.filterBySelect(this.state.todos);
+
+    if (this.state.query !== '') {
+      return this.filterBySearch(todos);
+    }
+
+    return todos;
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { selectedUserId, isLoading } = this.state;
 
     return (
       <div className="App">
@@ -103,11 +119,15 @@ class App extends React.Component {
             <Select changeHandler={this.handleChange} />
             <Randomizer clickHandler={this.random} />
           </div>
-          <TodoList
-            todos={this.filter()}
-            selected={this.state.selectedPost}
-            clickHandler={this.selectPost}
-          />
+          {isLoading ? this.loader()
+            : (
+              <TodoList
+                todos={this.filter()}
+                selected={this.state.selectedPost}
+                clickHandler={this.selectPost}
+              />
+            )
+          }
         </div>
 
         <div className="App__content">
@@ -116,6 +136,7 @@ class App extends React.Component {
               <CurrentUser
                 userId={selectedUserId}
                 clickHandler={this.clear}
+                loader={this.loader}
               />
             ) : 'No user selected'}
           </div>

@@ -9,13 +9,12 @@ export const Select = ({ changeHandler }) => (
       name="select"
       onChange={changeHandler}
     >
-    <option value="All">All</option>
-    <option value="Completed">Completed</option>
-    <option value="Active">Active</option>
-  </select>
+      <option value="All">All</option>
+      <option value="Completed">Completed</option>
+      <option value="Active">Active</option>
+    </select>
   </div>
-  
-    
+
 );
 
 Select.propTypes = {

@@ -12,10 +12,16 @@ function request(url) {
     .then(result => result.data);
 }
 
-export function getTodos() {
+function wait(delay) {
+  return new Promise(resolve => setTimeout(resolve, delay))
+}
+
+export const getTodos = async () => {
+  await wait(1000);
   return request(`/todos`);
 }
 
-export function getUser(userId) {
+export const getUser = async (userId) => {
+  await wait(1000);
   return request(`/users/${userId}`);
 }

@@ -98,4 +98,10 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__loader { 
+    position: relative;
+    left: 40%;
+    top: 10px;
+  }
 }

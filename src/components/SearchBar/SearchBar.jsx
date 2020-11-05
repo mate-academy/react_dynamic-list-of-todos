@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './SearchBar.scss'
+import './SearchBar.scss';
 
 export const SearchBar = ({ value, handleChange }) => (
-  
+
   <div className="search-bar">
     <input
       type="text"
