@@ -9,6 +9,7 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    selectedTodoId: 0,
   };
 
   componentDidMount() {
@@ -31,18 +32,28 @@ class App extends React.Component {
   clearUserId = () => {
     this.setState({
       selectedUserId: 0,
+      selectedTodoId: 0,
     });
   }
 
+  handleChange = (event, todoId) => {
+    this.setState({
+      selectedTodoId: todoId,
+    });
+
+    this.selectUser(event);
+  }
+
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, selectedTodoId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            selectUser={this.selectUser}
+            handleChange={this.handleChange}
+            selectedTodoId={selectedTodoId}
           />
         </div>
 
