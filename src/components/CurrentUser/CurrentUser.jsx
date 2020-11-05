@@ -7,6 +7,7 @@ import './CurrentUser.scss';
 export class CurrentUser extends React.PureComponent {
   state = {
     user: {},
+    err: null,
   }
 
   async componentDidMount() {
@@ -29,25 +30,22 @@ export class CurrentUser extends React.PureComponent {
     try {
       const user = await getUser(userId);
 
-      this.setState({
-        user,
-      });
+      user
+        ? this.setState({
+          user,
+          err: null,
+        })
+        : this.setState({
+          err: 'User not found',
+        });
     } catch (error) {
-      this.setState({
-        user: {
-          name: 'No name',
-          email: 'No email',
-          phone: 'No phone',
-        },
-      });
-
       console.warn(error);
     }
   }
 
   render() {
     const { userId, resetUserId } = this.props;
-    const { user: { name, email, phone } } = this.state;
+    const { user, err } = this.state;
 
     return (
       <div className="CurrentUser">
@@ -59,9 +57,14 @@ export class CurrentUser extends React.PureComponent {
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
+        {err || (
+          <>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+          </>
+        )
+        }
 
         <button
           type="button"
