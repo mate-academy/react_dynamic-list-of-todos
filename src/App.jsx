@@ -3,13 +3,12 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 
 class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    selectedUser: null,
     filterQuery: '',
     selectValue: 'all',
   };
@@ -31,28 +30,6 @@ class App extends React.Component {
       .catch(err => console.warn(err));
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { selectedUserId } = this.state;
-
-    if (prevState.selectedUserId !== selectedUserId) {
-      this.changeSelectedUser(selectedUserId);
-    }
-  }
-
-  changeSelectedUser = async(userId) => {
-    try {
-      const user = await getUser(userId);
-
-      this.setState({
-        selectedUser: user,
-      });
-    } catch (error) {
-      this.setState({
-        selectedUser: null,
-      });
-    }
-  }
-
   changeUserId = (userId) => {
     this.setState({
       selectedUserId: userId,
@@ -67,7 +44,7 @@ class App extends React.Component {
     });
   }
 
-  resetSelectedUser = () => {
+  resetUserId = () => {
     this.setState({
       selectedUserId: 0,
     });
@@ -87,7 +64,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedUser, filterQuery, selectValue, userId } = this.state;
+    const { selectedUserId, filterQuery, selectValue } = this.state;
 
     return (
       <div className="App">
@@ -104,11 +81,10 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUser ? (
+            {selectedUserId ? (
               <CurrentUser
-                userId={userId}
-                user={selectedUser}
-                resetUser={this.resetSelectedUser}
+                userId={selectedUserId}
+                resetUserId={this.resetUserId}
               />
             ) : 'No user selected'}
           </div>
