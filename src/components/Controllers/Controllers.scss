@@ -1,0 +1,9 @@
+.Controllers{
+  display: flex;
+  justify-content: space-evenly;
+
+  &__select,
+  &__input {
+    width: 200px;
+  }
+}

@@ -1,4 +1,6 @@
 .CurrentUser {
+  text-align: center;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -18,7 +20,6 @@
   &__email,
   &__phone {
     color: #c4bdd9;
-    text-align: center;
     margin: 5px;
   }
 
