@@ -1,7 +1,8 @@
 import React from 'react';
-import './TodoList.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+
+import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
