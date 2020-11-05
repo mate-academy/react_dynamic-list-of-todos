@@ -33,6 +33,14 @@ export class CurrentUser extends React.PureComponent {
         user,
       });
     } catch (error) {
+      this.setState({
+        user: {
+          name: 'No name',
+          email: 'No email',
+          phone: 'No phone',
+        },
+      });
+
       console.warn(error);
     }
   }
