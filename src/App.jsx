@@ -13,9 +13,9 @@ class App extends React.Component {
 
   componentDidMount() {
     getAllTodos()
-      .then(todos=> {
-        this.setState({todos})
-      })
+      .then((todos) => {
+        this.setState({ todos });
+      });
   }
 
   selectUser = (id) => {
@@ -35,7 +35,7 @@ class App extends React.Component {
             todos={todos}
             selectUser={selectUser}
             selectedUserId={selectedUserId}
-           />
+          />
         </div>
 
         <div className="App__content">
