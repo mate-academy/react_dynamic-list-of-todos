@@ -72,10 +72,22 @@ class App extends React.Component {
   }
 
   shuffleTodos = () => {
-    this.setState(prevState => ({
-      filteredTodos: [...prevState.filteredTodos]
-        .sort(() => Math.random() - 0.5),
-    }));
+    this.setState((prevState) => {
+      const shuffledTodos = [...prevState.filteredTodos];
+
+      for (let i = shuffledTodos.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [
+          shuffledTodos[i],
+          shuffledTodos[j],
+        ] = [shuffledTodos[j], shuffledTodos[i]];
+      }
+
+      return {
+        filteredTodos: shuffledTodos,
+      };
+    });
   }
 
   render() {
