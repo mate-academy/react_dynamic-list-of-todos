@@ -9,7 +9,7 @@ export const TodoList = ({
   todos,
   filterText,
   handleChange,
-  selectValue,
+  showedTodos,
   changeUserId,
 }) => (
   <div className="TodoList">
@@ -19,7 +19,7 @@ export const TodoList = ({
       className="TodoList__controllers"
       filterText={filterText}
       handleChange={handleChange}
-      selectValue={selectValue}
+      showedTodos={showedTodos}
     />
 
     <div className="TodoList__list-container">

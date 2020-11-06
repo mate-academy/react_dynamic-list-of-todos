@@ -11,7 +11,7 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     filterText: '',
-    selectValue: 'all',
+    showedTodos: 'all',
   };
 
   componentDidMount() {
@@ -46,7 +46,7 @@ class App extends React.Component {
   }
 
   getFiltredTodos = () => {
-    const { todos, filterText, selectValue } = this.state;
+    const { todos, filterText, showedTodos } = this.state;
 
     const filterBy = {
       all: () => true,
@@ -60,12 +60,12 @@ class App extends React.Component {
         const searchText = filterText.toLowerCase();
 
         return todoTitle.includes(searchText)
-          && filterBy[selectValue](completed);
+          && filterBy[showedTodos](completed);
       });
   }
 
   render() {
-    const { selectedUserId, filterText, selectValue } = this.state;
+    const { selectedUserId, filterText, showedTodos } = this.state;
 
     return (
       <div className="App">
@@ -76,7 +76,7 @@ class App extends React.Component {
             filterText={filterText}
             handleChange={this.handleChange}
             changeUserId={this.changeUserId}
-            selectValue={selectValue}
+            showedTodos={showedTodos}
           />
         </div>
 
