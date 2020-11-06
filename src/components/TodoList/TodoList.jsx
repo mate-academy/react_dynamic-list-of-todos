@@ -45,13 +45,6 @@ export class TodoList extends React.Component {
       return true;
     });
 
-    // let randomNum = function (pow) {
-    //   return Math.random() * pow;
-    // };
-
-    // let addedRandomNum = Math.floor(randomNum(10));
-    // console.log(addedRandomNum - 6);
-
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -78,10 +71,6 @@ export class TodoList extends React.Component {
           <option value="active">active</option>
           <option value="completed">completed</option>
         </select>
-
-        <button type="button">
-          RANDOM
-        </button>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
