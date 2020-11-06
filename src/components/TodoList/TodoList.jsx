@@ -1,9 +1,9 @@
 import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import SearchTodo from '../SearchTodo/SearchTodo';
 import { TodoShape } from '../TodoShape/TodoShape';
+import Todo from '../Todo/Todo';
 
 export class TodoList extends React.PureComponent {
   state = {
@@ -36,12 +36,12 @@ export class TodoList extends React.PureComponent {
       todos,
       selectUser,
       selectedUserId,
-      isError,
-      isLoading,
+      hasError,
+      hasLoading,
     } = this.props;
     const { search, visibleTodos } = this.state;
 
-    if (isLoading) {
+    if (hasLoading) {
       return (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -51,7 +51,7 @@ export class TodoList extends React.PureComponent {
       );
     }
 
-    if (isError) {
+    if (hasError) {
       return (
         <div>
           <h1>Server has problem</h1>
@@ -83,25 +83,11 @@ export class TodoList extends React.PureComponent {
                     : 'TodoList__item--unchecked'}`
                 }
               >
-                <label>
-                  <input type="checkbox" checked={todo.completed} readOnly />
-                  <p>{todo.title}</p>
-                </label>
-
-                <button
-                  className={classNames(
-                    'TodoList__user-button',
-                    'button',
-                    {
-                      // eslint-disable-next-line max-len
-                      'TodoList__user-button--selected': todo.userId === selectedUserId,
-                    },
-                  )}
-                  type="button"
-                  onClick={() => selectUser((todo.userId))}
-                >
-                  {`User #${todo.userId}`}
-                </button>
+                <Todo
+                  {...todo}
+                  selectedUserId={selectedUserId}
+                  selectUser={selectUser}
+                />
               </li>
             ))}
           </ul>
@@ -115,8 +101,8 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape(TodoShape)),
   selectUser: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
-  isError: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  hasError: PropTypes.bool.isRequired,
+  hasLoading: PropTypes.bool.isRequired,
 };
 
 TodoList.defaultProps = {

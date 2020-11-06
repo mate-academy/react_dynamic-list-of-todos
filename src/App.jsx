@@ -8,25 +8,30 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     todos: [],
-    isError: false,
-    isLoading: false,
+    hasError: false,
+    hasLoading: false,
     selectedUserId: 0,
   };
 
   async componentDidMount() {
-    this.setState({ isLoading: true });
+    this.setState({ hasLoading: true });
     try {
-      const todos = await getTodos();
+      const todos = await getTodos()
+        .then(todosData => todosData.data
+          .filter(todo => todo.id
+            && todo.userId
+            && todo.title
+            && todo.completed !== null));
 
       this.setState({
-        todos: todos.data,
-        isError: false,
-        isLoading: false,
+        todos,
+        hasError: false,
+        hasLoading: false,
       });
     } catch (error) {
       this.setState({
-        isError: true,
-        isLoading: false,
+        hasError: true,
+        hasLoading: false,
       });
     }
   }
@@ -44,7 +49,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, isError, isLoading } = this.state;
+    const { todos, selectedUserId, hasError, hasLoading } = this.state;
 
     return (
       <div className="App">
@@ -53,8 +58,8 @@ class App extends React.Component {
             todos={todos}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
-            isError={isError}
-            isLoading={isLoading}
+            hasError={hasError}
+            hasLoading={hasLoading}
           />
         </div>
 
