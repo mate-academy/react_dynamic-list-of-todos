@@ -27,11 +27,6 @@ class App extends React.Component {
     });
   }
 
-  validateTodos = todos => todos.filter(todo => todo.userId
-        && todo.id
-        && todo.title
-        && typeof todo.completed === 'boolean')
-
   render() {
     const { todos, selectedUserId, selectedTodoId } = this.state;
 
