@@ -1,0 +1,23 @@
+.Todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 5px;
+
+  &__user-button--selected {
+    background-color: #4d457b;
+    color: white;
+  }
+
+  &--checked {
+    background-color: #cde4e4;
+    color: #459595;
+  }
+
+  &--unchecked {
+    background-color: #ffe0db;
+    color: #ff3626;
+  }
+}
