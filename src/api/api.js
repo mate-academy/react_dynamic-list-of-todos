@@ -1,22 +1,15 @@
-const TODOS_URL = 'https://mate-api.herokuapp.com/todos/';
-const USERS_URL = 'https://mate-api.herokuapp.com/users/';
+const BASE_URL = 'https://mate-api.herokuapp.com';
 
-export const getAllTodos = () => fetch(TODOS_URL)
+const request = url => fetch(`${BASE_URL}${url}`)
   .then((response) => {
-    if (response.ok) {
-      return response.json();
+    if (!response.ok) {
+      throw new Error(`${response.status} - ${response.statusText}`);
     }
 
-    throw new Error(`${response.status} - ${response.statusText}`);
+    return response.json();
   })
-  .then(todos => todos.data);
+  .then(result => result.data);
 
-export const getUser = id => fetch(`${USERS_URL}${id}`)
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
+export const getAllTodos = () => request(`/todos`);
 
-    throw new Error(`${response.status} - ${response.statusText}`);
-  })
-  .then(user => user.data);
+export const getUser = userId => request(`/users/${userId}`);
