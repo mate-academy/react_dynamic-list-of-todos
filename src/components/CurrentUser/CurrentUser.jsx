@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import { CurrentUserPropTypes } from '../PropTypes/CurrentUserPropTypes';
 import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
@@ -65,8 +66,4 @@ export class CurrentUser extends React.Component {
   }
 }
 
-CurrentUser.propTypes = {
-  userId: PropTypes.number.isRequired,
-  selectUser: PropTypes.func.isRequired,
-  getUser: PropTypes.func.isRequired,
-};
+CurrentUser.propTypes = CurrentUserPropTypes;

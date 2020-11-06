@@ -1,8 +1,10 @@
 import React from 'react';
 import './TodoList.scss';
-
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { TodoPropType } from '../PropTypes/TodoPropType';
+
+import { Todo } from '../Todo';
+import { Inputs } from '../Inputs';
 
 export class TodoList extends React.Component {
   state = {
@@ -35,62 +37,20 @@ export class TodoList extends React.Component {
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <div className="TodoList__inputs">
-          <label htmlFor="search">
-            Search todo in list:
-            <input
-              type="text"
-              id="search"
-              className="TodoList__input"
-              name="query"
-              value={query}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label htmlFor="visibletodos">
-            Choose todos
-            <select
-              id="visibleTodos"
-              name="visibleTodos"
-              value={visibleTodos}
-              onChange={handleChange}
-            >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
-        </div>
+        <Inputs
+          handleChange={handleChange}
+          query={query}
+          visibleTodos={visibleTodos}
+        />
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {filteredTodos.map(({ id, userId, completed, title }) => (
-              <li
-                key={id}
-                className={classNames('TodoList__item',
-                  {
-                    'TodoList__item--unchecked': !completed,
-                    'TodoList__item--checked': completed,
-                  })}
-              >
-
-                <label>
-                  <input type="checkbox" checked={completed} readOnly />
-                  <p>{title}</p>
-                </label>
-
-                <button
-                  type="button"
-                  className={classNames('button TodoList__user-button', {
-                    'TodoList__user-button--selected':
-                      userId === selectedUserId,
-                  })}
-                  onClick={() => selectUser(userId)}
-                >
-                  {`UserID #${userId}`}
-                </button>
-              </li>
+            {filteredTodos.map(todo => (
+              <Todo
+                todo={todo}
+                selectUser={selectUser}
+                selectedUserId={selectedUserId}
+              />
             ))}
           </ul>
         </div>
@@ -101,12 +61,7 @@ export class TodoList extends React.Component {
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      userId: PropTypes.number,
-      title: PropTypes.string.isRequired,
-      completed: PropTypes.bool,
-    }),
+    PropTypes.shape(TodoPropType),
   ).isRequired,
   selectedUserId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,

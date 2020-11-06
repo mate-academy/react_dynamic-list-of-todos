@@ -15,7 +15,10 @@ class App extends React.Component {
   componentDidMount() {
     getAllTodos()
       .then((todos) => {
-        this.setState({ todos });
+        const checkedTodos = todos.filter(todo => (
+          todo.title && todo.id));
+
+        this.setState({ todos: checkedTodos });
       });
   }
 
