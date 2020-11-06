@@ -16,7 +16,7 @@ export const Todo = ({ completed, title, userId, changeUserId }) => (
       type="button"
       onClick={() => changeUserId(userId)}
     >
-      User&nbsp;#
+      {'User #'}
       {userId}
     </button>
   </>
