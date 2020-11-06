@@ -6,8 +6,6 @@ import { CurrentUser } from './components/CurrentUser';
 
 import { request } from './api';
 
-let todosFromServer;
-
 class App extends React.PureComponent {
   state = {
     todos: [],
@@ -20,12 +18,10 @@ class App extends React.PureComponent {
 
   getTodos = () => {
     request('./todos').then((result) => {
-      todosFromServer = result.data.filter(todo => (
-        todo.title && todo.id
-      ));
-
       this.setState({
-        todos: todosFromServer,
+        todos: result.data.filter(todo => (
+          todo.title && todo.id
+        )),
       });
     });
   }
