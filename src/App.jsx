@@ -21,7 +21,7 @@ class App extends React.PureComponent {
   getTodos = () => {
     request('./todos').then((result) => {
       todosFromServer = result.data.filter(todo => (
-        todo.title
+        todo.title && todo.id
       ));
 
       this.setState({
