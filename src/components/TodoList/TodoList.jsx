@@ -7,7 +7,7 @@ export class TodoList extends React.Component {
   state = {
     title: '',
     filter: '',
-    selectedId: '',
+    selectedTodoId: '',
   }
 
   handleChange = (event, name) => {
@@ -18,21 +18,21 @@ export class TodoList extends React.Component {
   }
 
   handleSelect = (event) => {
-    const { filterUserByCompleted } = this.props;
+    const { filterTodosByStatus } = this.props;
     const { value } = event.target;
 
     this.setState({ filter: value });
-    filterUserByCompleted(value);
+    filterTodosByStatus(value);
   }
 
-  handleSelectUser = (id, userId) => {
+  handleSelectUser = (todoId, userId) => {
     this.props.selectUser(userId);
-    this.setState({ selectedId: id });
+    this.setState({ selectedTodoId: todoId });
   }
 
   render() {
     const { todos, shuffle } = this.props;
-    const { title, filter, selectedId } = this.state;
+    const { title, filter, selectedTodoId } = this.state;
 
     return (
       <div className="TodoList">
@@ -48,11 +48,11 @@ export class TodoList extends React.Component {
           />
           <select
             value={filter}
-            name="completed"
+            name="status"
             onChange={this.handleSelect}
             className="TodoList__select select"
           >
-            <option value="">filter by status</option>
+            <option value="" disabled>filter by status</option>
             <option value="all">all</option>
             <option value="active">active</option>
             <option value="completed">completed</option>
@@ -82,8 +82,8 @@ export class TodoList extends React.Component {
 
                 <button
                   className={ClassNames(
-                    'TodoList__user-button', 'button', {
-                      'TodoList__user-button--selected': todo.id === selectedId,
+                    'TodoList__button', 'button', {
+                      'TodoList__button--selected': todo.id === selectedTodoId,
                     },
                   )}
                   type="button"
@@ -113,6 +113,6 @@ TodoList.propTypes = {
   ).isRequired,
   selectUser: PropTypes.func.isRequired,
   filterUser: PropTypes.func.isRequired,
-  filterUserByCompleted: PropTypes.func.isRequired,
+  filterTodosByStatus: PropTypes.func.isRequired,
   shuffle: PropTypes.func.isRequired,
 };

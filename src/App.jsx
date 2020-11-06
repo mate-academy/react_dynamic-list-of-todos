@@ -17,9 +17,11 @@ class App extends React.Component {
   async componentDidMount() {
     const todos = await getTodos();
 
+    const validTodos = todos.filter(todo => todo.title && todo.userId);
+
     this.setState({
-      todos: todos.filter(todo => todo.title !== '' && todo.userId !== null),
-      allTodos: todos.filter(todo => todo.title !== '' && todo.userId !== null),
+      todos: validTodos,
+      allTodos: validTodos,
       isLoaded: true,
     });
   }
@@ -32,26 +34,32 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  filterUserByField = (value, field) => {
+  filterTodosByTitle = (value, field) => {
     this.setState(state => ({
-      todos: [...state.allTodos].filter(todo => todo[field].includes(value)),
+      todos: state.allTodos.filter(todo => todo[field].includes(value)),
     }));
   }
 
-  filterUserByCompleted = (value) => {
-    if (value === 'all' || value === 'filter by status') {
-      this.setState(state => ({
-        todos: [...state.allTodos],
-      }));
-
-      return;
+  filterTodosByStatus = (value) => {
+    switch (value) {
+      case 'all':
+        this.setState(state => ({
+          todos: [...state.allTodos],
+        }));
+        break;
+      case 'completed':
+        this.setState(state => ({
+          todos: state.allTodos.filter(todo => todo.completed),
+        }));
+        break;
+      case 'active':
+        this.setState(state => ({
+          todos: state.allTodos.filter(todo => !todo.completed),
+        }));
+        break;
+      default:
+        break;
     }
-
-    const filterValue = value === 'completed';
-
-    this.setState(state => ({
-      todos: [...state.allTodos].filter(todo => todo.completed === filterValue),
-    }));
   }
 
   shuffle = () => {
@@ -80,8 +88,8 @@ class App extends React.Component {
             <TodoList
               todos={todos}
               selectUser={this.selectUser}
-              filterUser={this.filterUserByField}
-              filterUserByCompleted={this.filterUserByCompleted}
+              filterUser={this.filterTodosByTitle}
+              filterTodosByStatus={this.filterTodosByStatus}
               shuffle={this.shuffle}
             />
           </div>
