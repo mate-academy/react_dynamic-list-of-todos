@@ -18,6 +18,11 @@ class App extends React.Component {
         this.setState({
           todos: [...todos],
         });
+      })
+      .catch(() => {
+        this.setState({
+          todos: [],
+        });
       });
   }
 

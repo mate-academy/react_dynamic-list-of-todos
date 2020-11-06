@@ -2,6 +2,8 @@ import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
+import { TodoSearch } from '../TodoSearch/TodoSearch';
+import { StatusSelect } from '../StatusSelect/StatusSelect';
 
 export class TodoList extends React.Component {
   state = {
@@ -48,29 +50,11 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <input
-          className="TodoList__search"
-          type="text"
-          placeholder="Type search word"
-          onChange={this.searchHandler}
+        <TodoSearch searchHandler={this.searchHandler} />
+        <StatusSelect
+          selectedOption={selectedOption}
+          handleSelect={this.handleSelect}
         />
-
-        <select
-          className="TodoList__select"
-          value={selectedOption}
-          onChange={this.handleSelect}
-        >
-          <option
-            value=""
-            disabled
-            defaultValue
-          >
-            Choose the status of the task
-          </option>
-          <option value="all">all</option>
-          <option value="active">active</option>
-          <option value="completed">completed</option>
-        </select>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">

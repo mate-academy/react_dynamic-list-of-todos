@@ -9,22 +9,12 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    getUser(this.props.userId)
-      .then((user) => {
-        this.setState({
-          user: { ...user.data },
-        });
-      });
+    this.addUser();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      getUser(this.props.userId)
-        .then((user) => {
-          this.setState({
-            user: { ...user.data },
-          });
-        });
+      this.addUser();
     }
   }
 
@@ -36,12 +26,21 @@ export class CurrentUser extends React.Component {
     this.props.clearUserId();
   }
 
+  addUser() {
+    getUser(this.props.userId)
+      .then((user) => {
+        this.setState({
+          user: { ...user.data },
+        });
+      });
+  }
+
   render() {
     const { id, name, email, phone } = this.state.user;
 
     return (
       <>
-        {Object.keys(this.state.user).length !== 0 && (
+        {Object.keys(this.state.user).length && (
           <>
             <div>
               <button
