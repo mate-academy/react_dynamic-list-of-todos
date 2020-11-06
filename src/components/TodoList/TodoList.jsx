@@ -37,7 +37,7 @@ export const TodoList = ({
           <option
             value="not completed"
           >
-            Not completed
+            Active
           </option>
           <option
             value="completed"
