@@ -13,12 +13,6 @@ class App extends React.Component {
     selectValue: 'all',
   };
 
-  callbacksForCompletedFilter = {
-    all: () => true,
-    active: completed => !completed,
-    completed: completed => completed,
-  }
-
   componentDidMount() {
     getTodos()
       .then((todos) => {
@@ -53,13 +47,19 @@ class App extends React.Component {
   getFiltredTodos = () => {
     const { todos, filterQuery, selectValue } = this.state;
 
+    const callbacksForCompletedFilter = {
+      all: () => true,
+      active: completed => !completed,
+      completed: completed => completed,
+    };
+
     return todos
       .filter(({ title, completed }) => {
         const titleInLowerCase = title.toLowerCase();
         const queryInLowerCase = filterQuery.toLowerCase();
 
         return titleInLowerCase.includes(queryInLowerCase)
-          && this.callbacksForCompletedFilter[selectValue](completed);
+          && callbacksForCompletedFilter[selectValue](completed);
       });
   }
 
