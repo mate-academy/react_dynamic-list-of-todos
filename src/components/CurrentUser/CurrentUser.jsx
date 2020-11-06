@@ -9,49 +9,71 @@ export class CurrentUser extends PureComponent {
     user: {},
   }
 
-  async componentDidMount() {
-    const user = await getUser(this.props.userId);
-
-    this.setState({ user });
+  componentDidMount() {
+    this.updateUser(this.props.userId);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.userId !== prevProps.userId) {
-      getUser(this.props.userId)
-        .then(data => this.setState({ user: data }));
+  componentDidUpdate(prevState) {
+    if (this.state.user && prevState.user.id === this.props.userId) {
+      return;
     }
+
+    this.updateUser(this.props.userId);
+  }
+
+  updateUser(newUserId) {
+    getUser(newUserId)
+      .then((newUser) => {
+        this.setState({
+          user: newUser,
+        });
+      })
+      .catch(() => {
+        this.setState({
+          user: {},
+        });
+      });
   }
 
   render() {
-    const { handleUser } = this.props;
-    const { name, email, phone, id } = this.state.user;
+    const { user } = this.state;
+    const { onButtonClick } = this.props;
 
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {id}
-          </span>
-        </h2>
+        {user
+          ? (
+            <>
+              <h2 className="CurrentUser__title">
+                <span>
+                  {`Selected user: ${user.id}`}
+                </span>
+              </h2>
 
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
+              <h3 className="CurrentUser__name">{user.name}</h3>
+              <p className="CurrentUser__email">{user.email}</p>
+              <p className="CurrentUser__phone">{user.phone}</p>
 
-        <button
-          className="button clear-button"
-          type="button"
-          onClick={() => handleUser(0)}
-        >
-          Clear
-        </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onButtonClick();
+                }}
+                className="button clear-button"
+              >
+                Clear
+              </button>
+            </>
+          )
+          : (
+            <p>User is not found</p>
+          )}
       </div>
     );
   }
 }
 
 CurrentUser.propTypes = {
-  handleUser: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
+  onButtonClick: PropTypes.func.isRequired,
 };

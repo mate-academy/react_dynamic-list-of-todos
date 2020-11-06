@@ -1,17 +1,14 @@
-const API_URL_TODOS = 'https://mate-api.herokuapp.com/todos';
-const API_URL_USERS = 'https://mate-api.herokuapp.com/users/';
+export const BASE_URL = 'https://mate-api.herokuapp.com';
 
-export function getToDos() {
-  return fetch(API_URL_TODOS)
-    .then(prepareResponse)
-    .then(getData);
-}
+export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
+  .then((result) => {
+    if (!result.ok) {
+      throw new Error(`${result.status} - ${result.statusText}`);
+    }
 
-export function getUser(userId) {
-  return fetch(`${API_URL_USERS}${userId}`)
-    .then(prepareResponse)
-    .then(getData);
-}
+    return result.json();
+  })
+  .then(result => result.data);
 
-const prepareResponse = response => response.json();
-const getData = result => result.data;
+export const getTodos = () => request('/todos');
+export const getUser = id => request(`/users/${id}`);

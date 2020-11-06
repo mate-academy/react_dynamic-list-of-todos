@@ -1,95 +1,85 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import { Search } from '../Search/Search';
-import { Select } from '../Select/Select';
-
+import { Todo } from '../Todo';
 import './TodoList.scss';
 
-export const TodoList = ({
-  todos,
-  query,
-  isTaskDone,
-  selectedTask,
-  handleUser,
-  handleStatus,
-  checkQuery,
-}) => {
-  const filtredTasks = todos.filter(({ title, completed }) => {
-    const comtareText = () => title.toLowerCase().includes(query);
+export class TodoList extends React.PureComponent {
+  state = {
+    search: '',
+    filteredTodos: 'all',
+  }
 
-    if (isTaskDone === 'true') {
-      return comtareText() && completed;
-    }
+  filter = {
+    all: () => true,
+    completed: todo => todo.completed,
+    active: todo => !todo.completed,
+  }
 
-    if (isTaskDone === 'false') {
-      return comtareText() && !completed;
-    }
+  changeHandler = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
 
-    return comtareText();
-  });
+  render() {
+    const { todos, selectedUserId, onButtonClick } = this.props;
+    const { search, filteredTodos } = this.state;
+    const todosToShow = todos
+      ? (todos.filter(todo => (
+        todo.title.includes(search) && this.filter[filteredTodos](todo)
+      )))
+      : null;
 
-  return (
-    <div className="TodoList">
-      <h2>Todos:</h2>
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
 
-      <Search checkQuery={checkQuery} />
-      <Select handleStatus={handleStatus} />
+        <div className="ui input">
+          <input
+            name="search"
+            placeholder="Type search task"
+            className="form-control"
+            value={search}
+            onChange={this.changeHandler}
+          />
+        </div>
 
-      <div className="TodoList__list-container">
-        <ul className="TodoList__list">
-          {filtredTasks.map(({ id, title, completed, userId }) => (
-            <li
-              key={id}
-              className={classNames(
-                'TodoList__item', {
-                  'TodoList__item--unchecked': !completed,
-                  'TodoList__item--checked': completed,
-                },
-              )}
-            >
-              <label>
-                <input
-                  type="checkbox"
-                  checked={completed}
-                  readOnly
+        <div>
+          <select
+            name="filteredTodos"
+            value={filteredTodos}
+            onChange={this.changeHandler}
+            className="ui selection dropdown"
+          >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="active">Active</option>
+          </select>
+          <ul className="TodoList__list">
+            {todosToShow
+              ? (todosToShow.map(todo => (
+                <Todo
+                  todo={todo}
+                  onButtonClick={onButtonClick}
+                  isSelectedUser={selectedUserId === todo.userId}
+                  key={todo.id}
                 />
-                <p>{title}</p>
-              </label>
-
-              <button
-                className={classNames(
-                  'TodoList__user-button',
-                  { 'TodoList__user-button--selected': selectedTask === title },
-                  'button',
-                )}
-                type="button"
-                onClick={() => handleUser(userId, title)}
-              >
-                {`User${'\u00A0'}#${userId}`}
-              </button>
-            </li>
-          ))}
-        </ul>
+              )))
+              : <p>No tasks</p>}
+          </ul>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
-      userId: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-  query: PropTypes.string.isRequired,
-  isTaskDone: PropTypes.string.isRequired,
-  selectedTask: PropTypes.string.isRequired,
-  handleUser: PropTypes.func.isRequired,
-  handleStatus: PropTypes.func.isRequired,
-  checkQuery: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    userId: PropTypes.number,
+    id: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+  })).isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+  onButtonClick: PropTypes.func.isRequired,
 };
