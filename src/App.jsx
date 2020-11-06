@@ -8,7 +8,7 @@ import { getTodos, getUser } from './api';
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: null,
+    selectedUserId: 0,
   };
 
   componentDidMount() {

@@ -21,7 +21,7 @@ export class TodoList extends React.PureComponent {
     const { todos, selectUserId, selectedUserId } = this.props;
     const { searchValue, showedTodos } = this.state;
     let preparedTodos = todos.filter(
-      todo => todo.title.toLowerCase().includes(searchValue),
+      todo => todo.title.toLowerCase().includes(searchValue.toLowerCase()),
     );
 
     if (showedTodos === 'completed') {
