@@ -3,13 +3,14 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-weight: bold;
-  background-color: #b8b3d2;
-  border: 0;
-  color: white;
+  background-color: white;
+  border: 2px solid #7667c2;
+  color: #7667c2;
   transition: background-color 0.12s;
   font-size: inherit;
 
   &:hover {
     background-color: #4d457b;
+    color: white;
   }
 }

@@ -1,44 +1,82 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { Todo } from '../Todo';
+import { ListOptions } from '../ListOptions';
+import { TodoListShape } from '../shapes/TodoListShape';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export class TodoList extends React.PureComponent {
+  state = {
+    selectedTodoId: null,
+    titleQuery: '',
+    statusQuery: 'all',
+  };
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  callbacksByStatus = {
+    all: () => true,
+    active: todo => !todo.completed,
+    completed: todo => todo.completed,
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  handleUserSelect = (userId, id) => {
+    this.props.selectUser(userId);
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({
+      selectedTodoId: id,
+    });
+  };
+
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [`${name}Query`]: value,
+    });
+  };
+
+  filterTodos = (todos) => {
+    const { titleQuery, statusQuery } = this.state;
+    const filterQuery = titleQuery.toLowerCase();
+
+    return todos.filter(todo => (
+      todo.title.toLowerCase().includes(filterQuery)
+      && this.callbacksByStatus[statusQuery](todo)));
+  };
+
+  render() {
+    const { todos } = this.props;
+    const { selectedTodoId, titleQuery, statusQuery } = this.state;
+    const filteredTodos = this.filterTodos(todos);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <ListOptions
+          handleChange={this.handleChange}
+          titleQuery={titleQuery}
+          statusQuery={statusQuery}
+        />
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {filteredTodos.map(todo => (
+              <Todo
+                key={todo.id}
+                todo={todo}
+                handleUserSelect={this.handleUserSelect}
+                selectedTodoId={selectedTodoId}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = TodoListShape;
+
+TodoList.defaultProps = {
+  todos: [],
+};
