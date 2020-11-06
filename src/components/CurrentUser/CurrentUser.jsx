@@ -9,7 +9,7 @@ export class CurrentUser extends React.Component {
     user: {},
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { userId } = this.props;
 
     getUser(userId)
@@ -22,10 +22,10 @@ export class CurrentUser extends React.Component {
       });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { userId } = this.props;
 
-    if (this.state.user.userId === userId) {
+    if (prevProps.userId === userId) {
       return;
     }
 

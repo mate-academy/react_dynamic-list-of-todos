@@ -13,7 +13,7 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  componentDidMount = async() => {
+  async componentDidMount() {
     const todos = await getTodos();
 
     this.setState({
@@ -40,6 +40,10 @@ class App extends React.Component {
     }));
   }
 
+  selectButton = (id) => {
+    this.setState({ selectedUserId: id });
+  }
+
   clearUser = () => {
     this.setState({ selectedUserId: 0 });
   }
@@ -54,6 +58,8 @@ class App extends React.Component {
             todos={todos}
             setUser={this.setUser}
             changeStatus={this.changeStatus}
+            selectButton={this.selectButton}
+            userId={selectedUserId}
           />
         </div>
 

@@ -17,8 +17,13 @@ export class TodoList extends React.Component {
     this.setState({ query: target.value.toLowerCase() });
   }
 
+  selectButtonToggler = (id) => {
+    this.props.selectButton(id);
+    this.props.setUser(id);
+  }
+
   render() {
-    const { setUser, changeStatus } = this.props;
+    const { changeStatus, userId } = this.props;
     const { status, query } = this.state;
     let { todos } = this.props;
 
@@ -52,6 +57,7 @@ export class TodoList extends React.Component {
           <option value="Completed">Completed</option>
           <option value="Not completed">Not completed</option>
         </select>
+
         <h2>Todos:</h2>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
@@ -74,13 +80,12 @@ export class TodoList extends React.Component {
                   <p>{todo.title}</p>
                 </label>
                 <button
-                  className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                  "
+                  className={todo.userId === userId
+                    ? 'TodoList__user-button--selected'
+                    : 'TodoList__user-button'
+                  }
                   type="button"
-                  onClick={() => setUser(todo.userId)}
+                  onClick={() => this.selectButtonToggler(todo.userId)}
                 >
                   {`User #${todo.userId}`}
                 </button>
@@ -104,4 +109,6 @@ TodoList.propTypes = {
   ).isRequired,
   setUser: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
+  selectButton: PropTypes.func.isRequired,
 };
