@@ -24,7 +24,6 @@ class App extends React.Component {
 
   selectedUser = (idUser) => {
     // eslint-disable-next-line no-console
-    console.log('id', idUser);
     this.setState({
       selectedUserId: idUser,
     });
