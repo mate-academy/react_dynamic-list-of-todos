@@ -12,11 +12,14 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  componentDidMount() {
-    allTodos()
-      .then(data => this.setState({
-        todos: data,
-      }));
+  async componentDidMount() {
+    const todos = await allTodos();
+
+    const filterTodos = todos.filter(todo => todo.title && todo.id);
+
+    this.setState({
+      todos: filterTodos,
+    });
   }
 
   selectedUser = (idUser) => {
