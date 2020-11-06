@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { TodoPropTypes } from '../propTypes/TodoPropTypes';
 
-export const Todo = ({ todo, selectUser, selectedUserId }) => (
+export const Todo = ({
+  todo: { completed, userId, title },
+  selectUser,
+  selectedUserId,
+}) => (
   <div
     className={classNames({
       TodoList__item: true,
-      'TodoList__item--checked': todo.completed,
-      'TodoList__item--unchecked': !todo.completed,
+      'TodoList__item--checked': completed,
+      'TodoList__item--unchecked': !completed,
     })}
   >
     <label>
       <input type="checkbox" readOnly />
-      <p>{todo.title}</p>
+      <p>{title}</p>
     </label>
 
     <button
@@ -21,12 +25,12 @@ export const Todo = ({ todo, selectUser, selectedUserId }) => (
         button: true,
         'TodoList__user-button': true,
         'TodoList__user-button--selected':
-          selectedUserId === todo.userId,
+          selectedUserId === userId,
       })}
       type="button"
-      onClick={() => selectUser(todo.userId)}
+      onClick={() => selectUser(userId)}
     >
-      {`User #${todo.userId}`}
+      {`User #${userId}`}
     </button>
   </div>
 );

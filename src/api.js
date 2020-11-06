@@ -12,10 +12,14 @@ function request(url) {
     .then(result => result.data);
 }
 
-export function getTodos() {
-  return request(`/todos`);
+export async function getTodos() {
+  const todos = await request(`/todos`);
+
+  return todos.filter(todo => todo.userId && todo.title);
 }
 
-export function getUser(userId) {
-  return request(`/users/${userId}`);
+export async function getUser(userId) {
+  const user = await request(`/users/${userId}`);
+
+  return user;
 }

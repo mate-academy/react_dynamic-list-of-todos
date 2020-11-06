@@ -9,6 +9,7 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    todosError: false,
   };
 
   componentDidMount() {
@@ -17,7 +18,8 @@ class App extends React.Component {
         this.setState({
           todos,
         });
-      });
+      })
+      .catch(() => this.setState({ todosError: true }));
   }
 
   selectUser = (selectedUserId) => {
@@ -31,16 +33,25 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, todosError } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={todos}
-            selectedUserId={selectedUserId}
-            selectUser={this.selectUser}
-          />
+          {todosError
+            ? (
+              <h2>
+                {`Can't load todos, please reload the page `}
+              </h2>
+            )
+            : (
+              <TodoList
+                todos={todos}
+                selectedUserId={selectedUserId}
+                selectUser={this.selectUser}
+              />
+            )
+          }
         </div>
 
         <div className="App__content">

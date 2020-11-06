@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './TodoList.scss';
 import { TodoPropTypes } from '../propTypes/TodoPropTypes';
 import { Todo } from '../Todo';
+import { TodoListControllers } from '../TodoListControllers';
 
 export class TodoList extends React.PureComponent {
   state = {
@@ -31,35 +32,11 @@ export class TodoList extends React.PureComponent {
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <label>
-          <span>
-            {`Search todo: `}
-          </span>
-          <input
-            name="search"
-            type="text"
-            value={search}
-            onChange={this.handleChange}
-          />
-        </label>
-
-        <label>
-          <select
-            name="visibleTodos"
-            onChange={this.handleChange}
-            value={visibleTodos}
-          >
-            <option value="all">
-              All
-            </option>
-            <option value="active">
-              Active
-            </option>
-            <option value="completed">
-              Completed
-            </option>
-          </select>
-        </label>
+        <TodoListControllers
+          handleChange={this.handleChange}
+          searchValue={search}
+          selectValue={visibleTodos}
+        />
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">

@@ -6,6 +6,7 @@ import './CurrentUser.scss';
 export class CurrentUser extends React.PureComponent {
   state = {
     user: {},
+    userError: false,
   }
 
   componentDidMount() {
@@ -27,38 +28,52 @@ export class CurrentUser extends React.PureComponent {
 
     const newUser = await getUser(newUserId);
 
+    if (!newUser) {
+      this.setState({ userError: true });
+
+      return;
+    }
+
+    this.setState({ userError: false });
+
     this.setState({ user: newUser });
   }
 
   render() {
-    const { user } = this.state;
+    const { user, userError } = this.state;
     const { clearSelectedUser } = this.props;
 
     return (
-      <div className="CurrentUser">
-        <button
-          type="button"
-          className="button"
-          onClick={clearSelectedUser}
-        >
-          Clear
-        </button>
-        <h2 className="CurrentUser__title">
-          <span>
-            {`Selected user: ${user.id}`}
-          </span>
-        </h2>
+      <>
+        {userError
+          ? (<h3>{`Can't find user info `}</h3>)
+          : (
+            <div className="CurrentUser">
+              <button
+                type="button"
+                className="button"
+                onClick={clearSelectedUser}
+              >
+                Clear
+              </button>
+              <h2 className="CurrentUser__title">
+                <span>
+                  {`Selected user: ${user.id}`}
+                </span>
+              </h2>
 
-        <h3 className="CurrentUser__name">
-          {user.name}
-        </h3>
-        <p className="CurrentUser__email">
-          {user.email}
-        </p>
-        <p className="CurrentUser__phone">
-          {user.phone}
-        </p>
-      </div>
+              <h3 className="CurrentUser__name">
+                {user.name}
+              </h3>
+              <p className="CurrentUser__email">
+                {user.email}
+              </p>
+              <p className="CurrentUser__phone">
+                {user.phone}
+              </p>
+            </div>
+          )}
+      </>
     );
   }
 }
