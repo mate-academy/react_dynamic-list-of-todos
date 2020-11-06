@@ -4,6 +4,7 @@ import './TodoList.scss';
 import classNames from 'classnames';
 import { TodoShape } from '../../shapes/TodoShape';
 import { FilterField } from '../FilterField';
+import { TodoItem } from '../TodoItem';
 
 export class TodoList extends Component {
   state = {
@@ -56,21 +57,13 @@ export class TodoList extends Component {
                     'TodoList__item--checked': completed,
                   })}
               >
-                <label>
-                  <input type="checkbox" checked={completed} readOnly />
-                  <p>{title}</p>
-                </label>
-
-                <button
-                  className={classNames('button TodoList__user-button', {
-                    // eslint-disable-next-line max-len
-                    'TodoList__user-button--selected': userId === selectedUserId,
-                  })}
-                  type="button"
-                  onClick={() => selectUser(userId)}
-                >
-                  {`UserId #${userId}`}
-                </button>
+                <TodoItem
+                  userId={userId}
+                  completed={completed}
+                  title={title}
+                  selectedUserId={selectedUserId}
+                  selectUser={() => selectUser(userId)}
+                />
               </li>
             ))}
           </ul>

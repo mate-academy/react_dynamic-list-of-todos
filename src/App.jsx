@@ -12,9 +12,11 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    getAllTodos().then(data => this.setState({
-      todos: data,
-    }));
+    getAllTodos()
+      .then(data => data.filter(({ id, title }) => id && title))
+      .then(todos => this.setState({
+        todos,
+      }));
   }
 
   selectUser = (id) => {
@@ -31,7 +33,19 @@ class App extends React.Component {
 
   shuffleTodos = () => {
     const { todos } = this.state;
-    const shuffledTodos = [...todos].sort(() => 0.5 - Math.random());
+    const shuffledTodos = [...todos];
+
+    for (let i = shuffledTodos.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [
+        shuffledTodos[i],
+        shuffledTodos[j],
+      ] = [
+        shuffledTodos[j],
+        shuffledTodos[i],
+      ];
+    }
 
     this.setState({
       todos: shuffledTodos,

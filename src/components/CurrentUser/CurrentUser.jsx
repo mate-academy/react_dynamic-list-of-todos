@@ -20,15 +20,21 @@ export class CurrentUser extends Component {
   }
 
   setNewUser = (id) => {
-    const { getUser } = this.props;
+    const { getUser, clearUser } = this.props;
 
     if (id === this.state.user.id) {
       return;
     }
 
-    getUser(id).then(newUser => this.setState({
-      user: newUser,
-    }));
+    getUser(id).then((newUser) => {
+      if (!newUser) {
+        clearUser();
+      } else {
+        this.setState({
+          user: newUser,
+        });
+      }
+    });
   }
 
   render() {
