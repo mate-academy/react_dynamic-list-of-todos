@@ -57,5 +57,4 @@ export class CurrentUser extends Component {
 CurrentUser.propTypes = {
   clearUser: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
-  getUser: PropTypes.func.isRequired,
 }.isRequired;

@@ -16,9 +16,11 @@ class App extends React.Component {
   async componentDidMount() {
     const todos = await getTodos();
 
+    const filterTodos = todos.data.filter(todo => todo.title && todo.id);
+
     this.setState({
-      todos: todos.data,
-      initialTodos: todos.data,
+      todos: filterTodos,
+      initialTodos: filterTodos,
     });
   }
 
@@ -49,10 +51,10 @@ class App extends React.Component {
 
     switch (value) {
       case 'active':
-        this.filterByBoolean(false);
+        this.filterByStatus(false);
         break;
       case 'completed':
-        this.filterByBoolean(true);
+        this.filterByStatus(true);
         break;
       default:
         this.setState(state => ({
@@ -62,7 +64,7 @@ class App extends React.Component {
     }
   }
 
-  filterByBoolean(bool) {
+  filterByStatus(bool) {
     const { initialTodos } = this.state;
 
     this.setState({
@@ -77,11 +79,12 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={this.filteredTodos()}
-            handleUser={this.handleUser}
             search={this.changeHandler}
             query={inputValue}
             handleSelect={this.handleSelectChange}
+            todos={this.filteredTodos()}
+            handleUser={this.handleUser}
+            selectedUserId={selectedUserId}
           />
         </div>
 
