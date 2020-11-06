@@ -8,6 +8,7 @@ export class CurrentUser extends React.Component {
     user: null,
     isLoading: false,
     userError: false,
+    hasLoadingError: false,
   }
 
   componentDidMount() {
@@ -25,26 +26,47 @@ export class CurrentUser extends React.Component {
   async loadData() {
     const { userId } = this.props;
 
-    this.setState({ isLoading: true });
-    const user = await getUser(userId);
-
-    if (!user) {
-      this.setState({ userError: true });
-    }
-
     this.setState({
-      user,
-      isLoading: false,
+      isLoading: true,
+      hasLoadingError: false,
     });
+
+    try {
+      const user = await getUser(userId);
+
+      if (!user) {
+        this.setState({ userError: true });
+      }
+
+      this.setState({
+        user,
+        isLoading: false,
+      });
+    } catch (error) {
+      this.setState({
+        hasLoadingError: true,
+      });
+    }
   }
 
   render() {
-    const { user, isLoading, userError } = this.state;
+    const {
+      user,
+      isLoading,
+      userError,
+      hasLoadingError,
+    } = this.state;
     const { clearUser } = this.props;
 
     return (
       <div className="CurrentUser">
-        {isLoading && <h3>Loadings</h3>}
+        {
+          (
+            isLoading && <h3>Loadings</h3>,
+            hasLoadingError && <h3>Error occurred during loading</h3>,
+            userError && <h3>Can&apos;t find user</h3>
+          )
+        }
         {(user && !isLoading)
           && (
             <>
@@ -69,7 +91,6 @@ export class CurrentUser extends React.Component {
             </>
           )
         }
-        {userError && (<h3>Can&apos;t find user</h3>)}
       </div>
     );
   }
