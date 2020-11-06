@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
+import { Form } from '../Form';
+import { Todo } from '../Todo';
 
 const TodoList = ({ allTodos, onUserSelect }) => {
   const [todos, setTodos] = useState(allTodos);
@@ -31,7 +33,7 @@ const TodoList = ({ allTodos, onUserSelect }) => {
 
   const filterTodos = (searchQuery, selectedCategory) => {
     setTodos([...allTodos]
-      .filter(todo => todo.title.toLowerCase().includes(
+      .filter(todo => todo.title && todo.title.toLowerCase().includes(
         searchQuery.toLowerCase(),
       ) && categoryFilters[selectedCategory](todo)));
   };
@@ -40,55 +42,12 @@ const TodoList = ({ allTodos, onUserSelect }) => {
     <div className="TodoList">
       <h2>Todos:</h2>
 
-      <form className="TodoList__form">
-        <input
-          type="text"
-          id="search-query"
-          className="TodoList__enter"
-          placeholder="Enter"
-          onChange={onSearch}
-        />
-
-        <select
-          name="todosFilter"
-          onChange={onComplete}
-        >
-          <option value="all">
-            All todos
-          </option>
-          <option value="active">
-            Active todos
-          </option>
-          <option value="completed">
-            Completed todos
-          </option>
-        </select>
-
-      </form>
+      <Form onSearch={onSearch} onComplete={onComplete} />
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
           {todos.map(todo => (
-            <li
-              key={todo.id}
-              className={`TodoList__item
-                TodoList__item--${todo.completed ? '' : 'un'}checked`
-              }
-            >
-              <label>
-                <input type="checkbox" checked={todo.completed} readOnly />
-                <p>{todo.title}</p>
-              </label>
-
-              <button
-                className="TodoList__user-button button"
-                type="button"
-                onClick={() => onUserSelect(todo.userId)}
-              >
-                User&nbsp;#
-                {todo.userId}
-              </button>
-            </li>
+            <Todo key={todo.id} {...todo} onUserClick={onUserSelect} />
           ))}
         </ul>
       </div>
@@ -97,19 +56,18 @@ const TodoList = ({ allTodos, onUserSelect }) => {
 };
 
 TodoList.defaultProps = {
-  allTodos: [{
-    userId: 0,
-    completed: false,
-  }],
+  allTodos: [
+    Todo.defaultProps,
+  ],
 };
 
 TodoList.propTypes = {
   allTodos: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
       userId: PropTypes.number,
-      title: PropTypes.string.isRequired,
+      title: PropTypes.string,
       completed: PropTypes.bool,
+      id: PropTypes.number.isRequired,
     }),
   ),
   onUserSelect: PropTypes.func.isRequired,

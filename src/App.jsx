@@ -12,7 +12,8 @@ class App extends React.PureComponent {
   };
 
   async componentDidMount() {
-    const todos = await getAllTodos();
+    const todos = (await getAllTodos())
+      .filter(({ title, completed, userId }) => title && userId);
 
     this.setState(state => ({
       ...state,

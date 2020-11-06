@@ -32,7 +32,7 @@ class CurrentUser extends React.PureComponent {
         <h2 className="CurrentUser__title">
           <span>
             Selected user:&nbsp;
-            {this.state.user.id || 'Unknown'}
+            {this.state.user.id || this.props.userId || 'Unknown'}
           </span>
         </h2>
 
