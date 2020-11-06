@@ -6,6 +6,8 @@ import './CurrentUser.scss';
 export class CurrentUser extends React.Component {
   state = {
     user: null,
+    isLoading: false,
+    userError: false,
   }
 
   componentDidMount() {
@@ -22,19 +24,29 @@ export class CurrentUser extends React.Component {
 
   async loadData() {
     const { userId } = this.props;
+
+    this.setState({ isLoading: true });
     const user = await getUser(userId);
 
-    this.setState({ user });
+    if (!user) {
+      this.setState({ userError: true });
+    }
+
+    this.setState({
+      user,
+      isLoading: false,
+    });
   }
 
   render() {
-    const { user } = this.state;
+    const { user, isLoading, userError } = this.state;
     const { clearUser } = this.props;
 
     return (
       <div className="CurrentUser">
-        {user
-          ? (
+        {isLoading && <h3>Loadings</h3>}
+        {(user && !isLoading)
+          && (
             <>
               <h2
                 className="CurrentUser__title"
@@ -56,9 +68,8 @@ export class CurrentUser extends React.Component {
               </button>
             </>
           )
-          : (<h3>Loading</h3>)
         }
-
+        {userError && (<h3>Can&apos;t find user</h3>)}
       </div>
     );
   }
