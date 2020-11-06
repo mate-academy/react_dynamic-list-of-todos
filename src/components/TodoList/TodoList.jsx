@@ -24,9 +24,11 @@ export class TodoList extends React.PureComponent {
   render() {
     const { todos, selectedUserId, onButtonClick } = this.props;
     const { search, filteredTodos } = this.state;
-    const todosToShow = todos.filter(todo => (
-      todo.title.includes(search) && this.filter[filteredTodos](todo)
-    ));
+    const todosToShow = todos
+      ? (todos.filter(todo => (
+        todo.title.includes(search) && this.filter[filteredTodos](todo)
+      )))
+      : null;
 
     return (
       <div className="TodoList">
@@ -36,7 +38,7 @@ export class TodoList extends React.PureComponent {
           <input
             name="search"
             placeholder="Search"
-            className="input"
+            className="form-control"
             value={search}
             onChange={this.changeHandler}
           />
@@ -45,19 +47,22 @@ export class TodoList extends React.PureComponent {
             name="filteredTodos"
             value={filteredTodos}
             onChange={this.changeHandler}
+            className="form-control"
           >
             <option value="all">All</option>
             <option value="completed">Completed</option>
             <option value="active">active</option>
           </select>
           <ul className="TodoList__list">
-            {todosToShow.map(todo => (
-              <Todo
-                todo={todo}
-                onButtonClick={onButtonClick}
-                isSelectedUser={selectedUserId === todo.userId}
-              />
-            ))}
+            {todosToShow
+              ? (todosToShow.map(todo => (
+                <Todo
+                  todo={todo}
+                  onButtonClick={onButtonClick}
+                  isSelectedUser={selectedUserId === todo.userId}
+                />
+              )))
+              : <p>No tasks</p>}
           </ul>
         </div>
       </div>

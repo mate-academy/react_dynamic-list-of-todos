@@ -17,6 +17,11 @@ class App extends React.Component {
         this.setState({
           todos,
         });
+      })
+      .catch(() => {
+        this.setState({
+          todos: null,
+        });
       });
   }
 
