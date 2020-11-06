@@ -11,7 +11,3 @@ export function getUser(userId) {
   return fetch(`${userUrl}${userId}`)
     .then(response => response.json());
 }
-
-// export const request = (url) => {
-//   return fetch(`${BASE_URL}${url}`)
-// }
