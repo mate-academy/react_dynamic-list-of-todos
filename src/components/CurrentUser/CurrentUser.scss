@@ -26,4 +26,12 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__waiting {
+    text-align: center;
+    width: 80px;
+    margin: 10px auto;
+    font-size: 24px;
+    font-weight: bold;
+  }
 }
