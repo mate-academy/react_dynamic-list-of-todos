@@ -11,7 +11,7 @@ let todosFromServer;
 class App extends React.PureComponent {
   state = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: null,
   };
 
   componentDidMount() {
@@ -20,7 +20,9 @@ class App extends React.PureComponent {
 
   getTodos = () => {
     request('./todos').then((result) => {
-      todosFromServer = result.data;
+      todosFromServer = result.data.filter(todo => (
+        todo.title
+      ));
 
       this.setState({
         todos: todosFromServer,
@@ -36,7 +38,7 @@ class App extends React.PureComponent {
 
   clearUser = () => {
     this.setState({
-      selectedUserId: 0,
+      selectedUserId: null,
     });
   };
 

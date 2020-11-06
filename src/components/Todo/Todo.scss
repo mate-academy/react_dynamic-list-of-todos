@@ -9,6 +9,10 @@
   &__user-button--selected {
     background-color: #4d457b;
     color: white;
+
+    &:focus {
+      color: white;
+    }
   }
 
   &--checked {

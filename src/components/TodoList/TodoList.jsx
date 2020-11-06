@@ -7,7 +7,7 @@ import { TodoListShape } from '../shapes/TodoListShape';
 
 export class TodoList extends React.PureComponent {
   state = {
-    selectedTodoId: 0,
+    selectedTodoId: null,
     titleQuery: '',
     statusQuery: 'all',
   };

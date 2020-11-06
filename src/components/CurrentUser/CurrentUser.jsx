@@ -4,12 +4,16 @@ import './CurrentUser.scss';
 import { request } from '../../api';
 import { CurrentUserShape } from '../shapes/CurrentUserShape';
 
+const initialState = {
+  id: null,
+  name: '',
+  email: '',
+  phone: '',
+};
+
 export class CurrentUser extends React.PureComponent {
   state = {
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
+    ...initialState,
   };
 
   componentDidMount() {
@@ -24,6 +28,14 @@ export class CurrentUser extends React.PureComponent {
 
   getUser = (userId) => {
     request(`./users/${userId}`).then((user) => {
+      if (!user.data) {
+        this.setState({
+          ...initialState,
+        });
+
+        return;
+      }
+
       const { id, name, email, phone } = user.data;
 
       this.setState({
@@ -39,25 +51,29 @@ export class CurrentUser extends React.PureComponent {
     const { name, id, email, phone } = this.state;
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            {`Selected user: ${id}`}
-          </span>
-        </h2>
+      id ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              {`Selected user: ${id}`}
+            </span>
+          </h2>
 
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
+          <h3 className="CurrentUser__name">{name}</h3>
+          <p className="CurrentUser__email">{email}</p>
+          <p className="CurrentUser__phone">{phone}</p>
 
-        <button
-          type="button"
-          className="CurrentUser__clear button"
-          onClick={this.props.clearUser}
-        >
-          Clear
-        </button>
-      </div>
+          <button
+            type="button"
+            className="CurrentUser__clear button"
+            onClick={this.props.clearUser}
+          >
+            Clear
+          </button>
+        </div>
+      ) : (
+        <div>User not found</div>
+      )
     );
   }
 }

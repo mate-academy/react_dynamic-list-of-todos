@@ -41,5 +41,9 @@ export const Todo = ({ todo, handleUserSelect, selectedTodoId }) => {
 Todo.propTypes = {
   todo: PropTypes.shape(TodoShape).isRequired,
   handleUserSelect: PropTypes.func.isRequired,
-  selectedTodoId: PropTypes.number.isRequired,
+  selectedTodoId: PropTypes.number,
+};
+
+Todo.defaultProps = {
+  selectedTodoId: null,
 };
