@@ -1,44 +1,49 @@
 import React from 'react';
+import ClassNames from 'classnames';
+import { Todo } from '../Todo';
+import { Controllers } from '../Controllers';
 import './TodoList.scss';
+import { TodoListProps } from '../../props/TodoListProps';
 
-export const TodoList = () => (
+export const TodoList = ({
+  todos,
+  filterQuery,
+  handleChange,
+  selectValue,
+  changeUserId,
+}) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
+    <Controllers
+      className="TodoList__controllers"
+      filterQuery={filterQuery}
+      handleChange={handleChange}
+      selectValue={selectValue}
+    />
+
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {todos.map(({ completed, id, title, userId }) => (
+          <li
+            key={id}
+            className={ClassNames('TodoList__item', {
+              'TodoList__item--checked': completed,
+              'TodoList__item--unchecked': !completed,
+            })}
           >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <Todo
+              completed={completed}
+              title={title}
+              userId={userId}
+              handleChange={handleChange}
+              changeUserId={changeUserId}
+            />
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 );
+
+TodoList.propTypes = TodoListProps;
