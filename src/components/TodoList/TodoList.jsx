@@ -2,7 +2,7 @@ import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
 import { TodoShape } from '../shapes/TodoShape';
-import { TodoItem } from '../TodoItem';
+import { Todo } from '../Todo';
 import { FilterForm } from '../FilterForm';
 
 export class TodoList extends React.Component {
@@ -89,7 +89,7 @@ export class TodoList extends React.Component {
           <ul className="TodoList__list">
             {
               filteredTodos.map(todo => (
-                <TodoItem
+                <Todo
                   key={todo.id}
                   todo={todo}
                   selectedTodoId={selectedTodoId}

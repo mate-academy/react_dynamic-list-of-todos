@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { TodoShape } from '../shapes/TodoShape';
 
-export const TodoItem = ({ todo, selectedTodoId, selectUser, searchValue }) => {
+export const Todo = ({ todo, selectedTodoId, selectUser, searchValue }) => {
   const { id, userId, completed, title } = todo;
 
   const isShown = title.toLowerCase().includes(searchValue);
@@ -38,7 +38,7 @@ export const TodoItem = ({ todo, selectedTodoId, selectUser, searchValue }) => {
   );
 };
 
-TodoItem.propTypes = {
+Todo.propTypes = {
   todo: PropTypes.shape(TodoShape).isRequired,
   selectedTodoId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,

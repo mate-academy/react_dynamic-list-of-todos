@@ -16,9 +16,8 @@ export class CurrentUser extends React.Component {
 
     try {
       const user = await getUser(userId);
-      const userData = await user.json();
 
-      this.updateUser(userData.data);
+      this.updateUser(user.data);
     } catch (error) {
       this.updateError();
     }
@@ -35,9 +34,8 @@ export class CurrentUser extends React.Component {
 
     try {
       const user = await getUser(userId);
-      const userData = await user.json();
 
-      this.updateUser(userData.data);
+      this.updateUser(user.data);
     } catch (error) {
       this.updateError();
     }

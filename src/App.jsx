@@ -16,7 +16,7 @@ class App extends React.Component {
     const todos = await getTodos();
 
     this.setState(prevState => ({
-      todos: [...prevState.todos, ...this.validateTodos(todos)],
+      todos: [...prevState.todos, ...todos],
     }));
   }
 
