@@ -4,7 +4,17 @@ const userUrl = `${BASE_URL}/users/`;
 
 export function getTodos() {
   return fetch(todosUrl)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then(todos => todos.data
+      .filter(todo => (
+        todo.userId !== null
+      ))
+      .filter(todo => (
+        todo.title !== ''
+      ))
+      .filter(todo => (
+        todo.completed !== null
+      )));
 }
 
 export function getUser(userId) {

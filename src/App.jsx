@@ -16,7 +16,7 @@ class App extends React.Component {
     getTodos()
       .then((todos) => {
         this.setState({
-          todos: [...todos.data],
+          todos: [...todos],
         });
       });
   }
