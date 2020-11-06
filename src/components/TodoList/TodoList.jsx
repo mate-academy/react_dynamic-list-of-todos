@@ -1,8 +1,8 @@
 import React from 'react';
+import './TodoList.scss';
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-
-import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
@@ -19,7 +19,7 @@ export class TodoList extends React.Component {
   handleChange = (event) => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value.toLowerCase() });
+    this.setState({ [name]: value });
   }
 
   render() {
@@ -28,7 +28,7 @@ export class TodoList extends React.Component {
     const { handleChange, filterCompleted } = this;
 
     const filteredTodos = todos
-      .filter(todo => todo.title.toLowerCase().includes(query)
+      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase())
         && filterCompleted[visibleTodos](todo));
 
     return (
@@ -82,11 +82,10 @@ export class TodoList extends React.Component {
 
                 <button
                   type="button"
-                  className={classNames('TodoList__user-button button',
-                    {
-                      'TodoList__user-button--selected':
-                        userId === selectedUserId,
-                    })}
+                  className={classNames('button TodoList__user-button', {
+                    'TodoList__user-button--selected':
+                      userId === selectedUserId,
+                  })}
                   onClick={() => selectUser(userId)}
                 >
                   {`UserID #${userId}`}
