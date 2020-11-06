@@ -17,9 +17,13 @@ class App extends React.Component {
   componentDidMount() {
     getTodos()
       .then((todos) => {
+        const filteredTodos = todos.filter(todo => (
+          todo.title && todo.id
+        ));
+
         this.setState({
-          todos,
-          filteredTodos: todos,
+          todos: filteredTodos,
+          filteredTodos,
         });
       });
   }
@@ -33,8 +37,8 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       valueOnInput: value,
-      filteredTodos: [...prevState.todos].filter(todo => (
-        todo.title.toLowerCase().includes(value.toLowerCase())
+      filteredTodos: prevState.todos.filter(todo => (
+        todo.title.includes(value)
       )),
     }));
   };
@@ -44,7 +48,7 @@ class App extends React.Component {
 
     if (value === 'all') {
       this.setState(prevState => ({
-        filteredTodos: [...prevState.todos],
+        filteredTodos: prevState.todos,
         valueOnSelect: value,
       }));
     }
@@ -53,7 +57,7 @@ class App extends React.Component {
 
     if (value === 'completed' || value === 'not completed') {
       this.setState(prevState => ({
-        filteredTodos: [...prevState.todos].filter(todo => (
+        filteredTodos: prevState.todos.filter(todo => (
           todo.completed === booleanValue
         )),
         valueOnSelect: value,
@@ -77,6 +81,8 @@ class App extends React.Component {
             selectedUser={this.selectedUser}
             filterOnInput={this.filterOnInput}
             filterBySelect={this.filterBySelect}
+            valueOnInput={valueOnInput}
+            valueOnSelect={valueOnSelect}
           />
         </div>
 
@@ -86,10 +92,6 @@ class App extends React.Component {
               <CurrentUser
                 selectedUserId={selectedUserId}
                 selectedUser={this.selectedUser}
-                filterOnInput={this.filterOnInput}
-                filterBySelect={this.filterBySelect}
-                valueOnInput={valueOnInput}
-                valueOnSelect={valueOnSelect}
               />
             ) : (
               <div className="App__text">Please, select a user</div>

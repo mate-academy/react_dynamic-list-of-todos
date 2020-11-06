@@ -85,11 +85,6 @@ TodoList.propTypes = {
   selectedUser: PropTypes.func.isRequired,
   filterOnInput: PropTypes.func.isRequired,
   filterBySelect: PropTypes.func.isRequired,
-  valueOnInput: PropTypes.string,
-  valueOnSelect: PropTypes.string,
-};
-
-TodoList.defaultProps = {
-  valueOnInput: '',
-  valueOnSelect: 'all',
+  valueOnInput: PropTypes.string.isRequired,
+  valueOnSelect: PropTypes.string.isRequired,
 };
