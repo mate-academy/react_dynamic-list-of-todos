@@ -12,15 +12,15 @@ export class CurrentUser extends React.PureComponent {
     this.updateUser(this.props.userId);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.user && prevState.user.id === this.props.userId) {
+      return;
+    }
+
     this.updateUser(this.props.userId);
   }
 
   updateUser(newUserId) {
-    if (this.state.user && this.state.user.id === newUserId) {
-      return;
-    }
-
     getUser(newUserId)
       .then((newUser) => {
         this.setState({
@@ -29,7 +29,7 @@ export class CurrentUser extends React.PureComponent {
       })
       .catch(() => {
         this.setState({
-          user: null,
+          user: {},
         });
       });
   }

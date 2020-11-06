@@ -60,6 +60,7 @@ export class TodoList extends React.PureComponent {
                   todo={todo}
                   onButtonClick={onButtonClick}
                   isSelectedUser={selectedUserId === todo.userId}
+                  key={todo.id}
                 />
               )))
               : <p>No tasks</p>}
