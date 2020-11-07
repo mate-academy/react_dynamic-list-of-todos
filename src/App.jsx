@@ -48,7 +48,6 @@ class App extends React.Component {
   }
 
   filterTodosByStatus = (value) => {
-
     switch (value) {
       case 'completed':
         this.setState(prevState => ({

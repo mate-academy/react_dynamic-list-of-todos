@@ -63,7 +63,6 @@ export class CurrentUser extends React.Component {
       <div className="CurrentUser">
         {
           (
-            isLoading && <h3>Loadings</h3>,
             hasLoadingError && <h3>Error occurred during loading</h3>,
             userError && <h3>Can&apos;t find user</h3>
           )
@@ -92,6 +91,7 @@ export class CurrentUser extends React.Component {
             </>
           )
         }
+        {isLoading && <h3>Loading</h3>}
       </div>
     );
   }
