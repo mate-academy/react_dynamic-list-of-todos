@@ -27,7 +27,7 @@ class App extends React.Component {
         try {
           this.setState({
             todos: todos
-              .filter(todo => todo.title !== ''),
+              .filter(todo => todo.title !== '' && todo.title !== null),
             isLoading: false,
           });
         } catch {
@@ -102,7 +102,7 @@ class App extends React.Component {
   filter() {
     const todos = this.filterBySelect(this.state.todos);
 
-    if (this.state.query !== '') {
+    if (this.state.query !== '' && this.state.todos !== null) {
       return this.filterBySearch(todos);
     }
 
