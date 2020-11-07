@@ -14,6 +14,7 @@ class App extends React.Component {
 
   componentDidMount() {
     getTodos()
+      .then(data => data.filter(({ id, title }) => id && title))
       .then((todos) => {
         this.setState({
           todos,

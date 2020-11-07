@@ -13,12 +13,10 @@ export class CurrentUser extends PureComponent {
     this.updateUser(this.props.userId);
   }
 
-  componentDidUpdate(prevState) {
-    if (this.state.user && prevState.user.id === this.props.userId) {
-      return;
-    }
+  componentDidUpdate() {
+    const { userId } = this.props;
 
-    this.updateUser(this.props.userId);
+    this.updateUser(userId);
   }
 
   updateUser(newUserId) {
