@@ -29,6 +29,7 @@ export class CurrentUser extends React.Component {
     this.setState({
       isLoading: true,
       hasLoadingError: false,
+      userError: false,
     });
 
     try {

@@ -48,27 +48,27 @@ class App extends React.Component {
   }
 
   filterTodosByStatus = (value) => {
-    if (value === 'completed') {
-      this.setState(prevState => ({
-        filteredTodos: [...prevState.todos]
-          .filter(todo => todo.completed === true),
-      }));
 
-      return;
+    switch (value) {
+      case 'completed':
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos
+            .filter(todo => todo.completed === true),
+        }));
+        break;
+
+      case 'active':
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos
+            .filter(todo => todo.completed === false),
+        }));
+        break;
+
+      default:
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos,
+        }));
     }
-
-    if (value === 'active') {
-      this.setState(prevState => ({
-        filteredTodos: [...prevState.todos]
-          .filter(todo => todo.completed === false),
-      }));
-
-      return;
-    }
-
-    this.setState(prevState => ({
-      filteredTodos: [...prevState.todos],
-    }));
   }
 
   shuffleTodos = () => {
@@ -91,7 +91,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { filteredTodos, selectedUserId, query } = this.state;
+    const { filteredTodos, selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -102,7 +102,6 @@ class App extends React.Component {
             filterTodosByTitle={this.filterTodosByTitle}
             filterTodosByStatus={this.filterTodosByStatus}
             shuffleTodos={this.shuffleTodos}
-            title={query}
           />
         </div>
 
