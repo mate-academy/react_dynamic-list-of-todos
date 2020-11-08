@@ -2,6 +2,8 @@ import React from 'react';
 import './TodoList.scss';
 import { Todo } from '../Todo';
 import { TodoListShape } from './TodoListShape';
+import { Input } from '../Input';
+import { Select } from '../Select';
 
 export class TodoList extends React.PureComponent {
   state = {
@@ -35,34 +37,8 @@ export class TodoList extends React.PureComponent {
     return (
       <div className="TodoList">
         <div className="TodoList__form">
-          <label>
-            <input
-              type="text"
-              className="TodoList__input"
-              placeholder="write name of title, please"
-              name="searchValue"
-              value={searchValue}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            <select
-              name="showedTodos"
-              value={showedTodos}
-              className="TodoList__select"
-              onChange={this.handleChange}
-            >
-              <option value="">
-                All
-              </option>
-              <option value="completed">
-                Completed
-              </option>
-              <option value="active">
-                Active
-              </option>
-            </select>
-          </label>
+          <Input value={searchValue} handleChange={this.handleChange} />
+          <Select value={showedTodos} handleChange={this.handleChange} />
         </div>
         <h2>Todos:</h2>
         <Todo

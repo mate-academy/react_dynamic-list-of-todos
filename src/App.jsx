@@ -15,7 +15,9 @@ class App extends React.Component {
     getTodos()
       .then((todos) => {
         this.setState({ todos });
-      });
+      })
+      // eslint-disable-next-line no-alert
+      .catch(error => window.alert(`Something went wrong. ${error}`));
   }
 
   selectUserId = (userId) => {

@@ -20,9 +20,13 @@ export class CurrentUser extends React.PureComponent {
     const { currentUser } = this.state;
 
     if (userId !== currentUser.id) {
-      const user = await getUser(userId);
+      try {
+        const user = await getUser(userId);
 
-      this.setState({ currentUser: user });
+        this.setState({ currentUser: user });
+      } catch (error) {
+        this.setState({ currentUser: {} });
+      }
     }
   }
 
