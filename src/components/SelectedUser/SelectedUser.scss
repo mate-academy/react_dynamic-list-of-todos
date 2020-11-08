@@ -1,0 +1,15 @@
+.SelectedUser {
+  &__title {
+    font-size: 24px;
+    color: white;
+  }
+
+  &__name,
+  &__email,
+  &__phone {
+    color: #4d457b;
+    text-align: center;
+    margin: 10px;
+    font-size: 26px;
+  }
+}
