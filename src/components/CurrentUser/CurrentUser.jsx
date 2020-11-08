@@ -11,12 +11,7 @@ export class CurrentUser extends React.Component {
   componentDidMount() {
     const { userId } = this.props;
 
-    getUser(userId)
-      .then((user) => {
-        this.setState({
-          user,
-        });
-      });
+    this.changeUser(userId);
   }
 
   componentDidUpdate() {
@@ -26,6 +21,10 @@ export class CurrentUser extends React.Component {
       return;
     }
 
+    this.changeUser(userId);
+  }
+
+  changeUser(userId) {
     getUser(userId)
       .then((user) => {
         this.setState({
