@@ -1,0 +1,25 @@
+.loading {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  z-index: 1;
+}
+
+.loading__circle {
+  height: 40px;
+  width: 40px;
+  border-top: 4px solid #000;
+  border-radius: 20px;
+  animation: loading 0.5s linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loading {
+  100% {
+    transform: rotate(160deg);
+  }
+}

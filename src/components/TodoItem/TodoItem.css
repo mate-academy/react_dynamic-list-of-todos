@@ -1,0 +1,7 @@
+.todo-item__status--completed {
+  color: #dd3343;
+}
+
+.todo-item__status--uncompleted {
+  color: #40d636;
+}

@@ -1,0 +1,16 @@
+table {
+  margin: auto;
+}
+
+th {
+  cursor: pointer;
+}
+
+tr {
+  border: 1px solid #eee;
+}
+
+.todo-item__name {
+  font-weight: bold;
+  cursor: pointer;
+}
