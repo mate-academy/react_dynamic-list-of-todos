@@ -16,7 +16,7 @@ class App extends React.Component {
   componentDidMount() {
     getTodos()
       .then(todos => this.setState({
-        todos: todos.filter(todo => todo.userId != null),
+        todos: [...todos].filter(todo => todo.userId != null),
       }));
   }
 

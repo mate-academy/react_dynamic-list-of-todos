@@ -1,11 +1,12 @@
 import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
+import ClassNames from 'classnames';
 import { Todo } from '../Todo/Todo';
 
 export class TodoList extends React.PureComponent {
   render() {
-    const { todos, selectUser, selectedUserId, query, status } = this.props;
+    const { todos, selectUser, query, status } = this.props;
 
     let filteredTodos = todos
       .filter(todo => todo.title
@@ -21,19 +22,19 @@ export class TodoList extends React.PureComponent {
     return (
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {filteredTodos.map(todo => (
+          {filteredTodos.map(({ completed, id, title, userId }) => (
             <li
-              key={todo.id}
-              className={
-                `TodoList__item TodoList__item--${todo.completed
-                  ? 'checked'
-                  : 'unchecked'}`
-              }
+              key={id}
+              className={ClassNames('TodoList__item', {
+                'TodoList__item--checked': completed,
+                'TodoList__item--unchecked': !completed,
+              })}
             >
               <Todo
-                todo={todo}
+                completed={completed}
+                title={title}
+                userId={userId}
                 selectUser={selectUser}
-                selectedUserId={selectedUserId}
               />
             </li>
           ))}
@@ -50,7 +51,6 @@ TodoList.propTypes = {
   })),
   query: PropTypes.string,
   status: PropTypes.string,
-  selectedUserId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
 };
 
