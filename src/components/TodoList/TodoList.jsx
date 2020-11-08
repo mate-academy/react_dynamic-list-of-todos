@@ -1,44 +1,54 @@
 import React from 'react';
 import './TodoList.scss';
+import { Todo } from '../Todo';
+import { TodoListShape } from './TodoListShape';
+import { Input } from '../Input';
+import { Select } from '../Select';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  state = {
+    searchValue: '',
+    showedTodos: '',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (event) => {
+    const { name, value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({
+      [name]: value,
+    });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  render() {
+    const { todos, selectUserId, selectedUserId } = this.props;
+    const { searchValue, showedTodos } = this.state;
+    let preparedTodos = todos.filter(
+      todo => todo.title.toLowerCase().includes(searchValue.toLowerCase()),
+    );
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    if (showedTodos === 'completed') {
+      preparedTodos = preparedTodos.filter(todo => todo.completed);
+    }
+
+    if (showedTodos === 'active') {
+      preparedTodos = preparedTodos.filter(todo => !todo.completed);
+    }
+
+    return (
+      <div className="TodoList">
+        <div className="TodoList__form">
+          <Input value={searchValue} handleChange={this.handleChange} />
+          <Select value={showedTodos} handleChange={this.handleChange} />
+        </div>
+        <h2>Todos:</h2>
+        <Todo
+          todos={preparedTodos}
+          selectUserId={selectUserId}
+          selectedUserId={selectedUserId}
+        />
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = TodoListShape;
