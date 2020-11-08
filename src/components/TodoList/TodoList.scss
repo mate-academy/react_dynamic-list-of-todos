@@ -28,4 +28,11 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #4d457b;
+    outline: none;
+  }
 }
