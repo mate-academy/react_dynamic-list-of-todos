@@ -29,34 +29,42 @@ export class CurrentUser extends React.Component {
     const { selectedUser } = this.props;
 
     return (
-      <>
-        {user
-          ? (
-            <div className="App__content-container">
-              <div className="CurrentUser">
+      <div className="App__content-container">
+        <div className="CurrentUser">
+          {user
+            ? (
+              <>
                 <h2 className="CurrentUser__title">
                   <span>{`Selected user: ${user.id}`}</span>
                 </h2>
                 <h3 className="CurrentUser__name">{user.name}</h3>
                 <p className="CurrentUser__email">{user.email}</p>
                 <p className="CurrentUser__phone">{user.phone}</p>
-                <button
-                  className="CurrentUser__clear button"
-                  type="button"
-                  onClick={() => selectedUser(0)}
-                >
-                  Clear
-                </button>
+              </>
+            ) : (
+              <div className="CurrentUser__waiting">
+                Error, select another user
               </div>
-            </div>
-          ) : (<div className="CurrentUser__waiting">Please, wait</div>)
-        }
-      </>
+            )
+          }
+          <button
+            className="CurrentUser__clear button"
+            type="button"
+            onClick={() => selectedUser(0)}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
     );
   }
 }
 
 CurrentUser.propTypes = {
-  selectedUserId: PropTypes.number.isRequired,
+  selectedUserId: PropTypes.number,
   selectedUser: PropTypes.func.isRequired,
+};
+
+CurrentUser.defaultProps = {
+  selectedUserId: 0,
 };

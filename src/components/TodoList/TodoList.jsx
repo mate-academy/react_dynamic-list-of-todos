@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
 
+import { Input } from '../Input';
+import { Select } from '../Select';
+
 export const TodoList = ({
   todos,
   selectedUser,
@@ -15,36 +18,14 @@ export const TodoList = ({
 
     <div className="TodoList__list-container">
       <div className="TodoList__filter">
-        <input
-          className="TodoList__input"
-          type="text"
-          name="valueOnInput"
-          placeholder="Title"
-          value={valueOnInput}
-          onChange={filterOnInput}
+        <Input
+          valueOnInput={valueOnInput}
+          filterOnInput={filterOnInput}
         />
-        <select
-          className="TodoList__select"
-          name="valueOnSelect"
-          value={valueOnSelect}
-          onChange={filterBySelect}
-        >
-          <option
-            value="all"
-          >
-            All
-          </option>
-          <option
-            value="not completed"
-          >
-            Active
-          </option>
-          <option
-            value="completed"
-          >
-            Completed
-          </option>
-        </select>
+        <Select
+          valueOnSelect={valueOnSelect}
+          filterBySelect={filterBySelect}
+        />
       </div>
       <ul className="TodoList__list">
         {todos.map(todo => (

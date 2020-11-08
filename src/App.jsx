@@ -87,7 +87,7 @@ class App extends React.Component {
         </div>
 
         <div className="App__content">
-          {selectedUserId !== 0
+          {selectedUserId
             ? (
               <CurrentUser
                 selectedUserId={selectedUserId}
