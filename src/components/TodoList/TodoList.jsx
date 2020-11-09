@@ -70,37 +70,38 @@ export class TodoList extends React.Component {
                   </p>
                 </label>
 
-                {selectedTodoId === todo.id ? (
-                  <button
-                    className={
-                      classNames('TodoList__user-button button', {
-                        'TodoList__user-button--selected':
-                        todo.userId === selectedUserId
-                        && selectedTodoId === todo.id,
-                      })
-                    }
-                    type="button"
-                    onClick={() => selectUser(0)}
-                  >
-                    User&nbsp;#
-                    {todo.userId}
-                  </button>
-                ) : (
-                  <button
-                    className={
-                      classNames('TodoList__user-button button', {
-                        'TodoList__user-button--selected':
-                        todo.userId === selectedUserId
-                        && selectedTodoId === todo.id,
-                      })
-                    }
-                    type="button"
-                    onClick={() => selectUser(todo.userId, todo.id)}
-                  >
-                    User&nbsp;#
-                    {todo.userId}
-                  </button>
-                )}
+                {selectedTodoId === todo.id && selectedUserId === todo.userId
+                  ? (
+                    <button
+                      className={
+                        classNames('TodoList__user-button button', {
+                          'TodoList__user-button--selected':
+                          todo.userId === selectedUserId
+                          && selectedTodoId === todo.id,
+                        })
+                      }
+                      type="button"
+                      onClick={() => selectUser(0, 0)}
+                    >
+                      User&nbsp;#
+                      {todo.userId}
+                    </button>
+                  ) : (
+                    <button
+                      className={
+                        classNames('TodoList__user-button button', {
+                          'TodoList__user-button--selected':
+                          todo.userId === selectedUserId
+                          && selectedTodoId === todo.id,
+                        })
+                      }
+                      type="button"
+                      onClick={() => selectUser(todo.userId, todo.id)}
+                    >
+                      User&nbsp;#
+                      {todo.userId}
+                    </button>
+                  )}
               </li>
             ))}
           </ul>
