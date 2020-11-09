@@ -7,7 +7,7 @@ export const SearchBar = ({ value, handleChange }) => (
   <div className="search-bar">
     <input
       type="text"
-      name="query"
+      name="searchQuery"
       id="search-query"
       className="search-bar__input"
       value={value}

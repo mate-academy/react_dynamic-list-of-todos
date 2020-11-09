@@ -13,7 +13,7 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     select: 'All',
-    query: '',
+    searchQuery: '',
     todos: [],
     selectedPost: 0,
     selectedUserId: 0,
@@ -27,7 +27,7 @@ class App extends React.Component {
         try {
           this.setState({
             todos: todos
-              .filter(todo => todo.title !== '' && todo.title !== null),
+              .filter(todo => !!todo.title),
             isLoading: false,
           });
         } catch {
@@ -43,7 +43,7 @@ class App extends React.Component {
     });
   }
 
-  clear = () => {
+  clearSelectedUser = () => {
     this.setState({
       selectedPost: 0,
       selectedUserId: 0,
@@ -57,10 +57,10 @@ class App extends React.Component {
   }
 
   filterBySearch = (todos) => {
-    const { query } = this.state;
+    const { searchQuery } = this.state;
 
     return todos.filter(({ title }) => (
-      title.toLowerCase().includes(query.toLowerCase())
+      title.toLowerCase().includes(searchQuery.toLowerCase())
     ));
   }
 
@@ -79,7 +79,7 @@ class App extends React.Component {
     return this.state.todos;
   }
 
-  random = () => {
+  randomSortTodos = () => {
     this.setState(prevState => (
       {
         todos: [...prevState.todos]
@@ -102,7 +102,7 @@ class App extends React.Component {
   filter() {
     const todos = this.filterBySelect(this.state.todos);
 
-    if (this.state.query !== '' && this.state.todos !== null) {
+    if (this.state.searchQuery !== '' && this.state.todos !== null) {
       return this.filterBySearch(todos);
     }
 
@@ -123,10 +123,10 @@ class App extends React.Component {
           <div className="App__tools">
             <SearchBar
               handleChange={this.handleChange}
-              value={this.state.query}
+              value={this.state.searchQuery}
             />
             <Select changeHandler={this.handleChange} />
-            <Randomizer clickHandler={this.random} />
+            <Randomizer clickHandler={this.randomSortTodos} />
           </div>
           {isLoading ? this.loader()
             : (
@@ -145,7 +145,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                clickHandler={this.clear}
+                clickHandler={this.clearSelectedUser}
                 loader={this.loader}
               />
             ) : 'No user selected'}
