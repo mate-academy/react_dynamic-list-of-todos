@@ -25,7 +25,7 @@ class App extends React.Component {
       .catch(err => console.warn(err));
   }
 
-  changeUserId = (userId) => {
+  handleСhangeUserId = (userId) => {
     this.setState({
       selectedUserId: userId,
     });
@@ -75,19 +75,21 @@ class App extends React.Component {
             selectUserId={this.selectUserId}
             filterText={filterText}
             handleChange={this.handleChange}
-            changeUserId={this.changeUserId}
+            handleСhangeUserId={this.handleСhangeUserId}
             showedTodos={showedTodos}
           />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser
-                userId={selectedUserId}
-                resetUserId={this.resetUserId}
-              />
-            ) : 'No user selected'}
+            {selectedUserId
+              ? (
+                <CurrentUser
+                  userId={selectedUserId}
+                  resetUserId={this.resetUserId}
+                />
+              )
+              : 'No user selected'}
           </div>
         </div>
       </div>

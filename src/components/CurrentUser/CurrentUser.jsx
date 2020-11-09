@@ -8,39 +8,34 @@ export class CurrentUser extends React.PureComponent {
     user: {},
   }
 
-  async componentDidMount() {
-    this.changeUser();
-  }
-
-  async componentDidUpdate(prevProps) {
+  componentDidMount() {
     const { userId } = this.props;
 
-    if (prevProps.userId === userId) {
+    this.changeUser(userId);
+  }
+
+  componentDidUpdate() {
+    const { userId } = this.props;
+
+    if (this.state.user && this.state.user.id === userId) {
       return;
     }
 
-    this.changeUser();
+    this.changeUser(userId);
   }
 
-  changeUser = async() => {
-    const { userId } = this.props;
-
-    try {
-      const user = await getUser(userId);
-
-      this.setState({
-        user,
+  changeUser(userId) {
+    getUser(userId)
+      .then((user) => {
+        this.setState({
+          user,
+        });
       });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('ERROR: ', error);
-    }
   }
 
   render() {
     const { userId, resetUserId } = this.props;
     const { user } = this.state;
-    const { name, email, phone } = this.state.user;
 
     return user
       ? (
@@ -52,9 +47,9 @@ export class CurrentUser extends React.PureComponent {
             </span>
           </h2>
 
-          <h3 className="CurrentUser__name">{name}</h3>
-          <p className="CurrentUser__email">{email}</p>
-          <p className="CurrentUser__phone">{phone}</p>
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
 
           <button
             type="button"

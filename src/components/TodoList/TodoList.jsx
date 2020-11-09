@@ -10,7 +10,7 @@ export const TodoList = ({
   filterText,
   handleChange,
   showedTodos,
-  changeUserId,
+  handleСhangeUserId,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -37,7 +37,7 @@ export const TodoList = ({
               title={title}
               userId={userId}
               handleChange={handleChange}
-              changeUserId={changeUserId}
+              handleСhangeUserId={handleСhangeUserId}
             />
           </li>
         ))}

@@ -2,7 +2,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import { TodoProps } from '../../props/TodoProps';
 
-export const Todo = ({ completed, title, userId, changeUserId }) => (
+export const Todo = ({ completed, title, userId, handleСhangeUserId }) => (
   <>
     <label>
       <input type="checkbox" readOnly checked={completed} />
@@ -14,7 +14,7 @@ export const Todo = ({ completed, title, userId, changeUserId }) => (
         'TodoList__user-button--selected': completed,
       })}
       type="button"
-      onClick={() => changeUserId(userId)}
+      onClick={() => handleСhangeUserId(userId)}
     >
       {'User #'}
       {userId}

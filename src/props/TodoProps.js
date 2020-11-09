@@ -4,5 +4,5 @@ export const TodoProps = {
   completed: PropTypes.bool,
   title: PropTypes.string.isRequired,
   userId: PropTypes.number,
-  changeUserId: PropTypes.func.isRequired,
+  handleСhangeUserId: PropTypes.func.isRequired,
 };

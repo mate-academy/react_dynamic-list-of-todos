@@ -2,7 +2,7 @@ import React from 'react';
 import { FilterProps } from '../../props/FilterProps';
 import './Filter.scss';
 
-export const Filter = ({ filterText, handleChange, selectValue }) => (
+export const Filter = ({ filterText, handleChange, showedTodos }) => (
   <div className="filter">
     <input
       className="ui input"
@@ -14,8 +14,8 @@ export const Filter = ({ filterText, handleChange, selectValue }) => (
 
     <select
       className="ui selection dropdown"
-      name="selectValue"
-      value={selectValue}
+      name="showedTodos"
+      value={showedTodos}
       onChange={handleChange}
     >
       <option value="all">
