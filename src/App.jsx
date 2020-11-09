@@ -10,7 +10,7 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     selectedTodoId: 0,
-    selectValue: 'all',
+    selectFilterValue: 'all',
     filterValue: '',
   };
 
@@ -30,11 +30,11 @@ class App extends React.Component {
   }
 
   filterTodosByStatus = (todos) => {
-    if (this.state.selectValue === 'completed') {
+    if (this.state.selectFilterValue === 'completed') {
       return todos.filter(todo => todo.completed === true);
     }
 
-    if (this.state.selectValue === 'active') {
+    if (this.state.selectFilterValue === 'active') {
       return todos.filter(todo => todo.completed === false);
     }
 
@@ -57,14 +57,14 @@ class App extends React.Component {
     });
   }
 
-  handleChange = (value) => {
+  handleFilterQuery = (value) => {
     this.setState({
       filterValue: value,
     });
   }
 
-  handleSelect = (status) => {
-    this.setState({ selectValue: status });
+  handleFilterType = (status) => {
+    this.setState({ selectFilterValue: status });
   }
 
   selectedUser = (userId, todoId) => {
@@ -80,7 +80,7 @@ class App extends React.Component {
       selectedUserId,
       selectedTodoId,
       filterValue,
-      selectValue,
+      selectFilterValue,
     } = this.state;
 
     return (
@@ -91,9 +91,9 @@ class App extends React.Component {
             showUser={this.selectedUser}
             selectedTodoId={selectedTodoId}
             filterValue={filterValue}
-            selectValue={selectValue}
-            handleChange={this.handleChange}
-            handleSelect={this.handleSelect}
+            selectFilterValue={selectFilterValue}
+            handleFilterQuery={this.handleFilterQuery}
+            handleFilterType={this.handleFilterType}
           />
         </div>
 

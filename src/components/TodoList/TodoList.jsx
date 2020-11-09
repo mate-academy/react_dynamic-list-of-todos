@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import './TodoList.scss';
 
@@ -8,9 +9,9 @@ export const TodoList = ({
   showUser,
   selectedTodoId,
   filterValue,
-  selectValue,
-  handleChange,
-  handleSelect,
+  selectFilterValue,
+  handleFilterQuery,
+  handleFilterType,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -20,13 +21,13 @@ export const TodoList = ({
         name="title"
         value={filterValue}
         placeholder="Choose Todo Title"
-        onChange={({ target }) => handleChange(target.value)}
+        onChange={({ target }) => handleFilterQuery(target.value)}
         className="TodoList__input input"
       />
       <select
         name="completed"
-        value={selectValue}
-        onChange={({ target }) => handleSelect(target.value)}
+        value={selectFilterValue}
+        onChange={({ target }) => handleFilterType(target.value)}
         className="TodoList__select select"
       >
         <option value="">Filter by status</option>
@@ -40,12 +41,11 @@ export const TodoList = ({
         {todos.map(todo => (
           <li
             key={todo.id}
-            className={
-              `TodoList__item
-            ${todo.completed
-            ? 'TodoList__item--checked'
-            : 'TodoList__item--unchecked'}`
-            }
+            className={classNames({
+              TodoList__item: true,
+              'TodoList__item--checked': todo.completed === true,
+              'TodoList__item--unchecked': todo.completed === false,
+            })}
           >
             <label>
               <input type="checkbox" />
@@ -53,11 +53,11 @@ export const TodoList = ({
             </label>
 
             <button
-              className={
-                `button ${selectedTodoId === todo.id
-                  ? 'TodoList__user-button--selected'
-                  : 'TodoList__user-button'}`
-              }
+              className={classNames({
+                button: true,
+                'TodoList__user-button--selected': selectedTodoId === todo.id,
+                'TodoList__user-button': true,
+              })}
               type="button"
               onClick={() => showUser(todo.userId, todo.id)}
             >
@@ -80,9 +80,9 @@ TodoList.propTypes = {
     }).isRequired,
   ).isRequired,
   filterValue: PropTypes.string.isRequired,
-  selectValue: PropTypes.string.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleSelect: PropTypes.func.isRequired,
+  selectFilterValue: PropTypes.string.isRequired,
+  handleFilterQuery: PropTypes.func.isRequired,
+  handleFilterType: PropTypes.func.isRequired,
   showUser: PropTypes.func.isRequired,
   selectedTodoId: PropTypes.number.isRequired,
 };
