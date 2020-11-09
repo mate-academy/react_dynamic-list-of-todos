@@ -4,19 +4,25 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
+import { LoadingError } from './components/LoadingError';
 
 class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    hasLoadingError: false,
   };
 
   async componentDidMount() {
-    const todos = await getTodos();
+    try {
+      const todos = await getTodos();
 
-    this.setState({
-      todos: todos.filter(todo => todo.userId && todo.title),
-    });
+      this.setState({ todos });
+    } catch (error) {
+      this.setState({
+        hasLoadingError: true,
+      });
+    }
   }
 
   selectUser = (selectedUserId) => {
@@ -32,7 +38,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, hasLoadingError } = this.state;
     const { selectUser, clearSelectedUser } = this;
 
     return (
@@ -43,6 +49,7 @@ class App extends React.Component {
             selectedUserId={selectedUserId}
             selectUser={selectUser}
           />
+          {hasLoadingError && <LoadingError />}
         </div>
 
         <div className="App__content">

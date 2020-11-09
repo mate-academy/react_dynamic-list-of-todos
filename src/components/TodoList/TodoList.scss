@@ -28,4 +28,17 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    width: 300px;
+    margin: 10px;
+    padding: 5px;
+    height: 35px;
+    border: 1.5px solid #459595;
+    border-radius: 5px;
+    color: #4d457b;
+    font-size: 20px;
+    outline: none;
+    cursor: pointer;
+  }
 }
