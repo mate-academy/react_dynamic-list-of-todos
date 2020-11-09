@@ -18,12 +18,15 @@ export class TodoList extends React.PureComponent {
   }
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   }
 
   render() {
     const { todos, selectedUserId, selectUser } = this.props;
     const { search, visibleTodos } = this.state;
+
     const renderedTodos = todos.filter(todo => (
       todo.title.includes(search) && this.filter[visibleTodos](todo)
     ));

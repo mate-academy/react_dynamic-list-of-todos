@@ -34,9 +34,10 @@ export class CurrentUser extends React.PureComponent {
       return;
     }
 
-    this.setState({ userError: false });
-
-    this.setState({ user: newUser });
+    this.setState({
+      userError: false,
+      user: newUser,
+    });
   }
 
   render() {
