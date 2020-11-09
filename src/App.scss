@@ -80,6 +80,11 @@ input[type="checkbox"]:checked + p:before {
     flex-basis: 60%;
   }
 
+  &__filter {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__content {
     @extend %stretch-panel;
 
@@ -90,5 +95,13 @@ input[type="checkbox"]:checked + p:before {
   &__content-container {
     position: sticky;
     top: 20px;
+  }
+
+  &__text {
+    width: 135px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
   }
 }

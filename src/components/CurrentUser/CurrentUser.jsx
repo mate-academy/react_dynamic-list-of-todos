@@ -1,12 +1,68 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
+import { getUser } from '../../api/api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: null,
+  };
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    const user = await getUser(this.props.selectedUserId);
+
+    this.setState({ user });
+  }
+
+  render() {
+    const { user } = this.state;
+    const { selectedUser } = this.props;
+
+    return (
+      <div className="App__content-container">
+        <div className="CurrentUser">
+          {user ? (
+            <>
+              <h2 className="CurrentUser__title">
+                <span>{`Selected user: ${user.id}`}</span>
+              </h2>
+              <h3 className="CurrentUser__name">{user.name}</h3>
+              <p className="CurrentUser__email">{user.email}</p>
+              <p className="CurrentUser__phone">{user.phone}</p>
+            </>
+          ) : (
+            <div className="CurrentUser__waiting">
+              Error, select another user
+            </div>
+          )}
+          <button
+            className="CurrentUser__clear button"
+            type="button"
+            onClick={() => selectedUser(0)}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  selectedUserId: PropTypes.number,
+  selectedUser: PropTypes.func.isRequired,
+};
+
+CurrentUser.defaultProps = {
+  selectedUserId: 0,
+};
