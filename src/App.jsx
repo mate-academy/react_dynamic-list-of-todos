@@ -9,15 +9,16 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    selectedTodoId: 0,
+    selectValue: 'all',
+    filterValue: '',
   };
 
-  async componentDidMount() {
-    const todos = await getTodos();
-    const preparedTodos = todos.filter(todo => todo.title && todo.userId);
-
-    this.setState({
-      todos: preparedTodos,
-    });
+  componentDidMount() {
+    getTodos()
+      .then((todos) => {
+        this.setState({ todos });
+      });
   }
 
   selectUser = (selectedUserId) => {
@@ -28,39 +29,71 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  filterTodosByStatus = (value) => {
-    if (value === 'all') {
-      this.setState(state => ({
-        todos: [...state.todos],
-      }));
-    } else if (value === 'completed') {
-      this.setState(state => ({
-        todos: state.todos.filter(todo => todo.completed),
-      }));
-    } else if (value === 'active') {
-      this.setState(state => ({
-        todos: state.todos.filter(todo => !todo.completed),
-      }));
+  filterTodosByStatus = (todos) => {
+    if (this.state.selectValue === 'completed') {
+      return todos.filter(todo => todo.completed === true);
     }
+
+    if (this.state.selectValue === 'active') {
+      return todos.filter(todo => todo.completed === false);
+    }
+
+    return todos;
   }
 
-  filterTodosByTitle = (value, field) => {
-    this.setState(state => ({
-      todos: state.todos.filter(todo => todo[field].includes(value)),
-    }));
+  filterTodosByTitle = (todos) => {
+    const { filterValue } = this.state;
+
+    if (filterValue === '') {
+      return todos;
+    }
+
+    return todos.filter((todo) => {
+      if (!todo.title) {
+        return false;
+      }
+
+      return todo.title.includes(filterValue);
+    });
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      filterValue: value,
+    });
+  }
+
+  handleSelect = (status) => {
+    this.setState({ selectValue: status });
+  }
+
+  selectedUser = (userId, todoId) => {
+    this.setState({
+      selectedUserId: userId,
+      selectedTodoId: todoId,
+    });
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const {
+      todos,
+      selectedUserId,
+      selectedTodoId,
+      filterValue,
+      selectValue,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
-            selectUser={this.selectUser}
-            filterUser={this.filterTodosByTitle}
-            filterUserByCompleted={this.filterTodosByStatus}
+            todos={this.filterTodosByTitle(this.filterTodosByStatus(todos))}
+            showUser={this.selectedUser}
+            selectedTodoId={selectedTodoId}
+            filterValue={filterValue}
+            selectValue={selectValue}
+            handleChange={this.handleChange}
+            handleSelect={this.handleSelect}
           />
         </div>
 
