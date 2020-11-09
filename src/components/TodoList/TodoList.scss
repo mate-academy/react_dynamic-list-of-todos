@@ -28,4 +28,30 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+
+    & * {
+      width: 500px;
+      height: 50px;
+      box-sizing: border-box;
+      margin-left: 8px;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      font-size: 16px;
+      color: #4d457b;
+      border: none;
+      border-radius: 10px;
+      background-color: #c6c1e0;
+    }
+  }
+
+  &__input {
+    &::placeholder {
+      font-size: 16px;
+      color: #4d457b;
+    }
+  }
 }
