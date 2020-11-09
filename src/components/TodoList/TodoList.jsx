@@ -1,44 +1,44 @@
 import React from 'react';
 import './TodoList.scss';
+import ClassNames from 'classnames';
+import { Todo } from '../Todo/Todo';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  render() {
+    const { todos, selectUser, query, status } = this.props;
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+    let filteredTodos = todos
+      .filter(todo => todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase()));
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    if (status === 'Completed') {
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+    } else if (status === 'Not completed') {
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    return (
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {filteredTodos.map(({ completed, id, title, userId }) => (
+            <li
+              key={id}
+              className={ClassNames('TodoList__item', {
+                'TodoList__item--checked': completed,
+                'TodoList__item--unchecked': !completed,
+              })}
+            >
+              <Todo
+                completed={completed}
+                title={title}
+                userId={userId}
+                selectUser={selectUser}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
