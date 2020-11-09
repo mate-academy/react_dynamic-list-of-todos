@@ -23,7 +23,15 @@
   }
 
   &__clear {
+    background-color: rgba(54, 9, 68, 0.5);
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
     display: block;
+    width: 100px;
     margin: 20px auto 0;
+    cursor: pointer;
   }
 }

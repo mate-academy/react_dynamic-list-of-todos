@@ -1,0 +1,15 @@
+.select {
+  &__bar {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    border: 2px solid rgb(223, 231, 229);
+    border-radius: 5px;
+    background-color: rgba(25, 0, 247, 0.3);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+}
