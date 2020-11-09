@@ -83,7 +83,7 @@ export class TodoList extends React.Component {
                     onClick={() => selectUser(0)}
                   >
                     User&nbsp;#
-                    {todo.id}
+                    {todo.userId}
                   </button>
                 ) : (
                   <button
@@ -98,7 +98,7 @@ export class TodoList extends React.Component {
                     onClick={() => selectUser(todo.userId, todo.id)}
                   >
                     User&nbsp;#
-                    {todo.id}
+                    {todo.userId}
                   </button>
                 )}
               </li>
