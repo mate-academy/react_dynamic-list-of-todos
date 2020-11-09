@@ -6,7 +6,7 @@ export const Select = ({ changeHandler }) => (
   <div className="select">
     <select
       className="select__bar"
-      name="select"
+      name="filterType"
       onChange={changeHandler}
     >
       <option value="All">All</option>

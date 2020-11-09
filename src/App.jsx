@@ -12,10 +12,10 @@ import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
-    select: 'All',
+    filterType: 'All',
     searchQuery: '',
     todos: [],
-    selectedPost: 0,
+    selectedPostId: 0,
     selectedUserId: 0,
     isLoading: true,
     hasLoadinsErros: false,
@@ -39,13 +39,13 @@ class App extends React.Component {
   selectPost = (postId, userId) => {
     this.setState({
       selectedUserId: userId,
-      selectedPost: postId,
+      selectedPostId: postId,
     });
   }
 
   clearSelectedUser = () => {
     this.setState({
-      selectedPost: 0,
+      selectedPostId: 0,
       selectedUserId: 0,
     });
   }
@@ -65,9 +65,9 @@ class App extends React.Component {
   }
 
   filterBySelect = (todos) => {
-    const { select } = this.state;
+    const { filterType } = this.state;
 
-    switch (select) {
+    switch (filterType) {
       case 'All': return this.state.todos;
       case 'Active': return todos
         .filter(todo => !todo.completed);
@@ -132,7 +132,7 @@ class App extends React.Component {
             : (
               <TodoList
                 todos={this.filter()}
-                selected={this.state.selectedPost}
+                selected={this.state.selectedPostId}
                 clickHandler={this.selectPost}
               />
             )
