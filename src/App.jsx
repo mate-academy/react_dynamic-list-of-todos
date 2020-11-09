@@ -10,6 +10,7 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    selectedTodoId: 0,
     hasLoadingError: false,
   };
 
@@ -27,20 +28,27 @@ class App extends React.Component {
     }
   }
 
-  selectUser = (selectedUserId) => {
+  selectUser = (selectedUserId, selectedTodoId) => {
     this.setState({
       selectedUserId,
+      selectedTodoId,
     });
   }
 
   clearSelectedUser = () => {
     this.setState({
       selectedUserId: 0,
+      selectedTodoId: 0,
     });
   }
 
   render() {
-    const { todos, selectedUserId, hasLoadingError } = this.state;
+    const {
+      todos,
+      selectedUserId,
+      hasLoadingError,
+      selectedTodoId,
+    } = this.state;
     const { selectUser, clearSelectedUser } = this;
 
     return (
@@ -49,6 +57,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectedUserId={selectedUserId}
+            selectedTodoId={selectedTodoId}
             selectUser={selectUser}
           />
           {hasLoadingError && <LoadingError />}

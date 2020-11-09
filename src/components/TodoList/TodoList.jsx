@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import propTypes from 'prop-types';
+import classNames from 'classnames';
 
 export class TodoList extends React.Component {
   state = {
@@ -21,7 +22,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectUser, selectedUserId } = this.props;
+    const { todos, selectUser, selectedUserId, selectedTodoId } = this.props;
     const { input, select } = this.state;
     const filteredTodos = todos.filter(todo => (
       todo.title.toLowerCase().includes(input.toLowerCase())
@@ -69,9 +70,15 @@ export class TodoList extends React.Component {
                   </p>
                 </label>
 
-                {selectedUserId === todo.userId ? (
+                {selectedTodoId === todo.id ? (
                   <button
-                    className="button"
+                    className={
+                      classNames('TodoList__user-button button', {
+                        'TodoList__user-button--selected':
+                        todo.userId === selectedUserId
+                        && selectedTodoId === todo.id,
+                      })
+                    }
                     type="button"
                     onClick={() => selectUser(0)}
                   >
@@ -80,9 +87,15 @@ export class TodoList extends React.Component {
                   </button>
                 ) : (
                   <button
-                    className="button"
+                    className={
+                      classNames('TodoList__user-button button', {
+                        'TodoList__user-button--selected':
+                        todo.userId === selectedUserId
+                        && selectedTodoId === todo.id,
+                      })
+                    }
                     type="button"
-                    onClick={() => selectUser(todo.userId)}
+                    onClick={() => selectUser(todo.userId, todo.id)}
                   >
                     User&nbsp;#
                     {todo.id}
@@ -106,4 +119,5 @@ TodoList.propTypes = {
   })).isRequired,
   selectUser: propTypes.func.isRequired,
   selectedUserId: propTypes.number.isRequired,
+  selectedTodoId: propTypes.number.isRequired,
 };
