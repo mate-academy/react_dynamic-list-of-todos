@@ -36,7 +36,7 @@ class App extends React.Component {
       });
   }
 
-  selectPost = (postId, userId) => {
+  handleSelectPost = (postId, userId) => {
     this.setState({
       selectedUserId: userId,
       selectedPostId: postId,
@@ -133,7 +133,7 @@ class App extends React.Component {
               <TodoList
                 todos={this.filter()}
                 selected={this.state.selectedPostId}
-                clickHandler={this.selectPost}
+                handleSelectPost={this.handleSelectPost}
               />
             )
           }

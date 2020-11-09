@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
 import './TodoList.scss';
 
-export const TodoList = ({ todos, clickHandler, selected }) => (
+export const TodoList = ({ todos, handleSelectPost, selected }) => (
   <div className="TodoList">
 
     <div className="TodoList__list-container">
@@ -12,7 +12,7 @@ export const TodoList = ({ todos, clickHandler, selected }) => (
           <Todo
             {...todo}
             key={todo.id}
-            clickHandler={clickHandler}
+            handleSelectPost={handleSelectPost}
             selected={selected}
           />
         ))}
@@ -23,6 +23,6 @@ export const TodoList = ({ todos, clickHandler, selected }) => (
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  clickHandler: PropTypes.func.isRequired,
+  handleSelectPost: PropTypes.func.isRequired,
   selected: PropTypes.number.isRequired,
 };

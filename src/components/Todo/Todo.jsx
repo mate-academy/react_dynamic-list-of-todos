@@ -8,7 +8,7 @@ export const Todo = ({
   userId,
   id,
   selected,
-  clickHandler,
+  handleSelectPost,
 }) => (
   <li
     className={cn('TodoList__item', {
@@ -26,7 +26,7 @@ export const Todo = ({
         'TodoList__user-button--selected': id === selected,
       })}
       type="button"
-      onClick={() => clickHandler(id, userId)}
+      onClick={() => handleSelectPost(id, userId)}
     >
       User&nbsp;#
       {userId}
@@ -40,5 +40,5 @@ Todo.propTypes = {
   userId: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
   selected: PropTypes.number.isRequired,
-  clickHandler: PropTypes.func.isRequired,
+  handleSelectPost: PropTypes.func.isRequired,
 };
