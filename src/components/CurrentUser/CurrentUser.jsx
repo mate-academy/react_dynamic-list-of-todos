@@ -1,12 +1,58 @@
 import React from 'react';
 import './CurrentUser.scss';
+import PropTypes from 'prop-types';
+import { httpRequest } from '../api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+class CurrentUser extends React.PureComponent {
+  state = {
+    user: {},
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    httpRequest(`users/${this.props.userId}`)
+      .then(users => this.setState({
+        user: users.data,
+      }));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.userId !== prevProps.userId) {
+      httpRequest(`users/${this.props.userId}`)
+        .then(users => this.setState({
+          user: users.data,
+        }));
+    }
+  }
+
+  render() {
+    const { name, email, phone, id } = this.state.user;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {id}
+          </span>
+        </h2>
+        <h3 className="CurrentUser__name">{name}</h3>
+        <p className="CurrentUser__email">{email}</p>
+        <p className="CurrentUser__phone">{phone}</p>
+        <button
+          className="fluid negative ui button"
+          onClick={this.props.clearUser}
+          type="button"
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  clearUser: PropTypes.func.isRequired,
+};
+
+export default CurrentUser;

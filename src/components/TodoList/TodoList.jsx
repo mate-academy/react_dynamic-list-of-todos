@@ -1,44 +1,52 @@
 import React from 'react';
 import './TodoList.scss';
-
-export const TodoList = () => (
+import { TodoListProps, TodoListDefaultProps } from '../props/TodoListProps'
+export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {todos.map(todo => (
+          <li
+            className={
+              `TodoList__item TodoList__item--${todo.completed
+                ? 'checked' : 'unchecked'
+              }`
+            }
+            key={todo.id}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label key={todo.title}>
+              {
+                todo.completed
+                  ? <input type="checkbox" readOnly checked />
+                  : <input type="checkbox" readOnly />
+              }
+              <p>{todo.title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+            <button
+              className={
+                `TodoList__user-button${
+                  selectedUserId === todo.userId
+                  ? ' TodoList__user-button--selected button'
+                  : ' button'
+                }`
+              }
+              type="button"
+              key={todo.userId}
+              onClick={() => getCurrentUserId(todo.userId)}
+            >
+              UserId #
+              {todo.userId}
+            </button>
+          </li>
+        ))}
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
       </ul>
     </div>
   </div>
 );
+
+TodoList.propTypes = TodoListProps;
+TodoList.defaultProps = TodoListDefaultProps;
