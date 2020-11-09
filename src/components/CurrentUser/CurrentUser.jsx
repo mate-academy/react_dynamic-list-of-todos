@@ -51,7 +51,7 @@ class CurrentUser extends React.PureComponent {
 }
 
 CurrentUser.propTypes = {
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
   clearUser: PropTypes.func.isRequired,
 };
 

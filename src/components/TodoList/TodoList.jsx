@@ -14,8 +14,9 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
               ? 'TodoList__item TodoList__item--checked'
               : 'TodoList__item TodoList__item--unchecked'
           }
+              key={todo.id}
           >
-            <label>
+            <label key={todo.title}>
               {
                 todo.completed
                   ? <input type="checkbox" readOnly checked />
@@ -32,6 +33,7 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
                   : 'TodoList__user-button button'
               }
               type="button"
+              key={todo.userId * Math.ceil(Math.random() * 100)}
               onClick={() => getCurrentUserId(todo.userId)}
             >
               UserId #
@@ -47,10 +49,17 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: PropTypes.string.isRequired,
+    completed: PropTypes.bool,
     title: PropTypes.string.isRequired,
     userId: PropTypes.number.isRequired,
-  })).isRequired,
+  })),
   getCurrentUserId: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.string.isRequired,
+  selectedUserId: PropTypes.number,
+};
+
+TodoList.defaultProps = {
+  selectedUserId: null,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: null,
+  })),
 };

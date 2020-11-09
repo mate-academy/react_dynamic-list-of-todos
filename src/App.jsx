@@ -8,6 +8,7 @@ import TodoForm from './components/TodoForm/TodoForm';
 
 class App extends React.Component {
   state = {
+    initialTodos: [],
     todos: [],
     selectedUserId: null,
   };
@@ -15,7 +16,10 @@ class App extends React.Component {
   componentDidMount() {
     getAll('todos')
       .then(todos => this.setState({
-        todos: todos.data,
+        initialTodos: todos.data
+          .filter(todo => todo.title && todo.userId),
+        todos: todos.data
+          .filter(todo => todo.title && todo.userId),
       }));
   }
 
@@ -27,26 +31,24 @@ class App extends React.Component {
 
   onSelectHandler = (event) => {
     const statusType = event.target.value;
+    const currState = [...this.state.initialTodos];
 
     if (statusType === 'completed') {
-      getAll('todos')
-        .then(todos => this.setState({
-          todos: todos.data.filter(todo => todo.completed === true),
-        }));
+      this.setState({
+        todos: currState.filter(todo => todo.completed === true),
+      });
     }
 
     if (statusType === 'active') {
-      getAll('todos')
-        .then(todos => this.setState({
-          todos: todos.data.filter(todo => todo.completed === false),
-        }));
+      this.setState({
+        todos: currState.filter(todo => todo.completed === false),
+      });
     }
 
     if (statusType === 'all') {
-      getAll('todos')
-        .then(todos => this.setState({
-          todos: todos.data,
-        }));
+      this.setState({
+        todos: [...currState],
+      });
     }
   }
 
@@ -59,6 +61,12 @@ class App extends React.Component {
   onChangeHandler = (event) => {
     // eslint-disable-next-line no-unused-vars
     const searchElement = event.target.value;
+    const filteredTodos = [...this.state.initialTodos]
+      .filter(todo => todo.title.includes(searchElement));
+
+    this.setState({
+      todos: filteredTodos,
+    });
   }
 
   render() {
