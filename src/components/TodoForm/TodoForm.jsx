@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
+import { TodoFormProps } from '../props/TodoFormProps';
 const TodoForm = ({ onChangeHandler, onSelectHandler, inputValue }) => (
   <div className="ui form">
     <div className="two fields">
@@ -43,9 +42,5 @@ const TodoForm = ({ onChangeHandler, onSelectHandler, inputValue }) => (
   </div>
 );
 
-TodoForm.propTypes = {
-  onChangeHandler: PropTypes.func.isRequired,
-  onSelectHandler: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-};
+TodoForm.propTypes = TodoFormProps;
 export default TodoForm;

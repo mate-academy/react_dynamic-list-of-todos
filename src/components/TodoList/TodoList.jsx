@@ -1,7 +1,6 @@
 import React from 'react';
 import './TodoList.scss';
-import PropTypes from 'prop-types';
-
+import { TodoListProps, TodoListDefaultProps } from '../props/TodoListProps'
 export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -28,9 +27,11 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
 
             <button
               className={
-                `TodoList__user-button${selectedUserId === todo.userId
+                `TodoList__user-button${
+                  selectedUserId === todo.userId
                   ? ' TodoList__user-button--selected button'
-                  : ' button'}`
+                  : ' button'
+                }`
               }
               type="button"
               key={todo.userId}
@@ -47,19 +48,5 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
   </div>
 );
 
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: PropTypes.bool,
-    title: PropTypes.string.isRequired,
-    userId: PropTypes.number.isRequired,
-  })),
-  getCurrentUserId: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.number,
-};
-
-TodoList.defaultProps = {
-  selectedUserId: null,
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: null,
-  })),
-};
+TodoList.propTypes = TodoListProps;
+TodoList.defaultProps = TodoListDefaultProps;
