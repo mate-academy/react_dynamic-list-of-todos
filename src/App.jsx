@@ -17,7 +17,9 @@ class App extends React.Component {
     try {
       const todos = await getTodos();
 
-      this.setState({ todos });
+      this.setState({
+        todos: todos.filter(todo => todo.userId !== null),
+      });
     } catch (error) {
       this.setState({
         hasLoadingError: true,
