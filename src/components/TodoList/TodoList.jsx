@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
 import { TodoSearch } from '../TodoSearch/TodoSearch';
 import { StatusSelect } from '../StatusSelect/StatusSelect';
+import { todoPropTypesShape } from '../../propTypesShapes/todoPropTypesShape';
 
 export class TodoList extends React.Component {
   state = {
     query: '',
-    selectedOption: '',
+    selectedStatus: '',
   }
 
   searchHandler = (event) => {
@@ -23,36 +24,42 @@ export class TodoList extends React.Component {
     const { value } = event.target;
 
     this.setState({
-      selectedOption: value,
+      selectedStatus: value,
     });
   }
 
   render() {
-    const { query, selectedOption } = this.state;
+    const { query, selectedStatus } = this.state;
     const { selectedTodoId, handleChange, todos } = this.props;
 
     const searchableTodos = todos.filter(({ title }) => (
       title.toLowerCase().includes(query)
     ));
 
-    const selectedTodos = searchableTodos.filter((todo) => {
-      if (selectedOption === 'active') {
-        return todo.completed === false;
-      }
+    let selectedTodos = '';
 
-      if (selectedOption === 'completed') {
-        return todo.completed === true;
-      }
+    if (selectedStatus === '') {
+      selectedTodos = searchableTodos;
+    } else {
+      selectedTodos = searchableTodos.filter((todo) => {
+        if (selectedStatus === 'active') {
+          return todo.completed === false;
+        }
 
-      return true;
-    });
+        if (selectedStatus === 'completed') {
+          return todo.completed === true;
+        }
+
+        return true;
+      });
+    }
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
         <TodoSearch searchHandler={this.searchHandler} />
         <StatusSelect
-          selectedOption={selectedOption}
+          selectedStatus={selectedStatus}
           handleSelect={this.handleSelect}
         />
 
@@ -79,10 +86,7 @@ export class TodoList extends React.Component {
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      completed: PropTypes.bool.isRequired,
-      title: PropTypes.string.isRequired,
-      userId: PropTypes.number.isRequired,
+      ...todoPropTypesShape,
     }).isRequired,
   ).isRequired,
   selectedTodoId: PropTypes.number.isRequired,

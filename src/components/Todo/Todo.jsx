@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { todoPropTypesShape } from '../../propTypesShapes/todoPropTypesShape';
 
 export function Todo({
   completed,
@@ -12,9 +13,10 @@ export function Todo({
 }) {
   return (
     <li
-      className={completed
-        ? 'TodoList__item TodoList__item--checked'
-        : 'TodoList__item TodoList__item--unchecked'}
+      className={classNames('TodoList__item', {
+        'TodoList__item--checked': completed,
+        'TodoList__item--unchecked': !completed,
+      })}
     >
       <label>
         <input
@@ -44,10 +46,7 @@ export function Todo({
 }
 
 Todo.propTypes = {
-  id: PropTypes.number.isRequired,
-  completed: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  ...todoPropTypesShape,
   selectedTodoId: PropTypes.number.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

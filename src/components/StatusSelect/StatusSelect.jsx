@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export function StatusSelect({ selectedOption, handleSelect }) {
+export function StatusSelect({ selectedStatus, handleSelect }) {
   return (
     <select
       className="TodoList__select"
-      value={selectedOption}
+      value={selectedStatus}
       onChange={handleSelect}
     >
       <option value="all" defaultValue>all</option>
@@ -17,5 +17,5 @@ export function StatusSelect({ selectedOption, handleSelect }) {
 
 StatusSelect.propTypes = {
   handleSelect: PropTypes.func.isRequired,
-  selectedOption: PropTypes.string.isRequired,
+  selectedStatus: PropTypes.string.isRequired,
 };
