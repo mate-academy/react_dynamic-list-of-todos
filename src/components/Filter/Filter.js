@@ -2,14 +2,19 @@ import React from 'react';
 import { FilterProps } from '../../props/FilterProps';
 import './Filter.scss';
 
-export const Filter = ({ filterText, handleChange, showedTodos }) => (
+export const Filter = ({
+  filterText,
+  handleChange,
+  handleChangeFilterText,
+  showedTodos,
+}) => (
   <div className="filter">
     <input
       className="ui input"
       placeholder="Search..."
       name="filterText"
       value={filterText}
-      onChange={handleChange}
+      onChange={handleChangeFilterText}
     />
 
     <select

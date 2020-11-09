@@ -39,6 +39,14 @@ class App extends React.Component {
     });
   }
 
+  handleChangeFilterText = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
   resetUserId = () => {
     this.setState({
       selectedUserId: 0,
@@ -75,6 +83,7 @@ class App extends React.Component {
             selectUserId={this.selectUserId}
             filterText={filterText}
             handleChange={this.handleChange}
+            handleChangeFilterText={this.handleChangeFilterText}
             handleСhangeUserId={this.handleСhangeUserId}
             showedTodos={showedTodos}
           />

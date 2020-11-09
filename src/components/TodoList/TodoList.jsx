@@ -9,6 +9,7 @@ export const TodoList = ({
   todos,
   filterText,
   handleChange,
+  handleChangeFilterText,
   showedTodos,
   handleСhangeUserId,
 }) => (
@@ -16,9 +17,9 @@ export const TodoList = ({
     <h2>Todos:</h2>
 
     <Filter
-      className="TodoList__controllers"
       filterText={filterText}
       handleChange={handleChange}
+      handleChangeFilterText={handleChangeFilterText}
       showedTodos={showedTodos}
     />
 
