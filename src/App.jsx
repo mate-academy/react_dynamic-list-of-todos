@@ -3,18 +3,22 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import CurrentUser from './components/CurrentUser/CurrentUser';
-import { getAll } from './components/api';
+import { httpRequest } from './components/api';
 import TodoForm from './components/TodoForm/TodoForm';
 
 class App extends React.Component {
   state = {
-    initialTodos: [],
     todos: [],
+    isSelected: false,
+    selectedTodos: [],
     selectedUserId: null,
+    inputValue: '',
   };
 
+  initialTodos = [];
+
   componentDidMount() {
-    getAll('todos')
+    httpRequest('todos')
       .then(todos => this.setState({
         initialTodos: todos.data
           .filter(todo => todo.title && todo.userId),
@@ -30,24 +34,30 @@ class App extends React.Component {
   }
 
   onSelectHandler = (event) => {
+    this.setState(
+      {isSelected: true });
+    const { initialTodos } = this.state;
     const statusType = event.target.value;
-    const currState = [...this.state.initialTodos];
-
     if (statusType === 'completed') {
       this.setState({
-        todos: currState.filter(todo => todo.completed === true),
+        todos: initialTodos.filter(todo => todo.completed === true),
+        selectedTodos: initialTodos.filter(todo => todo.completed === true),
+        isSelected: true,
       });
     }
 
     if (statusType === 'active') {
       this.setState({
-        todos: currState.filter(todo => todo.completed === false),
+        todos: initialTodos.filter(todo => todo.completed === false),
+        selectedTodos: initialTodos.filter(todo => todo.completed === false),
+        isSelected: true,
       });
     }
 
     if (statusType === 'all') {
       this.setState({
-        todos: [...currState],
+        todos: [...initialTodos],
+        isSelected: false,
       });
     }
   }
@@ -59,10 +69,10 @@ class App extends React.Component {
   }
 
   onChangeHandler = (event) => {
-    // eslint-disable-next-line no-unused-vars
-    const searchElement = event.target.value;
-    const filteredTodos = [...this.state.initialTodos]
-      .filter(todo => todo.title.includes(searchElement));
+    const { inputValue, initialTodos, isSelected, selectedTodos } = this.state;
+    this.setState({ inputValue: event.target.value });
+    const filteredTodos = (isSelected ? selectedTodos : initialTodos)
+      .filter(todo => todo.title.includes(inputValue));
 
     this.setState({
       todos: filteredTodos,
@@ -78,6 +88,7 @@ class App extends React.Component {
           <TodoForm
             onChangeHandler={this.onChangeHandler}
             onSelectHandler={this.onSelectHandler}
+            inputValue={this.state.inputValue}
           />
           <TodoList
             todos={todos}

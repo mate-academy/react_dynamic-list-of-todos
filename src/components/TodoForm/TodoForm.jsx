@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoForm = ({ onChangeHandler, onSelectHandler }) => (
+const TodoForm = ({ onChangeHandler, onSelectHandler, inputValue}) => (
   <div className="ui form">
     <div className="two fields">
       <div className="field">
@@ -10,6 +10,7 @@ const TodoForm = ({ onChangeHandler, onSelectHandler }) => (
           <input
             placeholder="Enter task title"
             type="text"
+            value={inputValue}
             onChange={event => onChangeHandler(event)}
           />
         </label>
@@ -17,7 +18,9 @@ const TodoForm = ({ onChangeHandler, onSelectHandler }) => (
       <div className="field">
         <label>
           Select status
-          <select onChange={event => onSelectHandler(event)}>
+          <select
+            onChange={event => onSelectHandler(event)}
+          >
             <option
               value="all"
             >

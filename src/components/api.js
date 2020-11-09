@@ -1,6 +1,6 @@
 const BASE_URL = 'https://mate-api.herokuapp.com/';
 
-export function getAll(apiElement) {
+export function httpRequest(apiElement) {
   return fetch(BASE_URL + apiElement)
     .then((response) => {
       if (!response.ok) {

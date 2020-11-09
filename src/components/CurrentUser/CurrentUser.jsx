@@ -1,7 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { getAll } from '../api';
+import { httpRequest } from '../api';
 
 class CurrentUser extends React.PureComponent {
   state = {
@@ -9,17 +9,17 @@ class CurrentUser extends React.PureComponent {
   }
 
   componentDidMount() {
-    getAll(`users/${this.props.userId}`)
-      .then(user => this.setState({
-        user: user.data,
+    httpRequest(`users/${this.props.userId}`)
+      .then(users => this.setState({
+        user: users.data,
       }));
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.userId !== prevProps.userId) {
-      getAll(`users/${this.props.userId}`)
-        .then(user => this.setState({
-          user: user.data,
+      httpRequest(`users/${this.props.userId}`)
+        .then(users => this.setState({
+          user: users.data,
         }));
     }
   }
