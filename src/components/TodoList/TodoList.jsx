@@ -1,44 +1,72 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
+import { TodoPropTypes } from '../propTypes/TodoPropTypes';
+import { Todo } from '../Todo';
+import { TodoListControllers } from '../TodoListControllers';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  state = {
+    search: '',
+    visibleTodos: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  filter = {
+    all: () => true,
+    completed: todo => todo.completed,
+    active: todo => !todo.completed,
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  render() {
+    const { todos, selectedUserId, selectUser } = this.props;
+    const { search, visibleTodos } = this.state;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    const renderedTodos = todos.filter(todo => (
+      todo.title.includes(search) && this.filter[visibleTodos](todo)
+    ));
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <TodoListControllers
+          handleChange={this.handleChange}
+          searchValue={search}
+          selectValue={visibleTodos}
+        />
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {
+              renderedTodos.map(todo => (
+                <li
+                  key={todo.id}
+                >
+                  <Todo
+                    todo={todo}
+                    selectUser={selectUser}
+                    selectedUserId={selectedUserId}
+                  />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape(TodoPropTypes),
+  ).isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
