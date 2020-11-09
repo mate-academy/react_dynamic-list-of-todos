@@ -34,32 +34,27 @@ class App extends React.Component {
   }
 
   onSelectHandler = (event) => {
-    this.setState(
-      {isSelected: true });
+    this.setState({
+      isSelected: true,
+    });
     const { initialTodos } = this.state;
     const statusType = event.target.value;
-    if (statusType === 'completed') {
-      this.setState({
-        todos: initialTodos.filter(todo => todo.completed === true),
-        selectedTodos: initialTodos.filter(todo => todo.completed === true),
-        isSelected: true,
-      });
-    }
 
-    if (statusType === 'active') {
-      this.setState({
-        todos: initialTodos.filter(todo => todo.completed === false),
-        selectedTodos: initialTodos.filter(todo => todo.completed === false),
-        isSelected: true,
-      });
-    }
-
-    if (statusType === 'all') {
-      this.setState({
-        todos: [...initialTodos],
-        isSelected: false,
-      });
-    }
+    this.setState({
+      todos: initialTodos
+        .filter(todo => statusType === 'completed'
+          ? todo.completed === true
+          : statusType === 'active'
+            ? todo.completed === false
+            : todo),
+      selectedTodos: initialTodos
+        .filter(todo => statusType === 'completed'
+          ? todo.completed === true
+          : statusType === 'active'
+            ? todo.completed === false
+            : todo),
+      isSelected: true,
+    });
   }
 
   clearUser = () => {
@@ -70,30 +65,36 @@ class App extends React.Component {
 
   onChangeHandler = (event) => {
     const { inputValue, initialTodos, isSelected, selectedTodos } = this.state;
-    this.setState({ inputValue: event.target.value });
     const filteredTodos = (isSelected ? selectedTodos : initialTodos)
       .filter(todo => todo.title.includes(inputValue));
 
     this.setState({
       todos: filteredTodos,
+      inputValue: event.target.value,
     });
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, inputValue } = this.state;
+    const {
+      onChangeHandler,
+      onSelectHandler,
+      getCurrentUserId,
+      clearUser,
+    } = this;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoForm
-            onChangeHandler={this.onChangeHandler}
-            onSelectHandler={this.onSelectHandler}
-            inputValue={this.state.inputValue}
+            onChangeHandler={onChangeHandler}
+            onSelectHandler={onSelectHandler}
+            inputValue={inputValue}
           />
           <TodoList
             todos={todos}
-            getCurrentUserId={this.getCurrentUserId}
-            selectedUserId={this.state.selectedUserId}
+            getCurrentUserId={getCurrentUserId}
+            selectedUserId={selectedUserId}
           />
         </div>
 
@@ -101,8 +102,8 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                userId={this.state.selectedUserId}
-                clearUser={this.clearUser}
+                userId={selectedUserId}
+                clearUser={clearUser}
               />
             ) : 'No user selected'}
           </div>

@@ -9,12 +9,13 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
         {todos.map(todo => (
-          <li className={
-            todo.completed
-              ? 'TodoList__item TodoList__item--checked'
-              : 'TodoList__item TodoList__item--unchecked'
-          }
-              key={todo.id}
+          <li
+            className={
+              `TodoList__item TodoList__item--${todo.completed
+                ? 'checked' : 'unchecked'
+              }`
+            }
+            key={todo.id}
           >
             <label key={todo.title}>
               {
@@ -27,13 +28,12 @@ export const TodoList = ({ todos, getCurrentUserId, selectedUserId }) => (
 
             <button
               className={
-                selectedUserId === todo.userId
-                  // eslint-disable-next-line max-len
-                  ? 'TodoList__user-button TodoList__user-button--selected button'
-                  : 'TodoList__user-button button'
+                `TodoList__user-button${selectedUserId === todo.userId
+                  ? ' TodoList__user-button--selected button'
+                  : ' button'}`
               }
               type="button"
-              key={todo.userId * Math.ceil(Math.random() * 100)}
+              key={todo.userId}
               onClick={() => getCurrentUserId(todo.userId)}
             >
               UserId #
