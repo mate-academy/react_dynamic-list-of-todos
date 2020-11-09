@@ -8,11 +8,11 @@ export class CurrentUser extends React.Component {
     user: {},
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.changeUser();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const { userId } = this.props;
 
     if (prevProps.userId === userId) {
