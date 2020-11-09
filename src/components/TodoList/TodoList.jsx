@@ -2,31 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
 
-import { Input } from '../Input';
-import { Select } from '../Select';
-
 export const TodoList = ({
   todos,
   selectedUser,
-  filterOnInput,
-  filterBySelect,
-  valueOnInput,
-  valueOnSelect,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
-      <div className="TodoList__filter">
-        <Input
-          valueOnInput={valueOnInput}
-          filterOnInput={filterOnInput}
-        />
-        <Select
-          valueOnSelect={valueOnSelect}
-          filterBySelect={filterBySelect}
-        />
-      </div>
       <ul className="TodoList__list">
         {todos.map(todo => (
           <li
@@ -36,10 +19,11 @@ export const TodoList = ({
               : 'TodoList__item TodoList__item--unchecked'}
           >
             <label>
-              {todo.completed
-                ? <input type="checkbox" checked readOnly />
-                : <input type="checkbox" readOnly />
-              }
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                readOnly
+              />
               <p>{todo.title}</p>
             </label>
             <button
@@ -64,8 +48,4 @@ TodoList.propTypes = {
     title: PropTypes.string,
   }).isRequired).isRequired,
   selectedUser: PropTypes.func.isRequired,
-  filterOnInput: PropTypes.func.isRequired,
-  filterBySelect: PropTypes.func.isRequired,
-  valueOnInput: PropTypes.string.isRequired,
-  valueOnSelect: PropTypes.string.isRequired,
 };

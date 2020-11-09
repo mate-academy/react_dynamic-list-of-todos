@@ -2,7 +2,9 @@ import React from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
-import { CurrentUser } from './components/CurrentUser/CurrentUser';
+import { CurrentUser } from './components/CurrentUser';
+import { Input } from './components/Input';
+import { Select } from './components/Select';
 import { getTodos } from './api/api';
 
 class App extends React.Component {
@@ -76,13 +78,19 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
+          <div className="App__filter">
+            <Input
+              valueOnInput={valueOnInput}
+              filterOnInput={this.filterOnInput}
+            />
+            <Select
+              valueOnSelect={valueOnSelect}
+              filterBySelect={this.filterBySelect}
+            />
+          </div>
           <TodoList
             todos={filteredTodos}
             selectedUser={this.selectedUser}
-            filterOnInput={this.filterOnInput}
-            filterBySelect={this.filterBySelect}
-            valueOnInput={valueOnInput}
-            valueOnSelect={valueOnSelect}
           />
         </div>
 

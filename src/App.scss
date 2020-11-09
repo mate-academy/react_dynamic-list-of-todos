@@ -80,6 +80,11 @@ input[type="checkbox"]:checked + p:before {
     flex-basis: 60%;
   }
 
+  &__filter {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__content {
     @extend %stretch-panel;
 

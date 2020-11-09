@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Select.scss';
 
 export const Select = ({ valueOnSelect, filterBySelect }) => (
   <select
-    className="TodoList__select"
+    className="select"
     name="valueOnSelect"
     value={valueOnSelect}
     onChange={filterBySelect}
