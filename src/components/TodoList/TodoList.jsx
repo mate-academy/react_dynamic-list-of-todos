@@ -23,7 +23,9 @@ export class TodoList extends React.Component {
   render() {
     const { todos, selectUser, selectedUserId } = this.props;
     const { input, select } = this.state;
-    const filteredTodos = todos.filter(todo => todo.title.includes(input)
+    const filteredTodos = todos.filter(todo => (
+      todo.title.toLowerCase().includes(input.toLowerCase())
+    )
     && this.filter[select](todo));
 
     return (
