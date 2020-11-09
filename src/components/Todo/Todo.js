@@ -14,8 +14,9 @@ const Todo = ({ completed, title, userId, selectedUserId, selectUser }) => (
         'TodoList__user-button',
         'button',
         {
-          // eslint-disable-next-line max-len
-          'TodoList__user-button--selected': userId === selectedUserId,
+          'TodoList__user-button--selected': (
+            userId === selectedUserId
+          ),
         },
       )}
       type="button"
