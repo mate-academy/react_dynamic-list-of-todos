@@ -1,8 +1,31 @@
 .TodoList {
   width: 100%;
 
+  &__user-button {
+    outline: none;
+
+    background-color: #7064b3;
+    border: 1px solid #7064b3;
+
+    height: 30px;
+    width: 80px;
+
+    color: white;
+
+    cursor: pointer;
+  }
+
   &__user-button--selected {
+    outline: none;
+
     background-color: #4d457b;
+    border: 1px solid #4d457b;
+    color: white;
+
+    height: 30px;
+    width: 80px;
+
+    cursor: pointer;
   }
 
   &__list {
