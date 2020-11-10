@@ -12,6 +12,8 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     selectedTodoId: 0,
+    status: 'All',
+    query: '',
   };
 
   async componentDidMount() {
@@ -44,6 +46,15 @@ class App extends React.Component {
     }));
   }
 
+  handleSelect = ({ target }) => {
+    this.setState({ status: target.value });
+  }
+
+  handleChange = ({ target }) => {
+    this.setState({ query: target.value.toLowerCase() });
+  }
+  
+
   selectButton = (userId) => {
     this.setState({ selectedUserId: userId });
   }
@@ -53,17 +64,20 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, selectedTodoId, status, query } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
             todos={todos}
+            selectedTodoId={selectedTodoId}
+            status={status}
+            query={query}
             selectedUser={this.selectedUser}
             changeStatus={this.changeStatus}
-            selectButton={this.selectButton}
-            selectedTodoId={this.state.selectedTodoId}
+            handleSelect={this.handleSelect}
+            handleChange={this.handleChange}
           />
         </div>
 
