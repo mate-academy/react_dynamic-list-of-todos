@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './TodoList.scss';
 import { TodosSearch } from './todosSearch';
 import { Todo } from './todo';
 import { Select } from './select';
+
+import './TodoList.scss';
 
 export const TodoList = ({
   todos,
@@ -36,6 +37,7 @@ export const TodoList = ({
                 key={todo.id}
                 title={todo.title}
                 userId={todo.userId}
+                completed={todo.completed}
                 userSelect={userSelect}
               />
             )
