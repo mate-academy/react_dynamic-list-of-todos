@@ -1,44 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import { Form } from '../Form';
+import { Todo } from '../Todo';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+const TodoList = ({ allTodos, onUserSelect }) => {
+  const [todos, setTodos] = useState(allTodos);
+  const [category, setCategory] = useState('all');
+  const [query, setQuery] = useState('');
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  const categoryFilters = {
+    all: () => true,
+    active: todo => !todo.completed,
+    completed: todo => todo.completed,
+  };
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const onComplete = (event) => {
+    const { value } = event.target;
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    setCategory(value);
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+    filterTodos(query, value);
+  };
+
+  const onSearch = (event) => {
+    const { value } = event.target;
+
+    setQuery(value);
+
+    filterTodos(value, category);
+  };
+
+  const isTitleIncludesQuery = (title, searchQuery) => title
+    && title.toLowerCase().includes(searchQuery.toLowerCase());
+
+  const filterTodos = (searchQuery, selectedCategory) => {
+    const isTodoIncludesCategory = categoryFilters[selectedCategory];
+
+    setTodos([...allTodos]
+      .filter(todo => isTitleIncludesQuery(todo.title, searchQuery)
+        && isTodoIncludesCategory(todo)));
+  };
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <Form onSearch={onSearch} onComplete={onComplete} />
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todos.map(todo => (
+            <Todo key={todo.id} {...todo} onUserClick={onUserSelect} />
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+TodoList.defaultProps = {
+  allTodos: [
+    Todo.defaultProps,
+  ],
+};
+
+TodoList.propTypes = {
+  allTodos: PropTypes.arrayOf(
+    PropTypes.shape({
+      userId: PropTypes.number,
+      title: PropTypes.string,
+      completed: PropTypes.bool,
+      id: PropTypes.number.isRequired,
+    }),
+  ),
+  onUserSelect: PropTypes.func.isRequired,
+};
+
+export { TodoList };

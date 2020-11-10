@@ -1,6 +1,14 @@
 .TodoList {
   width: 100%;
 
+  &__form {
+    text-align: center;
+  }
+
+  &__enter {
+    margin-right: 80px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
