@@ -17,11 +17,6 @@ export class TodoList extends React.Component {
     this.setState({ query: target.value.toLowerCase() });
   }
 
-  selectButtonToggler = (id) => {
-    this.props.selectButton(id);
-    this.props.setUser(id);
-  }
-
   render() {
     const { changeStatus, userId } = this.props;
     const { status, query } = this.state;
@@ -80,12 +75,12 @@ export class TodoList extends React.Component {
                   <p>{todo.title}</p>
                 </label>
                 <button
-                  className={todo.userId === userId
+                  className={todo.id === this.props.selectedTodoId
                     ? 'TodoList__user-button--selected'
                     : 'TodoList__user-button'
                   }
                   type="button"
-                  onClick={() => this.selectButtonToggler(todo.userId)}
+                  onClick={() => this.props.selectedUser(todo.userId, todo.id)}
                 >
                   {`User #${todo.userId}`}
                 </button>

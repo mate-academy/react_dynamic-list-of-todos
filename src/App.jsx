@@ -11,6 +11,7 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    selectedTodoId: 0,
   };
 
   async componentDidMount() {
@@ -21,8 +22,11 @@ class App extends React.Component {
     });
   }
 
-  setUser = (userId) => {
-    this.setState({ selectedUserId: userId });
+  selectedUser = (userId, todoId) => {
+    this.setState({
+      selectedUserId: userId,
+      selectedTodoId: todoId,
+    });
   }
 
   changeStatus = (id) => {
@@ -40,8 +44,8 @@ class App extends React.Component {
     }));
   }
 
-  selectButton = (id) => {
-    this.setState({ selectedUserId: id });
+  selectButton = (userId) => {
+    this.setState({ selectedUserId: userId });
   }
 
   clearUser = () => {
@@ -56,10 +60,10 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            setUser={this.setUser}
+            selectedUser={this.selectedUser}
             changeStatus={this.changeStatus}
             selectButton={this.selectButton}
-            userId={selectedUserId}
+            selectedTodoId={this.state.selectedTodoId}
           />
         </div>
 
