@@ -9,12 +9,12 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    this.addUser();
+    this.loadUser();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.addUser();
+      this.loadUser();
     }
   }
 
@@ -26,7 +26,7 @@ export class CurrentUser extends React.Component {
     this.props.clearUserId();
   }
 
-  addUser() {
+  loadUser() {
     getUser(this.props.userId)
       .then((user) => {
         this.setState({
