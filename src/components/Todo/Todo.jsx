@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const Todo = ({ userId, title, completed, onUserClick }) => (
   <li
-    className={`TodoList__item
-      TodoList__item--${completed ? '' : 'un'}checked`
-    }
+    className={(classNames('TodoList__item',
+      { 'TodoList__item--unchecked': completed }))}
   >
     <label>
       <input type="checkbox" checked={completed} readOnly />

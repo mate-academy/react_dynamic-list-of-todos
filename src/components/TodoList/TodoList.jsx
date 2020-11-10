@@ -31,11 +31,15 @@ const TodoList = ({ allTodos, onUserSelect }) => {
     filterTodos(value, category);
   };
 
+  const isTitleIncludesQuery = (title, searchQuery) => title
+    && title.toLowerCase().includes(searchQuery.toLowerCase());
+
   const filterTodos = (searchQuery, selectedCategory) => {
+    const isTodoIncludesCategory = categoryFilters[selectedCategory];
+
     setTodos([...allTodos]
-      .filter(todo => todo.title && todo.title.toLowerCase().includes(
-        searchQuery.toLowerCase(),
-      ) && categoryFilters[selectedCategory](todo)));
+      .filter(todo => isTitleIncludesQuery(todo.title, searchQuery)
+        && isTodoIncludesCategory(todo)));
   };
 
   return (

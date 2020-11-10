@@ -21,7 +21,7 @@ class App extends React.PureComponent {
     }));
   }
 
-  clear = () => {
+  clearSelectUserId = () => {
     this.selectUserId(0);
   }
 
@@ -38,7 +38,7 @@ class App extends React.PureComponent {
     return (
       <div className="App">
         <div className="App__sidebar">
-          {todos.length ? (
+          {todos.length > 0 ? (
             <TodoList
               allTodos={todos}
               onUserSelect={this.selectUserId}
@@ -49,7 +49,10 @@ class App extends React.PureComponent {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} onClear={this.clear} />
+              <CurrentUser
+                userId={selectedUserId}
+                onClear={this.clearSelectUserId}
+              />
             ) : 'No user selected'}
           </div>
         </div>

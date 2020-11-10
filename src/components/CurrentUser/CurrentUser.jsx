@@ -27,23 +27,25 @@ class CurrentUser extends React.PureComponent {
   }
 
   render() {
+    const { id, userId, name, email, phone } = this.state.user;
+
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>
             Selected user:&nbsp;
-            {this.state.user.id || this.props.userId || 'Unknown'}
+            {id || userId || 'Unknown'}
           </span>
         </h2>
 
         <h3 className="CurrentUser__name">
-          {this.state.user.name || 'No name'}
+          {name || 'No name'}
         </h3>
         <p className="CurrentUser__email">
-          {this.state.user.email || 'No email'}
+          {email || 'No email'}
         </p>
         <p className="CurrentUser__phone">
-          {this.state.user.phone || 'No phone'}
+          {phone || 'No phone'}
         </p>
 
         <button
