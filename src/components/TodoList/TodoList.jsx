@@ -64,7 +64,12 @@ export class TodoList extends React.Component {
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onClick={!todo.completed}
+                    readOnly
+                  />
                   <p>
                     {todo.title}
                   </p>
