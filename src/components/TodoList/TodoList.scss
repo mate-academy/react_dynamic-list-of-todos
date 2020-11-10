@@ -1,6 +1,23 @@
 .TodoList {
   width: 100%;
 
+  &__search {
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 300px;
+    line-height: 2rem;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 5px;
+  }
+
+  &__select {
+    padding: 9px;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 5px;
+    line-height: 2rem;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
