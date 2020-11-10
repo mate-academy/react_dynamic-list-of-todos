@@ -15,18 +15,22 @@ export class CurrentUser extends Component {
 
   componentDidUpdate() {
     const { userId } = this.props;
+    const { id } = this.state.user;
 
-    this.setNewUser(userId);
+    if (userId !== id) {
+      this.setNewUser(userId);
+    }
   }
 
-  setNewUser = (id) => {
+  setNewUser = (newId) => {
     const { getUser, clearUser } = this.props;
+    const { id } = this.state.user;
 
-    if (id === this.state.user.id) {
+    if (newId === id) {
       return;
     }
 
-    getUser(id).then((newUser) => {
+    getUser(newId).then((newUser) => {
       if (!newUser) {
         clearUser();
       } else {
@@ -46,7 +50,7 @@ export class CurrentUser extends Component {
         <button
           type="button"
           className="CurrentUser__clear"
-          onClick={() => clearUser()}
+          onClick={clearUser}
         >
           Clear
         </button>

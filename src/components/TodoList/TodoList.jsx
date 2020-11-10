@@ -29,11 +29,15 @@ export class TodoList extends Component {
   render() {
     const { todos, selectUser, shuffleTodos, selectedUserId } = this.props;
     const { search, shownTodos } = this.state;
-    const { handleChange, filterByAccomplishment } = this;
 
     const filteredTodos = todos
-      .filter(todo => todo.title.toLowerCase().includes(search.toLowerCase())
-        && filterByAccomplishment[shownTodos](todo));
+      .filter((todo) => {
+        const todoString = todo.title.toLowerCase();
+        const searchString = search.toLowerCase();
+
+        return (todoString.includes(searchString)
+          && this.filterByAccomplishment[shownTodos](todo));
+      });
 
     return (
       <div className="TodoList">
@@ -41,7 +45,7 @@ export class TodoList extends Component {
 
         <FilterField
           search={search}
-          handleChange={handleChange}
+          handleChange={this.handleChange}
           shownTodos={shownTodos}
           shuffleTodos={shuffleTodos}
         />
@@ -51,11 +55,10 @@ export class TodoList extends Component {
             {filteredTodos.map(({ id, userId, completed, title }) => (
               <li
                 key={id}
-                className={classNames('TodoList__item',
-                  {
-                    'TodoList__item--unchecked': !completed,
-                    'TodoList__item--checked': completed,
-                  })}
+                className={classNames('TodoList__item', {
+                  'TodoList__item--unchecked': !completed,
+                  'TodoList__item--checked': completed,
+                })}
               >
                 <TodoItem
                   userId={userId}

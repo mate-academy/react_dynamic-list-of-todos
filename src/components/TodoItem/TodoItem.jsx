@@ -17,8 +17,9 @@ export const TodoItem = ({
 
     <button
       className={classNames('button TodoList__user-button', {
-        // eslint-disable-next-line max-len
-        'TodoList__user-button--selected': userId === selectedUserId,
+        'TodoList__user-button--selected': (
+          userId === selectedUserId
+        ),
       })}
       type="button"
       onClick={() => selectUser(userId)}
