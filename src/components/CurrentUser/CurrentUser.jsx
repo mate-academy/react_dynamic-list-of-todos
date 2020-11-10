@@ -12,7 +12,7 @@ export class CurrentUser extends React.Component {
   async componentDidMount() {
     const { userId } = this.props;
 
-    getUser(userId)
+    await getUser(userId)
       .then((user) => {
         if (!user) {
           return;
@@ -22,10 +22,10 @@ export class CurrentUser extends React.Component {
       });
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate() {
     const { userId } = this.props;
 
-    getUser(userId)
+    await getUser(userId)
       .then(user => (
         !user ? this.setState({ user: {} }) : this.setState({ user })
       ));
@@ -47,7 +47,7 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__phone">{user.phone}</p>
         <button
           type="button"
-          onClick={() => clearUser()}
+          onClick={clearUser}
         >
           Clear
         </button>
