@@ -26,4 +26,12 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__btn {
+    background-color: red;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    color: wheat;
+  }
 }
