@@ -1,0 +1,26 @@
+.filter-form {
+  display: flex;
+  font-family: "Segoe UI", sans-serif;
+
+  &__input {
+    flex-basis: 72%;
+    margin: 0 25px 0 10px;
+    padding: 6px;
+
+    font-size: 16px;
+
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+  }
+
+  &__select {
+    flex-basis: 20%;
+
+    font-size: 16px;
+    color: #666;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+  }
+}
