@@ -37,14 +37,7 @@ export class TodoList extends React.Component {
   shuffleTodos = (todos) => {
     const shuffledTodos = [...todos];
 
-    for (let i = shuffledTodos.length - 1; i > 0; i -= 1) {
-      const randNumber = Math.floor(Math.random() * (i + 1));
-
-      [shuffledTodos[i], shuffledTodos[randNumber]]
-        = [shuffledTodos[randNumber], shuffledTodos[i]];
-    }
-
-    return shuffledTodos;
+    return shuffledTodos.sort(() => Math.random() - 0.5);
   }
 
   randomizeTodos = () => {

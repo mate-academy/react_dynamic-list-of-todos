@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
+import { validateTodos } from './validation';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -14,10 +15,11 @@ class App extends React.Component {
 
   async componentDidMount() {
     const todos = await getTodos();
+    const validatedTodos = validateTodos(todos);
 
-    this.setState(prevState => ({
-      todos: [...prevState.todos, ...todos],
-    }));
+    this.setState({
+      todos: validatedTodos,
+    });
   }
 
   selectUser = (userId, todoId) => {
@@ -45,7 +47,6 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                getUser={getUser}
                 selectUser={this.selectUser}
               />
             ) : 'No user selected'}

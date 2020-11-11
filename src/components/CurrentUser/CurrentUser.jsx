@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getUser } from '../../api';
 import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
@@ -10,7 +11,7 @@ export class CurrentUser extends React.Component {
   }
 
   async componentDidMount() {
-    const { userId, getUser } = this.props;
+    const { userId } = this.props;
 
     this.updateIsLoading();
 
@@ -24,7 +25,7 @@ export class CurrentUser extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { userId, getUser } = this.props;
+    const { userId } = this.props;
 
     if (prevProps.userId === userId) {
       return;
@@ -100,6 +101,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  getUser: PropTypes.func.isRequired,
   selectUser: PropTypes.func.isRequired,
 };
