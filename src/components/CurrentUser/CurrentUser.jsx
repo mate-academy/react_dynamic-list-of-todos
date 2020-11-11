@@ -1,47 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getUser } from '../../api';
 import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    users: {},
+    user: {},
   }
 
   async componentDidMount() {
-    const { userId, allUsers } = this.props;
-    const selectedUser = await allUsers(userId);
+    const { userId } = this.props;
+    const selectedUser = await getUser(userId);
 
     this.updateUser(selectedUser);
   }
 
   async componentDidUpdate(prevProps) {
-    const { userId, allUsers } = this.props;
+    const { userId } = this.props;
 
-    if (prevProps.userId === userId) {
-      return;
+    if (prevProps.userId !== userId) {
+      const selectedUser = await getUser(userId);
+
+      this.updateUser(selectedUser);
     }
-
-    const selectedUser = await allUsers(userId);
-
-    this.updateUser(selectedUser);
   }
 
-  updateUser = (id) => {
+  updateUser = (user) => {
     this.setState({
-      users: id,
+      user,
     });
   }
 
   render() {
-    const { users } = this.state;
-    const { phone, id, name, email } = users;
-    const { clear } = this.props;
+    const { user } = this.state;
+    const { phone, id, name, email } = user;
+    const { clearUser } = this.props;
 
     return (
       <div className="CurrentUser">
         <button
           type="button"
-          onClick={clear}
+          onClick={clearUser}
           className="ui button"
         >
           Clear
@@ -60,6 +59,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  allUsers: PropTypes.func.isRequired,
-  clear: PropTypes.func.isRequired,
+  clearUser: PropTypes.func.isRequired,
 };

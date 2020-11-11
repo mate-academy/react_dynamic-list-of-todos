@@ -2,22 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './SearchInput.scss';
 
-export const SearchInput = ({ handleChange, search, showTodo }) => (
+export const SearchInput = ({ handleChange, filterQuery, status }) => (
   <div>
     <label>
       {`Search: `}
       <input
         type="text"
         onChange={handleChange}
-        name="search"
-        value={search}
+        name="filterQuery"
+        value={filterQuery}
         className="position"
       />
     </label>
 
     <select
-      name="showTodo"
-      value={showTodo}
+      name="status"
+      value={status}
       onChange={handleChange}
       className="position"
     >
@@ -30,7 +30,7 @@ export const SearchInput = ({ handleChange, search, showTodo }) => (
 );
 
 SearchInput.propTypes = {
-  search: PropTypes.string.isRequired,
-  showTodo: PropTypes.string.isRequired,
+  filterQuery: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

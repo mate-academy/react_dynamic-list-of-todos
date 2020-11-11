@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { allTodos, allUsers } from './api';
+import { allTodos } from './api';
 import 'semantic-ui-css/semantic.min.css';
 
 class App extends React.Component {
@@ -15,21 +15,20 @@ class App extends React.Component {
   async componentDidMount() {
     const todos = await allTodos();
 
-    const filterTodos = todos.filter(todo => todo.title && todo.id);
+    const filteredTodos = todos.filter(todo => todo.title && todo.id);
 
     this.setState({
-      todos: filterTodos,
+      todos: filteredTodos,
     });
   }
 
-  selectedUser = (idUser) => {
-    // eslint-disable-next-line no-console
+  selectedUser = (idUser, id) => {
     this.setState({
       selectedUserId: idUser,
     });
   }
 
-  clear = () => {
+  clearUser = () => {
     this.setState({
       selectedUserId: 0,
     });
@@ -53,8 +52,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                allUsers={allUsers}
-                clear={this.clear}
+                clearUser={this.clearUser}
               />
             ) : 'No user selected'}
           </div>

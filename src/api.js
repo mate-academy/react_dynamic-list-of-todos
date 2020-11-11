@@ -5,6 +5,6 @@ export const allTodos = () => fetch(TODOS_URL)
   .then(response => response.json())
   .then(todo => todo.data);
 
-export const allUsers = userId => fetch(`${USERS_URL}/${userId}`)
+export const getUser = userId => fetch(`${USERS_URL}/${userId}`)
   .then(response => response.json())
   .then(todo => todo.data);

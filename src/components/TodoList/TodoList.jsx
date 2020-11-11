@@ -6,14 +6,14 @@ import { SearchInput } from '../SearchInput/SearchInput';
 
 export class TodoList extends React.Component {
   state = {
-    search: '',
-    showTodo: 'all',
+    filterQuery: '',
+    status: 'all',
   }
 
   filterBySelect = {
-    all: callback => callback,
-    completed: callback => callback.completed,
-    active: callback => !callback.completed,
+    all: todo => todo,
+    completed: todo => todo.completed,
+    active: todo => !todo.completed,
   }
 
   handleChange = (event) => {
@@ -26,18 +26,20 @@ export class TodoList extends React.Component {
 
   render() {
     const { todos, selectedUser, selectedUserId } = this.props;
-    const { search, showTodo } = this.state;
+    const { filterQuery, status } = this.state;
 
     const filterTodos = todos
-      .filter(todo => todo.title.toLowerCase().includes(search.toLowerCase())
-        && this.filterBySelect[showTodo](todo));
+      .filter(todo => todo.title
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase())
+        && this.filterBySelect[status](todo));
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
         <SearchInput
-          showTodo={showTodo}
-          search={search}
+          status={status}
+          filterQuery={filterQuery}
           handleChange={this.handleChange}
         />
 
@@ -63,10 +65,10 @@ export class TodoList extends React.Component {
                 <button
                   className={classNames('button TodoList__user-button', {
                     // eslint-disable-next-line max-len
-                    'TodoList__user-button--selected': userId === selectedUserId,
+                    'TodoList__user-button--selected': selectedUserId === userId,
                   })}
                   type="button"
-                  onClick={() => selectedUser(userId)}
+                  onClick={() => selectedUser(userId, id)}
                 >
                   {`UserId #${userId}`}
                 </button>
