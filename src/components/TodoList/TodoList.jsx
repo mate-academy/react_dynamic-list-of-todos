@@ -21,19 +21,19 @@ export class TodoList extends React.Component {
     const { search, selected } = this.state;
 
     if (todos) {
+      let todoCopy = [...todos];
+
       if (selected === 'active') {
-        return todos.filter(
-          (todo) => todo.title && !todo.completed && todo.title.includes(search)
-        );
+        todoCopy = todoCopy.filter((todo) => todo.title && !todo.completed);
       }
 
       if (selected === 'completed') {
-        return todos.filter(
-          (todo) => todo.title && todo.completed && todo.title.includes(search)
-        );
+        todoCopy = todoCopy.filter((todo) => todo.title && todo.completed);
       }
 
-      return todos.filter((todo) => todo.title && todo.title.includes(search));
+      return todoCopy.filter(
+        (todo) => todo.title && todo.title.includes(search)
+      );
     }
 
     return [];

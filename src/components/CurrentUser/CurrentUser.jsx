@@ -26,6 +26,10 @@ export class CurrentUser extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    console.log('cwu');
+  }
+
   getUser(userId) {
     request(`users/${userId}`).then((res) => {
       if (res.data) {
