@@ -28,4 +28,24 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    text-align: center;
+    background-color: #e9e6f2;
+    border-radius: 10px;
+  }
+
+  &__input {
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 200px;
+  }
+
+  &__select {
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 120px;
+  }
 }
