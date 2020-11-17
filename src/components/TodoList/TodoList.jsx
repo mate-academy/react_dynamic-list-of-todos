@@ -32,20 +32,23 @@ export class TodoList extends React.Component {
     const { todos } = this.props;
     const { search, status } = this.state;
 
-    return todos.filter(
-      (todo) => {
-        switch (status) {
-          case STATUS.active:
-            return !todo.completed;
-          case STATUS.complited:
-            return todo.completed;
-          default:
-            return todo;
-        }
-      },
-    ).filter(
-      todo => todo.title.toLowerCase().includes(search.toLowerCase()),
-    );
+    return todos
+      .filter(
+        todo => todo.title,
+      ).filter(
+        (todo) => {
+          switch (status) {
+            case STATUS.active:
+              return !todo.completed;
+            case STATUS.complited:
+              return todo.completed;
+            default:
+              return todo;
+          }
+        },
+      ).filter(
+        todo => todo.title.toLowerCase().includes(search.toLowerCase()),
+      );
   }
 
   render() {
@@ -126,8 +129,8 @@ export class TodoList extends React.Component {
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     userId: PropTypes.number,
-    completed: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool,
+    title: PropTypes.string,
   })).isRequired,
   selectedUserId: PropTypes.number,
   selectUser: PropTypes.func.isRequired,

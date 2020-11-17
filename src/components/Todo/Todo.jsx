@@ -34,7 +34,7 @@ Todo.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.number,
     userId: PropTypes.number,
-    completed: PropTypes.bool.isRequired,
+    completed: PropTypes.bool,
     title: PropTypes.string.isRequired,
   }).isRequired,
   selectedUserId: PropTypes.number,
