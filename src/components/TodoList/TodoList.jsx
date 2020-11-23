@@ -37,8 +37,10 @@ export const TodoList = ({
         className="TodoList__control__search"
         placeholder="search for todo by name"
         onChange={(event) => {
-          updateTodos(allTodos.filter(todo => todo.title.toLowerCase()
-            .includes(event.target.value.toLocaleLowerCase())));
+          updateTodos(allTodos.filter(todo => (
+            !todo.title && typeof todo.title === 'object' ? ''
+              : todo.title.toLowerCase()
+                .includes(event.target.value.toLocaleLowerCase()))));
         }}
       />
       <button
