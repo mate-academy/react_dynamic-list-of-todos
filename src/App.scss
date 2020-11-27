@@ -92,3 +92,34 @@ input[type="checkbox"]:checked + p:before {
     top: 20px;
   }
 }
+
+button.randomize {
+  background-color: transparent;
+  border: 1px solid;
+  padding: 16px;
+  border-radius: 4px;
+  position: relative;
+  margin: 10px;
+  display: block;
+
+  overflow: hidden;
+}
+
+button.randomize::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+  z-index: -1;
+  transform: scaleX(0) skewX(-90deg);
+  transition: transform 0.3s;
+  transform-origin: right center;
+}
+
+button.randomize:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
