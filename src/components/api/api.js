@@ -1,8 +1,18 @@
 // eslint-disable-next-line
 const API_URL = `https://mate-api.herokuapp.com`;
 
-const request = url => fetch(`${API_URL}${url}`)
-  .then(response => response.json());
+export const getTodos = async() => {
+  const todos = fetch(`${API_URL}/todos`)
+    .then(promise => promise.json())
+    .then(result => result.data);
 
-export const getTodos = () => request('/todos');
-export const getUser = userId => request(`/users/${userId}`);
+  return todos;
+};
+
+export const getUser = async(userId) => {
+  const user = fetch(`${API_URL}/users/${userId}`)
+    .then(promise => promise.json())
+    .then(result => result.data);
+
+  return user;
+};

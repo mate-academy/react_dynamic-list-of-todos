@@ -1,57 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
 import { getUser } from '../api/api';
 
-export class CurrentUser extends React.Component {
-  state = {
-    user: {},
-  }
+export const CurrentUser = ({ selectedUserId, chooseUserId }) => {
+  const [user, setUser] = useState({});
 
-  componentDidMount() {
-    this.loadUser();
-  }
+  useEffect(() => {
+    const fetchUser = async() => {
+      const result = await getUser(selectedUserId);
 
-  componentDidUpdate(prevState) {
-    if (prevState.selectedUserId !== this.props.selectedUserId) {
-      this.loadUser();
-    }
-  }
+      setUser(result);
+    };
 
-  loadUser() {
-    getUser(this.props.selectedUserId).then((data) => {
-      this.setState({ user: { ...data.data } });
-    });
-  }
+    fetchUser();
+  }, [selectedUserId]);
 
-  render() {
-    const { user } = this.state;
-    const { selectUser } = this.props;
+  return (
+    <div className="CurrentUser">
+      {user !== null
+        ? (
+          <>
+            <h2 className="CurrentUser__title">
+              <span>
+                {`Selected user:${user.id}`}
+              </span>
+            </h2>
 
-    return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            {`Selected user:${user.id}`}
-          </span>
-        </h2>
-
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
-        <button
-          className="randomize"
-          type="button"
-          onClick={() => selectUser(0)}
-        >
-          Clear user details!
-        </button>
-      </div>
-    );
-  }
-}
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+            <button
+              className="randomize"
+              type="button"
+              onClick={() => chooseUserId(0)}
+            >
+              Clear user details!
+            </button>
+          </>
+        )
+        : 'We do not have information about this user'}
+    </div>
+  );
+};
 
 CurrentUser.propTypes = {
   selectedUserId: PropTypes.number.isRequired,
-  selectUser: PropTypes.func.isRequired,
+  chooseUserId: PropTypes.func.isRequired,
 };
