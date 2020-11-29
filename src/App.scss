@@ -92,3 +92,45 @@ input[type="checkbox"]:checked + p:before {
     top: 20px;
   }
 }
+
+.sidebar {
+  border: 1px solid #4d457b;
+  width: 410px;
+  height: 45px;
+  margin: 0 auto;
+  background: #4d457b;
+  font-size: 15px;
+  font-weight: bold;
+  color: #4d457b;
+  border-radius: 10px;
+}
+
+.randomize {
+  display: inline-block;
+  margin-left: 20px;
+  margin-top: 10px;
+  font-size: 15px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.randomize,
+.input,
+.select {
+  color: #4d457b;
+  background: white;
+  border-radius: 5px;
+  border: 2px solid white;
+  font-weight: bold;
+}
+
+.input {
+  margin-left: 12px;
+  height: 18px;
+
+}
+
+.select {
+  margin-left: 20px;
+  height: 24px;
+}
