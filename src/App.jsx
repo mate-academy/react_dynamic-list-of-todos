@@ -39,9 +39,9 @@ export class App extends React.Component {
     this.setState({ todosFilter: todos
       // eslint-disable-next-line no-nested-ternary
       .filter(todo => (value === 'active'
-        ? todo.completed
+        ? (!todo.completed)
         : value === 'completed'
-          ? (!todo.completed)
+          ? todo.completed
           : todo)) });
   }
 
