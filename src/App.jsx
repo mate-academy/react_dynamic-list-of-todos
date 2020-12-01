@@ -8,7 +8,7 @@ import { getTodos } from './api';
 export class App extends React.Component {
   state = {
     todos: [],
-    todosFilter: [],
+    filteredTodos: [],
     selectedUserId: 0,
   }
 
@@ -19,7 +19,7 @@ export class App extends React.Component {
 
     this.setState({
       todos,
-      todosFilter: todos,
+      filteredTodos: todos,
     });
   }
 
@@ -27,27 +27,31 @@ export class App extends React.Component {
     const { value } = e.target;
 
     this.setState(state => ({
-      todosFilter: state.todos.filter(todo => todo.title.toLowerCase()
+      filteredTodos: state.todos.filter(todo => todo.title.toLowerCase()
         .includes(value.toLowerCase())),
     }));
   };
 
   handleChangeSelect = (e) => {
     const { value } = e.target;
-    const { todos } = this.state;
 
-    this.setState({ todosFilter: todos
-      // eslint-disable-next-line no-nested-ternary
-      .filter(todo => (value === 'active'
-        ? (!todo.completed)
-        : value === 'completed'
-          ? todo.completed
-          : todo)) });
+    this.setState(state => ({
+      filteredTodos: state.todos.filter((todo) => {
+        switch (value) {
+          case 'active':
+            return !todo.completed;
+          case 'completed':
+            return todo.completed;
+          default:
+            return todo;
+        }
+      }),
+    }));
   }
 
   handleRandomize = () => {
     this.setState(state => ({
-      todosFilter: [...state.todos].sort(() => Math.random() - 0.5),
+      filteredTodos: [...state.todos].sort(() => Math.random() - 0.5),
     }));
   }
 
@@ -58,7 +62,7 @@ export class App extends React.Component {
   handleClear = () => this.setState({ selectedUserId: 0 })
 
   render() {
-    const { todosFilter, selectedUserId } = this.state;
+    const { filteredTodos, selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -88,7 +92,7 @@ export class App extends React.Component {
             </button>
           </div>
           <TodoList
-            todos={todosFilter}
+            todos={filteredTodos}
             userId={selectedUserId}
             handleClickUsers={this.handleClickUsers}
           />
