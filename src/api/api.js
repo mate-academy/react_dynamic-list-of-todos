@@ -6,4 +6,4 @@ const request = (key = 'todos') => fetch(`${BASE_URL}${key}`)
 
 export const getTodos = () => request();
 
-export const getUsers = userId => request(`users/${userId}`);
+export const getUser = userId => request(`users/${userId}`);

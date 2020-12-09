@@ -2,7 +2,7 @@ import React from 'react';
 import './CurrentUser.scss';
 import { UsersIdTypes } from './UsersIdTypes';
 
-import { getUsers } from '../../api/api';
+import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.PureComponent {
   state= {
@@ -15,13 +15,13 @@ export class CurrentUser extends React.PureComponent {
   }
 
   componentDidMount() {
-    getUsers(this.props.userId)
+    getUser(this.props.userId)
       .then(user => this.setState({ user }));
   }
 
   componentDidUpdate() {
     if (this.state.user.id !== this.props.userId) {
-      getUsers(this.props.userId)
+      getUser(this.props.userId)
         .then(user => this.setState({ user }));
     }
   }
