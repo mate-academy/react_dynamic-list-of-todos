@@ -115,4 +115,5 @@ TodoList.propTypes = {
     title: PropTypes.string,
   }).isRequired).isRequired,
   selectUser: PropTypes.func.isRequired,
+  checkTask: PropTypes.func.isRequired,
 };

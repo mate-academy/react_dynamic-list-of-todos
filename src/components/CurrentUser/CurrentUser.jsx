@@ -1,7 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
-import { getUser } from '../../api';
 import PropTypes from 'prop-types';
+import { getUser } from '../../api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -59,4 +59,4 @@ export class CurrentUser extends React.Component {
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
   clear: PropTypes.func.isRequired,
-}
+};
