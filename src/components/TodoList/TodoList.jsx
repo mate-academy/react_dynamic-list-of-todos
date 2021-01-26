@@ -21,7 +21,7 @@ export class TodoList extends React.Component {
     const { query,select } = this.state;
     const { todos, selectUser } = this.props;
 
-    const filteredTask = todos
+    const filterTasks = todos
     .filter( task => {
       if(query) {
         return (
@@ -31,6 +31,7 @@ export class TodoList extends React.Component {
       }
       return task;
     })
+
     .filter(task => {
       if( select === 'Active') {
         return task.completed === false;
@@ -70,7 +71,7 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {filteredTask.map(todo => (
+            {filterTasks.map(todo => (
               <li
                 className={classNames(
                   'TodoList__item',
