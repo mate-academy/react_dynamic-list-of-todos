@@ -1,6 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 import { getUser } from '../../api';
+import PropTypes from 'prop-types';
 
 export class CurrentUser extends React.PureComponent {
 
@@ -46,4 +47,8 @@ export class CurrentUser extends React.PureComponent {
       </div>
     )
   };
+}
+
+CurrentUser.propTypes = {
+  onReset: PropTypes.func.isRequired,
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 export class TodoList extends React.Component {
 
@@ -104,3 +105,13 @@ export class TodoList extends React.Component {
     )
   }
 };
+
+TodoList.propTypes = {
+  selectUser: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+    userId:PropTypes.number,
+  }))
+}
