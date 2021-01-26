@@ -28,4 +28,27 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__input {
+    padding: 10px;
+    width: 100%;
+    border-radius: 10px;
+
+    &:focus,
+    &:active {
+      box-shadow: 1px 1px 3px grey;
+      outline: none;
+    }
+  }
+
+  &__select {
+    margin-top: 20px;
+    padding: 5px;
+  }
 }

@@ -26,4 +26,32 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__loading {
+    height: 200px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__spin {
+    font-size: 36px;
+  }
+
+  &__btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    height: 50px;
+  }
+
+  &__btn {
+    cursor: pointer;
+
+    font-size: 26px;
+  }
 }
