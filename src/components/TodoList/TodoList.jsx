@@ -8,10 +8,11 @@ export class TodoList extends React.Component{
     substringForFilter: '',
     status: 'all',
     todos: [],
+    checked: {},
   }
 
   render() {
-    const { todos, selectUser } = this.props;
+    const { selectUser,todos } = this.props;
     const { substringForFilter } = this.state;
 
     return(
@@ -49,11 +50,16 @@ export class TodoList extends React.Component{
                 ? true : (false || true))
             .map(todo => (
           <li
-            className="TodoList__item TodoList__item--unchecked"
+            className={`TodoList__item ${todo.completed ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}`}
             key={todo.id}
           >
             <label>
-              <input type="checkbox" readOnly />
+              <input type="checkbox"
+              readOnly
+              checked={
+                todo.completed ? true : false
+              }
+              />
               <p>{todo.title}</p>
             </label>
 
