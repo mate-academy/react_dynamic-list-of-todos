@@ -12,7 +12,6 @@ export class TodoList extends React.Component {
     this.setState({
       selected: event.target.value,
     });
-    console.log(event.target.value)
   };
 
   render() {
