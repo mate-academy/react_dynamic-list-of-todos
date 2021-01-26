@@ -45,14 +45,18 @@ export class TodoList extends React.Component{
         <ul className="TodoList__list">
           {todos
             .filter(todo => todo.title && todo.title.includes(substringForFilter))
-            .filter(todo => todo.completed && todo.completed === (this.state.status === 'active')
-              ? false : (this.state.status === 'completed')
-                ? true : (false || true))
+            .filter(todo => this.state.status === 'all'
+              ? (todo.completed === true || todo.completed === false)
+              : this.state.status === 'active'
+              ? todo.completed === false
+              : this.state.status === 'completed'
+              ? todo.completed === true
+              : null)
             .map(todo => (
           <li
             className={`TodoList__item ${todo.completed ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}`}
             key={todo.id}
-          >
+          >{`${todo.completed}`}
             <label>
               <input type="checkbox"
               readOnly
