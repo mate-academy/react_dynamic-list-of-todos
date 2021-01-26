@@ -28,4 +28,14 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__inputField {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+  }
+
+  &__select {
+    height: 30px;
+  }
 }
