@@ -4,45 +4,57 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 export class TodoList extends React.Component {
-
   state = {
     query: '',
-    select: 'all',
+    statusFilter: 'all',
   };
 
-
   handleChange = (event) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
 
     this.setState({ [name]: value });
   };
 
+  filterByQuery = () => {
+    const { query } = this.state;
 
-  render() {
-    const { query,select } = this.state;
-    const { todos, selectUser } = this.props;
-
-    const filterTasks = todos
-    .filter( task => {
-      if(query) {
+    return (task) => {
+      if (query) {
         return (
           task.title !== null
           && task.title.toLowerCase().includes(query.toLowerCase())
-        )
+        );
       }
-      return task;
-    })
 
-    .filter(task => {
-      if( select === 'Active') {
+      return task;
+    };
+  }
+
+  filterByStatus = () => {
+    const { statusFilter } = this.state;
+
+    return (task) => {
+      if (statusFilter === 'Active') {
         return task.completed === false;
-      } else if ( select === 'Completed') {
+      }
+
+      if (statusFilter === 'Completed') {
         return task.completed === true;
       }
-      return task;
-    });
 
-    return(
+      return task;
+    };
+  }
+
+  render() {
+    const { query, statusFilter } = this.state;
+    const { todos, selectUser } = this.props;
+
+    const filterTasks = todos
+      .filter(this.filterByQuery())
+      .filter(this.filterByStatus());
+
+    return (
       <div className="TodoList">
         <h2>Todos:</h2>
         <form>
@@ -53,14 +65,15 @@ export class TodoList extends React.Component {
               name="query"
               placeholder="Find task"
               value={query}
-              onChange={this.handleChange}/>
+              onChange={this.handleChange}
+            />
           </label>
 
           <label>
             Show
             <select
-              name="select"
-              value={select} 
+              name="statusFilter"
+              value={statusFilter}
               onChange={this.handleChange}
             >
               <option>All</option>
@@ -76,8 +89,8 @@ export class TodoList extends React.Component {
               <li
                 className={classNames(
                   'TodoList__item',
-                  {'TodoList__item--unchecked' : !todo.completed },
-                  {'TodoList__item--checked' : todo.completed }
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed },
                 )}
                 key={todo.id}
               >
@@ -95,16 +108,18 @@ export class TodoList extends React.Component {
                   type="button"
                   onClick={() => selectUser(todo.userId)}
                 >
-                  User {todo.userId}
+                  User
+                  {' '}
+                  {todo.userId}
                 </button>
               </li>
             ))}
           </ul>
         </div>
       </div>
-    )
+    );
   }
-};
+}
 
 TodoList.propTypes = {
   selectUser: PropTypes.func.isRequired,
@@ -112,6 +127,6 @@ TodoList.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string,
     completed: PropTypes.bool,
-    userId:PropTypes.number,
-  }))
-}
+    userId: PropTypes.number,
+  })).isRequired,
+};

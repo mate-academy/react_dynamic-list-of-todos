@@ -13,21 +13,19 @@ class App extends React.Component {
 
   componentDidMount() {
     getAllTodos()
-      .then(todos => this.setState({
-        todos,
-      }))
+      .then(todos => this.setState({ todos }));
   }
 
   selectUser = (id) => {
     this.setState({
       selectedUserId: id,
-    })
+    });
   }
 
-  Reset = () => {
+  RemoveUser = () => {
     this.setState({
       selectedUserId: 0,
-    })
+    });
   }
 
   render() {
@@ -36,8 +34,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList 
-            todos={todos} 
+          <TodoList
+            todos={todos}
             selectUser={this.selectUser}
           />
         </div>
@@ -45,7 +43,7 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} onReset={this.Reset} />
+              <CurrentUser userId={selectedUserId} onReset={this.RemoveUser} />
             ) : 'No user selected'}
           </div>
         </div>
