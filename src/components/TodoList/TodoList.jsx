@@ -30,8 +30,8 @@ export class TodoList extends React.Component {
           type="text"
           value={this.props.query}
           onChange={((event) => {
-            this.props.setQuery(event.target.value);
             this.props.setCriterion(`all`);
+            this.props.setQuery(event.target.value);
           })}
         />
         {' '}
