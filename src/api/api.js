@@ -5,5 +5,5 @@ export const getTodos = () => fetch(`${BASE_URL}/todos`)
   .then(response => response.data);
 
 export const getUser = id => fetch(`${BASE_URL}/users/${id}`)
-  .then(resp => resp.json())
-  .then(resp => resp.data);
+  .then(response => response.json())
+  .then(response => response.data);

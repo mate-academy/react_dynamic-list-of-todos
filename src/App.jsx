@@ -15,9 +15,7 @@ class App extends React.Component {
 
   componentDidMount() {
     getTodos()
-      .then(todos => this.setState({
-        todos,
-      }));
+      .then(todos => this.setState({ todos }));
   }
 
   selectUser = (userId) => {

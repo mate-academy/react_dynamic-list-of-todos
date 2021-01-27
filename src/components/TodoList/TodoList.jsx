@@ -7,7 +7,7 @@ import './TodoList.scss';
 export class TodoList extends Component {
   state = {
     postId: 0,
-    select: 'all',
+    filterStatus: 'all',
     filterTitle: '',
   };
 
@@ -17,29 +17,40 @@ export class TodoList extends Component {
     this.props.onSelectUser(userId);
   }
 
-  selectChangeHandler = (event) => {
-    this.setState({ select: event.target.value });
+  setFilter = (event) => {
+    this.setState({ filterStatus: event.target.value });
   }
 
   onInputHandler = (event) => {
     this.setState({ filterTitle: event.target.value });
   }
 
+  filterByStatus = (todo) => {
+    const { filterStatus } = this.state;
+
+    switch (filterStatus) {
+      case 'completed': return todo.completed;
+      case 'active': return !todo.completed;
+      default: return true;
+    }
+  }
+
+  // eslint-disable-next-line consistent-return
+  filterByTitle = (todo) => {
+    const { filterTitle } = this.state;
+
+    if (todo.title !== null) {
+      return todo.title.toLowerCase().includes(filterTitle.toLowerCase());
+    }
+  }
+
   render() {
-    let { todos } = this.props;
-    const { postId, filterTitle, select } = this.state;
+    const { todos } = this.props;
+    const { postId } = this.state;
 
-    if (select !== 'all') {
-      select === 'active'
-        ? todos = todos.filter(todo => todo.completed === false)
-        : todos = todos.filter(todo => todo.completed === true);
-    }
-
-    if (filterTitle) {
-      todos = todos
-        .filter(({ title }) => title !== null
-          && title.toLowerCase().includes(filterTitle.toLowerCase()));
-    }
+    const filteredTodos = todos
+      .filter(this.filterByStatus)
+      .filter(this.filterByTitle);
 
     return (
       <div className="TodoList">
@@ -59,7 +70,7 @@ export class TodoList extends Component {
               Filter by status:
               <select
                 className="TodoList__select"
-                onChange={event => this.selectChangeHandler(event)}
+                onChange={event => this.setFilter(event)}
               >
                 <option value="all">Show all</option>
                 <option value="active">Show active</option>
@@ -69,7 +80,7 @@ export class TodoList extends Component {
           </form>
           <ul className="TodoList__list">
 
-            {todos.map(todo => (
+            {filteredTodos.map(todo => (
               <li
                 key={todo.id}
                 className={cn('TodoList__item', {
