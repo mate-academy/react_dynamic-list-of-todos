@@ -56,8 +56,8 @@ export class TodoList extends React.Component {
             {todos.map(todo => (
               <li
                 key={todo.id}
-                className={`TodoList__item TodoList__item--
-                  ${todo.completed ? 'checked' : 'unchecked'}
+                className={`TodoList__item
+                  TodoList__item--${todo.completed ? 'checked' : 'unchecked'}
                 `}
               >
                 <label>
