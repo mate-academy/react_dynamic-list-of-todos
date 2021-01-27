@@ -7,7 +7,7 @@
 
   &__list {
     list-style: none;
-    padding-left: 5px;
+    padding-left: 0;
   }
 
   &__item {
@@ -27,5 +27,32 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__filters {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__input {
+    display: block;
+    left: 0;
+    padding: 10px;
+    height: 15px;
+    width: 65%;
+
+    border-radius: 10px;
+    border-color: rgb(214, 211, 211);
+    outline: none;
+  }
+
+  &__statusChanger {
+    padding: 10px;
+    height: 40px;
+    width: 25%;
+
+    border-radius: 10px;
+    border-color: rgb(214, 211, 211);
+    outline: none;
   }
 }
