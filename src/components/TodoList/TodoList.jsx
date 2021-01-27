@@ -76,7 +76,6 @@ export class TodoList extends React.Component {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    // value={todo.completed}
                     onChange={() => onChange(todo.id)}
                   />
                   <p>{todo.title}</p>
