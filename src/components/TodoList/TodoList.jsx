@@ -31,7 +31,7 @@ export class TodoList extends React.Component {
     this.setState({ sortBy: value });
   }
 
-  toFilter = (todo) => {
+  filterTodosByStatus = (todo) => {
     const { sortBy } = this.state;
 
     switch (sortBy) {
@@ -48,13 +48,17 @@ export class TodoList extends React.Component {
     const { todos, onSelect, onChange } = this.props;
     const { search } = this.state;
 
-    const isVisibleTodos = todos.filter(this.toSearch)
-      .filter(this.toFilter);
+    const filteredTodos = todos.filter(this.toSearch)
+      .filter(this.filterTodosByStatus);
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <input type="text" value={search} onChange={this.handleChangeInput} />
+        <input
+          type="text"
+          value={search}
+          onChange={this.handleChangeInput}
+        />
         <select onChange={this.handleChangeSelect}>
           <option value="all">all</option>
           <option value="active">active</option>
@@ -63,7 +67,7 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {isVisibleTodos.map(todo => (
+            {filteredTodos.map(todo => (
               <li
                 key={todo.id}
                 className={classNames(

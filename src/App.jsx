@@ -18,7 +18,8 @@ class App extends React.Component {
           todos: data.map((item) => {
             if (item.completed === null) {
               return {
-                ...item, completed: false,
+                ...item,
+                completed: false,
               };
             }
 
@@ -28,7 +29,7 @@ class App extends React.Component {
       });
   }
 
-  changeCheckbox = (id) => {
+  toggleTodoStatus = (id) => {
     this.setState(state => (
       {
         todos: state.todos.map((todo) => {
@@ -64,7 +65,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             onSelect={this.selectUser}
-            onChange={this.changeCheckbox}
+            onChange={this.toggleTodoStatus}
           />
         </div>
         <div className="App__content">
