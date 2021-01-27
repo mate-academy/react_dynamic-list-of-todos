@@ -21,6 +21,12 @@ class App extends React.Component {
     this.setState({ selectedUserId: id });
   }
 
+  clearUser = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
@@ -37,11 +43,7 @@ class App extends React.Component {
                 <CurrentUser userId={selectedUserId} />
                 <button
                   type="button"
-                  onClick={() => {
-                    this.setState({
-                      selectedUserId: 0,
-                    });
-                  }}
+                  onClick={this.clearUser}
                 >
                   Clear
                 </button>

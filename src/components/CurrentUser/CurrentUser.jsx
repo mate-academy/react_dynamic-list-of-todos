@@ -3,9 +3,16 @@ import './CurrentUser.scss';
 import PropTypes from 'prop-types';
 import { getUserbyId } from '../../api';
 
+const initialUser = {};
+const notFoundUser = {
+  name: 'not found',
+  email: 'not found',
+  phone: 'not found',
+};
+
 export class CurrentUser extends React.Component {
   state = {
-    user: {},
+    user: initialUser,
     userId: 0,
   }
 
@@ -16,10 +23,19 @@ export class CurrentUser extends React.Component {
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.userId !== this.props.userId) {
-      const person = await getUserbyId(this.props.userId);
+    const { userId } = this.props;
 
-      this.chooseNewUser(person.data);
+    if (prevState.userId !== userId) {
+      const person = await getUserbyId(userId);
+
+      if (person.data !== null) {
+        this.chooseNewUser(person.data);
+      } else {
+        this.chooseNewUser({
+          ...notFoundUser,
+          id: userId,
+        });
+      }
     }
   }
 
@@ -37,12 +53,12 @@ export class CurrentUser extends React.Component {
       <>
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
-            <span>{`Selected user: ${user.id}`}</span>
+            <span>{`Selected user: ${user?.id}`}</span>
           </h2>
 
-          <h3 className="CurrentUser__name">{user.name}</h3>
-          <p className="CurrentUser__email">{user.email}</p>
-          <p className="CurrentUser__phone">{user.phone}</p>
+          <h3 className="CurrentUser__name">{user?.name}</h3>
+          <p className="CurrentUser__email">{user?.email}</p>
+          <p className="CurrentUser__phone">{user?.phone}</p>
         </div>
       </>
     );

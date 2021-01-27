@@ -16,10 +16,23 @@ export class TodoList extends React.Component {
     });
   }
 
-  render() {
-    const { todos, selectUser } = this.props;
-    const { query, checked, values, selected } = this.state;
-    const needTodos = todos
+  handleQuerySearch = (event) => {
+    this.setState({
+      query: event.target.value,
+    });
+  }
+
+  handleChecking = (value) => {
+    this.setState(state => ({
+      checked: !state.checked,
+      values: [...state.values, value],
+    }));
+  }
+
+  filteringTodos = (unfilteredTodos) => {
+    const { selected, query } = this.state;
+
+    return unfilteredTodos
       .filter(todo => todo.title !== '' && todo.userId !== null)
       .filter((todo) => {
         if (selected === 'active') {
@@ -31,7 +44,19 @@ export class TodoList extends React.Component {
         }
 
         return todo;
+      })
+      .filter((item) => {
+        const insensitiveQuery = query.toLowerCase();
+        const insensitiveTitle = item.title.toLowerCase();
+
+        return insensitiveTitle.includes(insensitiveQuery);
       });
+  }
+
+  render() {
+    const { todos, selectUser } = this.props;
+    const { query, checked, values, selected } = this.state;
+    const needTodos = this.filteringTodos(todos);
 
     return (
       <div className="TodoList">
@@ -41,16 +66,12 @@ export class TodoList extends React.Component {
           type="text"
           id="search-query"
           placeholder="Type search word"
-          value={this.state.query}
-          onChange={(event) => {
-            this.setState({
-              query: event.target.value,
-            });
-          }}
+          value={query}
+          onChange={this.handleQuerySearch}
         />
 
         <select
-          value={this.state.selected}
+          value={selected}
           onChange={this.handleChange}
         >
           <option value="">chose your variant</option>
@@ -73,52 +94,38 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {needTodos
-              .filter((item) => {
-                const insensitiveQuery = query.toLowerCase();
-                const insensitiveTitle = item.title.toLowerCase();
+            {needTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={`TodoList__item
+                ${(checked && values.includes(todo.id))
+                || (todo.completed === true)
+                ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}`}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={(checked && values.includes(todo.id))
+                    || (todo.completed === true)}
+                    onClick={() => this.handleChecking(todo.id)}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
 
-                return insensitiveTitle.includes(insensitiveQuery);
-              })
-              .map(todo => (
-                <li
-                  key={todo.id}
-                  className={`TodoList__item
-                  ${(checked && values.includes(todo.id))
-                  || (todo.completed === true)
-                  ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}`}
+                <button
+                  className="
+            TodoList__user-button
+            TodoList__user-button--selected
+            button
+          "
+                  type="button"
+                  onClick={() => selectUser(todo.userId)}
                 >
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={(checked && values.includes(todo.id))
-                      || (todo.completed === true)}
-                      onClick={() => {
-                        this.setState(state => ({
-                          checked: !state.checked,
-                          values: [...state.values, todo.id],
-                        }));
-                      }}
-                      readOnly
-                    />
-                    <p>{todo.title}</p>
-                  </label>
-
-                  <button
-                    className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-                    type="button"
-                    onClick={() => {
-                      selectUser(todo.userId);
-                    }}
-                  >
-                    {`User ${todo.userId}`}
-                  </button>
-                </li>
-              ))}
+                  {`User ${todo.userId}`}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
