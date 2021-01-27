@@ -31,7 +31,7 @@ export class TodoList extends React.Component {
 
         return todo;
       })
-      .filter(todo => todo.title.includes(query));
+      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
     return (
       <div className="TodoList">
