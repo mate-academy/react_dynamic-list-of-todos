@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './TodoList.scss';
 
 export class TodoList extends React.Component {
@@ -8,23 +9,32 @@ export class TodoList extends React.Component {
     filter: 'all',
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
   render() {
     const { todos, getUserId, changeComplate } = this.props;
+    const { title, filter } = this.state;
 
     let filteredTodos = [];
 
-    if (this.state.title === '') {
+    if (title === '') {
       filteredTodos = [...todos];
     } else {
       filteredTodos = todos.filter(todo => (todo.title !== null))
-        .filter(todo => (todo.title.includes(this.state.title)));
+        .filter(todo => (todo.title.includes(title)));
     }
 
-    if (this.state.filter === 'active') {
+    if (filter === 'active') {
       filteredTodos = filteredTodos.filter(todo => (!todo.completed));
     }
 
-    if (this.state.filter === 'completed') {
+    if (filter === 'completed') {
       filteredTodos = filteredTodos.filter(todo => (todo.completed));
     }
 
@@ -32,28 +42,22 @@ export class TodoList extends React.Component {
       <div className="TodoList">
         <h2>Todos:</h2>
         <label>
+          {' '}
+          Filter:
           <input
             name="title"
             type="text"
             placeholder="tape a todo"
-            value={this.state.title}
-            onChange={(event) => {
-              this.setState({
-                title: event.target.value,
-              });
-            }}
+            value={title}
+            onChange={this.handleChange}
           />
         </label>
 
         <label>
           <select
             name="filter"
-            value={this.state.filter}
-            onChange={(event) => {
-              this.setState({
-                filter: event.target.value,
-              });
-            }}
+            value={filter}
+            onChange={this.handleChange}
           >
             <option value="all">all</option>
             <option value="active">active</option>
@@ -66,9 +70,10 @@ export class TodoList extends React.Component {
             {filteredTodos.map(todo => (
               <li
                 key={todo.id}
-                className={todo.completed
-                  ? 'TodoList__item TodoList__item--checked'
-                  : 'TodoList__item TodoList__item--unchecked'}
+                className={classNames('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
               >
                 <label>
                   <input
@@ -84,7 +89,10 @@ export class TodoList extends React.Component {
                 </label>
 
                 <button
-                  className="TodoList__user-button button"
+                  className={classNames(
+                    'TodoList__user-button', 'button',
+                    { 'TodoList__user-button--selected': !todo.completed },
+                  )}
                   type="button"
                   onClick={() => {
                     getUserId(todo.userId);

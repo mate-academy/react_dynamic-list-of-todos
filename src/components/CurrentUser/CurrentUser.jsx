@@ -29,6 +29,19 @@ export class CurrentUser extends React.Component {
 
   render() {
     const { user } = this.state;
+    const { clearUser } = this.props;
+
+    if (user === null) {
+      return (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user: no user information
+            </span>
+          </h2>
+        </div>
+      );
+    }
 
     return (
       <div className="CurrentUser">
@@ -43,8 +56,9 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__email">{user.email}</p>
         <p className="CurrentUser__phone">{user.phone}</p>
         <button
+          className="CurrentUser__clear"
           type="button"
-          onClick={this.props.clearUser}
+          onClick={clearUser}
         >
           Clear
         </button>
