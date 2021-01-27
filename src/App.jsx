@@ -22,7 +22,7 @@ class App extends React.Component {
     });
   }
 
-  RemoveUser = () => {
+  removeUser = () => {
     this.setState({
       selectedUserId: 0,
     });
@@ -43,7 +43,7 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} onReset={this.RemoveUser} />
+              <CurrentUser userId={selectedUserId} onReset={this.removeUser} />
             ) : 'No user selected'}
           </div>
         </div>

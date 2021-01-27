@@ -15,35 +15,30 @@ export class TodoList extends React.Component {
     this.setState({ [name]: value });
   };
 
-  filterByQuery = () => {
+  filterByQuery = (task) => {
     const { query } = this.state;
 
-    return (task) => {
-      if (query) {
-        return (
-          task.title !== null
-          && task.title.toLowerCase().includes(query.toLowerCase())
-        );
-      }
+    if (query) {
+      return task.title !== null && task.title.toLowerCase().includes(query.toLowerCase());
+    }
 
-      return task;
-    };
+    return task
   }
 
-  filterByStatus = () => {
+  filterByStatus = (task) => {
     const { statusFilter } = this.state;
 
-    return (task) => {
-      if (statusFilter === 'Active') {
+
+    switch(statusFilter) {
+      case ('Active'):
         return task.completed === false;
-      }
 
-      if (statusFilter === 'Completed') {
+      case ('Completed'):
         return task.completed === true;
-      }
 
+      default:
       return task;
-    };
+    }
   }
 
   render() {
@@ -51,8 +46,8 @@ export class TodoList extends React.Component {
     const { todos, selectUser } = this.props;
 
     const filterTasks = todos
-      .filter(this.filterByQuery())
-      .filter(this.filterByStatus());
+      .filter(this.filterByQuery)
+      .filter(this.filterByStatus);
 
     return (
       <div className="TodoList">
