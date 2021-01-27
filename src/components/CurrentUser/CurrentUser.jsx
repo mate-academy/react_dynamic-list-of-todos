@@ -20,24 +20,24 @@ export class CurrentUser extends React.Component {
   render() {
     const { users } = this.state;
     const { userId } = this.props;
-    const user = users.find(userFind => userFind.id === userId);
+    const selectedUser = users.find(user => user.id === userId);
 
     return (
       <>
-        {users.length > 0 ? (
+        {(users.length > 0 && selectedUser) ? (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
               <span>
                 Selected user:
-                {user.id}
+                {selectedUser.id}
               </span>
             </h2>
 
-            <h3 className="CurrentUser__name">{user.name}</h3>
-            <p className="CurrentUser__email">{user.email}</p>
-            <p className="CurrentUser__phone">{user.phone}</p>
+            <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+            <p className="CurrentUser__email">{selectedUser.email}</p>
+            <p className="CurrentUser__phone">{selectedUser.phone}</p>
           </div>
-        ) : 'Loading...'}
+        ) : '...not found'}
       </>
 
     );

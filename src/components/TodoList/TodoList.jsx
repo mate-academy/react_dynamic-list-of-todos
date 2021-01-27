@@ -4,12 +4,23 @@ import PropTypes from 'prop-types';
 
 export class TodoList extends React.Component {
   state = {
-    filterStr: '',
-    select: 'all',
+    query: '',
+    selectedStatus: 'all',
   };
 
+  statusFilter = (todo) => {
+    switch (this.state.selectedStatus) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return todo;
+    }
+  }
+
   render() {
-    const { filterStr, select } = this.state;
+    const { query } = this.state;
     const { todos, selectUser, checkHandler } = this.props;
 
     return (
@@ -17,16 +28,16 @@ export class TodoList extends React.Component {
         <h2>Todos:</h2>
         <input
           className="TodoList__filter"
-          value={filterStr}
+          value={query}
           placeholder="Filter todos"
           onChange={({ target }) => {
-            this.setState({ filterStr: target.value });
+            this.setState({ query: target.value });
           }}
         />
         <select
           className="TodoList__select"
           onChange={({ target }) => {
-            this.setState({ select: target.value });
+            this.setState({ selectedStatus: target.value });
           }}
         >
           <option value="all"> all </option>
@@ -37,18 +48,9 @@ export class TodoList extends React.Component {
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {todos
-              .filter((todo) => {
-                switch (select) {
-                  case 'active':
-                    return !todo.completed;
-                  case 'completed':
-                    return todo.completed;
-                  default:
-                    return todo;
-                }
-              })
+              .filter(todo => this.statusFilter(todo))
               .filter(todo => todo.title
-                && todo.title.toLowerCase().includes(filterStr.toLowerCase()))
+                && todo.title.toLowerCase().includes(query.toLowerCase()))
               .map(todo => (
                 <li
                   key={todo.id}

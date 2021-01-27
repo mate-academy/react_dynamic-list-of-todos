@@ -27,11 +27,11 @@ class App extends React.Component {
   };
 
   checkHandler = (todoId) => {
-    const todosNew = [...this.state.todos];
-    const todoNew = todosNew.find(todo => todo.id === todoId);
+    const todos = [...this.state.todos];
+    const selectedTodo = todos.find(todo => todo.id === todoId);
 
-    todoNew.completed = !todoNew.completed;
-    this.setState({ todos: [...todosNew] });
+    selectedTodo.completed = !selectedTodo.completed;
+    this.setState(state => ({ todos }));
   }
 
   render() {
