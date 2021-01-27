@@ -14,7 +14,8 @@ class App extends React.Component {
   componentDidMount() {
     getAllTodos()
       .then(todos => (
-        this.setState({ todos: todos.data.filter(task => task.title) })));
+        this.setState({ todos: todos.data.filter(task => task.title
+          && task.userId) })));
   }
 
   selectUser = (id) => {
