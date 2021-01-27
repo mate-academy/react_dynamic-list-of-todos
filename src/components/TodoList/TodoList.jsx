@@ -2,18 +2,33 @@ import React from 'react';
 import './TodoList.scss';
 
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 export class TodoList extends React.Component{
   state = {
-    substringForFilter: '',
+    query: '',
     status: 'all',
-    todos: [],
+    todos: [...this.props.todos],
     checked: {},
   }
 
+  searchByTitle(todo) {
+    return todo.title && todo.title.includes(this.state.query)
+  }
+
+  filterByStatus(todo) {
+    return this.state.status === 'all'
+      ? (todo.completed === true || todo.completed === false)
+      : this.state.status === 'active'
+      ? todo.completed === false
+      : this.state.status === 'completed'
+      ? todo.completed === true
+      : null
+  }
+
   render() {
-    const { selectUser,todos } = this.props;
-    const { substringForFilter } = this.state;
+    const { selectUser, todos } = this.props;
+    const { query } = this.state;
 
     return(
       <div className="TodoList">
@@ -22,10 +37,10 @@ export class TodoList extends React.Component{
       <input
         type='text'
         placeholder='title'
-        value={substringForFilter}
+        value={query}
         onChange={(event) => {
           this.setState({
-            substringForFilter: event.target.value,
+            query: event.target.value,
           })
         }}
       />
@@ -44,19 +59,13 @@ export class TodoList extends React.Component{
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
           {todos
-            .filter(todo => todo.title && todo.title.includes(substringForFilter))
-            .filter(todo => this.state.status === 'all'
-              ? (todo.completed === true || todo.completed === false)
-              : this.state.status === 'active'
-              ? todo.completed === false
-              : this.state.status === 'completed'
-              ? todo.completed === true
-              : null)
+            .filter(todo => this.searchByTitle(todo))
+            .filter(todo => this.filterByStatus(todo))
             .map(todo => (
           <li
-            className={`TodoList__item ${todo.completed ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}`}
+            className={`TodoList__item ${cn('TodoList__item--checked',{'TodoList__item--unchecked':todo.completed})}`}
             key={todo.id}
-          >{`${todo.completed}`}
+          >
             <label>
               <input type="checkbox"
               readOnly

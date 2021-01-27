@@ -2,6 +2,7 @@ import React from 'react';
 import './CurrentUser.scss';
 
 import PropTypes from 'prop-types'
+import { getUserInfo } from '../../api/api';
 
 export class CurrentUser extends React.Component{
   state = {
@@ -17,35 +18,48 @@ export class CurrentUser extends React.Component{
     },
   }
 
-  getUserInfo = () => {
-    return fetch(`https://mate-api.herokuapp.com/users/${this.props.userId}`)
-      .then(response => response.json());
-  }
-
   componentDidMount() {
-    this.getUserInfo().then(userInfoFromServer => {
+    getUserInfo(this.props.userId).then(userInfoFromServer => {
       this.setState({
         userInfo: userInfoFromServer.data,
       })
-
     })
   }
 
   componentDidUpdate() {
-    this.props.userId !== this.state.userInfo.id
-      && this.getUserInfo().then(userInfoFromServer => {
-      this.setState({
-        userInfo: userInfoFromServer.data,
+    if (this.state.userInfo) {
+      (this.props.userId !== this.state.userInfo.id)
+      && getUserInfo(this.props.userId)
+        .then(userInfoFromServer => {
+          this.setState({
+            userInfo: userInfoFromServer.data,
+          })
+        })
+    } else {
+      getUserInfo(this.props.userId).then(userInfoFromServer => {
+        this.setState({
+          userInfo: userInfoFromServer.data,
+        })
       })
-    })
+    }
   }
 
   render() {
+    if (!this.state.userInfo) {
+      return(
+        <div>No info about user</div>
+      )
+    }
     const {id, name, email,phone} = this.state.userInfo;
 
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title"><span>Selected user: {id}</span></h2>
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {id}
+          </span>
+        </h2>
 
         <h3 className="CurrentUser__name">{name}</h3>
         <p className="CurrentUser__email">{email}</p>
