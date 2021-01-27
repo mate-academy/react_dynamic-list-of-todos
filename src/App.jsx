@@ -25,10 +25,16 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  filterTask = (query) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(task => task.title.includes(query)),
-    }));
+  changeTodoStatus = (task) => {
+    this.setState((prevState) => {
+      const newTask = task;
+
+      newTask.completed = !newTask.completed;
+
+      return {
+        todos: [...prevState.todos],
+      };
+    });
   }
 
   render() {
@@ -40,7 +46,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectUser={this.selectUser}
-            filter={this.filterTask}
+            changeTodoStatus={this.changeTodoStatus}
           />
         </div>
 
