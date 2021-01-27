@@ -41,7 +41,7 @@ export class CurrentUser extends React.Component {
         </p>
         <button
           type="button"
-          className="button"
+          className="button CurrentUser__clear"
           onClick={clear}
         >
           Clear
