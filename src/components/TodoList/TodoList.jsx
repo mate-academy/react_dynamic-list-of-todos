@@ -6,14 +6,13 @@ import './TodoList.scss';
 
 export class TodoList extends Component {
   state = {
-    postId: 0,
+    todoId: 0,
     filterStatus: 'all',
     filterTitle: '',
   };
 
-  buttonClickHandler = (postId, userId) => {
-    this.setState({ postId });
-
+  selectUser = (todoId, userId) => {
+    this.setState({ todoId });
     this.props.onSelectUser(userId);
   }
 
@@ -35,18 +34,19 @@ export class TodoList extends Component {
     }
   }
 
-  // eslint-disable-next-line consistent-return
   filterByTitle = (todo) => {
     const { filterTitle } = this.state;
 
-    if (todo.title !== null) {
-      return todo.title.toLowerCase().includes(filterTitle.toLowerCase());
+    if (todo.title === null) {
+      return;
     }
+
+    return todo.title.toLowerCase().includes(filterTitle.toLowerCase());
   }
 
   render() {
     const { todos } = this.props;
-    const { postId } = this.state;
+    const { todoId } = this.state;
 
     const filteredTodos = todos
       .filter(this.filterByStatus)
@@ -61,7 +61,7 @@ export class TodoList extends Component {
             <label className="TodoList__label">
               Todo filter:
               <input
-                onChange={event => this.onInputHandler(event)}
+                onChange={this.onInputHandler}
                 className="TodoList__filter"
               />
             </label>
@@ -98,9 +98,9 @@ export class TodoList extends Component {
                 </label>
 
                 <button
-                  onClick={() => this.buttonClickHandler(todo.id, todo.userId)}
+                  onClick={() => this.selectUser(todo.id, todo.userId)}
                   className={cn('TodoList__user-button', 'button', {
-                    'TodoList__user-button--selected': todo.id === postId,
+                    'TodoList__user-button--selected': todo.id === todoId,
                   })}
                   type="button"
                 >
