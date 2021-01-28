@@ -1,44 +1,134 @@
 import React from 'react';
 import './TodoList.scss';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    todoId: 0,
+    searchTitle: '',
+    selectBy: '',
+  };
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
+  selectTodo = (todoId) => {
+    this.setState({ todoId });
+  }
+
+  updateSearchTitle = (event) => {
+    this.setState({ searchTitle: event.target.value });
+  }
+
+  updateStatus = (event) => {
+    this.setState({ selectBy: event.target.value });
+  }
+
+  filterByStatus = (todo) => {
+    const { selectBy } = this.state;
+
+    switch (selectBy) {
+      case 'active':
+        return !todo.completed;
+
+      case 'completed':
+        return todo.completed;
+
+      default:
+        return true;
+    }
+  }
+
+  filterByTitle = (todo) => {
+    const { searchTitle } = this.state;
+
+    return todo.title
+      ? todo.title.toLowerCase().includes(searchTitle.toLowerCase())
+      : false;
+  }
+
+  render() {
+    const {
+      todos,
+      selectUser,
+    } = this.props;
+
+    const { todoId, search } = this.state;
+    const visibleTodos = todos
+      .filter(this.filterByTitle)
+      .filter(this.filterByStatus);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <form>
+          <label htmlFor="search-query">
+            Find Task&nbsp;
           </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
+          <input
+            type="text"
+            id="search-query"
+            placeholder="Type search word"
+            value={search}
+            onChange={this.updateSearchTitle}
+          />
+          <br />
+          <label htmlFor="select-todo">
+            Filter by status:&nbsp;
           </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
+          <select
+            id="select-todo"
+            onChange={this.updateStatus}
           >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </form>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className="TodoList__item TodoList__item--unchecked"
+              >
+                <label>
+                  <input type="checkbox" readOnly />
+                  <p>
+                    {`
+                    ${todo.title} - ${todo.completed ? 'Completed' : 'Active'}
+                    `}
+                  </p>
+                </label>
+                <button
+                  className={classnames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected': todo.id === todoId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => {
+                    selectUser(todo.userId);
+                    this.selectTodo(todo.id);
+                  }}
+                >
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
