@@ -8,20 +8,19 @@ export class CurrentUser extends React.Component {
     user: null,
   }
 
-  async componentDidMount() {
-    const selectedUser = await getUser(this.props.userId);
-
-    this.setState({ user: selectedUser.data });
+  componentDidMount() {
+    this.loadUser();
   }
 
-  async componentDidUpdate(prevState, prevProps) {
-    if (prevProps.userId === this.props.userId) {
-      return;
+  componentDidUpdate(prevState, prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadUser();
     }
+  }
 
+  async loadUser() {
     const selectedUser = await getUser(this.props.userId);
 
-    // eslint-disable-next-line react/no-did-update-set-state
     this.setState({ user: selectedUser.data });
   }
 
