@@ -13,10 +13,10 @@ class App extends React.Component {
 
   async componentDidMount() {
     try {
-      const print = await getTodos();
+      const date = await getTodos();
 
       this.setState({
-        todos: print,
+        todos: date,
       });
     } catch (error) {
       // eslint-disable-next-line no-console

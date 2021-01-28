@@ -21,7 +21,7 @@ export class TodoList extends React.Component {
     });
   }
 
-  toTitleSearch = (todo) => {
+  filterByQuery = (todo) => {
     const { query } = this.state;
 
     if (todo.title !== null) {
@@ -31,7 +31,7 @@ export class TodoList extends React.Component {
     return false;
   }
 
-  toSelectFilter = (todo) => {
+  filterByStatus = (todo) => {
     const { select } = this.state;
 
     switch (select) {
@@ -44,14 +44,14 @@ export class TodoList extends React.Component {
     }
   }
 
-  hangleSuffled = () => {
+  setShuffleMode = () => {
     this.setState({
       shuffle: true,
       select: '',
     });
   }
 
-  toShuffleFilter = todos => todos.map(todo => (
+  shuffleTodos = todos => todos.map(todo => (
     {
       sort: Math.random(),
       value: todo,
@@ -62,10 +62,10 @@ export class TodoList extends React.Component {
   render() {
     const { todos, checkTodo, checkUser } = this.props;
     const { userId, query, select, shuffle } = this.state;
-    const filtredTodos = todos.filter(this.toTitleSearch)
-      .filter(this.toSelectFilter);
+    const filtredTodos = todos.filter(this.filterByQuery)
+      .filter(this.filterByStatus);
 
-    const suffledTodos = this.toShuffleFilter(todos);
+    const suffledTodos = this.shuffleTodos(todos);
     const checkedTodos = shuffle
       ? suffledTodos
       : filtredTodos;
@@ -98,7 +98,7 @@ export class TodoList extends React.Component {
             <button
               type="button"
               className="TodoList__random-button"
-              onClick={this.hangleSuffled}
+              onClick={this.setShuffleMode}
             >
               Randomize
             </button>
