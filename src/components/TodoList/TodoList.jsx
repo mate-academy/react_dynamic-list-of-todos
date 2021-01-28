@@ -46,9 +46,9 @@ export class TodoList extends React.Component {
             this.setState({ selectedFilter: event.target.value })
           )}
         >
-          <option>All</option>
-          <option>Active</option>
-          <option>Completed</option>
+          <option value="All">All</option>
+          <option value="Active">Active</option>
+          <option value="Completed">Completed</option>
         </select>
 
         <div className="TodoList__list-container">
@@ -65,7 +65,7 @@ export class TodoList extends React.Component {
                     type="checkbox"
                     checked={todo.completed}
                     readOnly
-                    onChange={() => this.props.onComplete(todo)}
+                    onChange={() => this.props.onComplete(todo.id)}
                   />
                   <p>{todo.title}</p>
                 </label>

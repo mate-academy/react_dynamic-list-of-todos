@@ -19,14 +19,23 @@ class App extends React.Component {
     });
   }
 
-  onComplete = (todo) => {
+  onComplete = (id) => {
     this.setState((state) => {
-      const item = todo;
+      const todos = state.todos.map((todo) => {
+        if (todo.id === id) {
+          const changedTodo = {
+            ...todo,
+            completed: !todo.completed,
+          };
 
-      item.completed = !item.completed;
+          return changedTodo;
+        }
+
+        return todo;
+      });
 
       return {
-        todos: [...state.todos],
+        todos,
       };
     });
   }
