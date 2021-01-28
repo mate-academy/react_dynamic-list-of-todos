@@ -24,6 +24,12 @@
 
   &__clear {
     display: block;
+    background-color: rgb(241, 124, 124);
+    color: #fff;
+    height: 30px;
+    width: 70px;
+    border-radius: 10px;
     margin: 20px auto 0;
+    cursor: pointer;
   }
 }
