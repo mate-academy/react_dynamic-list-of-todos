@@ -24,6 +24,12 @@
 
   &__clear {
     display: block;
+    width: 70px;
+    height: 30px;
     margin: 20px auto 0;
+    background-color: #4d457b;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
   }
 }
