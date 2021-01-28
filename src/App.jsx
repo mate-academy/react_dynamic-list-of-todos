@@ -15,11 +15,7 @@ class App extends React.Component {
   componentDidMount() {
     getTodos()
       .then(data => data.filter(({ id, title }) => id && title))
-      .then((todos) => {
-        this.setState({
-          todos,
-        });
-      })
+      .then(todos => this.setState({ todos }))
       .catch(() => {
         this.setState({
           todos: null,
@@ -48,7 +44,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectedUserId={selectedUserId}
-            onButtonClick={this.selectUser}
+            selectUser={this.selectUser}
           />
         </div>
 
@@ -57,7 +53,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                onButtonClick={this.clearSelectedUser}
+                clearSelectedUser={this.clearSelectedUser}
               />
             ) : 'No user selected'}
           </div>

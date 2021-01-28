@@ -3,7 +3,7 @@ import { TodoType } from '../../types';
 
 const classNames = require('classnames');
 
-export const Todo = ({ todo, onButtonClick, isSelectedUser }) => (
+export const Todo = ({ todo, selectUser, isSelectedUser }) => (
   <li
     className={classNames({
       TodoList__item: true,
@@ -24,7 +24,7 @@ export const Todo = ({ todo, onButtonClick, isSelectedUser }) => (
         button: true,
       })}
       type="button"
-      onClick={() => onButtonClick(todo.userId)}
+      onClick={() => selectUser(todo.userId)}
     >
       {`User #${todo.userId}`}
     </button>

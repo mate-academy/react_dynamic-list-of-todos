@@ -13,10 +13,12 @@ export class CurrentUser extends PureComponent {
     this.updateUser(this.props.userId);
   }
 
-  componentDidUpdate() {
-    const { userId } = this.props;
+  componentDidUpdate({ userId }) {
+    const newUserId = this.props.userId;
 
-    this.updateUser(userId);
+    if (userId !== newUserId) {
+      this.updateUser(newUserId);
+    }
   }
 
   updateUser(newUserId) {
@@ -35,7 +37,7 @@ export class CurrentUser extends PureComponent {
 
   render() {
     const { user } = this.state;
-    const { onButtonClick } = this.props;
+    const { clearSelectedUser } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -54,9 +56,7 @@ export class CurrentUser extends PureComponent {
 
               <button
                 type="button"
-                onClick={() => {
-                  onButtonClick();
-                }}
+                onClick={clearSelectedUser}
                 className="button clear-button"
               >
                 Clear

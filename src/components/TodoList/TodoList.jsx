@@ -15,23 +15,44 @@ export class TodoList extends React.PureComponent {
     active: todo => !todo.completed,
   }
 
-  changeHandler = (event) => {
+  handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
 
-  render() {
-    const { todos, selectedUserId, onButtonClick } = this.props;
-    const { search, filteredTodos } = this.state;
-    const todoIncludes = todo => todo.title
-      .toLowerCase()
+  filterByTitle = (todo) => {
+    const { search } = this.state;
+
+    if (todo.title === null) {
+      return false;
+    }
+
+    return todo.title.toLowerCase()
       .includes(search.toLowerCase());
+  }
+
+  filterByStatus = (todo) => {
+    const { filteredTodos } = this.state;
+
+    if (filteredTodos === 'completed') {
+      return todo.completed;
+    }
+
+    if (filteredTodos === 'active') {
+      return !todo.completed;
+    }
+
+    return true;
+  }
+
+  render() {
+    const { todos, selectedUserId, selectUser } = this.props;
+    const { search, filteredTodos } = this.state;
 
     const visibleTodos = todos
-      .filter(todo => todo.title
-        && todoIncludes(todo)
-          && this.filter[filteredTodos](todo));
+      .filter(this.filterByTitle)
+      .filter(this.filterByStatus);
 
     return (
       <div className="TodoList">
@@ -42,7 +63,7 @@ export class TodoList extends React.PureComponent {
           placeholder="Type search task"
           className="input is-primary"
           value={search}
-          onChange={this.changeHandler}
+          onChange={this.handleChange}
         />
 
         <div>
@@ -50,7 +71,7 @@ export class TodoList extends React.PureComponent {
             <select
               name="filteredTodos"
               value={filteredTodos}
-              onChange={this.changeHandler}
+              onChange={this.handleChange}
             >
               <option value="all">All</option>
               <option value="completed">Completed</option>
@@ -62,7 +83,7 @@ export class TodoList extends React.PureComponent {
               ? (visibleTodos.map(todo => (
                 <Todo
                   todo={todo}
-                  onButtonClick={onButtonClick}
+                  selectUser={selectUser}
                   isSelectedUser={selectedUserId === todo.userId}
                   key={todo.id}
                 />
