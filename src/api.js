@@ -6,7 +6,7 @@ export function getTodos() {
     .then(response => response.json());
 }
 
-export function getUserId(id) {
+export function getUserById(id) {
   return fetch(`${USER_URL}${id}`)
     .then(response => response.json())
     .then(result => result.data);

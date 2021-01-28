@@ -18,7 +18,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectedUser, todoCheck } = this.props;
+    const { todos, selectedUser, todoCheck: checkTodo } = this.props;
     const input = this.state.query.toLocaleLowerCase();
 
     const preparedTodos = todos.filter(todo => todo.title.toLocaleLowerCase()
@@ -81,7 +81,7 @@ export class TodoList extends React.Component {
                     type="checkbox"
                     name="done"
                     checked={todo.completed}
-                    onChange={() => todoCheck(todo.id)}
+                    onChange={() => checkTodo(todo.id)}
                   />
                   <p>{todo.title}</p>
                 </label>

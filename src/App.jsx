@@ -19,11 +19,7 @@ class App extends React.Component {
     ));
   }
 
-  userDiscard = () => {
-    this.setState({ selectedUserId: 0 });
-  }
-
-  todoCheck = (todoId) => {
+  checkTodo = (todoId) => {
     const foundTodo = this.state.todos.find(todo => todo.id === todoId);
 
     this.setState(state => ({
@@ -48,11 +44,9 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            selectUser={(userId) => {
-              this.setState({ selectedUserId: userId });
-            }}
+            selectUser={userId => this.setState({ selectedUserId: userId })}
             selectedUser={selectedUserId}
-            todoCheck={this.todoCheck}
+            todoCheck={this.checkTodo}
           />
         </div>
 
@@ -61,7 +55,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                userDiscard={() => {
+                removeUser={() => {
                   this.setState({ selectedUserId: 0 });
                 }}
               />

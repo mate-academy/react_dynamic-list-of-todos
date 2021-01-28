@@ -1,7 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { getUserId } from '../../api';
+import { getUserById } from '../../api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -23,7 +23,7 @@ export class CurrentUser extends React.Component {
   }
 
   async gettingId() {
-    const user = await getUserId(this.props.userId);
+    const user = await getUserById(this.props.userId);
 
     this.setState({ user });
   }
@@ -49,7 +49,7 @@ export class CurrentUser extends React.Component {
 
         <button
           type="button"
-          onClick={this.props.userDiscard}
+          onClick={this.props.removeUser}
           className="button"
         >
           clear
@@ -62,5 +62,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
-  userDiscard: PropTypes.func.isRequired,
+  removeUser: PropTypes.func.isRequired,
 };
