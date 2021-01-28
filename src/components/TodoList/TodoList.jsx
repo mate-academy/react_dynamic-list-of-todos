@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './TodoList.scss';
 
 export class TodoList extends React.Component {
@@ -53,37 +54,43 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todos.map(todo => (
-              <li
-                key={todo.id}
-                className={`TodoList__item
-                  TodoList__item--${todo.completed ? 'checked' : 'unchecked'}
-                `}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    readOnly
-                    onChange={() => this.props.onComplete(todo.id)}
-                  />
-                  <p>{todo.title}</p>
-                </label>
+            {todos.map((todo) => {
+              const todoClasses = classNames({
+                TodoList__item: true,
+                'TodoList__item--checked': todo.completed,
+                'TodoList__item--unchecked': !todo.completed,
+              });
 
-                <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
-                  type="button"
-                  onClick={() => this.props.onUserSelect(todo.userId)}
+              return (
+                <li
+                  key={todo.id}
+                  className={todoClasses}
                 >
-                  User&nbsp;#
-                  {todo.userId}
-                </button>
-              </li>
-            ))}
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      readOnly
+                      onChange={() => this.props.onComplete(todo.id)}
+                    />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
+                    className="
+                      TodoList__user-button
+                      TodoList__user-button--selected
+                      button
+                    "
+                    type="button"
+                    onClick={() => this.props.onUserSelect(todo.userId)}
+                  >
+                    User&nbsp;#
+                    {todo.userId}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
