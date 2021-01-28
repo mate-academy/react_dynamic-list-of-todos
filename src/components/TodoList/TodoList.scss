@@ -1,5 +1,34 @@
 .TodoList {
   width: 100%;
+  
+  &__title {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  &__checkbox {
+    width: 200px;
+    height: 30px;
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+  }
+
+  &__random-button {
+    height: 30px;
+    border-radius: 5px;
+    background-color: #4d457b;
+    font-family: inherit;
+    font-weight: bold;
+    color: white;
+  }
 
   &__user-button--selected {
     background-color: #4d457b;
