@@ -88,10 +88,7 @@ export class TodoList extends React.Component {
                   <p>{todo.title}</p>
                 </label>
                 <button
-                  className={classNames(
-                    'TodoList__user-button', 'button',
-                    { 'TodoList__user-button--selected': !todo.completed },
-                  )}
+                  className='TodoList__user-button, button'
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
