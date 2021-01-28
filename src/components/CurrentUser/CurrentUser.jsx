@@ -18,10 +18,6 @@ export class CurrentUser extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.setState({ user: null });
-  }
-
   async gettingId() {
     const user = await getUserById(this.props.userId);
 
@@ -30,7 +26,7 @@ export class CurrentUser extends React.Component {
 
   render() {
     if (!this.state.user) {
-      return <span />;
+      return <span>Loading ...</span>;
     }
 
     const { name, email, phone, id } = this.state.user;

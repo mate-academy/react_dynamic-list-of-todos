@@ -17,23 +17,27 @@ export class TodoList extends React.Component {
     });
   }
 
+  filterByStatus = (todo) => {
+    switch (this.state.filteredBy) {
+      case 'completed':
+        return todo.completed === true;
+      case 'active':
+        return todo.completed === false;
+      default:
+        return todo;
+    }
+  }
+
+  filterByQuery = todo => (
+    todo.title.toLocaleLowerCase()
+      .includes(this.state.query.toLocaleLowerCase())
+  );
+
   render() {
     const { todos, selectedUser, todoCheck: checkTodo } = this.props;
-    const input = this.state.query.toLocaleLowerCase();
 
-    const preparedTodos = todos.filter(todo => todo.title.toLocaleLowerCase()
-      .includes(input))
-      .filter((todo) => {
-        if (this.state.filteredBy === 'true') {
-          return todo.completed === true;
-        }
-
-        if (this.state.filteredBy === 'false') {
-          return todo.completed === false;
-        }
-
-        return todo;
-      });
+    const preparedTodos = todos.filter(this.filterByQuery)
+      .filter(this.filterByStatus);
 
     return (
       <div className="TodoList">
@@ -57,11 +61,11 @@ export class TodoList extends React.Component {
             all todos
           </option>
 
-          <option value="false">
+          <option value="active">
             active
           </option>
 
-          <option value="true">
+          <option value="completed">
             completed
           </option>
 
