@@ -56,6 +56,7 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
+
             {selectedUserId !== 0 ? (
               <CurrentUser
                 userId={selectedUserId}
@@ -66,6 +67,7 @@ class App extends React.Component {
             ) : (
               <p>Please select user</p>
             )}
+
           </div>
         </div>
       </div>
