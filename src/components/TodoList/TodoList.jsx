@@ -1,115 +1,95 @@
 import React from 'react';
+import './TodoList.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './TodoList.scss';
 
-export class TodoList extends React.Component {
-  state = {
-    query: '',
-    status: 'all',
-  }
+export const TodoList = ({
+  todos,
+  selectUser,
+  toCheck,
+  toSearch,
+  toSelect,
+  toShuffle,
+}) => (
+  <div className="TodoList">
+    <h2>Todos:</h2>
 
-  toSearch = e => this.setState({ query: e.target.value })
+    <div className="TodoList__filters">
+      <label className="TodoList__label">
+        Todo filter:
+        <input
+          className="TodoList__input"
+          onChange={toSearch}
+        />
+      </label>
 
-  toSelect = e => this.setState({ status: e.target.value });
+      <label className="TodoList__label">
+        Filter by status:
+        <select
+          className="TodoList__select"
+          onChange={toSelect}
+        >
+          <option value="all">Show all</option>
+          <option value="active">Show active</option>
+          <option value="completed">Show completed</option>
+        </select>
+      </label>
 
-  render() {
-    const { todos, selectUser, toShuffle } = this.props;
-    const { query, status } = this.state;
+      <button
+        type="button"
+        className="button"
+        onClick={toShuffle}
+      >
+        shuffle
+      </button>
+    </div>
 
-    const todoSearch = (todo) => {
-      const queryLow = query.toLowerCase();
-
-      return todo.title.toLowerCase().includes(queryLow);
-    };
-
-    const statusSearch = (todo) => {
-      switch (status) {
-        case 'completed':
-          return todo.completed;
-        case 'active':
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    };
-
-    const newTodos = todos.filter(todoSearch).filter(statusSearch);
-
-    return (
-      <div className="TodoList">
-        <h2>Todos:</h2>
-
-        <div className="TodoList__filters">
-          <label className="TodoList__label">
-            Todo filter:
-            <input
-              onChange={this.toSearch}
-              className="TodoList__input"
-            />
-          </label>
-
-          <label className="TodoList__label">
-            Filter by status:
-            <select
-              className="TodoList__select"
-              onChange={this.toSelect}
-            >
-              <option value="all">Show all</option>
-              <option value="active">Show active</option>
-              <option value="completed">Show completed</option>
-            </select>
-          </label>
-
-          <button
-            type="button"
-            className="button"
-            onClick={toShuffle}
+    <div className="TodoList__list-container">
+      <ul className="TodoList__list">
+        {todos.map(todo => (
+          <li
+            key={todo.id}
+            className={classNames('TodoList__item',
+              { 'TodoList__item--checked': todo.completed },
+              { 'TodoList__item--unchecked': !todo.completed })}
           >
-            shuffle
-          </button>
-        </div>
+            <label>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onClick={() => toCheck(todo.id)}
+                readOnly
+              />
+              <p>{todo.title}</p>
+            </label>
 
-        <div className="TodoList__list-container">
-          <ul className="TodoList__list">
-            {newTodos.map(todo => (
-              <li
-                key={todo.id}
-                className={classNames('TodoList__item',
-                  { 'TodoList__item--checked': todo.completed },
-                  { 'TodoList__item--unchecked': !todo.completed })}
-              >
-                <label>
-                  <input type="checkbox" checked={todo.completed} readOnly />
-                  <p>{todo.title}</p>
-                </label>
-
-                <button
-                  className={classNames('button',
-                    { 'TodoList__user-button': todo.completed },
-                    { 'TodoList__user-button--selected': !todo.completed })}
-                  type="button"
-                  onClick={() => selectUser(todo.userId)}
-                >
-                  User&nbsp;#
-                  {todo.userId}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-}
+            <button
+              className={classNames('button',
+                { 'TodoList__user-button': todo.completed },
+                { 'TodoList__user-button--selected': !todo.completed })}
+              type="button"
+              onClick={() => selectUser(todo.userId)}
+            >
+              User&nbsp;#
+              {todo.userId}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
 
 TodoList.propTypes = {
-  selectUser: PropTypes.func.isRequired,
-  toShuffle: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       userId: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
+  toCheck: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
+  toSearch: PropTypes.func.isRequired,
+  toSelect: PropTypes.func.isRequired,
+  toShuffle: PropTypes.func.isRequired,
 };

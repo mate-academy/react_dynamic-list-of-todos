@@ -1,11 +1,11 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { getUsers } from '../../data/api';
+import { getUser } from '../../data/api';
 
 export class CurrentUser extends React.Component {
   state = {
-    users: {},
+    user: null,
   }
 
   async componentDidMount() {
@@ -19,16 +19,16 @@ export class CurrentUser extends React.Component {
   }
 
   async dataLoad() {
-    const response = await getUsers(this.props.userId);
+    const response = await getUser(this.props.userId);
 
-    this.setState({ users: response.data });
+    this.setState({ user: response.data });
   }
 
   render() {
-    const { users } = this.state;
+    const { user } = this.state;
     const { clearUser } = this.props;
 
-    if (!users) {
+    if (!user) {
       return (
         <p>Loading data...</p>
       );
@@ -39,13 +39,13 @@ export class CurrentUser extends React.Component {
         <h2 className="CurrentUser__title">
           <span>
             Selected user:
-            {users.id}
+            {user.id}
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{users.name}</h3>
-        <p className="CurrentUser__email">{users.email}</p>
-        <p className="CurrentUser__phone">{users.phone}</p>
+        <h3 className="CurrentUser__name">{user.name}</h3>
+        <p className="CurrentUser__email">{user.email}</p>
+        <p className="CurrentUser__phone">{user.phone}</p>
         <button type="button" onClick={() => clearUser()}>Clear user</button>
       </div>
     );

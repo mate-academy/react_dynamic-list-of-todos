@@ -9,6 +9,8 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    query: '',
+    status: 'all',
     shuffle: false,
   };
 
@@ -28,6 +30,21 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   };
 
+  toCheckTodo = (todoId) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => ((todo.id !== todoId)
+        ? todo
+        : {
+          ...todo,
+          completed: !todo.completed,
+        })),
+    }));
+  }
+
+  toSearchFilter = e => this.setState({ query: e.target.value });
+
+  toSelectFilter = e => this.setState({ status: e.target.value });
+
   toShuffle = () => {
     this.setState(state => ({
       shuffle: !state.shuffle,
@@ -35,18 +52,40 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, shuffle } = this.state;
+    const { todos, selectedUserId, query, status, shuffle } = this.state;
+
+    const todoSearch = (todo) => {
+      const queryLow = query.toLowerCase();
+
+      return todo.title.toLowerCase().includes(queryLow);
+    };
+
+    const statusSearch = (todo) => {
+      switch (status) {
+        case 'completed':
+          return todo.completed;
+        case 'active':
+          return !todo.completed;
+        default:
+          return todo;
+      }
+    };
+
+    const newTodos = todos.filter(todoSearch).filter(statusSearch);
 
     if (shuffle) {
-      todos.sort(() => Math.random() - 0.5);
+      newTodos.sort(() => Math.random() - 0.5);
     }
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
+            todos={newTodos}
+            toCheck={this.toCheckTodo}
             selectUser={this.selectUser}
+            toSearch={this.toSearchFilter}
+            toSelect={this.toSelectFilter}
             toShuffle={this.toShuffle}
           />
         </div>
