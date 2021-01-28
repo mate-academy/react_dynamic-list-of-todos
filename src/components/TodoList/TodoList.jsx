@@ -13,13 +13,26 @@ export class TodoList extends React.Component {
     this.setState({ inputValue: event.target.value });
   };
 
-  hendlerSelect = (event) => {
+  handleStatusSelect = (event) => {
     this.setState({ selectValue: event.target.value });
   };
 
   render() {
     const { todos, checkInput, userID } = this.props;
     const { inputValue } = this.state;
+    const filteredArrayByInput = [...todos].filter(ele => ele.title !== null
+      && ele.title.includes(inputValue));
+    const filteredArrayBySelect = [...filteredArrayByInput].filter((todo) => {
+      if (this.state.selectValue === 'active') {
+        return todo.completed === false;
+      }
+
+      if (this.state.selectValue === 'completed') {
+        return todo.completed === true;
+      }
+
+      return todo;
+    });
 
     return (
       <div className="TodoList">
@@ -35,7 +48,7 @@ export class TodoList extends React.Component {
             />
             <select
               className="TodoList__select"
-              onChange={this.hendlerSelect}
+              onChange={this.handleStatusSelect}
             >
               <option disabled>select type</option>
               <option>all</option>
@@ -47,20 +60,7 @@ export class TodoList extends React.Component {
         <h2>Todos:</h2>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todos
-              .filter(ele => ele.title !== null
-                && ele.title.includes(inputValue))
-              .filter((elem) => {
-                if (this.state.selectValue === 'active') {
-                  return elem.completed === false;
-                }
-
-                if (this.state.selectValue === 'completed') {
-                  return elem.completed === true;
-                }
-
-                return elem;
-              })
+            {filteredArrayBySelect
               .map(todo => (
                 <li
                   key={Math.random()}

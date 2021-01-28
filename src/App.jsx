@@ -13,18 +13,15 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  componentDidMount() {
-    getAll()
-      .then((result) => {
-        this.setState({
-          todos: result.data,
-        });
-      });
+  async componentDidMount() {
+    this.setState({
+      todos: await getAll(),
+    });
   }
 
   checkedHandler = (todoID) => {
     this.setState((prevState) => {
-      const item = prevState.todos.find(element => element.id === todoID);
+      const item = [...prevState.todos].find(element => element.id === todoID);
 
       item.completed = !item.completed;
 
