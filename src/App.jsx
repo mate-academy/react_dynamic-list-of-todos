@@ -17,8 +17,27 @@ class App extends React.Component {
     this.setState({ todos: tasks.data });
   }
 
-  selectUser = (id) => {
-    this.setState({ selectedUserId: id });
+  selectUser = (userId) => {
+    this.setState({ selectedUserId: userId });
+  }
+
+  handleClear = () => {
+    this.setState({ selectedUserId: 0 });
+  }
+
+  changeTaskStatus = (todoId) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }),
+    }));
   }
 
   render() {
@@ -27,13 +46,20 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} selectUser={this.selectUser} />
+          <TodoList
+            todos={todos}
+            selectUser={this.selectUser}
+            changeTaskStatus={this.changeTaskStatus}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                clearUser={this.handleClear}
+              />
             ) : 'No user selected'}
           </div>
         </div>
