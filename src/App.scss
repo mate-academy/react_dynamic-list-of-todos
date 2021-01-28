@@ -29,6 +29,22 @@ p {
   background-color: white;
 }
 
+input {
+  font-family: inherit;
+  padding: 3px 5px;
+  border: 1px solid #4d457b;
+  border-radius: 5px;
+  outline: #4d457b;
+}
+
+select {
+  width: 150px;
+  outline: none;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: white;
+}
+
 input[type="checkbox"] {
   display: none;
 }
@@ -67,6 +83,10 @@ input[type="checkbox"]:checked + p:before {
   border-left-color: transparent;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+button {
+  outline: none;
 }
 
 .App {

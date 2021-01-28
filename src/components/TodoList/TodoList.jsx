@@ -59,39 +59,48 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <form>
-          <label htmlFor="search-query">
-            Find Task&nbsp;
-          </label>
-          <input
-            type="text"
-            id="search-query"
-            placeholder="Type search word"
-            value={search}
-            onChange={this.updateSearchTitle}
-          />
-          <br />
-          <label htmlFor="select-todo">
-            Filter by status:&nbsp;
-          </label>
-          <select
-            id="select-todo"
-            onChange={this.updateStatus}
-          >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </select>
+        <form className="TodoList__form">
+          <div className="TodoList__form-field">
+            <label htmlFor="search-query">
+              Find Task:&nbsp;
+            </label>
+            <input
+              type="text"
+              id="search-query"
+              placeholder="Type search word"
+              value={search}
+              onChange={this.updateSearchTitle}
+            />
+          </div>
+          <div className="TodoList__form-field">
+            <label htmlFor="select-todo">
+              Filter by status:&nbsp;
+            </label>
+            <select
+              id="select-todo"
+              onChange={this.updateStatus}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
         </form>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {visibleTodos.map(todo => (
               <li
                 key={todo.id}
-                className="TodoList__item TodoList__item--unchecked"
+                className={classnames(`TodoList__item`, {
+                  'TodoList__item--unchecked': todo.completed === false,
+                  'TodoList__item--checked': todo.completed === true,
+                })}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    readOnly
+                  />
                   <p>
                     {`
                     ${todo.title} - ${todo.completed ? 'Completed' : 'Active'}
@@ -112,7 +121,7 @@ export class TodoList extends React.Component {
                     this.selectTodo(todo.id);
                   }}
                 >
-                  {todo.userId}
+                  User Info
                 </button>
               </li>
             ))}

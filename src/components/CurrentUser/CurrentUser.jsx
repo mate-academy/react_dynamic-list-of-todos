@@ -8,13 +8,13 @@ export class CurrentUser extends React.Component {
     user: null,
   }
 
-  componentDidMount() {
-    this.loadUser();
+  async componentDidMount() {
+    await this.loadUser();
   }
 
-  componentDidUpdate(prevState, prevProps) {
+  async componentDidUpdate(prevState, prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.loadUser();
+      await this.loadUser();
     }
   }
 
@@ -52,6 +52,7 @@ export class CurrentUser extends React.Component {
         </p>
         <button
           type="button"
+          className="button CurrentUser__clear"
           onClick={clear}
         >
           Clear
