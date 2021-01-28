@@ -62,9 +62,7 @@ export class CurrentUser extends React.Component {
         <div className="CurrentUser__btn-wrap">
           <button
             className="fas fa-recycle CurrentUser__btn"
-            onClick={() => {
-              this.props.clearUser();
-            }}
+            onClick={this.props.clearUser}
             type="button"
           >
             Clear

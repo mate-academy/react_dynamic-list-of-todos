@@ -51,7 +51,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectUserId } = this.props;
+    const { todos, selectUserId, checkHandler } = this.props;
     const { query, selected } = this.state;
 
     let preparedTodos = this.filterTodos(todos, query);
@@ -97,7 +97,14 @@ export class TodoList extends React.Component {
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                    onChange={() => {
+                      checkHandler(todo.id);
+                    }}
+                  />
                   <p>
                     {todo.title}
                   </p>
@@ -134,4 +141,5 @@ TodoList.propTypes = {
     userId: PropTypes.number,
   })).isRequired,
   selectUserId: PropTypes.func.isRequired,
+  checkHandler: PropTypes.func.isRequired,
 };

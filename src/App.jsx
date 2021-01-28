@@ -29,6 +29,17 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
+  checkHandler = (id) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => (
+        todo.id === id
+          ? {
+            ...todo,
+            completed: !todo.completed,
+          } : todo)),
+    }));
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
@@ -38,6 +49,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectUserId={this.selectUserId}
+            checkHandler={this.checkHandler}
           />
         </div>
 
