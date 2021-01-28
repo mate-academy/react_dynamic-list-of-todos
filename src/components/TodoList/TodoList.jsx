@@ -33,7 +33,7 @@ export class TodoList extends React.Component {
     });
   }
 
-  display = (todos, selected) => {
+  displayBy = (todos, selected) => {
     switch (selected) {
       case 'active':
         return todos.filter(todo => !todo.completed);
@@ -56,7 +56,7 @@ export class TodoList extends React.Component {
 
     let preparedTodos = this.filterTodos(todos, query);
 
-    preparedTodos = this.display(preparedTodos, selected);
+    preparedTodos = this.displayBy(preparedTodos, selected);
 
     return (
       <div className="TodoList">

@@ -2,23 +2,27 @@ const BASE_URL = 'https://mate-api.herokuapp.com';
 const userUrl = '/users/';
 const todosUrl = '/todos';
 
-const request = (url, option) => fetch(`${BASE_URL}${url}`, option)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(
-        `${response.status} - ${response.statusText}`,
-      );
-    }
+const request = async(url) => {
+  const response = await fetch(`${BASE_URL}${url}`);
 
-    return response.json();
-  });
+  if (!response.ok) {
+    throw new Error(
+      `${response.status} - ${response.statusText}`,
+    );
+  }
 
-export const getTodos = () => request(todosUrl)
-  .then(todos => todos.data);
+  return response.json();
+};
 
-export const getUser = (userId) => {
+export const getTodos = async() => {
+  const todos = await request(todosUrl);
+
+  return todos.data;
+};
+
+export const getUser = async(userId) => {
   const url = `${userUrl}${userId}`;
+  const todos = await request(url);
 
-  return request(url)
-    .then(user => user.data);
+  return todos.data;
 };

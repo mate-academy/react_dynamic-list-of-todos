@@ -20,13 +20,11 @@ export class CurrentUser extends React.Component {
     }
   }
 
-  updateUser = () => {
+  async updateUser() {
     const { userId } = this.props;
+    const user = await getUser(userId);
 
-    getUser(userId)
-      .then((user) => {
-        this.setState({ user });
-      });
+    this.setState({ user });
   }
 
   render() {

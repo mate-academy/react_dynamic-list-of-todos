@@ -14,11 +14,10 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  componentDidMount() {
-    getTodos()
-      .then((todos) => {
-        this.setState({ todos });
-      });
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({ todos });
   }
 
   selectUserId = (id) => {
