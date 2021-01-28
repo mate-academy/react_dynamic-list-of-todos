@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import './CurrentUser.scss';
-import {getTodos, getUser, getUsers} from '../../api/api';
+import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -27,7 +27,6 @@ export class CurrentUser extends React.Component {
   render() {
     const { deleteUser } = this.props;
     const { user } = this.state;
-    console.log(user);
 
     return (
       <>

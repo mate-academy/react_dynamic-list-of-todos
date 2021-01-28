@@ -21,12 +21,6 @@ class App extends React.Component {
     option: '',
   };
 
-  // async componentDidMount() {
-    // const todos = await getTodos()
-      // this.setState({ todos: todos });
-    // console.log(todos[0].title);
-  // }
-
   loadTodos = async() => {
     this.setState({
       loading: true,
@@ -63,12 +57,6 @@ class App extends React.Component {
       })
     }
   }
-  // componentDidMount() {
-  //   getTodos()
-  //     .then((todos) => {
-  //       this.setState({ todos: todos.data });
-  //     });
-  // }
 
   filterHandler = (e) => {
     this.setState({
@@ -78,7 +66,6 @@ class App extends React.Component {
 
   deleteUser = () => {
     this.setState({ selectedUserId: 0 });
-    console.log('delete user');
   }
 
   render() {

@@ -5,7 +5,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 export class TodoList extends React.Component {
   state = {
-    completedMode: 'all',
+    selectOption: 'all',
   }
 
   handleChange = (event) => {
@@ -17,9 +17,9 @@ export class TodoList extends React.Component {
   }
 
   filterBySelect = (todos) => {
-    const { completedMode } = this.state;
+    const { selectOption } = this.state;
 
-    switch (completedMode) {
+    switch (selectOption) {
       case 'completed':
         return todos.completed;
 
@@ -40,11 +40,10 @@ export class TodoList extends React.Component {
 
         <div className="select">
           <select
-            value={this.completedMode}
+            value={this.selectOption}
             onChange={this.handleChange}
-            name="completedMode"
-            id="completedMode"
-            className="select-mode"
+            name="selectOption"
+            id="selectOption"
           >
             <option value="">take a choose</option>
             <option value="all">all</option>
