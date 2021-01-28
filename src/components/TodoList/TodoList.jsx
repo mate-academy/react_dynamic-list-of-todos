@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import PropsType from 'prop-types';
+import classNames from 'classnames';
 
 export class TodoList extends React.Component {
   state = {
@@ -54,8 +55,11 @@ export class TodoList extends React.Component {
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
               <li
-                className={`TodoList__item TodoList__item--${todo.completed
-                  ? 'checked' : 'unchecked'}`}
+                className={classNames({
+                  TodoList__item: true,
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
               >
                 <label>
                   <input

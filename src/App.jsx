@@ -14,8 +14,9 @@ class App extends React.Component {
   componentDidMount() {
     getAllTodos()
       .then(todos => (
-        this.setState({ todos: todos.data.filter(task => task.title
-          && task.userId) })));
+        this.setState({
+          todos: todos.data.filter(task => task.title && task.userId),
+        })));
   }
 
   selectUser = (id) => {
@@ -27,15 +28,17 @@ class App extends React.Component {
   }
 
   changeTodoStatus = (task) => {
-    this.setState((prevState) => {
-      const newTask = task;
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (task === todo) {
+          const newTask = todo;
 
-      newTask.completed = !newTask.completed;
+          newTask.completed = !newTask.completed;
+        }
 
-      return {
-        todos: [...prevState.todos],
-      };
-    });
+        return todo;
+      }),
+    }));
   }
 
   render() {
