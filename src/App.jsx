@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { TodoList } from './components/TodoList';
 import { getTodos } from './api';
 
 class App extends React.Component {
@@ -10,7 +10,7 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     query: '',
-    status: 'all',
+    status: '',
     isRandom: false,
   };
 
@@ -89,7 +89,7 @@ class App extends React.Component {
             searchTodos={this.onSearchChange}
             filterTodos={this.onSelectChange}
             searchValue={query}
-            statu={status}
+            status={status}
             checkTodo={this.onCheckChange}
           />
         </div>

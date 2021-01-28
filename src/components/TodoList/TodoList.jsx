@@ -1,7 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
-import ClassNames from 'classnames';
 import PropTypes from 'prop-types';
+import ClassNames from 'classnames';
 import { TypeTodo } from '../../types';
 
 export const TodoList = React.memo(({
@@ -30,8 +30,8 @@ export const TodoList = React.memo(({
         value={status}
         onChange={filterTodos}
       >
-        <option value={null}>Select option filter</option>
-        <option value="">all</option>
+        <option disabled>Select an option</option>
+        <option value="all">all</option>
         <option value="active">active</option>
         <option value="completed">completed</option>
       </select>
