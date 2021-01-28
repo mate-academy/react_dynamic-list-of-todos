@@ -51,19 +51,21 @@ export class TodoList extends React.Component {
     });
   }
 
+  toShuffleFilter = todos => todos.map(todo => (
+    {
+      sort: Math.random(),
+      value: todo,
+    }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(a => a.value);
+
   render() {
     const { todos, checkTodo, checkUser } = this.props;
     const { userId, query, select, shuffle } = this.state;
     const filtredTodos = todos.filter(this.toTitleSearch)
       .filter(this.toSelectFilter);
 
-    const suffledTodos = todos.map(todo => ({
-      sort: Math.random(),
-      value: todo,
-    }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(a => a.value);
-
+    const suffledTodos = this.toShuffleFilter(todos);
     const checkedTodos = shuffle
       ? suffledTodos
       : filtredTodos;
@@ -151,8 +153,8 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      userId: PropTypes.number.isRequired,
-      completed: PropTypes.bool.isRequired,
+      userId: PropTypes.number,
+      completed: PropTypes.bool,
       title: PropTypes.string,
     }).isRequired,
   ).isRequired,

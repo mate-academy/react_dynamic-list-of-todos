@@ -16,7 +16,7 @@ class App extends React.Component {
       const print = await getTodos();
 
       this.setState({
-        todos: [...print],
+        todos: print,
       });
     } catch (error) {
       // eslint-disable-next-line no-console
