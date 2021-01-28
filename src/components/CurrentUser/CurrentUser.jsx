@@ -21,8 +21,8 @@ export class CurrentUser extends React.Component {
     this.loadUser();
   }
 
-  loadUser = async() => {
-    await getUser(this.props.userId)
+  loadUser = () => {
+    getUser(this.props.userId)
       .then(selectedUser => this.setState({ selectedUser: selectedUser.data }));
   }
 

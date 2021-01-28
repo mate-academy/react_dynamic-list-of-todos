@@ -11,8 +11,8 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  async componentDidMount() {
-    await getAllTodos().then(todos => this.setState({ todos: todos.data }));
+  componentDidMount() {
+    getAllTodos().then(todos => this.setState({ todos: todos.data }));
   }
 
   selectUser = (userId) => {
