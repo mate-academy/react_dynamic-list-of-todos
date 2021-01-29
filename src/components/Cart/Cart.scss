@@ -1,0 +1,58 @@
+@import "../../styles/vars.scss";
+
+.cart-block {
+  &__button {
+    position: absolute;
+    right: 10px;
+    height: 20px;
+    width: 23px;
+    background: url("../../images/cart-logo.png") 100% 100% no-repeat;
+    background-size: cover;
+    border: none;
+    border-radius: $border-radius;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: $box-shadow;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.cart {
+  height: 250px;
+  width: 220px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: $box-shadow;
+
+  &__cart-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  &__header {
+    font-size: 14px;
+    font-style: italic;
+    padding: 10px 0;
+    margin: 40px 20px;
+    border-bottom: 1px solid $second-color;
+  }
+
+  &__total {
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+  }
+
+  &__menu {
+    position: absolute;
+    bottom: 15px;
+    right: 18px;
+  }
+}
