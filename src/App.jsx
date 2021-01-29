@@ -9,22 +9,20 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    query: '',
+    statusFilter: 'All',
   };
 
   componentDidMount() {
     getAll()
-      .then((response) => {
-        const result = response.data.filter(item => (
-          item.title !== null
-        ));
-
+      .then((result) => {
         this.setState({
-          todos: result,
+          todos: result.data.filter(todo => todo.title),
         });
       });
   }
 
-  handleChangeCheked = (userId) => {
+  checkTodo = (userId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((item) => {
         if (item.id !== userId) {
@@ -39,15 +37,41 @@ class App extends React.Component {
     }));
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, query, statusFilter } = this.state;
+
+    const filterByQuery = todo => (
+      todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+    );
+
+    const filterByStatus = (item) => {
+      switch (statusFilter) {
+        case 'Active':
+          return !item.completed;
+        case 'Completed':
+          return item.completed;
+        default:
+          return item;
+      }
+    };
+
+    const newTodos = todos.filter(filterByQuery).filter(filterByStatus);
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
-            changeCheked={this.handleChangeCheked}
+            todos={newTodos}
+            changeCheked={this.checkTodo}
+            handleChange={this.handleChange}
             selectedUserId={(userId) => {
               this.setState({ selectedUserId: userId });
             }}
