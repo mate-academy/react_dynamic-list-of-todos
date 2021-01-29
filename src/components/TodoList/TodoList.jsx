@@ -17,7 +17,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectUser, changeTaskStatus, selectedUserId } = this.props;
+    const { todos, onUserSelected, selectedUserId } = this.props;
     const { query, selectedTodos } = this.state;
 
     const findTodos = todos.filter(todo => (
@@ -80,9 +80,6 @@ export class TodoList extends React.Component {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={() => {
-                      changeTaskStatus(todo.id);
-                    }}
                     readOnly
                   />
                   <p>{todo.title}</p>
@@ -96,12 +93,10 @@ export class TodoList extends React.Component {
 
                   type="button"
                   onClick={() => {
-                    selectUser(todo.userId);
+                    onUserSelected(todo.userId);
                   }}
                 >
-                  User
-                  {' '}
-                  {todo.userId}
+                  User&nbsp;#{todo.userId}
                 </button>
               </li>
             ))}

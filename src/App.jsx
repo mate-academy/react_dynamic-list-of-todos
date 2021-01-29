@@ -17,27 +17,12 @@ class App extends React.Component {
     this.setState({ todos: tasks.data });
   }
 
-  selectUser = (userId) => {
+  onUserSelected = (userId) => {
     this.setState({ selectedUserId: userId });
   }
 
   handleClear = () => {
     this.setState({ selectedUserId: 0 });
-  }
-
-  changeTaskStatus = (todoId) => {
-    this.setState(state => ({
-      todos: state.todos.map((todo) => {
-        if (todo.id !== todoId) {
-          return todo;
-        }
-
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }),
-    }));
   }
 
   render() {
@@ -49,8 +34,7 @@ class App extends React.Component {
           <TodoList
             selectedUserId={selectedUserId}
             todos={todos}
-            selectUser={this.selectUser}
-            changeTaskStatus={this.changeTaskStatus}
+            onUserSelected={this.onUserSelected}
           />
         </div>
 
