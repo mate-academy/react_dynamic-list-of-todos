@@ -1,15 +1,24 @@
-.button {
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  background-color: #b8b3d2;
-  border: 0;
-  color: white;
-  transition: background-color 0.12s;
-  font-size: inherit;
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 
-  &:hover {
-    background-color: #4d457b;
-  }
+body,
+h1 {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
 }

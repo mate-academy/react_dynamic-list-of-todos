@@ -1,32 +1,24 @@
 import PropTypes from 'prop-types';
 
-const todosType = PropTypes.arrayOf(PropTypes.shape({
-  userId: PropTypes.number,
-  id: PropTypes.number,
-  title: PropTypes.string,
-  completed: PropTypes.bool,
+const cartItemsType = PropTypes.arrayOf(PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  count: PropTypes.string.isRequired,
 }));
 
-const todoType = PropTypes.shape({
-  userId: PropTypes.number,
-  id: PropTypes.number,
-  title: PropTypes.string,
-  completed: PropTypes.bool,
+const productType = PropTypes.shape({
+  price: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 });
 
-export const todoListType = {
-  todos: todosType.isRequired,
-  selectedUserId: PropTypes.number.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
-};
+export const cartType = PropTypes.shape({
+  cartItems: cartItemsType.isRequired,
+  clearCart: PropTypes.func.isRequired,
+}).isRequired;
 
-export const TodoType = {
-  todo: todoType.isRequired,
-  isSelectedUser: PropTypes.bool.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
-};
-
-export const currentUserType = {
-  userId: PropTypes.number.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
-};
+export const productsType = PropTypes.shape({
+  addToCart: PropTypes.func.isRequired,
+  products: PropTypes.arrayOf(productType.isRequired).isRequired,
+}).isRequired;

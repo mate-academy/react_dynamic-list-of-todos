@@ -1,0 +1,24 @@
+@import "../../styles/vars.scss";
+
+.list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+
+  &__product {
+    margin: 0 10px 10px;
+  }
+}
+
+.product {
+  border: 1px solid;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  &__button {
+    margin: 0 20px 15px;
+  }
+}
