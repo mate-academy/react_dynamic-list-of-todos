@@ -17,7 +17,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectUser, changeTaskStatus } = this.props;
+    const { todos, selectUser, changeTaskStatus, selectedUserId } = this.props;
     const { query, selectedTodos } = this.state;
 
     const findTodos = todos.filter(todo => (
@@ -88,7 +88,12 @@ export class TodoList extends React.Component {
                   <p>{todo.title}</p>
                 </label>
                 <button
-                  className='TodoList__user-button, button'
+                  className={classNames({
+                    'TodoList__user-button': true,
+                    'button': true,
+                    'TodoList__user-button--selected': todo.userId === selectedUserId,
+                  })}
+
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
