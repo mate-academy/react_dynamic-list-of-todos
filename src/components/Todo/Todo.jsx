@@ -5,11 +5,12 @@ const classNames = require('classnames');
 
 export const Todo = ({ todo, selectUser, isSelectedUser }) => (
   <li
-    className={classNames({
-      TodoList__item: true,
-      'TodoList__item--checked': todo.completed,
-      'TodoList__item--unchecked': !todo.completed,
-    })}
+    className={classNames(
+      'TodoList__item', {
+        'TodoList__item--checked': todo.completed,
+        'TodoList__item--unchecked': !todo.completed,
+      },
+    )}
     key={todo.id}
   >
     <label>

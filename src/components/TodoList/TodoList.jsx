@@ -9,12 +9,6 @@ export class TodoList extends React.PureComponent {
     filteredTodos: 'all',
   }
 
-  filter = {
-    all: () => true,
-    completed: todo => todo.completed,
-    active: todo => !todo.completed,
-  }
-
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -35,15 +29,16 @@ export class TodoList extends React.PureComponent {
   filterByStatus = (todo) => {
     const { filteredTodos } = this.state;
 
-    if (filteredTodos === 'completed') {
-      return todo.completed;
-    }
+    switch (filteredTodos) {
+      case 'completed':
+        return todo.completed;
 
-    if (filteredTodos === 'active') {
-      return !todo.completed;
-    }
+      case 'active':
+        return !todo.completed;
 
-    return true;
+      default:
+        return true;
+    }
   }
 
   render() {
