@@ -11,8 +11,8 @@ export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
 
 export const getTodos = () => request('/todos');
 
-export const getUserDatas = async(userId) => {
-  const getUsersFromServer = await fetch(`${BASE_URL}/users/${userId}`);
+export const getUser = async(userId) => {
+  const response = await fetch(`${BASE_URL}/users/${userId}`);
 
-  return getUsersFromServer.json();
+  return response.json();
 };

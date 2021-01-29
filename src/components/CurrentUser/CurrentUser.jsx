@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './CurrentUser.scss';
-import { getUserDatas } from '../../api';
+import { getUser } from '../../api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -9,17 +9,17 @@ export class CurrentUser extends React.Component {
   }
 
   async componentDidMount() {
-    const usersFromServer = await getUserDatas(this.props.userId);
+    const userFromServer = await getUser(this.props.userId);
 
-    this.setState({ user: usersFromServer.data });
+    this.setState({ user: userFromServer.data });
   }
 
   async componentDidUpdate(previousProps) {
-    const usersFromServer = await getUserDatas(this.props.userId);
+    if (previousProps.userId !== this.props.userId) {
+      const userFromServer = await getUser(this.props.userId);
 
-    if (previousProps.userId !== usersFromServer.data.id) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ user: usersFromServer.data });
+      this.setState({ user: userFromServer.data });
     }
   }
 
