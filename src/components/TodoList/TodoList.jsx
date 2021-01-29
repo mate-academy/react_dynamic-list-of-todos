@@ -1,44 +1,94 @@
 import React from 'react';
+import { todoListType } from '../../types';
+import { Todo } from '../Todo';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  state = {
+    search: '',
+    filteredTodos: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  filterByTitle = (todo) => {
+    const { search } = this.state;
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    if (todo.title === null) {
+      return false;
+    }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    return todo.title.toLowerCase()
+      .includes(search.toLowerCase());
+  }
+
+  filterByStatus = (todo) => {
+    const { filteredTodos } = this.state;
+
+    switch (filteredTodos) {
+      case 'completed':
+        return todo.completed;
+
+      case 'active':
+        return !todo.completed;
+
+      default:
+        return true;
+    }
+  }
+
+  render() {
+    const { todos, selectedUserId, selectUser } = this.props;
+    const { search, filteredTodos } = this.state;
+
+    const visibleTodos = todos
+      .filter(this.filterByTitle)
+      .filter(this.filterByStatus);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <input
+          name="search"
+          placeholder="Type search task"
+          className="input is-primary"
+          value={search}
+          onChange={this.handleChange}
+        />
+
+        <div>
+          <div className="select">
+            <select
+              name="filteredTodos"
+              value={filteredTodos}
+              onChange={this.handleChange}
+            >
+              <option value="all">All</option>
+              <option value="completed">Completed</option>
+              <option value="active">Active</option>
+            </select>
+          </div>
+          <ul className="TodoList__list">
+            {visibleTodos
+              ? (visibleTodos.map(todo => (
+                <Todo
+                  todo={todo}
+                  selectUser={selectUser}
+                  isSelectedUser={selectedUserId === todo.userId}
+                  key={todo.id}
+                />
+              )))
+              : <p>No tasks</p>}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = todoListType;
