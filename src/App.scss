@@ -76,7 +76,6 @@ input[type="checkbox"]:checked + p:before {
 
   &__sidebar {
     @extend %stretch-panel;
-
     flex-basis: 60%;
   }
 
@@ -90,5 +89,28 @@ input[type="checkbox"]:checked + p:before {
   &__content-container {
     position: sticky;
     top: 20px;
+  }
+  &__searchbar {
+    margin: 10px 0;
+    padding: 5px 10px;
+    background-color: #4d457b;
+    border-radius: 5px;
+    border: 0;
+    font-weight: bold;
+    color: white;
+    font-size: inherit;
+    &::placeholder {
+      color: white;
+    }
+  }
+  &__select {
+    margin: 10px 0;
+    padding: 5px 10px;
+    background-color: #4d457b;
+    border-radius: 5px;
+    border: 0;
+    font-weight: bold;
+    color: white;
+    font-size: inherit;
   }
 }
