@@ -31,9 +31,11 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (task === todo) {
-          const newTask = todo;
+          const newTask = { ...todo };
 
           newTask.completed = !newTask.completed;
+
+          return newTask;
         }
 
         return todo;
