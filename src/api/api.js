@@ -3,7 +3,7 @@ const BASE_URL = 'https://mate-api.herokuapp.com';
 export function getTodos() {
   return fetch(`${BASE_URL}/todos`)
     .then(response => response.json())
-    .then(result => result.data);
+    .then(result => result.data.filter(todo => todo.userId));
 }
 
 export function getUser(userId) {

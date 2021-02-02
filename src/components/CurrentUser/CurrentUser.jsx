@@ -1,50 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
-export class CurrentUser extends React.Component {
-  state = {
-    user: '',
-  }
+export const CurrentUser = ({ clearData, userId }) => {
+  const [user, setUser] = useState(null);
 
-  async componentDidMount() {
-    const userFromServer = await getUser(this.props.userId);
+  useEffect(() => {
+    const handleUser = async() => {
+      const userFromServer = await getUser(userId);
 
-    this.setState({ user: userFromServer });
-  }
+      setUser(userFromServer);
+    };
 
-  async componentDidUpdate(prevProps) {
-    if (prevProps.userId !== this.props.userId) {
-      const userFromServer = await getUser(this.props.userId);
-      // eslint-disable-next-line
-      this.setState({ user: userFromServer });
-    }
-  }
+    handleUser();
+  }, [userId]);
 
-  render() {
-    const { id, name, email, phone } = this.state.user;
+  return (
+    user
+      && (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {user.id}
+            </span>
+          </h2>
 
-    return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {id}
-          </span>
-        </h2>
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
 
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
-
-        <button onClick={this.props.clearData} type="button">
-          clear
-        </button>
-      </div>
-    );
-  }
-}
+          <button
+            onClick={clearData}
+            type="button"
+            className="CurrentUser__clear"
+          >
+            clear
+          </button>
+        </div>
+      )
+  );
+};
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
