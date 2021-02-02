@@ -31,7 +31,9 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, selectedUserId, hasLoaded } = this.state;
+    const { selectedUserId, hasLoaded } = this.state;
+
+    const todos = this.state.todos.filter(todo => todo.userId);
 
     return (
       <div className="App">

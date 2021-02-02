@@ -12,7 +12,7 @@ export class CurrentUser extends React.Component {
   async componentDidMount() {
     const { userId } = this.props;
 
-    const user = await getUser(userId);
+    const user = await this.fetchUser(userId);
 
     this.setState({ user });
   }
@@ -22,9 +22,15 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    const user = await getUser(this.props.userId);
+    const user = await this.fetchUser(this.props.userId);
 
     this.setState({ user });
+  }
+
+  async fetchUser(userId) {
+    const user = await getUser(userId);
+
+    return user;
   }
 
   render() {
