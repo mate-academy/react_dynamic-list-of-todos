@@ -28,4 +28,16 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  &__select {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
 }
