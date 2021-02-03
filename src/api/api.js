@@ -1,29 +1,16 @@
+/* eslint-disable no-multiple-empty-lines */
 const TODO_API_URL = 'https://mate-api.herokuapp.com';
 
-export const request = (url, options) => fetch(`${TODO_API_URL}${url}`, options)
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(`${res.status} - ${res.statusText}`);
+const request = (url, options) => fetch(`${TODO_API_URL}${url}`, options)
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
     }
 
-    return res.json();
+    throw new Error(`${response.status} - ${response.statusText}`);
   })
-  .then(data => data.data);
+  .then(result => result.data);
 
-function wait(delay) {
-  return new Promise(resolve => setTimeout(resolve, delay));
-}
-
-export const getTodos = async() => {
-  await wait(1000);
-
-  return request('/todos');
-};
-
+export const getTodos = () => request('/todos');
 export const getUsers = () => request('/users');
-
 export const getUser = selectedUserId => request(`/users/${selectedUserId}`);
-
-// export const getUserTodo = (selectedUserId) => {
-//   return request(`/users/${selectedUserId}/todos`);
-// };

@@ -5,45 +5,60 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 export class TodoList extends React.Component {
   state = {
-    selectOption: 'all',
+    query: '',
+    option: 'all',
   }
 
   handleChange = (event) => {
     const { name, value } = event.target;
 
-    this.setState({
-      [name]: value,
-    });
-  }
-
-  filterBySelect = (todos) => {
-    const { selectOption } = this.state;
-
-    switch (selectOption) {
-      case 'completed':
-        return todos.completed;
-
-      case 'active':
-        return !todos.completed;
-
-      default:
-        return true;
-    }
+    this.setState({ [name]: value });
   }
 
   render() {
     const { todos, selectUser, selectedUserId } = this.props;
-    const selectedTodos = todos.filter(this.filterBySelect);
+    const { query, option } = this.state;
+
+    const currentTodos = todos
+      .filter(todo => todo.userId !== null && todo.title !== '')
+      .filter((todo) => {
+        if (query) {
+          return (
+            todo.title.toLowerCase().includes(query.toLowerCase())
+          );
+        }
+
+        return todo;
+      })
+      .filter((todo) => {
+        if (option === 'active') {
+          return !todo.completed;
+        }
+
+        if (option === 'completed') {
+          return todo.completed;
+        }
+
+        return todo;
+      });
 
     return (
       <div className="TodoList">
 
+        <input
+          type="text"
+          className="input is-rounded"
+          name="query"
+          value={this.state.query}
+          onChange={this.handleChange}
+          placeholder="Primary input"
+        />
+
         <div className="select">
           <select
-            value={this.selectOption}
+            name="option"
+            value={this.state.option}
             onChange={this.handleChange}
-            name="selectOption"
-            id="selectOption"
           >
             <option value="">take a choose</option>
             <option value="all">all</option>
@@ -53,7 +68,7 @@ export class TodoList extends React.Component {
         </div>
 
         <h2>Todos:</h2>
-        {selectedTodos && selectedTodos.map(todo => (
+        {currentTodos.map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}

@@ -5,23 +5,22 @@ import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: [],
+    user: null,
   };
 
   async componentDidMount() {
-    const user = await getUser(this.props.userId);
-    this.setState({ user });
+    this.getUser();
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
+  async componentDidUpdate(prevProps, prevState) {
     if (prevProps.userId !== this.props.userId) {
-      const user = await getUser(this.props.userId);
-      if (user.name === null) {
-        return <p>Loading profile...</p>;
-      } else {
-        return this.setState({ user });
-      }
+      this.getUser();
     }
+  }
+
+  getUser = async () => {
+    const user = await getUser(this.props.userId);
+    this.setState({ user })
   }
 
   render() {
@@ -31,11 +30,17 @@ export class CurrentUser extends React.Component {
     return (
       <>
         <div className="CurrentUser">
-          <h2 className="CurrentUser__title"><span>Selected user: {this.props.userId}</span></h2>
+          <h2 className="CurrentUser__title">
+            <span>
+            Selected user:
+            {this.props.userId}
+            </span>
+          </h2>
 
-          <h3 className="CurrentUser__name">{!user.name ? '' : user.name}</h3>
-          <p className="CurrentUser__email">{user.email}</p>
-          <p className="CurrentUser__phone">{user.phone}</p>
+          <h3 className="CurrentUser__name">{user?.name}</h3>
+          <p className="CurrentUser__email">{user?.email}</p>
+          <p className="CurrentUser__phone">{user?.phone}</p>
+          {/*{ optional chaining ' ?.  ' }*/}
         </div>
         <button
           onClick={deleteUser}

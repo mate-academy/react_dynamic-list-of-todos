@@ -12,56 +12,22 @@ import { LoadingError } from './components/LoadingError/LoadingError';
 class App extends React.Component {
   state = {
     todos: [],
-    filteredTodos: [],
     selectedUserId: 0,
-    query: '',
     selectedStatus: '',
-    loading: false,
-    hasLoadingError: false,
-    option: '',
   };
 
-  loadTodos = async() => {
-    this.setState({
-      loading: true,
-      hasLoadingError: false,
-    });
-
-    try {
-      const todos = await getTodos()
-      this.setState({
-        todos: todos,
-      });
-    } catch (error) {
-      this.setState({
-        hasLoadingError: true,
-        loading: false,
-      });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { query, todos } = this.state;
-    if (prevState.query !== query) {
-      const filteredTodos = todos
-        .filter(todo => {
-          if (todo.title === null) {
-            return false;
-          } else {
-          return todo.title.includes(query);
-          }
-        });
+  async componentDidMount() {
+      try {
+        const todos = await getTodos();
 
         this.setState({
-        filteredTodos,
-      })
-    }
-  }
-
-  filterHandler = (e) => {
-    this.setState({
-      query: e.target.value
-    });
+          todos: todos.filter(todo => todo.userId !== null && todo.title !== ''),
+        });
+      } catch (error) {
+        this.setState({
+          hasLoadingError: true,
+        });
+      }
   }
 
   deleteUser = () => {
@@ -69,42 +35,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, filteredTodos, loading, hasLoadingError } = this.state;
+
+    console.log(this.state.todos);
+    const { todos, selectedUserId, hasLoadingError } = this.state;
     return (
       <>
         <div className="App">
           <div className="App__sidebar">
 
-            {todos.length === 0 ? (
-              <button
-                className={classnames('button', 'is-link', { 'is-loading': loading })}
-                onClick={this.loadTodos}
-                type="button"
-              >
-                load todos
-              </button>
-            ) : (
-              <>
-                <div>
-                  <input
-                    value={this.state.query}
-                    onChange={this.filterHandler}
-                    className="input is-rounded"
-                    type="text"
-                    placeholder="Primary input"
-                  />
-                </div>
-
-                <TodoList
-                  todos={filteredTodos.length > 0
-                    ? filteredTodos
-                    : todos}
-                  selectedUserId={selectedUserId}
-                  selectUser={(selectedUserId) => {
-                    this.setState({ selectedUserId });
-                  }}/>
-              </>
-            )}
+            <TodoList
+              todos={todos}
+              selectedUserId={selectedUserId}
+              selectUser={(selectedUserId) => {
+                this.setState({ selectedUserId });
+              }}
+            />
 
           </div>
           <div className="App__content">
@@ -112,9 +57,9 @@ class App extends React.Component {
 
               {selectedUserId
                 ? ( <CurrentUser
-                      deleteUser={this.deleteUser}
-                      userId={selectedUserId}
-                    />)
+                  deleteUser={this.deleteUser}
+                  userId={selectedUserId}
+                />)
                 : 'No user selected'}
             </div>
           </div>
