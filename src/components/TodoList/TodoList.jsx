@@ -1,44 +1,120 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    taskToFind: '',
+    selectedTodos: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (event) => {
+    const { name, value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({ [name]: value });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  render() {
+    const { todos, selectUser, selectedUserId } = this.props;
+    const { taskToFind, selectedTodos } = this.state;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    const findTodos = todos.filter(todo => (
+      todo.title !== null
+      && todo.title.toLowerCase().includes(taskToFind.toLowerCase())
+    ));
+
+    const filterTodos = findTodos.filter((todo) => {
+      switch (selectedTodos) {
+        case 'Active':
+          return !todo.completed;
+        case 'Completed':
+          return todo.completed;
+        default:
+          return todo;
+      }
+    });
+
+    return (
+
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <label>
+          Search task:
+          {' '}
+          <input
+            type="text"
+            className="TodoList__name-filter"
+            name="taskToFind"
+            value={taskToFind}
+            onChange={this.handleChange}
+            id="search-taskToFind"
+            placeholder="Enter the title"
+          />
+        </label>
+        {' '}
+        <select
+          name="selectedTodos"
+          value={selectedTodos}
+          onChange={this.handleChange}
+        >
+          <option>All</option>
+          <option>Active</option>
+          <option>Completed</option>
+        </select>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {filterTodos.map(todo => (
+              <li
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': todo.completed },
+                  { 'TodoList__item--unchecked': !todo.completed },
+                )}
+                key={todo.id}
+              >
+
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className={classNames({
+                    'TodoList__user-button': true,
+                    button: true,
+                    'TodoList__user-button--selected':
+                      todo.userId === selectedUserId,
+                  })}
+
+                  type="button"
+                  onClick={() => {
+                    selectUser(todo.userId);
+                  }}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    userId: PropTypes.number,
+    id: PropTypes.number,
+    title: PropTypes.string,
+  }).isRequired).isRequired,
+  selectUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+};
