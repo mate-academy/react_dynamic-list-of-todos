@@ -30,7 +30,7 @@ export class CurrentUser extends React.Component {
     const { user } = this.state;
     const { clearUser } = this.props;
 
-    if (user === null) {
+    if (!user) {
       return null;
     }
 

@@ -37,7 +37,7 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
+            todos={todos.filter(todo => todo.userId)}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
           />
