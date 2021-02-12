@@ -1,7 +1,6 @@
-/* eslint-disable no-multiple-empty-lines */
 const TODO_API_URL = 'https://mate-api.herokuapp.com';
 
-const request = (url, options) => fetch(`${TODO_API_URL}${url}`, options)
+const request = url => fetch(`${TODO_API_URL}${url}`)
   .then((response) => {
     if (response.ok) {
       return response.json();

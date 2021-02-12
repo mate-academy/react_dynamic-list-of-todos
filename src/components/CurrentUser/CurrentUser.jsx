@@ -9,12 +9,12 @@ export class CurrentUser extends React.Component {
   };
 
   async componentDidMount() {
-    this.getUser();
+    await this.getUser();
   }
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.userId !== this.props.userId) {
-      this.getUser();
+      await this.getUser();
     }
   }
 
@@ -40,7 +40,6 @@ export class CurrentUser extends React.Component {
           <h3 className="CurrentUser__name">{user?.name}</h3>
           <p className="CurrentUser__email">{user?.email}</p>
           <p className="CurrentUser__phone">{user?.phone}</p>
-          {/*{ optional chaining ' ?.  ' }*/}
         </div>
         <button
           onClick={deleteUser}
