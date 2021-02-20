@@ -23,7 +23,11 @@
   }
 
   &__clear {
+    background-color: red;
+    color:white;
+    border-radius: 3px;
     display: block;
     margin: 20px auto 0;
+    text-align: center;
   }
 }
