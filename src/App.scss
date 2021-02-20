@@ -38,6 +38,7 @@ input[type="checkbox"] + p {
   padding-left: 35px;
   cursor: pointer;
   -webkit-user-select: none;
+  user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
 }

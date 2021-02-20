@@ -10,6 +10,30 @@
     padding-left: 5px;
   }
 
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__labelForInput {
+    margin-left: 164px;
+  }
+
+  &__labelForSelect {
+    margin-right: 106px;
+  }
+
+  &__select {
+    color: dimgrey;
+  }
+
+  &__searchTodos {
+    display: flex;
+    justify-content: space-around;
+    padding-left: 5px;
+    margin-top: 5px;
+  }
+
   &__item {
     display: flex;
     justify-content: space-between;
