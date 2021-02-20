@@ -4,6 +4,9 @@
   &__user-button--selected {
     background-color: #4d457b;
   }
+  &__user-button--unselected {
+    background-color: green;
+  }
 
   &__list {
     list-style: none;
@@ -28,4 +31,10 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+}
+.Randomize{
+  border-radius: 2px;
+  background-color: rgb(114, 158, 160);
+  color:black;
+  margin:5px;
 }
