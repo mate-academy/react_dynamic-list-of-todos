@@ -2,33 +2,20 @@ import React, { useState, useEffect } from 'react';
 import './App.scss';
 import './styles/general.scss';
 
+import { useSelector } from 'react-redux';
 import { getTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
-  const [title, setTitle] = useState('');
-  const [selectedUserId, setUserId] = useState(0);
-  const [selectedFilter, setFilter] = useState('All');
+
+  const filter = useSelector(state => state.todoFilterReducer.filter);
+  const title = useSelector(state => state.todoFilterReducer.todoTitle);
+
+  const selectedUser = useSelector(state => state.userReducer.user);
 
   let todosForFilter = [...todos];
-
-  const handlerFilterStatus = (newStatus) => {
-    setFilter(newStatus);
-  };
-
-  const handleInputChange = (text) => {
-    setTitle(text);
-  };
-
-  const selectUser = (userId) => {
-    setUserId(userId);
-  };
-
-  const clearData = () => {
-    setUserId(null);
-  };
 
   useEffect(() => {
     const handleTodos = async() => {
@@ -40,12 +27,12 @@ const App = () => {
     handleTodos();
   }, []);
 
-  switch (selectedFilter) {
-    case 'Active':
+  switch (filter) {
+    case 'ACTIVE':
       todosForFilter = todos.filter(todo => !todo.completed);
       break;
 
-    case 'Completed':
+    case 'COMPLETED':
       todosForFilter = todos.filter(todo => todo.completed);
       break;
 
@@ -68,25 +55,16 @@ const App = () => {
     <div className="App">
       <div className="App__sidebar">
         <TodoList
-          handlerFilterStatus={handlerFilterStatus}
-          handleInputChange={handleInputChange}
-          selectUser={selectUser}
           todos={todosForFilter}
-          selectedFilter={selectedFilter}
-          title={title}
         />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId
-            ? (
-              <CurrentUser
-                userId={selectedUserId}
-                clearData={clearData}
-              />
-            )
-            : 'No user selected'}
+          {selectedUser
+            ? <CurrentUser />
+            : 'No user selected'
+          }
         </div>
       </div>
     </div>

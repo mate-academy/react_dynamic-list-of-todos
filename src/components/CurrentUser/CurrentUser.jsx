@@ -1,50 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { hideUser } from '../../store/selectUser';
 import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser = ({ clearData, userId }) => {
-  const [user, setUser] = useState(null);
+export const CurrentUser = () => {
+  const dispatch = useDispatch();
+  const currentUserId = useSelector(state => state.userReducer.user);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const handleUser = async() => {
-      const userFromServer = await getUser(userId);
+      const userFromServer = await getUser(currentUserId);
 
-      setUser(userFromServer);
+      setCurrentUser(userFromServer);
     };
 
     handleUser();
-  }, [userId]);
+  }, [currentUserId]);
 
   return (
-    user
-      && (
-        <div className="CurrentUser">
-          <h2 className="CurrentUser__title">
-            <span>
-              Selected user:
-              {' '}
-              {user.id}
-            </span>
-          </h2>
+    currentUser && (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {' '}
+            {currentUser.userId}
+          </span>
+        </h2>
 
-          <h3 className="CurrentUser__name">{user.name}</h3>
-          <p className="CurrentUser__email">{user.email}</p>
-          <p className="CurrentUser__phone">{user.phone}</p>
+        <h3 className="CurrentUser__name">{currentUser.name}</h3>
+        <p className="CurrentUser__email">{currentUser.email}</p>
+        <p className="CurrentUser__phone">{currentUser.phone}</p>
 
-          <button
-            onClick={clearData}
-            type="button"
-            className="CurrentUser__clear"
-          >
-            clear
-          </button>
-        </div>
-      )
+        <button
+          onClick={() => dispatch(hideUser())}
+          type="button"
+          className="CurrentUser__clear"
+        >
+          clear
+        </button>
+      </div>
+    )
   );
-};
-
-CurrentUser.propTypes = {
-  userId: PropTypes.number.isRequired,
-  clearData: PropTypes.func.isRequired,
 };
