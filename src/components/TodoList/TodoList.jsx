@@ -42,43 +42,39 @@ export class TodoList extends React.Component {
     }
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-  }
-
   render() {
     const { todos, setSelectedUserId, shuffleTodos } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
+
         <div className="TodoList__list-container">
-          <form onSubmit={event => this.handleSubmit(event)}>
-            <input
-              name="query"
-              placeholder="todos filter"
-              className="todoInput"
-              value={this.state.query}
-              onChange={this.handleChange}
-            />
-            <select
-              name="filter"
-              value={this.state.filter}
-              onChange={this.handleChange}
-              className="todoSelect"
-            >
-              <option value="All">All</option>
-              <option value="Active">Active</option>
-              <option value="Completed">Completed</option>
-            </select>
-            <button
-              type="button"
-              className="button"
-              onClick={() => shuffleTodos(todos)}
-            >
-              Randomize
-            </button>
-          </form>
+          <input
+            name="query"
+            placeholder="todos filter"
+            className="todoInput"
+            value={this.state.query}
+            onChange={this.handleChange}
+          />
+          <select
+            name="filter"
+            value={this.state.filter}
+            onChange={this.handleChange}
+            className="todoSelect"
+          >
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button
+            type="button"
+            className="button"
+            onClick={() => shuffleTodos(todos)}
+          >
+            Randomize
+          </button>
+
           <ul className="TodoList__list">
             {this.filterTodos(todos).map(todo => (
               this.isQueryInTodo(this.state.query, todo.title) && (
