@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ACTIVE, COMPLETED } from '../../api';
 import './TodoList.scss';
 
 export class TodoList extends React.Component {
@@ -22,7 +23,7 @@ export class TodoList extends React.Component {
     return (!!(title.toLowerCase().includes(serchElement)));
   };
 
-  hadnleChange = (event) => {
+  handleChange = (event) => {
     const { name, value } = event.target;
 
     this.setState(state => ({
@@ -33,33 +34,37 @@ export class TodoList extends React.Component {
 
   filterTodos = (todos) => {
     switch (this.state.filter) {
-      case 'Active':
+      case ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case COMPLETED:
         return todos.filter(todo => todo.completed);
       default: return todos;
     }
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+  }
+
   render() {
-    const { todos, setUser, shuffleTodos } = this.props;
+    const { todos, setSelectedUserId, shuffleTodos } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
         <div className="TodoList__list-container">
-          <form onSubmit={event => event.preventDefault()}>
+          <form onSubmit={event => this.handleSubmit(event)}>
             <input
               name="query"
               placeholder="todos filter"
               className="todoInput"
               value={this.state.query}
-              onChange={this.hadnleChange}
+              onChange={this.handleChange}
             />
             <select
               name="filter"
               value={this.state.filter}
-              onChange={this.hadnleChange}
+              onChange={this.handleChange}
               className="todoSelect"
             >
               <option value="All">All</option>
@@ -89,11 +94,11 @@ export class TodoList extends React.Component {
                   </label>
                   <button
                     className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button"
+                     TodoList__user-button
+                     TodoList__user-button--selected
+                     button"
                     type="button"
-                    onClick={() => setUser(+todo.userId, 'selectedUserId')}
+                    onClick={() => setSelectedUserId(+todo.userId)}
                   >
                     User&nbsp;
                     {todo.userId}
@@ -109,7 +114,7 @@ export class TodoList extends React.Component {
 }
 
 TodoList.propTypes = {
-  setUser: PropTypes.func.isRequired,
+  setSelectedUserId: PropTypes.func.isRequired,
   shuffleTodos: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({

@@ -14,11 +14,11 @@ class App extends React.Component {
   async componentDidMount() {
     const allTodos = await request('todos');
 
-    this.setValuesFromServer(allTodos, 'todos');
+    this.setState({ todos: allTodos });
   }
 
-  setValuesFromServer = (value, stateName) => {
-    this.setState({ [stateName]: value });
+  setSelectedUserId = (value) => {
+    this.setState({ selectedUserId: value });
   }
 
   clearUserInfo = () => {
@@ -31,7 +31,6 @@ class App extends React.Component {
     for (let i = shuffledTodos.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
 
-      // eslint-disable-next-line max-len
       [shuffledTodos[i], shuffledTodos[j]]
        = [shuffledTodos[j], shuffledTodos[i]];
     }
@@ -49,7 +48,7 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            setUser={this.setValuesFromServer}
+            setSelectedUserId={this.setSelectedUserId}
             todos={todos}
             shuffleTodos={this.shuffleTodos}
           />
