@@ -25,5 +25,25 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    padding: 10px 35px;
+    background-color: #ffe0db;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff3626;
+  }
+
+  &__clearBtn {
+    display: block;
+    padding: 7px 25px;
+    margin: 0 auto;
+    background-color: #ffe0db;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff3626;
+
   }
 }
