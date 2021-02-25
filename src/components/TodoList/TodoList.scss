@@ -29,3 +29,21 @@
     color: #ff3626;
   }
 }
+
+.TodoList__list-select {
+  background-color: #e9e1f2;
+  border: 1px solid #4d457b;
+  color: #4d457b;
+  width: 100px;
+  height: 40px;
+}
+
+.TodoList__list-input {
+  background-color: #e9e1f2;
+  border: 1px solid #4d457b;
+  color: #b7abc4;
+  width: 300px;
+  height: 40px;
+  padding-left: 20px;
+  margin: 20px;
+}
