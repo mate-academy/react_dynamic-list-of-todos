@@ -1,6 +1,6 @@
 import React from 'react';
 import { CurrentUserType } from '../../types';
-import { getUsers } from '../../api/api';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
@@ -9,7 +9,7 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    getUsers(this.props.userId)
+    getUser(this.props.userId)
       .then(user => this.setState({
         user,
       }));
@@ -20,7 +20,7 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    getUsers(this.props.userId).then((user) => {
+    getUser(this.props.userId).then((user) => {
       if (!user) {
         this.setState({
           user: {},
