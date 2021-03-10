@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export const TodoList = ({ todos,
   selectUser,
   selectedUserId,
-  title,
+  query,
   handleChange,
   filterStatus }) => (
     <div className="TodoList">
@@ -17,9 +17,9 @@ export const TodoList = ({ todos,
           <p>Filter Todo: </p>
           <input
             type="text"
-            name="title"
+            name="query"
             placeholder="Search a title"
-            value={title}
+            value={query}
             onChange={handleChange}
           />
         </div>
@@ -101,12 +101,12 @@ export const TodoList = ({ todos,
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
-    title: PropTypes.string,
+    query: PropTypes.string,
     userId: PropTypes.number,
   })).isRequired,
   selectUser: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
+  query: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   filterStatus: PropTypes.string.isRequired,
 };

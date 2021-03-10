@@ -9,7 +9,7 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    title: '',
+    query: '',
     filterStatus: '',
   };
 
@@ -20,10 +20,10 @@ class App extends React.Component {
   }
 
   getFilteredTodos = () => {
-    const { todos, title, filterStatus } = this.state;
+    const { todos, query, filterStatus } = this.state;
 
     const filteredTodosByTitle = todos.filter(todo => todo.title
-      && todo.title.includes(title));
+      && todo.title.includes(query));
 
     let filteredTodosByStatus = filteredTodosByTitle;
 
@@ -39,8 +39,7 @@ class App extends React.Component {
         break;
 
       default:
-        filteredTodosByStatus = [...filteredTodosByTitle];
-        break;
+        return filteredTodosByTitle;
     }
 
     return filteredTodosByStatus;
@@ -61,7 +60,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedUserId, title, filterStatus } = this.state;
+    const { selectedUserId, query, filterStatus } = this.state;
 
     return (
       <div className="App">
@@ -70,7 +69,7 @@ class App extends React.Component {
             todos={this.getFilteredTodos()}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
-            title={title}
+            query={query}
             handleChange={this.handleChange}
             filterStatus={filterStatus}
           />
@@ -83,9 +82,7 @@ class App extends React.Component {
                 userId={selectedUserId}
                 clear={this.clear}
               />
-            ) : `${selectedUserId === null
-              ? 'User is not found in our database'
-              : 'No user selected'}`}
+            ) : 'No user found'}
           </div>
         </div>
       </div>

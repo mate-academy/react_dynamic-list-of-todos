@@ -26,6 +26,7 @@ export class CurrentUser extends React.Component {
 
   render() {
     const { user } = this.state;
+    const { clear } = this.props;
 
     return (
       user ? (
@@ -42,7 +43,7 @@ export class CurrentUser extends React.Component {
           <button
             type="button"
             className="CurrentUser__clear__button"
-            onClick={this.props.clear}
+            onClick={clear}
           >
             Clear
           </button>
