@@ -26,4 +26,22 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__clear__button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    background-color: #d67272;
+    border: 0;
+    color: white;
+    transition: background-color 0.12s;
+    font-size: inherit;
+    display: block;
+    margin: 20px auto 0;
+  
+    &:hover {
+      background-color: #d40909;
+    }
+  }
 }

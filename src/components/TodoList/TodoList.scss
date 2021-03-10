@@ -1,8 +1,23 @@
 .TodoList {
   width: 100%;
 
+  &__list__searchField {
+    display: inline-block;
+    justify-content: center;
+    margin: 0px 130px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
+  }
+
+  &__user-button--disabled {
+    background-color: #c2c2c2;
+    cursor: auto;
+  }
+
+  &__user-button--disabled:hover {
+    background-color: #c2c2c2;
   }
 
   &__list {
