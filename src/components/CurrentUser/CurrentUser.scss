@@ -23,7 +23,23 @@
   }
 
   &__clear {
-    display: block;
-    margin: 20px auto 0;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+}
+
+.Preloader {
+  text-align: center;
+
+  &__title {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 1rem;
+
+    span {
+      background-color: #4d457b;
+      padding: 5px;
+      border-radius: 5px;
+    }
   }
 }

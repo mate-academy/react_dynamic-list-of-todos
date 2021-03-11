@@ -1,6 +1,11 @@
 .TodoList {
   width: 100%;
 
+  &__sort {
+    margin-bottom: 2rem;
+    margin-left: 8px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
@@ -28,4 +33,16 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+}
+
+.input.is-primary {
+  max-width: 40%;
+}
+
+.button.is-primary {
+  margin-left: 5px;
+}
+
+.button.is-danger {
+  margin-left: 5px;
 }
