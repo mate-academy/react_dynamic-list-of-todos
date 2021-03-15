@@ -24,6 +24,13 @@
 
   &__clear {
     display: block;
+    height: 40px;
+    width: 80px;
     margin: 20px auto 0;
+    
+    color: white;
+
+    background-color: #4d457b;
+    border-radius: 5px;
   }
 }
