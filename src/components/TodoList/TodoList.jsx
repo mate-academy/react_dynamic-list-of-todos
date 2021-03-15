@@ -16,14 +16,6 @@ export class TodoList extends React.Component {
     });
   }
 
-  hadnleSelect = (event) => {
-    const { value } = event.target;
-
-    this.setState({
-      selectValue: value,
-    });
-  }
-
   render() {
     const { selectUser, todos } = this.props;
     const { selectValue, inputValue } = this.state;
