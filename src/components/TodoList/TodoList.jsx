@@ -1,44 +1,123 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Todo } from '../Todo';
+import { getTodos } from '../../API/api';
+
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends Component {
+  state = {
+    todos: [],
+    text: '',
+    select: '',
+    preparedTodos: [],
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  async componentDidMount() {
+    const todos = await getTodos();
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({
+      todos, preparedTodos: todos,
+    });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  onChange = (e) => {
+    const { value, name, type } = e.target;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({ [name]: value });
+
+    switch (type) {
+      case 'text':
+        return this.filterByTitle();
+
+      default:
+        return this.selectCategory(value);
+    }
+  }
+
+  filterByTitle() {
+    this.setState(prevState => ({
+      preparedTodos: prevState.todos.filter(
+        todo => ((todo.title !== null)
+          ? todo.title.includes(prevState.text)
+          : null),
+      ),
+    }));
+  }
+
+  selectCategory(property) {
+    switch (property) {
+      case 'completed':
+        this.setState(prevState => ({
+          preparedTodos: prevState.todos.filter(
+            todo => !todo.completed,
+          ),
+        }));
+        break;
+
+      case 'active':
+        this.setState(prevState => ({
+          preparedTodos: prevState.todos.filter(
+            todo => todo.completed,
+          ),
+        }));
+        break;
+
+      default:
+        this.setState(prevState => ({
+          preparedTodos: [...prevState.todos],
+        }));
+    }
+  }
+
+  render() {
+    const { selectedUser, selectedUserId } = this.props;
+    const { todos, select, text, preparedTodos } = this.state;
+    const { onChange } = this;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        {todos.length > 0 && (
+          <>
+            <input
+              className="input is-rounded"
+              type="text"
+              value={text}
+              name="text"
+              placeholder="type title here"
+              onChange={onChange}
+            />
+            <div className="select is-rounded">
+              <select
+                name="select"
+                value={select}
+                onChange={onChange}
+              >
+                <option>all</option>
+                <option>active</option>
+                <option>completed</option>
+              </select>
+            </div>
+          </>
+        )}
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {preparedTodos.map(todo => (
+              <Todo
+                key={todo.id}
+                todo={todo}
+                selectedUser={selectedUser}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  selectedUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+};
