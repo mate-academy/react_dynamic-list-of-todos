@@ -15,6 +15,6 @@ Add the data loading, so the App works as described below:
 1. If I select another user the details should be updated. (use `componentDidUpdate`).
 1. If I select the same user there should not be a request to the server.
 1. Add a button `Clear` into the `CurrentUser` to clear the selectedUser in the `App`
-1. Add an `<input>` to the `TodoList` to filter the todos by title
+1. Add an `<input>` to the `TodoList` to filter the todos by title (there can be todos where title is `null`)
 1. Add a `<select>` to the `TodoList` to show `all`, `active`(not completed) or `completed` todos.
 1. (*) Add `Randomize` button to the `TodoList` to show the todos in a random order.
