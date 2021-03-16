@@ -22,7 +22,7 @@ export class TodoList extends React.Component {
 
   findMatchedTodos = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(
+      todos: prevState.visibleTodos.filter(
         todo => todo.title && todo.title.includes(prevState.title),
       ),
     }));
