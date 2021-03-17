@@ -6,7 +6,6 @@ import { todosFromServer } from '../../api';
 
 export class TodoList extends React.Component {
   state = {
-    visibleTodos: [],
     todos: [],
     title: '',
     select: 'all',
@@ -15,47 +14,40 @@ export class TodoList extends React.Component {
   componentDidMount() {
     todosFromServer()
       .then(todo => this.setState({
-        visibleTodos: todo,
         todos: todo,
       }));
   }
 
-  findMatchedTodos = () => {
-    this.setState(prevState => ({
-      todos: prevState.visibleTodos.filter(
-        todo => todo.title && todo.title.includes(prevState.title),
-      ),
-    }));
+  updateTodosInState = () => {
+    todosFromServer()
+      .then(preparedTodo => this.setState(prevState => (
+        { todos: preparedTodo.filter(
+          todo => todo.title && todo.title.includes(prevState.title),
+        ) })));
   }
 
-  changeHandleOnSelect = (event) => {
+  filterTodos = (event) => {
     const { value, name } = event.target;
 
     this.setState({ [name]: value });
-
-    switch (value) {
-      case 'active':
-        this.setState(prevState => ({
-          todos: prevState.visibleTodos.filter(todo => !todo.completed),
-        }));
-        break;
-      case 'completed':
-        this.setState(prevState => ({
-          todos: prevState.visibleTodos.filter(todo => todo.completed),
-        }));
-        break;
-      default:
-        this.setState(prevState => ({
-          todos: prevState.visibleTodos,
-        }));
-    }
+    todosFromServer()
+      .then(preparedTodo => this.setState((prevState) => {
+        switch (value) {
+          case 'active':
+            return { todos: preparedTodo.filter(todo => !todo.completed) };
+          case 'completed':
+            return { todos: preparedTodo.filter(todo => todo.completed) };
+          default:
+            return { todos: preparedTodo };
+        }
+      }));
   };
 
-  changeHandle = (event) => {
+  findMatchedTodos = (event) => {
     const { value, name } = event.target;
 
     this.setState({ [name]: value });
-    this.findMatchedTodos();
+    this.updateTodosInState();
   };
 
   render() {
@@ -70,7 +62,7 @@ export class TodoList extends React.Component {
             type="text"
             name="title"
             value={this.state.title}
-            onChange={this.changeHandle}
+            onChange={this.findMatchedTodos}
             placeholder="title"
           />
 
@@ -78,7 +70,7 @@ export class TodoList extends React.Component {
             type="text"
             name="select"
             value={this.state.select}
-            onChange={this.changeHandleOnSelect}
+            onChange={this.filterTodos}
           >
             <option>all</option>
             <option>active</option>

@@ -34,22 +34,20 @@ export class CurrentUser extends React.Component {
           </span>
         </h2>
 
-        {this.state.user
-        && (
-        <>
-          <h3 className="CurrentUser__name">{this.state.user[0].name}</h3>
-          <p className="CurrentUser__email">{this.state.user[0].email}</p>
-          <p className="CurrentUser__phone">{this.state.user[0].phone}</p>
-          <button
-            type="button"
-            onClick={this.props.clearUser}
-            className="button"
-          >
-            Clear
-          </button>
-        </>
-        )
-        }
+        {this.state.user && (
+          <>
+            <h3 className="CurrentUser__name">{this.state.user[0].name}</h3>
+            <p className="CurrentUser__email">{this.state.user[0].email}</p>
+            <p className="CurrentUser__phone">{this.state.user[0].phone}</p>
+            <button
+              type="button"
+              onClick={this.props.clearUser}
+              className="button"
+            >
+              Clear
+            </button>
+          </>
+        )}
       </div>
     );
   }
