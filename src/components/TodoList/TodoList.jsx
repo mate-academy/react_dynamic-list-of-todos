@@ -8,8 +8,8 @@ import './TodoList.scss';
 export class TodoList extends Component {
   state = {
     todos: [],
-    text: '',
-    select: '',
+    inputValue: '',
+    selectValue: '',
     preparedTodos: [],
   }
 
@@ -39,7 +39,7 @@ export class TodoList extends Component {
     this.setState(prevState => ({
       preparedTodos: prevState.todos.filter(
         todo => ((todo.title !== null)
-          ? todo.title.includes(prevState.text)
+          ? todo.title.includes(prevState.inputValue)
           : null),
       ),
     }));
@@ -71,8 +71,8 @@ export class TodoList extends Component {
   }
 
   render() {
-    const { selectedUser, selectedUserId } = this.props;
-    const { todos, select, text, preparedTodos } = this.state;
+    const { selectedUser } = this.props;
+    const { todos, selectValue, inputValue, preparedTodos } = this.state;
     const { onChange } = this;
 
     return (
@@ -83,15 +83,15 @@ export class TodoList extends Component {
             <input
               className="input is-rounded"
               type="text"
-              value={text}
-              name="text"
+              value={inputValue}
+              name="inputValue"
               placeholder="type title here"
               onChange={onChange}
             />
             <div className="select is-rounded">
               <select
-                name="select"
-                value={select}
+                name="selectValue"
+                value={selectValue}
                 onChange={onChange}
               >
                 <option>all</option>
@@ -119,5 +119,4 @@ export class TodoList extends Component {
 
 TodoList.propTypes = {
   selectedUser: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.number.isRequired,
 };

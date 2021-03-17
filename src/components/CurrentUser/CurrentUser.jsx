@@ -9,18 +9,19 @@ export class CurrentUser extends Component {
   };
 
   componentDidMount() {
-    this.loadData();
+    this.loadUser();
   }
 
   componentDidUpdate(prevState) {
     if (prevState.userId !== this.props.userId) {
-      this.loadData();
+      this.loadUser();
     }
   }
 
-  loadData() {
-    getUser(this.props.userId)
-      .then(user => this.setState({ user }));
+  async loadUser() {
+    const user = await getUser(this.props.userId);
+
+    this.setState({ user });
   }
 
   render() {

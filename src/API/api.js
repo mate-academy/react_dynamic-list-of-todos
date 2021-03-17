@@ -1,16 +1,23 @@
 const BASE__URL = 'https://mate-api.herokuapp.com/';
 
-const request = url => fetch(`${BASE__URL}${url}`)
-  .then((result) => {
-    if (!result.ok) {
-      throw new Error(`${result.status}`);
-    }
+const request = async(url) => {
+  const response = await fetch(`${BASE__URL}${url}`);
 
-    return result.json();
-  });
+  if (!response.ok) {
+    throw new Error(`${response.status}`);
+  }
 
-export const getTodos = () => request('todos')
-  .then(response => response.data);
+  return response.json();
+};
 
-export const getUser = userId => request(`users/${userId}`)
-  .then(response => response.data);
+export const getTodos = async() => {
+  const response = await request('todos');
+
+  return response.data;
+};
+
+export const getUser = async(userId) => {
+  const response = await request(`users/${userId}`);
+
+  return response.data;
+};

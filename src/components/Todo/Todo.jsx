@@ -21,10 +21,10 @@ export function Todo({ todo, selectedUser}) {
 
       <button
         className="
-      TodoList__user-button
-      TodoList__user-button--selected
-      button
-    "
+          TodoList__user-button
+          TodoList__user-button--selected
+          button
+        "
         type="button"
         onClick={() => selectedUser(todo.userId)}
       >
