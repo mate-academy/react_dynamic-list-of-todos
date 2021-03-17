@@ -26,9 +26,13 @@ class App extends React.Component {
     });
   }
 
-  handleUser = (userId) => {
+  handleSelectUser = (userId) => {
     this.setState({ selectedUserId: userId });
   };
+
+  handleClearUser = () => {
+    this.setState({ selectedUserId: 0 });
+  }
 
   render() {
     const { selectedUserId, users, todos } = this.state;
@@ -37,7 +41,7 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            selectUser={this.handleUser}
+            selectUser={this.handleSelectUser}
             todos={todos}
           />
         </div>
@@ -48,7 +52,7 @@ class App extends React.Component {
               <CurrentUser
                 userId={selectedUserId}
                 users={users}
-                clearUser={this.handleUser}
+                clearUser={this.handleClearUser}
               />
             ) : 'No user selected'}
           </div>

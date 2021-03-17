@@ -4,7 +4,7 @@ import './CurrentUser.scss';
 
 export const CurrentUser = ({ users, userId, clearUser }) => (
   <div className="CurrentUser">
-    {users.map(user => (user.id === userId ? (
+    {users.filter(user => user.id === userId).map(user => (
       <>
         <h2 className="CurrentUser__title">
           <span>{`Selected user: ${user.id}`}</span>
@@ -15,14 +15,12 @@ export const CurrentUser = ({ users, userId, clearUser }) => (
         <button
           type="button"
           className="CurrentUser__clear"
-          onClick={() => {
-            clearUser(0);
-          }}
+          onClick={clearUser}
         >
           Clear
         </button>
       </>
-    ) : null))}
+    ))}
   </div>
 );
 
