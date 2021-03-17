@@ -8,102 +8,83 @@ import './TodoList.scss';
 export class TodoList extends Component {
   state = {
     todos: [],
-    inputValue: '',
     selectValue: '',
-    preparedTodos: [],
   }
 
   async componentDidMount() {
-    const todos = await getTodos();
+    this.setState({ todos: await getTodos() });
+  }
 
-    this.setState({
-      todos, preparedTodos: todos,
-    });
+  filterByTitle = async(event) => {
+    const { value } = event.target;
+    let todos = await getTodos();
+
+    todos = todos.filter(todo => ((todo.title !== null)
+      ? todo.title.includes(value)
+      : null));
+
+    this.setState({ todos });
   }
 
   onChange = (e) => {
-    const { value, name, type } = e.target;
+    const { value, name } = e.target;
 
     this.setState({ [name]: value });
 
-    switch (type) {
-      case 'text':
-        return this.filterByTitle();
-
-      default:
-        return this.selectCategory(value);
-    }
+    return this.selectCategory(value);
   }
 
-  filterByTitle() {
-    this.setState(prevState => ({
-      preparedTodos: prevState.todos.filter(
-        todo => ((todo.title !== null)
-          ? todo.title.includes(prevState.inputValue)
-          : null),
-      ),
-    }));
-  }
+  selectCategory = async(property) => {
+    const todos = await getTodos();
 
-  selectCategory(property) {
     switch (property) {
       case 'completed':
-        this.setState(prevState => ({
-          preparedTodos: prevState.todos.filter(
-            todo => !todo.completed,
-          ),
-        }));
+        this.setState({ todos: todos.filter(
+          todo => !todo.completed,
+        ) });
         break;
 
       case 'active':
-        this.setState(prevState => ({
-          preparedTodos: prevState.todos.filter(
-            todo => todo.completed,
-          ),
-        }));
+        this.setState({ todos: todos.filter(
+          todo => todo.completed,
+        ) });
         break;
 
       default:
-        this.setState(prevState => ({
-          preparedTodos: [...prevState.todos],
-        }));
+        this.setState({ todos });
     }
   }
 
   render() {
     const { selectedUser } = this.props;
-    const { todos, selectValue, inputValue, preparedTodos } = this.state;
-    const { onChange } = this;
+    const { todos, selectValue } = this.state;
+    const { onChange, filterByTitle } = this;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        {todos.length > 0 && (
-          <>
-            <input
-              className="input is-rounded"
-              type="text"
-              value={inputValue}
-              name="inputValue"
-              placeholder="type title here"
+        <>
+          <input
+            className="input is-rounded"
+            type="text"
+            placeholder="type title here"
+            onChange={filterByTitle}
+          />
+          <div className="select is-rounded">
+            <select
+              name="selectValue"
+              value={selectValue}
               onChange={onChange}
-            />
-            <div className="select is-rounded">
-              <select
-                name="selectValue"
-                value={selectValue}
-                onChange={onChange}
-              >
-                <option>all</option>
-                <option>active</option>
-                <option>completed</option>
-              </select>
-            </div>
-          </>
-        )}
+            >
+              <option>all</option>
+              <option>active</option>
+              <option>completed</option>
+            </select>
+          </div>
+        </>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {preparedTodos.map(todo => (
+            {todos.map(todo => (
               <Todo
                 key={todo.id}
                 todo={todo}

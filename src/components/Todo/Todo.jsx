@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export function Todo({ todo, selectedUser}) {
+export function Todo({ todo, selectedUser }) {
   return (
     <li className={classNames(
       'TodoList__item',
