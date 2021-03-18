@@ -27,3 +27,15 @@
     margin: 20px auto 0;
   }
 }
+
+.userDelete-btn {
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: #ea546b;
+  border: 0;
+  color: white;
+  transition: background-color 0.12s;
+  font-size: inherit;
+}
