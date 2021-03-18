@@ -34,8 +34,14 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
+  selectedUser = () => {
+    const { users, selectedUserId } = this.state;
+
+    return users.find(user => user.id === selectedUserId);
+  }
+
   render() {
-    const { selectedUserId, users, todos } = this.state;
+    const { todos, selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -50,8 +56,7 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                userId={selectedUserId}
-                users={users}
+                user={this.selectedUser()}
                 clearUser={this.handleClearUser}
               />
             ) : 'No user selected'}

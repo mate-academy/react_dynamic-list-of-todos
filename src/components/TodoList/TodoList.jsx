@@ -5,8 +5,8 @@ import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
-    selectValue: '',
-    inputValue: '',
+    selectQuery: '',
+    inputQuery: '',
   }
 
   handleChange = (event) => {
@@ -17,25 +17,27 @@ export class TodoList extends React.Component {
     });
   }
 
+  filterTodos(items) {
+    const { selectQuery, inputQuery } = this.state;
+
+    switch (selectQuery) {
+      case 'active':
+        return items.filter(item => item.completed === false);
+      case 'completed':
+        return items.filter(item => item.completed === true);
+      default:
+        return items.filter(item => (
+          item.title.toLowerCase().includes(inputQuery)
+        ));
+    }
+  }
+
   render() {
     const { selectUser, todos } = this.props;
-    const { selectValue, inputValue } = this.state;
+    const { selectQuery, inputQuery } = this.state;
     const options = ['all', 'active', 'completed'];
 
-    function filterTodos(items) {
-      switch (selectValue) {
-        case 'active':
-          return items.filter(item => item.completed === false);
-        case 'completed':
-          return items.filter(item => item.completed === true);
-        default:
-          return items.filter(item => (
-            item.title.toLowerCase().includes(inputValue)
-          ));
-      }
-    }
-
-    const visibleTodos = filterTodos(todos);
+    const visibleTodos = this.filterTodos(todos);
 
     return (
       <div className="TodoList">
@@ -43,14 +45,14 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <input
-            name="inputValue"
-            value={inputValue}
+            name="inputQuery"
+            value={inputQuery}
             placeholder="Search by title"
             onChange={this.handleChange}
           />
           <select
-            name="selectValue"
-            value={selectValue}
+            name="selectQuery"
+            value={selectQuery}
             onChange={this.handleChange}
           >
             {options.map(option => (
