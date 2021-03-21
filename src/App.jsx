@@ -8,7 +8,6 @@ import { getData } from './api';
 class App extends React.Component {
   state = {
     todos: [],
-    fullData: [],
     selectedUserId: 0,
     search: '',
     choosedSelect: 'all',
@@ -17,38 +16,17 @@ class App extends React.Component {
   async componentDidMount() {
     const data = await getData();
 
-    this.setState({ todos: data, fullData: data });
+    this.setState({
+      todos: data,
+    });
   }
 
-  selectHandler = (id) => (
+  selectHandler = id => (
     this.setState({ selectedUserId: id })
   );
 
   clearHandler = () => {
     this.setState({ selectedUserId: 0 });
-  }
-
-  showBy = () => {
-    const { choosedSelect, fullData } = this.state;
-    const completedTodo = [...fullData].filter(todo => todo.completed);
-    const activeTodo = [...fullData].filter(todo => !todo.completed);
-
-    switch (choosedSelect) {
-      case 'active':
-        return this.setState({
-          todos: completedTodo,
-        });
-
-      case 'completed':
-        return this.setState({
-          todos: activeTodo,
-        });
-
-      default:
-        return this.setState({
-          todos: fullData,
-        });
-    }
   }
 
   changeHandler = (e) => {
@@ -57,18 +35,32 @@ class App extends React.Component {
     this.setState({
       [name]: value,
     });
+  }
 
-    this.showBy();
+  filterTodos = (items) => {
+    const { choosedSelect } = this.state;
+
+    switch (choosedSelect) {
+      case 'active':
+        return items.filter(item => item.completed);
+
+      case 'completed':
+        return items.filter(item => !item.completed);
+
+      default:
+        return items;
+    }
   }
 
   render() {
     const { todos, selectedUserId } = this.state;
+    const visibleTodos = this.filterTodos(todos);
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             selectHandler={this.selectHandler}
             search={this.state.search}
             changeHandler={this.changeHandler}
