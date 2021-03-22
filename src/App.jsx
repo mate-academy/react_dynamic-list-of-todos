@@ -7,13 +7,17 @@ import { getTodos } from './helpers';
 
 class App extends React.Component {
   state = {
+    allTodos: [],
     todos: [],
     selectedUserId: 0,
   };
 
   componentDidMount() {
-    getTodos().then((todos) => {
-      this.setState({ todos });
+    getTodos().then((allTodos) => {
+      this.setState({
+        allTodos,
+        todos: allTodos,
+      });
     });
   }
 
@@ -25,20 +29,16 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  handleFilterBySearching = async(value) => {
-    let todos = await getTodos();
+  handleFilterBySearching = (value) => {
+    const { allTodos } = this.state;
 
-    todos = todos.filter((todo) => {
-      if (!todo.title) {
-        return false;
-      }
-
-      return (todo.title.includes(value));
+    this.setState({
+      todos: allTodos.filter(todo => todo.title.includes(value)),
     });
-    this.setState({ todos });
   }
 
-  handleSelectFilter = async(value) => {
+  handleSelectFilter = (value) => {
+    const { allTodos } = this.state;
     let callback;
 
     switch (value) {
@@ -55,9 +55,8 @@ class App extends React.Component {
         return;
     }
 
-    let todos = await getTodos();
+    const todos = allTodos.filter(callback);
 
-    todos = todos.filter(callback);
     this.setState({ todos });
   }
 

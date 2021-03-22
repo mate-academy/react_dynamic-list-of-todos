@@ -5,6 +5,10 @@ import { getUser } from '../../helpers';
 
 export class CurrentUser extends React.Component {
 state = {
+  id: 0,
+  name: '',
+  email: '',
+  phone: '',
 };
 
 componentDidMount() {
