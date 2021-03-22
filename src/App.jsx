@@ -39,25 +39,23 @@ class App extends React.Component {
 
   handleSelectFilter = (value) => {
     const { allTodos } = this.state;
-    let callback;
+    let filteredTodos = allTodos;
 
     switch (value) {
       case 'all':
-        callback = todo => true;
+        filteredTodos = allTodos;
         break;
       case 'active':
-        callback = todo => todo.completed === false;
+        filteredTodos = allTodos.filter(todo => todo.completed === false);
         break;
       case 'complited':
-        callback = todo => todo.completed;
+        filteredTodos = allTodos.filter(todo => todo.completed);
         break;
       default:
         return;
     }
 
-    const todos = allTodos.filter(callback);
-
-    this.setState({ todos });
+    this.setState({ todos: filteredTodos });
   }
 
   render() {
