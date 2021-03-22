@@ -26,7 +26,8 @@ export class CurrentUser extends React.Component {
     const { clearUsers } = this.props;
     const { user } = this.state;
 
-    return (user
+    return (
+      user
       && (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">

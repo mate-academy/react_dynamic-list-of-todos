@@ -70,12 +70,12 @@ class App extends React.Component {
      return todos;
    }
 
-   selectedFilter(selectedValue, state) {
+   selectedFilter = (selectedValue, state) => {
      switch (selectedValue) {
        case 'completed':
-         return state.filter(el => el.completed === true);
+         return state.filter(el => el.completed);
        case 'active':
-         return state.filter(el => el.completed === false);
+         return state.filter(el => !el.completed);
        default:
          return state;
      }
@@ -110,12 +110,13 @@ class App extends React.Component {
 
          <div className="App__content">
            <div className="App__content-container">
-             {selectedUserId ? (
-               <CurrentUser
-                 userId={selectedUserId}
-                 clearUsers={this.clearUsers}
-               />
-             ) : 'No user selected'}
+             {selectedUserId
+               ? (
+                 <CurrentUser
+                   userId={selectedUserId}
+                   clearUsers={this.clearUsers}
+                 />
+               ) : 'No user selected'}
            </div>
          </div>
        </div>
