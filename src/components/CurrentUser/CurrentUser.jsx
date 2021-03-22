@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { loadUser } from '../../api';
 import './CurrentUser.scss';
 
@@ -42,9 +43,6 @@ export class CurrentUser extends React.Component {
     const { userError } = this.state;
     const { name, email, phone, } = this.state.selectedUserDetails;
 
-    console.log(this.state.selectedUserDetails);
-    console.log(userError);
-
     return (
       
       <>
@@ -71,3 +69,7 @@ export class CurrentUser extends React.Component {
   }
 }
  
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  onReset: PropTypes.func.isRequired,
+}

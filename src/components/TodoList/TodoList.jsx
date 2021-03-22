@@ -1,6 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
-import { loadTodos } from '../../api'
+import PropTypes from 'prop-types';
+import { loadTodos } from '../../api';
+import { Todo } from '../Todo/Todo';
 import './TodoList.scss';
 
 export class TodoList extends React.Component {
@@ -115,29 +116,13 @@ export class TodoList extends React.Component {
           </select>
           <ul className="TodoList__list">
             {todos.map(todo => (
-              <li
-                key={todo.id}
-                className={classNames(`TodoList__item`, {
-                'TodoList__item--checked': todo.completed,
-                'TodoList__item--unchecked': !todo.completed,
-              })}
-              onClick={() => onUserSelect(todo.userId)}
-              >
-                <label>
-                  <input type="checkbox" readOnly />
-                  <p>{todo.title}</p>
-                </label>
-
-                <button
-                className={classNames(`
-                  TodoList__user-button button`, {
-                  'TodoList__user-button--selected': todo.userId === selectedUserId,
-                })}
-                  type="button"
-                >
-                  User #{todo.userId}
-                </button>
-              </li>
+              <Todo key={todo.id}
+                onUserSelect={onUserSelect}
+                selectedUserId={selectedUserId}
+                completed={todo.completed}
+                userId={todo.userId}
+                title={todo.title}
+              />
             ))}
           </ul>
         </div>
@@ -145,4 +130,8 @@ export class TodoList extends React.Component {
     )
   }
 }
-  
+
+TodoList.propTypes = {
+  onUserSelect: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+}
