@@ -1,12 +1,73 @@
 import React from 'react';
+import { loadUser } from '../../api';
 import './CurrentUser.scss';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    selectedUserDetails: [],
+    userError: false,
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadData();
+    }
+  }
+
+  handleClickClear = () => {
+    this.props.onReset(0)
+  }
+
+  async loadData() {
+    const selectedUser = await loadUser(this.props.userId);
+
+    if (selectedUser.data === null) {
+      this.setState({ userError: true });
+
+      return false;
+    }
+
+    this.setState({ 
+      selectedUserDetails: selectedUser.data,
+      userError: false,
+    });
+  }
+
+  render() {
+    const { userId } = this.props;
+    const { userError } = this.state;
+    const { name, email, phone, } = this.state.selectedUserDetails;
+
+    console.log(this.state.selectedUserDetails);
+    console.log(userError);
+
+    return (
+      
+      <>
+      {userError ? <div className="CurrentUser">
+        <h2 className="CurrentUser__title"><span>Invalid User</span></h2>
+      </div>
+      : 
+      <div className="CurrentUser">
+      <h2 className="CurrentUser__title"><span>Selected user: {userId}</span></h2>
+  
+      <h3 className="CurrentUser__name">{name}</h3>
+      <p className="CurrentUser__email">{email}</p>
+      <p className="CurrentUser__phone">{phone}</p>
+    </div>
+      }
+      <button
+        type="button"
+        onClick={this.handleClickClear}
+      >
+        Clear
+      </button>
+      </>
+    )
+  }
+}
+ 
