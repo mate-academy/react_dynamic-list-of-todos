@@ -26,7 +26,7 @@ class App extends React.Component {
     });
   }
 
-  handleSelectUser = (userId) => {
+  handleUserSelection = (userId) => {
     this.setState({ selectedUserId: userId });
   };
 
@@ -34,7 +34,7 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  selectedUser = () => {
+  findSelectedUser = () => {
     const { users, selectedUserId } = this.state;
 
     return users.find(user => user.id === selectedUserId);
@@ -47,7 +47,7 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            selectUser={this.handleSelectUser}
+            selectUser={this.handleUserSelection}
             todos={todos}
           />
         </div>
@@ -56,7 +56,7 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                user={this.selectedUser()}
+                user={this.findSelectedUser()}
                 clearUser={this.handleClearUser}
               />
             ) : 'No user selected'}

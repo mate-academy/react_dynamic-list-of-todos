@@ -22,9 +22,9 @@ export class TodoList extends React.Component {
 
     switch (selectQuery) {
       case 'active':
-        return items.filter(item => item.completed === false);
+        return items.filter(item => !item.completed);
       case 'completed':
-        return items.filter(item => item.completed === true);
+        return items.filter(item => item.completed);
       default:
         return items.filter(item => (
           item.title.toLowerCase().includes(inputQuery)
@@ -65,15 +65,15 @@ export class TodoList extends React.Component {
             {visibleTodos.map(todo => (
               <li
                 className={classNames('TodoList__item', {
-                  'TodoList__item--unchecked': todo.completed === false,
-                  'TodoList__item--checked': todo.completed === true,
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
                 })}
                 key={todo.id}
               >
                 <label>
                   <input
                     type="checkbox"
-                    checked={todo.completed === true}
+                    checked={todo.completed}
                     readOnly
                   />
                   <p>{todo.title}</p>
