@@ -11,7 +11,7 @@ class App extends React.Component {
 
   selectUserHandler = (userId) => {
     if (userId !== this.state.selectedUserId) {
-      this.setState({ selectedUserId: userId})
+      this.setState({ selectedUserId: userId });
     }
   }
 

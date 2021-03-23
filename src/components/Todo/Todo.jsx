@@ -2,19 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const Todo = ({
-  onUserSelect,
+export const Todo = ({ onUserSelect,
   selectedUserId,
   completed,
   userId,
-  title }) => {
-  return (
+  title }) => (
     <li
-      className={classNames(`TodoList__item`, {
-      'TodoList__item--checked': completed,
-      'TodoList__item--unchecked': !completed,
-    })}
       onClick={() => onUserSelect(userId)}
+      className={classNames(`TodoList__item`, {
+        'TodoList__item--checked': completed,
+        'TodoList__item--unchecked': !completed,
+      })}
     >
       <label>
         <input type="checkbox" readOnly />
@@ -22,17 +20,17 @@ export const Todo = ({
       </label>
 
       <button
-      className={classNames(`
+        className={classNames(`
         TodoList__user-button button`, {
-        'TodoList__user-button--selected': userId === selectedUserId,
-      })}
+          'TodoList__user-button--selected': userId === selectedUserId,
+        })}
         type="button"
       >
-        User #{userId}
+        User #
+        {userId}
       </button>
     </li>
-  )
-}
+);
 
 Todo.propTypes = {
   onUserSelect: PropTypes.func.isRequired,
@@ -40,4 +38,4 @@ Todo.propTypes = {
   completed: PropTypes.bool.isRequired,
   userId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-}
+};

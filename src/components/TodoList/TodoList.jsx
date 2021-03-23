@@ -16,18 +16,18 @@ export class TodoList extends React.Component {
     const todos = await loadTodos();
 
     this.setState({
-      todos: todos,
+      todos,
       loadedTodos: todos,
-    })
+    });
   }
 
   componentDidUpdate(_, prevState) {
     if (prevState.option !== this.state.option) {
-      this.filterByOption(this.state.option)
+      this.filterByOption(this.state.option);
     }
 
     if (prevState.query !== this.state.query) {
-      this.filterList(this.state.query)
+      this.filterList(this.state.query);
     }
   }
 
@@ -40,31 +40,33 @@ export class TodoList extends React.Component {
   filterByOption = (option) => {
     const { loadedTodos } = this.state;
 
-    switch(option) {
+    this.setState({ query: '' })
+
+    switch (option) {
       case 'all':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo)
+          todos: loadedTodos.filter(todo => todo),
         });
 
       case 'completed':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo.completed === true)
+          todos: loadedTodos.filter(todo => todo.completed === true),
         });
 
       case 'uncompleted':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo.completed === false)
+          todos: loadedTodos.filter(todo => todo.completed === false),
         });
 
-        default: return false;
+      default: return false;
     }
   }
 
   filterList = () => {
     const { loadedTodos } = this.state;
 
-    this.setState(prevState => {
-      const filtredTodos = loadedTodos.filter(todo => {
+    this.setState((prevState) => {
+      const filtredTodos = loadedTodos.filter((todo) => {
         const title = todo.title.toLowerCase();
         const query = prevState.query.toLowerCase();
 
@@ -72,7 +74,7 @@ export class TodoList extends React.Component {
       });
 
       return ({ todos: filtredTodos });
-    })
+    });
   }
 
   render() {
@@ -85,7 +87,9 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <label>
-            Search: {' '}
+            Search:
+            {' '}
+            {' '}
             <input
               type="text"
               placeholder="find ToDo"
@@ -96,27 +100,28 @@ export class TodoList extends React.Component {
           </label>
           <select
             value={this.state.option}
-            name='option'
+            name="option"
             onChange={this.handleChange}
           >
-            <option value='initial' disabled>
+            <option value="initial" disabled>
               choose parameter
             </option>
             <option
-              value='completed'
+              value="completed"
             >
               completed
             </option>
-            <option value='uncompleted'>
+            <option value="uncompleted">
               uncompleted
             </option>
-            <option value='all'>
+            <option value="all">
               all
             </option>
           </select>
           <ul className="TodoList__list">
             {todos.map(todo => (
-              <Todo key={todo.id}
+              <Todo
+                key={todo.id}
                 onUserSelect={onUserSelect}
                 selectedUserId={selectedUserId}
                 completed={todo.completed}
@@ -127,11 +132,11 @@ export class TodoList extends React.Component {
           </ul>
         </div>
       </div>
-    )
+    );
   }
 }
 
 TodoList.propTypes = {
   onUserSelect: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
-}
+};

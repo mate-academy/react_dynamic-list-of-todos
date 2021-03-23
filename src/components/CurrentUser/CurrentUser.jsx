@@ -20,7 +20,7 @@ export class CurrentUser extends React.Component {
   }
 
   handleClickClear = () => {
-    this.props.onReset(0)
+    this.props.onReset(0);
   }
 
   async loadData() {
@@ -32,7 +32,7 @@ export class CurrentUser extends React.Component {
       return false;
     }
 
-    this.setState({ 
+    this.setState({
       selectedUserDetails: selectedUser.data,
       userError: false,
     });
@@ -41,35 +41,43 @@ export class CurrentUser extends React.Component {
   render() {
     const { userId } = this.props;
     const { userError } = this.state;
-    const { name, email, phone, } = this.state.selectedUserDetails;
+    const { name, email, phone } = this.state.selectedUserDetails;
 
     return (
-      
+
       <>
-      {userError ? <div className="CurrentUser">
-        <h2 className="CurrentUser__title"><span>Invalid User</span></h2>
-      </div>
-      : 
-      <div className="CurrentUser">
-      <h2 className="CurrentUser__title"><span>Selected user: {userId}</span></h2>
-  
-      <h3 className="CurrentUser__name">{name}</h3>
-      <p className="CurrentUser__email">{email}</p>
-      <p className="CurrentUser__phone">{phone}</p>
-    </div>
+        {userError ? (
+          <div className="CurrentUser">
+            <h2 className="CurrentUser__title"><span>Invalid User</span></h2>
+          </div>
+        )
+          : (
+            <div className="CurrentUser">
+              <h2 className="CurrentUser__title">
+                <span>
+                  Selected user:
+                  {userId}
+                </span>
+              </h2>
+
+              <h3 className="CurrentUser__name">{name}</h3>
+              <p className="CurrentUser__email">{email}</p>
+              <p className="CurrentUser__phone">{phone}</p>
+            </div>
+          )
       }
-      <button
-        type="button"
-        onClick={this.handleClickClear}
-      >
-        Clear
-      </button>
+        <button
+          type="button"
+          onClick={this.handleClickClear}
+        >
+          Clear
+        </button>
       </>
-    )
+    );
   }
 }
- 
+
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
   onReset: PropTypes.func.isRequired,
-}
+};
