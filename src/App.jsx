@@ -10,7 +10,7 @@ class App extends React.Component {
     todos: [],
     selectedUserId: 0,
     search: '',
-    choosedSelect: 'all',
+    choosedSelect: '',
   };
 
   async componentDidMount() {
@@ -46,6 +46,9 @@ class App extends React.Component {
 
       case 'completed':
         return items.filter(item => !item.completed);
+
+      case 'all':
+        return items;
 
       default:
         return items;
