@@ -3,13 +3,7 @@ export function getTodos() {
     fetch('https://mate-api.herokuapp.com/todos')
       .then(response => response.json())
       .then(result => result.data)
-      .then(data => data.filter((todo) => {
-        if (!todo.title) {
-          return false;
-        }
-
-        return true;
-      }))
+      .then(data => data.filter(todo => todo.title))
   );
 }
 
