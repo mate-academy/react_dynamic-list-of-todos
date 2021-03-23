@@ -24,38 +24,35 @@ export class TodoList extends React.Component {
   componentDidUpdate(_, prevState) {
     if (prevState.option !== this.state.option) {
       this.filterByOption(this.state.option);
-    }
-
-    if (prevState.query !== this.state.query) {
-      this.filterList(this.state.query);
-    }
+    };
   }
 
   handleChange = (event) => {
     const { name, value } = event.target;
 
     this.setState({ [name]: value });
+
+    this.filterList();
   }
 
   filterByOption = (option) => {
-    const { loadedTodos } = this.state;
-
-    this.setState({ query: '' })
+    const { todos } = this.state;
+    const todosCopy = [...todos];
 
     switch (option) {
       case 'all':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo),
+          todos: todosCopy.filter(todo => todo),
         });
 
       case 'completed':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo.completed === true),
+          todos: todosCopy.filter(todo => todo.completed === true),
         });
 
       case 'uncompleted':
         return this.setState({
-          todos: loadedTodos.filter(todo => todo.completed === false),
+          todos: todosCopy.filter(todo => todo.completed === false),
         });
 
       default: return false;
@@ -71,9 +68,11 @@ export class TodoList extends React.Component {
         const query = prevState.query.toLowerCase();
 
         return title.includes(query);
-      });
+      })
 
-      return ({ todos: filtredTodos });
+      return ({
+        todos: filtredTodos
+      });
     });
   }
 
