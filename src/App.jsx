@@ -3,10 +3,11 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getData } from './api';
+import { getData, getUsers } from './api';
 
 class App extends React.Component {
   state = {
+    users: [],
     todos: [],
     selectedUserId: 0,
     search: '',
@@ -15,9 +16,12 @@ class App extends React.Component {
 
   async componentDidMount() {
     const data = await getData();
+    const filteredData = data.filter(todo => todo.title);
+    const users = await getUsers();
 
     this.setState({
-      todos: data,
+      todos: filteredData,
+      users,
     });
   }
 
@@ -29,8 +33,8 @@ class App extends React.Component {
     this.setState({ selectedUserId: 0 });
   }
 
-  changeHandler = (e) => {
-    const { name, value } = e.target;
+  changeHandler = (changeEvent) => {
+    const { name, value } = changeEvent.target;
 
     this.setState({
       [name]: value,
@@ -48,15 +52,13 @@ class App extends React.Component {
         return items.filter(item => !item.completed);
 
       case 'all':
-        return items;
-
       default:
         return items;
     }
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, users } = this.state;
     const visibleTodos = this.filterTodos(todos);
 
     return (
@@ -75,6 +77,7 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             <CurrentUser
+              users={users}
               userId={selectedUserId}
               clearHandler={this.clearHandler}
             />

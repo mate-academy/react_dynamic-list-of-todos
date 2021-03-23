@@ -38,7 +38,7 @@ export const TodoList = ({
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
           {todos.filter(todo => (
-            todo.title && todo.title.includes(search.toLowerCase())
+            todo.title.includes(search.toLowerCase())
           )).map(todo => (
             <li
               key={todo.id}
@@ -78,8 +78,8 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
-      complited: PropTypes.string.isRequired,
-      userId: PropTypes.string.isRequired,
+      complited: PropTypes.string,
+      userId: PropTypes.number,
     }).isRequired,
   ),
   selectHandler: PropTypes.func.isRequired,

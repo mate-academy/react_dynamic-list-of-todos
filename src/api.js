@@ -10,8 +10,8 @@ export const getData = () => (
     .then(response => response.data)
 );
 
-export const getUsers = userId => (
-  fetch(`${usersUrl}${userId}`)
+export const getUsers = () => (
+  fetch(usersUrl)
     .then(response => response.json())
     .then(response => response.data)
 );

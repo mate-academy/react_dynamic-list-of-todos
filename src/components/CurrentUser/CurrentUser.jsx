@@ -1,7 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { getUsers } from '../../api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -9,11 +8,14 @@ export class CurrentUser extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
+    const { users } = this.props;
+
     if (this.props.userId !== prevProps.userId) {
-      const data = await getUsers(`${this.props.userId}`);
 
       this.setState({
-        currUser: data,
+        currUser: users.find(user => (
+          user.id === this.props.userId
+        )),
       });
     }
   }
@@ -49,6 +51,14 @@ export class CurrentUser extends React.Component {
 }
 
 CurrentUser.propTypes = {
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string,
+      email: PropTypes.string.isRequired,
+      phone: PropTypes.string,
+    }).isRequired,
+  ).isRequired,
   userId: PropTypes.number.isRequired,
   clearHandler: PropTypes.func.isRequired,
 };
