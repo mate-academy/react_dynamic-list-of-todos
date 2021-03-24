@@ -21,64 +21,71 @@ export class TodoList extends React.Component {
     });
   }
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(_, prevState){
     if (prevState.option !== this.state.option) {
-      this.filterByOption(this.state.option);
-    };
+      this.filterList(this.state.query, this.state.option)
+    }
+
+    if (prevState.query !== this.state.query) {
+      this.filterList(this.state.query, this.state.option)
+    }
+  }
+
+  queryHandler = (event) => {
+    const curentValue = event.target.value;
+
+    this.setState({ query: curentValue });
   }
 
   handleChange = (event) => {
     const { name, value } = event.target;
 
     this.setState({ [name]: value });
-
-    this.filterList();
   }
 
-  filterByOption = (option) => {
-    const { todos } = this.state;
-    const todosCopy = [...todos];
+  filterByOption = (filteredTodos, option) => {
+    const completedTodos = filteredTodos.filter(todo => todo.completed);
+    const uncompletedTodos = filteredTodos.filter(todo => !todo.completed);
 
     switch (option) {
       case 'all':
-        return this.setState({
-          todos: todosCopy.filter(todo => todo),
-        });
+        return true;
 
       case 'completed':
         return this.setState({
-          todos: todosCopy.filter(todo => todo.completed === true),
+          todos: completedTodos,
         });
 
       case 'uncompleted':
         return this.setState({
-          todos: todosCopy.filter(todo => todo.completed === false),
+          todos: uncompletedTodos,
         });
 
-      default: return false;
+      default: return true;
     }
   }
 
-  filterList = () => {
+  filterList = (querySelector, option) => {
+    console.log(querySelector);
     const { loadedTodos } = this.state;
 
-    this.setState((prevState) => {
-      const filtredTodos = loadedTodos.filter((todo) => {
+    const filteredTodos = loadedTodos.filter((todo) => {
         const title = todo.title.toLowerCase();
-        const query = prevState.query.toLowerCase();
+        const query = querySelector.toLowerCase();
 
-        return title.includes(query);
+        return title.includes(query)
       })
 
-      return ({
-        todos: filtredTodos
-      });
-    });
+    this.setState({
+        todos:  filteredTodos
+      }, () => this.filterByOption(filteredTodos, option))
   }
 
   render() {
     const { onUserSelect, selectedUserId } = this.props;
     const { todos, query } = this.state;
+
+    console.log(todos);
 
     return (
       <div className="TodoList">
@@ -86,15 +93,13 @@ export class TodoList extends React.Component {
 
         <div className="TodoList__list-container">
           <label>
-            Search:
-            {' '}
-            {' '}
+            Search: {' '}
             <input
               type="text"
               placeholder="find ToDo"
               name="query"
               value={query}
-              onChange={this.handleChange}
+              onChange={this.queryHandler}
             />
           </label>
           <select
