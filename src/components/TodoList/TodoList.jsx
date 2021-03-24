@@ -24,11 +24,7 @@ export class TodoList extends React.Component {
   componentDidUpdate(_, prevState){
     const { option, query} = this.state;
 
-    if (prevState.option !== option) {
-      this.filterList(query, option)
-    }
-
-    if (prevState.query !== query) {
+    if (prevState.option !== option || prevState.query !== query) {
       this.filterList(query, option)
     }
   }
@@ -50,9 +46,6 @@ export class TodoList extends React.Component {
     const uncompletedTodos = filteredTodos.filter(todo => !todo.completed);
 
     switch (option) {
-      case 'all':
-        return true;
-
       case 'completed':
         return this.setState({
           todos: completedTodos,
@@ -63,17 +56,17 @@ export class TodoList extends React.Component {
           todos: uncompletedTodos,
         });
 
+      case 'all':
       default: return true;
     }
   }
 
-  filterList = (querySelector, option) => {
-    console.log(querySelector);
+  filterList = (inputText, option) => {
     const { loadedTodos } = this.state;
 
     const filteredTodos = loadedTodos.filter((todo) => {
         const title = todo.title.toLowerCase();
-        const query = querySelector.toLowerCase();
+        const query = inputText.toLowerCase();
 
         return title.includes(query)
       })

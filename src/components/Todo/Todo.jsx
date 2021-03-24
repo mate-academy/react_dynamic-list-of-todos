@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const Todo = ({ onUserSelect,
+export const Todo = ({
+  onUserSelect,
   selectedUserId,
   completed,
   userId,

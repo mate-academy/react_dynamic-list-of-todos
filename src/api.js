@@ -11,8 +11,7 @@ export function loadTodos() {
       }
 
       return todo;
-    }))
-    .then(response => response);
+    }));
 }
 
 export function loadUser(userId) {
