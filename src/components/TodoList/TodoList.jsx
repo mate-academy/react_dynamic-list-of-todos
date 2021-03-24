@@ -1,44 +1,141 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { loadTodos } from '../../api';
+import { Todo } from '../Todo/Todo';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    todos: [],
+    loadedTodos: [],
+    query: '',
+    option: '',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
+  async componentDidMount() {
+    const todos = await loadTodos();
+
+    this.setState({
+      todos,
+      loadedTodos: todos,
+    });
+  }
+
+  componentDidUpdate(_, prevState){
+    const { option, query} = this.state;
+
+    if (prevState.option !== option || prevState.query !== query) {
+      this.filterList(query, option)
+    }
+  }
+
+  queryHandler = (event) => {
+    const curentValue = event.target.value;
+
+    this.setState({ query: curentValue });
+  }
+
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({ [name]: value });
+  }
+
+  filterByOption = (filteredTodos, option) => {
+    const completedTodos = filteredTodos.filter(todo => todo.completed);
+    const uncompletedTodos = filteredTodos.filter(todo => !todo.completed);
+
+    switch (option) {
+      case 'completed':
+        return this.setState({
+          todos: completedTodos,
+        });
+
+      case 'uncompleted':
+        return this.setState({
+          todos: uncompletedTodos,
+        });
+
+      case 'all':
+      default: return true;
+    }
+  }
+
+  filterList = (inputText, option) => {
+    const { loadedTodos } = this.state;
+
+    const filteredTodos = loadedTodos.filter((todo) => {
+        const title = todo.title.toLowerCase();
+        const query = inputText.toLowerCase();
+
+        return title.includes(query)
+      })
+
+    this.setState({
+        todos:  filteredTodos
+      }, () => this.filterByOption(filteredTodos, option))
+  }
+
+  render() {
+    const { onUserSelect, selectedUserId } = this.props;
+    const { todos, query } = this.state;
+
+    console.log(todos);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
           <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
+            Search: {' '}
+            <input
+              type="text"
+              placeholder="find ToDo"
+              name="query"
+              value={query}
+              onChange={this.queryHandler}
+            />
           </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+          <select
+            value={this.state.option}
+            name="option"
+            onChange={this.handleChange}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="initial" disabled>
+              choose parameter
+            </option>
+            <option
+              value="completed"
+            >
+              completed
+            </option>
+            <option value="uncompleted">
+              uncompleted
+            </option>
+            <option value="all">
+              all
+            </option>
+          </select>
+          <ul className="TodoList__list">
+            {todos.map(todo => (
+              <Todo
+                key={todo.id}
+                onUserSelect={onUserSelect}
+                selectedUserId={selectedUserId}
+                completed={todo.completed}
+                userId={todo.userId}
+                title={todo.title}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+TodoList.propTypes = {
+  onUserSelect: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+};

@@ -6,23 +6,34 @@ import { CurrentUser } from './components/CurrentUser';
 
 class App extends React.Component {
   state = {
-    todos: [],
     selectedUserId: 0,
   };
 
+  selectUserHandler = (userId) => {
+    if (userId !== this.state.selectedUserId) {
+      this.setState({ selectedUserId: userId });
+    }
+  }
+
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          <TodoList
+            selectedUserId={selectedUserId}
+            onUserSelect={this.selectUserHandler}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                onReset={this.selectUserHandler}
+              />
             ) : 'No user selected'}
           </div>
         </div>
