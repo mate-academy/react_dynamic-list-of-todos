@@ -21,6 +21,14 @@ export class TodoList extends React.Component {
     }
   }
 
+  changeInpuValue = (event) => {
+    this.setState({ inputValue: event.target.value });
+  };
+
+  changeSelectValue = (event) => {
+    this.setState({ selectValue: event.target.value });
+  };
+
   render() {
     const { todos, handleSelectedUser } = this.props;
 
@@ -32,15 +40,10 @@ export class TodoList extends React.Component {
           type="text"
           placeholder="title..."
           value={this.state.inputValue}
-          onChange={(event) => {
-            this.setState({ inputValue: event.target.value });
-          }}
+          onChange={this.changeInpuValue}
         />
         <select
-          onChange={(event) => {
-            this.setState({ selectValue: event.target.value });
-          }
-          }
+          onChange={this.changeSelectValue}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

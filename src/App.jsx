@@ -42,9 +42,6 @@ class App extends React.Component {
     let filteredTodos = allTodos;
 
     switch (value) {
-      case 'all':
-        filteredTodos = allTodos;
-        break;
       case 'active':
         filteredTodos = allTodos.filter(todo => todo.completed === false);
         break;
@@ -52,6 +49,7 @@ class App extends React.Component {
         filteredTodos = allTodos.filter(todo => todo.completed);
         break;
       default:
+      case 'all':
         return;
     }
 

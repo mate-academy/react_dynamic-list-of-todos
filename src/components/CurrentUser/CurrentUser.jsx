@@ -18,11 +18,9 @@ componentDidMount() {
 componentDidUpdate(_, prevState) {
   const { userId } = this.props;
 
-  if (prevState.id === userId) {
-    return;
+  if (prevState.id !== userId) {
+    this.getData();
   }
-
-  this.getData();
 }
 
 getData() {
@@ -60,15 +58,10 @@ render() {
       <p className="CurrentUser__phone">{phone}</p>
       <button
         type="button"
-        className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
-        onClick={() => {
-          handleClearUserField();
-        }
-      }
+        className="TodoList__user-button
+                   TodoList__user-button--selected
+                   button"
+        onClick={handleClearUserField}
       >
         Clear
       </button>
