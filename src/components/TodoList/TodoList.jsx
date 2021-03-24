@@ -22,12 +22,14 @@ export class TodoList extends React.Component {
   }
 
   componentDidUpdate(_, prevState){
-    if (prevState.option !== this.state.option) {
-      this.filterList(this.state.query, this.state.option)
+    const { option, query} = this.state;
+
+    if (prevState.option !== option) {
+      this.filterList(query, option)
     }
 
-    if (prevState.query !== this.state.query) {
-      this.filterList(this.state.query, this.state.option)
+    if (prevState.query !== query) {
+      this.filterList(query, option)
     }
   }
 
