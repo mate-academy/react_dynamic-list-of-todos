@@ -6,16 +6,20 @@ import './TodoList.scss';
 export class TodoList extends React.Component {
   state = {
     input: '',
-    select: 'All',
+    filterOption: 'All',
   }
 
-  changeHandler = (event) => {
+  inputChangeHandler = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  selectChangeHadler = (event) => {
+    this.setState({ filterOption: event.target.value });
+  }
+
   filterTodos = (todos) => {
-    const { input, select } = this.state;
-    const todoContainsInput = todos.filter((todo) => {
+    const { input, filterOption } = this.state;
+    const filteredTodosByTitle = todos.filter((todo) => {
       if (todo.title) {
         return todo.title.includes(input);
       }
@@ -23,19 +27,19 @@ export class TodoList extends React.Component {
       return false;
     });
 
-    switch (select) {
+    switch (filterOption) {
       case 'Active':
-        return todoContainsInput.filter(todo => !todo.completed);
+        return filteredTodosByTitle.filter(todo => !todo.completed);
       case 'Completed':
-        return todoContainsInput.filter(todo => todo.completed);
+        return filteredTodosByTitle.filter(todo => todo.completed);
       default:
-        return todoContainsInput;
+        return filteredTodosByTitle;
     }
   }
 
   render() {
     const { todos, selectedUserChanger, currentUserId } = this.props;
-    const { input, select } = this.state;
+    const { input, filterOption } = this.state;
 
     return (
       <div className="TodoList">
@@ -45,13 +49,13 @@ export class TodoList extends React.Component {
           name="input"
           value={input}
           placeholder="Search by title"
-          onChange={this.changeHandler}
+          onChange={this.inputChangeHandler}
         />
 
         <select
           name="select"
-          value={select}
-          onChange={this.changeHandler}
+          value={filterOption}
+          onChange={this.selectChangeHadler}
         >
           <option value="All">All</option>
           <option value="Active">Active</option>
