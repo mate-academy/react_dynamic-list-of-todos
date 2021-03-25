@@ -10,11 +10,13 @@ const request = async(url) => {
   return response.json();
 };
 
-export const getTodos = async() => {
-  const response = await request('todos');
-
-  return response.data;
-};
+export async function getTodos() {
+  return (
+    request('todos')
+      .then(result => result.data)
+      .then(data => data.filter(todo => todo.title))
+  );
+}
 
 export const getUser = async(userId) => {
   const response = await request(`users/${userId}`);

@@ -16,13 +16,11 @@ export class TodoList extends React.Component {
 
   handleSearchUser = async(event) => {
     const { value } = event.target;
-    let todos = await getTodos();
+    const todos = await getTodos();
 
-    todos = todos.filter(todo => ((todo.title !== null)
-      ? todo.title.includes(value)
-      : null));
+    const sortTotos = todos.filter(todo => todo.title.includes(value));
 
-    this.setState({ todos });
+    this.setState({ todos: sortTotos });
   }
 
   handleSelect = (event) => {
