@@ -14,7 +14,7 @@ export class TodoList extends React.Component {
     this.setState({ todos: await getTodos() });
   }
 
-  handleSearchUSer = async(event) => {
+  handleSearchUser = async(event) => {
     const { value } = event.target;
     let todos = await getTodos();
 
@@ -36,19 +36,20 @@ export class TodoList extends React.Component {
   selectCategory = async(select) => {
     const todos = await getTodos();
 
-    if (select === 'completed') {
-      return this.setState({ todos: todos.filter(
-        todo => !todo.completed,
-      ) });
+    switch (select) {
+      case 'completed':
+        this.setState({ todos: todos.filter(
+          todo => !todo.completed,
+        ) });
+        break;
+      case 'active':
+        this.setState({ todos: todos.filter(
+          todo => todo.completed,
+        ) });
+        break;
+      default:
+        this.setState({ todos });
     }
-
-    if (select === 'active') {
-      return this.setState({ todos: todos.filter(
-        todo => todo.completed,
-      ) });
-    }
-
-    return this.setState({ todos });
   }
 
   render() {
@@ -62,11 +63,11 @@ export class TodoList extends React.Component {
             className="input is-rounded"
             type="text"
             placeholder="type title here"
-            onChange={this.handleSearchUSer}
+            onChange={this.handleSearchUser}
           />
           <div className="select is-rounded">
             <select
-              name="selectValue"
+              name="select"
               value={select}
               onChange={this.handleSelect}
             >
