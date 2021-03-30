@@ -1,44 +1,79 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export const TodoList = (props) => {
+  const {
+    todos,
+    selectUser,
+    setQueryText,
+    setQueryCategory,
+    textFilter,
+    categoryFilter,
+  } = props;
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  let filteredTodos = textFilter(todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  filteredTodos = categoryFilter(filteredTodos);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <label>
+        Find
+        <input
+          type="text"
+          onChange={setQueryText}
+        />
+      </label>
+      <select onChange={setQueryCategory}>
+        <option value="all">All</option>
+        <option value="true">Completed</option>
+        <option value="false">Active</option>
+      </select>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {
+            filteredTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={!todo.completed
+                  ? 'TodoList__item TodoList__item--unchecked'
+                  : 'TodoList__item TodoList__item--checked'}
+              >
+                <label>
+                  <input type="checkbox" readOnly />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button"
+                  type="button"
+                  onClick={selectUser(todo.userId)}
+                >
+                  User&nbsp; #
+                  {
+                    todo.userId
+                  }
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape(),
+  ).isRequired,
+  selectUser: PropTypes.func.isRequired,
+  setQueryText: PropTypes.func.isRequired,
+  setQueryCategory: PropTypes.func.isRequired,
+  textFilter: PropTypes.func.isRequired,
+  categoryFilter: PropTypes.func.isRequired,
+};
