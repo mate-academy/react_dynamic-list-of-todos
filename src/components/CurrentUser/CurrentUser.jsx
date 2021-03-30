@@ -5,22 +5,25 @@ import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: '',
+    user: null,
+    users: null,
   }
 
   componentDidMount() {
     usersFromServer()
-      .then(result => this.setState({
-        user: result.filter(person => person.id === this.props.userId),
-      }));
+      .then((result) => {
+        this.setState({
+          users: result,
+          user: result.filter(person => person.id === this.props.userId),
+        });
+      });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      usersFromServer()
-        .then(result => this.setState({
-          user: result.filter(person => person.id === this.props.userId),
-        }));
+      this.setState(prevState => ({
+        user: prevState.users.filter(person => person.id === this.props.userId),
+      }));
     }
   }
 

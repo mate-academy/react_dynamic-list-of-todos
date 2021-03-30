@@ -7,40 +7,42 @@ import { todosFromServer } from '../../api';
 export class TodoList extends React.Component {
   state = {
     todos: [],
+    visibleTodos: [],
     title: '',
     select: 'all',
   }
 
   componentDidMount() {
     todosFromServer()
-      .then(todo => this.setState({
-        todos: todo,
+      .then(todos => this.setState({
+        todos,
+        visibleTodos: todos,
       }));
   }
 
   updateTodosInState = () => {
-    todosFromServer()
-      .then(preparedTodo => this.setState(prevState => (
-        { todos: preparedTodo.filter(
-          todo => todo.title && todo.title.includes(prevState.title),
-        ) })));
+    this.setState(prevState => (
+      { todos: prevState.visibleTodos.filter(
+        todo => todo.title && todo.title.includes(prevState.title),
+      ) }));
   }
 
   filterTodos = (event) => {
     const { value, name } = event.target;
 
     this.setState({ [name]: value });
-    todosFromServer()
-      .then(preparedTodo => this.setState((prevState) => {
-        switch (value) {
-          case 'active':
-            return { todos: preparedTodo.filter(todo => !todo.completed) };
-          case 'completed':
-            return { todos: preparedTodo.filter(todo => todo.completed) };
-          default:
-            return { todos: preparedTodo };
-        }
-      }));
+    this.setState((prevState) => {
+      switch (value) {
+        case 'active':
+          return { todos: prevState.visibleTodos
+            .filter(todo => !todo.completed) };
+        case 'completed':
+          return { todos: prevState.visibleTodos
+            .filter(todo => todo.completed) };
+        default:
+          return { todos: prevState.visibleTodos };
+      }
+    });
   };
 
   findMatchedTodos = (event) => {
