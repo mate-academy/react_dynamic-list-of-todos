@@ -14,7 +14,7 @@ class App extends React.Component {
   async componentDidMount() {
     const todos = await getAll();
 
-    this.setState({ todos: todos.data });
+    this.setState({ todos: todos.data.filter(todo => todo.title) });
   }
 
   clearUser = () => {

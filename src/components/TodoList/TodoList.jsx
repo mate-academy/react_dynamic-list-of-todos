@@ -10,17 +10,17 @@ export class TodoList extends React.Component {
 
   filterTitle = (event) => {
     const { value } = event.target;
-    console.log(this.state.todos)
-    console.log(value)
-    // this.setState({
-    //   todos: this.props.todos
-    //     .filter(todo => todo.title.includes(value)),
-    // });
+    const filterTodo = this.props.todos.map(todo => todo.title.includes(value));
+    console.log(filterTodo);
+    this.setState({
+      todos: filterTodo,
+    });
   }
 
   render() {
     const { selectUser } = this.props;
     const { todos } = this.state;
+    console.log(todos)
 
     return (
       <div className="TodoList">
