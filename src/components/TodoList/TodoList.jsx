@@ -1,44 +1,112 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    input: '',
+    select: 'All',
+  };
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  inputChangeHandel = (event) => {
+    const { name, value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({ [name]: value });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  filterTodos = () => {
+    const { input, select } = this.state;
+    const filteredTodosSearch = this.props.todos
+      .filter(todo => (todo.title ? todo.title.includes(input) : false));
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    switch (select) {
+      case 'Active':
+        return filteredTodosSearch.filter(todo => !todo.completed);
+
+      case 'Completed':
+        return filteredTodosSearch.filter(todo => todo.completed);
+
+      default:
+      case 'All':
+        return filteredTodosSearch;
+    }
+  }
+
+  render() {
+    const { input, select } = this.state;
+    const { todos, selectedUser, selectedUserId } = this.props;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <input
+          name="input"
+          type="text"
+          value={input}
+          onChange={event => this.inputChangeHandel(event)}
+        />
+
+        <select
+          name="select"
+          value={select}
+          onChange={event => this.inputChangeHandel(event)}
+        >
+          <option value="All">All</option>
+          <option value="Active">Active</option>
+          <option value="Completed">Completed</option>
+        </select>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {this.filterTodos(todos).map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed },
+                )}
+              >
+                <label>
+                  <input type="checkbox" readOnly />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className={classNames(
+                    'button',
+                    'TodoList__user-button',
+                    { 'TodoList__user-button--selected':
+                        todo.userId === selectedUserId },
+                  )}
+                  type="button"
+                  onClick={() => {
+                    if (todo.userId === selectedUserId) {
+                      selectedUser(0);
+                    } else {
+                      selectedUser(todo.userId);
+                    }
+                  }}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    id: PropTypes.number,
+    userId: PropTypes.number,
+    completed: PropTypes.bool,
+  })).isRequired,
+  selectedUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+};
