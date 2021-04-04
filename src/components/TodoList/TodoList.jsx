@@ -11,7 +11,8 @@ export class TodoList extends React.Component {
 
   filterTitle = (event) => {
     const { value } = event.target;
-    const filterTodo = this.state.todos
+    const { todos } = this.props;
+    const filterTodo = todos
       .filter(todo => (todo.title ? todo.title.includes(value) : false));
 
     this.setState({
