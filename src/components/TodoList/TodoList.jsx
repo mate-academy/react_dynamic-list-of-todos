@@ -1,44 +1,119 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    serchOption: '',
+    searchTitle: '',
+    todos: this.props.todosFromServer,
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  filteredTodoByTitle = (event) => {
+    const { value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+    this.setState({
+      searchTitle: value,
+      todos: this.props.todosFromServer
+        .filter(todo => todo.title.toLowerCase()
+          .includes(value.toLowerCase())),
+    });
+  }
+
+  handleChange = (event) => {
+    const { value } = event.target;
+
+    this.setState({ serchOption: value });
+  }
+
+  filterTodosByOptions = (todos) => {
+    const { serchOption } = this.state;
+
+    switch (serchOption) {
+      case 'Active':
+        return todos.filter(item => !item.completed);
+
+      case 'Completed':
+        return todos.filter(item => item.completed);
+      default:
+        return todos;
+    }
+  }
+
+  render() {
+    const { chooseUser } = this.props;
+    const { todos, searchTitle } = this.state;
+    const prepearedTodos = this.filterTodosByOptions(todos);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <label
+          htmlFor="title"
+          className="label"
+        >
+          Search title
+        </label>
+        <input
+          type="text"
+          placeholder="Enter the title"
+          id="title"
+          className="input is-normal"
+          value={searchTitle}
+          onChange={this.filteredTodoByTitle}
+        />
+        <select
+          className="select is-info"
+          onChange={this.handleChange}
+        >
+          <option
+            value="All"
           >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
+            All
+          </option>
+          <option
+            value="Active"
           >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+            Active
+          </option>
+          <option
+            value="Completed"
+          >
+            Complete
+          </option>
+        </select>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {prepearedTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
+              >
+                <label>
+                  <p>{todo.completed ? '✔' : '❌'}</p>
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => chooseUser(todo.userId)}
+                >
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todosFromServer: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  chooseUser: PropTypes.func.isRequired,
+};
