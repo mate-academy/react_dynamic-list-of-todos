@@ -31,11 +31,12 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={todos}
-            selectUser={this.selectUser}
-            selectedUserId={selectedUserId}
-          />
+          {!!todos.length && (
+            <TodoList
+              todos={ todos }
+              selectUser={ this.selectUser }
+              selectedUserId={ selectedUserId }
+          />) }
           {todos.length === 0 && (
             <Loader />
           )}

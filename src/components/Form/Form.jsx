@@ -1,7 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export function Form({ input, select, handleChange }) {
+export const Form = ({ todos, addFilterTodos }) => {
+  const [input, setInput] = useState('');
+  const [select, setSelect] = useState('All');
+
+  const filteredTodos = () => {
+    const filteredTodosSearch = todos
+      .filter(todo => (todo.title ? todo.title.includes(input) : false));
+
+    switch (select) {
+      case 'Active':
+        return addFilterTodos(filteredTodosSearch
+          .filter(todo => !todo.completed));
+
+      case 'Completed':
+        return addFilterTodos(filteredTodosSearch
+          .filter(todo => todo.completed));
+
+      default:
+      case 'All':
+        return addFilterTodos(filteredTodosSearch);
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === 'input') {
+      setInput(value);
+    }
+
+    if (name === 'select') {
+      setSelect(value);
+    }
+  };
+
+  useEffect(() => {
+    filteredTodos();
+  }, [input, select]);
+
   return (
     <>
       <input
@@ -22,10 +60,12 @@ export function Form({ input, select, handleChange }) {
       </select>
     </>
   );
-}
+};
 
 Form.propTypes = {
-  input: PropTypes.string.isRequired,
-  select: PropTypes.string.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+  })).isRequired,
+  addFilterTodos: PropTypes.func.isRequired,
 };

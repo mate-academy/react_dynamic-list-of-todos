@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { Form } from '../Form/Form';
 
 export class TodoList extends React.Component {
   state = {
-    input: '',
-    select: 'All',
+    filteredTodos: this.props.todos,
   };
 
   handleClick = (todoUserId, selectedUserId, selectUser) => {
@@ -17,58 +17,26 @@ export class TodoList extends React.Component {
     }
   }
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
-
-    this.setState({ [name]: value });
-  }
-
-  filterTodos = () => {
-    const { input, select } = this.state;
-    const filteredTodosSearch = this.props.todos
-      .filter(todo => (todo.title ? todo.title.includes(input) : false));
-
-    switch (select) {
-      case 'Active':
-        return filteredTodosSearch.filter(todo => !todo.completed);
-
-      case 'Completed':
-        return filteredTodosSearch.filter(todo => todo.completed);
-
-      default:
-      case 'All':
-        return filteredTodosSearch;
-    }
+  addFilterTodos = (filteredTodos) => {
+    this.setState({ filteredTodos });
   }
 
   render() {
-    const { input, select } = this.state;
+    const { filteredTodos } = this.state;
     const { todos, selectUser, selectedUserId } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <input
-          name="input"
-          type="text"
-          value={input}
-          onChange={event => this.handleChange(event)}
+        <Form
+          todos={todos}
+          addFilterTodos={this.addFilterTodos}
         />
-
-        <select
-          name="select"
-          value={select}
-          onChange={event => this.handleChange(event)}
-        >
-          <option value="All">All</option>
-          <option value="Active">Active</option>
-          <option value="Completed">Completed</option>
-        </select>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {this.filterTodos(todos).map(todo => (
+            {filteredTodos.map(todo => (
               <li
                 key={todo.id}
                 className={classNames(
