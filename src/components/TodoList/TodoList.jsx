@@ -9,7 +9,15 @@ export class TodoList extends React.Component {
     select: 'All',
   };
 
-  inputChangeHandel = (event) => {
+  handleClick = (todoUserId, selectedUserId, selectUser) => {
+    if (todoUserId === selectedUserId) {
+      selectUser(0);
+    } else {
+      selectUser(todoUserId);
+    }
+  }
+
+  handleChange = (event) => {
     const { name, value } = event.target;
 
     this.setState({ [name]: value });
@@ -35,7 +43,7 @@ export class TodoList extends React.Component {
 
   render() {
     const { input, select } = this.state;
-    const { todos, selectedUser, selectedUserId } = this.props;
+    const { todos, selectUser, selectedUserId } = this.props;
 
     return (
       <div className="TodoList">
@@ -45,13 +53,13 @@ export class TodoList extends React.Component {
           name="input"
           type="text"
           value={input}
-          onChange={event => this.inputChangeHandel(event)}
+          onChange={event => this.handleChange(event)}
         />
 
         <select
           name="select"
           value={select}
-          onChange={event => this.inputChangeHandel(event)}
+          onChange={event => this.handleChange(event)}
         >
           <option value="All">All</option>
           <option value="Active">Active</option>
@@ -82,11 +90,7 @@ export class TodoList extends React.Component {
                   )}
                   type="button"
                   onClick={() => {
-                    if (todo.userId === selectedUserId) {
-                      selectedUser(0);
-                    } else {
-                      selectedUser(todo.userId);
-                    }
+                    this.handleClick(todo.userId, selectedUserId, selectUser);
                   }}
                 >
                   {`User #${todo.userId}`}
@@ -107,6 +111,6 @@ TodoList.propTypes = {
     userId: PropTypes.number,
     completed: PropTypes.bool,
   })).isRequired,
-  selectedUser: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
 };

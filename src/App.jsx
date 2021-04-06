@@ -14,10 +14,10 @@ class App extends React.Component {
 
   componentDidMount() {
     loadTodos()
-      .then(response => this.setState({ todos: response }));
+      .then(todos => this.setState({ todos }));
   }
 
-  selectedUser = (userId) => {
+  selectUser = (userId) => {
     this.setState({ selectedUserId: userId });
   }
 
@@ -33,7 +33,7 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            selectedUser={this.selectedUser}
+            selectUser={this.selectUser}
             selectedUserId={selectedUserId}
           />
           {todos.length === 0 && (

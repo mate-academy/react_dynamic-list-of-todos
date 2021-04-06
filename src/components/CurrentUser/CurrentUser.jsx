@@ -6,7 +6,7 @@ import { Loader } from '../Loader/Loader';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: null,
+    selectedUser: null,
   }
 
   componentDidMount() {
@@ -24,15 +24,15 @@ export class CurrentUser extends React.Component {
   async getUser() {
     const { selectedUserId } = this.props;
 
-    const userA = await loadUsers(selectedUserId);
+    const selectedUser = await loadUsers(selectedUserId);
 
-    this.setState({ user: userA });
+    this.setState({ selectedUser });
   }
 
   render() {
-    const { user } = this.state;
+    const { selectedUser } = this.state;
 
-    if (user === null) {
+    if (selectedUser === null) {
       return (
         <Loader />
       );
@@ -43,13 +43,13 @@ export class CurrentUser extends React.Component {
         <div>
           <h2 className="CurrentUser__title">
             <span>
-              {user.id}
+              {selectedUser.id}
             </span>
           </h2>
 
-          <h3 className="CurrentUser__name">{user.name}</h3>
-          <p className="CurrentUser__email">{user.email}</p>
-          <p className="CurrentUser__phone">{user.phone}</p>
+          <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+          <p className="CurrentUser__email">{selectedUser.email}</p>
+          <p className="CurrentUser__phone">{selectedUser.phone}</p>
 
           <button
             className="button"
