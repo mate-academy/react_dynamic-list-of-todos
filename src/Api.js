@@ -1,12 +1,12 @@
 const BASE_URL = 'https://mate-api.herokuapp.com/';
 
 const request = url => fetch(`${BASE_URL}${url}`)
-  .then((result) => {
-    if (!result.ok) {
+  .then((response) => {
+    if (!response.ok) {
       throw (new Error('failed Data'));
     }
 
-    return result.json();
+    return response.json();
   })
   .then(result => result.data)
   .then((result) => {
