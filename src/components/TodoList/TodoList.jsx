@@ -9,18 +9,10 @@ export class TodoList extends React.Component {
   }
 
   handleInputChange = (event) => {
-    const { value } = event.target;
+    const { name, value } = event.target;
 
     this.setState({
-      query: value,
-    });
-  }
-
-  handleSelectChange = (event) => {
-    const { value } = event.target;
-
-    this.setState({
-      select: value,
+      [name]: value,
     });
   }
 
@@ -65,8 +57,11 @@ export class TodoList extends React.Component {
           onChange={this.handleInputChange}
         />
 
+        {' '}
+
         <select
-          onChange={this.handleSelectChange}
+          onChange={this.handleInputChange}
+          name="select"
           value={select}
         >
           <option value="All">
