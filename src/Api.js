@@ -8,15 +8,8 @@ const request = url => fetch(`${BASE_URL}${url}`)
 
     return response.json();
   })
-  .then(result => result.data)
-  .then((result) => {
-    if (url === 'todos') {
-      return result.filter(item => item.title);
-    }
+  .then(result => result.data);
 
-    return result;
-  });
+export const getTodos = () => request('todos');
 
-export const getTodos = request('todos');
-
-export const getUsers = request('users');
+export const getUsers = () => request('users');

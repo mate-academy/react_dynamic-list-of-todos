@@ -5,12 +5,12 @@ import classNames from 'classnames';
 
 export class TodoList extends React.Component {
   state = {
-    serchOption: '',
+    searchOption: '',
     searchTitle: '',
     todos: this.props.todosFromServer,
   }
 
-  filteredTodoByTitle = (event) => {
+  filterTodoByTitle = (event) => {
     const { value } = event.target;
 
     this.setState({
@@ -24,13 +24,13 @@ export class TodoList extends React.Component {
   handleChange = (event) => {
     const { value } = event.target;
 
-    this.setState({ serchOption: value });
+    this.setState({ searchOption: value });
   }
 
   filterTodosByOptions = (todos) => {
-    const { serchOption } = this.state;
+    const { searchOption } = this.state;
 
-    switch (serchOption) {
+    switch (searchOption) {
       case 'Active':
         return todos.filter(item => !item.completed);
 
@@ -61,7 +61,7 @@ export class TodoList extends React.Component {
           id="title"
           className="input is-normal"
           value={searchTitle}
-          onChange={this.filteredTodoByTitle}
+          onChange={this.filterTodoByTitle}
         />
         <select
           className="select is-info"
@@ -114,6 +114,10 @@ export class TodoList extends React.Component {
 }
 
 TodoList.propTypes = {
-  todosFromServer: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  todosFromServer: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
   chooseUser: PropTypes.func.isRequired,
 };

@@ -14,12 +14,13 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const allUsers = await getUsers;
-    const allTodos = await getTodos;
+    const users = await getUsers();
+    const todos = await getTodos()
+      .then(result => result.filter(todo => todo.title));
 
     this.setState({
-      users: allUsers,
-      todos: allTodos,
+      users,
+      todos,
     });
   }
 
