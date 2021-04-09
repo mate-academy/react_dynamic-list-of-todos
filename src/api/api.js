@@ -13,7 +13,10 @@ function request(url, options) {
 }
 
 export function getTodos() {
-  return request(`${BASE_URL}/todos`);
+  return request(`${BASE_URL}/todos`)
+    .then(todos => todos.filter(todo => (
+      todo.id && todo.title && todo.userId
+    )));
 }
 
 export function getUser() {

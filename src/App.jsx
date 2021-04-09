@@ -17,9 +17,7 @@ class App extends React.Component {
     const usersFromServer = await getUser();
 
     this.setState({
-      todos: todosFromServer.filter(todo => (
-        todo.id && todo.title && todo.userId
-      )),
+      todos: todosFromServer,
       users: usersFromServer,
     });
   }
