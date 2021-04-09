@@ -15,8 +15,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     const users = await getUsers();
-    const todos = await getTodos()
-      .then(result => result.filter(todo => todo.title));
+    const todos = await getTodos();
 
     this.setState({
       users,
