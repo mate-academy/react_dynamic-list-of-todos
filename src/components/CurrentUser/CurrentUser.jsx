@@ -34,24 +34,31 @@ export class CurrentUser extends React.Component {
     const { clearUser } = this.props;
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${currentUser.id}`}</span>
-        </h2>
+      <>
+        { currentUser === null ? (
+          <h1>Error dataBase</h1>
+        )
+          : (
+            <div className="CurrentUser">
+              <h2 className="CurrentUser__title">
+                <span>{`Selected user: ${currentUser.id}`}</span>
+              </h2>
 
-        <h3 className="CurrentUser__name">{currentUser.name}</h3>
-        <p className="CurrentUser__email">{currentUser.email}</p>
-        <p className="CurrentUser__phone">{currentUser.phone}</p>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => {
-            clearUser();
-          }}
-        >
-          Clear
-        </Button>
-      </div>
+              <h3 className="CurrentUser__name">{currentUser.name}</h3>
+              <p className="CurrentUser__email">{currentUser.email}</p>
+              <p className="CurrentUser__phone">{currentUser.phone}</p>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  clearUser();
+                }}
+              >
+                Clear
+              </Button>
+            </div>
+          )}
+      </>
     );
   }
 }

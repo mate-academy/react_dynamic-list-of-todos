@@ -40,12 +40,12 @@ export class TodoList extends React.Component {
     switch (defaultSelect) {
       case 'Show Completed':
         searchByComplited = searchByTodos
-          .filter(todo => todo.completed === false);
+          .filter(todo => todo.completed === true);
         break;
 
       case 'Show Active':
         searchByComplited = searchByTodos
-          .filter(todo => todo.completed === true);
+          .filter(todo => todo.completed === false);
         break;
 
       default:
