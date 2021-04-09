@@ -1,44 +1,84 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
+import { Form } from '../Form';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    filteredTodos: this.props.todos,
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  saveTodos = (todos) => {
+    this.setState({
+      filteredTodos: todos,
+    });
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  render() {
+    const { selectUser, todos } = this.props;
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+        <Form
+          todos={todos}
+          saveTodos={this.saveTodos}
+          userId={this.props.userId}
+        />
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {this.state.filteredTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={`TodoList__item ${todo.completed === true
+                  ? 'TodoList__item--checked'
+                  : 'TodoList__item--unchecked'}`}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={`${todo.completed === true
+                      ? 'checked'
+                      : ''}`}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => {
+                    selectUser(todo.userId);
+                  }}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  userId: PropTypes.number.isRequired,
+  selectUser: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
+    }).isRequired,
+  ),
+};
+
+TodoList.defaultProps = {
+  todos: [],
+};
