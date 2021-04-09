@@ -20,6 +20,23 @@ export class TodoList extends React.Component {
     });
   }
 
+  filterByTitle = (todo) => {
+    const { inputTitle } = this.state;
+
+    return todo.title.toLowerCase()
+      .includes(inputTitle.toLowerCase());
+  }
+
+  filterByStatus = (todo) => {
+    const { defaultSelect } = this.state;
+
+    switch (defaultSelect) {
+      case 'Show Completed': return todo.completed;
+      case 'Show Active': return !todo.completed;
+      default: return true;
+    }
+  }
+
   render() {
     const {
       todos,
@@ -32,29 +49,13 @@ export class TodoList extends React.Component {
       defaultSelect,
     } = this.state;
 
-    const searchByTodos = todos
-      .filter(todo => todo.title.toLowerCase()
-        .includes(inputTitle.toLowerCase()));
-    let searchByComplited = null;
-
-    switch (defaultSelect) {
-      case 'Show Completed':
-        searchByComplited = searchByTodos
-          .filter(todo => todo.completed === true);
-        break;
-
-      case 'Show Active':
-        searchByComplited = searchByTodos
-          .filter(todo => todo.completed === false);
-        break;
-
-      default:
-        searchByComplited = [...searchByTodos];
-    }
+    const filterTodos = todos
+      .filter(this.filterByTitle)
+      .filter(this.filterByStatus);
 
     return (
       <div className="TodoList">
-        <h2>{`Todos: ${searchByComplited.length}`}</h2>
+        <h2>{`Todos: ${filterTodos.length}`}</h2>
         <form
           className="TodoList__form"
           noValidate
@@ -97,7 +98,7 @@ export class TodoList extends React.Component {
           </Select>
         </form>
         <ul className="TodoList__list">
-          {searchByComplited.map(todo => (
+          {filterTodos.map(todo => (
             <li
               className={className(`TodoList__item`, {
                 'TodoList__item--checked': todo.completed === true,
