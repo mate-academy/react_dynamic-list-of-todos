@@ -36,7 +36,7 @@ export class CurrentUser extends React.Component {
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${currentUser.name}`}</span>
+          <span>{`Selected user: ${currentUser.id}`}</span>
         </h2>
 
         <h3 className="CurrentUser__name">{currentUser.name}</h3>

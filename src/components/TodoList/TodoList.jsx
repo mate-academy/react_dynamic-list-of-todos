@@ -26,6 +26,7 @@ export class TodoList extends React.Component {
       checkedHandler,
       selectUserHandler,
     } = this.props;
+
     const {
       inputTitle,
       defaultSelect,
@@ -55,6 +56,7 @@ export class TodoList extends React.Component {
       <div className="TodoList">
         <h2>{`Todos: ${searchByComplited.length}`}</h2>
         <form
+          className="TodoList__form"
           noValidate
           autoComplete="off"
         >
