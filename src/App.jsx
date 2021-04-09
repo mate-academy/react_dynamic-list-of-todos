@@ -14,11 +14,7 @@ class App extends React.Component {
   async componentDidMount() {
     const todos = await getTodos();
 
-    this.setState({
-      todos: todos.data.filter(todo => todo.title && (
-        todo.userId && todo.userId <= 10 && todo.userId !== 0
-      )),
-    });
+    this.setState({ todos });
   }
 
   resetUser = () => {
@@ -37,9 +33,8 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             userId={selectedUserId}
-            // eslint-disable-next-line
-            selectUser={(selectedUserId) => {
-              this.setState({ selectedUserId });
+            selectUser={(userId) => {
+              this.setState({ selectedUserId: userId });
             }}
           />
           )}

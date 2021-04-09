@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
+import { Form } from '../Form/Form';
 
 export class TodoList extends React.Component {
   state = {
@@ -48,16 +49,10 @@ export class TodoList extends React.Component {
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <input
-          className="form__input form"
-          type="text"
-          name="query"
-          placeholder="find title..."
-          value={query}
+        <Form
+          query={query}
           onChange={this.handleInputChange}
         />
-
-        {' '}
 
         <select
           onChange={this.handleInputChange}
@@ -120,14 +115,16 @@ export class TodoList extends React.Component {
 TodoList.propTypes = {
   userId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
-  todos: PropTypes.shape({
-    data: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        userId: PropTypes.number.isRequired,
-        title: PropTypes.string.isRequired,
-        completed: PropTypes.bool.isRequired,
-      }).isRequired,
-    ).isRequired,
-  }).isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
+    }).isRequired,
+  ),
+};
+
+TodoList.defaultProps = {
+  todos: [],
 };
