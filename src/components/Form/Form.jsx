@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export class FormToFilterTodos extends React.Component {
+export class Form extends React.Component {
   state = {
     query: '',
     todoStatus: '',
@@ -16,15 +16,15 @@ export class FormToFilterTodos extends React.Component {
       [name]: value,
     });
 
-    let acts = todos.filter(todo => (todo.title.includes(query.toLowerCase())));
+    let filteredTodos = todos.filter(todo => (todo.title.includes(query.toLowerCase())));
 
     switch (value) {
       case 'completed':
-        acts = acts.filter(activity => activity.completed);
+        filteredTodos = filteredTodos.filter(activity => activity.completed);
 
         break;
       case 'active':
-        acts = acts.filter(activity => !activity.completed);
+        filteredTodos = filteredTodos.filter(activity => !activity.completed);
 
         break;
       default:
@@ -33,7 +33,7 @@ export class FormToFilterTodos extends React.Component {
         break;
     }
 
-    this.props.getFilteredTodos(acts);
+    this.props.setTodos(filteredTodos);
   }
 
   render() {
@@ -74,11 +74,11 @@ export class FormToFilterTodos extends React.Component {
   }
 }
 
-FormToFilterTodos.propTypes = {
+Form.propTypes = {
   todos: PropTypes.shape({
     id: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  getFilteredTodos: PropTypes.func.isRequired,
+  setTodos: PropTypes.func.isRequired,
 };

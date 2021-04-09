@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FormToFilterTodos } from '../FormToFilterTodos/FormToFilterTodos';
+import { Form } from '../Form/Form';
 
 import './TodoList.scss';
 
@@ -10,9 +10,9 @@ export class TodoList extends React.Component {
     filteredTodos: this.props.todos,
   }
 
-  getFilteredTodos = (activities) => {
+  setTodos = (todos) => {
     this.setState({
-      filteredTodos: activities,
+      filteredTodos: todos,
     });
   }
 
@@ -23,9 +23,9 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <FormToFilterTodos
+        <Form
           todos={this.props.todos}
-          getFilteredTodos={this.getFilteredTodos}
+          setTodos={this.setTodos}
         />
 
         <div className="TodoList__list-container">
