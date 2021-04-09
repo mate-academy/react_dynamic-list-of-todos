@@ -3,6 +3,8 @@ import './TodoList.scss';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
+import { FormFilter } from '../FormFilter';
+
 export class TodoList extends React.PureComponent {
   state = {
     selectValue: 'all',
@@ -40,25 +42,15 @@ export class TodoList extends React.PureComponent {
         <div className="TodoList">
           <h2>Todos:</h2>
 
-          <input
-            type="text"
-            placeholder="Search by title"
-            value={this.state.inputValue}
-
-            onChange={(event) => {
-              this.handleChange(event);
+          <FormFilter
+            onHandleChange={this.handleChange}
+            changeSelectValue={(event) => {
+              this.setState({
+                selectValue: event.target.value,
+              });
             }}
+            inputValue={this.state.inputValue}
           />
-          <select onChange={(event) => {
-            this.setState({
-              selectValue: event.target.value,
-            });
-          }}
-          >
-            <option value="all">all</option>
-            <option value="Active">Active</option>
-            <option value="Complited">Complited</option>
-          </select>
 
           <div className="TodoList__list-container">
             <ul className="TodoList__list">

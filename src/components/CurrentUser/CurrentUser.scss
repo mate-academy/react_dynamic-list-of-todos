@@ -30,34 +30,22 @@
   &__button {
     width: 130px;
     height: 40px;
-
     position: relative;
     left: 50%;
     top: 15px;
-
     transform: translateX(-50%);
-
     cursor: pointer;
-
     text-transform: uppercase;
     color: #fff;
-
     outline: none;
-
     border: 1px solid transparent;
-
     background: #4d457b;
-
     transition: background 0.3s ease-in;
 
     &:hover {
-
       background: #fff;
-
       border: 1px solid #4d457b;
-
       border-radius: 3px;
-
       color: #4d457b;
     }
   }

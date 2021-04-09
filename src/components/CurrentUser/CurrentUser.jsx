@@ -22,7 +22,7 @@ export class CurrentUser extends React.PureComponent {
     const user = await getUser(this.props.userId);
 
     this.setState({
-      user: user.data,
+      user,
     });
   }
 
