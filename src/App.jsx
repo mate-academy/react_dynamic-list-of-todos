@@ -17,6 +17,12 @@ class App extends React.Component {
     this.setState({ todos });
   }
 
+  selectUser = (userId) => {
+    this.setState({
+      selectedUserId: userId,
+    });
+  }
+
   resetUser = () => {
     this.setState({
       selectedUserId: 0,
@@ -30,13 +36,13 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           {todos.length > 0 && (
-          <TodoList
-            todos={todos}
-            userId={selectedUserId}
-            selectUser={(userId) => {
-              this.setState({ selectedUserId: userId });
-            }}
-          />
+            <>
+              <TodoList
+                todos={todos}
+                selectUser={this.selectUser}
+                userId={selectedUserId}
+              />
+            </>
           )}
         </div>
 

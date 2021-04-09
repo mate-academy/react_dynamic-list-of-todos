@@ -1,81 +1,35 @@
 import React from 'react';
 import './TodoList.scss';
 import PropTypes from 'prop-types';
-import { Form } from '../Form/Form';
+import { Form } from '../Form';
 
 export class TodoList extends React.Component {
   state = {
-    query: '',
-    select: '',
+    filteredTodos: this.props.todos,
   }
 
-  handleInputChange = (event) => {
-    const { name, value } = event.target;
-
+  saveTodos = (todos) => {
     this.setState({
-      [name]: value,
+      filteredTodos: todos,
     });
   }
 
-  filterTodos(list) {
-    switch (this.state.select) {
-      case 'Active':
-        return list.filter(todo => !todo.completed);
-      case 'Completed':
-        return list.filter(todo => todo.completed);
-      case 'By userId':
-        if (!this.props.userId) {
-          return list;
-        }
-
-        return list.filter(todo => todo.userId === this.props.userId);
-      default:
-        return list;
-    }
-  }
-
   render() {
-    const { todos, selectUser } = this.props;
-    const { query, select } = this.state;
-
-    const selectedTodos = this.filterTodos(todos);
-
-    const filteredTodos = query
-      ? selectedTodos.filter(todo => todo.title.toLowerCase()
-        .includes(query.toLowerCase()))
-      : selectedTodos;
+    const { selectUser, todos } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
 
         <Form
-          query={query}
-          onChange={this.handleInputChange}
+          todos={todos}
+          saveTodos={this.saveTodos}
+          userId={this.props.userId}
         />
-
-        <select
-          onChange={this.handleInputChange}
-          name="select"
-          value={select}
-        >
-          <option value="All">
-            All
-          </option>
-          <option value="Active">
-            Active
-          </option>
-          <option value="Completed">
-            Completed
-          </option>
-          <option value="By userId">
-            This user only(choose a user and try)
-          </option>
-        </select>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {filteredTodos.map(todo => (
+            {this.state.filteredTodos.map(todo => (
               <li
                 key={todo.id}
                 className={`TodoList__item ${todo.completed === true
