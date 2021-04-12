@@ -34,23 +34,21 @@ export class TodoList extends Component {
     });
 
     this.setState((prevState) => {
-      if (value === 'active') {
-        return {
+      switch (value) {
+        case 'active': return {
           todos: prevState.todosCopy.filter(
             todo => !todo.completed,
           ),
         };
-      }
 
-      if (value === 'completed') {
-        return {
+        case 'completed': return {
           todos: prevState.todosCopy.filter(
             todo => todo.completed,
           ),
         };
-      }
 
-      return { todos: prevState.todosCopy };
+        default: return { todos: prevState.todosCopy };
+      }
     });
   }
 
@@ -124,11 +122,9 @@ export class TodoList extends Component {
             {this.state.todos.map(todo => (
               <li
                 key={todo.id}
-                className={
-                  todo.completed
-                    ? 'TodoList__item TodoList__item--checked'
-                    : 'TodoList__item TodoList__item--unchecked'
-                }
+                className={`TodoList__item ${todo.completed === true
+                  ? 'TodoList__item--checked'
+                  : 'TodoList__item--unchecked'}`}
               >
                 <label>
                   <input
