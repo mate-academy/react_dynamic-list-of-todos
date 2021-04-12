@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
@@ -62,3 +63,8 @@ export class CurrentUser extends React.Component {
     );
   }
 }
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  clearUser: PropTypes.func.isRequired,
+};

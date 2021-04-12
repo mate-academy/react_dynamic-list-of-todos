@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
 import classNames from 'classnames';
 import { TodosForm } from '../TodosForm';
@@ -117,3 +118,19 @@ export class TodoList extends React.Component {
     );
   }
 }
+
+TodoList.propTypes = {
+  selectUser: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      completed: PropTypes.bool,
+    }).isRequired,
+  ),
+};
+
+TodoList.defaultProps = {
+  todos: [],
+};
