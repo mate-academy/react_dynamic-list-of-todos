@@ -31,23 +31,39 @@ export class TodoList extends React.Component {
   }
 
   showComplete = (event) => {
-    this.setState(state => ({
+    const { searchValue } = this.state;
+    const searchWorld = searchValue.toLocaleLowerCase();
+
+    this.setState({
       defaultSelectValue: event.target.value,
-      filteredTodos: this.initialTodos.filter(todo => todo.completed),
-    }));
+      filteredTodos: this.initialTodos
+        .filter(todo => (
+          todo.completed && todo.title.toLowerCase().includes(searchWorld)
+        )),
+    });
   }
 
   showActive = (event) => {
-    this.setState(state => ({
+    const { searchValue } = this.state;
+    const searchWorld = searchValue.toLocaleLowerCase();
+
+    this.setState({
       defaultSelectValue: event.target.value,
-      filteredTodos: this.initialTodos.filter(todo => !todo.completed),
-    }));
+      filteredTodos: this.initialTodos
+        .filter(todo => (
+          !todo.completed && todo.title.toLowerCase().includes(searchWorld)
+        )),
+    });
   }
 
   showAll = (event) => {
+    const { searchValue } = this.state;
+    const searchWorld = searchValue.toLocaleLowerCase();
+
     this.setState({
       defaultSelectValue: event.target.value,
-      filteredTodos: this.initialTodos,
+      filteredTodos: this.initialTodos
+        .filter(todo => todo.title.toLowerCase().includes(searchWorld)),
     });
   }
 
