@@ -37,12 +37,13 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          { !!todos.length && (
-          <TodoList
-            todosFromServer={todos}
-            chooseUser={this.chooseUser}
-          />
-          )
+          {
+            !!todos.length && (
+            <TodoList
+              todosFromServer={todos}
+              chooseUser={this.chooseUser}
+            />
+            )
           }
         </div>
 
