@@ -77,7 +77,7 @@ export class TodoList extends React.PureComponent {
                 <label>
                   <input
                     type="checkbox"
-                    checked={todo.id}
+                    checked={todo.completed}
                     readOnly
                   />
                   <p>
@@ -98,20 +98,6 @@ export class TodoList extends React.PureComponent {
                 </button>
               </li>
             ))}
-
-            <li className="TodoList__item TodoList__item--checked">
-              <label>
-                <input type="checkbox" checked readOnly />
-                <p>distinctio vitae autem nihil ut molestias quo</p>
-              </label>
-
-              <button
-                className="TodoList__user-button button"
-                type="button"
-              >
-                User&nbsp;#2
-              </button>
-            </li>
           </ul>
         </div>
       </div>
