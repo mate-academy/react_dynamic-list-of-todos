@@ -30,7 +30,7 @@ export class Form extends React.Component {
         break;
       default:
       case 'All':
-
+        filteredByType = filteredTodos;
         break;
     }
 
@@ -75,7 +75,7 @@ export class Form extends React.Component {
         break;
       default:
       case 'All':
-
+        filteredByType = filteredByQuery;
         break;
     }
 
