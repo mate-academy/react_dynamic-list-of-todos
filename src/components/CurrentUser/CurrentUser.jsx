@@ -4,7 +4,7 @@ import './CurrentUser.scss';
 import Button from '@material-ui/core/Button';
 import { getUser } from '../../api/api';
 
-export class CurrentUser extends React.Component {
+export class CurrentUser extends React.PureComponent {
   state = {
     currentUser: {},
   }
