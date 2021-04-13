@@ -1,6 +1,11 @@
 .TodoList {
   width: 100%;
 
+  &__form {
+    display: flex;
+    justify-content: space-around;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
