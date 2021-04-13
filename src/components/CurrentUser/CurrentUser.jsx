@@ -58,7 +58,7 @@ export class CurrentUser extends React.Component {
         </p>
         <div className="CurrentUser__btn-wrap">
           <button
-            className="fas fa-recycle CurrentUser__btn"
+            className="CurrentUser__btn"
             onClick={this.props.clearUser}
             type="button"
           >

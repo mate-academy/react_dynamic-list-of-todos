@@ -3,7 +3,9 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './api'
+import { getTodos } from './api';
+
+import '@fortawesome/fontawesome-free/css/all.css';
 
 class App extends React.Component {
   state = {
