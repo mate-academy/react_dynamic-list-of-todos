@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export class Form extends React.Component {
   state = {
     query: '',
-    selectedTodo: '',
+    selectedType: '',
   }
 
   handleTypeChange = (event) => {
@@ -14,16 +14,18 @@ export class Form extends React.Component {
     let filteredTodos = [...todos];
 
     this.setState({
-      selectedTodo: value,
+      selectedType: value,
     });
+
+    let filteredByType;
 
     switch (value) {
       case 'Completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        filteredByType = filteredTodos.filter(todo => todo.completed);
 
         break;
       case 'Active':
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        filteredByType = filteredTodos.filter(todo => !todo.completed);
 
         break;
       default:
@@ -32,7 +34,15 @@ export class Form extends React.Component {
         break;
     }
 
-    this.props.addFilterTodos(filteredTodos);
+    const filteredByQuery = filteredByType.filter((todo) => {
+      if (todo.title === '' || !!todo.title) {
+        return todo.title.includes(this.state.query.toLowerCase());
+      }
+
+      return false;
+    });
+
+    this.props.addFilterTodos(filteredByQuery);
   }
 
   handleInputChange = (event) => {
@@ -43,7 +53,7 @@ export class Form extends React.Component {
       [name]: value,
     });
 
-    const filteredTodos = todos.filter((todo) => {
+    const filteredByQuery = todos.filter((todo) => {
       if (todo.title === '' || !!todo.title) {
         return todo.title.includes(value.toLowerCase());
       }
@@ -51,11 +61,29 @@ export class Form extends React.Component {
       return false;
     });
 
-    this.props.addFilterTodos(filteredTodos);
+
+    let filteredByType = [...filteredByQuery];
+
+        switch (this.state.selectedType) {
+      case 'Completed':
+        filteredByType = filteredByQuery.filter(todo => todo.completed);
+
+        break;
+      case 'Active':
+        filteredByType = filteredByQuery.filter(todo => !todo.completed);
+
+        break;
+      default:
+      case 'All':
+
+        break;
+    }
+
+    this.props.addFilterTodos(filteredByType);
   }
 
   render() {
-    const { query, selectedTodo } = this.state;
+    const { query, selectedType } = this.state;
 
     return (
       <form>
@@ -68,8 +96,8 @@ export class Form extends React.Component {
         />
 
         <select
-          name="selectedTodo"
-          value={selectedTodo}
+          name="selectedType"
+          value={selectedType}
           onChange={this.handleTypeChange}
         >
           <option value="All">
