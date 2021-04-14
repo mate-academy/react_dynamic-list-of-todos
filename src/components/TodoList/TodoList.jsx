@@ -1,44 +1,59 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './TodoList.scss';
 
-export const TodoList = () => (
+export const TodoList = ({ filteredTodos, selectedUser }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
-
     <div className="TodoList__list-container">
+
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {filteredTodos.map(({ id, title, userId, completed }) => (
+          <li
+            className={`TodoList__item
+              ${completed
+              ? 'TodoList__item--unchecked'
+              : 'TodoList__item--checked'}`}
+            key={id}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label>
+              <input
+                type="checkbox"
+                checked={completed}
+                readOnly
+              />
+              <p>{title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <button
+              className={`TodoList__user-button button
+              ${completed
+                ? 'TodoList__user-button--selected'
+                : ''}`}
+              type="button"
+              onClick={() => selectedUser(userId)}
+            >
+              User&nbsp;#
+              {userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 );
+
+TodoList.propTypes = {
+  filteredTodos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })),
+  selectedUser: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  filteredTodos: 'no todo yet',
+};
