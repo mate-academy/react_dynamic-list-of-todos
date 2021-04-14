@@ -14,7 +14,6 @@ export class App extends React.Component {
     selectedUserId: 0,
     user: {},
     errorData: true,
-    searchValue: '',
     filterInfo: 'all',
   };
 
@@ -57,19 +56,18 @@ export class App extends React.Component {
 
   search = (value) => {
     const { filterInfo } = this.state;
-    const needTodos = this.filtered(filterInfo);
+    const needTodos = this.filtered(filterInfo, value);
     const visible = needTodos.filter(todo => (
       todo.title.toLowerCase().includes(value.toLowerCase())
     ));
 
     this.setState({
       todosVisible: visible,
-      searchValue: value,
     });
   }
 
-  filtered = (value) => {
-    const { allTodos, searchValue } = this.state;
+  filtered = (value, searchValue) => {
+    const { allTodos } = this.state;
     const needTodos = allTodos.filter(todo => (
       todo.title.toLowerCase().includes(searchValue.toLowerCase())
     ));

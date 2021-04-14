@@ -13,11 +13,11 @@ export class TodoList extends React.Component {
 
   handleChange = (e) => {
     const { todosVisible, filtered } = this.props;
-    const { selectorValue } = this.state;
+    const { selectorValue, searchValue } = this.state;
     const elementTodo = todosVisible.find(todo => todo.id === +e.target.id);
 
     elementTodo.completed = !elementTodo.completed;
-    filtered(selectorValue);
+    filtered(selectorValue, searchValue);
   }
 
   render() {
@@ -39,7 +39,7 @@ export class TodoList extends React.Component {
         <select
           onChange={(e) => {
             this.setState({ selectorValue: e.target.value });
-            filtered(e.target.value);
+            filtered(e.target.value, searchValue);
           }}
         >
           <option value="all">All</option>
