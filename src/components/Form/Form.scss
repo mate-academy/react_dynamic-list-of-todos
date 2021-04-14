@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+
+  &__input,
+  &__select {
+    padding: 5px 10px;
+    color: #4d457b;
+    border-radius: 5px;
+    border: 2px solid #4d457b;
+    font-family: "Roboto", sans-serif;
+    font-size: inherit;
+    font-weight: 600;
+  }
+}
