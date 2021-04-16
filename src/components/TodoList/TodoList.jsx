@@ -20,15 +20,16 @@ export class TodoList extends React.Component {
   filterTodos = (todos) => {
     const { query, filter } = this.state;
 
-    if (filter === 'completed') {
-      return todos.filter(todo => todo.completed);
+    switch(filter) {
+      case 'completed':
+        return todos.filter(todo =>
+          todo.completed && todo.title.includes(query));
+      case 'active':
+        return todos.filter(todo =>
+          !todo.completed && todo.title.includes(query));
+      default:
+        return todos.filter(todo => todo.title.includes(query));
     }
-
-    if (filter === 'active') {
-      return todos.filter(todo => !todo.completed);
-    }
-
-    return todos.filter(todo => todo.title.includes(query));
   }
 
   render() {

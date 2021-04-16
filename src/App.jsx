@@ -14,7 +14,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     const allTodos = await request('todos');
-    const filteredTodos = await allTodos.filter(todo => todo.title);
+    const filteredTodos = allTodos.filter(todo => todo.title);
 
     this.setState({
       todos: filteredTodos,
