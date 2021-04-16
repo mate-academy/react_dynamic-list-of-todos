@@ -12,4 +12,37 @@
   &:hover {
     background-color: #4d457b;
   }
+
+  &--resset {
+    display: block;
+    margin: 0 auto;
+    padding: 5px 30px;
+    background-color: rgb(247, 191, 191);
+  }
+}
+
+.input {
+  padding: 5px 10px;
+  margin-right: 10px;
+  height: 35px;
+  width: 250px;
+
+  border: 1px solid #459595;
+  outline: 0;
+  border-radius: 5px;
+
+  &:focus {
+    border: 1px solid rgb(95, 252, 95);
+  }
+}
+
+.select {
+  height: 47px;
+  border: 1px solid #459595;
+  outline: 0;
+  border-radius: 5px;
+
+  &:focus {
+    border: 1px solid rgb(95, 252, 95);
+  }
 }
