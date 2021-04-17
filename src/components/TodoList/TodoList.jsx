@@ -21,7 +21,7 @@ export class TodoList extends React.Component {
     const selectedTodos = todos.filter(todo => (
       value !== 'all'
         ? todo.completed === Boolean(+value) && todo.title.includes(search)
-        : todo && todo.title.includes(search)
+        : todo.title.includes(search)
     ));
 
     return (
