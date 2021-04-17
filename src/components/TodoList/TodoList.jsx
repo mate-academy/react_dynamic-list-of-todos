@@ -6,28 +6,47 @@ import PropTypes from 'prop-types';
 export class TodoList extends React.Component {
   state = {
     value: 'all',
+    search: '',
   }
 
   handleChange = (event) => {
     this.setState({
-      value: event.target.value,
+      [event.target.name]: event.target.value,
     });
   }
 
   render() {
     const { todos, selectUser, selectedUserId, changeCompleted } = this.props;
-    const { value } = this.state;
+    const { value, search } = this.state;
     const selectedTodos = todos.filter(todo => (
       value !== 'all'
-        ? todo.completed === Boolean(+value)
-        : todo
+        ? todo.completed === Boolean(+value) && todo.title.includes(search)
+        : todo && todo.title.includes(search)
     ));
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
+        <div class="form__group field">
+          <input
+            value={search}
+            onChange={this.handleChange}
+            type="input"
+            class="form__field"
+            placeholder="Name"
+            name="search"
+            id='search'
+          />
+          <label
+            for="search"
+            class="form__label"
+          >
+            Search
+          </label>
+        </div>
         <select
           className="TodoList__filter"
+          name="value"
           value={value}
           onChange={this.handleChange}
         >
