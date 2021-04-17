@@ -28,4 +28,19 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__controls {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__input {
+    padding: 5px;
+    margin: 10px;
+  }
+
+  &__select {
+    margin: 10px;
+    padding: 5px;
+  }
 }
