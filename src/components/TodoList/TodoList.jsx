@@ -80,8 +80,10 @@ export class TodoList extends React.PureComponent {
                 <label>
                   <input
                     type="checkbox"
-                    onClick={()=> changeStatus(todo.id)}
-                    readOnly />
+                    checked={todo.completed}
+                    onClick={() => changeStatus(todo.id)}
+                    readOnly
+                  />
                   <p>{todo.title}</p>
                 </label>
 
