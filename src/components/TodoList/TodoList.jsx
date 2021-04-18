@@ -38,7 +38,7 @@ export class TodoList extends React.PureComponent {
   }
 
   render() {
-    const { todos, selectUser } = this.props;
+    const { todos, selectUser, selectedUserId, changeStatus } = this.props;
     const { selectedStatus, filteredTitle } = this.state;
     const filteredTodos = todos
       .filter(this.searchedTodos).filter(this.selectedByStatus);
@@ -78,16 +78,17 @@ export class TodoList extends React.PureComponent {
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    onClick={()=> changeStatus(todo.id)}
+                    readOnly />
                   <p>{todo.title}</p>
                 </label>
 
                 <button
-                  className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+                  className={classNames(`TodoList__user-button`, `button`,
+                    { 'TodoList__user-button--selected':
+                      todo.userId === selectedUserId })}
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
@@ -115,4 +116,6 @@ TodoList.propTypes = {
     }),
   ).isRequired,
   selectUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 };
