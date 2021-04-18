@@ -28,4 +28,13 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    padding: 10px 15px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    font-size: 18px;
+    text-transform: capitalize;
+    margin: 20px;
+  }
 }
