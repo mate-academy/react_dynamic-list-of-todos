@@ -28,6 +28,9 @@ export class CurrentUser extends React.Component {
 
     return (
       <div className="CurrentUser">
+        <button type="button" onClick={this.props.clearUser}>
+          Clear
+        </button>
         <h2 className="CurrentUser__title">
           <span>{`Selected user: ${id}`}</span>
         </h2>
@@ -42,4 +45,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: propTypes.number.isRequired,
+  clearUser: propTypes.func.isRequired,
 };

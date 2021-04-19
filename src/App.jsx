@@ -22,6 +22,23 @@ export class App extends React.Component {
     });
   }
 
+  clearUser = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
+  }
+
+  changeStatus = (todoId) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (
+        (todo.id === todoId)
+          ? {
+            ...todo, completed: !todo.completed,
+          }
+          : { ...todo })),
+    }));
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
@@ -31,6 +48,7 @@ export class App extends React.Component {
           <TodoList
             todos={todos}
             selectUser={this.selectUser}
+            changeStatus={this.changeStatus}
           />
         </div>
 
@@ -39,6 +57,7 @@ export class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
+                clearUser={this.clearUser}
               />
             ) : 'No user selected'}
           </div>
