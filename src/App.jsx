@@ -29,8 +29,6 @@ class App extends React.Component {
   render() {
     const { todos, selectedUserId } = this.state;
 
-    console.log(todos);
-
     return (
       <div className="App">
         <div className="App__sidebar">
