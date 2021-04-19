@@ -1,44 +1,55 @@
 import React from 'react';
 import './TodoList.scss';
+import cn from 'classnames';
+import PropTypes from 'prop-types';
 
-export const TodoList = () => (
+export const TodoList = ({ todos, selectUser }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map(todo => (
+          <li
+            key={todo.id}
+            className={cn('TodoList__item', {
+              'TodoList__item--checked': todo.completed,
+              'TodoList__item--unchecked': !todo.completed,
+            })}
+          >
+            <label>
+              <input type="checkbox" readOnly checked={todo.completed} />
+              <p>{todo.title}</p>
+            </label>
 
-          <button
-            className="
+            <button
+              className="
               TodoList__user-button
               TodoList__user-button--selected
               button
             "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+              type="button"
+              onClick={() => {
+                selectUser(todo.userId);
+              }}
+            >
+              {`User #${todo.userId}`}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 );
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      userId: PropTypes.number,
+      title: PropTypes.string,
+      completed: PropTypes.bool,
+    }),
+  ).isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
