@@ -45,9 +45,7 @@ export class CurrentUser extends React.PureComponent {
           button
         "
         type="button"
-        onClick={() => {
-          clearUser();
-        }}
+        onClick={clearUser}
       >
         Clear
       </button>
