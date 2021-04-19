@@ -28,4 +28,29 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    margin-right: 150px;
+    font-size: 20px;
+    border: 2px solid rgb(172, 160, 160);
+    border-radius: 10px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__select {
+    font-size: 20px;
+    border-radius: 10px;
+    border: 2px solid rgb(172, 160, 160);
+    background-color: rgb(241, 215, 159);
+    transition: background-color 0.5s;
+
+    &:focus {
+      cursor: pointer;
+      outline: none;
+      background-color: rgb(221, 210, 185);
+    }
+  }
 }
