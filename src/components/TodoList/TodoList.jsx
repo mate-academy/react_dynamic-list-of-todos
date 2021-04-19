@@ -3,62 +3,89 @@ import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state ={
-    todoList: this.props.todos,
-    inputValue: '',
+    select: 'All',
+    inputTitle: '',
   }
 
+  handleInputChange = ({ target }) => {
+    const { value, name } = target;
 
-  handleSelect = (ev) => {
-    const value = ev.target.value;
-    const todos = this.props.todos;
+    this.setState({
+      [name]: value,
+    });
+    console.log(this.state)
+  }
 
-    if(value === 'Active') {
-      this.setState({
-        todoList : todos.filter(todo => todo.completed === false),
-      })
-    } else if (value === 'Completed') {
-      this.setState({
-        todoList : todos.filter(todo => todo.completed === true),
-      })
-    } else {
-      this.setState({
-        todoList: this.props.todos,
-      })
+  filterByTitle = (todo) => {
+    const { inputTitle } = this.state;
+
+    return todo.title.toLowerCase()
+      .includes(inputTitle.toLowerCase());
+  }
+
+  filterByStatus = (todo) => {
+    const { select } = this.state;
+
+    switch (select) {
+      case 'Completed': return todo.completed;
+      case 'Active': return !todo.completed;
+      default: return true;
     }
   }
 
-  handleInput = (ev) => {
-    const value = ev.target.value;
-    this.setState({
-      inputValue : value
-    },
-    this.setState(prev => ({
-      todoList: prev.todoList.filter(todo =>todo.title !== null
-        &&  todo.title.includes(this.state.inputValue))
-    })))
-  }
-
   render() {
-    const { todoList } = this.state;
-    const { selectUser, changeStatus } = this.props;
+
+    const {
+      todos,
+      selectUser,
+      changeStatus,
+    } = this.props;
+
+    const {
+      inputTitle,
+      select,
+    } = this.state;
+
+    const filterTodos = todos
+      .filter(this.filterByTitle)
+      .filter(this.filterByStatus);
 
     return(
       <div className="TodoList">
         <h2>Todos:</h2>
         <input
           type="text"
-          value={this.state.inputValue}
-          onChange={this.handleInput}
-
+          name="inputTitle"
+          value={inputTitle}
+          onChange={this.handleInputChange}
         />
-        <select onChange={this.handleSelect}>
-          <option>All</option>
-          <option>Active</option>
-          <option>Completed</option>
+        <select
+          name="select"
+          value={select}
+          onChange={this.handleInputChange}
+        >
+          <option
+            name="All"
+            value="All"
+          >
+            All
+          </option>
+          <option
+            name="Active"
+            value="Active"
+          >
+            Active
+          </option>
+          <option
+            name="Completed"
+            value="Completed"
+          >
+            Completed
+          </option>
         </select>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todoList.map(todo => (
+            {filterTodos.map(todo => (
               <li
               className={todo.completed
                 ? "TodoList__item TodoList__item--checked"

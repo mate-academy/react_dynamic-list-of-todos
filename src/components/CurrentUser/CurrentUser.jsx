@@ -31,6 +31,7 @@ export class CurrentUser extends React.PureComponent {
 
   render() {
     const { id, name, email, phone } = this.state.selectedUser;
+    const { clearUser } = this.props;
 
     return (
     <div className="CurrentUser">
@@ -38,6 +39,19 @@ export class CurrentUser extends React.PureComponent {
       <h3 className="CurrentUser__name">{name}</h3>
       <p className="CurrentUser__email">{email}</p>
       <p className="CurrentUser__phone">{phone}</p>
+      <button
+        className="
+          TodoList__user-button
+          TodoList__user-button--selected
+          button
+        "
+        type="button"
+        onClick={() => {
+          clearUser();
+        }}
+      >
+        Clear
+      </button>
     </div>
     )
   }

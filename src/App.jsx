@@ -16,13 +16,25 @@ class App extends React.Component {
   componentDidMount() {
     getTodos()
       .then(todos => {
-        this.setState({ todos : todos.data });
+        const data = todos.data
+        .filter(todo => typeof todo.userId === 'number')
+        .filter(todo => typeof todo.completed === 'boolean')
+        .filter(todo => todo.title !== '')
+        this.setState({
+          todos : data,
+        });
     });
   }
 
   selectUser = (userId) => {
     this.setState({
       selectedUserId: userId,
+    });
+  }
+
+  clearUser = () => {
+    this.setState({
+      selectedUserId: 0,
     });
   }
 
@@ -54,7 +66,10 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                clearUser={this.clearUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>
