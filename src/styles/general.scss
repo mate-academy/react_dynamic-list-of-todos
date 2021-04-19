@@ -12,4 +12,9 @@
   &:hover {
     background-color: #4d457b;
   }
+
+  &__center {
+    display: block;
+    margin: 0 auto;
+  }
 }
