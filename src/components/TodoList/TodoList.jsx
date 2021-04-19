@@ -11,7 +11,7 @@ export class TodoList extends React.Component {
   handleSelect = (ev) => {
     const value = ev.target.value;
     const todos = this.props.todos;
-    console.log(value)
+
     if(value === 'Active') {
       this.setState({
         todoList : todos.filter(todo => todo.completed === false),
@@ -31,12 +31,16 @@ export class TodoList extends React.Component {
     const value = ev.target.value;
     this.setState({
       inputValue : value
-    })
+    },
+    this.setState(prev => ({
+      todoList: prev.todoList.filter(todo =>todo.title !== null
+        &&  todo.title.includes(this.state.inputValue))
+    })))
   }
 
   render() {
     const { todoList } = this.state;
-    const { selectUser } = this.props;
+    const { selectUser, changeStatus } = this.props;
 
     return(
       <div className="TodoList">
@@ -54,10 +58,7 @@ export class TodoList extends React.Component {
         </select>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todoList
-              .filter(todo =>todo.title !== null
-                &&  todo.title.includes(this.state.inputValue))
-              .map(todo => (
+            {todoList.map(todo => (
               <li
               className={todo.completed
                 ? "TodoList__item TodoList__item--checked"
@@ -65,7 +66,12 @@ export class TodoList extends React.Component {
               key={todo.id}
               >
               <label>
-                <input type="checkbox" readOnly  checked={todo.completed}/>
+                <input
+                type="checkbox"
+                readOnly
+                checked={todo.completed}
+                onClick={() => changeStatus(todo.id)}
+                />
                 <p>{todo.title}</p>
               </label>
               <button

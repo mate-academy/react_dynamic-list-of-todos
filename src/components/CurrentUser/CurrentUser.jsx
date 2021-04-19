@@ -1,6 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 import { getUser } from '../../api/api'
+import { propTypes } from '../../types'
 
 export class CurrentUser extends React.PureComponent {
   state = {
@@ -41,3 +42,5 @@ export class CurrentUser extends React.PureComponent {
     )
   }
 }
+
+CurrentUser.propTypes = propTypes;
