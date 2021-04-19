@@ -110,7 +110,7 @@ export class TodoList extends React.Component {
 }
 
 const TodoType = {
-  completed: PropTypes.bool.isRequired,
+  completed: PropTypes.bool || false,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   userId: PropTypes.number.isRequired,
