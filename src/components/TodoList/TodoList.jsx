@@ -1,5 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
+import { propTypes } from '../../types';
+
 
 export class TodoList extends React.Component {
   state ={
@@ -122,3 +124,5 @@ export class TodoList extends React.Component {
     )
   }
 };
+
+TodoList.propTypes = propTypes;
