@@ -1,5 +1,6 @@
 import React from 'react';
 import './TodoList.scss';
+import { ControlPanel } from '../ControlPanel'
 import { propTypes } from '../../types';
 
 
@@ -15,7 +16,6 @@ export class TodoList extends React.Component {
     this.setState({
       [name]: value,
     });
-    console.log(this.state)
   }
 
   filterByTitle = (todo) => {
@@ -55,36 +55,11 @@ export class TodoList extends React.Component {
     return(
       <div className="TodoList">
         <h2>Todos:</h2>
-        <input
-          type="text"
-          name="inputTitle"
-          value={inputTitle}
-          onChange={this.handleInputChange}
+        <ControlPanel
+          handleInputChange={this.handleInputChange}
+          inputTitle={inputTitle}
+          select={select}
         />
-        <select
-          name="select"
-          value={select}
-          onChange={this.handleInputChange}
-        >
-          <option
-            name="All"
-            value="All"
-          >
-            All
-          </option>
-          <option
-            name="Active"
-            value="Active"
-          >
-            Active
-          </option>
-          <option
-            name="Completed"
-            value="Completed"
-          >
-            Completed
-          </option>
-        </select>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {filterTodos.map(todo => (

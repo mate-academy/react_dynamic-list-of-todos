@@ -17,9 +17,9 @@ class App extends React.Component {
     getTodos()
       .then(todos => {
         const data = todos.data
-        .filter(todo => typeof todo.userId === 'number')
-        .filter(todo => typeof todo.completed === 'boolean')
-        .filter(todo => todo.title !== '')
+          .filter(todo => typeof todo.userId === 'number')
+          .filter(todo => typeof todo.completed === 'boolean')
+          .filter(todo => todo.title !== '')
         this.setState({
           todos : data,
         });
@@ -40,7 +40,7 @@ class App extends React.Component {
 
   changeStatus = (todoId) => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].map(todo => {
+      todos: prevState.todos.map(todo => {
         if (todo.id === todoId) {
           todo.completed = !todo.completed
         }
@@ -56,12 +56,13 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          {todos.length > 0 &&
-          <TodoList
-            todos={todos}
-            selectUser={this.selectUser}
-            changeStatus={this.changeStatus}
-          />}
+          {todos.length > 0 && (
+            <TodoList
+              todos={todos}
+              selectUser={this.selectUser}
+              changeStatus={this.changeStatus}
+            />
+          )}
         </div>
         <div className="App__content">
           <div className="App__content-container">

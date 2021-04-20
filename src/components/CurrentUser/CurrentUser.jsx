@@ -29,10 +29,14 @@ export class CurrentUser extends React.PureComponent {
   }
 
   render() {
+    const { selectedUser } = this.state
     const { id, name, email, phone } = this.state.selectedUser;
     const { clearUser } = this.props;
 
     return (
+    (!selectedUser.id)?
+    'Loading...'
+    :
     <div className="CurrentUser">
       <h2 className="CurrentUser__title"><span>Selected user: {id}</span></h2>
       <h3 className="CurrentUser__name">{name}</h3>
@@ -41,7 +45,6 @@ export class CurrentUser extends React.PureComponent {
       <button
         className="
           TodoList__user-button
-          TodoList__user-button--selected
           button
         "
         type="button"
