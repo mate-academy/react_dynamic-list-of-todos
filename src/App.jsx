@@ -1,46 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { getTodos } from './api/api';
+import { deleteTodo, getTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
-class App extends React.Component {
-  state = {
-    todos: [],
-    selectedUserId: 0,
+export const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(0);
+
+  const loadTodos = () => {
+    getTodos()
+      .then(setTodos);
   };
 
-  componentDidMount() {
-    getTodos()
-      .then(todos => this.setState({ todos }));
-  }
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
-  selectUser = (userId) => {
-    this.setState({
-      selectedUserId: userId,
-    });
-  }
+  const removeTodo = (todoId) => {
+    deleteTodo(todoId).then(loadTodos);
+  };
 
-  render() {
-    const { todos, selectedUserId } = this.state;
+  return (
+    <div className="App">
+      <div className="App__sidebar">
+        <TodoList
+          todos={todos}
+          selectUser={setSelectedUserId}
+          deleteTodo={removeTodo}
+        />
+      </div>
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList todos={todos} selectUser={this.selectUser} />
-        </div>
-
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
-            ) : 'No user selected'}
-          </div>
+      <div className="App__content">
+        <div className="App__content-container">
+          {selectedUserId ? (
+            <CurrentUser userId={selectedUserId} />
+          ) : 'No user selected'}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
