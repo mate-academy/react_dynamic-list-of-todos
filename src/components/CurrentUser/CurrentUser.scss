@@ -10,6 +10,10 @@
     }
   }
 
+  &__error {
+    text-align: center;
+  }
+
   &__name {
     margin: 30px 0 10px;
     font-size: 1.5rem;
@@ -23,7 +27,8 @@
   }
 
   &__clear {
+    width: fit-content;
     display: block;
-    margin: 20px auto 0;
+    margin: 20px auto;
   }
 }

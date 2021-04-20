@@ -1,1 +1,1 @@
-export * from './CurrentUser';
+export * from './CurrentUser.jsx';
