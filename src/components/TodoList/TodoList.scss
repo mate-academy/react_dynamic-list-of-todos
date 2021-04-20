@@ -28,4 +28,19 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__box {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  &__select {
+    margin-left: 15px;
+  }
 }
