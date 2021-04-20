@@ -27,6 +27,7 @@ export class TodoList extends React.Component {
       searchValue: event.target.value,
       filteredTodos: [...this.initialTodos]
         .filter(todo => todo.title.toLowerCase().includes(searchWorld)),
+      defaultSelectValue: 'All',
     });
   }
 
@@ -70,16 +71,21 @@ export class TodoList extends React.Component {
   handleSelectChange = (event) => {
     const { value } = event.target;
 
-    if (value === 'Complete') {
-      this.showComplete(event);
-    }
+    switch (value) {
+      case 'Complete':
+        this.showComplete(event);
 
-    if (value === 'Active') {
-      this.showActive(event);
-    }
+        break;
+      case 'Active':
+        this.showActive(event);
 
-    if (value === 'All') {
-      this.showAll(event);
+        break;
+      case 'All':
+        this.showAll(event);
+
+        break;
+      default:
+        break;
     }
   }
 
@@ -101,7 +107,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { selectUser } = this.props;
+    const { selectUser, selectedUserId } = this.props;
     const {
       filteredTodos,
       searchValue,
@@ -157,16 +163,23 @@ export class TodoList extends React.Component {
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly checked={todo.completed} />
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
                   <p>{ todo.title }</p>
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                        selectedUserId === todo.userId,
+                    },
+                  )}
                   type="button"
                   onClick={() => selectUser(todo.userId)}
                 >
@@ -193,4 +206,5 @@ TodoList.propTypes = {
     }).isRequired,
   ).isRequired,
   selectUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };
