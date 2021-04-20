@@ -27,6 +27,7 @@ export class CurrentUser extends React.PureComponent {
 
   render() {
     const { selectedUser } = this.state;
+    const { deleteUser } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -40,6 +41,15 @@ export class CurrentUser extends React.PureComponent {
         <h3 className="CurrentUser__name">{selectedUser.name}</h3>
         <p className="CurrentUser__email">{selectedUser.email}</p>
         <p className="CurrentUser__phone">{selectedUser.phone}</p>
+        <button
+          className="button"
+          type="button"
+          onClick={() => {
+            deleteUser();
+          }}
+        >
+          Delete
+        </button>
       </div>
     );
   }
@@ -47,4 +57,5 @@ export class CurrentUser extends React.PureComponent {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
