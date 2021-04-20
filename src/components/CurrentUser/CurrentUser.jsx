@@ -5,7 +5,7 @@ import { getUser } from '../../api/todos';
 
 export class CurrentUser extends React.Component {
   state = {
-    selectedUser: {},
+    selectedUser: null,
   }
 
   componentDidMount() {
@@ -28,6 +28,10 @@ export class CurrentUser extends React.Component {
   render() {
     const { selectedUser } = this.state;
     const { clearSelection } = this.props;
+
+    if (!selectedUser) {
+      return 'Loading...';
+    }
 
     return (
       <div className="CurrentUser">

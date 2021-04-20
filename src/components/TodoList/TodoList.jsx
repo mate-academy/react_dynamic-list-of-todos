@@ -2,6 +2,7 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { Form } from '../Form';
 
 export class TodoList extends React.Component {
   state = {
@@ -27,33 +28,11 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <div class="form__group field">
-          <input
-            value={search}
-            onChange={this.handleChange}
-            type="input"
-            class="form__field"
-            placeholder="Name"
-            name="search"
-            id='search'
-          />
-          <label
-            for="search"
-            class="form__label"
-          >
-            Search
-          </label>
-        </div>
-        <select
-          className="TodoList__filter"
-          name="value"
+        <Form
           value={value}
-          onChange={this.handleChange}
-        >
-          <option value="all">All</option>
-          <option value="0">Active</option>
-          <option value="1">Completed</option>
-        </select>
+          search={search}
+          handleChange={this.handleChange}
+        />
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {selectedTodos.map(todo => (
@@ -71,7 +50,6 @@ export class TodoList extends React.Component {
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => changeCompleted(todo.id)}
-                    // readOnly
                   />
                   <p>{todo.title}</p>
                 </label>
