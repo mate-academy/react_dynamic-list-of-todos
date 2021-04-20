@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import './TodoList.scss';
 import propTypes from 'prop-types';
 import { todoShape } from '../../shapes/shapes';
+import { Forms } from '../Forms';
 
 export class TodoList extends React.Component {
   state = {
@@ -25,15 +26,13 @@ export class TodoList extends React.Component {
     ))
 
   handleSelect = (todo) => {
-    if (this.state.select === 'completed') {
-      return todo.completed;
-    }
+    const { select } = this.state;
 
-    if (this.state.select === 'active') {
-      return !todo.completed;
+    switch (select) {
+      case 'completed': return todo.completed;
+      case 'active': return !todo.completed;
+      default: return todo;
     }
-
-    return todo;
   }
 
   render() {
@@ -45,22 +44,11 @@ export class TodoList extends React.Component {
 
     return (
       <div className="TodoList">
-        <input
-          type="text"
-          name="input"
-          value={input}
-          onChange={this.handleChange}
+        <Forms
+          handleChange={this.handleChange}
+          select={select}
+          input={input}
         />
-        <select
-          value={select}
-          name="select"
-          onChange={this.handleChange}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-
         <h2>Todos:</h2>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
