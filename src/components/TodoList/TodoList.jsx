@@ -21,9 +21,7 @@ export class TodoList extends React.Component {
 
   titleChecker = todo => (todo.title === null
     ? todo.title
-    : todo.title.includes(
-      this.state.input,
-    ))
+    : todo.title.includes(this.state.input))
 
   handleSelect = (todo) => {
     const { select } = this.state;
@@ -76,9 +74,7 @@ export class TodoList extends React.Component {
                       button
                     "
                   type="button"
-                  onClick={() => {
-                    selectUser(todo.userId);
-                  }}
+                  onClick={() => selectUser(todo.userId)}
                 >
                   {`User #${todo.userId}`}
                 </button>
