@@ -1,12 +1,58 @@
 import React from 'react';
 import './CurrentUser.scss';
+import { getUser } from '../../api/api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.PureComponent {
+  state = {
+    selectedUser : {},
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    getUser(this.props.userId)
+      .then(user => {
+        this.setState({
+          selectedUser: user.data
+        })
+      })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      getUser(this.props.userId)
+        .then(user => {
+          this.setState({
+            selectedUser :  user.data
+          })
+        }
+      );
+    }
+  }
+
+  render() {
+    const { selectedUser } = this.state
+    const { id, name, email, phone } = this.state.selectedUser;
+    const { clearUser } = this.props;
+
+    return (
+    (!selectedUser.id)?
+    'Loading...'
+    :
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title"><span>Selected user: {id}</span></h2>
+      <h3 className="CurrentUser__name">{name}</h3>
+      <p className="CurrentUser__email">{email}</p>
+      <p className="CurrentUser__phone">{phone}</p>
+      <button
+        className="
+          TodoList__user-button
+          button
+        "
+        type="button"
+        onClick={clearUser}
+      >
+        Clear
+      </button>
+    </div>
+    )
+  }
+}
