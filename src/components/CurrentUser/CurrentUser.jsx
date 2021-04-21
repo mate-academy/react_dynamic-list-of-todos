@@ -5,7 +5,7 @@ import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: {},
+    user: null,
   }
 
   componentDidMount() {
@@ -28,36 +28,37 @@ export class CurrentUser extends React.Component {
   render() {
     const { getUserId } = this.props;
 
+    if (!this.state.user) {
+      return (
+        <h3>
+          Loading...
+        </h3>
+      )
+    }
+
     return (
-      <div>
-        {this.state.user
-          ? (
-            <>
-              <div className="CurrentUser">
-                <h2 className="CurrentUser__title">
-                  <span>
-                    Selected user:
-                    {this.state.user.id}
-                  </span>
-                </h2>
+      <>
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {this.state.user.id}
+            </span>
+          </h2>
 
-                <h3 className="CurrentUser__name">{this.state.user.name}</h3>
-                <p className="CurrentUser__email">{this.state.user.email}</p>
-                <p className="CurrentUser__phone">{this.state.user.phone}</p>
+          <h3 className="CurrentUser__name">{this.state.user.name}</h3>
+          <p className="CurrentUser__email">{this.state.user.email}</p>
+          <p className="CurrentUser__phone">{this.state.user.phone}</p>
 
-                <button
-                  type="button"
-                  className="CurrentUser__button button"
-                  onClick={() => getUserId(0)}
-                >
-                  Clear
-                </button>
-              </div>
-            </>
-          ) : (
-            <h3>There is no information about this user</h3>
-          )}
-      </div>
+          <button
+            type="button"
+            className="CurrentUser__button button"
+            onClick={() => getUserId(0)}
+          >
+            Clear
+          </button>
+        </div>
+      </>
     );
   }
 }
