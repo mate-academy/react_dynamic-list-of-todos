@@ -35,6 +35,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectUser={this.selectUser}
+            selectedUserId={selectedUserId}
           />
         </div>
 

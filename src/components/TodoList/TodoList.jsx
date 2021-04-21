@@ -2,6 +2,7 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { Form } from '../Form';
 
 export class TodoList extends React.Component {
   state = {
@@ -39,7 +40,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, selectUser } = this.props;
+    const { todos, selectUser, selectedUserId } = this.props;
     const { inputTitle, defaultSelect } = this.state;
 
     const filterTodos = todos
@@ -49,27 +50,11 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-
-        <form>
-          <input
-            type="text"
-            name="inputTitle"
-            value={inputTitle}
-            placeholder="filter todos"
-            onChange={this.handleChange}
-          />
-
-          <select
-            name="defaultSelect"
-            value={defaultSelect}
-            onChange={this.handleChange}
-          >
-            <option>all</option>
-            <option>completed</option>
-            <option>active</option>
-          </select>
-        </form>
-
+        <Form
+          inputTitle={inputTitle}
+          defaultSelect={defaultSelect}
+          handleChange={this.handleChange}
+        />
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {filterTodos.map(todo => (
@@ -86,11 +71,10 @@ export class TodoList extends React.Component {
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={classNames('TodoList__user-button', 'button', {
+                    'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
+                  })}
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
@@ -117,4 +101,5 @@ TodoList.propTypes = {
     }),
   ).isRequired,
   selectUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };

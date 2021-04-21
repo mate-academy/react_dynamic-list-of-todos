@@ -5,7 +5,7 @@ import './CurrentUser.scss';
 
 export class CurrentUser extends React.Component {
   state = {
-    selectedUser: {},
+    selectedUser: null,
   }
 
   componentDidMount() {
@@ -28,6 +28,10 @@ export class CurrentUser extends React.Component {
     const { selectedUser } = this.state;
     const { clearUser } = this.props;
 
+    if (!selectedUser) {
+      return 'Loading...';
+    }
+
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
@@ -42,9 +46,7 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__phone">{selectedUser.phone}</p>
         <button
           type="button"
-          onClick={() => {
-            clearUser();
-          }}
+          onClick={clearUser}
         >
           Clear
         </button>
