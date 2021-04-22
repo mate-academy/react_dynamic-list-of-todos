@@ -12,17 +12,17 @@
   display: flex;
   width: 200px;
   justify-content: space-between;
-
-  &__link {
-    font-size: 20px;
-    text-decoration: none;
-    text-transform: uppercase;
-    color: black;
-  }
-
-  .is-active {
-    color: red;
-  }
 }
 
+.nav__link {
+  font-size: 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: black;
+}
 
+.nav .is-active {
+  color: red;
+}
+
+/*# sourceMappingURL=App.css.map */

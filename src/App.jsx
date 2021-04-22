@@ -1,34 +1,43 @@
 import React from 'react';
+import { Route, Switch, NavLink } from 'react-router-dom';
+
+import { Users } from './components/Users/Users';
 import './App.scss';
-import './styles/general.scss';
-import { TodoList } from './components/TodoList';
-import { CurrentUser } from './components/CurrentUser';
 
-class App extends React.Component {
-  state = {
-    todos: [],
-    selectedUserId: 0,
-  };
+const App = () => (
+  <section>
+    {/* create separate component for header */}
+    <header className="header">
+      <nav className="nav">
+        <NavLink
+          activeClassName="is-active"
+          className="nav__link"
+          to="/"
+          exact
+        >
+          Home Page
+        </NavLink>
+        <NavLink
+          activeClassName="is-active"
+          className="nav__link"
+          to="/users"
+        >
+          Users
+        </NavLink>
+      </nav>
+    </header>
+    <Switch>
+      <Route path="/" exact>
+        <h1>
+          Home Page
+        </h1>
+      </Route>
 
-  render() {
-    const { todos, selectedUserId } = this.state;
-
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList todos={todos} />
-        </div>
-
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
-            ) : 'No user selected'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+      <Route path="/users">
+        <Users />
+      </Route>
+    </Switch>
+  </section>
+);
 
 export default App;
