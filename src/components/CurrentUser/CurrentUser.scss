@@ -1,4 +1,7 @@
 .CurrentUser {
+  display: flex;
+  flex-direction: column;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -25,5 +28,10 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+  }
+
+  &__user-button {
+    margin: 10px auto;
+    background-color: #4d457b;
   }
 }
