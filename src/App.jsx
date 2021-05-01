@@ -21,12 +21,28 @@ export class App extends React.Component {
     await getTodos()
       .then(todos => this.setState({
         allTodos: todos,
-        todosVisible: todos,
+        todosVisible: todos.map(todo => ({
+          ...todo,
+          selected: false,
+        })),
       }));
   }
 
   selectUser = (userId) => {
-    const { selectedUserId } = this.state;
+    const { selectedUserId, todosVisible } = this.state;
+    const todosSelected = [...todosVisible];
+
+    for (let i = 0; i < todosSelected.length; i += 1) {
+      if (todosSelected[i].userId === +userId) {
+        todosSelected[i].selected = true;
+      } else {
+        todosSelected[i].selected = false;
+      }
+    }
+
+    this.setState({
+      todosVisible: todosSelected,
+    });
 
     if (userId !== selectedUserId) {
       getUsers(userId)
@@ -52,6 +68,20 @@ export class App extends React.Component {
       selectedUserId: 0,
       user: {},
     });
+
+    this.clearSelect();
+  }
+
+  clearSelect = () => {
+    const { todosVisible } = this.state;
+    const todosUnSelected = todosVisible.map(todo => ({
+      ...todo,
+      selected: false,
+    }));
+
+    this.setState({
+      todosVisible: todosUnSelected,
+    });
   }
 
   search = (value) => {
@@ -73,20 +103,25 @@ export class App extends React.Component {
     ));
     let visible;
 
-    if (value === 'completed') {
-      visible = needTodos.filter(todo => (
-        todo.completed === true
-      ));
-    }
+    switch (value) {
+      case 'completed':
+        visible = needTodos.filter(todo => (
+          todo.completed === true
+        ));
+        break;
 
-    if (value === 'active') {
-      visible = needTodos.filter(todo => (
-        todo.completed === false
-      ));
-    }
+      case 'active':
+        visible = needTodos.filter(todo => (
+          todo.completed === false
+        ));
+        break;
 
-    if (value === 'all') {
-      visible = needTodos;
+      case 'all':
+        visible = needTodos;
+        break;
+
+      default:
+        break;
     }
 
     this.setState({
