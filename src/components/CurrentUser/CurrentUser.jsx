@@ -32,6 +32,10 @@ export class CurrentUser extends React.Component {
     const { id, name, email, phone } = this.state.selectedUser;
     const { clearUser } = this.props;
 
+    if (!Object.keys(this.state.selectedUser).length) {
+      return 'Loading...';
+    }
+
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
@@ -45,15 +49,17 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__email">{email}</p>
         <p className="CurrentUser__phone">{phone}</p>
 
-        <button
-          type="button"
-          className="button"
-          onClick={() => {
-            clearUser();
-          }}
-        >
-          Clear user
-        </button>
+        <div className="CurrentUser__buttons">
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              clearUser();
+            }}
+          >
+            Clear user
+          </button>
+        </div>
       </div>
     );
   }
