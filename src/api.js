@@ -8,10 +8,6 @@ export async function getTodos() {
 }
 
 export async function getUser(id) {
-  // this.setState({
-  //   loading: true,
-  // });
-
   const user = await fetch(USERS_URL + id);
 
   return user.json();

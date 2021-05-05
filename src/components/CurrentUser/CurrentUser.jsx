@@ -53,9 +53,7 @@ export class CurrentUser extends React.Component {
           <button
             type="button"
             className="button"
-            onClick={() => {
-              clearUser();
-            }}
+            onClick={clearUser}
           >
             Clear user
           </button>

@@ -5,41 +5,47 @@ import './Filters.scss';
 export const Filters = ({
   filterStatus,
   filterTitle,
+  filters,
   handleChange,
   handleBtn,
-}) => (
-  <form className="TodoList__list-filters">
-    <input
-      type="text"
-      name="filterTitle"
-      value={filterTitle}
-      placeholder="filter todos"
-      onChange={handleChange}
-    />
+}) => {
+  const filtersKeys = Object.keys(filters);
 
-    <select
-      name="filterStatus"
-      value={filterStatus}
-      onChange={handleChange}
-    >
-      <option>All</option>
-      <option>Active</option>
-      <option>Completed</option>
-    </select>
+  return (
+    <form className="TodoList__list-filters">
+      <input
+        type="text"
+        name="filterTitle"
+        value={filterTitle}
+        placeholder="filter todos"
+        onChange={handleChange}
+      />
 
-    <button
-      type="button"
-      className="button"
-      onClick={handleBtn}
-    >
-      Randomize
-    </button>
-  </form>
-);
+      <select
+        name="filterStatus"
+        value={filterStatus}
+        onChange={handleChange}
+      >
+        {filtersKeys.map(filterKey => (
+          <option key={filterKey}>{filters[filterKey]}</option>
+        ))}
+      </select>
+
+      <button
+        type="button"
+        className="button"
+        onClick={handleBtn}
+      >
+        Randomize
+      </button>
+    </form>
+  );
+};
 
 Filters.propTypes = {
   filterStatus: PropTypes.string.isRequired,
   filterTitle: PropTypes.string.isRequired,
+  filters: PropTypes.objectOf(PropTypes.string).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBtn: PropTypes.func.isRequired,
 };

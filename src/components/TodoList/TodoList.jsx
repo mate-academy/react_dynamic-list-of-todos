@@ -4,9 +4,15 @@ import './TodoList.scss';
 
 import { Filters } from '../Filters';
 
+const filters = {
+  All: 'All',
+  Active: 'Active',
+  Completed: 'Completed',
+};
+
 export class TodoList extends React.Component {
   state = {
-    filterStatus: 'All',
+    filterStatus: filters.All,
     filterTitle: '',
     randomized: false,
     selectedUserId: 0,
@@ -36,9 +42,9 @@ export class TodoList extends React.Component {
     const { filterStatus } = this.state;
 
     switch (filterStatus) {
-      case 'Completed':
+      case filters.Completed:
         return todo.completed;
-      case 'Active':
+      case filters.Active:
         return !todo.completed;
       default:
         return true;
@@ -60,7 +66,7 @@ export class TodoList extends React.Component {
       selectedUserId,
     } = this.state;
 
-    let todosFiltered;
+    let filteredTodos;
 
     const randomize = (data) => {
       let num = data.length;
@@ -78,12 +84,12 @@ export class TodoList extends React.Component {
       return data;
     };
 
-    todosFiltered = todos
+    filteredTodos = todos
       .filter(this.filterByTitle)
       .filter(this.filterByStatus);
 
     if (randomized) {
-      todosFiltered = randomize(todosFiltered);
+      filteredTodos = randomize(filteredTodos);
     }
 
     return (
@@ -93,13 +99,14 @@ export class TodoList extends React.Component {
         <Filters
           filterTitle={filterTitle}
           filterStatus={filterStatus}
+          filters={filters}
           handleChange={this.handleInputChange}
           handleBtn={this.handleRandomBtn}
         />
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todosFiltered.map(todo => (
+            {filteredTodos.map(todo => (
               <li
                 className={todo.completed
                   ? 'TodoList__item TodoList__item--checked'
