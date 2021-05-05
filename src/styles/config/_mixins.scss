@@ -1,0 +1,32 @@
+// MIXINS
+
+// Placeholders
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &::-moz-input-placeholder {
+    @content;
+  }
+  &::-ms-input-placeholder {
+    @content;
+  }
+  &::placeholder {
+    @content;
+  }
+}
+
+// Generalize input styles
+@mixin input-styles($styles, $cl, $states: ()) {
+  $elems: 'input', 'select', 'textarea';
+  $list: ();
+  @each $elem in $elems {
+    $list: append($list, unquote('#{$elem}:#{$cl}'), comma);
+    @each $state in $states {
+      $list: append($list, unquote('#{$elem}:#{$cl}:#{$state}'), comma);
+    }
+  }
+  #{$list} {
+    @extend #{$styles};
+  }
+}
