@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import './TodoList.scss';
 
-export class TodoList extends React.Component {
+export class TodoList extends React.PureComponent {
   state = {
     title: '',
     filterOptions: [
