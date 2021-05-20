@@ -29,3 +29,21 @@
     color: #ff3626;
   }
 }
+
+input {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid rgb(0, 0, 0);
+}
+
+select {
+  width: 10%;
+  font-size: 15px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+}
