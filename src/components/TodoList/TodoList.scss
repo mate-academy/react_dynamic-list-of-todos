@@ -28,4 +28,16 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+  }
+
+  &__search {
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 10px;
+  }
 }
