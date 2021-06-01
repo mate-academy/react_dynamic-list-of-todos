@@ -22,7 +22,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.title !== this.state.title && this.state.title !== '') {
+    if (prevState.title !== this.state.title) {
       this.titleParse();
     }
 
