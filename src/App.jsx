@@ -1,4 +1,4 @@
-/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable no-unreachable */
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
@@ -10,25 +10,14 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     todos: [],
-    copiedTodos: [],
     selectedUserId: 0,
     title: '',
-    selectOption: '',
+    selectedOption: '',
     randomOption: false,
   };
 
   componentDidMount() {
     this.updateTodos();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.title !== this.state.title) {
-      this.titleParse();
-    }
-
-    if (prevState.randomOption !== this.state.randomOption) {
-      this.randomOrder();
-    }
   }
 
   handleChange = (e) => {
@@ -40,41 +29,48 @@ class App extends React.Component {
   updateTodos = async() => {
     const todos = await getTodos();
 
-    this.setState({
-      todos,
-      copiedTodos: [...todos],
-    });
+    this.setState({ todos });
   }
 
   selectUserId = (id) => {
     this.setState({ selectedUserId: id });
   }
 
-  randomOrder() {
-    const newArr = (this.state.randomOption)
-      ? this.state.copiedTodos.sort(() => Math.random() - 0.5)
-      : this.titleParse();
-
-    this.setState({ copiedTodos: newArr });
-  }
-
-  titleParse() {
-    const newTodos = this.state.todos.filter((todo) => {
+  prepareTodos = () => {
+    let filteredTodos = this.state.todos.filter((todo) => {
       if (todo.title === null) {
         return false;
       }
 
-      return todo.title.includes(this.state.title);
+      if (todo.title.includes(this.state.title)) {
+        switch (this.state.selectedOption) {
+          case 'active':
+            return !todo.completed;
+
+            break;
+          case 'completed':
+            return todo.completed;
+
+            break;
+          default:
+            return true;
+        }
+      } else {
+        return false;
+      }
     });
 
-    this.setState({ copiedTodos: newTodos });
+    filteredTodos = (this.state.randomOption)
+      ? filteredTodos.sort(() => Math.random() - 0.5)
+      : filteredTodos;
 
-    return newTodos;
+    return filteredTodos;
   }
 
   render() {
-    const { selectedUserId, title, copiedTodos, selectOption, randomOption }
+    const { selectedUserId, title, selectedOption, randomOption }
       = this.state;
+    const renderedTodos = this.prepareTodos();
 
     return (
       <div className="App">
@@ -90,8 +86,8 @@ class App extends React.Component {
             />
             <select
               className="filter-item"
-              name="selectOption"
-              value={selectOption}
+              name="selectedOption"
+              value={selectedOption}
               onChange={this.handleChange}
             >
               <option
@@ -122,9 +118,9 @@ class App extends React.Component {
             </button>
           </div>
           <TodoList
-            todos={copiedTodos}
+            todos={renderedTodos}
             onSelected={this.selectUserId}
-            selectOption={selectOption}
+            selectedOption={selectedOption}
           />
         </div>
 
