@@ -28,4 +28,15 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input-label {
+    display: inline-block;
+    margin-right: 250px;
+  }
+
+  &__status-select,
+  &__title-search {
+    margin-top: 20px;
+    display: block;
+  }
 }
