@@ -46,6 +46,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             todoID={todoID}
+            selectedUserId={selectedUserId}
             onUserSelected={this.onUserSelected}
             filterTodosByTitle={this.filterTodosByTitle}
           />

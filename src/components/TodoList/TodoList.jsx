@@ -47,7 +47,7 @@ export class TodoList extends Component {
   }
 
   render() {
-    const { onUserSelected, todoID } = this.props;
+    const { onUserSelected, todoID, selectedUserId } = this.props;
     const { completed } = this.state;
     const todos = this.state.todos || this.props.todos;
 
@@ -100,7 +100,8 @@ export class TodoList extends Component {
 
                 <button
                   className={classNames('TodoList__user-button button', {
-                    'TodoList__user-button--selected': todo.id === todoID,
+                    'TodoList__user-button--selected':
+                    todo.id === todoID && selectedUserId !== 0,
                   })}
                   type="button"
                   onClick={() => onUserSelected(todo.userId, todo.id)}
@@ -126,6 +127,7 @@ TodoList.propTypes = {
   })),
   onUserSelected: PropTypes.func.isRequired,
   todoID: PropTypes.number.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };
 
 TodoList.defaultProps = {

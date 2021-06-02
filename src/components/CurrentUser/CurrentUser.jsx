@@ -14,7 +14,7 @@ export class CurrentUser extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+    if (prevProps.userId !== this.props.userId) {
       this.loadData();
     }
   }
