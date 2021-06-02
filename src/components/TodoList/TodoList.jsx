@@ -1,44 +1,148 @@
 import React from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+const randomize = (array) => {
+  const randomArray = array;
+  let i = randomArray.length - 1;
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  while (i) {
+    const j = Math.floor(Math.random() * i);
+    const temp = randomArray[i];
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+    randomArray[i] = randomArray[j];
+    randomArray[j] = temp;
+
+    i -= 1;
+  }
+
+  return randomArray;
+};
+
+export class TodoList extends React.Component {
+  state = {
+    titleFilter: '',
+    statusFilter: 'all',
+    randomTodos: [],
+  };
+
+  handleFilter = ({ target }) => {
+    this.setState({ [target.name]: target.value });
+  }
+
+  setRandomTodos = () => {
+    const { todos } = this.props;
+
+    this.setState({ randomTodos: randomize(todos) });
+  }
+
+  render() {
+    const { selectedUserId, selectUser } = this.props;
+    const { titleFilter, statusFilter, randomTodos } = this.state;
+    let todos = randomTodos.length ? randomTodos : this.props.todos;
+
+    todos = todos.filter(({ title }) => (
+      title && title.includes(titleFilter.trim())
+    ));
+
+    switch (statusFilter) {
+      case 'active':
+        todos = todos.filter(({ completed }) => !completed);
+        break;
+      case 'completed':
+        todos = todos.filter(({ completed }) => completed);
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__options">
+          <input
+            type="text"
+            className="TodoList__filter-title"
+            placeholder="Filter todos by title"
+            name="titleFilter"
+            value={titleFilter}
+            onChange={this.handleFilter}
+          />
+          <select
+            name="statusFilter"
+            className="TodoList__filter-status"
+            onChange={this.handleFilter}
           >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
           <button
-            className="TodoList__user-button button"
             type="button"
+            className="button TodoList__randomize-button"
+            onClick={this.setRandomTodos}
           >
-            User&nbsp;#2
+            Randomize
           </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+        </div>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {todos.map(({ id, userId, title, completed }) => (
+              <li
+                className={classNames(
+                  'TodoList__item', completed
+                    ? 'TodoList__item--checked'
+                    : 'TodoList__item--unchecked',
+                )}
+                key={id}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={completed}
+                    readOnly
+                  />
+                  <p>{title}</p>
+                </label>
+
+                <button
+                  type="button"
+                  className={classNames(
+                    'button TodoList__user-button',
+                    selectedUserId === userId
+                    && 'TodoList__user-button--selected',
+                  )}
+                  onClick={() => selectUser(userId)}
+                >
+                  User&nbsp;
+                  {userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+const todosTypes = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  userId: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  completed: PropTypes.bool.isRequired,
+}));
+
+TodoList.propTypes = {
+  todos: todosTypes,
+  selectedUserId: PropTypes.number.isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  todos: [],
+};
