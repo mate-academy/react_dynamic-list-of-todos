@@ -55,9 +55,9 @@ export const TodoList = ({
 
             <button
               className={selectedUserId === todo.userId ? (
-                'TodoList__user-button button'
-              ) : (
                 'TodoList__user-button--selected button'
+              ) : (
+                'TodoList__user-button button'
               )}
               type="button"
               onClick={() => {
