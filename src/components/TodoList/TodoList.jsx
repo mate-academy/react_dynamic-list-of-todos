@@ -1,43 +1,43 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList = () => (
+export const TodoList = ({ todos, selectUser, selectedUser }) => (
   <div className="TodoList">
-    <h2>Todos:</h2>
-
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {todos.map(todo => (
+          <li
+            className={
+              todo.completed
+                ? 'TodoList__item TodoList__item--checked'
+                : 'TodoList__item TodoList__item--unchecked'
+            }
+            key={todo.id}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label>
+              <input type="checkbox" readOnly />
+              <p>{todo.title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <button
+              className={
+                todo.userId === selectedUser
+                  ? `
+                      TodoList__user-button
+                      TodoList__user-button--selected
+                      button
+                    `
+                  : 'TodoList__user-button button'
+              }
+              type="button"
+              onClick={() => {
+                selectUser(todo.userId);
+              }}
+            >
+              User&nbsp;#{todo.userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
