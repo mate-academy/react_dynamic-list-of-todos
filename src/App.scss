@@ -73,11 +73,6 @@ input[type="checkbox"]:checked + p:before {
   transform: rotate(45deg);
 }
 
-.searchWrap {
-  max-width: 200px;
-  height: 300px;
-}
-
 .App {
   display: flex;
   justify-content: stretch;

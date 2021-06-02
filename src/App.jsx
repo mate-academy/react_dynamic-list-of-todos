@@ -5,7 +5,7 @@ import getResponse from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
-const url = 'https://mate-api.herokuapp.com/todos';
+const url = 'todos';
 
 class App extends React.Component {
   state = {
@@ -59,25 +59,14 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <div className="searchWrap">
-          <label htmlFor="">
-            TODO name:
-            <input
-              type="text"
-              value={titleFilter}
-              onChange={this.inputHandler}
-            />
-          </label>
-          <select onChange={this.selectHandler}>
-            <option value="all">All</option>
-            <option value>Finished</option>
-            <option value={false}>Unfinished</option>
-          </select>
-        </div>
         <div className="App__sidebar">
           <TodoList
             todos={formatedList}
+            titleFilter={titleFilter}
+            selectedUserId={selectedUserId}
             selectUser={this.selectUser}
+            inputHandler={this.inputHandler}
+            selectHandler={this.selectHandler}
           />
         </div>
 

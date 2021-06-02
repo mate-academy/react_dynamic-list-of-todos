@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './CurrentUser.scss';
 import getResponse from '../../api/api';
 
-const url = 'https://mate-api.herokuapp.com/users';
+const url = 'users';
 
 export class CurrentUser extends React.Component {
   state = {
