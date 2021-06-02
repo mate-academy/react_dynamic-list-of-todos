@@ -26,6 +26,7 @@ export class TodoList extends React.Component {
 
     if (isRandom) {
       formmatedTodos.sort(() => Math.random() - Math.random());
+      this.setState({ isRandom: false });
     }
 
     if (!searchQuarry.length !== 0) {
