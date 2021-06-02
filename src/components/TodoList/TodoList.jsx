@@ -60,6 +60,7 @@ export class TodoList extends React.Component {
           <option>Active</option>
         </select>
         <button
+          className="button"
           type="button"
           onClick={() => this.shuffle(todos)}
         >
