@@ -37,16 +37,6 @@ class App extends React.Component {
     });
   }
 
-  // filterTodosByTitle = ({ target }) => {
-  //   const { todos } = this.state;
-  //   const filtered = todos
-  //     .filter(todo => todo.title && todo.title.includes(target.value));
-
-  //   this.setState({
-  //     todos: filtered,
-  //   });
-  // }
-
   render() {
     const { todos, selectedUserId, todoID } = this.state;
 
