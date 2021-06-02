@@ -16,6 +16,10 @@ h3 {
   text-align: center;
 }
 
+select {
+  height: 35px;
+}
+
 label,
 p {
   margin: 0;
@@ -67,6 +71,11 @@ input[type="checkbox"]:checked + p:before {
   border-left-color: transparent;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.searchWrap {
+  max-width: 200px;
+  height: 300px;
 }
 
 .App {
