@@ -29,3 +29,20 @@
     color: #ff3626;
   }
 }
+
+.sorting-input {
+  box-sizing: content-box;
+  margin-right: 10px;
+  padding: 5px 10px;
+  width: 200px;
+  height: 25px;
+  border: 1px solid black;
+}
+
+.randomize-active {
+  background-color: #ff342691;
+}
+
+.randomize-inactive {
+  background-color: #76ff2691;
+}
