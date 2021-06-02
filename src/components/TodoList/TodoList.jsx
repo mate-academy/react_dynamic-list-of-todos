@@ -112,13 +112,25 @@ export class TodoList extends React.Component {
   }
 }
 
+TodoList.defaultProps = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: 0,
+    userId: 0,
+    title: '',
+    completed: false,
+  })),
+  selectedUserId: 0,
+}
+
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    userId: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  })).isRequired,
+    id: PropTypes.number,
+    userId: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+  })),
   onSelectUser: PropTypes.func.isRequired,
-  selectedUserId: PropTypes.number.isRequired,
+  selectedUserId: PropTypes.number,
 };
+
+
