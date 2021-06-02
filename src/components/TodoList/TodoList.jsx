@@ -35,6 +35,8 @@ export class TodoList extends React.Component {
     return result;
   }
 
+  checkTitle = (title, titleFilter) => title && title.includes(titleFilter);
+
   render() {
     const {
       selectedUser,
@@ -78,8 +80,8 @@ export class TodoList extends React.Component {
           }}
         >
           <option value="all">Show all todos</option>
-          <option value="active">Show uncomplited todos</option>
-          <option value="completed">Show complited todos</option>
+          <option value="active">Show uncompleted todos</option>
+          <option value="completed">Show completed todos</option>
         </select>
 
         <button
@@ -101,56 +103,54 @@ export class TodoList extends React.Component {
         </button>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {preparedTodos.map((todo) => {
-              if (todo.title && todo.title.includes(titleFilter)) {
-                return (
-                  <li
+            {preparedTodos.map(todo => (
+              this.checkTitle(todo.title, titleFilter) ? (
+                <li
+                  className={classNames(
+                    'TodoList__item',
+                    {
+                      'TodoList__item--checked': todo.completed,
+                      'TodoList__item--unchecked': !todo.completed,
+                    },
+                  )}
+                  key={todo.id}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      readOnly
+                      checked={todo.completed}
+                    />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
                     className={classNames(
-                      'TodoList__item',
-                      {
-                        'TodoList__item--checked': todo.completed,
-                        'TodoList__item--unchecked': !todo.completed,
-                      },
+                      'TodoList__user-button', 'button',
+                      { 'TodoList__user-button--selected':
+                        selectedUser === todo.userId },
                     )}
-                    key={todo.id}
+                    type="button"
+                    onClick={() => {
+                      selectUser(todo.userId);
+                    }}
                   >
-                    <label>
-                      <input
-                        type="checkbox"
-                        readOnly
-                        checked={todo.completed}
-                      />
-                      <p>{todo.title}</p>
-                    </label>
-
-                    <button
-                      className={classNames(
-                        'TodoList__user-button', 'button',
-                        { 'TodoList__user-button--selected':
-                          selectedUser === todo.userId },
-                      )}
-                      type="button"
-                      onClick={() => {
-                        selectUser(todo.userId);
-                      }}
-                    >
-                      {todo.userId ? (
-                        <>
-                          User&nbsp;#
-                          {todo.userId}
-                        </>
-                      ) : (
-                        <>
-                          not assigned
-                        </>
-                      )}
-                    </button>
-                  </li>
-                );
-              }
-
-              return null;
-            })}
+                    {todo.userId ? (
+                      <>
+                        User&nbsp;#
+                        {todo.userId}
+                      </>
+                    ) : (
+                      <>
+                        not assigned
+                      </>
+                    )}
+                  </button>
+                </li>
+              ) : (
+                null
+              )
+            ))}
           </ul>
         </div>
       </div>

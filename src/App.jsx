@@ -41,7 +41,7 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId && selectedUserId !== null ? (
+            {selectedUserId ? (
               <CurrentUser userId={selectedUserId} clearUser={this.clearUser} />
             ) : 'No user selected'}
           </div>
