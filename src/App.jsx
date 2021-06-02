@@ -22,29 +22,6 @@ class App extends React.Component {
       });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.todos !== this.state.todos) {
-      getResponse(url)
-        .then((todos) => {
-          const filteredTodos = todos
-            .filter(todo => !Object.values(todo).includes(null))
-            .filter(todo => todo.title.includes(this.state.titleFilter))
-            .filter((todo) => {
-              switch (this.state.todoStatus) {
-                case ('all'):
-                  return true;
-                case (todo.completed.toString()):
-                  return true;
-                default:
-                  return false;
-              }
-            });
-
-          this.setState({ todos: filteredTodos });
-        });
-    }
-  }
-
   selectUser = (userId, event) => {
     if (event.target.checked) {
       this.setState({ selectedUserId: userId });
@@ -66,7 +43,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId, titleFilter } = this.state;
+    const { todos, selectedUserId, titleFilter, todoStatus } = this.state;
+
+    const formatedList = todos
+      .filter(todo => !Object.values(todo).includes(null))
+      .filter(todo => todo.title.includes(titleFilter))
+      .filter((todo) => {
+        switch (todoStatus) {
+          case ('all'):
+            return true;
+          case (todo.completed.toString()):
+            return true;
+          default:
+            return false;
+        }
+      });
 
     return (
       <div className="App">
@@ -87,7 +78,7 @@ class App extends React.Component {
         </div>
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
+            todos={formatedList}
             selectUser={this.selectUser}
           />
         </div>
