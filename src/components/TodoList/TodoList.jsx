@@ -1,44 +1,103 @@
 import React from 'react';
 import './TodoList.scss';
+import propTypes from 'prop-types';
+import { Todo } from '../Todo';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    formmatedTodos: [],
+    isRandom: false,
+    statusFilter: 0,
+    searchQuarry: '',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  componentDidMount() {
+    this.setState({ formmatedTodos: [...this.props.todos] });
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+  randomizeTodos() {
+    this.setState({ isRandom: true });
+  }
+
+  render() {
+    const { isRandom, searchQuarry, statusFilter } = this.state;
+    let { formmatedTodos } = this.state;
+    const { selectUser } = this.props;
+
+    if (isRandom) {
+      formmatedTodos.sort(() => Math.random() - Math.random());
+    }
+
+    if (!searchQuarry.length !== 0) {
+      formmatedTodos = formmatedTodos.filter(({ title }) => {
+        if (title !== null) {
+          return title.toLowerCase().includes(searchQuarry.toLowerCase());
+        }
+
+        return false;
+      });
+    }
+
+    if (statusFilter !== 0) {
+      formmatedTodos = (statusFilter === 1)
+        ? formmatedTodos.filter(todo => !todo.completed)
+        : formmatedTodos.filter(todo => todo.completed);
+    }
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__list-container">
+          <input
+            placeholder="todo title"
+            value={this.state.searchQuarry}
+            onChange={
+              event => this.setState({ searchQuarry: event.target.value })
+            }
+          />
+          <select
+            value={this.state.statusFilter}
+            onChange={
+              event => this.setState({ statusFilter: +event.target.value })}
           >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
+            <option value={0}>status</option>
+            <option value={1}>in progress</option>
+            <option value={2}>completed</option>
+          </select>
           <button
-            className="TodoList__user-button button"
+            className="button"
             type="button"
+            onClick={() => this.randomizeTodos()}
           >
-            User&nbsp;#2
+            Randomize
           </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+          <ul className="TodoList__list">
+            {
+              formmatedTodos.map(
+                todo => (
+                  <Todo
+                    key={todo.id}
+                    todo={todo}
+                    selectUser={selectUser}
+                  />
+                ),
+              )
+            }
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: propTypes.arrayOf(
+    propTypes.shape({
+      id: propTypes.number.isRequired,
+      completed: propTypes.bool.isRequired,
+      title: propTypes.string.isRequired,
+
+    }),
+  ).isRequired,
+  selectUser: propTypes.func.isRequired,
+};
