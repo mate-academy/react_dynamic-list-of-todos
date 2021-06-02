@@ -25,9 +25,6 @@ export const TodoList = ({ todos, selectUser }) => (
                 <input
                   type="checkbox"
                   readOnly
-                  onChange={(event) => {
-                    selectUser(todo.userId, event);
-                  }}
                 />
               )}
               <p>{todo.title}</p>
@@ -40,6 +37,9 @@ export const TodoList = ({ todos, selectUser }) => (
                 button
               "
               type="button"
+              onClick={() => {
+                selectUser(todo.userId);
+              }}
             >
               User&nbsp;#
               {todo.userId}

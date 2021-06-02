@@ -23,10 +23,8 @@ class App extends React.Component {
   }
 
   selectUser = (userId, event) => {
-    if (event.target.checked) {
+    if (userId !== this.state.selectedUserId) {
       this.setState({ selectedUserId: userId });
-    } else {
-      this.setState({ selectedUserId: 0 });
     }
   }
 
