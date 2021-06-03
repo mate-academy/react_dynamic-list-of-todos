@@ -9,8 +9,8 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    query: '',
-    completedStatus: '',
+    searchTitle: '',
+    searchTodoStatus: '',
   };
 
   async componentDidMount() {
@@ -21,41 +21,51 @@ class App extends React.Component {
     });
   }
 
-  queryUpdate = (value) => {
-    this.setState({ query: value });
+  updateSearchTitle = (value) => {
+    this.setState({ searchTitle: value });
   };
 
-  setCompletedStatus = (status) => {
-    this.setState({ completedStatus: status });
+  updateSearchTodoStatus = (status) => {
+    this.setState({ searchTodoStatus: status });
   }
 
-  render() {
-    const { todos, selectedUserId, query, completedStatus } = this.state;
-    const normalizeQuery = query.toLowerCase().trim();
+  visibleTodos = (todos) => {
+    const { searchTitle, searchTodoStatus } = this.state;
 
-    let visibleTodos = todos.filter(
-      todo => ((todo.title != null)
-        ? todo.title.toLowerCase().includes(normalizeQuery) : todo.title),
-    );
+    const normalizeQuery = searchTitle.toLowerCase().trim();
 
-    switch (completedStatus) {
+    let visibleTodos = [...todos];
+
+    switch (searchTodoStatus) {
       case 'Active':
-        visibleTodos = [...todos].filter(({ completed }) => !completed);
+        visibleTodos = visibleTodos.filter(({ completed }) => !completed);
         break;
       case 'Completed':
-        visibleTodos = [...todos].filter(({ completed }) => completed);
+        visibleTodos = visibleTodos.filter(({ completed }) => completed);
         break;
       default:
         break;
     }
 
+    visibleTodos = visibleTodos.filter(
+      todo => ((todo.title != null)
+        ? todo.title.toLowerCase().includes(normalizeQuery) : todo.title),
+    );
+
+    return visibleTodos;
+  }
+
+  render() {
+    const { todos, selectedUserId } = this.state;
+
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={visibleTodos}
-            queryUpdate={this.queryUpdate}
-            setCompletedStatus={this.setCompletedStatus}
+            todos={this.visibleTodos(todos)}
+            selectedUserId={selectedUserId}
+            updateSearchTitle={this.updateSearchTitle}
+            updateSearchTodoStatus={this.updateSearchTodoStatus}
             selectUser={(userId) => {
               this.setState({ selectedUserId: userId });
             }}

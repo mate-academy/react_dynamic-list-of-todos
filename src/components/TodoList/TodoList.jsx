@@ -6,41 +6,45 @@ import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
-    query: '',
+    titleQuery: '',
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !== this.state.query) {
-      this.props.queryUpdate(this.state.query);
+    if (prevState.titleQuery !== this.state.titleQuery) {
+      this.props.updateSearchTitle(this.state.titleQuery);
     }
   }
 
-  handleQueryChange = (event) => {
-    this.setState(
-      { query: event.target.value },
-    );
-  };
-
   render() {
-    const { todos, selectUser, setCompletedStatus } = this.props;
+    const {
+      todos,
+      selectUser,
+      updateSearchTodoStatus,
+      selectedUserId,
+    } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
         <div className="TodoList__filter-form">
           <label fotHtml="bytitle">
-            {`Filter by title  `}
+            Filter by title
+            {`  `}
             <input
               id="bytitle"
               type="text"
-              onChange={this.handleQueryChange}
+              onChange={(event) => {
+                this.setState({ titleQuery: event.target.value });
+              }}
             />
           </label>
-          <label fotHtml="bytitle">
-            {`   Filter by completed  `}
+          <label fotHtml="bycompleted">
+            Filter by completed
+            {`  `}
             <select
+              id="bycompleted"
               className="TodoList__filter-completed"
-              onChange={event => setCompletedStatus(event.target.value)}
+              onChange={event => updateSearchTodoStatus(event.target.value)}
             >
               <option value="All">All</option>
               <option value="Completed">Completed</option>
@@ -63,11 +67,9 @@ export class TodoList extends React.Component {
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={classNames(`TodoList__user-button button`,
+                    { 'TodoList__user-button--selected':
+                      todo.userId === selectedUserId })}
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
@@ -93,6 +95,7 @@ TodoList.propTypes = {
     completed: PropTypes.string.isRequired,
   }).isRequired,
   selectUser: PropTypes.func.isRequired,
-  setCompletedStatus: PropTypes.func.isRequired,
-  queryUpdate: PropTypes.func.isRequired,
+  updateSearchTodoStatus: PropTypes.func.isRequired,
+  updateSearchTitle: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };
