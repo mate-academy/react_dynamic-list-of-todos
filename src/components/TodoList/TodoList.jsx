@@ -6,7 +6,8 @@ export const TodoList = ({
   todos,
   userId,
   selectUser,
-  handleChange,
+  queryChange,
+  selestChange,
   filter,
 }) => (
   <div className="TodoList">
@@ -18,11 +19,11 @@ export const TodoList = ({
       name="query"
       className="input"
       placeholder="Type search word"
-      onChange={handleChange}
+      onChange={queryChange}
     />
 
     <select
-      onChange={handleChange}
+      onChange={selestChange}
       name="filter"
       value={filter}
     >
@@ -80,9 +81,10 @@ export const TodoList = ({
 );
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf().isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape).isRequired,
   userId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  queryChange: PropTypes.func.isRequired,
+  selestChange: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };

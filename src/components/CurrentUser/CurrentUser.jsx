@@ -9,16 +9,16 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    this.loadUser();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.selectedUserId !== this.props.selectedUserId) {
-      this.loadData();
+      this.loadUser();
     }
   }
 
-  async loadData() {
+  async loadUser() {
     const user = await getUser(this.props.selectedUserId);
 
     this.setState({ user });

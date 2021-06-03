@@ -8,6 +8,7 @@ import { getTodos } from './components/api';
 class App extends React.Component {
   state = {
     todos: [],
+    todosFromServer: [],
     selectedUserId: 0,
     query: '',
     filter: 'all',
@@ -17,27 +18,7 @@ class App extends React.Component {
     const todos = await getTodos();
 
     this.setState({ todos });
-  }
-
-  async componentDidUpdate() {
-    let todos;
-    const { filter } = this.state;
-
-    if (filter === 'all') {
-      todos = await getTodos();
-    }
-
-    if (filter === 'active') {
-      todos = await getTodos()
-        .then(result => result.filter(todo => todo.completed === false));
-    }
-
-    if (filter === 'completed') {
-      todos = await getTodos()
-        .then(result => result.filter(todo => todo.completed === true));
-    }
-
-    this.pushTodos(todos);
+    this.setState({ todosFromServer: todos });
   }
 
   clearUser = () => {
@@ -46,16 +27,35 @@ class App extends React.Component {
     });
   }
 
-  handleChange = (event) => {
+  selestChange = (event) => {
+    const { name, value } = event.target;
+    const { todosFromServer } = this.state;
+    let todosSelest = todosFromServer;
+
+    if (value === 'all') {
+      todosSelest = todosFromServer;
+    }
+
+    if (value === 'active') {
+      todosSelest = todosFromServer.filter(todo => todo.completed === false);
+    }
+
+    if (value === 'completed') {
+      todosSelest = todosFromServer.filter(todo => todo.completed === true);
+    }
+
+    this.setState({
+      [name]: value,
+      todos: todosSelest,
+    });
+  }
+
+  queryChange = (event) => {
     const { name, value } = event.target;
 
     this.setState({
       [name]: value,
     });
-  }
-
-  pushTodos(todos) {
-    this.setState({ todos });
   }
 
   render() {
@@ -73,7 +73,8 @@ class App extends React.Component {
           <TodoList
             todos={filtredTodos}
             filter={filter}
-            handleChange={this.handleChange}
+            queryChange={this.queryChange}
+            selestChange={this.selestChange}
             userId={selectedUserId}
             selectUser={(userId) => {
               this.setState({ selectedUserId: userId });
