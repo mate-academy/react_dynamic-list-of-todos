@@ -15,7 +15,7 @@ export class TodoList extends React.Component {
     const todos = await getTodos();
 
     this.setState({
-      visibleTodos: [...todos].slice(0, 10),
+      visibleTodos: [...todos],
     });
   }
 
