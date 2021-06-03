@@ -44,10 +44,6 @@ class App extends React.Component {
           return (todo.title.includes(this.state.input)) && (todo.completed === !!this.state.select);
         }
 
-        if (this.state.select === 'all') {
-          return true;
-        }
-
         return false;
       }
     );
