@@ -55,7 +55,7 @@ class TodoList extends React.PureComponent {
   }
 
   render() {
-    const { todos, onChangeUser } = this.props;
+    const { todos, onChangeUser, selectedUserId } = this.props;
     const { search, todoStatus, random } = this.state;
     let todosForShow = this.searchFilter(todos);
 
@@ -115,8 +115,13 @@ class TodoList extends React.PureComponent {
                 </label>
 
                 <button
-                  // eslint-disable-next-line max-len
-                  className="TodoList__user-button TodoList__user-button--selected button"
+                  className={classNames(
+                    'TodoList__user-button button',
+                    {
+                      // eslint-disable-next-line max-len
+                      'TodoList__user-button--selected': selectedUserId === todo.userId,
+                    },
+                  )}
                   type="button"
                   onClick={() => onChangeUser(todo.userId)}
                 >
@@ -139,6 +144,7 @@ TodoList.propTypes = {
     completed: PropTypes.bool,
   })).isRequired,
   onChangeUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };
 
 export default TodoList;

@@ -29,7 +29,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} onChangeUser={this.setSelectedUser} />
+          <TodoList
+            todos={todos}
+            onChangeUser={this.setSelectedUser}
+            selectedUserId={selectedUserId}
+          />
         </div>
 
         <div className="App__content">
