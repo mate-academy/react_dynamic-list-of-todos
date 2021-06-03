@@ -1,4 +1,4 @@
-.CurrentUser {
+.currentUser {
   &__title {
     font-size: 1rem;
     color: white;
@@ -22,8 +22,18 @@
     margin: 5px;
   }
 
-  &__clear {
+  &__clearButton {
     display: block;
     margin: 20px auto 0;
+    width: max-content;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: black;
+    color: white;
+
+    &:active {
+      background-color: white;
+      color: black;
+    }
   }
 }
