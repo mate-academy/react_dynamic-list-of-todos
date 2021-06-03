@@ -1,0 +1,26 @@
+.form {
+  margin: 10px 0;
+
+  &__input {
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #3298dc;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:focus {
+      border: none;
+      outline:  2px solid #3298dc;
+    }
+  }
+
+  &__select {
+    border: 1px solid #3298dc;
+
+    &:focus {
+      border: 1px solid #3298dc;
+      outline: none;
+    }
+  }
+}
