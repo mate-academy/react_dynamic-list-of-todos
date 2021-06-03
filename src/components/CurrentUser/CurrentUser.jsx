@@ -1,11 +1,11 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { request } from '../../api/api';
+import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
-    users: {},
+    user: {},
   };
 
   componentDidMount() {
@@ -18,16 +18,16 @@ export class CurrentUser extends React.Component {
     }
   }
 
-  getUsers = async() => {
-    const userFromServer = await request(`/users/${this.props.userId}`);
+  async getUsers() {
+    const userFromServer = await getUser(this.props.userId);
 
     this.setState({
-      users: userFromServer.data,
+      user: userFromServer,
     });
   }
 
   render() {
-    const { id, name, email, phone } = this.state.users;
+    const { id, name, email, phone } = this.state.user;
     const { clearSelectedUser } = this.props;
 
     return (

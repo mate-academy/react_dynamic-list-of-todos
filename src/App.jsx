@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api/api';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -11,17 +11,13 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  componentDidMount() {
-    this.getTodos();
-  }
-
-  getTodos = async() => {
-    const todoListFromServer = await request('/todos');
+  async componentDidMount() {
+    const todoListFromServer = await getTodos();
 
     this.setState({
-      todos: todoListFromServer.data,
+      todos: todoListFromServer,
     });
-  }
+  };
 
   onSelectedUser = (userId) => {
     this.setState({
