@@ -14,8 +14,36 @@ export class TodoList extends React.Component {
     }
   }
 
+  searchSelect = (value, content) => {
+    const filter = this.props.todos.filter(todo => todo.title !== null && todo.title !== '');
+    let find = '';
+
+    value === 'all'
+      ? find = filter.filter(todo => todo.title.includes(content))
+      : find = filter.filter(todo => (
+          todo.completed === (value === 'active' ? false : true) && (
+            todo.title.includes(content))
+        ))
+
+    return find;
+  }
+
+  selectFind = (value) => {
+    const { todos } = this.props;
+
+    if (value === 'completed') {
+      const active = todos.filter(todo => todo.completed === true)
+      this.setState({ filterTodos: active })
+    } else if (value === 'active') {
+      const complete = todos.filter(todo => todo.completed === false)
+      this.setState({ filterTodos: complete })
+    } else {
+      this.setState({ filterTodos: todos })
+    }
+  }
+
   render() {
-    const { todos, userId, findUserId } = this.props;
+    const { userId, findUserId } = this.props;
     const { filterTodos, select, search } = this.state;
 
     return (
@@ -24,19 +52,9 @@ export class TodoList extends React.Component {
           value={search}
           placeholder="search Title"
           onChange={(event) => {
-            const filter = todos.filter(todo => todo.title !== null && todo.title !== '');
-            let find = '';
-
-            select === 'all'
-              ? find = filter.filter(todo => todo.title.includes(event.target.value))
-              : find = filter.filter(todo => (
-                  todo.completed === (select === 'active' ? false : true) && (
-                    todo.title.includes(event.target.value))
-                ))
-
             this.setState({
               search: event.target.value,
-              filterTodos: find,
+              filterTodos: this.searchSelect(select, event.target.value),
             });
           }}
         />
@@ -45,15 +63,7 @@ export class TodoList extends React.Component {
           value={select}
           onChange={(event) => {
             this.setState({ select: event.target.value });
-            if (event.target.value === 'completed') {
-              const active = todos.filter(todo => todo.completed === true)
-              this.setState({ filterTodos: active })
-            } else if (event.target.value === 'active') {
-              const complete = todos.filter(todo => todo.completed === false)
-              this.setState({ filterTodos: complete })
-            } else {
-              this.setState({ filterTodos: todos })
-            }
+            this.selectFind(event.target.value);
           }}
         >
           <option
