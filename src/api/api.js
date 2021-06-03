@@ -11,4 +11,5 @@ const request = url => fetch(`${API_URL}${url}`)
   .then(result => result.data);
 
 export const getTodos = () => request('./todos');
+export const getUsers = () => request('./users');
 export const getUser = userId => request(`./users/${userId}`);

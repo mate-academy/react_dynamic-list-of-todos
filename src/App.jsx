@@ -16,8 +16,7 @@ class App extends React.Component {
   }
 
   loadData = async() => {
-    // eslint-disable-next-line
-    const todos = await getTodos(this.props.userId);
+    const todos = await getTodos();
 
     this.setState({ todos });
   }

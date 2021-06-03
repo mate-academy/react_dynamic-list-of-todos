@@ -3,11 +3,38 @@ import './TodoList.scss';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+const shuffle = (array) => {
+
+  const randomArray = array;
+  let i = randomArray.length - 1;
+
+  while (i) {
+    // eslint-disable-next-line
+    const j = Math.floor(Math.random() * i);
+    const result = randomArray[i];
+    randomArray[i] = randomArray[j];
+    randomArray[j] = result;
+    i--;
+  }
+}
+
 export class TodoList extends React.Component {
   state = {
     completedTodos: 'All',
     title: '',
+    randomTodos: [],
   };
+
+  completedTodos = (todos) => {
+    switch (this.state.completedTodos) {
+      case 'Active':
+        return todos.filter(todo => !todo.completed);
+      case 'Completed':
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }
 
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -17,28 +44,20 @@ export class TodoList extends React.Component {
     });
   }
 
-  shuffle = (result) => {
-    result.sort(() => Math.floor(Math.random() * 100) - 30);
-    this.forceUpdate();
+  handleRandomizer = () => {
+    const { todos } = this.props;
+
+    this.setState({ randomTodos: shuffle(todos) });
   }
 
   render() {
     const { todos } = this.props;
-    const { title, completedTodos } = this.state;
-    let preparedTodoList;
+    const { title, completedTodos, isRandom } = this.state;
 
-    switch (completedTodos) {
-      case 'All':
-        preparedTodoList = todos;
-        break;
-      case 'Completed':
-        preparedTodoList = todos.filter(todo => todo.completed === true);
-        break;
-      case 'Active':
-        preparedTodoList = todos.filter(todo => todo.completed === false);
-        break;
-      default:
-        break;
+    let preparedTodos = this.completedTodos([...todos]);
+
+    if (isRandom) {
+      preparedTodos = this.shuffle(preparedTodos);
     }
 
     return (
@@ -62,13 +81,13 @@ export class TodoList extends React.Component {
         <button
           type="button"
           className="button"
-          onClick={() => this.shuffle(todos)}
+          onClick={this.handleRandomizer}
         >
           Randomize
         </button>
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {preparedTodoList
+            {preparedTodos
               .filter(todo => todo.title
                 && (todo.title).includes(title))
               .map(todo => (
@@ -114,23 +133,22 @@ export class TodoList extends React.Component {
 
 TodoList.defaultProps = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    id: 0,
     userId: 0,
     title: '',
     completed: false,
   })),
   selectedUserId: 0,
-}
+};
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    userId: PropTypes.number,
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-  })),
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number,
+      title: PropTypes.string,
+      completed: PropTypes.bool,
+    }),
+  ).isRequired,
   onSelectUser: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number,
 };
-
-
