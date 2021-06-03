@@ -13,24 +13,24 @@ export class TodoList extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.todos.length !== this.props.todos.length) {
       this.setTodos([...this.props.todos]);
-      // this.setState({ todos: [...this.props.todos] });
     }
 
     if (prevState.inputValue !== this.state.inputValue) {
-      const { todos, inputValue } = this.state;
-
-      if (inputValue !== '') {
-        const filteredList = todos
+      if (this.state.inputValue !== '') {
+        const filteredList = [...this.props.todos]
           .filter((todo) => {
             if (todo.title === null) {
               return false;
             }
 
-            return todo.title.includes(inputValue);
+            return todo.title.includes(this.state.inputValue);
           });
 
         this.setTodos(filteredList);
-        // this.setState({ todos: filteredList });
+      }
+
+      if (this.state.inputValue === '' || this.state.inputValue === undefined) {
+        this.setTodos([...this.props.todos]);
       }
     }
   }
