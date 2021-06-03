@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
 
@@ -15,7 +16,12 @@ export class TodoList extends React.PureComponent {
             {todos.map(todo => (
               <li
                 key={todo.id}
-                className="TodoList__item TodoList__item--unchecked"
+                className={classNames('TodoList__item',
+                  {
+                    'TodoList__item--checked': todo.completed,
+                    'TodoList__item--unchecked': !todo.completed,
+                  }
+                )}
               >
                 <label>
                   <input type="checkbox" readOnly />
