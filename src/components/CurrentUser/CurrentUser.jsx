@@ -1,12 +1,64 @@
+// import { render } from 'node-sass';
 import React from 'react';
 import './CurrentUser.scss';
+import PropTypes from 'prop-types';
+import { getUser } from '../../api/api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: {},
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    getUser(this.props.userId)
+      .then(({ data: user }) => {
+        this.setState({ user });
+      });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      getUser(this.props.userId)
+        .then(({ data: user }) => {
+          this.setState({ user });
+        });
+    }
+  }
+
+  render() {
+    const { id, name, email, phone } = this.state.user;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {id}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">
+          {name}
+        </h3>
+        <p className="CurrentUser__email">
+          {email}
+        </p>
+        <p className="CurrentUser__phone">
+          {phone}
+        </p>
+        <button
+          type="button"
+          className="CurrentUser__button"
+          onClick={this.props.onClear}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  onClear: PropTypes.func.isRequired,
+};
