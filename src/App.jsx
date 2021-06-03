@@ -8,15 +8,12 @@ import { getTodos } from './api';
 class App extends React.Component {
   state = {
     todos: [],
-    copy: [],
     selectedUserId: 0,
   };
 
   async componentDidMount() {
     getTodos().then((todos) => {
-      this.setState({
-        todos: todos.data, copy: todos.data,
-      });
+      this.setState({ todos: todos.data });
     });
   }
 
@@ -26,27 +23,6 @@ class App extends React.Component {
     }
 
     this.setState({ selectedUserId: userId });
-  }
-
-  filterUser = (complete) => {
-    const { copy } = this.state;
-
-    if (complete === 'all') {
-      this.setState({ todos: copy });
-    } else {
-      const filter = copy.filter(
-        todo => todo.completed === (complete === 'true'),
-      );
-
-      this.setState({ todos: filter });
-    }
-  }
-
-  searchTodo = (text) => {
-    const filter = this.state.copy.filter(todo => todo.title !== null && todo.title !== '')
-    const result = filter.filter(todo => todo.title.includes(text))
-
-    this.setState({ todos: result });
   }
 
   clearUser = () => {
@@ -63,8 +39,6 @@ class App extends React.Component {
             todos={todos}
             userId={selectedUserId}
             findUserId={this.findUserId}
-            filterUser={this.filterUser}
-            searchTodo={this.searchTodo}
           />
         </div>
 

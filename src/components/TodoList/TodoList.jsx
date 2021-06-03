@@ -3,13 +3,20 @@ import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
-    select: '',
+    filterTodos: [],
+    select: 'all',
     search: '',
   }
 
+  async componentDidUpdate(prevProps) {
+    if (prevProps.todos !== this.props.todos) {
+      this.setState({ filterTodos: this.props.todos })
+    }
+  }
+
   render() {
-    const { todos, userId, findUserId, filterUser, searchTodo } = this.props;
-    const { select, search } = this.state;
+    const { todos, userId, findUserId } = this.props;
+    const { filterTodos, select, search } = this.state;
 
     return (
       <div className="TodoList">
@@ -17,8 +24,20 @@ export class TodoList extends React.Component {
           value={search}
           placeholder="search Title"
           onChange={(event) => {
-            this.setState({ search: event.target.value });
-            searchTodo(event.target.value);
+            const filter = todos.filter(todo => todo.title !== null && todo.title !== '');
+            let find = '';
+
+            select === 'all'
+              ? find = filter.filter(todo => todo.title.includes(event.target.value))
+              : find = filter.filter(todo => (
+                  todo.completed === (select === 'active' ? false : true) && (
+                    todo.title.includes(event.target.value))
+                ))
+
+            this.setState({
+              search: event.target.value,
+              filterTodos: find,
+            });
           }}
         />
 
@@ -26,15 +45,17 @@ export class TodoList extends React.Component {
           value={select}
           onChange={(event) => {
             this.setState({ select: event.target.value });
-            filterUser(event.target.value);
+            if (event.target.value === 'completed') {
+              const active = todos.filter(todo => todo.completed === true)
+              this.setState({ filterTodos: active })
+            } else if (event.target.value === 'active') {
+              const complete = todos.filter(todo => todo.completed === false)
+              this.setState({ filterTodos: complete })
+            } else {
+              this.setState({ filterTodos: todos })
+            }
           }}
         >
-          <option
-            value=""
-          >
-            select
-          </option>
-
           <option
             value="all"
           >
@@ -42,13 +63,13 @@ export class TodoList extends React.Component {
           </option>
 
           <option
-            value="false"
+            value="active"
           >
             active
           </option>
 
           <option
-            value="true"
+            value="completed"
           >
             completed
           </option>
@@ -56,7 +77,7 @@ export class TodoList extends React.Component {
 
         <h2>Todos:</h2>
 
-        {todos.map(todo => (
+        {filterTodos.map(todo => (
           <div
             className="TodoList__list-container"
             key={todo.id}
