@@ -21,6 +21,12 @@ export class CurrentUser extends React.Component {
   async getUser() {
     const user = await getUser(this.props.userId);
 
+    if (user === null) {
+      this.props.selectUser(0);
+
+      return;
+    }
+
     this.setState({ currentUser: user });
   }
 
