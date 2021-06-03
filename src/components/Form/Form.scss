@@ -10,7 +10,16 @@
     cursor: pointer;
 
     &:focus {
-      border: 2px solid #3298dc;
+      border: none;
+      outline:  2px solid #3298dc;
+    }
+  }
+
+  &__select {
+    border: 1px solid #3298dc;
+
+    &:focus {
+      border: 1px solid #3298dc;
       outline: none;
     }
   }

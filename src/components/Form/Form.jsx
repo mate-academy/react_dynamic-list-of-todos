@@ -90,7 +90,7 @@ export class Form extends React.Component {
           onChange={this.handleInputChange}
         />
         <select
-          className="form__input"
+          className="form__input form__select"
           name="selectedType"
           value={selectedType}
           onChange={this.handleTypeChange}
