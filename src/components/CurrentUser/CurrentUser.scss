@@ -1,4 +1,5 @@
 .CurrentUser {
+  text-align: center;
   &__title {
     font-size: 1rem;
     color: white;
@@ -25,5 +26,11 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+  }
+  
+  &__button {
+    margin-top: 15px;
+    color: white;
+    background-color: #4d457b;
   }
 }
