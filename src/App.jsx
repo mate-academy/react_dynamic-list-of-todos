@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
 
@@ -42,15 +43,15 @@ class App extends React.Component {
     let visibleTodos = [...todos];
 
     if (todosStatus === 'Active') {
-      visibleTodos = [...todos].filter(({ completed }) => !completed);
+      visibleTodos = todos.filter(({ completed }) => !completed);
     }
 
     if (todosStatus === 'Completed') {
-      visibleTodos = [...todos].filter(({ completed }) => completed);
+      visibleTodos = todos.filter(({ completed }) => completed);
     }
 
     if (titleSearch) {
-      visibleTodos = [...visibleTodos].filter(todo => (
+      visibleTodos = visibleTodos.filter(todo => (
         (`${todo.title}`).toLowerCase().includes(titleSearch.toLowerCase())
       ));
     }
@@ -60,19 +61,23 @@ class App extends React.Component {
 
   render() {
     const { titleSearch, selectedUserId } = this.state;
-    const visibleTodos = this.prepareTodos();
+    const visibleTodos = this.prepareTodos()
+      .filter(todos => todos.title);
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={visibleTodos}
-            selectedUserId={selectedUserId}
-            titleSearch={titleSearch}
-            onSearchByTitle={this.onSearchByTitle}
-            onSelectUserById={this.onSelectUserById}
-            onSetTodosStatus={this.onSetTodosStatus}
-          />
+          {visibleTodos && (
+            <TodoList
+              todos={visibleTodos}
+              selectedUserId={selectedUserId}
+              titleSearch={titleSearch}
+              onSearchByTitle={this.onSearchByTitle}
+              onSelectUserById={this.onSelectUserById}
+              onSetTodosStatus={this.onSetTodosStatus}
+            />
+          )}
+
         </div>
 
         <div className="App__content">

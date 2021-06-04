@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './CurrentUser.scss';
 
 import PropTypes from 'prop-types';
@@ -11,12 +12,7 @@ export class CurrentUser extends React.Component {
   };
 
   componentDidMount() {
-    const { userId } = this.props;
-
-    getUser(userId)
-      .then(({ data }) => {
-        this.setState({ user: { ...data } });
-      });
+    this.loadUser();
   }
 
   componentDidUpdate(prevProps) {
@@ -24,9 +20,11 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    const { userId } = this.props;
+    this.loadUser();
+  }
 
-    getUser(userId)
+  loadUser() {
+    getUser(this.props.userId)
       .then(({ data }) => {
         this.setState({ user: { ...data } });
       });
@@ -36,17 +34,22 @@ export class CurrentUser extends React.Component {
     const { id, name, email, phone } = this.state.user;
     const { onClearUser } = this.props;
 
-    return (
+    return (this.props && (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>
-            {`Selected User: #${id}`}
+            {`Selected User: #${id || 'loading...'}`}
           </span>
         </h2>
-
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
+        {this.state.user ? (
+          <>
+            <h3 className="CurrentUser__name">{name}</h3>
+            <p className="CurrentUser__email">{email}</p>
+            <p className="CurrentUser__phone">{phone}</p>
+          </>
+        ) : (
+          <p>loading...</p>
+        )}
 
         <button
           className="CurrentUser__clear button"
@@ -57,6 +60,8 @@ export class CurrentUser extends React.Component {
         </button>
 
       </div>
+    )
+
     );
   }
 }

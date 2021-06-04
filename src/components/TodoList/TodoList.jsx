@@ -1,6 +1,9 @@
 import React from 'react';
+
 import './TodoList.scss';
+
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export const TodoList = ({
   todos,
@@ -42,9 +45,11 @@ export const TodoList = ({
         {todos.map(todo => (
 
           <li
-            className={todo.completed
-              ? 'TodoList__item TodoList__item--checked'
-              : 'TodoList__item TodoList__item--unchecked'}
+            className={classNames({
+              TodoList__item: true,
+              'TodoList__item--unchecked': !todo.completed,
+              'TodoList__item--checked': todo.completed,
+            })}
             key={todo.id}
           >
 
@@ -53,21 +58,25 @@ export const TodoList = ({
               <p>{todo.title}</p>
             </label>
 
-            <button
-              className={todo.userId === selectedUserId
-                ? `TodoList__user-button
-                   TodoList__user-button--selected
-                   button`
-                : `TodoList__user-button button`
-              }
-              type="button"
-              onClick={() => {
-                onSelectUserById(todo.userId);
-              }}
-            >
-              User&nbsp;#
-              {todo.userId}
-            </button>
+            {todo.userId
+              && (
+                <button
+                  className={classNames({
+                    'TodoList__user-button': true,
+                    button: true,
+                    'TodoList__user-button--selected':
+                      todo.userId === selectedUserId,
+                  })}
+                  type="button"
+                  onClick={() => {
+                    onSelectUserById(todo.userId);
+                  }}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              )
+            }
 
           </li>
         ))}
