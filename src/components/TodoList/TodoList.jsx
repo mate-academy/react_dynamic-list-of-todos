@@ -2,7 +2,7 @@ import React from 'react';
 import './TodoList.scss';
 import PropTypes, { string } from 'prop-types';
 
-export const TodoList = ({ todos, userSelect, userSelected }) => (
+export const TodoList = ({ todos, selectUser, selectedUser }) => (
   <div className="TodoList">
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
@@ -21,7 +21,7 @@ export const TodoList = ({ todos, userSelect, userSelected }) => (
             </label>
             <button
               className={
-                todo.userId === userSelected
+                todo.userId === selectedUser
                   ? `
                       TodoList__user-button
                       TodoList__user-button--selected
@@ -31,7 +31,7 @@ export const TodoList = ({ todos, userSelect, userSelected }) => (
               }
               type="button"
               onClick={() => {
-                userSelect(todo.userId);
+                selectUser(todo.userId);
               }}
             >
               User&nbsp;#
@@ -46,6 +46,6 @@ export const TodoList = ({ todos, userSelect, userSelected }) => (
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(string).isRequired,
-  userSelect: PropTypes.func.isRequired,
-  userSelected: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
+  selectedUser: PropTypes.func.isRequired,
 };
