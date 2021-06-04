@@ -1,9 +1,11 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
+import { getTodos } from './components/api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './components/api/api';
 
 class App extends React.Component {
   state = {
