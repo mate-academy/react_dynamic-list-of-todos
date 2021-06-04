@@ -19,23 +19,24 @@ export class CurrentUser extends React.Component {
 
   loadData = () => {
     getUser(this.props.selectedUserId)
-      .then(user => this.setState({ user: user.data }));
+      .then(user => this.setState({ user }));
   }
 
   render() {
     const { user } = this.state;
 
-    if (!user) {
-      return <span>User cannot be finded</span>;
-    }
-
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title"><span>Selected user: {user.id}</span></h2>
-
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
+        {user ? (
+          <>
+            <h2 className="CurrentUser__title"><span>Selected user: {user.id}</span></h2>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+          </>
+        ) : (
+          <span>User is loading...</span>
+        )}
       </div>
     );
   }

@@ -9,66 +9,76 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    input: '',
-    select: 'all',
+    title: '',
+    selectedTypeOfTodos: 'all',
   };
 
   componentDidMount() {
     getTodos()
-    .then(todos => this.setState({todos: todos.data}));
+      .then(todos => this.setState({ todos }));
   }
 
   selectUser = (newUserId) => (
-    this.setState({selectedUserId: newUserId})
+    this.setState({ selectedUserId: newUserId })
   );
 
-  changeHandler = (event) => (
-    this.setState({[event.target.name]: event.target.value})
-  );
+  changeHandler = (event) => {
+    const { name, value } = event.target;
+    this.setState({[name]: value})
+  };
 
   render() {
-    const { todos, selectedUserId } = this.state;
-    console.log('select', this.state.select);
+    const {
+      todos,
+      selectedUserId,
+      title,
+      selectedTypeOfTodos,
+    } = this.state;
 
-    const todosFiltered = todos.filter(
+    console.log(title);
+
+    const filteredTodos = todos.filter(
       todo => {
-        if (this.state.select === 'all' && todo.title) {
-          return todo.title.includes(this.state.input);
+        if (!todo.title) {
+          return false;
         }
 
-        if (this.state.select === 'true' && todo.title) {
-          return (todo.title.includes(this.state.input)) && (todo.completed === !!this.state.select);
+        if (selectedTypeOfTodos === 'all') {
+          return todo.title.includes(title);
         }
 
-        if (this.state.select === '' && todo.title) {
-          return (todo.title.includes(this.state.input)) && (todo.completed === !!this.state.select);
+        if (selectedTypeOfTodos === 'done') {
+          return todo.title.includes(title) && todo.completed;
+        }
+
+        if (selectedTypeOfTodos === 'undone') {
+          return todo.title.includes(title) && !todo.completed;
         }
 
         return false;
       }
     );
-    console.log('todosFiltered', todosFiltered);
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <input
-            name="input"
+            name="title"
             placeholder="Input ToDo title"
-            value={this.state.input}
+            value={this.state.title}
             onChange={(event) => this.changeHandler(event)}
           />
           <select
-            name="select"
-            value={this.state.select}
+            name="selectedTypeOfTodos"
+            value={this.state.selectedTypeOfTodos}
             onChange={(event) => this.changeHandler(event)}
           >
             <option value="all">All</option>
-            <option value="true">Done</option>
-            <option value="">Undone</option>
+            <option value="done">Done</option>
+            <option value="undone">Undone</option>
           </select>
           <TodoList
-            todos={todosFiltered}
+            todos={filteredTodos}
             selectUser={this.selectUser}
           />
         </div>
@@ -77,7 +87,7 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                selectedUserId={this.state.selectedUserId}
+                selectedUserId={selectedUserId}
               />
             ) : 'No user selected'}
           </div>

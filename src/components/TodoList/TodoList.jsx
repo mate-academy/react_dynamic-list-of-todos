@@ -3,11 +3,7 @@ import classNames from 'classnames';
 import './TodoList.scss';
 
 export class TodoList extends React.Component {
-
-  inputHandler = (event) => this.setState({[event.target.name]: event.target.value})
-
   render() {
-
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -18,13 +14,11 @@ export class TodoList extends React.Component {
               this.props.todos.map(todo => (
                 <li
                   key={todo.id}
-                  className={classNames(
-                    "TodoList__item",
-                    {
-                      "TodoList__item--checked": todo.completed === true,
-                      "TodoList__item--unchecked": todo.completed === false,
-                    })
-                  }
+                  className={classNames({
+                    "TodoList__item": true,
+                    "TodoList__item--checked": todo.completed,
+                    "TodoList__item--unchecked": !todo.completed,
+                  })}
                 >
                   <label>
                     {todo.completed ? (
@@ -33,13 +27,12 @@ export class TodoList extends React.Component {
                         checked
                         readOnly
                       />
-                      ) : (
-                        <input
+                    ) : (
+                      <input
                         type="checkbox"
                         readOnly
                       />
-                      )
-                    }
+                    )}
                     <p>{todo.title}</p>
                   </label>
       
