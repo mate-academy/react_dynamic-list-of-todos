@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import './TodoList.scss';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
+import { Todo } from '../Todo';
+
+import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
@@ -15,11 +18,6 @@ export class TodoList extends React.Component {
     this.setState({
       [name]: value,
     });
-  }
-
-  shuffle = (arr) => {
-    arr.sort(() => Math.round(Math.random() * 100) - 50);
-    this.forceUpdate();
   }
 
   render() {
@@ -62,7 +60,7 @@ export class TodoList extends React.Component {
         <button
           className="button"
           type="button"
-          onClick={() => this.shuffle(todos)}
+          onClick={() => this.props.shuffleTodos(todos)}
         >
           Shuffle
         </button>
@@ -80,28 +78,11 @@ export class TodoList extends React.Component {
                   })
                 }
                 >
-                  <label>
-                    {todo.completed ? (
-                      <input type="checkbox" checked readOnly />
-                    ) : (
-                      <input type="checkbox" disabled />
-                    )}
-
-                    <p>{todo.title}</p>
-                  </label>
-                  <button
-                    className={classNames('button TodoList__user-button', {
-                      // eslint-disable-next-line
-                      'TodoList__user-button--selected': todo.userId === this.props.userId,
-                    })}
-                    type="button"
-                    onClick={() => {
-                      this.props.onSelectedUser(todo.userId);
-                    }}
-                  >
-                    User #
-                    {todo.userId}
-                  </button>
+                  <Todo
+                    todo={todo}
+                    selectUser={this.props.selectUser}
+                    userId={this.props.userId}
+                  />
                 </li>
               ))}
 
@@ -119,6 +100,7 @@ TodoList.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   })).isRequired,
-  onSelectedUser: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
+  shuffleTodos: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
 };

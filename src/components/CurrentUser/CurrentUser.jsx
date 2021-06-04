@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import './CurrentUser.scss';
-import { getData } from '../../api/api';
+
+import { getUser } from '../../api/users';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -19,7 +21,7 @@ export class CurrentUser extends React.Component {
   }
 
   SelectedUser = async() => {
-    const selectedUser = await getData(`/users/${this.props.userId}`);
+    const selectedUser = await getUser(this.props.userId);
 
     this.setState({
       user: selectedUser.data,
@@ -44,7 +46,7 @@ export class CurrentUser extends React.Component {
         <button
           type="button"
           className="button"
-          onClick={() => this.props.clearSelectedUser()}
+          onClick={this.props.clearSelectedUser}
         >
           Clear
         </button>

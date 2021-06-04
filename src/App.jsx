@@ -1,9 +1,12 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
+import { getTodos } from './api/todos';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getData } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -15,14 +18,23 @@ class App extends React.Component {
     this.loadTodoList();
   }
 
-  onSelectedUser = (userId) => {
+  shuffleTodos = (arr) => {
+    const todosSortRandom = [...arr]
+      .sort(() => Math.round(Math.random() * 100) - 50);
+
+    this.setState({
+      todos: todosSortRandom,
+    });
+  }
+
+  selectUser = (userId) => {
     this.setState({
       selectedUserId: userId,
     });
   }
 
   loadTodoList = async() => {
-    const prepearedTodoList = await getData(`/todos`);
+    const prepearedTodoList = await getTodos();
 
     this.setState({
       todos: prepearedTodoList.data,
@@ -43,8 +55,9 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            onSelectedUser={this.onSelectedUser}
+            selectUser={this.selectUser}
             userId={selectedUserId}
+            shuffleTodos={this.shuffleTodos}
           />
         </div>
 
