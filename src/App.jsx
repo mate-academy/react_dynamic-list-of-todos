@@ -1,39 +1,74 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
+import { getTodos } from './api/api';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-
-import { getTodos } from './api';
 
 class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    searchQuery: '',
+    completedFilter: 'all',
   };
 
-  async componentDidMount() {
-    const todos = await getTodos();
-
-    this.setState({
-      todos,
-    });
+  componentDidMount() {
+    getTodos()
+      .then((todos) => {
+        this.setState({
+          todos,
+        });
+      });
   }
 
   selectUser = (selectedUserId) => {
     this.setState({ selectedUserId });
   }
 
-  render() {
-    const { todos, selectedUserId } = this.state;
+  handleChange = (event) => {
+    const { value, name } = event.target;
 
-    return todos.length !== 0 ? (
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  getVisibleTodos = (todos, searchQuery) => {
+    const normalizedQuery = searchQuery.toLowerCase();
+
+    return todos.filter(todo => todo.title
+      && todo.title.toLowerCase().includes(normalizedQuery));
+  }
+
+  filterCompletedTodos = (todos, completedFilter) => todos.filter(todo => (
+    completedFilter === 'completed'
+      ? todo.completed
+      : !todo.completed
+  ))
+
+  render() {
+    const { todos, selectedUserId, searchQuery, completedFilter } = this.state;
+
+    let visibleTodos = this.getVisibleTodos(todos, searchQuery);
+
+    if (completedFilter !== 'all') {
+      visibleTodos = this.filterCompletedTodos(visibleTodos, completedFilter);
+    }
+
+    return visibleTodos.length > 0 ? (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos.data}
+            searchQuery={searchQuery}
+            completedFilter={completedFilter}
+            visibleTodos={visibleTodos}
             selectedUserId={selectedUserId}
-            onSelectUser={this.selectUser}
+            onHandleChange={this.handleChange}
+            onUserSelected={this.selectUser}
           />
         </div>
 
@@ -48,11 +83,7 @@ class App extends React.Component {
           </div>
         </div>
       </div>
-    ) : (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    ) : (<p>Loading...</p>);
   }
 }
 
