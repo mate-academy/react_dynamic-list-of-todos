@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getUser } from '../../api/api';
+
 import './CurrentUser.scss';
+
+import { getUser } from '../../api/api';
+
 
 export class CurrentUser extends React.Component {
   state = {
-    user: {},
+    user: null,
   }
 
   componentDidMount() {
@@ -37,17 +40,23 @@ export class CurrentUser extends React.Component {
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
+        {!user ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
 
-        <button
-          type="button"
-          onClick={() => this.props.onSelectedUser(0)}
-          className="CurrentUser__button"
-        >
-          Clear
-        </button>
+            <button
+              type="button"
+              onClick={() => this.props.onSelectedUser(0)}
+              className="CurrentUser__button"
+            >
+              Clear
+            </button>
+          </>
+        )}
       </div>
     );
   }

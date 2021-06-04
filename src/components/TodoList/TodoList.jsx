@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+
 import './TodoList.scss';
 
 export class TodoList extends React.PureComponent {
@@ -24,17 +25,15 @@ export class TodoList extends React.PureComponent {
                 )}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input type="checkbox" checked={todo.completed} readOnly />
                   <p>{todo.title}</p>
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
                   type="button"
+                  className={classNames('TodoList__user-button', 'button',
+                    {'TodoList__user-button--selected': this.props.selectedUserId === todo.userId}
+                  )}
                   onClick={() => onSelectedUser(todo.userId)}
                 >
                   User&nbsp;#

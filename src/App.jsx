@@ -1,9 +1,13 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
+import { getTodos } from './api/api';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './api/api';
+
 
 class App extends React.Component {
   state = {
@@ -90,6 +94,7 @@ class App extends React.Component {
           <TodoList
             todos={prepairTodos}
             onSelectedUser={this.selectUser}
+            selectedUserId={selectedUserId}
           />
         </div>
 
