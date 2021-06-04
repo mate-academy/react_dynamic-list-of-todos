@@ -21,10 +21,6 @@ export class CurrentUser extends React.Component {
     }
   }
 
-  clear = () => {
-    this.setState({ user: {} });
-  }
-
   setUser = (user) => {
     this.setState({ user: { ...user.data } });
   }
@@ -50,7 +46,7 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__phone">{phone}</p>
         <button
           type="button"
-          onClick={this.clear}
+          onClick={this.props.clear}
         >
           Clear
         </button>
@@ -61,4 +57,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
+  clear: PropTypes.func.isRequired,
 };
