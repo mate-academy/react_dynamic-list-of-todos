@@ -1,44 +1,101 @@
 import React from 'react';
+
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export class TodoList extends React.PureComponent {
+  render() {
+    const {
+      visibleTodos,
+      onUserSelected,
+      selectedUserId,
+      completedFilter,
+      searchQuery,
+      onHandleChange,
+    } = this.props;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div>
+          <input
+            value={searchQuery}
+            name="searchQuery"
+            onChange={onHandleChange}
+            type="text"
+            placeholder="Type something for filtering todos"
+          />
+
+          <select
+            name="completedFilter"
+            value={completedFilter}
+            onChange={onHandleChange}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="all">all</option>
+            <option value="active">active</option>
+            <option value="completed">completed</option>
+          </select>
+        </div>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames({
+                  TodoList__item: true,
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
+              >
+                <label>
+                  <input type="checkbox" checked={todo.completed} readOnly />
+                  <p>{todo.title}</p>
+                </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                {todo.userId && (
+                  <button
+                    className={classNames({
+                      button: true,
+                      'TodoList__user-button': true,
+                      'TodoList__user-button--selected':
+                        selectedUserId === todo.userId,
+                    })}
+                    type="button"
+                    onClick={() => onUserSelected(todo.userId)}
+                  >
+                    User&nbsp;#
+                    {todo.userId}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  visibleTodos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      title: PropTypes.string,
+      completed: PropTypes.bool,
+      userId: PropTypes.number,
+    }),
+  ),
+  selectedUserId: PropTypes.number.isRequired,
+  onUserSelected: PropTypes.func.isRequired,
+  onHandleChange: PropTypes.func.isRequired,
+  completedFilter: PropTypes.string.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+};
+
+TodoList.defaultProps = {
+  visibleTodos: [],
+};
