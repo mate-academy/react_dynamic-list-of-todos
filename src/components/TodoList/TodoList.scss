@@ -1,6 +1,45 @@
 .TodoList {
   width: 100%;
 
+  &__filtersBlock {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__filtersInnerContainer {
+    display: flex;
+    height: 30px;
+    width: 70%;
+  }
+
+  &__search {
+    padding-left: 7px;
+    font-size: large;
+    border-radius: 10px 0 0 10px;
+    flex: 3;
+  }
+
+  &__select {
+    flex: 1;
+    border-width: 1px;
+    border-radius: 0 10px 10px 0;
+    font-size: medium;
+  }
+
+  .inputField {
+    opacity: 1;
+    border-width: 1px;
+    outline: none;
+  }
+
+  .inputField:hover {
+    box-shadow: 0 3px 2px lightgrey;
+  }
+
+  .inputField:focus {
+    background: linear-gradient(rgb(255, 255, 255), rgb(240, 240, 240));
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
