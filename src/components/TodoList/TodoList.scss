@@ -29,3 +29,18 @@
     color: #ff3626;
   }
 }
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 60px;
+
+  & > * {
+    width: 250px;
+    height: 35px;
+    color: rgb(53, 52, 52);
+    background: rgb(224, 226, 224);
+    border: 1px solid rgb(176, 241, 176);
+  }
+}
