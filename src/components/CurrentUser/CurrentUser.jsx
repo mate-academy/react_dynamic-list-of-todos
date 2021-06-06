@@ -20,9 +20,11 @@ export class CurrentUser extends React.Component {
   componentDidUpdate(prevProps) {
     const { userId } = this.props;
 
-    if (prevProps.userId !== userId) {
-      this.getUser(userId);
+    if (prevProps.userId === userId) {
+      return;
     }
+
+    this.getUser(userId);
   }
 
   getUser = async(id) => {

@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -22,7 +22,7 @@ class App extends React.Component {
     }
   }
 
-  updateUser = (id) => {
+  selectUser = (id) => {
     this.setState({ selectedUserId: id });
   }
 
@@ -37,16 +37,24 @@ class App extends React.Component {
       <div className="App">
         <div className="App__sidebar">
           {!errorMessage ? todos && (
-            <TodoList todos={todos} updateUser={this.updateUser} />
+            <TodoList
+              todos={todos}
+              selectedUserId={selectedUserId}
+              onUserIdSelected={this.selectUser}
+            />
           ) : (
             <p className="error">{errorMessage}</p>
           )}
+
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId > 0 ? (
-              <CurrentUser userId={selectedUserId} clearUser={this.clearUser} />
+            {selectedUserId ? (
+              <CurrentUser
+                userId={selectedUserId}
+                clearUser={this.clearUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>

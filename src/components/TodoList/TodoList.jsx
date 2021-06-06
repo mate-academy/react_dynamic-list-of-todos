@@ -5,65 +5,51 @@ import './TodoList.scss';
 
 export class TodoList extends React.Component {
   state = {
-    filter: '',
-    status: '',
-  }
-
-  hangleFilter = (event) => {
-    this.setState({ filter: event.target.value });
-  }
-
-  handleExecutionStatus = (event) => {
-    this.setState({ status: event.target.value });
+    query: '',
+    type: '',
   }
 
   render() {
-    const { updateUser, todos } = this.props;
-    const { filter, status } = this.state;
-    const searchPhrase = filter.toLocaleLowerCase();
-    const statusOptions = ['all', 'active', 'completed'];
+    const { todos, onUserIdSelected, selectedUserId } = this.props;
+    const { query, type } = this.state;
+    const typeOptions = ['all', 'active', 'completed'];
+    const searchPhrase = query.toLocaleLowerCase();
 
-    let filteredTodos = todos.filter(({ title }) => (
-      title?.toLocaleLowerCase().includes(searchPhrase)
-    ));
-
-    if (status) {
-      switch (status) {
-        case 'active':
-          filteredTodos = todos.filter(todo => todo.completed !== true);
-          break;
-        case 'completed':
-          filteredTodos = todos.filter(todo => todo.completed === true);
-          break;
-        default:
-          filteredTodos = todos;
-          break;
-      }
-    }
+    const filteredTodosList = todos
+      .filter(todo => todo.title)
+      .filter(todo => todo.title.toLocaleLowerCase().includes(searchPhrase))
+      .filter((todo) => {
+        switch (type) {
+          case 'active':
+            return todo.completed !== true;
+          case 'completed':
+            return todo.completed === true;
+          default:
+            return true;
+        }
+      });
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <div>
+        <div className="filter">
           <input
             type="text"
-            id="filter"
-            className="filter-field"
-            name="filter"
-            placeholder="filter by title"
-            value={filter}
-            onChange={this.hangleFilter}
+            value={query}
+            onChange={(event) => {
+              this.setState({ query: event.target.value });
+            }}
           />
-        </div>
-        <div>
           <select
             id="status"
             className="filter-field"
-            value={status}
-            onChange={this.handleExecutionStatus}
+            value={type}
+            onChange={(event) => {
+              this.setState({ type: event.target.value });
+            }}
           >
             <option>select status for todos</option>
-            {statusOptions.map(item => (
+            {typeOptions.map(item => (
               <option
                 key={item}
                 value={item}
@@ -73,43 +59,42 @@ export class TodoList extends React.Component {
             ))}
           </select>
         </div>
+
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {filteredTodos.map(todo => (
+            {filteredTodosList.map(todo => (
               <li
                 key={todo.id}
                 className={classnames({
                   TodoList__item: true,
-                  'TodoList__item--unchecked': !todo.completed,
                   'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
                 })}
               >
                 <label>
-                  <input
-                    type="checkbox"
-                    readOnly
-                    defaultChecked={todo.completed}
-                  />
+                  <input type="checkbox" checked={todo.completed} readOnly />
                   <p>{todo.title}</p>
                 </label>
 
-                <button
-                  className={classnames({
-                    button: true,
-                    'TodoList__user-button': true,
-                    'TodoList__user-button--selected': !todo.completed,
-                  })}
-                  type="button"
-                  onClick={() => {
-                    if (todo.userId) {
-                      updateUser(todo.userId);
-                    }
-                  }}
-                >
-                  User&nbsp;#
-                  {todo.userId}
-                </button>
+                {todo.userId && (
+                  <button
+                    type="button"
+                    className={classnames({
+                      button: true,
+                      'TodoList__user-button': true,
+                      'TodoList__user-button--selected':
+                        selectedUserId === todo.userId,
+                    })}
+                    onClick={() => {
+                      onUserIdSelected(todo.userId);
+                    }}
+                  >
+                    User&nbsp;
+                    {todo.userId}
+                  </button>
+                )}
               </li>
+
             ))}
           </ul>
         </div>
@@ -125,9 +110,11 @@ TodoList.propTypes = {
     title: PropTypes.string,
     completed: PropTypes.bool,
   })),
-  updateUser: PropTypes.func.isRequired,
+  onUserIdSelected: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number,
 };
 
 TodoList.defaultProps = {
   todos: [],
+  selectedUserId: 0,
 };
