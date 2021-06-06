@@ -5,17 +5,19 @@ import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
-    currentUser: {},
+    user: null,
   }
 
   componentDidMount() {
     this.getUser();
   }
 
-  componentDidUpdate(state) {
-    if (state.userId !== this.props.userId && this.state.userId !== 0) {
-      this.getUser();
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId === this.props.userId) {
+      return;
     }
+
+    this.getUser();
   }
 
   async getUser() {
@@ -27,24 +29,24 @@ export class CurrentUser extends React.Component {
       return;
     }
 
-    this.setState({ currentUser: user });
+    this.setState({ user });
   }
 
   render() {
-    const { id, name, email, phone } = this.state.currentUser;
+    const { user } = this.state;
 
-    return (
+    return (user === null) ? 'loading' : (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>
             Selected user:
-            {id}
+            {user.id}
           </span>
         </h2>
 
-        <h3 className="CurrentUser__name">{name}</h3>
-        <p className="CurrentUser__email">{email}</p>
-        <p className="CurrentUser__phone">{phone}</p>
+        <h3 className="CurrentUser__name">{user.name}</h3>
+        <p className="CurrentUser__email">{user.email}</p>
+        <p className="CurrentUser__phone">{user.phone}</p>
         <button
           type="button"
           className="button CurrentUser__clear"

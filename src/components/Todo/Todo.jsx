@@ -13,7 +13,10 @@ export const Todo = ({ todo, selectUser }) => (
   >
 
     <label>
-      <input type="checkbox" disabled={todo.completed} />
+      <input
+        type="checkbox"
+        checked={todo.completed}
+      />
       <p>{todo.title}</p>
     </label>
 

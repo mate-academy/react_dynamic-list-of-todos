@@ -1,13 +1,15 @@
 const API_URL = 'https://mate-api.herokuapp.com';
 
-export function getTodos() {
-  return fetch(`${API_URL}/todos`)
+function getData(url) {
+  return fetch(`${API_URL}${url}`)
     .then(response => response.json())
     .then(response => response.data);
 }
 
+export function getTodos() {
+  return getData('/todos');
+}
+
 export function getUser(userId) {
-  return fetch(`${API_URL}/users/${userId}`)
-    .then(response => response.json())
-    .then(response => response.data);
+  return getData(`/users/${userId}`);
 }
