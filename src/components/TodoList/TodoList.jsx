@@ -7,7 +7,7 @@ class TodoList extends React.PureComponent {
   state = {
     search: '',
     todoStatus: 'all',
-    random: null,
+    isShuffle: false,
   }
 
   searchHandler = (event) => {
@@ -16,7 +16,7 @@ class TodoList extends React.PureComponent {
     });
   }
 
-  searchFilter = (todos) => {
+  getTodosForShow = (todos) => {
     if (!todos) {
       return [];
     }
@@ -24,8 +24,10 @@ class TodoList extends React.PureComponent {
     const { search } = this.state;
     const searchToLower = search.toLowerCase();
 
-    return todos.filter(({ title }) => (
+    const todosWithSearchFilter = todos.filter(({ title }) => (
       title && title.toLowerCase().includes(searchToLower)));
+
+    return this.todosCompletedFilter(todosWithSearchFilter);
   }
 
   todoStatusHandler = (event) => {
@@ -38,30 +40,25 @@ class TodoList extends React.PureComponent {
     const { todoStatus } = this.state;
 
     switch (todoStatus) {
-      case 'all':
-        return todos;
       case 'active':
         return todos.filter(({ completed }) => !completed);
+
       case 'inactive':
         return todos.filter(({ completed }) => completed);
+
+      case 'all':
       default:
         return todos;
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  randomSort(todos) {
-    return [...todos].sort(() => 0.5 - Math.random());
-  }
-
   render() {
-    const { todos, onChangeUser, selectedUserId } = this.props;
-    const { search, todoStatus, random } = this.state;
-    let todosForShow = this.searchFilter(todos);
+    const { todos, onUserChange, selectedUserId } = this.props;
+    const { search, todoStatus, isShuffle } = this.state;
+    let todosForShow = this.getTodosForShow(todos);
 
-    todosForShow = this.todosCompletedFilter(todosForShow);
-    if (random) {
-      todosForShow = this.randomSort(todosForShow);
+    if (isShuffle) {
+      todosForShow = randomSort(todosForShow);
     }
 
     return (
@@ -87,7 +84,7 @@ class TodoList extends React.PureComponent {
 
         <button
           type="button"
-          onClick={() => this.setState({ random: Math.random() })}
+          onClick={() => this.setState({ isShuffle: Math.random() })}
         >
           randomSort
         </button>
@@ -97,13 +94,11 @@ class TodoList extends React.PureComponent {
             {todosForShow.map(todo => (
               <li
                 key={todo.id}
-                className={classNames(
-                  'TodoList__item',
+                className={classNames('TodoList__item',
                   {
                     'TodoList__item--unchecked': !todo.completed,
                     'TodoList__item--checked': todo.completed,
-                  },
-                )}
+                  })}
               >
                 <label>
                   <input
@@ -123,7 +118,7 @@ class TodoList extends React.PureComponent {
                     },
                   )}
                   type="button"
-                  onClick={() => onChangeUser(todo.userId)}
+                  onClick={() => onUserChange(todo.userId)}
                 >
                   User&nbsp;#
                   {todo.userId}
@@ -143,8 +138,12 @@ TodoList.propTypes = {
     title: PropTypes.string,
     completed: PropTypes.bool,
   })).isRequired,
-  onChangeUser: PropTypes.func.isRequired,
+  onUserChange: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
 };
+
+function randomSort(todos) {
+  return [...todos].sort(() => 0.5 - Math.random());
+}
 
 export default TodoList;

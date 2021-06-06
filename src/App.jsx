@@ -12,9 +12,9 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({
-      todos: await getTodos(),
-    });
+    const todosFromServer = await getTodos();
+
+    this.setState({ todos: todosFromServer });
   }
 
   setSelectedUser = (id) => {
@@ -31,7 +31,7 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            onChangeUser={this.setSelectedUser}
+            onUserChange={this.setSelectedUser}
             selectedUserId={selectedUserId}
           />
         </div>
@@ -41,7 +41,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                onChangeUser={this.setSelectedUser}
+                onUserReset={() => this.setSelectedUser(null)}
               />
             ) : 'No user selected'}
           </div>

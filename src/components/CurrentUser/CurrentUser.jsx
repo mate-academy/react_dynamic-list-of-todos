@@ -12,9 +12,7 @@ class CurrentUser extends React.PureComponent {
     const { userId } = this.props;
 
     if (userId) {
-      this.setState({
-        user: await getUser(userId),
-      });
+      await this.setUser();
     }
   }
 
@@ -22,16 +20,21 @@ class CurrentUser extends React.PureComponent {
     const { userId } = this.props;
 
     if (userId !== prevProps.userId) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        user: await getUser(userId),
-      });
+      await this.setUser();
     }
   }
 
+  setUser = async() => {
+    const { userId } = this.props;
+
+    this.setState({
+      user: await getUser(userId),
+    });
+  };
+
   render() {
     const { user } = this.state;
-    const { onChangeUser } = this.props;
+    const { onUserReset } = this.props;
 
     return (
       <>
@@ -49,22 +52,21 @@ class CurrentUser extends React.PureComponent {
             <p className="CurrentUser__phone">{user.phone}</p>
             <button
               type="button"
-              onClick={() => onChangeUser(null)}
+              onClick={onUserReset}
             >
               clear
             </button>
           </div>
         ) : (
           <span>Loading...</span>
-        )
-        }
+        )}
       </>
     );
   }
 }
 
 CurrentUser.propTypes = {
-  onChangeUser: PropTypes.func.isRequired,
+  onUserReset: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
 };
 
