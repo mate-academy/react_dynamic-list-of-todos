@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import './CurrentUser.scss';
-import { request } from '../../api';
+
+import PropTypes from 'prop-types';
+
+import { getUser } from '../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -9,38 +12,47 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    request('/users', `/${this.props.userId}`)
-      .then(({ data }) => this.setState({ user: { ...data } }));
+    const { userId } = this.props;
+
+    getUser(userId)
+      .then((user) => {
+        this.setState({ user });
+      });
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.userId !== prevProps.userId) {
-      request('/users', `/${this.props.userId}`)
-        .then(({ data }) => this.setState({ user: { ...data } }));
+    if (prevProps.userId === this.props.userId) {
+      return;
     }
+
+    const { userId } = this.props;
+
+    getUser(userId)
+      .then((user) => {
+        this.setState({ user });
+      });
   }
 
   render() {
-    const { id, name, email, phone } = this.state.user;
-    const { clearUser } = this.props;
+    const { name, email, phone, id } = this.state.user;
+    const { onRemoveUser } = this.props;
 
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>
-            Selected user:
-            {' '}
-            {id}
+            {`Selected user: ${id}`}
           </span>
         </h2>
 
         <h3 className="CurrentUser__name">{name}</h3>
         <p className="CurrentUser__email">{email}</p>
         <p className="CurrentUser__phone">{phone}</p>
+
         <button
-          className="CurrentUser__clear"
           type="button"
-          onClick={clearUser}
+          className="CurrentUser__clear button"
+          onClick={onRemoveUser}
         >
           Clear
         </button>
@@ -50,6 +62,6 @@ export class CurrentUser extends React.Component {
 }
 
 CurrentUser.propTypes = {
+  onRemoveUser: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
-  clearUser: PropTypes.func.isRequired,
 };
