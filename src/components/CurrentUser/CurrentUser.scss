@@ -22,8 +22,13 @@
     margin: 5px;
   }
 
-  &__clear {
+  &__clear-btn {
     display: block;
-    margin: 20px auto 0;
+    margin: 20px auto;
+    background-color: #cde4e4;
+    border-radius: 8px;
+    padding: 5px 30px;
+    border: 1px solid #459595;
+    color: #459595;
   }
 }
