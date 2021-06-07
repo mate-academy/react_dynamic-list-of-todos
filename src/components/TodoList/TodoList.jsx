@@ -32,10 +32,10 @@ export class TodoList extends React.Component {
     const { todos } = this.props;
 
     if (value === 'completed') {
-      const active = todos.filter(todo => todo.completed === true)
+      const active = todos.filter(todo => todo.completed)
       this.setState({ filterTodos: active })
     } else if (value === 'active') {
-      const complete = todos.filter(todo => todo.completed === false)
+      const complete = todos.filter(todo => !todo.completed)
       this.setState({ filterTodos: complete })
     } else {
       this.setState({ filterTodos: todos })

@@ -29,7 +29,7 @@ export class CurrentUser extends React.Component {
 
     return (
       <>
-        {this.state.user !== null
+        {this.state.user
           ? (
             <div className="CurrentUser">
               <h2 className="CurrentUser__title">
@@ -43,11 +43,11 @@ export class CurrentUser extends React.Component {
               <p className="CurrentUser__email">{user.email}</p>
               <p className="CurrentUser__phone">{user.phone}</p>
 
-              {this.props.userId !== 0 && (
+              {this.props.userId && (
                 <button
                   className="TodoList__user-button button"
                   type="button"
-                  onClick={() => this.props.clearUser()}
+                  onClick={this.props.clearUser}
                 >
                   Clear
                 </button>
