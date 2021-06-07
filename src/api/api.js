@@ -1,8 +1,18 @@
 // eslint-disable-next-line
-const baseURL = 'https://mate-api.herokuapp.com/';
+const BASE_URL = 'https://mate-api.herokuapp.com';
 
-const getData = url => fetch(`${baseURL}${url}`)
-  .then(response => response.json())
-  .then(response => response.data);
+export const getTodos = () => {
+  const url = `${BASE_URL}${'/todos'}`;
 
-export default getData;
+  return fetch(url)
+    .then(response => response.json())
+    .then(response => response.data);
+};
+
+export const getUser = (userId) => {
+  const url = `${BASE_URL}${'/users'}${userId}`;
+
+  return fetch(url)
+    .then(response => response.json())
+    .then(response => response.data);
+};

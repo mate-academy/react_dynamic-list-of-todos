@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './CurrentUser.scss';
-import getResponse from '../../api/api';
 
-const url = 'users';
+import './CurrentUser.scss';
+
+import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -11,7 +11,7 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    getResponse(`${url}/${this.props.userId}`)
+    getUser(`/${this.props.userId}`)
       .then((selectedUser) => {
         this.setState({ selectedUser });
       });
@@ -19,7 +19,7 @@ export class CurrentUser extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      getResponse(`${url}/${this.props.userId}`)
+      getUser(`/${this.props.userId}`)
         .then((selectedUser) => {
           this.setState({ selectedUser });
         });

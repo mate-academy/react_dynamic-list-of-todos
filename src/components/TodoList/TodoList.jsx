@@ -27,8 +27,8 @@ export const TodoList = ({
         </label>
         <select onChange={selectHandler}>
           <option value="all">All</option>
-          <option value>Finished</option>
-          <option value={false}>Unfinished</option>
+          <option value="finished">Finished</option>
+          <option value="unfinished">Unfinished</option>
         </select>
       </div>
 

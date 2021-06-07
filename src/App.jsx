@@ -3,12 +3,10 @@ import React from 'react';
 import './App.scss';
 import './styles/general.scss';
 
-import getData from './api/api';
+import { getTodos } from './api/api';
 
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-
-const url = 'todos';
 
 class App extends React.Component {
   state = {
@@ -19,7 +17,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    getData(url)
+    getTodos()
       .then((todos) => {
         this.setState({ todos });
       });
@@ -45,20 +43,25 @@ class App extends React.Component {
 
   render() {
     const { todos, selectedUserId, titleFilter, todoStatus } = this.state;
+    let formatedList;
 
-    const formatedList = todos
+    const todosFromServer = todos
       .filter(todo => !Object.values(todo).includes(null))
-      .filter(todo => todo.title.includes(titleFilter))
-      .filter((todo) => {
-        switch (todoStatus) {
-          case ('all'):
-            return true;
-          case (todo.completed.toString()):
-            return true;
-          default:
-            return false;
-        }
-      });
+      .filter(todo => todo.title.includes(titleFilter));
+
+    switch (todoStatus) {
+      case 'all':
+        formatedList = todosFromServer;
+        break;
+      case 'finished':
+        formatedList = todosFromServer.filter(todo => todo.completed === true);
+        break;
+      case 'unfinished':
+        formatedList = todosFromServer.filter(todo => todo.completed === false);
+        break;
+      default:
+        break;
+    }
 
     return (
       <div className="App">
