@@ -55,11 +55,11 @@ class App extends React.Component {
     }
 
     if (filterStatus === 'active') {
-      renderTodos = [...renderTodos].filter(todo => todo.completed);
+      renderTodos = [...renderTodos].filter(todo => !todo.completed);
     }
 
     if (filterStatus === 'completed') {
-      renderTodos = [...renderTodos].filter(todo => !todo.completed);
+      renderTodos = [...renderTodos].filter(todo => todo.completed);
     }
 
     return renderTodos;
