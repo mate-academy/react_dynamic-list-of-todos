@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import { request } from '../API/api';
 import './CurrentUser.scss';
 
-const URL = 'https://mate-api.herokuapp.com/users';
-
 export class CurrentUser extends React.PureComponent {
   state = {
-    user: request(URL, `/${this.props.userId}`)
+    user: request(`/users/${this.props.userId}`)
       .then(currUser => this.setState({ user: currUser })),
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      request(URL, `/${this.props.userId}`)
+      request(`/users/${this.props.userId}`)
         .then(currUser => this.setState({ user: currUser }));
     }
   }

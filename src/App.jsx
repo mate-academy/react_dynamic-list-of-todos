@@ -5,8 +5,6 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { request } from './components/API/api';
 
-const URL = 'https://mate-api.herokuapp.com';
-
 let allTodos;
 
 class App extends React.Component {
@@ -16,15 +14,12 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    allTodos = await request(URL, '/todos');
+    allTodos = await request('/todos');
     this.setState({ todos: allTodos });
   }
 
-  handleClick = (event) => {
-    const { textContent, classList } = event.target;
-
-    classList.add('TodoList__user-button--selected');
-    this.setState({ selectedUserId: +textContent[textContent.length - 1] });
+  handleClick = (userId) => {
+    this.setState({ selectedUserId: userId });
   }
 
   active = () => {
@@ -59,6 +54,7 @@ class App extends React.Component {
             active={this.active}
             completed={this.completed}
             all={this.all}
+            selectedUserId={selectedUserId}
           />
         </div>
 

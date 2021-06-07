@@ -8,10 +8,12 @@ export class TodoList extends React.PureComponent {
   }
 
   render() {
-    const { todos, callback, active, completed, all } = this.props;
+    const {
+      todos, callback, active, completed, all, selectedUserId,
+    } = this.props;
     const todosWithoutNull = todos.filter(todo => todo.title !== null);
     const filteredTodos = todosWithoutNull
-      .filter(todo => todo.title.startsWith(this.state.query));
+      .filter(todo => todo.title.includes(this.state.query));
 
     return (
       <div className="TodoList">
@@ -46,12 +48,15 @@ export class TodoList extends React.PureComponent {
               </label>
 
               <button
-                className="
-                  TodoList__user-button
-                  button
-                "
+                className={
+                  // eslint-disable-next-line max-len
+                  `TodoList__user-button${todo.userId === selectedUserId ? '--selected' : ''} button`
+                }
                 type="button"
-                onClick={callback}
+                onClick={() => {
+                  callback(todo.userId);
+                }}
+                id={todo.userId}
               >
                 User&nbsp;
                 {`#${todo.userId}`}
@@ -78,4 +83,5 @@ TodoList.propTypes = {
   active: PropTypes.func.isRequired,
   completed: PropTypes.func.isRequired,
   all: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
 };
