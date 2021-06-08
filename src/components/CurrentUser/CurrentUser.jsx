@@ -11,17 +11,17 @@ export class CurrentUser extends React.Component {
   };
 
   componentDidMount() {
-    this.selectedUser();
+    this.selectUser();
   }
   
   componentDidUpdate(prevProps) {
     if (prevProps.userId === this.props.userId) {
       return;
     }
-    this.selectedUser();
+    this.selectUser();
   }
 
-  selectedUser = () => {
+  selectUser = () => {
     getUser(this.props.userId)
       .then(user => {
         this.setState({ user })
@@ -56,7 +56,7 @@ export class CurrentUser extends React.Component {
             </p>
             <button
               type="button"
-              onClick={() => clearSelectedUser()}
+              onClick={clearSelectedUser}
             >
               Clear
             </button>

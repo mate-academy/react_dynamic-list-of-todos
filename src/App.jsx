@@ -27,14 +27,16 @@ class App extends React.Component {
   render() {
     const { todos, selectedUserId } = this.state;
 
+    const setUserId = (userId) => {
+      this.setState({selectedUserId: userId})
+    };
+
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            onUserIdSelected={userId => {
-              this.setState({selectedUserId: userId})
-            }}
+            onUserIdSelected={setUserId}
             selectedUserId={selectedUserId}
           />
         </div>

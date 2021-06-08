@@ -20,20 +20,20 @@ export class TodoList extends React.Component {
 
     const todosToDisplay = todos
       .filter(todo => todo.title)
-        .filter(todo => todo.title.includes(titleFilter))
-          .filter(todo => {
-            switch (statusFilter) {
-              case 'active':
-              return todo.completed === false;
+      .filter(todo => todo.title.includes(titleFilter))
+      .filter(todo => {
+        switch (statusFilter) {
+          case 'active':
+          return !todo.completed;
 
-              case 'completed':
-              return todo.completed === true;
+          case 'completed':
+          return todo.completed;
 
-              case 'all':
-              default:
-              return todo;
-            }
-          });
+          case 'all':
+          default:
+          return todo;
+        }
+      });
     
     return (
       <div className="TodoList">
