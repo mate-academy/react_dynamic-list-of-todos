@@ -15,9 +15,17 @@ export const TodoList = ({
   const visibleTodos = todos
     .filter(todo => todo.title)
     .filter(todo => todo.title.includes(query))
-    .filter(todo =>
-      (type === 'completed' ? todo.completed : !todo.completed),
-    );
+    .filter((todo) => {
+      if (type === 'completed') {
+        return todo.completed;
+      }
+
+      if (type === 'active') {
+        return !todo.completed;
+      }
+
+      return todo;
+    });
 
   return (
     <div className="TodoList">
@@ -32,16 +40,9 @@ export const TodoList = ({
         id="todoState"
         onClick={event => setType(event.target.value)}
       >
-        <option
-          value=""
-          defaultValue
-          disabled
-        >
-          Select state
-        </option>
+        <option value="all">All</option>
         <option value="completed">Completed</option>
         <option value="active">Active</option>
-        <option value="all">All</option>
       </select>
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
@@ -49,8 +50,7 @@ export const TodoList = ({
             <li
               key={todo.id}
               className={classnames({
-                // eslint-disable-next-line quote-props
-                'TodoList__item': true,
+                TodoList__item: true,
                 'TodoList__item--checked': todo.completed,
                 'TodoList__item--unchecked': !todo.completed,
               })}
@@ -87,7 +87,7 @@ export const TodoList = ({
 
 TodoList.propTypes = {
   todos: propTypes.arrayOf({
-    userId: propTypes.number.isRequired,
+    userId: propTypes.string.isRequired,
     title: propTypes.string.isRequired,
     completed: propTypes.bool.isRequired,
   }).isRequired,

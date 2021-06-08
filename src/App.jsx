@@ -11,6 +11,10 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [selectedUserId, setUserId] = useState(0);
 
+  const selectUser = (userId) => {
+    setUserId(userId);
+  };
+
   useEffect(() => {
     getTodos(todos)
       .then(setTodos);
@@ -26,9 +30,7 @@ const App = () => {
         <TodoList
           todos={todos}
           selectedUserId={selectedUserId}
-          selectUser={(userId) => {
-            setUserId(userId);
-          }}
+          selectUser={selectUser}
         />
       </div>
 

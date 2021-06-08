@@ -11,7 +11,7 @@ export const CurrentUser = ({ userId, clearUser }) => {
   useEffect(() => {
     getUser(userId)
       .then(setUser);
-  });
+  }, [userId]);
 
   return (
     <div className="CurrentUser">
