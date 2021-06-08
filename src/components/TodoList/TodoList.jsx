@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import './TodoList.scss'; //
 
 export class TodoList extends React.PureComponent {
@@ -14,7 +15,6 @@ export class TodoList extends React.PureComponent {
     let filteredTodos = todosWithoutNull
       .filter(todo => todo.title.includes(this.state.query));
 
-    // eslint-disable-next-line default-case
     switch (this.state.filterOption) {
       case 'completed':
         filteredTodos = filteredTodos.filter(todo => todo.completed === true);
@@ -23,6 +23,12 @@ export class TodoList extends React.PureComponent {
       case 'active':
         filteredTodos = filteredTodos.filter(todo => todo.completed === false);
         break;
+
+      case 'all':
+        break;
+
+      default:
+        throw new Error('TodoList, line 8, unexpected filterOption');
     }
 
     return (
@@ -52,33 +58,39 @@ export class TodoList extends React.PureComponent {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {filteredTodos.map(todo => !!todo.title && todo.userId && (
-            <li
-              key={todo.id}
-                  // eslint-disable-next-line max-len
-              className={`${'TodoList__item'} TodoList__item${todo.completed ? '--checked' : '--unchecked'}`}
-            >
-              <label>
-                <input type="checkbox" checked={todo.completed} readOnly />
-                <p>{todo.title}</p>
-              </label>
-
-              <button
-                className={
-                  // eslint-disable-next-line max-len
-                  `TodoList__user-button${todo.userId === selectedUserId ? '--selected' : ''} button`
-                }
-                type="button"
-                onClick={() => {
-                  callback(todo.userId);
-                }}
-                id={todo.userId}
+            {filteredTodos.map(
+              ({ title, completed, userId, id }) => !!title && userId && (
+              <li
+                key={id}
+                className={classnames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': completed },
+                  { 'TodoList__item--unchecked': !completed },
+                )}
               >
-                User&nbsp;
-                {`#${todo.userId}`}
-              </button>
-            </li>
-            ))}
+                <label>
+                  <input type="checkbox" checked={completed} readOnly />
+                  <p>{title}</p>
+                </label>
+
+                <button
+                  className={classnames(
+                    'button',
+                    // eslint-disable-next-line max-len
+                    { 'TodoList__user-button--selected': userId === selectedUserId },
+                  )}
+                  type="button"
+                  onClick={() => {
+                    callback(userId);
+                  }}
+                  id={userId}
+                >
+                  User&nbsp;
+                  {`#${userId}`}
+                </button>
+              </li>
+              ),
+            )}
           </ul>
         </div>
       </div>

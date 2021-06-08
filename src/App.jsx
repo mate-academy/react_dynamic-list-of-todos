@@ -5,8 +5,6 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { request } from './components/API/api';
 
-let allTodos;
-
 class App extends React.Component {
   state = {
     todos: [],
@@ -14,7 +12,8 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    allTodos = await request('/todos');
+    const allTodos = await request('/todos');
+
     this.setState({ todos: allTodos });
   }
 
