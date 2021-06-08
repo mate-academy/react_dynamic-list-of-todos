@@ -1,6 +1,6 @@
 # React dynamic list of TODOs
 - Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/)
+  [DEMO LINK](https://vova-myronenko.github.io/react_dynamic-list-of-todos/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -8,7 +8,7 @@ You are given a basic markup for the App, TodosList and CurrentUser components a
 
 Add the data loading, so the App works as described below:
 
-1. Create a separate file `api.js` to put all the API call there.
+1. Create a separate file `api.js` to put all the API calls there.
 1. Todos are fetched on page load from [GET todos endpoint](https://mate-api.herokuapp.com/todos). (Use `componentDidMount`)
 1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
 1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate-api.herokuapp.com/users/1) (replace 1 with a given `userId`).
