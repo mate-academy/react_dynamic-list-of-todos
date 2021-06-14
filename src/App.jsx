@@ -35,6 +35,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             hendleSelectUser={this.hendleSelectUser}
+            selectedUserId={selectedUserId}
           />
         </div>
 

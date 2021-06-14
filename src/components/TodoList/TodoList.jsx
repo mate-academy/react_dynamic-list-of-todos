@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
+import classNames from 'classnames';
 
 export class TodoList extends React.Component {
   state = {
@@ -17,7 +18,7 @@ export class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, hendleSelectUser } = this.props;
+    const { todos, hendleSelectUser, selectedUserId } = this.props;
     const filtred = todos.filter(todo => todo.title && todo
       .title.includes(this.state.titleFilter))
       .filter((todo) => {
@@ -43,17 +44,16 @@ export class TodoList extends React.Component {
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {filtred.map(todo => (
-              <li className="TodoList__item TodoList__item--unchecked">
+              <li
+                className={`TodoList__item ${todo.completed
+                  ? 'TodoList__item--checked'
+                  : 'TodoList__item--unchecked'}`}>
                 <label>
                   <input type="checkbox" readOnly />
                   <p>{todo.title}</p>
                 </label>
                 <button
-                  className="
-                          TodoList__user-button
-                          TodoList__user-button--selected
-                          button
-                        "
+                  className={classNames('TodoList__user-button', 'button', {'TodoList__user-button--selected': selectedUserId === todo.userId})}
                   type="button"
                   onClick={() => hendleSelectUser(todo.userId)}
                 >
@@ -70,6 +70,7 @@ export class TodoList extends React.Component {
 }
 
 TodoList.propTypes = {
+  selectedUserId: PropTypes.number.isRequired,
   hendleSelectUser: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
