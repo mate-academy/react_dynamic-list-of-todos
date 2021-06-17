@@ -54,9 +54,6 @@ export class TodoList extends React.Component {
           value={this.state.status}
           onChange={this.handleChange}
         >
-          <option value="">
-            Select todos
-          </option>
           <option value="all">
             All
           </option>
