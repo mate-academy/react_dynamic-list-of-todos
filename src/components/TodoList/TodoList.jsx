@@ -21,15 +21,15 @@ export class TodoList extends React.Component {
     const { filterValue, selectValue } = this.state;
 
     if (selectValue === "active") {
-      todos = this.props.todos.filter((todo) => todo.completed === false);
+      todos = todos.filter((todo) => !todo.completed);
     }
 
     if (selectValue === "completed") {
-      todos = this.props.todos.filter((todo) => todo.completed === true);
+      todos = todos.filter((todo) => todo.completed);
     }
 
     if (filterValue) {
-      todos = this.props.todos.filter((todo) =>
+      todos = todos.filter((todo) =>
         todo.title.includes(this.state.filterValue)
       );
     }
