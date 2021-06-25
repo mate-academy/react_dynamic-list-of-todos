@@ -1,44 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export const TodoList = React.memo(({ todos, setUserId }) => {
+  const [state, updateState] = useState(
+    {
+      todosFromServer: todos,
+      title: '',
+      filterBy: '',
+    },
+  );
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  const { todosFromServer, title, filterBy } = state;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+  const todosForDisplay = todosFromServer.filter(todo => (
+    typeof filterBy !== 'boolean'
+      ? todo.title.includes(title)
+      : todo.title.includes(title) && todo.completed === filterBy
+  ));
+
+  return (
+
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <div className="TodoList__controlers">
+        <TextField
+          id="outlined-basic"
+          label="Search for ..."
+          variant="outlined"
+          value={state.title}
+          onChange={event => updateState({
+            ...state, title: event.target.value,
+          })}
+        />
+        <FormControl
+          variant="outlined"
+          style={{ width: 150 }}
+        >
+          <InputLabel id="demo-simple-select-outlined-label">
+            Filter By
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            label="Filter By"
+            value={state.filterBy}
+            onChange={event => updateState({
+              ...state, filterBy: event.target.value,
+            })}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value>Completed</MenuItem>
+            <MenuItem value={false}>Active</MenuItem>
+          </Select>
+        </FormControl>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <button
+          type="button"
+          style={{ width: 150 }}
+          onClick={() => updateState({
+            ...state,
+            todosFromServer: todos.sort((a, b) => Math.random() - 0.5),
+          })}
+        >
+          Randomize
+        </button>
+      </div>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {
+            todosForDisplay.map((todo) => {
+              const { completed, userId, title: todoTitle, id } = todo;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+              return (
+                <li
+                  key={id}
+                  className={classNames(
+                    'TodoList__item',
+                    {
+                      'TodoList__item--checked': completed,
+                      'TodoList__item--unchecked': !completed,
+                    },
+                  )
+                  }
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="completed"
+                      checked={completed}
+                      onChange={() => {
+                        // eslint-disable-next-line
+                        todo.completed = !completed;
+                        updateState({
+                          ...state, todosFromServer: todos,
+                        });
+                      }}
+                    />
+                    <p>{todoTitle}</p>
+                  </label>
+                  <button
+                    type="button"
+                    className="
+                      TodoList__user-button
+                      TodoList__user-button--selected
+                      button
+                    "
+                    onClick={() => setUserId(userId)}
+                  >
+                    User&nbsp;#
+                    {userId}
+                  </button>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+});
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.object.isRequired,
+  ).isRequired,
+  setUserId: PropTypes.func.isRequired,
+};
