@@ -8,4 +8,5 @@ export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
     }
 
     return response.json();
-  });
+  })
+  .then(result => result.data);

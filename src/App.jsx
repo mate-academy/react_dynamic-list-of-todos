@@ -1,9 +1,12 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
+import { getTodos } from './api/todos';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -12,13 +15,13 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    request('/todos')
-      .then((todosFromServer) => {
-        this.setState({ todos: todosFromServer.data });
+    getTodos()
+      .then((todos) => {
+        this.setState({ todos });
       });
   }
 
-  userSelect = (userId) => {
+  userIdSelect = (userId) => {
     if (this.state.selectedUserId !== userId) {
       this.setState({
         selectedUserId: userId,
@@ -36,7 +39,7 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            userSelect={this.userSelect}
+            onUserIdSelected={this.userIdSelect}
             selectedUserId={selectedUserId}
           />
         </div>

@@ -1,42 +1,53 @@
 import React from 'react';
+
 import './CurrentUser.scss';
+
 import PropTypes from 'prop-types';
-import { request } from '../../api/api';
+import { getUser } from '../../api/users';
 
 export class CurrentUser extends React.Component {
   state = {
-    user: {},
+    user: null,
   }
 
   componentDidMount() {
-    request(`/users/${this.props.userId}`)
-      .then(({ data }) => {
-        this.setState({ user: data });
-      });
+    this.loadUser();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.userId !== prevProps.userId) {
-      request(`/users/${this.props.userId}`)
-        .then(({ data }) => {
-          this.setState({ user: data });
-        });
+    if (this.props.userId === prevProps.userId) {
+      return;
     }
+
+    this.loadUser();
+  }
+
+  loadUser() {
+    getUser(this.props.userId)
+      .then((user) => {
+        this.setState({ user });
+      });
   }
 
   render() {
     const { user } = this.state;
-    const { userClear } = this.props;
+    const { userClear, userId } = this.props;
 
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${user.id}`}</span>
+          <span>{`Selected user: ${userId}`}</span>
         </h2>
 
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
+        {!user ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+          </>
+        )}
 
         <button
           onClick={userClear}

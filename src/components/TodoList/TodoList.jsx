@@ -1,6 +1,8 @@
 import React from 'react';
-import './TodoList.scss';
 import classNames from 'classnames';
+
+import './TodoList.scss';
+
 import PropTypes from 'prop-types';
 
 export class TodoList extends React.Component {
@@ -31,7 +33,7 @@ export class TodoList extends React.Component {
   };
 
   render() {
-    const { todos, userSelect, selectedUserId } = this.props;
+    const { todos, onUserIdSelected, selectedUserId } = this.props;
     const { query } = this.state;
 
     const workingTodos = this.todosSelector([...todos]);
@@ -80,18 +82,22 @@ export class TodoList extends React.Component {
                   <p>{title}</p>
                 </label>
 
-                <button
-                  onClick={() => {
-                    userSelect(userId);
-                  }}
-                  className={classNames('TodoList__user-button button', {
-                    'TodoList__user-button--selected':
-                      selectedUserId === userId,
-                  })}
-                  type="button"
-                >
-                  {`User #${+userId}`}
-                </button>
+                {userId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onUserIdSelected(userId);
+                    }}
+                    className={classNames({
+                      'TodoList__user-button': true,
+                      button: true,
+                      'TodoList__user-button--selected':
+                        selectedUserId === userId,
+                    })}
+                  >
+                    {`User #${userId}`}
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -106,6 +112,6 @@ TodoList.propTypes = {
     PropTypes.shape({}),
   ).isRequired,
 
-  userSelect: PropTypes.func.isRequired,
+  onUserIdSelected: PropTypes.func.isRequired,
   selectedUserId: PropTypes.number.isRequired,
 };
