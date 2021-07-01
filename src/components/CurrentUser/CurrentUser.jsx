@@ -1,64 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './CurrentUser.scss';
 
 import PropTypes from 'prop-types';
 import { getUser } from '../../api/users';
 
-export class CurrentUser extends React.Component {
-  state = {
-    user: null,
-  }
+export const CurrentUser = ({ userId, userClear }) => {
+  const [user, setUser] = useState(null);
 
-  componentDidMount() {
-    this.loadUser();
-  }
+  useEffect(() => {
+    getUser(userId).then(setUser);
+  }, [userId]);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.userId === prevProps.userId) {
-      return;
-    }
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title">
+        <span>{`Selected user: ${userId}`}</span>
+      </h2>
 
-    this.loadUser();
-  }
+      {!user ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
+        </>
+      )}
 
-  loadUser() {
-    getUser(this.props.userId)
-      .then((user) => {
-        this.setState({ user });
-      });
-  }
-
-  render() {
-    const { user } = this.state;
-    const { userClear, userId } = this.props;
-
-    return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${userId}`}</span>
-        </h2>
-
-        {!user ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <h3 className="CurrentUser__name">{user.name}</h3>
-            <p className="CurrentUser__email">{user.email}</p>
-            <p className="CurrentUser__phone">{user.phone}</p>
-          </>
-        )}
-
-        <button
-          onClick={userClear}
-          type="button"
-        >
-          Clear
-        </button>
-      </div>
-    );
-  }
-}
+      <button
+        onClick={userClear}
+        type="button"
+      >
+        Clear
+      </button>
+    </div>
+  );
+};
 
 CurrentUser.propTypes = {
   userClear: PropTypes.func.isRequired,
