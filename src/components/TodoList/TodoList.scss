@@ -29,3 +29,15 @@
     color: #ff3626;
   }
 }
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  &__input,
+  &__select {
+    font-size: 20px;
+  }
+}
