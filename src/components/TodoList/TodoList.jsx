@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
+import classNames from 'classnames';
+
+const options = ['all', 'active', 'completed'];
 
 export class TodoList extends Component {
   state = {
@@ -30,14 +33,16 @@ export class TodoList extends Component {
   render() {
     const { todos, userSelected, selectedUserId } = this.props;
     const { search, typeFilter, isShuffle } = this.state;
-    const options = ['all', 'active', 'completed'];
     let visibleTodos = [...todos];
 
-    if (typeFilter === 'active') {
-      visibleTodos = todos.filter(todo => !todo.completed);
-    } else if (typeFilter === 'completed') {
-      visibleTodos = todos.filter(todo => todo.completed);
-    }
+    visibleTodos = todos.filter(todo => (
+      // eslint-disable-next-line no-nested-ternary
+      (typeFilter === 'active')
+        ? !todo.completed
+        : (typeFilter === 'completed')
+          ? todo.completed
+          : todo
+    ));
 
     if (isShuffle) {
       visibleTodos.sort(() => Math.random() - 0.5);
@@ -92,10 +97,10 @@ export class TodoList extends Component {
             {visibleTodos.map(todo => (
               <li
                 key={todo.id}
-                className={`TodoList__item ${todo.completed
-                  ? 'TodoList__item--checked'
-                  : 'TodoList__item--unchecked'
-                }`}
+                className={classNames('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
               >
                 <label>
                   <input
@@ -108,10 +113,14 @@ export class TodoList extends Component {
 
                 <button
                   type="button"
-                  className={`TodoList__user-button button`
-                  + `${todo.userId === selectedUserId
-                    ? ' TodoList__user-button--selected'
-                    : ''}`}
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                      todo.userId === selectedUserId,
+                    },
+                  )}
                   onClick={() => userSelected(todo.userId)}
                 >
                   {`User #${todo.userId}`}
