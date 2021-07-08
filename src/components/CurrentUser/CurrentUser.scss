@@ -1,4 +1,9 @@
 .CurrentUser {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
   &__title {
     font-size: 1rem;
     color: white;
