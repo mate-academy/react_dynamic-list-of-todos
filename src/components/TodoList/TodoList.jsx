@@ -5,32 +5,8 @@ import './TodoList.scss';
 export class TodoList extends React.Component {
   state = {
     listTodos: [...this.props.todos],
-    filterList: [...this.props.todos],
     filterValue: '',
     filterStateTodos: 'all',
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { filterStateTodos, filterValue } = this.state;
-
-    if (prevState.filterStateTodos !== filterStateTodos
-      || prevState.filterValue !== filterValue) {
-      const newList = [...this.state.listTodos].filter((elem) => {
-        if (filterStateTodos === 'completed') {
-          return elem.completed === true;
-        }
-
-        if (filterStateTodos === 'active') {
-          return elem.completed === false;
-        }
-
-        return true;
-      }).filter(item => (`${item.title}`).includes(filterValue));
-
-      this.setState({
-        filterList: newList,
-      });
-    }
   }
 
   handleChange = ({ target }) => {
@@ -39,27 +15,39 @@ export class TodoList extends React.Component {
     });
   };
 
-  shuffleRandom = () => {
-    let j,
-      temp;
-    const copyArr = [...this.state.filterList];
-
-    for (let i = copyArr.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      temp = copyArr[j];
-      copyArr[j] = copyArr[i];
-      copyArr[i] = temp;
-    }
-
-    this.setState({
-      filterList: copyArr,
-    });
-  };
-
   render() {
     const { selectedUserId, getSelectedUserId } = this.props;
-    const { filterValue, filterList, filterStateTodos } = this.state;
-    const currentListTodos = filterList;
+    const { filterValue, listTodos, filterStateTodos } = this.state;
+    const currentListTodos = [...this.state.listTodos].filter((elem) => {
+      if (filterStateTodos === 'completed') {
+        return elem.completed === true;
+      }
+
+      if (filterStateTodos === 'active') {
+        return elem.completed === false;
+      }
+
+      return true;
+    }).filter(item => (
+      `${item.title}`.toLowerCase()
+    ).includes(filterValue.toLowerCase()));
+
+    const shuffleRandom = () => {
+      let j,
+        temp;
+      const copyArr = [...listTodos];
+
+      for (let i = copyArr.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = copyArr[j];
+        copyArr[j] = copyArr[i];
+        copyArr[i] = temp;
+      }
+
+      this.setState({
+        listTodos: copyArr,
+      });
+    };
 
     return (
       <div className="TodoList">
@@ -72,7 +60,7 @@ export class TodoList extends React.Component {
           />
           <button
             type="button"
-            onClick={this.shuffleRandom}
+            onClick={shuffleRandom}
           >
             go random sort
           </button>

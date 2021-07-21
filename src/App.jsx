@@ -20,7 +20,9 @@ class App extends React.Component {
   }
 
   getSelectedUserId = (userId) => {
-    if (this.state.selectedUserId === userId) {
+    const { selectedUserId } = this.state;
+
+    if (selectedUserId === userId) {
       return;
     }
 

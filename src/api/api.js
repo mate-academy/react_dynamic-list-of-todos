@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const url = 'https://mate-api.herokuapp.com';
 
 export async function getTodosApi() {
