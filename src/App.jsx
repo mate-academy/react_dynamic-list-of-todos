@@ -3,11 +3,38 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodosApi } from './api/api';
 
 class App extends React.Component {
   state = {
-    todos: [],
+    todos: null,
     selectedUserId: 0,
+  };
+
+  componentDidMount() {
+    getTodosApi().then(response => (
+      this.setState({
+        todos: response.data,
+      })
+    ));
+  }
+
+  getSelectedUserId = (userId) => {
+    const { selectedUserId } = this.state;
+
+    if (selectedUserId === userId) {
+      return;
+    }
+
+    this.setState({
+      selectedUserId: userId,
+    });
+  }
+
+  clearSelectedUser = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
   };
 
   render() {
@@ -16,13 +43,24 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          {todos ? (
+            <TodoList
+              todos={todos}
+              getSelectedUserId={this.getSelectedUserId}
+              selectedUserId={selectedUserId}
+            />
+          ) : (
+            <h2>no todos</h2>
+          )}
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                clearSelectedUser={this.clearSelectedUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>
