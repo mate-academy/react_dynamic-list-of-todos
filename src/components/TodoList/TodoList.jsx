@@ -1,44 +1,101 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    filteredTodos: this.props.todos,
+    status: '',
+    query: '',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  filterTodos = (event) => {
+    const { name, value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+    this.setState({ [name]: value });
+    let filtTodos = this.props.todos;
+
+    filtTodos = filtTodos
+      .filter(todo => (todo.title.includes(this.state.query.toLowerCase())));
+    if (value === 'active') {
+      filtTodos = this.props.todos.filter(todo => todo.completed === false);
+    }
+
+    if (value === 'completed') {
+      filtTodos = this.props.todos.filter(todo => todo.completed === true);
+    }
+
+    this.setState({ filteredTodos: filtTodos });
+  }
+
+  render() {
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <form>
+          <input
+            onChange={this.filterTodos}
+            value={this.state.query}
+            name="query"
+          />
+          <select
+            onChange={this.filterTodos}
+            value={this.state.status}
+            name="status"
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option hidden>Choose a status</option>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </form>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+            {this.state.filteredTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={`TodoList__item
+                  ${todo.completed
+                  ? 'TodoList__item--unchecked'
+                  : 'TodoList__item--checked'}`}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className={`TodoList__user-button button
+                    ${todo.completed
+                    ? 'TodoList__user-button--selected'
+                    : ''}`}
+                  type="button"
+                  onClick={() => this.props.setUser(todo.userId)}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
+  setUser: PropTypes.func.isRequired,
+};
