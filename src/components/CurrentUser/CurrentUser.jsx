@@ -66,6 +66,14 @@ export class CurrentUser extends React.Component {
               <p className="CurrentUser__phone">
                 {this.state.user.phone}
               </p>
+
+              <button
+                type="button"
+                onClick={this.props.clearSelectedUserId}
+                className="button is-primary CurrentUser__clear"
+              >
+                Clear
+              </button>
             </div>
           )
           : (
@@ -82,4 +90,5 @@ export class CurrentUser extends React.Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
+  clearSelectedUserId: PropTypes.func.isRequired,
 };
