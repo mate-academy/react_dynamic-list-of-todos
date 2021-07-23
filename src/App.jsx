@@ -4,11 +4,29 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
+import { getAllTodos } from './api';
+
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: 4,
   };
+
+  componentDidMount() {
+    getAllTodos()
+      .then(response => response.data)
+      .then((todos) => {
+        this.setState({
+          todos,
+        });
+      });
+  }
+
+  setSelectedUserId = (userId) => {
+    this.setState({
+      selectedUserId: userId,
+    });
+  }
 
   render() {
     const { todos, selectedUserId } = this.state;
@@ -16,7 +34,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          <TodoList
+            todos={todos}
+            selectedUserId={selectedUserId}
+            onUserSelect={this.setSelectedUserId}
+          />
         </div>
 
         <div className="App__content">
