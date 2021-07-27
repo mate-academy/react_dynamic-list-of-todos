@@ -16,19 +16,19 @@ class App extends React.Component {
     this.setState({
       todos,
     })
-  }
+  };
 
   changeSelectedUser = (id) => {
     this.setState({
       selectedUserId: id,
     })
-  }
+  };
 
   clearSelectedUser = () => {
     this.setState({
       selectedUserId: 0,
     })
-  }
+  };
 
   render() {
     const { todos, selectedUserId } = this.state;

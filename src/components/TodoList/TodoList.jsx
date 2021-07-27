@@ -7,20 +7,19 @@ export class TodoList extends React.Component {
   state = {
     filterParameters: '',
     selectParameters: 'all',
-  }
+  };
 
   filterTodosByTitle = (value) => {
     this.setState({
       filterParameters: value,
     })
-  }
+  };
 
     filterTodosByState = (value) => {
       this.setState({
         selectParameters: value,
       })
-    }
-
+    };
 
   render() {
     const {
@@ -33,6 +32,23 @@ export class TodoList extends React.Component {
       selectParameters,
     } = this.state;
 
+    const filteredTodos = todos
+    .filter(
+      todo => todo.title 
+        && todo.title.includes(filterParameters)
+    )
+    .filter(
+      todo => {
+        switch(selectParameters) {
+          case 'all':
+            return true;
+          case 'active':
+            return !todo.completed;
+          case 'completed':
+            return todo.completed;
+        }
+      }
+    )
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -63,24 +79,8 @@ export class TodoList extends React.Component {
             </option>
           </select>
           <ul className="TodoList__list">
-            {todos
-              .filter(
-                todo => todo.title 
-                  && todo.title.includes(filterParameters)
-              )
-              .filter(
-                todo => {
-                  switch(selectParameters) {
-                    case 'all':
-                      return true;
-                    case 'active':
-                      return !todo.completed;
-                    case 'completed':
-                      return todo.completed;
-                  }
-                }
-              )
-              .map(todo => (
+            {
+              filteredTodos.map(todo => (
                 <li
                   key={todo.id}
                   className={classNames(
