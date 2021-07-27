@@ -13,7 +13,6 @@ class App extends React.Component {
 
   async componentDidMount() {
     const todos = await getTodos()
-    console.log(todos)
     this.setState({
       todos,
     })
