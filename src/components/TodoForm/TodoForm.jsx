@@ -15,7 +15,6 @@ export class TodoForm extends Component {
 
     this.setState({
       inputValue: value,
-      selectValue: 'all',
     });
     onTitleFiltering(value);
   };

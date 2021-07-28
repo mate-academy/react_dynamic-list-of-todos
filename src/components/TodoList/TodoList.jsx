@@ -8,34 +8,33 @@ import { TodoForm } from '../TodoForm';
 export class TodoList extends Component {
   state = {
     filteredTodos: null,
-    preparedTodos: null,
+    currentStatus: 'all',
   };
 
   onTitleFiltering = (value) => {
     this.setState({
-      preparedTodos: null,
       filteredTodos: this.makeTitleFilter(value),
     });
   };
 
   onStatusFiltering = (value) => {
     this.setState({
-      preparedTodos: this.makeStatusFilter(value),
+      currentStatus: value,
     });
   };
 
   onRandomize = () => {
     this.setState({
-      preparedTodos: this.makeRandomSort(),
+      filteredTodos: this.makeRandomSort(),
     });
   }
 
   makeRandomSort = () => {
     const { todos } = this.props;
-    const { filteredTodos, preparedTodos } = this.state;
+    const { filteredTodos } = this.state;
     const randomizer = () => Math.floor(Math.random() * 3);
 
-    return [...(preparedTodos || filteredTodos || todos)].sort(() => (
+    return [...(filteredTodos || todos)].sort(() => (
       randomizer() === 2 ? -1 : randomizer()
     ));
   }
@@ -77,13 +76,12 @@ export class TodoList extends Component {
     const {
       selectedUserId,
       onUserSelect,
-      todos,
     } = this.props;
 
     const {
-      preparedTodos,
-      filteredTodos,
+      currentStatus,
     } = this.state;
+    const preparedTodos = this.makeStatusFilter(currentStatus);
 
     return (
       <div className="TodoList">
@@ -95,7 +93,7 @@ export class TodoList extends Component {
             onRandomize={this.onRandomize}
           />
           <ul className="TodoList__list">
-            {(preparedTodos || filteredTodos || todos).map((todo) => {
+            {preparedTodos.map((todo) => {
               const todoItemClass = classNames({
                 TodoList__item: true,
                 'TodoList__item--checked': todo.completed === true,
