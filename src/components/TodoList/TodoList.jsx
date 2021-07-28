@@ -1,44 +1,119 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { Todo } from '../Todo';
+import { TodoListsShape } from '../../types';
+import { TodoForm } from '../TodoForm';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends Component {
+  state = {
+    filteredTodos: null,
+    preparedTodos: null,
+  };
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  onTitleFiltering = (value) => {
+    this.setState({
+      preparedTodos: null,
+      filteredTodos: this.makeTitleFilter(value),
+    });
+  };
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  onStatusFiltering = (value) => {
+    this.setState({
+      preparedTodos: this.makeStatusFilter(value),
+    });
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  onRandomize = () => {
+    this.setState({
+      preparedTodos: this.makeRandomSort(),
+    });
+  }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  makeRandomSort = () => {
+    const { todos } = this.props;
+    const { filteredTodos, preparedTodos } = this.state;
+    const randomizer = () => Math.floor(Math.random() * 3);
+
+    return [...(preparedTodos || filteredTodos || todos)].sort(() => (
+      randomizer() === 2 ? -1 : randomizer()
+    ));
+  }
+
+  makeTitleFilter = (query) => {
+    const { todos } = this.props;
+
+    return todos.filter((todo) => {
+      const { title, description } = todo;
+      const regex = new RegExp(query, 'gi');
+
+      return regex.test(title) || regex.test(description);
+    });
+  }
+
+  makeStatusFilter = (query) => {
+    const { todos } = this.props;
+    const { filteredTodos } = this.state;
+
+    return (filteredTodos || todos).filter((todo) => {
+      if (query === 'completed') {
+        return todo.completed === true;
+      }
+
+      if (query === 'active') {
+        return todo.completed === false;
+      }
+
+      return true;
+    });
+  }
+
+  render() {
+    const {
+      selectedUserId,
+      onUserSelect,
+      todos,
+    } = this.props;
+
+    const {
+      preparedTodos,
+      filteredTodos,
+    } = this.state;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__list-container">
+          <TodoForm
+            onTitleFiltering={this.onTitleFiltering}
+            onStatusFiltering={this.onStatusFiltering}
+            onRandomize={this.onRandomize}
+          />
+          <ul className="TodoList__list">
+            {(preparedTodos || filteredTodos || todos).map((todo) => {
+              const todoItemClass = classNames({
+                TodoList__item: true,
+                'TodoList__item--checked': todo.completed === true,
+                'TodoList__item--unchecked': todo.completed === false,
+              });
+
+              return todo.userId && (
+                <li key={todo.id} className={todoItemClass}>
+                  <Todo
+                    userId={todo.userId}
+                    title={todo.title}
+                    isCompleted={todo.completed}
+                    selectedUserId={selectedUserId}
+                    onUserSelect={onUserSelect}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = TodoListsShape;
