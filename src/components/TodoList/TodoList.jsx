@@ -44,10 +44,15 @@ export class TodoList extends Component {
     const { todos } = this.props;
 
     return todos.filter((todo) => {
-      const { title, description } = todo;
-      const regex = new RegExp(query, 'gi');
+      const { title } = todo;
 
-      return regex.test(title) || regex.test(description);
+      try {
+        const regex = new RegExp(query, 'gi');
+
+        return regex.test(title);
+      } catch (error) {
+        return false;
+      }
     });
   }
 
