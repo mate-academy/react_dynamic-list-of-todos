@@ -3,11 +3,11 @@ import './CurrentUser.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { UsersFromServer } from '../../app';
+import { getUsersById } from '../../app';
 
 export class CurrentUser extends React.PureComponent {
-  state={
-    user: 0,
+  state = {
+    userId: 0,
   }
 
   componentDidMount() {
@@ -21,15 +21,16 @@ export class CurrentUser extends React.PureComponent {
   }
 
   chooseTheUser = () => (
-    UsersFromServer(this.props.userId).then(a => (
-      this.setState({ user: a.data }))));
+    getUsersById(this.props.userId).then(user => (
+      this.setState({ userId: user.data }))));
 
   render() {
-    const { userId } = this.props;
+    const { userId, clearTheUser } = this.props;
+    const { name, email, phone } = this.state.userId;
 
     return (
       <>
-        {(this.state.user !== null) ? (
+        {(this.state.userId) ? (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
               <span>
@@ -37,12 +38,12 @@ export class CurrentUser extends React.PureComponent {
                 {userId}
               </span>
             </h2>
-            <h3 className="CurrentUser__name">{this.state.user.name}</h3>
-            <p className="CurrentUser__email">{this.state.user.email}</p>
-            <p className="CurrentUser__phone">{this.state.user.phone}</p>
+            <h3 className="CurrentUser__name">{name}</h3>
+            <p className="CurrentUser__email">{email}</p>
+            <p className="CurrentUser__phone">{phone}</p>
             <div className="CurrentUser__button-container">
               <Button
-                onClick={() => this.props.clearTheUser()}
+                onClick={() => clearTheUser()}
                 className="CurrentUser__button"
               >
                 clear

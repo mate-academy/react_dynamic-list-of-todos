@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { TodosFromServer } from './app';
+import { getTodos } from './app';
 
 class App extends React.Component {
   state = {
@@ -12,9 +12,9 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    TodosFromServer().then(a => this.setState(
+    getTodos().then(todos => this.setState(
       {
-        todos: a.data,
+        todos: todos.data,
       },
     ));
   }

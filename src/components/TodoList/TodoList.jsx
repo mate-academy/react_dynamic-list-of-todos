@@ -21,11 +21,14 @@ export class TodoList extends React.Component {
     return todos;
   }
 
-  inputFilter = todos => (
-    (this.state.inputValue.length)
-      ? (todos.filter(x => x.title !== null
-        && (x.title.includes(this.state.inputValue))))
-      : todos);
+  inputFilter = (todos) => {
+    if (this.state.inputValue.length) {
+      return (todos.filter(x => x.title !== null
+        && (x.title.includes(this.state.inputValue))));
+    }
+
+    return todos;
+  };
 
   render() {
     const { chooseTheUser, selectedUserId, todos } = this.props;
