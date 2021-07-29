@@ -11,16 +11,16 @@ export class CurrentUser extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.change();
+    this.chooseTheUser();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.userId !== prevProps.userId) {
-      this.change();
+      this.chooseTheUser();
     }
   }
 
-  change = () => (
+  chooseTheUser = () => (
     UsersFromServer(this.props.userId).then(a => (
       this.setState({ user: a.data }))));
 

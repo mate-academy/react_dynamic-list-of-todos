@@ -7,4 +7,4 @@ export const TodosFromServer = () => (
 
 export const UsersFromServer = userId => (
   fetch(`https://mate-api.herokuapp.com/users/${userId}`)
-    .then(a => a.json()));
+    .then(item => item.json()));

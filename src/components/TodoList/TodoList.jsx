@@ -21,7 +21,7 @@ export class TodoList extends React.Component {
     return todos;
   }
 
-  inputSort = todos => (
+  inputFilter = todos => (
     (this.state.inputValue.length)
       ? (todos.filter(x => x.title !== null
         && (x.title.includes(this.state.inputValue))))
@@ -35,7 +35,7 @@ export class TodoList extends React.Component {
         <h2>
           Todos:&nbsp;
           {
-              this.inputSort(this.selectSort(todos)).length
+              this.inputFilter(this.selectSort(todos)).length
           }
         </h2>
         <div className="block__input">
@@ -54,8 +54,8 @@ export class TodoList extends React.Component {
             value={this.state.inputValue}
           />
         </div>
-        {(true) && (
-          this.inputSort(this.selectSort(todos))
+        {(
+          this.inputFilter(this.selectSort(todos))
             .map(x => (
               <div
                 key={x.id}
