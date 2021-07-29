@@ -85,7 +85,7 @@ export class TodoList extends Component {
 
     return (
       <div className="TodoList">
-        <h2>Todos:</h2>
+        <h2>{`Todos: ${preparedTodos.length}`}</h2>
         <div className="TodoList__list-container">
           <TodoForm
             onTitleFiltering={this.onTitleFiltering}
