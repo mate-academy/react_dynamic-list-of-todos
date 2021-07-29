@@ -14,11 +14,11 @@ export class TodoList extends React.Component {
 
   selectSort = (todos) => {
     if (this.state.selectValue === 'Completed') {
-      return todos.filter(x => x.completed);
+      return todos.filter(todo => todo.completed);
     }
 
     if (this.state.selectValue === 'In proces') {
-      return todos.filter(x => !x.completed);
+      return todos.filter(todo => !todo.completed);
     }
 
     return todos;
@@ -61,32 +61,32 @@ export class TodoList extends React.Component {
         </div>
         {(
           this.inputFilter(this.selectSort(todos))
-            .map(x => (
+            .map(todo => (
               <div
-                key={x.id}
+                key={todo.id}
                 className="TodoList__list-container"
               >
                 <ul className="TodoList__list">
                   <li className={classNames(
-                    'TodoList__item', x.completed ? 'TodoList__item--checked'
+                    'TodoList__item', todo.completed ? 'TodoList__item--checked'
                       : 'TodoList__item--unchecked',
                   )}
                   >
                     <label>
                       <input type="checkbox" readOnly />
-                      <p>{x.title}</p>
+                      <p>{todo.title}</p>
                     </label>
                     <button
-                      onClick={() => chooseTheUser(x.userId)}
+                      onClick={() => chooseTheUser(todo.userId)}
                       className={classNames(
                         'TodoList__user-button button',
-                        (selectedUserId === x.userId)
+                        (selectedUserId === todo.userId)
                           && ('TodoList__user-button--selected'),
                       )}
                       type="button"
                     >
                       User&nbsp;
-                      {x.userId}
+                      {todo.userId}
                     </button>
                   </li>
                 </ul>
