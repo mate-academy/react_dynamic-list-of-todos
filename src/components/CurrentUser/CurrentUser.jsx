@@ -43,7 +43,7 @@ export class CurrentUser extends React.PureComponent {
             <p className="CurrentUser__phone">{phone}</p>
             <div className="CurrentUser__button-container">
               <Button
-                onClick={() => clearTheUser()}
+                onClick={clearTheUser}
                 className="CurrentUser__button"
               >
                 clear

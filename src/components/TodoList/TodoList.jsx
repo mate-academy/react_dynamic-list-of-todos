@@ -9,6 +9,9 @@ export class TodoList extends React.Component {
     inputValue: '',
   }
 
+  changeInput = value => (
+    this.setState({ inputValue: value }));
+
   selectSort = (todos) => {
     if (this.state.selectValue === 'Completed') {
       return todos.filter(x => x.completed);
@@ -23,8 +26,8 @@ export class TodoList extends React.Component {
 
   inputFilter = (todos) => {
     if (this.state.inputValue.length) {
-      return (todos.filter(x => x.title !== null
-        && (x.title.includes(this.state.inputValue))));
+      return (todos.filter(todo => todo.title !== null
+        && (todo.title.includes(this.state.inputValue))));
     }
 
     return todos;
@@ -51,8 +54,7 @@ export class TodoList extends React.Component {
             <option value="In proces">In process</option>
           </select>
           <input
-            onChange={({ target }) => (
-              this.setState({ inputValue: target.value }))}
+            onChange={({ target }) => this.changeInput(target.value)}
             placeholder="search by title"
             value={this.state.inputValue}
           />
