@@ -26,4 +26,14 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__button-container {
+    max-width: 60px;
+    display: flex !important;
+    margin:20px auto;
+  }
+
+  &__button {
+    width: 60px;
+  }
 }

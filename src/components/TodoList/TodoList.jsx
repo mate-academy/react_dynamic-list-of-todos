@@ -1,44 +1,96 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { TodoListPropTypes } from './TodoListPropTypes';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    selectValue: 'Both',
+    inputValue: '',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  selectSort = (todos) => {
+    if (this.state.selectValue === 'Completed') {
+      return todos.filter(x => x.completed);
+    }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+    if (this.state.selectValue === 'In proces') {
+      return todos.filter(x => !x.completed);
+    }
+
+    return todos;
+  }
+
+  inputSort = todos => (
+    (this.state.inputValue.length)
+      ? (todos.filter(x => x.title !== null
+        && (x.title.includes(this.state.inputValue))))
+      : todos);
+
+  render() {
+    const { chooseTheUser, selectedUserId, todos } = this.props;
+
+    return (
+      <div className="TodoList">
+        <h2>
+          Todos:&nbsp;
+          {
+              this.inputSort(this.selectSort(todos)).length
+          }
+        </h2>
+        <div className="block__input">
+          <select
+            onChange={({ target }) => (
+              this.setState({ selectValue: target.value }))}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="Both">Both</option>
+            <option value="Completed">Completed</option>
+            <option value="In proces">In process</option>
+          </select>
+          <input
+            onChange={({ target }) => (
+              this.setState({ inputValue: target.value }))}
+            placeholder="search by title"
+            value={this.state.inputValue}
+          />
+        </div>
+        {(true) && (
+          this.inputSort(this.selectSort(todos))
+            .map(x => (
+              <div
+                key={x.id}
+                className="TodoList__list-container"
+              >
+                <ul className="TodoList__list">
+                  <li className={classNames(
+                    'TodoList__item', x.completed ? 'TodoList__item--checked'
+                      : 'TodoList__item--unchecked',
+                  )}
+                  >
+                    <label>
+                      <input type="checkbox" readOnly />
+                      <p>{x.title}</p>
+                    </label>
+                    <button
+                      onClick={() => chooseTheUser(x.userId)}
+                      className={classNames(
+                        'TodoList__user-button button',
+                        (selectedUserId === x.userId)
+                          && ('TodoList__user-button--selected'),
+                      )}
+                      type="button"
+                    >
+                      User&nbsp;
+                      {x.userId}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ))
+        )}
+      </div>
+    );
+  }
+}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+TodoList.propTypes = TodoListPropTypes;
