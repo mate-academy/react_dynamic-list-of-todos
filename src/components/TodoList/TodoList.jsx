@@ -10,6 +10,12 @@ export class TodoList extends Component {
 
   handleChange = (key, value) => this.setState({ [key]: value });
 
+  searchTodo = event => this.setState({ searchLine: event.target.value });
+
+  filterTodo = (event) => {
+    this.handleChange(event.target.name, event.target.value);
+  }
+
   render() {
     const { todos, selectUser } = this.props;
     const { searchLine, filterBy } = this.state;
@@ -35,14 +41,12 @@ export class TodoList extends Component {
             type="text"
             placeholder="Search by title"
             value={this.state.searchLine}
-            onChange={(event) => {
-              this.setState({ searchLine: event.target.value });
-            }}
+            onChange={this.searchTodo}
           />
           <select
             name="filterBy"
             value={filterBy}
-            onChange={e => this.handleChange(e.target.name, e.target.value)}
+            onChange={this.filterTodo}
           >
             <option value="all">all</option>
             <option value="active">active</option>
@@ -70,7 +74,7 @@ export class TodoList extends Component {
                     button"
                   type="button"
                   value={todo.userId}
-                  onClick={e => selectUser(+(e.target.value))}
+                  onClick={event => selectUser(Number(event.target.value))}
                 >
                   User&nbsp;
                   {todo.userId}

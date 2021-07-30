@@ -8,24 +8,26 @@ export class CurrentUser extends React.Component {
     selectedUser: {},
   }
 
+  componentDidMount() {
+    this.getUser();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.getUser();
+    }
+  }
+
   async getUser() {
     const selectedUser = await getUsers(this.props.userId);
 
     this.setState({ selectedUser });
   }
 
-  componentDidMount = () => {
-    this.getUser();
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.userId !== this.props.userId) {
-      this.getUser();
-    }
-  }
-
   render() {
     const { selectedUser } = this.state;
+    const { id, email, phone, name } = selectedUser;
+    const { clearUser } = this.props;
 
     return (
       <>
@@ -33,15 +35,15 @@ export class CurrentUser extends React.Component {
           <h2 className="CurrentUser__title">
             <span>
               {'Selected user: '}
-              {selectedUser.id}
+              {id}
             </span>
           </h2>
 
-          <h3 className="CurrentUser__name">{selectedUser.name}</h3>
-          <p className="CurrentUser__email">{selectedUser.email}</p>
-          <p className="CurrentUser__phone">{selectedUser.phone}</p>
+          <h3 className="CurrentUser__name">{name}</h3>
+          <p className="CurrentUser__email">{email}</p>
+          <p className="CurrentUser__phone">{phone}</p>
         </div>
-        <button type="button" onClick={this.props.clearUser}>Clear</button>
+        <button type="button" onClick={clearUser}>Clear</button>
       </>
     );
   }
