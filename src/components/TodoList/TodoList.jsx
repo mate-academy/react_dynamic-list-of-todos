@@ -51,7 +51,10 @@ export const TodoList = ({
               })}
             >
               <label>
-                <input type="checkbox" readOnly />
+                <input
+                  type="checkbox"
+                  checked={todo.completed === true}
+                />
                 <p>{todo.title}</p>
               </label>
 
