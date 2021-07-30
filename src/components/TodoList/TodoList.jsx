@@ -9,18 +9,24 @@ class TodoList extends React.Component {
     selectValue: 'all',
   }
 
-  filtredArrayByValue = () => this.props.todos
+  prepereTodoByValue = () => this.props.todos
     .filter(todo => todo.title && todo.title.includes(this.state.inputValue))
 
-  filtredArrayBySelect = (value) => {
+  prepereTodoBySelect = (value) => {
     if (value === 'all') {
-      return this.filtredArrayByValue();
+      return this.prepereTodoByValue();
     }
 
-    return this.filtredArrayByValue()
+    return this.prepereTodoByValue()
       .filter(todo => (value === 'completed'
         ? todo.completed
         : !todo.completed));
+  }
+
+  handlerChangeInput = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({ [name]: value });
   }
 
   render() {
@@ -30,15 +36,13 @@ class TodoList extends React.Component {
         <div className="TodoList__list-container">
           <input
             className="input"
+            name="inputValue"
             value={this.state.inputValue}
-            onChange={(event) => {
-              this.setState({ inputValue: event.target.value });
-            }}
+            onChange={this.handlerChangeInput}
           />
           <select
-            onChange={(event) => {
-              this.setState({ selectValue: event.target.value });
-            }}
+            name="selectValue"
+            onChange={this.handlerChangeInput}
           >
             <option value="all">
               All
@@ -52,7 +56,7 @@ class TodoList extends React.Component {
           </select>
 
           <ul className="TodoList__list">
-            {this.filtredArrayBySelect(this.state.selectValue).map(todo => (
+            {this.prepereTodoBySelect(this.state.selectValue).map(todo => (
               <li
                 key={todo.id}
                 className={classnames(
