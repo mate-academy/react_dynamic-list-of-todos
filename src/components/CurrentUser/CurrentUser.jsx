@@ -1,12 +1,68 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { getUser } from '../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends Component {
+  state={
+    selectedUser: [],
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.getUser();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.getUser();
+    }
+  }
+
+  getUser = async() => {
+    const user = await getUser(this.props.userId);
+
+    this.setState({
+      selectedUser: user,
+    });
+
+    return this.state.selectedUser;
+  }
+
+  handleClearClick = () => {
+    this.props.clearForm();
+    this.setState({
+      selectedUser: '',
+    });
+  }
+
+  render() {
+    const { id, name, email, phone } = this.state.selectedUser;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:&nbsp;
+            {id}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{name}</h3>
+        <p className="CurrentUser__email">{email}</p>
+        <p className="CurrentUser__phone">{phone}</p>
+        <button
+          className="CurrentUser__clear"
+          type="button"
+          onClick={this.handleClearClick}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  clearForm: PropTypes.func.isRequired,
+};
