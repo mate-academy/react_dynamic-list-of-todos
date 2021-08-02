@@ -84,7 +84,7 @@ export class TodoList extends Component {
             {filteredTodos.map(todo => (
               <li
                 key={todo.id}
-                className={cn('TodoList__item', {
+                className={classNames('TodoList__item', {
                   'TodoList__item--checked': todo.completed,
                   'TodoList__item--unchecked': !todo.completed,
                 })}
@@ -100,7 +100,7 @@ export class TodoList extends Component {
 
                 <button
                   onClick={() => this.selectedUser(todo.id, todo.userId)}
-                  className={cn('TodoList__user-button', 'button', {
+                  className={classNames('TodoList__user-button', 'button', {
                     'TodoList__user-button--selected': todo.id === todoId,
                   })}
                   type="button"
