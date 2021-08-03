@@ -43,8 +43,6 @@ class App extends React.Component {
     });
   }
 
-  clear = () => this.setState({ selectedUserId: 0 });
-
   selectUser = selectedUserId => this.setState({ selectedUserId });
 
   filterTodos = (todos) => {
