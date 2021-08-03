@@ -1,44 +1,137 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import cn from 'classnames';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    filterByTitle: '',
+    selectedStatus: 'all',
+    todoId: 0,
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  selectUser = (todoId, userId) => {
+    this.setState({ todoId });
+    this.props.selectUser(userId);
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  handleTodosByTitle = (event) => {
+    this.setState({ filterByTitle: event.target.value });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  handleTodosByStatus = (event) => {
+    this.setState({ selectedStatus: event.target.value });
+  }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  makeFilteredTodos = todos => todos
+    .filter(todo => todo.title
+      && todo.title.includes(this.state.filterByTitle))
+    .filter((todo) => {
+      switch (this.state.selectedStatus) {
+        case 'completed':
+          return todo.completed;
+        case 'active':
+          return !todo.completed;
+        default:
+          return true;
+      }
+    });
+
+  render() {
+    const { todos } = this.props;
+    const { todoId, selectedStatus, filterByTitle } = this.state;
+    const {
+      selectUser,
+      handleTodosByTitle,
+      handleTodosByStatus,
+      makeFilteredTodos,
+    } = this;
+    const filteredTodos = makeFilteredTodos(todos);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <form>
+            <label>
+              Find a todo:
+              <input
+                value={filterByTitle}
+                onChange={handleTodosByTitle}
+              />
+            </label>
+            <select
+              value={selectedStatus}
+              onChange={handleTodosByStatus}
+            >
+              <option value="all">
+                All
+              </option>
+              <option value="completed">
+                Completed
+              </option>
+              <option value="active">
+                Active
+              </option>
+            </select>
+          </form>
+          <ul className="TodoList__list">
+            {filteredTodos.map((todo) => {
+              const itemClass = cn('TodoList__item', {
+                'TodoList__item--checked': todo.completed,
+                'TodoList__item--unchecked': !todo.completed,
+              });
+
+              return (
+                <li
+                  key={todo.id}
+                  className={itemClass}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      defaultChecked={todo.completed}
+                    />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
+                    onClick={() => selectUser(todo.id, todo.userId)}
+                    className={cn('TodoList__user-button', 'button',
+                      { 'TodoList__user-button--selected':
+                        todo.id === todoId })}
+                    type="button"
+                  >
+                    {`User#${todo.userId}`}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      userId: PropTypes.number,
+      id: PropTypes.number,
+      title: PropTypes.string,
+      completed: PropTypes.bool,
+    }),
+  ),
+  selectUser: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: null,
+    completed: false,
+    title: null,
+    userId: null,
+  })),
+};
