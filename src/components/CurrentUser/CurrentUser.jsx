@@ -23,7 +23,7 @@ export class CurrentUser extends React.PureComponent {
 
   clear = () => {
     this.setState({ currentUser: null });
-    this.props.clearUser();
+    this.props.clearUser(0);
   }
 
   render() {
