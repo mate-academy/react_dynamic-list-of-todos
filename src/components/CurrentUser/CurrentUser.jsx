@@ -1,12 +1,20 @@
 import React from 'react';
+import { userPropTyes } from '../../utils';
 import './CurrentUser.scss';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export const CurrentUser = ({ user }) => {
+  const { id, name, email, phone } = user;
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title">
+        <span>{`Selected user: ${id}`}</span>
+      </h2>
+      <h3 className="CurrentUser__name">{name}</h3>
+      <p className="CurrentUser__email">{email}</p>
+      <p className="CurrentUser__phone">{phone}</p>
+    </div>
+  );
+};
+
+CurrentUser.propTypes = userPropTyes;

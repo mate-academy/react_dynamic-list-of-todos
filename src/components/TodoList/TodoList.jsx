@@ -1,44 +1,41 @@
 import React from 'react';
+import { todoListPropTypes } from '../../utils';
 import './TodoList.scss';
 
-export const TodoList = () => (
+export const TodoList = ({ todos, onClick }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map((todo) => {
+          const { id, title, userId } = todo;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+          return (
+            <li key={id} className="TodoList__item TodoList__item--unchecked">
+              <label>
+                <input type="checkbox" readOnly />
+                <p>{title}</p>
+              </label>
+              <button
+                className="
+                  TodoList__user-button
+                  TodoList__user-button--selected
+                  button
+                "
+                type="button"
+                onClick={onClick}
+                name="selectedUserId"
+                value={userId}
+              >
+                {`User ${userId}`}
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   </div>
 );
+
+TodoList.propTypes = todoListPropTypes;
