@@ -28,4 +28,18 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__randomize {
+    background-color: yellow;
+    border: none;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    cursor: pointer;
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
 }

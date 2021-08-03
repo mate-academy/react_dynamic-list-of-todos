@@ -1,4 +1,7 @@
 .CurrentUser {
+  display: flex;
+  flex-direction: column;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -8,6 +11,15 @@
       padding: 5px;
       border-radius: 5px;
     }
+  }
+
+  &__clear-btn {
+    background-color: yellow;
+    border: none;
+    margin: 0 auto;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    cursor: pointer;
   }
 
   &__name {

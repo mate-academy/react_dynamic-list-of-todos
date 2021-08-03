@@ -76,6 +76,8 @@ input[type="checkbox"]:checked + p:before {
 
   &__sidebar {
     @extend %stretch-panel;
+    max-height: 90vh;
+    overflow-y: scroll;
 
     flex-basis: 60%;
   }
@@ -85,6 +87,9 @@ input[type="checkbox"]:checked + p:before {
 
     flex-basis: 30%;
     position: relative;
+    max-height: 400px;
+    overflow-y: scroll;
+
   }
 
   &__content-container {
