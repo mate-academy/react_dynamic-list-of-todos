@@ -1,44 +1,84 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import './TodoList.scss';
+import { Todo } from '../Todo/Todo';
+import { Form } from '../Form/Form';
 
-export const TodoList = () => (
+export const TodoList = (
+  {
+    todos,
+    chooseUser,
+    selectedUserId,
+    todoStatus,
+    setTodoStatus,
+    query,
+    setSearchQuery,
+  },
+) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
+    <Form
+      query={query}
+      setSearchQuery={setSearchQuery}
+      todoStatus={todoStatus}
+      setTodoStatus={setTodoStatus}
+    />
+
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {
+          todos.map(todo => (
+            <li
+              key={todo.id}
+              className={classnames(
+                'TodoList__item',
+                {
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
+                },
+              )}
+            >
+              <Todo
+                {...todo}
+                selectedUserId={selectedUserId}
+                chooseUser={chooseUser}
+              />
+            </li>
+          ))
+        }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
       </ul>
     </div>
   </div>
 );
+
+TodoList.defaultProps = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      completed: false,
+      title: '',
+      userId: 0,
+    }),
+  ),
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      completed: PropTypes.bool,
+      createdAt: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string,
+      updatedAt: PropTypes.string.isRequired,
+      userId: PropTypes.number,
+    }).isRequired,
+  ),
+  chooseUser: PropTypes.func.isRequired,
+  selectedUserId: PropTypes.number.isRequired,
+  todoStatus: PropTypes.string.isRequired,
+  setTodoStatus: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
+};
