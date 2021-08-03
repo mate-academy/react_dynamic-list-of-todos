@@ -33,10 +33,17 @@ export function Todo({ todo, selectedUserId, selectUser }) {
 }
 
 Todo.propTypes = {
-  todo: PropTypes.arrayOf({
-    completed: PropTypes.bool.isRequired,
+  todo: PropTypes.shape({
+    completed: PropTypes.bool,
     userId: PropTypes.number.isRequired,
-  }).isRequired,
-  selectedUserId: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+  }),
+  selectedUserId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
+};
+
+Todo.defaultProps = {
+  todo: {
+    completed: false,
+  },
 };

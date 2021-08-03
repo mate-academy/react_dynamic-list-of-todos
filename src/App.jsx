@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './components/api';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -28,29 +28,27 @@ class App extends React.Component {
       });
   }
 
-  filterTodoByTitle = (query) => {
+  filterTodos = (query, status) => {
     this.setState(state => ({
       visibleTodos: state.todos.filter((todo) => {
         const title = todo.title.toLowerCase();
+        let isRelevantStatus;
 
-        return title.includes(query);
-      }),
-    }));
-  }
-
-  filterTodosByStatus = (status) => {
-    this.setState(state => ({
-      visibleTodos: state.todos.filter((todo) => {
         switch (status) {
           case ('not completed'):
-            return todo.completed === false;
+            isRelevantStatus = !todo.completed;
+            break;
 
           case ('completed'):
-            return todo.completed === true;
+            isRelevantStatus = todo.completed;
+            break;
 
           default:
-            return true;
+            isRelevantStatus = true;
+            break;
         }
+
+        return title.includes(query) && isRelevantStatus;
       }),
     }));
   }
@@ -63,7 +61,7 @@ class App extends React.Component {
 
   render() {
     const { visibleTodos, selectedUserId } = this.state;
-    const { filterTodoByTitle, filterTodosByStatus } = this;
+    const { filterTodos, selectUser } = this;
 
     return (
       <div className="App">
@@ -71,9 +69,8 @@ class App extends React.Component {
           <TodoList
             todos={visibleTodos}
             selectedUserId={selectedUserId}
-            findTodoByTitle={filterTodoByTitle}
-            filterTodosByStatus={filterTodosByStatus}
-            selectUser={this.selectUser}
+            selectUser={selectUser}
+            filterTodos={filterTodos}
           />
         </div>
 
@@ -82,7 +79,7 @@ class App extends React.Component {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                selectUser={this.selectUser}
+                selectUser={selectUser}
               />
             ) : 'No user selected'}
           </div>

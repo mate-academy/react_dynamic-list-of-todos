@@ -12,31 +12,32 @@ export class TodoList extends React.Component {
 
   handleChange = (event) => {
     const { value } = event.target;
+    const { status } = this.state;
+    const { filterTodos } = this.props;
 
     this.setState({
       query: value,
     });
 
-    const { filterTodoByTitle } = this.props;
-
-    filterTodoByTitle(value);
+    filterTodos(value, status);
   }
 
   handleFilterByStatusChange = (event) => {
     const { value } = event.target;
+    const { query } = this.state;
+    const { filterTodos } = this.props;
 
     this.setState({
       status: value,
     });
 
-    const { filterTodosByStatus } = this.props;
-
-    filterTodosByStatus(value);
+    filterTodos(query, value);
   }
 
   render() {
-    const { query } = this.state;
+    const { query, status } = this.state;
     const { todos, selectedUserId, selectUser } = this.props;
+    const { handleChange, handleFilterByStatusChange } = this;
 
     return (
       <div className="TodoList">
@@ -49,15 +50,15 @@ export class TodoList extends React.Component {
               className="form-control"
               placeholder="Type title here"
               value={query}
-              onChange={this.handleChange}
+              onChange={handleChange}
             />
           </label>
           <label className="form-label">
             Filter todos by status:
             <select
               className="form-select"
-              onChange={this.handleFilterByStatusChange}
-              value={this.state.status}
+              onChange={handleFilterByStatusChange}
+              value={status}
             >
               <option value="all">all</option>
               <option value="not completed">not completed</option>
@@ -84,11 +85,10 @@ export class TodoList extends React.Component {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf({
+  todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
-  }).isRequired,
+  }).isRequired).isRequired,
   selectedUserId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
-  filterTodosByStatus: PropTypes.func.isRequired,
-  filterTodoByTitle: PropTypes.func.isRequired,
+  filterTodos: PropTypes.func.isRequired,
 };
