@@ -37,7 +37,6 @@ export class CurrentUser extends React.Component {
     const { userId, clearUser } = this.props;
 
     return (
-
       <>
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">

@@ -10,6 +10,12 @@ export class TodoList extends React.Component {
     completed: 'all',
   };
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({ [name]: value });
+  }
+
   render() {
     const { todos, selectUser, selectedUserId } = this.props;
     const { completed } = this.state;
@@ -32,63 +38,74 @@ export class TodoList extends React.Component {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-
         <div className="TodoList__list-container">
           <form className="d-flex gap-3 mb-3 ms-5">
             <input
               type="text"
+              name="title"
               value={this.state.title}
               placeholder="Title"
-              onChange={(event) => {
-                this.setState({
-                  title: event.target.value,
-                });
-              }}
+              onChange={this.handleChange}
             />
             <select
-              name="todos"
+              name="completed"
               value={this.state.completed}
-              onChange={(event) => {
-                this.setState({ completed: event.target.value });
-              }}
+              onChange={this.handleChange}
             >
               <option value="all">All</option>
               <option value="uncompleted">Active</option>
               <option value="completed">Completed</option>
             </select>
           </form>
-          <ul className="TodoList__list">
-            {filteredTodos.map(todo => (
-              <li
-                key={todo.id}
-                className={classNames('TodoList__item',
-                  {
-                    'TodoList__item--checked': todo.completed,
-                    'TodoList__item--unchecked': !todo.completed,
-                  })}
-              >
-                <label>
-                  <input type="checkbox" checked={todo.completed} />
-                  <p>{todo.title}</p>
-                </label>
-
-                <button
-                  type="button"
-                  className={
-                    classNames('button', 'TodoList__user-button',
-                      { 'TodoList__user-button--selected':
-                    todo.userId === selectedUserId })
-                    }
-                  onClick={() => {
-                    selectUser(todo.userId);
-                  }}
+          {todos.length !== 0 ? (
+            <ul className="TodoList__list">
+              {filteredTodos.map(todo => (
+                <li
+                  key={todo.id}
+                  className={classNames('TodoList__item',
+                    {
+                      'TodoList__item--checked': todo.completed,
+                      'TodoList__item--unchecked': !todo.completed,
+                    })}
                 >
-                  User&nbsp;#
-                  {todo.userId}
-                </button>
-              </li>
-            ))}
-          </ul>
+                  <label>
+                    <input type="checkbox" checked={todo.completed} />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
+                    type="button"
+                    className={
+                      classNames('button', 'TodoList__user-button',
+                        { 'TodoList__user-button--selected':
+                      todo.userId === selectedUserId })
+                      }
+                    onClick={() => {
+                      selectUser(todo.userId);
+                    }}
+                  >
+                    User&nbsp;#
+                    {todo.userId}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
+            : (
+              <div className="d-flex justify-content-center">
+                <div
+                  className="spinner-border"
+                  style={{
+                    width: '3rem', height: '3rem',
+                  }}
+                  role="status"
+                >
+                  <span className="sr-only" />
+                </div>
+              </div>
+            )
+          }
+
         </div>
       </div>
     );

@@ -34,7 +34,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { todos, selectedUserId, loading } = this.state;
 
     return (
       <div className="App">
@@ -43,6 +43,7 @@ class App extends React.Component {
             todos={todos}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
+            loading={loading}
           />
         </div>
 
