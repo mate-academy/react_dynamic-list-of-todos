@@ -6,8 +6,7 @@ import { getUserById } from '../../api/request';
 
 export class CurrentUser extends React.PureComponent {
   state = {
-    user: {},
-    isLoading: false,
+    user: null,
   }
 
   componentDidMount() {
@@ -31,9 +30,9 @@ export class CurrentUser extends React.PureComponent {
   }
 
   render() {
-    const { user, isLoading } = this.state;
+    const { user } = this.state;
 
-    if (isLoading) {
+    if (!user) {
       return (
         <div className="loading">
           <Loader
@@ -46,7 +45,7 @@ export class CurrentUser extends React.PureComponent {
       );
     }
 
-    const { onClick } = this.props;
+    const { clearUser } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -68,7 +67,7 @@ export class CurrentUser extends React.PureComponent {
         <button
           type="button"
           className="CurrentUser__clear button"
-          onClick={onClick}
+          onClick={clearUser}
         >
           Clear
         </button>
@@ -78,6 +77,6 @@ export class CurrentUser extends React.PureComponent {
 }
 
 CurrentUser.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  clearUser: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
 };

@@ -22,11 +22,10 @@ export class TodoList extends React.PureComponent {
     const {
       todos,
       selectedUserId,
-      onClick,
-      isLoading,
+      selectUserId,
     } = this.props;
 
-    if (isLoading) {
+    if (todos.length === 0) {
       return (
         <div className="loading">
           <Loader
@@ -120,7 +119,7 @@ export class TodoList extends React.PureComponent {
                     },
                   )}
                   type="button"
-                  onClick={() => onClick(todo.userId)}
+                  onClick={() => selectUserId(todo.userId)}
                 >
                   User&nbsp;
                   {todo.userId}
@@ -155,6 +154,5 @@ TodoList.propTypes = {
     }),
   ),
   selectedUserId: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  selectUserId: PropTypes.func.isRequired,
 };

@@ -9,7 +9,6 @@ class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    isLoading: false,
   };
 
   componentDidMount() {
@@ -32,7 +31,6 @@ class App extends React.Component {
     const {
       todos,
       selectedUserId,
-      isLoading,
     } = this.state;
 
     return (
@@ -41,8 +39,7 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             selectedUserId={selectedUserId}
-            onClick={this.selectUserId}
-            isLoading={isLoading}
+            selectUserId={this.selectUserId}
           />
         </div>
 
@@ -50,7 +47,7 @@ class App extends React.Component {
           <div className="App__content-container">
             {selectedUserId ? (
               <CurrentUser
-                onClick={this.onClear}
+                clearUser={this.onClear}
                 userId={selectedUserId}
               />
             ) : 'No user selected'}
