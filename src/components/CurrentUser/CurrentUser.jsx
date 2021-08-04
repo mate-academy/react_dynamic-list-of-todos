@@ -1,12 +1,79 @@
 import React from 'react';
 import './CurrentUser.scss';
+import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
+import { getUserById } from '../../api/request';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.PureComponent {
+  state = {
+    user: null,
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.getUser();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.getUser();
+    }
+  }
+
+  getUser() {
+    const selectedUserId = this.props.userId;
+
+    getUserById(selectedUserId)
+      .then(user => this.setState({ user }));
+  }
+
+  render() {
+    const { user } = this.state;
+
+    if (!user) {
+      return (
+        <div className="loading">
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />
+        </div>
+      );
+    }
+
+    const { clearUser } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            {`Selected user: ${user.id}`}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">
+          {user.name}
+        </h3>
+        <p className="CurrentUser__email">
+          {user.email}
+        </p>
+        <p className="CurrentUser__phone">
+          {user.phone}
+        </p>
+        <button
+          type="button"
+          className="CurrentUser__clear button"
+          onClick={clearUser}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  clearUser: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
+};

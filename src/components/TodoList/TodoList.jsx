@@ -1,44 +1,158 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.PureComponent {
+  state = {
+    filterByTitleCondition: '',
+    filterByStatusCondition: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
+  onChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  render() {
+    const {
+      todos,
+      selectedUserId,
+      selectUserId,
+    } = this.props;
+
+    if (todos.length === 0) {
+      return (
+        <div className="loading">
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />
+        </div>
+      );
+    }
+
+    const {
+      filterByTitleCondition,
+      filterByStatusCondition,
+    } = this.state;
+
+    const preparedTodos = todos
+      .filter((todo) => {
+        const title = todo.title.toLowerCase();
+
+        return (title.includes(filterByTitleCondition));
+      })
+      .filter((todo) => {
+        switch (filterByStatusCondition) {
+          case 'active':
+            return !todo.completed;
+          case 'completed':
+            return todo.completed;
+          case 'all':
+          default:
+            return true;
+        }
+      });
+
+    return (
+      <div className="TodoList">
+        <h2>
+          {`Todos: ${preparedTodos.length}`}
+        </h2>
+        <div className="search-form">
           <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
+            Filter by title:&nbsp;
+            <input
+              type="text"
+              name="filterByTitleCondition"
+              className="search-form__search-title"
+              onChange={this.onChange}
+              value={filterByTitleCondition}
+            />
           </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
           <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
+            Show:&nbsp;
+            <select
+              name="filterByStatusCondition"
+              onChange={this.onChange}
+            >
+              <option value="all">All</option>
+              <option value="active">Not completed</option>
+              <option value="completed">Completed</option>
+            </select>
           </label>
+        </div>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {preparedTodos.map(todo => (
+              <li
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+                key={todo.id}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    defaultChecked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                <button
+                  className={classNames(
+                    'TodoList__user-button button',
+                    {
+                      'TodoList__user-button--selected':
+                        todo.userId === selectedUserId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => selectUserId(todo.userId)}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.defaultProps = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      completed: false,
+    }),
+  ),
+
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
+      createdAt: PropTypes.string.isRequired,
+      updatedAt: PropTypes.string.isRequired,
+    }),
+  ),
+  selectedUserId: PropTypes.number.isRequired,
+  selectUserId: PropTypes.func.isRequired,
+};

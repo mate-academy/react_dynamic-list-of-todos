@@ -29,3 +29,15 @@
     color: #ff3626;
   }
 }
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
