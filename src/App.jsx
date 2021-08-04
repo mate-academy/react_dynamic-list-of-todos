@@ -3,55 +3,21 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api';
+import { getTodos } from './api';
 
 class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
-    value: '',
-    status: 'all',
   };
 
   componentDidMount() {
-    request('/todos')
+    getTodos()
       .then((todos) => {
         this.setState({
           todos,
         });
       });
-  }
-
-  filterByTitle = (event) => {
-    this.setState({
-      value: event.target.value,
-    });
-  }
-
-  filterByCompleteStatus = (event) => {
-    this.setState({
-      status: event.target.value,
-    });
-  }
-
-  filterTodos = (todos) => {
-    const { value, status } = this.state;
-    let result = [...todos];
-
-    if (status === 'completed') {
-      result = todos.filter(todo => todo.completed);
-    }
-
-    if (status === 'in process') {
-      result = todos.filter(todo => !todo.completed);
-    }
-
-    if (value !== '') {
-      result = result.filter(todo => todo.title
-        && todo.title.includes(value));
-    }
-
-    return result;
   }
 
   clearUser = () => {
@@ -60,29 +26,28 @@ class App extends React.Component {
     });
   }
 
+  selecteUserId = (userId) => {
+    this.setState({ selectedUserId: userId });
+  }
+
   render() {
-    const { todos, selectedUserId, status, value } = this.state;
-    const {
-      clearUser,
-      filterByCompleteStatus,
-      filterByTitle,
-      filterTodos,
-    } = this;
+    const { todos, selectedUserId } = this.state;
+    const { clearUser, selecteUserId } = this;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={filterTodos(todos)}
-            status={status}
-            value={value}
-            filterByCompleteStatus={filterByCompleteStatus}
-            filterByTitle={filterByTitle}
-            selectedUserId={selectedUserId}
-            onUserIdSelected={(userId) => {
-              this.setState({ selectedUserId: userId });
-            }}
-          />
+          {this.state.todos.length !== 0
+            ? (
+              <TodoList
+                todos={todos}
+                selectedUserId={selectedUserId}
+                onUserIdSelected={selecteUserId}
+              />
+            )
+            : 'Loadind...'
+          }
+
         </div>
 
         <div className="App__content">
