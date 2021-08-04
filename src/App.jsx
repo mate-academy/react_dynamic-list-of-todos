@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { loadData } from './utils';
+import { loadTodos } from './utils';
 
 class App extends React.Component {
   state = {
@@ -14,7 +14,7 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const todos = await loadData('/todos');
+    const todos = await loadTodos();
 
     this.setState({ todos: todos.filter(todo => todo.title !== null) });
   }
@@ -30,25 +30,11 @@ class App extends React.Component {
   render() {
     const { todos, searchQuery, filterBy } = this.state;
 
-    const todosToShow = todos
-      .filter((todo) => {
-        switch (filterBy) {
-          case 'active':
-            return todo.completed === false;
-          case 'completed':
-            return todo.completed === true;
-          default:
-            return todo;
-        }
-      })
-      .filter(todo => todo.title.toLowerCase()
-        .includes(this.state.searchQuery.toLowerCase()));
-
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todosToShow}
+            todos={todos}
             selectedUserId={this.state.selectedUserId}
             selectUser={(selectedUserId) => {
               this.setState({

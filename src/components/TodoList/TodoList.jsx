@@ -7,6 +7,20 @@ export const TodoList = ({ todos, selectUser, query, setState, filterBy }) => {
   const unchecked = 'TodoList__item--unchecked';
   const checked = 'TodoList__item--checked';
 
+  const todosToShow = todos
+    .filter((todo) => {
+      switch (filterBy) {
+        case 'active':
+          return todo.completed === false;
+        case 'completed':
+          return todo.completed === true;
+        default:
+          return todo;
+      }
+    })
+    .filter(todo => todo.title.toLowerCase()
+      .includes(query.toLowerCase()));
+
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
@@ -28,7 +42,7 @@ export const TodoList = ({ todos, selectUser, query, setState, filterBy }) => {
           <option value="completed">completed</option>
         </select>
         <ul className="TodoList__list">
-          {todos.map(todo => (
+          {todosToShow.map(todo => (
             <li
               className={classNames('TodoList__item', {
                 [checked]: todo.completed === true,
