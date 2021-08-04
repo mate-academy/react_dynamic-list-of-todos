@@ -45,25 +45,25 @@ export class CurrentUser extends React.Component {
               Selected user:
               {userId}
             </span>
+            <button
+              type="button"
+              onClick={() => {
+                clearUser(user.id);
+              }}
+              className="btn btn-outline-secondary ms-3"
+            >
+              Clear
+            </button>
           </h2>
 
           {user && (
           <>
             <h3 className="CurrentUser__name">{user.name}</h3>
-            <p className="CurrentUser__email">Shanna@melissa.tv</p>
-            <p className="CurrentUser__phone">010-692-6593 x09125</p>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
           </>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            clearUser(user.id);
-          }}
-          className="btn btn-outline-secondary"
-        >
-          Clear
-        </button>
       </>
     );
   }
