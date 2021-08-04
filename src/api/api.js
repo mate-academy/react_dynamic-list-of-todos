@@ -1,34 +1,34 @@
 const todoUrl = 'https://mate-api.herokuapp.com/todos';
 const userUrl = 'https://mate-api.herokuapp.com/users';
 
-export const getTodos = async() => {
+export const request = async(url) => {
+  const response = await fetch(`${url}`);
+
+  if (!response.ok) {
+    throw new Error('Serve is not responding');
+  }
+
+  const serverResponse = await response.json();
+
+  return serverResponse.data;
+};
+
+export async function getTodos() {
   try {
-    const response = await fetch(`${todoUrl}`);
+    const data = await request(todoUrl);
 
-    if (!response.ok) {
-      throw new Error('Serve is not responding');
-    }
-
-    const todos = await response.json();
-
-    return todos.data;
+    return data;
   } catch {
     return [];
   }
-};
+}
 
-export const getUserById = async(userId) => {
+export async function getUserById(userId) {
   try {
-    const response = await fetch(`${userUrl}${userId}`);
+    const user = await request(`${userUrl}/${userId}`);
 
-    if (!response.ok) {
-      throw new Error('Server is not responding');
-    }
-
-    const user = await response.json();
-
-    return user.data ? user.data : Error('User doesn\'t exist');
+    return user || Error('User does not exist');
   } catch (error) {
     return new Error(error);
   }
-};
+}

@@ -12,7 +12,7 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const todos = await getTodos('/todos');
+    const todos = await getTodos();
 
     this.setState({ todos });
   }

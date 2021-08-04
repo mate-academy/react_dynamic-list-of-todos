@@ -21,7 +21,7 @@ export class CurrentUser extends React.Component {
   loadData() {
     const { userId } = this.props;
 
-    getUserById(`/${userId}`)
+    getUserById(userId)
       .then(user => this.setState({ user }));
   }
 
