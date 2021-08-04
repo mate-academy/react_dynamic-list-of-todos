@@ -20,9 +20,9 @@ export class TodoList extends React.Component {
     });
   }
 
-  filterList = () => (
+  filterList = todos => (
     this.state.query.length > 0
-      ? this.props.todos.filter(
+      ? todos.filter(
         (todo) => {
           if (todo.title === null) {
             return false;
@@ -32,12 +32,12 @@ export class TodoList extends React.Component {
             .includes(this.state.query.toLowerCase());
         },
       )
-      : this.props.todos
+      : todos
   )
 
   render() {
     const { selectUser } = this.props;
-    let filteredTodos = this.filterList();
+    let filteredTodos = this.filterList(this.props.todos);
 
     if (this.state.select !== 'All') {
       filteredTodos = filteredTodos.filter(todo => (

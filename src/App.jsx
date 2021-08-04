@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api';
+import { getTodos, getUsers } from './api';
 
 class App extends React.Component {
   state = {
@@ -13,20 +13,22 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    request('/todos').then((todos) => {
-      this.setState({
-        todos,
+    getTodos()
+      .then((todos) => {
+        this.setState({
+          todos,
+        });
       });
-    });
   }
 
   componentDidUpdate(prevstate) {
     if (prevstate.selectedUserId !== this.state.selectedUserId) {
-      request('/users/').then((users) => {
-        this.setState(state => ({
-          currentUser: users.find(user => user.id === state.selectedUserId),
-        }));
-      });
+      getUsers()
+        .then((users) => {
+          this.setState(state => ({
+            currentUser: users.find(user => user.id === state.selectedUserId),
+          }));
+        });
     }
   }
 
