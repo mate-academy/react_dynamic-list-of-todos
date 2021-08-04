@@ -45,7 +45,7 @@ class App extends React.Component {
                 onUserIdSelected={selecteUserId}
               />
             )
-            : 'Loadind...'
+            : 'Loading...'
           }
 
         </div>
