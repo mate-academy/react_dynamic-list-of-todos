@@ -22,9 +22,7 @@ export const SearchField = ({
     <div className="box">
       <div className="field">
         <label htmlFor="search-query" className="label">
-          Search todo
         </label>
-
         <div className="control">
           <input
             type="text"
