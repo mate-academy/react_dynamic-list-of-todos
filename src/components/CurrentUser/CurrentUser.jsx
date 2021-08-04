@@ -1,12 +1,53 @@
 import React from 'react';
 import './CurrentUser.scss';
+import { getUsersInfo } from '../../api/api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: null,
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.setUser(getUsersInfo);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      this.setUser(getUsersInfo);
+    }
+  }
+
+  setUser = async(callback) => {
+    callback(this.props.selectedUserId).then(user => this.setState({ user }));
+  }
+
+  render() {
+    const { clearSelectedUser } = this.props;
+    const { selectedUserId } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        {!this.state.user ? 'Loading...' : (
+          <div>
+            <h2 className="CurrentUser__title">
+              <span>
+                Selected user:
+                {this.state.user.id}
+              </span>
+            </h2>
+            <h3 className="CurrentUser__name">{this.state.user.name}</h3>
+            <p className="CurrentUser__email">{this.state.user.email}</p>
+            <p className="CurrentUser__phone">{this.state.user.phone}</p>
+            <button
+              type="button"
+              onClick={() => clearSelectedUser()}
+            >
+              Clear
+            </button>
+          </div>
+        )
+        }
+      </div>
+    );
+  }
+}
