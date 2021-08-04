@@ -20,13 +20,10 @@ export class CurrentUser extends React.PureComponent {
   }
 
   getUser() {
-    this.setState({ isLoading: true });
-
     const selectedUserId = this.props.userId;
 
     getUserById(selectedUserId)
-      .then(user => this.setState({ user }))
-      .then(() => this.setState({ isLoading: false }));
+      .then(user => this.setState({ user }));
   }
 
   render() {

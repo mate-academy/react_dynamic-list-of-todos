@@ -12,11 +12,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({ isLoading: true });
-
     getTodos()
-      .then(todos => this.setState({ todos }))
-      .finally(() => this.setState({ isLoading: false }));
+      .then(todos => this.setState({ todos }));
   }
 
   selectUserId = (userId) => {
