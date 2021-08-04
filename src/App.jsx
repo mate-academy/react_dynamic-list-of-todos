@@ -8,8 +8,9 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     todos: [],
-    visibleTodos: [],
     selectedUserId: 4,
+    query: '',
+    status: 'all',
   };
 
   componentDidMount() {
@@ -22,36 +23,45 @@ class App extends React.Component {
             return userId && title;
           }),
         });
-        this.setState(state => ({
-          visibleTodos: state.todos,
-        }));
       });
   }
 
-  filterTodos = (query, status) => {
-    this.setState(state => ({
-      visibleTodos: state.todos.filter((todo) => {
-        const title = todo.title.toLowerCase();
-        let isRelevantStatus;
-
-        switch (status) {
-          case ('not completed'):
-            isRelevantStatus = !todo.completed;
-            break;
-
-          case ('completed'):
-            isRelevantStatus = todo.completed;
-            break;
-
-          default:
-            isRelevantStatus = true;
-            break;
-        }
-
-        return title.includes(query) && isRelevantStatus;
-      }),
-    }));
+  setTitleFilter = (query) => {
+    this.setState({
+      query,
+    });
   }
+
+  setStatusFilter = (status) => {
+    this.setState({
+      status,
+    });
+  }
+
+  filterTodos = (query, status) => {
+    const { todos } = this.state;
+
+    return todos.filter((todo) => {
+      const title = todo.title.toLowerCase();
+      let isRelevantStatus;
+
+      switch (status) {
+        case ('not completed'):
+          isRelevantStatus = !todo.completed;
+          break;
+
+        case ('completed'):
+          isRelevantStatus = todo.completed;
+          break;
+
+        default:
+          isRelevantStatus = true;
+          break;
+      }
+
+      return title.includes(query) && isRelevantStatus;
+    });
+  };
 
   selectUser = (userId) => {
     this.setState({
@@ -60,8 +70,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { visibleTodos, selectedUserId } = this.state;
-    const { filterTodos, selectUser } = this;
+    const { selectedUserId, query, status } = this.state;
+    const { setTitleFilter, setStatusFilter, selectUser, filterTodos } = this;
+    const visibleTodos = filterTodos(query.toLowerCase(), status);
 
     return (
       <div className="App">
@@ -70,7 +81,10 @@ class App extends React.Component {
             todos={visibleTodos}
             selectedUserId={selectedUserId}
             selectUser={selectUser}
-            filterTodos={filterTodos}
+            setTitleFilter={setTitleFilter}
+            setStatusFilter={setStatusFilter}
+            query={query}
+            status={status}
           />
         </div>
 

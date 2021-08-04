@@ -5,38 +5,22 @@ import './TodoList.scss';
 import { Todo } from '../Todo';
 
 export class TodoList extends React.Component {
-  state = {
-    query: '',
-    status: 'all',
-  }
-
   handleChange = (event) => {
     const { value } = event.target;
-    const { status } = this.state;
-    const { filterTodos } = this.props;
+    const { setTitleFilter } = this.props;
 
-    this.setState({
-      query: value,
-    });
-
-    filterTodos(value, status);
+    setTitleFilter(value);
   }
 
   handleFilterByStatusChange = (event) => {
     const { value } = event.target;
-    const { query } = this.state;
-    const { filterTodos } = this.props;
+    const { setStatusFilter } = this.props;
 
-    this.setState({
-      status: value,
-    });
-
-    filterTodos(query, value);
+    setStatusFilter(value);
   }
 
   render() {
-    const { query, status } = this.state;
-    const { todos, selectedUserId, selectUser } = this.props;
+    const { todos, selectedUserId, selectUser, query, status } = this.props;
     const { handleChange, handleFilterByStatusChange } = this;
 
     return (
@@ -88,7 +72,10 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
   }).isRequired).isRequired,
+  query: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
   selectedUserId: PropTypes.number.isRequired,
   selectUser: PropTypes.func.isRequired,
-  filterTodos: PropTypes.func.isRequired,
+  setTitleFilter: PropTypes.func.isRequired,
+  setStatusFilter: PropTypes.func.isRequired,
 };
