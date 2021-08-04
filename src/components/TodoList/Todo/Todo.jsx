@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const Todo = ({ todo }) => {
-  const {completed, title, id } = todo;
+export const Todo = ({ todo, setSelectedUserId, selectedUserId }) => {
+  const {completed, title, id, userId } = todo;
 
   return (
     <li className={`TodoList__item ${completed
@@ -21,9 +21,10 @@ export const Todo = ({ todo }) => {
       </label>
 
       <button
-        className={`TodoList__user-button button ${completed
+        className={`TodoList__user-button button ${userId === selectedUserId
           ? 'TodoList__user-button--selected' : ''}`}
         type="button"
+        onClick={() => setSelectedUserId(userId)}
       >
         User&nbsp;#
         {id}
