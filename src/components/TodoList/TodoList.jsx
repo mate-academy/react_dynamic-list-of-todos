@@ -17,10 +17,10 @@ export class TodoList extends React.PureComponent {
   }
 
   render() {
-    const { todos, selectedUser, selectedUserId } = this.props;
+    const { todos, selectUser, selectedUserId } = this.props;
     const { titleFilter, filterBy } = this.state;
     const filteredTodos = todos.filter(
-      todo => (todo.title && todo.title.includes(titleFilter))
+      todo => (todo.title.includes(titleFilter))
        && ((String(todo.completed) === filterBy) || filterBy === 'all'),
     );
 
@@ -72,7 +72,7 @@ export class TodoList extends React.PureComponent {
                     'button',
                   )}
                   type="button"
-                  onClick={() => selectedUser(todo.userId)}
+                  onClick={() => selectUser(todo.userId)}
                 >
                   User&nbsp;
                   {`#${todo.userId}`}
@@ -88,6 +88,6 @@ export class TodoList extends React.PureComponent {
 
 TodoList.propTypes = {
   todos: propTypes.arrayOf(propTypes.shape(TodoType)).isRequired,
-  selectedUser: propTypes.func.isRequired,
+  selectUser: propTypes.func.isRequired,
   selectedUserId: propTypes.number.isRequired,
 };

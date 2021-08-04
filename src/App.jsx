@@ -18,7 +18,7 @@ class App extends React.Component {
       });
   }
 
-  selectedUser = (id) => {
+  selectUser = (id) => {
     this.setState({
       selectedUserId: id,
     });
@@ -38,7 +38,7 @@ class App extends React.Component {
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            selectedUser={this.selectedUser}
+            selectUser={this.selectUser}
             selectedUserId={selectedUserId}
           />
         </div>

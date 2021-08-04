@@ -3,11 +3,16 @@ const API_URL = 'https://mate-api.herokuapp.com';
 export const getTodos = async() => {
   try {
     const response = await fetch(`${API_URL}/todos`);
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
     const todos = await response.json();
 
-    return todos.data;
+    return todos.data.filter(todo => todo.title);
   } catch {
-    return 'Something went wrong...';
+    return [];
   }
 };
 
