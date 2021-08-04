@@ -24,31 +24,41 @@ export class CurrentUser extends React.PureComponent {
   }
 
   render() {
-    const { clearUser } = this.props;
+    const { selectUser } = this.props;
     const { user } = this.state;
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${user.id}`}</span>
-        </h2>
+      user.id
+        ? (
+          <div className="CurrentUser">
+            <h2 className="CurrentUser__title">
+              <span>{`Selected user: ${user.id}`}</span>
+            </h2>
 
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
-        <button
-          type="button"
-          className="button"
-          onClick={clearUser}
-        >
-          Clear
-        </button>
-      </div>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+            <button
+              type="button"
+              className="button"
+              onClick={() => selectUser(0)}
+            >
+              Clear
+            </button>
+          </div>
+        ) : (
+          <div className="CurrentUser">
+            <h2>
+              Please wait ...
+            </h2>
+          </div>
+
+        )
     );
   }
 }
 
 CurrentUser.propTypes = {
-  clearUser: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
 };
