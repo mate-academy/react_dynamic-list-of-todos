@@ -1,5 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
+import PropTypes from 'prop-types';
 import { getUser } from '../../api/api';
 
 export class CurrentUser extends React.PureComponent {
@@ -8,22 +9,24 @@ export class CurrentUser extends React.PureComponent {
   }
 
   async componentDidMount() {
-    const user = await getUser(this.props.userId);
-
-    this.setState({ currentUser: user });
+    this.loadData();
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      const user = await getUser(this.props.userId);
-
-      this.setState({ currentUser: user });
+      this.loadData();
     }
   }
 
   clear = () => {
     this.setState({ currentUser: null });
     this.props.clearUser(0);
+  }
+
+  async loadData() {
+    const user = await getUser(this.props.userId);
+
+    this.setState({ currentUser: user });
   }
 
   render() {
@@ -35,7 +38,7 @@ export class CurrentUser extends React.PureComponent {
 
     return (
       <div className="CurrentUser">
-        {this.state.currentUser !== null && (
+        {currentUser !== null && (
           <>
             <h2 className="CurrentUser__title">
               <span>{`Selected user: ${currentUser.id}`}</span>
@@ -56,3 +59,8 @@ export class CurrentUser extends React.PureComponent {
     );
   }
 }
+
+CurrentUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  clearUser: PropTypes.func.isRequired,
+};

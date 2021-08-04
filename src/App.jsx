@@ -8,10 +8,9 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     todos: [],
-    filteredTodos: [],
     selectedUserId: 0,
     showError: false,
-    completed: '',
+    completed: 'null',
     title: '',
   };
 
@@ -24,11 +23,8 @@ class App extends React.Component {
         todo => (todo.title && todo.userId && todo.compleated !== null),
       );
 
-      console.log(filteredTodos);
-
       this.setState({
         todos: filteredTodos,
-        filteredTodos,
       });
     } else {
       this.setState({ showError: true });
@@ -45,33 +41,22 @@ class App extends React.Component {
     this.setState({ [name]: value });
   }
 
-  filtered = (event) => {
-    const { todos } = this.state;
-    const { name, value } = event.target;
+  renderVisibleTodos = () => {
+    const { todos, completed, title } = this.state;
 
-    if (value !== this.state[name] && name === 'title') {
-      const filter
-      = todos.filter(
-        todo => todo[name].toLowerCase().includes(value.toLowerCase()),
-      );
+    return todos
+      .filter((todo) => {
+        if (completed !== 'null') {
+          return todo.completed === (completed === 'true');
+        }
 
-      this.setState({ filteredTodos: filter });
-    }
-
-    if (name === 'completed') {
-      const filter
-      = todos.filter(
-        todo => todo.completed === value,
-      );
-
-      console.log(todos);
-
-      this.setState({ filteredTodos: filter });
-    }
+        return todo;
+      })
+      .filter(todo => todo.title.toLowerCase().includes(title));
   }
 
   render() {
-    const { filteredTodos, selectedUserId, completedFilter, titleFilter }
+    const { selectedUserId, completedFilter, titleFilter }
       = this.state;
 
     return (
@@ -84,29 +69,23 @@ class App extends React.Component {
                   name="completed"
                   id="completed"
                   value={completedFilter}
-                  onChange={(event) => {
-                    this.handleChange(event);
-                    this.filtered(event);
-                  }}
+                  onChange={this.handleChange}
                 >
-                  <option value="">All</option>
-                  <option value="true">Completed</option>
-                  <option value="false">Active</option>
+                  <option value="null">All</option>
+                  <option value>Completed</option>
+                  <option value={false}>Active</option>
                 </select>
                 <input
                   type="text"
                   name="title"
                   placeholder="Title"
                   value={titleFilter}
-                  onChange={(event) => {
-                    this.handleChange(event);
-                    this.filtered(event);
-                  }}
+                  onChange={this.handleChange}
                 />
               </div>
               {this.state.todos.length > 0 ? (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={this.renderVisibleTodos()}
                   selectedUser={selectedUserId}
                   setSelectedUser={this.setSelectedUser}
                 />

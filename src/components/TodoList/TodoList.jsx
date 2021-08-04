@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 export const TodoList = ({ todos, selectedUser, setSelectedUser }) => (
   <div className="TodoList">
@@ -39,3 +40,16 @@ export const TodoList = ({ todos, selectedUser, setSelectedUser }) => (
     </div>
   </div>
 );
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
+  selectedUser: PropTypes.number.isRequired,
+  setSelectedUser: PropTypes.func.isRequired,
+};
