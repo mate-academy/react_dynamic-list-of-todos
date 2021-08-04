@@ -2,6 +2,7 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
 
 export class TodoList extends React.PureComponent {
   state = {
@@ -22,7 +23,21 @@ export class TodoList extends React.PureComponent {
       todos,
       selectedUserId,
       onClick,
+      isLoading,
     } = this.props;
+
+    if (isLoading) {
+      return (
+        <div className="loading">
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />
+        </div>
+      );
+    }
 
     const {
       filterByTitleCondition,
@@ -37,12 +52,11 @@ export class TodoList extends React.PureComponent {
       })
       .filter((todo) => {
         switch (filterByStatusCondition) {
-          case 'all':
-            return true;
           case 'active':
             return !todo.completed;
           case 'completed':
             return todo.completed;
+          case 'all':
           default:
             return true;
         }
@@ -118,13 +132,12 @@ export class TodoList extends React.PureComponent {
       </div>
     );
   }
-};
+}
 
 TodoList.defaultProps = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       completed: false,
-      userId: 0,
     }),
   ),
 
@@ -134,7 +147,7 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      userId: PropTypes.number,
+      userId: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       completed: PropTypes.bool,
       createdAt: PropTypes.string.isRequired,
@@ -143,4 +156,5 @@ TodoList.propTypes = {
   ),
   selectedUserId: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };

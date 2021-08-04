@@ -1,11 +1,13 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { request } from '../../api/request';
+import Loader from 'react-loader-spinner';
+import { getUserById } from '../../api/request';
 
 export class CurrentUser extends React.PureComponent {
   state = {
     user: {},
+    isLoading: false,
   }
 
   componentDidMount() {
@@ -19,32 +21,49 @@ export class CurrentUser extends React.PureComponent {
   }
 
   getUser() {
+    this.setState({ isLoading: true });
+
     const selectedUserId = this.props.userId;
 
-    request(`users/${selectedUserId}`)
-      .then(user => this.setState({ user }));
+    getUserById(selectedUserId)
+      .then(user => this.setState({ user }))
+      .then(() => this.setState({ isLoading: false }));
   }
 
   render() {
-    const { id, name, email, phone } = this.state.user;
+    const { user, isLoading } = this.state;
+
+    if (isLoading) {
+      return (
+        <div className="loading">
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />
+        </div>
+      );
+    }
+
     const { onClick } = this.props;
 
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>
-            {`Selected user: ${id}`}
+            {`Selected user: ${user.id}`}
           </span>
         </h2>
 
         <h3 className="CurrentUser__name">
-          {name}
+          {user.name}
         </h3>
         <p className="CurrentUser__email">
-          {email}
+          {user.email}
         </p>
         <p className="CurrentUser__phone">
-          {phone}
+          {user.phone}
         </p>
         <button
           type="button"

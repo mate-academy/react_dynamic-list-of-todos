@@ -3,18 +3,21 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api/request';
+import { getTodos } from './api/request';
 
 class App extends React.Component {
   state = {
     todos: [],
     selectedUserId: 0,
+    isLoading: false,
   };
 
   componentDidMount() {
-    request('todos')
-      .then(todos => todos.filter(todo => todo.title))
-      .then(todos => this.setState({ todos }));
+    this.setState({ isLoading: true });
+
+    getTodos()
+      .then(todos => this.setState({ todos }))
+      .finally(() => this.setState({ isLoading: false }));
   }
 
   selectUserId = (userId) => {
@@ -29,6 +32,7 @@ class App extends React.Component {
     const {
       todos,
       selectedUserId,
+      isLoading,
     } = this.state;
 
     return (
@@ -38,6 +42,7 @@ class App extends React.Component {
             todos={todos}
             selectedUserId={selectedUserId}
             onClick={this.selectUserId}
+            isLoading={isLoading}
           />
         </div>
 
