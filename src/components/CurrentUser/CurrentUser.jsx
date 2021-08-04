@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './CurrentUser.scss';
-import { request } from '../../api/api';
+import { getUserById } from '../../api/api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -21,7 +21,7 @@ export class CurrentUser extends React.Component {
   loadData() {
     const { userId } = this.props;
 
-    request(`/users/${userId}`)
+    getUserById(`/${userId}`)
       .then(user => this.setState({ user }));
   }
 
@@ -50,7 +50,7 @@ export class CurrentUser extends React.Component {
         <button
           className="button"
           type="button"
-          onClick={() => clearUserInfo()}
+          onClick={clearUserInfo}
         >
           Clear
         </button>

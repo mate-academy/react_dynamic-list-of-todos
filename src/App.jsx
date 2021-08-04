@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api/api';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -12,7 +12,7 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    const todos = await request('/todos');
+    const todos = await getTodos('/todos');
 
     this.setState({ todos });
   }
@@ -34,10 +34,16 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={todos}
-            selectUser={selectUser}
-          />
+          {(todos.length === 0)
+            ? (
+              <h2>Loading...</h2>
+            ) : (
+              <TodoList
+                todos={todos}
+                selectUser={selectUser}
+              />
+            )
+          }
         </div>
 
         <div className="App__content">
