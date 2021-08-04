@@ -5,7 +5,7 @@ export const getTodos = async() => {
     const response = await fetch(`${API_URL}/todos`);
 
     if (!response.ok) {
-      throw new Error();
+      throw new Error('Server is not responding');
     }
 
     const todos = await response.json();
@@ -19,6 +19,11 @@ export const getTodos = async() => {
 export async function getUserInfo(userId) {
   try {
     const response = await fetch(`${API_URL}/users/${userId}`);
+
+    if (!response.ok) {
+      throw new Error('Server is not responding');
+    }
+
     const user = await response.json();
 
     return user.data ? user.data : Error('User does not exist');
