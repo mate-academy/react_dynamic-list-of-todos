@@ -53,7 +53,7 @@ export class TodoList extends React.Component {
               }}
             >
               <option value="all">All</option>
-              <option value="uncompleted">uncompleted</option>
+              <option value="uncompleted">Active</option>
               <option value="completed">Completed</option>
             </select>
           </form>
