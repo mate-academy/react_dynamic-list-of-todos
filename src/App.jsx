@@ -8,18 +8,11 @@ import { CurrentUser } from './components/CurrentUser';
 class App extends React.Component {
   state = {
     todos: [],
-    user: {},
     selectedUserId: 0,
   };
 
   componentDidMount() {
     this.setTodos(getAllTodos);
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedUserId !== this.state.selectedUserId) {
-      this.setUser(getUsersInfo);
-    }
   }
 
   setSelectedUserId = (id) => {
@@ -32,16 +25,12 @@ class App extends React.Component {
     callback().then(todos => this.setState({ todos }));
   }
 
-  setUser = async(callback) => {
-    callback(this.state.selectedUserId).then(user => this.setState({ user }));
-  }
-
   clearSelectedUser = () => {
-    this.setState({ user: {}});
+    this.setState({ selectedUserId: 0 });
   }
 
   render() {
-    const { user, selectedUserId } = this.state;
+    const { selectedUserId } = this.state;
 
     return (
       <div className="App">
@@ -60,10 +49,14 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
-            {
-              selectedUserId && selectedUserId
-                ? <CurrentUser users={user} clearSelectedUser={this.clearSelectedUser} />
-                : 'No user selected'
+            { selectedUserId
+              ? (
+                <CurrentUser
+                  selectedUserId={selectedUserId}
+                  clearSelectedUser={this.clearSelectedUser}
+                />
+              )
+              : ('No user selected')
             }
           </div>
         </div>
