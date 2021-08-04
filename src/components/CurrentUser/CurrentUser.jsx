@@ -28,7 +28,7 @@ export class CurrentUser extends React.PureComponent {
     const { user } = this.state;
 
     return (
-      user.id
+      user
         ? (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
