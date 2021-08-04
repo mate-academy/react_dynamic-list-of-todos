@@ -1,4 +1,4 @@
-const BASE_URL = 'https://mate-api.herokuapp.com';
+const BASE_URL = 'https://mate-api.herokuapp.comm';
 
 export const request = url => fetch(`${BASE_URL}${url}`)
   .then((res) => {
@@ -7,8 +7,7 @@ export const request = url => fetch(`${BASE_URL}${url}`)
     }
 
     return res.json();
-  })
-  .catch(() => []);
+  });
 
 export const getTodos = () => request('/todos')
   .then(response => response.data);
