@@ -27,3 +27,18 @@
     margin: 20px auto 0;
   }
 }
+
+.button-clear {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px;
+  background-color: rgb(169, 241, 52);
+  border-radius: 50%;
+  transition: 0.5s linear;
+  font-size: 20px;
+
+  &:hover {
+    background-color: rgb(238, 41, 41);
+  }
+}
