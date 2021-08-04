@@ -24,6 +24,13 @@
 
   &__clear {
     display: block;
+    background-color: #ff3626;
+    width: 80px;
+    height: 30px;
     margin: 20px auto 0;
+
+    :hover {
+      background-color: #ffe0db;
+    }
   }
 }
