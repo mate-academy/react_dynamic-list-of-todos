@@ -78,8 +78,8 @@ export class TodoList extends React.Component {
             {filtredTodos.map(todo => (
               <li
                 className={todo.completed
-                  ? 'TodoList__item TodoList__item--unchecked'
-                  : 'TodoList__item TodoList__item--checked'}
+                  ? 'TodoList__item TodoList__item--checked'
+                  : 'TodoList__item TodoList__item--unchecked'}
                 key={todo.id}
               >
                 <label>
