@@ -1,6 +1,26 @@
 .TodoList {
   width: 100%;
 
+  &__title-input {
+    display: inline-block;
+    width: 60%;
+    height: 20px;
+    font-weight: 35px;
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+    margin: 0 20px;
+    padding: 15px;
+  }
+
+  &__select {
+    display: inline-block;
+    height: 52px;
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+    padding: 15px;
+
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }

@@ -3,20 +3,40 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './utils/api';
 
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: 10,
   };
+
+  componentDidMount() {
+    getTodos()
+      .then((todos) => {
+        this.setState({
+          todos: todos.data.filter(
+            todo => todo.title && todo.userId,
+          ),
+        });
+      });
+  }
+
+  selectUser = (selectedUserId) => {
+    this.setState({ selectedUserId });
+  }
 
   render() {
     const { todos, selectedUserId } = this.state;
+    const { selectUser } = this;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          <TodoList
+            todos={todos}
+            selectUser={selectUser}
+          />
         </div>
 
         <div className="App__content">
