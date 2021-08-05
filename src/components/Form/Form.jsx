@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Form.scss';
 
-export const Form = ({ query, setSearchQuery, todoStatus, setTodoStatus }) => (
+export const Form = ({ query, setQuery, todoStatus, setTodoStatus }) => (
   <form action="post">
     <input
       className="input-group-text"
       type="text"
       placeholder="Find todo"
       value={query}
-      onChange={setSearchQuery}
+      onChange={({ target }) => setQuery(target.value)}
     />
 
     <select
@@ -26,7 +26,7 @@ export const Form = ({ query, setSearchQuery, todoStatus, setTodoStatus }) => (
 
 Form.propTypes = {
   query: PropTypes.string.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
   todoStatus: PropTypes.string.isRequired,
   setTodoStatus: PropTypes.func.isRequired,
 };
