@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { loadTodos } from './utils';
+import { loadTodos } from './utils/api';
 
 class App extends React.Component {
   state = {

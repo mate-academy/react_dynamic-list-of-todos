@@ -5,3 +5,5 @@ export const loadData = url => fetch(`${BASE_URL}${url}`)
   .then(serverResponse => serverResponse.data || serverResponse);
 
 export const loadTodos = () => loadData('/todos');
+
+export const loadUser = user => loadData(`/users/${user}/`);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { loadData } from '../../utils';
+import { loadUser } from '../../utils';
 
 import './CurrentUser.scss';
 
@@ -10,17 +10,17 @@ export class CurrentUser extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.loadUser();
+    this.getUser();
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.loadUser();
+      this.getUser();
     }
   }
 
-  async loadUser() {
-    const user = await loadData(`/users/${this.props.userId}/`);
+  async getUser() {
+    const user = await loadUser(this.props.userId);
 
     this.setState({
       user,
