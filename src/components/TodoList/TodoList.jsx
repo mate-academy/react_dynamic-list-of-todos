@@ -25,7 +25,7 @@ export const TodoList = ({ todos, selectedTodo, selectedTodoId }) => (
               <p>{todo.title}</p>
             </label>
 
-            {selectedTodoId === todo.id ? (
+            {selectedTodoId === todo.userId ? (
               <button
                 className="
                   TodoList__user-button
@@ -49,7 +49,7 @@ export const TodoList = ({ todos, selectedTodo, selectedTodoId }) => (
                 "
                 type="button"
                 onClick={() => {
-                  selectedTodo(todo.id);
+                  selectedTodo(todo.userId);
                 }}
               >
                 User&nbsp;

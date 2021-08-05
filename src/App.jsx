@@ -8,7 +8,6 @@ import { getTodos } from './api/api';
 class App extends React.Component {
   state = {
     todos: [],
-    selectedUserId: 0,
     todoId: 0,
   };
 
@@ -16,10 +15,11 @@ class App extends React.Component {
     const todos = await getTodos();
 
     this.setState({ todos });
+    // console.log(todos);
   }
 
   render() {
-    const { todos, selectedUserId, todoId } = this.state;
+    const { todos, todoId } = this.state;
 
     return (
       <div className="App">
@@ -38,8 +38,8 @@ class App extends React.Component {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+            {todoId ? (
+              <CurrentUser todoId={todoId} />
             ) : 'No user selected'}
           </div>
         </div>
