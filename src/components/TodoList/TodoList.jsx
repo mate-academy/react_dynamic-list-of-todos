@@ -1,44 +1,95 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends React.Component {
+  state = {
+    query: '',
+    selectedFilterTodos: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (event) => {
+    const { name, value } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({ [name]: value });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  render() {
+    const { onSelected, todos } = this.props;
+    const { query, selectedFilterTodos } = this.state;
+    const finallyTodos = todos
+      .filter(todo => todo.title.includes(query))
+      .filter((todo) => {
+        switch (selectedFilterTodos) {
+          case 'active':
+            return todo.completed;
+          case 'completed':
+            return !todo.completed;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+          default: return todo;
+        }
+      });
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__list-container">
+          <form>
+            <input
+              type="text"
+              placeholder="Search"
+              name="query"
+              onChange={this.handleChange}
+              className="form-control"
+            />
+            <select
+              value={selectedFilterTodos}
+              name="selectedFilterTodos"
+              onChange={this.handleChange}
+              className="form-select"
+            >
+              <option>all</option>
+              <option>active</option>
+              <option>completed</option>
+            </select>
+          </form>
+          <ul className="TodoList__list">
+            {finallyTodos.map(todo => (
+              <li
+                className="TodoList__item TodoList__item--unchecked"
+                key={todo.id}
+              >
+                <label>
+                  <input type="checkbox" readOnly />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => onSelected(todo.userId)}
+                >
+                  {`User: ${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: propTypes.arrayOf(
+    propTypes.shape({
+      id: propTypes.number.isRequired,
+      title: propTypes.string.isRequired,
+      userId: propTypes.number.isRequired,
+    }).isRequired,
+  ).isRequired,
+  onSelected: propTypes.func.isRequired,
+};
