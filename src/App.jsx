@@ -28,7 +28,7 @@ class App extends React.Component {
 
   clearForm = () => {
     this.setState({
-      selectedUserId: '',
+      selectedUserId: 0,
     });
   }
 
