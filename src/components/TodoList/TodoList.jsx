@@ -1,44 +1,114 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './TodoList.scss';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export class TodoList extends Component {
+  state = {
+    search: '',
+    query: 'all',
+  }
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  handleChange = (event) => {
+    const { value, name } = event.target;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    this.setState({
+      [name]: value,
+    });
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  applyFilters = (todos) => {
+    let todosToShow = [...todos];
+    const { search, query } = this.state;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    if (search) {
+      todosToShow = todosToShow.filter(todo => todo.title && todo.title
+        .toLowerCase().includes(search.toLowerCase()));
+    }
+
+    if (query === 'completed') {
+      todosToShow = todosToShow.filter(todo => todo.completed);
+    }
+
+    if (query === 'active') {
+      todosToShow = todosToShow.filter(todo => !todo.completed);
+    }
+
+    return todosToShow;
+  }
+
+  render() {
+    const { selectUser, todos } = this.props;
+    const { search, query } = this.state;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <form>
+            <input
+              name="search"
+              type="text"
+              value={search}
+              placeholder="Type search word"
+              onChange={this.handleChange}
+            />
+
+            <select
+              name="query"
+              value={query}
+              onChange={this.handleChange}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </form>
+
+          <ul className="TodoList__list">
+            {this.applyFilters(todos).map(todo => (
+              <li
+                key={todo.id}
+                className={`TodoList__item TodoList__item--${
+                  todo.completed ? 'checked' : 'unchecked'}`}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => selectUser(todo.userId)}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: PropTypes.bool,
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    userId: PropTypes.number,
+  })).isRequired,
+  selectUser: PropTypes.func.isRequired,
+};
