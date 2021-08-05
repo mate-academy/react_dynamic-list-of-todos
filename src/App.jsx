@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './utils/api';
+import { getTodos } from './utils/api';
 
 class App extends React.Component {
   state = {
@@ -12,7 +12,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    request('/todos')
+    getTodos()
       .then((todos) => {
         this.setState({
           todos: todos.data.filter(

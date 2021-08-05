@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './CurrentUser.scss';
-import { request } from '../../utils/api';
+import { getUser } from '../../utils/api';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -19,7 +19,7 @@ export class CurrentUser extends React.Component {
   }
 
   takeUser(userId) {
-    request(`/users/${userId}`)
+    getUser(userId)
       .then((user) => {
         this.setState({ user: user.data });
       });
