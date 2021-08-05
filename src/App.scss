@@ -76,7 +76,6 @@ input[type="checkbox"]:checked + p:before {
 
   &__sidebar {
     @extend %stretch-panel;
-
     flex-basis: 60%;
   }
 
