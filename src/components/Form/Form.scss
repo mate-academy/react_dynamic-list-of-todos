@@ -1,0 +1,17 @@
+.input-group-text {
+  box-sizing: border-box;
+  width: 50%;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  outline: none;
+
+  &:focus {
+    border: 1px solid #212529;
+  }
+}

@@ -25,5 +25,13 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    background-color: #00d1b2;
+    border-color: transparent;
+    color: #fff;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #00c4a7;
+    }
   }
 }
