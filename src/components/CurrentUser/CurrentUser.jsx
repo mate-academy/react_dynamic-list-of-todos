@@ -7,6 +7,7 @@ import './CurrentUser.scss';
 export class CurrentUser extends React.PureComponent {
   state = {
     user: null,
+    isLoading: false,
   }
 
   componentDidMount() {
@@ -20,15 +21,19 @@ export class CurrentUser extends React.PureComponent {
   }
 
   async getUser() {
+    this.setState({
+      isLoading: true,
+    });
     const user = await loadUser(this.props.userId);
 
     this.setState({
       user,
+      isLoading: false,
     });
   }
 
   render() {
-    const { user } = this.state;
+    const { user, isLoading } = this.state;
     const { clearUser } = this.props;
 
     if (!user) {
@@ -37,19 +42,30 @@ export class CurrentUser extends React.PureComponent {
 
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${user.id}`}</span>
-        </h2>
-        <h3 className="CurrentUser__name">{user.name}</h3>
-        <p className="CurrentUser__email">{user.email}</p>
-        <p className="CurrentUser__phone">{user.phone}</p>
-        <button
-          className="button"
-          type="button"
-          onClick={() => clearUser()}
-        >
-          Clear
-        </button>
+        {isLoading ? (
+          <img
+            src="https://i.gifer.com/2cOP.gif"
+            alt="loading"
+          />
+        )
+          : (
+            <>
+              <h2 className="CurrentUser__title">
+                <span>{`Selected user: ${user.id}`}</span>
+              </h2>
+              <h3 className="CurrentUser__name">{user.name}</h3>
+              <p className="CurrentUser__email">{user.email}</p>
+              <p className="CurrentUser__phone">{user.phone}</p>
+              <button
+                className="button"
+                type="button"
+                onClick={() => clearUser()}
+              >
+                Clear
+              </button>
+            </>
+          )
+        }
       </div>
     );
   }
