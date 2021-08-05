@@ -31,6 +31,22 @@ export class TodoList extends React.PureComponent {
       select,
     } = this.state;
 
+    const filteredByStatus = todos.filter((todo) => {
+      switch (select) {
+        case 'all':
+          return todo;
+
+        case 'completed':
+          return todo.completed;
+
+        case 'active':
+          return !todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -67,17 +83,7 @@ export class TodoList extends React.PureComponent {
             </select>
           </label>
           <ul className="TodoList__list">
-            {todos.filter((todo) => {
-              if (select === 'all') {
-                return true;
-              }
-
-              if (select === 'active') {
-                return !todo.completed;
-              }
-
-              return todo.completed;
-            }).map(todo => (
+            {filteredByStatus.map(todo => (
               todo.title.includes(title) && (
               <li
                 key={todo.id}
