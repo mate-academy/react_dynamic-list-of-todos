@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getUser } from '../api/api';
+import { getUsers } from '../api/api';
 import './CurrentUser.scss';
 
 export class CurrentUser extends Component {
@@ -19,7 +19,7 @@ export class CurrentUser extends Component {
   }
 
   getUser = async() => {
-    const user = await getUser(this.props.userId);
+    const user = await getUsers(`/users/${this.props.userId}`);
 
     this.setState({
       selectedUser: user,

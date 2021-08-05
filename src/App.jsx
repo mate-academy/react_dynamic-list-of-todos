@@ -4,7 +4,7 @@ import './styles/general.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getAll } from './components/api/api';
+import { getUsers } from './components/api/api';
 
 class App extends React.Component {
   state = {
@@ -13,7 +13,7 @@ class App extends React.Component {
   };
 
   componentDidMount = async() => {
-    const todos = await getAll();
+    const todos = await getUsers('/todos');
 
     this.setState({
       todos,
