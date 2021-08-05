@@ -7,10 +7,10 @@ export const request = url => fetch(`${BASE_URL}${url}`)
     }
 
     return res.json();
-  });
+  })
+  .then(response => response.data)
+  .catch(() => []);
 
-export const getTodos = () => request('/todos')
-  .then(response => response.data);
+export const getTodos = () => request('/todos');
 
-export const getUser = userId => request(`/users/${userId}`)
-  .then(response => response.data);
+export const getUserById = userId => request(`/users/${userId}`);

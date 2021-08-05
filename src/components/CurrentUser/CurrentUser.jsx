@@ -1,7 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 import PropTypes from 'prop-types';
-import { getUser } from '../../utils';
+import { getUserById } from '../../utils';
 
 export class CurrentUser extends React.Component {
   state = {
@@ -9,7 +9,7 @@ export class CurrentUser extends React.Component {
   }
 
   componentDidMount() {
-    return this.loadUser();
+    return this.setUser();
   }
 
   componentDidUpdate(prevProps) {
@@ -19,11 +19,11 @@ export class CurrentUser extends React.Component {
       return null;
     }
 
-    return this.loadUser();
+    return this.setUser();
   }
 
-  async loadUser() {
-    const user = await getUser(this.props.userId);
+  async setUser() {
+    const user = await getUserById(this.props.userId);
 
     this.setState({ user });
   }
@@ -45,7 +45,7 @@ export class CurrentUser extends React.Component {
         <p className="CurrentUser__email">{email}</p>
         <p className="CurrentUser__phone">{phone}</p>
         <button
-          onClick={() => clearUser()}
+          onClick={clearUser}
           className="TodoList__user-button
             TodoList__user-button--unselected
             button"
