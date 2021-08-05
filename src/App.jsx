@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { request } from './api';
+import { getTodos } from './api';
 
 class App extends React.Component {
   state = {
@@ -11,10 +11,9 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
-  async componentDidMount() {
-    const todos = await request('/todos');
-
-    this.setState({ todos });
+  componentDidMount() {
+    getTodos()
+      .then(todos => this.setState({ todos }));
   }
 
   selectUser = (userId) => {
