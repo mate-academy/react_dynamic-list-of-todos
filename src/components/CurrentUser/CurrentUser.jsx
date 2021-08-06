@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
 import { getUserData } from '../../api/api';
 
@@ -66,5 +67,5 @@ export class CurrentUser extends React.Component {
 }
 
 CurrentUser.propTypes = {
-  todoId: propTypes.number.isRequired,
+  todoId: PropTypes.number.isRequired,
 };
