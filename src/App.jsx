@@ -18,6 +18,10 @@ class App extends React.Component {
     // console.log(todos);
   }
 
+  selectedTodo = (todoId) => {
+    this.setState({ todoId });
+  }
+
   render() {
     const { todos, todoId } = this.state;
 
@@ -29,9 +33,7 @@ class App extends React.Component {
               todos={todos}
               selectedTodoId={todoId}
               // eslint-disable-next-line
-              selectedTodo={(todoId) => {
-                this.setState({ todoId });
-              }}
+              selectedTodo={this.selectedTodo}
             />
           )}
         </div>
@@ -39,7 +41,10 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             {todoId ? (
-              <CurrentUser todoId={todoId} />
+              <CurrentUser
+                todoId={todoId}
+                selectedTodo={this.selectedTodo}
+              />
             ) : 'No user selected'}
           </div>
         </div>

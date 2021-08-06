@@ -27,6 +27,8 @@ export class CurrentUser extends React.Component {
 
   render() {
     const { user } = this.state;
+    const { selectedTodo } = this.props;
+
 
     if (!user) {
       return (
@@ -61,6 +63,19 @@ export class CurrentUser extends React.Component {
         <h3 className="CurrentUser__name">{user.name}</h3>
         <p className="CurrentUser__email">{user.email}</p>
         <p className="CurrentUser__phone">{user.phone}</p>
+
+        <button
+          className="
+            TodoList__user-button
+            button
+            CurrentUser__clear
+          "
+          onClick={() => {
+            selectedTodo(0);
+          }}
+        >
+          Clear
+        </button>
       </div>
     );
   }
