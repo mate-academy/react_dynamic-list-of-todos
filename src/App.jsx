@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { UserTodos, users } from './utils';
+import { getUsers, getTodos } from './utils';
 
 class App extends React.Component {
   state = {
@@ -16,7 +16,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    UserTodos()
+    getUsers()
       .then(todos => this.setState({
         todos,
       }));
@@ -26,7 +26,7 @@ class App extends React.Component {
     const { selectedUserId } = this.state;
 
     if (prevState.selectedUserId !== selectedUserId) {
-      users(selectedUserId)
+      getTodos(selectedUserId)
         .then((user) => {
           if (user.data !== null && user.data !== undefined) {
             this.setState({ user: user.data });
