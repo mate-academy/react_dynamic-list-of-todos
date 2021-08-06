@@ -1,12 +1,86 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
+import { getUserData } from '../../api/api';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+export class CurrentUser extends React.Component {
+  state = {
+    user: null,
+  }
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+  componentDidMount() {
+    this.loadData();
+    // console.log(user);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props.todoId) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    const user = await getUserData(this.props.todoId);
+
+    this.setState({ user });
+  }
+
+  render() {
+    const { user } = this.state;
+    const { selectedTodo } = this.props;
+
+
+    if (!user) {
+      return (
+        <div className="
+          text-center
+          CurrentUser__spinner-position
+          "
+        >
+          <div
+            className="
+              spinner-grow
+              text-success
+              CurrentUser__spinner-config
+              "
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {user.id}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{user.name}</h3>
+        <p className="CurrentUser__email">{user.email}</p>
+        <p className="CurrentUser__phone">{user.phone}</p>
+
+        <button
+          className="
+            TodoList__user-button
+            button
+            CurrentUser__clear
+          "
+          onClick={() => {
+            selectedTodo(0);
+          }}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+CurrentUser.propTypes = {
+  todoId: PropTypes.number.isRequired,
+};

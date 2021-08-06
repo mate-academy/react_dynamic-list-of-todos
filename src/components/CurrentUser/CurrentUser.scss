@@ -26,4 +26,14 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__spinner-position {
+    margin-top: 50px;
+  }
+
+  &__spinner-config {
+    height: 4rem;
+    width: 4rem;
+    animation-duration: 1.3s;
+  }
 }
