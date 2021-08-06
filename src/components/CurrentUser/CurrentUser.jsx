@@ -19,7 +19,7 @@ export class CurrentUser extends Component {
   }
 
   getUser = async() => {
-    const user = await getUsers(`/users/${this.props.userId}`);
+    const user = await getUsers(this.props.userId);
 
     this.setState({
       selectedUser: user,
