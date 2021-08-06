@@ -1,8 +1,11 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api/api';
 
 class App extends React.Component {
   state = {
@@ -10,19 +13,40 @@ class App extends React.Component {
     selectedUserId: 0,
   };
 
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({ todos });
+  }
+
+  selectedUser = (userId) => {
+    this.setState({ selectedUserId: userId });
+  }
+
+  clear = () => {
+    this.setState({ selectedUserId: 0 });
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} />
+          <TodoList
+            todos={todos}
+            selectedUser={this.selectedUser}
+            selectedUserId={selectedUserId}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                clear={this.clear}
+              />
             ) : 'No user selected'}
           </div>
         </div>
