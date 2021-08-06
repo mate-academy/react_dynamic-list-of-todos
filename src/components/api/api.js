@@ -3,9 +3,9 @@ const API_URL = 'https://mate-api.herokuapp.com';
 
 export const getFromUrl = async(url) => {
   const response = await fetch(`${API_URL}${url}`);
-  const todos = await response.json();
+  const responseFromServer = await response.json();
 
-  return todos.data;
+  return responseFromServer.data || responseFromServer;
 };
 
 export const getTodos = () => getFromUrl('/todos');
