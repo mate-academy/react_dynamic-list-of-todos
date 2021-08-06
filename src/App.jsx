@@ -10,6 +10,7 @@ class App extends React.Component {
     todos: [],
     users: [],
     selectedUserId: 0,
+    filterBy: '',
   };
 
   async componentDidMount() {
@@ -22,34 +23,65 @@ class App extends React.Component {
     });
   }
 
+  handleFilterChange = (event) => {
+    this.setState({
+      filterBy: event.target.value,
+    });
+  }
+
   chooseUser = (currentUserId) => {
     this.setState({
       selectedUserId: currentUserId,
     });
   }
 
+  clearSelectedUser = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
+  }
+
   render() {
-    const { todos, users, selectedUserId } = this.state;
+    const { todos, users, selectedUserId, filterBy } = this.state;
+
     const filtredTodos = todos
       .filter(todo => todo.title)
       .filter(todo => todo.userId)
+      .filter(todo => users.find(user => user.id === todo.userId))
       .map(todo => ({
         ...todo,
-        completed: todo.completed === null ? false : todo.completed,
-      }));
+        completed: !todo.completed ? false : todo.completed,
+      }))
+      .filter(todo => (filterBy ? todo.title.includes(filterBy) : true));
+
     const filtredUsers = users
-      .filter(user => user.name)
-      .filter(user => user.id);
+      .map(user => ({
+        ...user,
+        name: !user.name ? 'No name' : user.name,
+        email: !user.email ? 'No email' : user.email,
+        phone: !user.phone ? 'No phone' : user.phone,
+      }));
 
     return (
       <div className="App">
         <div className="App__sidebar">
           {todos.length > 0
           && (
-            <TodoList
-              todos={filtredTodos}
-              chooseUser={this.chooseUser}
-            />
+            <>
+              <label>
+                Filter:
+                <input
+                  name="filterBy"
+                  type="text"
+                  value={this.state.filterBy}
+                  onChange={this.handleFilterChange}
+                />
+              </label>
+              <TodoList
+                todos={filtredTodos}
+                chooseUser={this.chooseUser}
+              />
+            </>
           )}
         </div>
 
@@ -59,6 +91,7 @@ class App extends React.Component {
               <CurrentUser
                 users={filtredUsers}
                 selectedUserId={selectedUserId}
+                clearSelectedUser={this.clearSelectedUser}
               />
             ) : 'No user selected'}
           </div>
