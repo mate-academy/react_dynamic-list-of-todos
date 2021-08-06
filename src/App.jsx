@@ -23,6 +23,10 @@ class App extends React.Component {
     this.setState({ selectedUserId: userId });
   }
 
+  clear = () => {
+    this.setState({ selectedUserId: 0 });
+  }
+
   render() {
     const { todos, selectedUserId } = this.state;
 
@@ -39,7 +43,10 @@ class App extends React.Component {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                userId={selectedUserId}
+                clear={this.clear}
+              />
             ) : 'No user selected'}
           </div>
         </div>

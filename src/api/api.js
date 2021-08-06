@@ -6,7 +6,10 @@ const getData = url => fetch(url)
   .then(result => result.data);
 
 export function getTodos() {
-  return getData(TODOS_URL);
+  return (getData(TODOS_URL)
+    .then(todos => todos.filter(
+      todo => (todo.title && todo.userId),
+    )));
 }
 
 export function getUsers(iserId) {

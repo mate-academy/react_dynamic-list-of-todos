@@ -36,8 +36,6 @@ export class TodoList extends Component {
         }
       });
 
-    console.log(this.state);
-
     return (
 
       <div className="TodoList">

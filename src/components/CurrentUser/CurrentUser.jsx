@@ -20,10 +20,6 @@ export class CurrentUser extends Component {
     this.loadData();
   }
 
-  clear = () => {
-    this.setState({ user: null });
-  }
-
   async loadData() {
     const user = await getUsers(this.props.userId);
 
@@ -32,7 +28,7 @@ export class CurrentUser extends Component {
 
   render() {
     const { user } = this.state;
-    const { userId } = this.props;
+    const { userId, clear } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -54,7 +50,7 @@ export class CurrentUser extends Component {
         <button
           type="button"
           className="CurrentUser__clear"
-          onClick={this.clear}
+          onClick={clear}
         >
           Clear
         </button>
@@ -65,4 +61,5 @@ export class CurrentUser extends Component {
 
 CurrentUser.propTypes = {
   userId: PropTypes.number.isRequired,
+  clear: PropTypes.func.isRequired,
 };
