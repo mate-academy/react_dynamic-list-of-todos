@@ -9,12 +9,20 @@ export const TodoList = ({ todos, onClick }) => (
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
         {todos.map((todo) => {
-          const { id, title, userId } = todo;
+          const { id, title, userId, completed } = todo;
 
           return (
-            <li key={id} className="TodoList__item TodoList__item--unchecked">
+            <li
+              key={id}
+              className={'TodoList__item'
+                + ` TodoList__item--${completed ? 'checked' : 'unchecked'}`
+              }
+            >
               <label>
-                <input type="checkbox" readOnly />
+                <input
+                  type="checkbox"
+                  readOnly
+                />
                 <p>{title}</p>
               </label>
               <button
