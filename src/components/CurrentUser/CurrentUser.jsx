@@ -1,12 +1,48 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+const URL = 'https://mate-api.herokuapp.com';
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export class CurrentUser extends React.Component {
+
+  state = {
+    user: '',
+  };
+
+  componentDidMount() {
+    this.allData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.allData();
+    }
+  }
+
+  getTodos = async() => {
+    const response = await fetch(`${URL}/users/${this.props.userId}`);
+    const result = await response.json();
+
+    return result.data;
+  };
+
+  allData() {
+    this.getTodos().then(user => this.setState({ user }));
+  }
+
+  render() {
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            {this.state.user.id}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{this.state.user.name}</h3>
+        <p className="CurrentUser__email">{this.state.user.email}</p>
+        <p className="CurrentUser__phone">{this.state.user.phone}</p>
+      </div>
+    )
+  }
+};

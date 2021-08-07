@@ -1,44 +1,43 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList = () => (
+export const TodoList = ({ todos, selectedUser }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map(todo => (
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+          <li
+            key={todo.id}
+            className={todo.completed
+              ? 'TodoList__item--checked TodoList__item'
+              : 'TodoList__item TodoList__item--unchecked'
+            }
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label>
+              <input type="checkbox" readOnly />
+              <p>{todo.title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <button
+              className="
+                TodoList__user-button
+                TodoList__user-button--selected
+                button
+              "
+              type="button"
+              onClick={() => selectedUser(todo.userId)}
+            >
+              User&nbsp;#{todo.userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 );
+
+
+
