@@ -91,7 +91,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
+          {todos.length
+          ? <TodoList
             todos={todos}
             query={query}
             randomTodo={randomTodo}
@@ -100,6 +101,18 @@ class App extends React.Component {
             selectedUserId={selectedUser}
             showSelectedTodo={showSelectedTodo}
           />
+          : <div
+              className="d-flex
+              align-items-center"
+            >
+            <strong>Loading...</strong>
+            <div
+              className="spinner-border ms-auto"
+              role="status"
+              aria-hidden="true"
+            >
+            </div>
+          </div>}
         </div>
 
         <div className="App__content">

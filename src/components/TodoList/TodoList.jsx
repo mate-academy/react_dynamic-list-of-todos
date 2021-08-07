@@ -63,10 +63,10 @@ export const TodoList = ({
               <li
                 key={todo.id}
                 className={
-                todo.completed
-                  ? 'TodoList__item TodoList__item--checked'
-                  : 'TodoList__item TodoList__item--unchecked'
-              }
+                  todo.completed
+                    ? 'TodoList__item TodoList__item--checked'
+                    : 'TodoList__item TodoList__item--unchecked'
+                  }
               >
                 <label>
                   <input
