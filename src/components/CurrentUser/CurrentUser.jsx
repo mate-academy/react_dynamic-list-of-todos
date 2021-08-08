@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './CurrentUser.scss';
 
 const URL = 'https://mate-api.herokuapp.com';
 
 export class CurrentUser extends React.Component {
-
   state = {
     user: '',
   };
@@ -31,6 +31,8 @@ export class CurrentUser extends React.Component {
   }
 
   render() {
+    const { clearUser } = this.props;
+
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
@@ -42,7 +44,20 @@ export class CurrentUser extends React.Component {
         <h3 className="CurrentUser__name">{this.state.user.name}</h3>
         <p className="CurrentUser__email">{this.state.user.email}</p>
         <p className="CurrentUser__phone">{this.state.user.phone}</p>
+        <button
+          onClick={clearUser}
+          className="TodoList__user-button
+            TodoList__user-button--selected
+            button"
+          type="button"
+        >
+          Clear
+        </button>
       </div>
-    )
+    );
   }
+}
+CurrentUser.propTypes = {
+  userId: PropTypes.string.isRequired,
+  clearUser: PropTypes.func.isRequired,
 };
