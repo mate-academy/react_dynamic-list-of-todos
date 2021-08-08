@@ -10,7 +10,8 @@ class App extends React.Component {
     todos: [],
     users: [],
     selectedUserId: 0,
-    filterBy: '',
+    filterByTitle: '',
+    filterByCompleted: '',
   };
 
   async componentDidMount() {
@@ -23,9 +24,11 @@ class App extends React.Component {
     });
   }
 
-  handleFilterChange = (event) => {
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
     this.setState({
-      filterBy: event.target.value,
+      [name]: value,
     });
   }
 
@@ -42,9 +45,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, users, selectedUserId, filterBy } = this.state;
+    const { todos, users, selectedUserId, filterByTitle,
+      filterByCompleted } = this.state;
 
-    const filtredTodos = todos
+    let filtredTodos = todos
       .filter(todo => todo.title)
       .filter(todo => todo.userId)
       .filter(todo => users.find(user => user.id === todo.userId))
@@ -52,7 +56,17 @@ class App extends React.Component {
         ...todo,
         completed: !todo.completed ? false : todo.completed,
       }))
-      .filter(todo => (filterBy ? todo.title.includes(filterBy) : true));
+      .filter(todo => (
+        filterByTitle ? todo.title.includes(filterByTitle) : true
+      ));
+
+    if (filterByCompleted.length > 0) {
+      filtredTodos = filtredTodos.filter(todo => (
+        filterByCompleted === 'complete'
+          ? !todo.completed
+          : todo.completed
+      ));
+    }
 
     const filtredUsers = users
       .map(user => ({
@@ -71,12 +85,22 @@ class App extends React.Component {
               <label>
                 Filter:
                 <input
-                  name="filterBy"
+                  name="filterByTitle"
                   type="text"
-                  value={this.state.filterBy}
-                  onChange={this.handleFilterChange}
+                  value={filterByTitle}
+                  onChange={this.handleChange}
                 />
               </label>
+              <select
+                name="filterByCompleted"
+                type="text"
+                value={filterByCompleted}
+                onChange={this.handleChange}
+              >
+                <option value="">All</option>
+                <option value="complete">Active</option>
+                <option value="uncomplete">Completed</option>
+              </select>
               <TodoList
                 todos={filtredTodos}
                 chooseUser={this.chooseUser}
