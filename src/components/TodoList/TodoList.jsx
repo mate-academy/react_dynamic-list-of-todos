@@ -1,44 +1,112 @@
 import React from 'react';
 import './TodoList.scss';
+import PropTypes from 'prop-types';
 
-export const TodoList = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export const TodoList = ({
+  todos,
+  selectedUserId,
+  query,
+  handleChange,
+  showSelectedTodo,
+  randomTodo,
+  isRandomTodo,
+}) => {
+  const filteredTodos = todos.filter(todo => (
+    todo.title.toLowerCase()
+      .includes(query.toLowerCase())
+  ));
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  const randomTodos = [...todos].sort(
+    () => Math.random() - 0.5);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      <input
+        type="text"
+        placeholder="Find user"
+        name="query"
+        value={query}
+        onChange={handleChange}
+      />
+      <select
+        name="selectedTodo"
+        onChange={showSelectedTodo}
+      >
+        <option value="all">Show all</option>
+        <option value="false">Show active</option>
+        <option value="true">Show completed</option>
+      </select>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      <button
+        type="button"
+        name="randomize"
+        className="
+            TodoList__user-button
+            TodoList__user-button--selected
+            button"
+        onClick={randomTodo}
+      >
+        Randomize
+      </button>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {(isRandomTodo
+            ? (randomTodos)
+            : (filteredTodos)).map(todo => (
+              <li
+                key={todo.id}
+                className={
+                  todo.completed
+                    ? 'TodoList__item TodoList__item--checked'
+                    : 'TodoList__item TodoList__item--unchecked'
+                  }
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  type="button"
+                  name="query"
+                  className={
+                    selectedUserId === todo.userId
+                    ? "TodoList__user-button--selected button"
+                    : "TodoList__user-button button"
+                  }
+                  onClick={() => selectedUserId(todo.userId)}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      completed: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+  selectedUserId: PropTypes.string.isRequired,
+  query: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  showSelectedTodo: PropTypes.func.isRequired,
+  randomTodo: PropTypes.func.isRequired,
+  isRandomTodo: PropTypes.bool.isRequired,
+}.isRequired;
