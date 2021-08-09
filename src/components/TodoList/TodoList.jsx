@@ -16,12 +16,8 @@ export const TodoList = ({
       .includes(query.toLowerCase())
   ));
 
-  const randomTodos = [...todos].sort(() => Math.random() - 0.5);
-  // let displayedTodo = [];
-
-  // isRandomTodo
-  //   ? displayedTodo = randomTodos
-  //   : displayedTodo = filteredTodos;
+  const randomTodos = [...todos].sort(
+    () => Math.random() - 0.5);
 
   return (
     <div className="TodoList">
@@ -80,10 +76,11 @@ export const TodoList = ({
                 <button
                   type="button"
                   name="query"
-                  className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button"
+                  className={
+                    selectedUserId === todo.userId
+                    ? "TodoList__user-button--selected button"
+                    : "TodoList__user-button button"
+                  }
                   onClick={() => selectedUserId(todo.userId)}
                 >
                   User&nbsp;
