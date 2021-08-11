@@ -27,10 +27,15 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={todos}
-            onSelectUser={this.handleSelectUser}
-          />
+          {this.state.todos.length !== 0
+            ? (
+              <TodoList
+                todos={todos}
+                onSelectUser={this.handleSelectUser}
+              />
+            )
+            : 'Loading...'
+        }
         </div>
 
         <div className="App__content">

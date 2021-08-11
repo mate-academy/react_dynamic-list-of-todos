@@ -20,6 +20,6 @@ export function getUsers() {
   return request('/users');
 }
 
-export function getUser(id) {
+export function getUserById(id) {
   return request(`/users/${id}`);
 }
