@@ -38,37 +38,33 @@ export class CurrentUser extends React.Component {
 
   render() {
     const { selectedUser, isUserSelected } = this.state;
-    const pageIsLoading = (!isUserSelected
-      ? <span>User is not selected</span>
-      : (
-        <div className="CurrentUser">
-          <h2 className="CurrentUser__title">
-            <span>
-              User&nbsp;#
-              {selectedUser.id}
-            </span>
-          </h2>
-          <h3 className="CurrentUser__name">
-            {selectedUser.name}
-          </h3>
-          <p className="CurrentUser__email">{selectedUser.email}</p>
-          <p className="CurrentUser__phone">{selectedUser.phone}</p>
-          <button
-            className="
-            TodoList__user-button
-            button
-          "
-            type="button"
-            onClick={this.clearUser}
-          >
-            Clear
-          </button>
-        </div>
-      ));
 
     return (
       <>
-        {pageIsLoading}
+        {!isUserSelected
+          ? <span>User is not selected</span>
+          : (
+            <div className="CurrentUser">
+              <h2 className="CurrentUser__title">
+                <span>
+                  User&nbsp;#
+                  {selectedUser.id}
+                </span>
+              </h2>
+              <h3 className="CurrentUser__name">
+                {selectedUser.name}
+              </h3>
+              <p className="CurrentUser__email">{selectedUser.email}</p>
+              <p className="CurrentUser__phone">{selectedUser.phone}</p>
+              <button
+                className="TodoList__user-button button"
+                type="button"
+                onClick={this.clearUser}
+              >
+                Clear
+              </button>
+            </div>
+          )}
       </>
     );
   }
