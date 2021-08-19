@@ -1,7 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList = () => (
+export const TodoList: React.FC = () => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
