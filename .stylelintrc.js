@@ -1,4 +1,4 @@
 module.exports = {
-  extends: "@mate-academy/stylelint-config",
-  rules: {}
-};
+  extends: '@mate-academy/eslint-config-react-typescript',
+  // extends: "@mate-academy/stylelint-config",
+}

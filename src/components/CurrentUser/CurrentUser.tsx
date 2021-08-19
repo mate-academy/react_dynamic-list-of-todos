@@ -1,7 +1,7 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser = () => (
+export const CurrentUser: React.FC = () => (
   <div className="CurrentUser">
     <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
 
