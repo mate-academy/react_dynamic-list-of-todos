@@ -47,6 +47,21 @@ export class TodoList extends React.Component<Props, State> {
     });
   };
 
+  randomize = () => {
+    const { tasks } = this.state;
+    const tasksCopy = [...tasks];
+
+    for (let i = tasksCopy.length - 1; i > 0; i -= 1) {
+      const randomIndex = Math.floor(Math.random() * i);
+      const temp = tasksCopy[i];
+
+      tasksCopy[i] = tasksCopy[randomIndex];
+      tasksCopy[randomIndex] = temp;
+    }
+
+    this.setState({ tasks: tasksCopy });
+  };
+
   getFilteredTasks = () => {
     const {
       tasks,
@@ -85,32 +100,44 @@ export class TodoList extends React.Component<Props, State> {
         <div className="TodoList">
           <h2>Todos:</h2>
           <div className="TodoList__list-container">
-            <input
-              type="text"
-              placeholder="Write key words here"
-              value={filterQuery}
-              onChange={this.filterQueryChange}
-              className="TodoList__filter"
-            />
+            <div className="TodoList__filters">
+              <input
+                type="text"
+                placeholder="Write key words here"
+                value={filterQuery}
+                onChange={this.filterQueryChange}
+                className="TodoList__filter"
+              />
 
-            <select
-              onChange={this.completenessQueryChange}
-            >
-              <option
-                value="all"
+              <button
+                className="TodoList__user-button button"
+                type="button"
+                onClick={this.randomize}
               >
-                Filter by completeness
-              </option>
-              <option value="all">
-                all
-              </option>
-              <option value="active">
-                active
-              </option>
-              <option value="completed">
-                completed
-              </option>
-            </select>
+                Randomize
+              </button>
+
+              <select
+                onChange={this.completenessQueryChange}
+                defaultValue=""
+              >
+                <option
+                  value=""
+                  disabled
+                >
+                  Filter by completeness
+                </option>
+                <option value="all">
+                  all
+                </option>
+                <option value="active">
+                  active
+                </option>
+                <option value="completed">
+                  completed
+                </option>
+              </select>
+            </div>
 
             <ul className="TodoList__list">
               {filteredTasks.map((task: Todo) => (
