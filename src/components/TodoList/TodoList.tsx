@@ -1,17 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
+import { Task } from '../types/Task';
 import './TodoList.scss';
 
-interface Task {
-  id: number,
-  userId: number,
-  title: string,
-  completed: boolean,
-}
-
 type Props = {
-  todo: [],
-  setId: any,
+  todo: Task[],
+  setUser: any,
   selectedUserId: number,
 };
 
@@ -23,7 +17,7 @@ export class TodoList extends React.Component<Props> {
   };
 
   render() {
-    const { todo, setId, selectedUserId } = this.props;
+    const { todo, setUser, selectedUserId } = this.props;
     const { prevId, value, sortBy } = this.state;
 
     return (
@@ -104,7 +98,7 @@ export class TodoList extends React.Component<Props> {
                       )}
                       type="button"
                       onClick={() => {
-                        setId(task.userId);
+                        setUser(task.userId);
                         this.setState({ prevId: task.id });
                       }}
                     >

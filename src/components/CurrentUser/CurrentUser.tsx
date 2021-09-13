@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTodos } from '../api';
+import { getUser } from '../api';
 import './CurrentUser.scss';
 
 type Props = {
@@ -18,18 +18,17 @@ export class CurrentUser extends React.Component<Props> {
   };
 
   componentDidMount() {
-    this.getDate();
+    this.getData();
   }
 
   componentDidUpdate(prevProps: { userId: number; }) {
     if (prevProps.userId !== this.props.userId) {
-      this.getDate();
+      this.getData();
     }
   }
 
-  getDate = () => {
-    getTodos(`users/${this.props.userId}`)
-      .then((person) => person.json())
+  getData = () => {
+    getUser(this.props.userId)
       .then(person => {
         this.setState({ user: person });
       })
@@ -48,9 +47,7 @@ export class CurrentUser extends React.Component<Props> {
           <>
             <button
               type="button"
-              onClick={() => {
-                clear();
-              }}
+              onClick={clear}
             >
               Clear
             </button>

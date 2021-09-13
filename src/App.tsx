@@ -1,13 +1,14 @@
 import React from 'react';
-import './App.scss';
-import { getTodos } from './components/api';
-import './styles/general.scss';
-import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './components/api';
+import { TodoList } from './components/TodoList';
+import { Task } from './components/types/Task';
+import './styles/general.scss';
+import './App.scss';
 
 interface State {
   selectedUserId: number;
-  todos: [];
+  todos: Task[];
 }
 
 class App extends React.Component<{}, State> {
@@ -19,14 +20,14 @@ class App extends React.Component<{}, State> {
   componentDidMount() {
     getTodos('todos')
       .then(info => info.json())
-      .then((data: []) => {
+      .then((data: Task[]) => {
         this.setState({
           todos: data,
         });
       });
   }
 
-  setId = (id: number) => {
+  setUser = (id: number) => {
     this.setState({ selectedUserId: id });
   };
 
@@ -34,20 +35,18 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
-  // filteredResult = () => {
-  //   this.setState({
-  //     todos:
-  //   })
-  // };
-
   render() {
     const { selectedUserId, todos } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          {todos.length > 0 && (
-            <TodoList selectedUserId={selectedUserId} setId={this.setId} todo={todos} />
+          {!!todos.length && (
+            <TodoList
+              selectedUserId={selectedUserId}
+              setUser={this.setUser}
+              todo={todos}
+            />
           )}
         </div>
 
