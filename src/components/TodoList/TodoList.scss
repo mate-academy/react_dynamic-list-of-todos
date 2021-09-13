@@ -28,4 +28,9 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+  }
 }
