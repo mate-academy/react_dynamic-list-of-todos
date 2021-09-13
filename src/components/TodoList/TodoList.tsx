@@ -14,7 +14,6 @@ interface State {
   searchQuery: string;
   filterByStatus: FilterByStatusTypes;
   hasLoadingError: boolean;
-  isShuffled: boolean
 }
 
 interface Props {
@@ -28,7 +27,6 @@ export class TodoList extends React.Component<Props, State> {
     searchQuery: '',
     filterByStatus: '' as FilterByStatusTypes,
     hasLoadingError: false,
-    isShuffled: false,
   };
 
   async componentDidMount() {
@@ -49,8 +47,10 @@ export class TodoList extends React.Component<Props, State> {
     this.setState({ filterByStatus: target.value as FilterByStatusTypes });
   };
 
-  randomise = (todos: Todo[]) => {
-    return [...todos].sort(() => Math.random() - 0.5);
+  randomize = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].sort(() => Math.random() - 0.5),
+    }));
   };
 
   getFilteredTodos = () => {
@@ -82,14 +82,9 @@ export class TodoList extends React.Component<Props, State> {
       searchQuery,
       filterByStatus,
       hasLoadingError,
-      isShuffled,
     } = this.state;
     const { selectedUserId, onUserSelect } = this.props;
-    let filteredTodos = this.getFilteredTodos();
-
-    if (isShuffled) {
-      filteredTodos = this.randomise(filteredTodos);
-    }
+    const filteredTodos = this.getFilteredTodos();
 
     return (
       <div className="TodoList">
@@ -106,7 +101,7 @@ export class TodoList extends React.Component<Props, State> {
           <button
             type="button"
             className="button"
-            onClick={() => this.setState({ isShuffled: true })}
+            onClick={this.randomize}
           >
             Randomise
           </button>
