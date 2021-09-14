@@ -1,21 +1,32 @@
 import classNames from 'classnames';
 import React from 'react';
 import { getTodos } from '../../api';
+import { TodoFilter } from '../TodoFilter';
+import { TodoRandomize } from '../TodoRandomize';
 import './TodoList.scss';
 
 interface State {
   todos: Todo[];
   query: string;
+  renderStatus: Status;
 }
 
 interface Props {
   chooseUser: (userId: number) => void;
+  selectedUserId: number;
+}
+
+enum Status {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
 }
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     todos: [],
     query: '',
+    renderStatus: Status.all,
   };
 
   componentDidMount() {
@@ -28,11 +39,31 @@ export class TodoList extends React.Component<Props, State> {
     }
   }
 
-  searchByTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    event.preventDefault();
+  searchByTitle = (value: string) => {
     this.setState({ query: value });
+  };
+
+  changeShowStatus = (value: Status) => {
+    this.setState({ renderStatus: value as Status });
+  };
+
+  showTodosByStatus = () => {
+    const { renderStatus, todos } = this.state;
+
+    switch (renderStatus) {
+      case Status.all:
+        return [...todos];
+      case Status.active:
+        return [...todos].filter(todo => todo.completed === false);
+      case Status.completed:
+        return [...todos].filter(todo => todo.completed === true);
+      default:
+        return [...todos];
+    }
+  };
+
+  setShuffleTodos = (todos: Todo[]) => {
+    this.setState({ todos });
   };
 
   async loadData() {
@@ -43,25 +74,29 @@ export class TodoList extends React.Component<Props, State> {
   }
 
   render() {
-    const { todos, query } = this.state;
+    const { query, renderStatus, todos } = this.state;
+    const { selectedUserId } = this.props;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <form>
-          <label htmlFor="searchBiTitle">
-            Search by title:
-            <input
-              type="text"
-              value={query}
-              id="searchBiTitle"
-              onChange={this.searchByTitle}
-            />
-          </label>
-        </form>
+        <div className="TodoList__controls">
+          <TodoFilter
+            changeShowStatus={this.changeShowStatus}
+            searchByTitle={this.searchByTitle}
+            renderStatus={renderStatus}
+            query={query}
+          />
+
+          <TodoRandomize
+            setShuffleTodos={this.setShuffleTodos}
+            todos={todos}
+          />
+        </div>
+
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todos.map(todo => (
+            {this.showTodosByStatus().map(todo => (
               <li
                 className={classNames(
                   'TodoList__item',
@@ -82,11 +117,13 @@ export class TodoList extends React.Component<Props, State> {
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected': todo.userId === selectedUserId,
+                    },
+                  )}
                   type="button"
                   onClick={(event) => {
                     event.preventDefault();
