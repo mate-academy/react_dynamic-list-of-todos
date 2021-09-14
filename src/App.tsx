@@ -86,11 +86,11 @@ class App extends React.Component<{}, State> {
 
     switch (showTodos) {
       case 'active':
-        newTodos = todos.filter(({ completed }) => completed);
+        newTodos = todos.filter(({ completed }) => !completed);
         break;
 
       case 'completed':
-        newTodos = todos.filter(({ completed }) => !completed);
+        newTodos = todos.filter(({ completed }) => completed);
         break;
 
       default:

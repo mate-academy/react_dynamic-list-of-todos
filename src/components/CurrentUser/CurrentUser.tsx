@@ -50,10 +50,7 @@ export class CurrentUser extends React.Component<Props, State> {
         <p className="CurrentUser__phone">{user?.phone}</p>
 
         <button
-          className="
-            CurrentUser__clear
-            button
-          "
+          className="CurrentUser__clear button"
           type="button"
           onClick={(event => this.props.handleClick(event, 0, 0))}
         >
