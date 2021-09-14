@@ -11,6 +11,19 @@ interface State {
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+
+  };
+
+  onSelectUser = (userId: number): void => {
+    this.setState({
+      selectedUserId: userId,
+    });
+  };
+
+  resetUserSelection = (): void => {
+    this.setState({
+      selectedUserId: 0,
+    });
   };
 
   render() {
@@ -19,13 +32,13 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList selectedUserId={selectedUserId} onSelectUser={this.onSelectUser} />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={selectedUserId} resetUserSelection={this.resetUserSelection} />
             ) : 'No user selected'}
           </div>
         </div>
