@@ -9,11 +9,13 @@ type Props = {
 
 type State = {
   user: User | null;
+  loadingError: boolean;
 };
 
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
     user: null,
+    loadingError: false,
   };
 
   componentDidMount() {
@@ -30,15 +32,19 @@ export class CurrentUser extends React.Component<Props, State> {
     getUser(this.props.userId)
       .then(user => {
         this.setState({ user });
+      })
+      .catch(()=> {
+        this.setState({ loadingError: true })
       });
   };
 
   render() {
-    const { user } = this.state;
+    const { user, loadingError } = this.state;
     const { selectUser } = this.props;
 
     return (
       <div className="CurrentUser">
+        {loadingError && (<p> Loading error. Please, try again... </p>)}
         { (user) && (
           <>
             <h2 className="CurrentUser__title">
@@ -49,7 +55,7 @@ export class CurrentUser extends React.Component<Props, State> {
             <p className="CurrentUser__email">{user.email}</p>
             <p className="CurrentUser__phone">{user.phone}</p>
             <button
-              className="TodoList__user-button TodoList__user-button button"
+              className="TodoList__user-button TodoList__user-button--selected button"
               type="button"
               onClick={() => selectUser(0)}
             >

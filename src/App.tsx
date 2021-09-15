@@ -8,18 +8,23 @@ import { getTodos } from './api';
 interface State {
   selectedUserId: number;
   todos: Todo[];
+  loadingError: boolean;
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
+    loadingError: false,
   };
 
   componentDidMount() {
     getTodos()
       .then(todos => {
         this.setState({ todos });
+      })
+      .catch(() => {
+        this.setState({ loadingError: true })
       });
   }
 
@@ -45,17 +50,21 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { selectedUserId, todos } = this.state;
+    const { selectedUserId, todos, loadingError } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
+          {loadingError ? (
+            <p>Loading error. Please, try again...</p>
+          ) : (
+            <TodoList
             selectUser={this.selectUser}
             todos={todos}
             onComplete={this.completeTask}
             selectedUser={selectedUserId}
           />
+          )}
         </div>
 
         <div className="App__content">
