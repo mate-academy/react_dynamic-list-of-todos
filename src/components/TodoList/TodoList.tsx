@@ -118,7 +118,7 @@ export class TodoList extends React.Component<Props, State> {
                     key={todo.id}
                   >
                     <label>
-                      <input type="checkbox" readOnly />
+                      <input type="checkbox" readOnly checked={todo.completed} />
                       <p>{todo.title}</p>
                     </label>
 
