@@ -1,12 +1,6 @@
 import React from 'react';
+import { TodoStatus } from '../../types';
 import './TodoFilter.scss';
-
-enum TodoStatus {
-  default = 'Default',
-  all = 'All',
-  completed = 'Completed',
-  active = 'Active',
-}
 
 interface Props {
   titlePhrase: string;
@@ -17,7 +11,10 @@ interface Props {
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
-    titlePhrase, handleChange, todoStatus, selectStatus,
+    titlePhrase,
+    handleChange,
+    todoStatus,
+    selectStatus,
   } = props;
 
   return (
@@ -37,17 +34,17 @@ export const TodoFilter: React.FC<Props> = (props) => {
           selectStatus(event.target.value as TodoStatus)
         )}
       >
-        <option value={TodoStatus.default} disabled>
+        <option value={TodoStatus.Default} disabled>
           Choose todo status
         </option>
-        <option value={TodoStatus.all}>
-          {TodoStatus.all}
+        <option value={TodoStatus.All}>
+          All
         </option>
-        <option value={TodoStatus.active}>
-          {TodoStatus.active}
+        <option value={TodoStatus.Active}>
+          Active
         </option>
-        <option value={TodoStatus.completed}>
-          {TodoStatus.completed}
+        <option value={TodoStatus.Completed}>
+          Completed
         </option>
       </select>
     </div>

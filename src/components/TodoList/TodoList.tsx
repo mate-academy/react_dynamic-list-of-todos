@@ -1,6 +1,7 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { TodoStatus } from '../../types';
 
 import { TodoFilter } from '../TodoFilter';
 
@@ -14,17 +15,10 @@ interface State {
   todoStatus: TodoStatus;
 }
 
-enum TodoStatus {
-  default = 'Default',
-  all = 'All',
-  completed = 'Completed',
-  active = 'Active',
-}
-
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     titlePhrase: '',
-    todoStatus: TodoStatus.default,
+    todoStatus: TodoStatus.Default,
   };
 
   handleChange = (value: string) => {
@@ -43,9 +37,9 @@ export class TodoList extends React.Component<Props, State> {
     const { todoStatus } = this.state;
 
     switch (todoStatus) {
-      case TodoStatus.active:
+      case TodoStatus.Active:
         return !completed;
-      case TodoStatus.completed:
+      case TodoStatus.Completed:
         return completed;
       default:
         return true;
