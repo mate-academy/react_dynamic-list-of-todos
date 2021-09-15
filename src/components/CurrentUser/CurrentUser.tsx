@@ -22,8 +22,10 @@ export class CurrentUser extends React.Component<Props, State> {
     this.loadData();
   }
 
-  componentDidUpdate() {
-    this.loadData();
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps !== this.props) {
+      this.loadData();
+    }
   }
 
   async loadData() {
