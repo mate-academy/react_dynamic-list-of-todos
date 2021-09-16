@@ -1,5 +1,6 @@
 import React from 'react';
 import { getUser } from '../../api';
+import { Loader } from '../Loader';
 import './CurrentUser.scss';
 
 interface Props {
@@ -29,6 +30,8 @@ export class CurrentUser extends React.Component<Props, State> {
 
   async loadUser() {
     const { selectedUserId } = this.props;
+
+    this.setState({ id: 0 });
     const user: User = await getUser(selectedUserId);
 
     this.setState({ ...user } as User);
@@ -41,6 +44,12 @@ export class CurrentUser extends React.Component<Props, State> {
       phone,
       email,
     } = this.state;
+
+    if (id === 0) {
+      return (
+        <Loader />
+      );
+    }
 
     return (
       <div className="CurrentUser">
@@ -57,8 +66,7 @@ export class CurrentUser extends React.Component<Props, State> {
         <button
           type="button"
           className="button CurrentUser__button"
-          onClick={(event) => {
-            event.preventDefault();
+          onClick={() => {
             this.props.chooseUser(0);
           }}
         >

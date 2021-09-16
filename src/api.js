@@ -15,8 +15,6 @@ export const getUser = (userId) => {
   return getData(`users/${userId}`);
 };
 
-export const getTodos = (query) => {
-  return getData('todos')
-    .then(todos => todos
-      .filter((todo) => todo.title && todo.title.includes(query)));
+export const getTodos = () => {
+  return getData('todos');
 };

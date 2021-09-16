@@ -35,9 +35,15 @@ export class TodoList extends React.Component<Props, State> {
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
     if (prevState.query !== this.state.query) {
-      this.loadData();
+      this.showTodosByStatus();
     }
   }
+
+  filteredTodos = () => {
+    const { query, todos } = this.state;
+
+    return todos.filter((todo) => todo.title && todo.title.includes(query));
+  };
 
   searchByTitle = (value: string) => {
     this.setState({ query: value });
@@ -48,17 +54,16 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   showTodosByStatus = () => {
-    const { renderStatus, todos } = this.state;
+    const { renderStatus } = this.state;
 
     switch (renderStatus) {
-      case Status.all:
-        return [...todos];
       case Status.active:
-        return [...todos].filter(todo => todo.completed === false);
+        return this.filteredTodos().filter(todo => !todo.completed);
       case Status.completed:
-        return [...todos].filter(todo => todo.completed === true);
+        return this.filteredTodos().filter(todo => todo.completed);
+      case Status.all:
       default:
-        return [...todos];
+        return this.filteredTodos();
     }
   };
 
@@ -67,8 +72,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   async loadData() {
-    const { query } = this.state;
-    const todos = await getTodos(query);
+    const todos = await getTodos();
 
     this.setState({ todos });
   }

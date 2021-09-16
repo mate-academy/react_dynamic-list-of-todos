@@ -14,7 +14,12 @@ class App extends React.Component<{}, State> {
   };
 
   chooseUser = (userId: number) => {
+    this.reset();
     this.setState({ selectedUserId: userId });
+  };
+
+  reset = () => {
+    this.setState({ selectedUserId: 0 });
   };
 
   render() {
