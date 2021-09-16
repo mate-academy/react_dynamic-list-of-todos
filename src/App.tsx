@@ -13,6 +13,10 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
+  resetSelectUser = () => {
+    this.setState({ selectedUserId: 0 });
+  };
+
   onSelectedId = (userId: number) => {
     this.setState({ selectedUserId: userId });
   };
@@ -32,7 +36,10 @@ class App extends React.Component<{}, State> {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser selectedUserId={selectedUserId} />
+              <CurrentUser
+                selectedUserId={selectedUserId}
+                resetUser={this.resetSelectUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>

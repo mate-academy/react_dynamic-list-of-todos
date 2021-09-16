@@ -4,6 +4,7 @@ import './CurrentUser.scss';
 
 interface Props {
   selectedUserId: number;
+  resetUser: () => void
 }
 
 type State = {
@@ -33,6 +34,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const { user } = this.state;
+    const { resetUser } = this.props;
 
     if (!user) {
       return (
@@ -53,6 +55,13 @@ export class CurrentUser extends React.Component<Props, State> {
         <h3 className="CurrentUser__name">{user.name}</h3>
         <p className="CurrentUser__email">{user.email}</p>
         <p className="CurrentUser__phone">{user.phone}</p>
+        <button
+          className="button button--reset"
+          type="button"
+          onClick={resetUser}
+        >
+          Reset
+        </button>
       </div>
     );
   }

@@ -12,4 +12,12 @@
   &:hover {
     background-color: #4d457b;
   }
+
+  &--reset {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 30px;
+  }
 }
