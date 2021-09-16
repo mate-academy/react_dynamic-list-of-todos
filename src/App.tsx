@@ -30,7 +30,6 @@ class App extends React.Component<{}, State> {
 
       this.setState({
         todos,
-        error: false,
       });
     } catch {
       this.setState({

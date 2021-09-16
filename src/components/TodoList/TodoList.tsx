@@ -48,12 +48,14 @@ export class TodoList extends React.Component<Props, State> {
 
   getFilteredTodos = (todos: Todo[]) => {
     const { titlePhrase } = this.state;
+    const phrase = titlePhrase.toLowerCase();
 
     return todos.filter(
       todo => {
         const { title, completed } = todo;
+        const titleLowerCase = title.toLowerCase();
 
-        return title && title.includes(titlePhrase) && this.getTodoStatus(completed);
+        return titleLowerCase && titleLowerCase.includes(phrase) && this.getTodoStatus(completed);
       },
     );
   };

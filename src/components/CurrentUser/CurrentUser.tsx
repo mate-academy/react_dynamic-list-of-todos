@@ -9,6 +9,7 @@ interface Props {
 
 type State = User & {
   error: boolean;
+  loading: boolean;
 };
 
 export class CurrentUser extends React.Component<Props, State> {
@@ -18,6 +19,7 @@ export class CurrentUser extends React.Component<Props, State> {
     email: '',
     phone: '',
     error: false,
+    loading: false,
   };
 
   componentDidMount() {
@@ -32,14 +34,19 @@ export class CurrentUser extends React.Component<Props, State> {
 
   loadUserData = async () => {
     try {
+      this.setState({
+        loading: true,
+      });
       const userData = await loadUserData(this.props.userId);
 
       this.setState({
         ...userData,
+        loading: false,
         error: false,
       });
     } catch {
       this.setState({
+        loading: false,
         error: true,
       });
     }
@@ -47,30 +54,46 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const {
-      id, name, email, phone, error,
+      id,
+      name,
+      email,
+      phone,
+      error,
+      loading,
     } = this.state;
 
     return (
-      error ? (
-        <h2>Ups... Something went wrong</h2>
-      ) : (
-        <div className="CurrentUser">
-          <h2 className="CurrentUser__title">
-            <span>{`Selected user: ${id}`}</span>
-          </h2>
+      <>
+        {
+          loading ? (
+            <h2>Loading...</h2>
+          ) : (
+            <>
+              {error && (
+                <h2>Ups... Something went wrong</h2>
+              )}
+              {!error && (
+                <div className="CurrentUser">
+                  <h2 className="CurrentUser__title">
+                    <span>{`Selected user: ${id}`}</span>
+                  </h2>
 
-          <h3 className="CurrentUser__name">{name}</h3>
-          <p className="CurrentUser__email">{email}</p>
-          <p className="CurrentUser__phone">{phone}</p>
-          <button
-            className="button"
-            type="button"
-            onClick={this.props.clearSelectedUser}
-          >
-            Clear
-          </button>
-        </div>
-      )
+                  <h3 className="CurrentUser__name">{name}</h3>
+                  <p className="CurrentUser__email">{email}</p>
+                  <p className="CurrentUser__phone">{phone}</p>
+                  <button
+                    className="button"
+                    type="button"
+                    onClick={this.props.clearSelectedUser}
+                  >
+                    Clear
+                  </button>
+                </div>
+              )}
+            </>
+          )
+        }
+      </>
     );
   }
 }
