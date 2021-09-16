@@ -4,6 +4,7 @@ import './CurrentUser.scss';
 
 type State = {
   user: User | null,
+  errorMessage: string,
 };
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
     user: null,
+    errorMessage: '',
   };
 
   componentDidMount() {
@@ -27,16 +29,20 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   async getLoadedData() {
-    const { userId } = this.props;
-    const user = await loadUsers(userId);
+    try {
+      const { userId } = this.props;
+      const user = await loadUsers(userId);
 
-    this.setState(() => ({
-      user,
-    }));
+      this.setState(() => ({
+        user, errorMessage: '',
+      }));
+    } catch (error) {
+      this.setState({ errorMessage: 'There is no such user' });
+    }
   }
 
   render() {
-    const { user } = this.state;
+    const { user, errorMessage } = this.state;
     const { onClearUserId } = this.props;
 
     return (
@@ -58,7 +64,7 @@ export class CurrentUser extends React.Component<Props, State> {
               Clear
             </button>
           </div>
-        ) : 'There is no such user'}
+        ) : errorMessage}
       </>
     );
   }
