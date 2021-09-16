@@ -53,6 +53,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   render() {
+    const { filteredQuery, selectedQuery } = this.state;
     const { onUsersId } = this.props;
     const filtredTodos = this.getFilteredTodos();
 
@@ -68,7 +69,7 @@ export class TodoList extends React.Component<Props, State> {
               id="filterTitle"
               className="form-control"
               placeholder="find title"
-              value={this.state.filteredQuery}
+              value={filteredQuery}
               onChange={this.handleChange}
             />
           </label>
@@ -77,7 +78,7 @@ export class TodoList extends React.Component<Props, State> {
             <select
               name="selectedQuery"
               id="selectedTodo"
-              value={this.state.selectedQuery}
+              value={selectedQuery}
               className="form-control"
               onChange={this.handleChange}
             >

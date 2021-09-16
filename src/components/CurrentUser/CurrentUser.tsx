@@ -45,9 +45,13 @@ export class CurrentUser extends React.Component<Props, State> {
     const { user, errorMessage } = this.state;
     const { onClearUserId } = this.props;
 
+    if (!user) {
+      throw new Error('Unable to load data Check your connection');
+    }
+
     return (
       <>
-        {user ? (
+        {!errorMessage ? (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
               <span>{`Selected user: ${user.id}`}</span>
