@@ -17,24 +17,23 @@ export class CurrentUser extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    getUser(this.props.selectedUserId)
+    this.getUserForUserId(this.props.selectedUserId);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      this.getUserForUserId(this.props.selectedUserId);
+    }
+  }
+
+  getUserForUserId = (userId : number) => {
+    getUser(userId)
       .then(user => {
         this.setState({
           user,
         });
       });
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps !== this.props) {
-      getUser(this.props.selectedUserId)
-        .then(user => {
-          this.setState({
-            user,
-          });
-        });
-    }
-  }
+  };
 
   render() {
     const { user } = this.state;
