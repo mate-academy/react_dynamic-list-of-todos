@@ -5,7 +5,7 @@ type Todo = {
   userId: number;
   title: string,
   completed: boolean,
-}; /* TODO: DESCRIBE */
+};
 
 interface User {
   id: number;

@@ -8,13 +8,13 @@ type Props = {
 };
 
 type State = {
-  filterQuery: string,
+  filteredQuery: string,
   selectedQuery: string,
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
-    filterQuery: '',
+    filteredQuery: '',
     selectedQuery: '',
   };
 
@@ -22,17 +22,17 @@ export class TodoList extends React.Component<Props, State> {
     const { name, value } = event.target;
 
     if (name === 'filterQuery') {
-      this.setState({ filterQuery: value, selectedQuery: 'Choose todo' });
+      this.setState({ filteredQuery: value, selectedQuery: 'Choose todo' });
     }
 
     if (name === 'selectedQuery') {
-      this.setState({ filterQuery: '', selectedQuery: value });
+      this.setState({ filteredQuery: '', selectedQuery: value });
     }
   };
 
   getFilteredTodos = () => {
     const { todos } = this.props;
-    const query = this.state.filterQuery.toLowerCase();
+    const query = this.state.filteredQuery.toLowerCase();
 
     switch (this.state.selectedQuery) {
       case 'all':
@@ -68,7 +68,7 @@ export class TodoList extends React.Component<Props, State> {
               id="filterTitle"
               className="form-control"
               placeholder="find title"
-              value={this.state.filterQuery}
+              value={this.state.filteredQuery}
               onChange={this.handleChange}
             />
           </label>
