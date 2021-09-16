@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import './TodoList.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface Props {
   todos: Todo[];
@@ -64,7 +65,7 @@ export class TodoList extends React.Component<Props, State> {
             type="text"
             name="query"
             value={query}
-            className="TodoList__item item"
+            className="TodoList__item"
             onChange={(this.handleQuery)}
           />
 
