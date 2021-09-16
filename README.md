@@ -9,7 +9,7 @@ You are given a basic markup for the App, TodosList and CurrentUser components a
 
 Add the data loading, so the App works as described below:
 
-1. Create a separate file `api.js` to put all the API call there.
+1. Create a separate file `api.ts` to put all the API call there.
 1. Todos are fetched on page load from [GET todos endpoint](https://mate.academy/students-api/todos). (Use `componentDidMount`)
 1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
 1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate.academy/students-api/users/1) (replace 1 with a given `userId`).
