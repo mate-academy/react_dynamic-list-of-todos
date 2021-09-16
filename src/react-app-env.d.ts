@@ -3,7 +3,7 @@
 type Todo = {
   id: number,
   userId: number,
-  completed: string,
+  completed: boolean,
   title: string,
   createdAt: string,
   updatedAt: string,

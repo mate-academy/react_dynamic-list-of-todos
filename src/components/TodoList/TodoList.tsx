@@ -109,14 +109,16 @@ export class TodoList extends React.Component<Props, State> {
           <ul className="TodoList__list">
             {visibleTodos.map(todo => (
               <li
-                className={classNames('TodoList__item TodoList__item--checked', {
+                className={classNames('TodoList__item', {
                   'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
                 })}
                 key={todo.id}
               >
                 <label>
                   <input
                     type="checkbox"
+                    checked={todo.completed}
                     readOnly
                   />
                   <p>{todo.title}</p>
