@@ -25,7 +25,7 @@ export class TodoList extends React.Component<Props, State> {
   state: State = {
     todos: [],
     searchQuery: '',
-    filterByStatus: '' as FilterByStatusTypes,
+    filterByStatus: 'all' as FilterByStatusTypes,
     hasLoadingError: false,
   };
 
@@ -106,23 +106,25 @@ export class TodoList extends React.Component<Props, State> {
             Randomise
           </button>
 
-          <select
-            onChange={this.handleSelect}
-            value={filterByStatus}
-          >
-            <option value="" disabled>
-              Choose status type
-            </option>
-            <option value="all">
-              All
-            </option>
-            <option value="active">
-              Active
-            </option>
-            <option value="completed">
-              Completed
-            </option>
-          </select>
+          <label htmlFor="status-type">
+            Status:
+            <select
+              onChange={this.handleSelect}
+              value={filterByStatus}
+              id="status-type"
+              className="TodoList__controls--status"
+            >
+              <option value="all">
+                All
+              </option>
+              <option value="active">
+                Active
+              </option>
+              <option value="completed">
+                Completed
+              </option>
+            </select>
+          </label>
         </div>
 
         <div className="TodoList__list-container">
@@ -143,6 +145,7 @@ export class TodoList extends React.Component<Props, State> {
                       <input
                         type="checkbox"
                         checked={todo.completed}
+                        readOnly
                       />
                       <p>{todo.title}</p>
                     </label>

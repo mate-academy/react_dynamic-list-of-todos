@@ -32,5 +32,10 @@
   &__controls {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    &--status {
+      margin-left: 10px;
+    }
   }
 }

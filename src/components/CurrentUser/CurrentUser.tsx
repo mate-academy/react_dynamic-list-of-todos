@@ -23,7 +23,7 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps !== this.props) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
       this.loadUser();
     }
   }
