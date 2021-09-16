@@ -1,5 +1,11 @@
 .TodoList {
   width: 100%;
+  text-align: center;
+
+  &__input {
+    width: 500px;
+    height: 25px;
+  }
 
   &__user-button--selected {
     background-color: #4d457b;
