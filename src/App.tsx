@@ -24,7 +24,7 @@ class App extends React.Component<{}, State> {
         this.setState({ todos });
       })
       .catch(() => {
-        this.setState({ loadingError: true })
+        this.setState({ loadingError: true });
       });
   }
 
@@ -59,11 +59,11 @@ class App extends React.Component<{}, State> {
             <p>Loading error. Please, try again...</p>
           ) : (
             <TodoList
-            selectUser={this.selectUser}
-            todos={todos}
-            onComplete={this.completeTask}
-            selectedUser={selectedUserId}
-          />
+              selectUser={this.selectUser}
+              todos={todos}
+              onComplete={this.completeTask}
+              selectedUser={selectedUserId}
+            />
           )}
         </div>
 

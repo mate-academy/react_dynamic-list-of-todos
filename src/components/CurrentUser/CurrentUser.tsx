@@ -33,8 +33,8 @@ export class CurrentUser extends React.Component<Props, State> {
       .then(user => {
         this.setState({ user });
       })
-      .catch(()=> {
-        this.setState({ loadingError: true })
+      .catch(() => {
+        this.setState({ loadingError: true });
       });
   };
 
