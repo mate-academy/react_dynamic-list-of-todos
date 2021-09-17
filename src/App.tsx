@@ -7,13 +7,15 @@ import { loadTodos } from './api';
 
 interface State {
   todos: Todo[];
-  selectedUserId: number;
+  selectedUserId: number | null;
+  visibleTodos: Todo[];
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
+    visibleTodos: [],
   };
 
   async componentDidMount() {
@@ -21,8 +23,37 @@ class App extends React.Component<{}, State> {
 
     this.setState({
       todos: data,
+      visibleTodos: [...data],
     });
   }
+
+  statusFilter = (status: string) => {
+    this.setState((currentState => ({
+      visibleTodos: currentState.todos
+        .filter(todo => {
+          switch (status) {
+            case 'all':
+              return todo;
+
+            case 'active':
+              return !todo.completed;
+
+            case 'completed':
+              return todo.completed;
+
+            default:
+              return todo;
+          }
+        }),
+    })));
+  };
+
+  titleFilter = (filterFor: string) => {
+    this.setState((currentState => ({
+      visibleTodos: currentState.visibleTodos
+        .filter(todo => todo.title.includes(filterFor)),
+    })));
+  };
 
   getSelectedUserId = (selectedUserId: number) => {
     this.setState({ selectedUserId });
@@ -46,15 +77,20 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const {
+      visibleTodos,
+      selectedUserId,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos.slice(0, 10)}
+            todos={visibleTodos}
             todoStatusChanger={this.todoStatusChanger}
             getSelectedUserId={this.getSelectedUserId}
+            statusFilter={this.statusFilter}
+            titleFilter={this.titleFilter}
           />
         </div>
 

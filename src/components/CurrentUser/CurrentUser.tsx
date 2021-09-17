@@ -3,7 +3,7 @@ import { loadUser } from '../../api';
 import './CurrentUser.scss';
 
 interface Props {
-  selectedUserId: number;
+  selectedUserId: number | null;
   clearUser: () => void;
 }
 
@@ -12,7 +12,7 @@ type State = {
 };
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
+  state: State = {
     selectedUser: null,
   };
 
@@ -27,7 +27,11 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   getUser = async () => {
-    const selectedUser = await loadUser(this.props.selectedUserId);
+    let selectedUser: User | null = null;
+
+    if (this.props.selectedUserId) {
+      selectedUser = await loadUser(this.props.selectedUserId);
+    }
 
     this.setState({ selectedUser });
   };
@@ -41,7 +45,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
     return selectedUser && (
       <div>
-        {/* <div className="CurrentUser">
+        <div className="CurrentUser">
           <h2 className="CurrentUser__title">
             <span>{`Selected user: ${selectedUser.id}`}</span>
           </h2>
@@ -54,14 +58,15 @@ export class CurrentUser extends React.Component<Props, State> {
           <p className="CurrentUser__phone">
             {selectedUser.phone}
           </p>
-        </div> */}
 
-        <button
-          type="button"
-          onClick={() => clearUser()}
-        >
-          Clear
-        </button>
+          <button
+            type="button"
+            onClick={() => clearUser()}
+            className="button CurrentUser__button"
+          >
+            Clear
+          </button>
+        </div>
       </div>
     );
   }
