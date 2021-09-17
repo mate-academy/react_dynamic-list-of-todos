@@ -28,4 +28,25 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  .inputFilter {
+    border: 1px solid #4d457b;
+    color: #4d457b;
+    font-size: 16px;
+  }
+
+  .inputFilter:focus {
+    outline: none;
+    border: 2px solid #4d457b;
+  }
+
+  .select {
+    border: 1px solid #4d457b;
+    color: #4d457b;
+    font-size: 16px;
+  }
+
+  .select:focus {
+    outline: none;
+  }
 }
