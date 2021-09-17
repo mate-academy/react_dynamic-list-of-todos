@@ -24,8 +24,13 @@ export class TodoList extends React.Component<Props, State> {
     this.setState({ [name]: value } as Pick<State, keyof State>);
   };
 
-  getFilteredTodos = (todos: Todo[]) => {
-    let visibleTasks = [...todos].filter(todo => {
+  getFilteredTodos = () => {
+    const { todos } = this.props;
+
+    let visibleTasks = todos.filter(todo => (todo.title
+      && todo.title.toLowerCase().includes(this.state.query.toLowerCase())));
+
+    visibleTasks = visibleTasks.filter(todo => {
       switch (this.state.filterBy) {
         case 'Active':
           return !todo.completed;
@@ -33,21 +38,17 @@ export class TodoList extends React.Component<Props, State> {
           return todo.completed;
         case 'All':
         default:
-          return todo;
+          return todos;
       }
     });
-
-    visibleTasks = visibleTasks
-      .filter(todo => (todo.title
-        && todo.title.toLocaleLowerCase().includes(this.state.query.toLocaleLowerCase())));
 
     return visibleTasks;
   };
 
   render() {
     const { query, filterBy } = this.state;
-    const { todos, selectUser } = this.props;
-    const filteredTodos = this.getFilteredTodos(todos);
+    const { selectUser } = this.props;
+    const filteredTodos = this.getFilteredTodos();
 
     return (
       <div className="TodoList">
@@ -109,20 +110,6 @@ export class TodoList extends React.Component<Props, State> {
                 </button>
               </li>
             ))}
-
-            <li className="TodoList__item TodoList__item--checked">
-              <label>
-                <input type="checkbox" checked readOnly />
-                <p>distinctio vitae autem nihil ut molestias quo</p>
-              </label>
-
-              <button
-                className="TodoList__user-button button"
-                type="button"
-              >
-                User&nbsp;#2
-              </button>
-            </li>
           </ul>
         </div>
       </div>
