@@ -28,4 +28,10 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__filter {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+  }
 }

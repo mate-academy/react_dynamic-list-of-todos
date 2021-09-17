@@ -12,4 +12,8 @@
   &:hover {
     background-color: #4d457b;
   }
+  &--clear {
+    display: flex;
+    margin: 20px auto;
+  }
 }
