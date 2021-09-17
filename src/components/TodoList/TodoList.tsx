@@ -126,7 +126,7 @@ export class TodoList extends React.Component<Props, State> {
                 </label>
 
                 <button
-                  className={on(git checkout -b develop
+                  className={on(
                     'TodoList__user-button button',
                     { 'TodoList__user-button--selected': todo.userId === selectedUserId },
                   )}
