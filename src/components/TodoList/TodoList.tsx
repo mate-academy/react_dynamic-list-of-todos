@@ -5,6 +5,7 @@ import { getTodos } from '../../api';
 type State = {
   currentTodos: Todo[];
   query: string;
+  status: Status | string;
 };
 
 type Props = {
@@ -15,6 +16,7 @@ export class TodoList extends React.Component<Props, State> {
   state: State = {
     currentTodos: [],
     query: '',
+    status: '',
   };
 
   componentDidMount() {
@@ -26,7 +28,29 @@ export class TodoList extends React.Component<Props, State> {
       });
   }
 
+  handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ status: event.target.value });
+  };
+
+  filterTodos = () => {
+    let todos = [...this.state.currentTodos];
+
+    todos = todos.filter(todo => todo.title.toLowerCase().includes(this.state.query.toLowerCase()));
+
+    if (this.state.status === 'Active') {
+      return todos.filter(arr => arr.completed === false);
+    }
+
+    if (this.state.status === 'Completed') {
+      return todos.filter(arr => arr.completed === true);
+    }
+
+    return todos;
+  };
+
   render() {
+    const filteredTodos = this.filterTodos();
+
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -34,14 +58,22 @@ export class TodoList extends React.Component<Props, State> {
           <input
             type="text"
             value={this.state.query}
+            placeholder="Search.."
+            className="input input-group"
             onChange={(event) => {
               this.setState({
                 query: event.target.value,
               });
             }}
           />
+          <select className="select form-select" onChange={this.handleChange}>
+            <option value="" disabled selected hidden>Choose status</option>
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
+          </select>
           <ul className="TodoList__list">
-            {this.state.currentTodos.map(todo => (
+            {filteredTodos.map(todo => (
               todo.completed
                 ? (
                   <li className="TodoList__item TodoList__item--unchecked">
