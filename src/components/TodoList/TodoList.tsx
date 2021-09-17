@@ -20,6 +20,8 @@ enum FilterByStatus {
   Completed = 'Completed',
 }
 
+type Event = React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>;
+
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     visibleTodos: this.props.todos,
@@ -27,7 +29,11 @@ export class TodoList extends React.Component<Props, State> {
     titleFilter: '',
   };
 
-  filterOptions = [FilterByStatus.All, FilterByStatus.Active, FilterByStatus.Completed];
+  filterOptions = [
+    FilterByStatus.All,
+    FilterByStatus.Active,
+    FilterByStatus.Completed,
+  ];
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.todos !== this.props.todos) {
@@ -80,17 +86,27 @@ export class TodoList extends React.Component<Props, State> {
     }
   };
 
-  selectHandleChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    await this.setState({
-      filterBy: event.target.value as FilterByStatus,
-    });
-    this.getFilterTodos();
+  shuffleTodos = async () => {
+    this.setState(state => (
+      {
+        visibleTodos: state.visibleTodos.sort(() => Math.random() - 0.5),
+      }
+    ));
   };
 
-  inputHandleChange = async (event : React.ChangeEvent<HTMLInputElement>) => {
-    await this.setState({
-      titleFilter: event.target.value,
-    });
+  handleChange = async (event: Event) => {
+    const { name, value } = event.target;
+
+    if (name === 'filterBy') {
+      await this.setState({
+        filterBy: value as FilterByStatus,
+      });
+    } else {
+      await this.setState({
+        titleFilter: value,
+      });
+    }
+
     this.getFilterTodos();
   };
 
@@ -105,14 +121,14 @@ export class TodoList extends React.Component<Props, State> {
           placeholder="Search by title"
           name="titleFilter"
           type="text"
-          onChange={this.inputHandleChange}
+          onChange={this.handleChange}
           className="TodoList__input"
         />
 
         <select
           name="filterBy"
           value={filterBy}
-          onChange={this.selectHandleChange}
+          onChange={this.handleChange}
           className="TodoList__select"
         >
           {this.filterOptions.map(selectItem => (
@@ -131,6 +147,14 @@ export class TodoList extends React.Component<Props, State> {
           className="TodoList__button button"
         >
           Clear selected user
+        </button>
+
+        <button
+          type="button"
+          onClick={this.shuffleTodos}
+          className="TodoList__button button"
+        >
+          Randomize
         </button>
 
         <div className="TodoList__list-container">

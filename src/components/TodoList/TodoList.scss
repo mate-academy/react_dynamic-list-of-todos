@@ -21,6 +21,10 @@
     display: block;
     width: 200px;
     margin: 0 auto;
+
+    &:first-of-type {
+      margin-bottom: 8px;
+    }
   }
 
   &__user-button--selected {
