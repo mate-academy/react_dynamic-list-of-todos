@@ -67,9 +67,9 @@ export class TodoList extends React.Component<Props, State> {
             value={filterBy}
             onChange={this.handleChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
           </select>
         </div>
         <div className="TodoList__list-container">
@@ -91,7 +91,7 @@ export class TodoList extends React.Component<Props, State> {
                     checked={todo.completed}
                     readOnly
                   />
-                  <p>delectus aut autem</p>
+                  <p>{todo.title}</p>
                 </label>
                 <button
                   className="

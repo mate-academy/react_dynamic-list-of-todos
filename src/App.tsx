@@ -17,9 +17,11 @@ class App extends React.Component<{}, State> {
   };
 
   async componentDidMount() {
-    const todos = await getTodos();
+    const task = await getTodos();
 
-    this.setState({ todos });
+    this.setState({
+      todos: task,
+    });
   }
 
   selectUser = (userId: number) => {
