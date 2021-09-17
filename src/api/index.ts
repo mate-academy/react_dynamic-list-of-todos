@@ -21,6 +21,3 @@ export async function getUserById(id: number): Promise<User> {
 
   return user;
 }
-
-// eslint-disable-next-line no-console
-console.log(getUserById(2));
