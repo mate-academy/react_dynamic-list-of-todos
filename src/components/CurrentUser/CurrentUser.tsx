@@ -31,10 +31,11 @@ export class CurrentUser extends React.Component<Props, State> {
   getUser = () => {
     getUser(this.props.userId)
       .then(user => {
-        this.setState({ user });
+        this.setState({ user, loadingError: false });
       })
       .catch(() => {
         this.setState({ loadingError: true });
+        // throw new Error(`Fetching user: ${error}`);
       });
   };
 
@@ -44,8 +45,8 @@ export class CurrentUser extends React.Component<Props, State> {
 
     return (
       <div className="CurrentUser">
-        {loadingError && (<p> Loading error. Please, try again... </p>)}
-        { (user) && (
+        {loadingError && (<p> No such a user in the database </p>)}
+        { user && !loadingError && (
           <>
             <h2 className="CurrentUser__title">
               {'Selected user: '}

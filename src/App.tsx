@@ -23,13 +23,14 @@ class App extends React.Component<{}, State> {
       .then(todos => {
         this.setState({ todos });
       })
-      .catch(() => {
+      .catch((error) => {
         this.setState({ loadingError: true });
+        throw new Error(`Fetching todos: ${error}`);
       });
   }
 
   selectUser = (userId: number) => {
-    this.setState({ selectedUserId: userId });
+    this.setState({ selectedUserId: userId, loadingError: false });
   };
 
   completeTask = (id: number) => {

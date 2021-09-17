@@ -3,10 +3,11 @@ const BASE_URL = 'https://mate.academy/students-api';
 const request = (url) => {
   return fetch(`${BASE_URL}${url}`)
     .then(response => {
-      return response.json();
-    })
-    .catch((error) => {
-      throw new Error(`${error.status} - ${error.statusText}`);
+      if (response.ok) {
+        return response.json();
+      }
+
+      return Promise.reject(new Error());
     });
 };
 
