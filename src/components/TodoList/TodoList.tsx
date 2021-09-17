@@ -38,11 +38,11 @@ export class TodoList extends React.Component<Props, State> {
     todos = todos.filter(todo => todo.title.toLowerCase().includes(this.state.query.toLowerCase()));
 
     if (this.state.status === 'Active') {
-      return todos.filter(arr => arr.completed === false);
+      return todos.filter(arr => arr.completed === true);
     }
 
     if (this.state.status === 'Completed') {
-      return todos.filter(arr => arr.completed === true);
+      return todos.filter(arr => arr.completed === false);
     }
 
     return todos;
