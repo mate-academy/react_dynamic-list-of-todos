@@ -16,50 +16,86 @@ type Props = {
 type State = {
   query: string;
   typeOfSort: SortType;
+  isRandomize: boolean;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     query: '',
     typeOfSort: SortType.All,
+    isRandomize: false,
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
+    if (name === 'query') {
+      this.setState({
+        query: value,
+      });
+    }
+
+    if (name === 'typeOfSort') {
+      this.setState({
+        typeOfSort: value as SortType,
+      });
+
+      this.setState({
+        isRandomize: false,
+      });
+    }
+  };
+
+  handleClick = () => {
     this.setState({
-      [name]: value,
-    } as { [K in keyof State]: State[K] });
+      isRandomize: true,
+    });
   };
 
   sortedTodos = () => {
-    const { query, typeOfSort } = this.state;
-    const { todos } = this.props;
+    const { query, typeOfSort, isRandomize } = this.state;
+    let copyTodos = this.props.todos;
     const lowQuery = query.toLowerCase();
+
+    if (isRandomize) {
+      copyTodos = this.randomize(copyTodos);
+    }
 
     switch (typeOfSort) {
       case SortType.Active:
-        return todos.filter(todo => (
+        return copyTodos.filter(todo => (
           todo.title
             && todo.title.toLowerCase().includes(lowQuery)
             && !todo.completed
         ));
 
       case SortType.Completed:
-        return todos.filter(todo => (
+        return copyTodos.filter(todo => (
           todo.title
             && todo.title.toLowerCase().includes(lowQuery)
             && todo.completed
         ));
 
       case SortType.All:
-        return todos.filter(todo => (
+        return copyTodos.filter(todo => (
           todo.title && todo.title.toLowerCase().includes(lowQuery)
         ));
 
       default:
         throw new Error('Some error in sort');
     }
+  };
+
+  randomize = (array: Todo[]) => {
+    const copy = [...array];
+
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+
+    return copy;
   };
 
   render() {
@@ -117,6 +153,13 @@ export class TodoList extends React.Component<Props, State> {
               Completed
             </option>
           </select>
+          <button
+            className="TodoList__form-button"
+            type="button"
+            onClick={() => this.handleClick()}
+          >
+            Random sort
+          </button>
         </form>
 
         <div className="TodoList__list-container">
