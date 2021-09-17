@@ -1,44 +1,110 @@
 import React from 'react';
+import cn from 'classnames';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[];
+  onUserSelection: (userId: number) => void;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface State {
+  query: string;
+  selectStateOfTodo: string;
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    query: '',
+    selectStateOfTodo: 'all',
+  };
+
+  getTodos = (todos: Todo[]) => {
+    const { query, selectStateOfTodo } = this.state;
+
+    let filteredTodos = todos
+      .filter(todo => todo.title.includes(query));
+
+    if (selectStateOfTodo === 'active') {
+      filteredTodos = filteredTodos
+        .filter(todo => !todo.completed);
+    } else if (selectStateOfTodo === 'completed') {
+      filteredTodos = filteredTodos
+        .filter(todo => todo.completed);
+    }
+
+    return filteredTodos;
+  };
+
+  render() {
+    const { query, selectStateOfTodo } = this.state;
+    const { todos, onUserSelection } = this.props;
+
+    const filteredTodos = this.getTodos(todos);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <input
+            type="text"
+            name="todo"
+            className="TodoList__input"
+            value={query}
+            onChange={(event) => {
+              this.setState({ query: event.target.value });
+            }}
+          />
+          <select
+            name="stateOfTodo"
+            className="TodoList__select"
+            value={selectStateOfTodo}
+            onChange={(event) => {
+              this.setState({ selectStateOfTodo: event.target.value });
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+          <ul className="TodoList__list">
+            {filteredTodos.map((todo) => (
+              <li
+                key={todo.id}
+                className={cn('TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  })}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => {
+                    onUserSelection(todo.userId);
+                  }}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
