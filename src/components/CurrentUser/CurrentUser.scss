@@ -22,8 +22,10 @@
     margin: 5px;
   }
 
-  &__clear {
-    display: block;
-    margin: 20px auto 0;
+  &__button {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 15px;
   }
 }
