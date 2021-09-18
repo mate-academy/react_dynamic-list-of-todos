@@ -1,51 +1,101 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { loadTodos } from '../../api';
 
 interface Props {
-  todos: Todo[];
-  todoStatusChanger: (todoId: number) => void;
   getSelectedUserId: (selectedUserId: number) => void;
-  statusFilter: (status: string) => void;
-  titleFilter: (filterFor: string) => void;
 }
 
 interface State {
   filteredTitle: string;
   filteredByStatus: string;
+  todos: Todo[];
+  visibleTodos: Todo[];
 }
 
 export class TodoList extends React.Component<Props, State> {
-  state = {
+  state: State = {
     filteredTitle: '',
     filteredByStatus: 'all',
+    todos: [],
+    visibleTodos: [],
   };
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    const { statusFilter, titleFilter } = prevProps;
-    const { filteredByStatus, filteredTitle } = this.state;
+  async componentDidMount() {
+    const data = await loadTodos();
 
-    if (prevState !== this.state) {
-      statusFilter(filteredByStatus);
-      titleFilter(filteredTitle);
-    }
+    this.setState({
+      todos: data,
+      visibleTodos: [...data],
+    });
   }
 
-  selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
+  todoStatusChanger = (todoId: number) => {
+    this.setState(currentState => ({
+      todos: currentState.todos.map(todo => {
+        if (todo.id === todoId) {
+          // eslint-disable-next-line no-param-reassign
+          todo.completed = !todo.completed;
+        }
 
-    this.setState({ filteredByStatus: value });
+        return todo;
+      }),
+    }));
   };
 
-  changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  titleFilter = (filterFor: string) => {
+    this.statusFilter(this.state.filteredByStatus);
+    this.setState((currentState => ({
+      visibleTodos: currentState.visibleTodos
+        .filter(todo => todo.title.includes(filterFor)),
+    })));
+  };
+
+  statusFilter = (status: string) => {
+    this.setState((currentState => ({
+      visibleTodos: currentState.todos
+        .filter(todo => {
+          switch (status) {
+            case 'all':
+              return todo;
+
+            case 'active':
+              return !todo.completed;
+
+            case 'completed':
+              return todo.completed;
+
+            default:
+              return todo;
+          }
+        }),
+    })));
+  };
+
+  selectHandler = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    this.setState({ filteredTitle: value });
+    await this.setState({ filteredByStatus: value });
+
+    this.statusFilter(this.state.filteredByStatus);
+  };
+
+  changeHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    await this.setState({ filteredTitle: value });
+
+    this.titleFilter(this.state.filteredTitle);
   };
 
   render() {
-    const { todos, todoStatusChanger, getSelectedUserId } = this.props;
-    const { filteredTitle, filteredByStatus } = this.state;
+    const { getSelectedUserId } = this.props;
+    const {
+      visibleTodos,
+      filteredTitle,
+      filteredByStatus,
+    } = this.state;
 
     return (
       <div className="TodoList">
@@ -85,7 +135,7 @@ export class TodoList extends React.Component<Props, State> {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {todos.map(todo => (
+            {visibleTodos.map(todo => (
               <li
                 key={todo.id}
                 className={classNames(
@@ -100,7 +150,7 @@ export class TodoList extends React.Component<Props, State> {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    onClick={() => todoStatusChanger(todo.id)}
+                    onClick={() => this.todoStatusChanger(todo.id)}
                   />
                   <p>{todo.title}</p>
                 </label>

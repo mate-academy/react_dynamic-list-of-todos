@@ -40,9 +40,6 @@ export class CurrentUser extends React.Component<Props, State> {
     const { clearUser } = this.props;
     const { selectedUser } = this.state;
 
-    // eslint-disable-next-line no-console
-    console.log(selectedUser);
-
     return selectedUser && (
       <div>
         <div className="CurrentUser">
