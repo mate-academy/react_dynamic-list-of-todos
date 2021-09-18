@@ -13,3 +13,5 @@ interface User {
   email: string;
   phone: string;
 }
+
+type InputOrSelect = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;

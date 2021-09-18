@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { TodoForm } from '../TodoForm';
 import './TodoList.scss';
 
 type Props = {
@@ -18,7 +19,7 @@ export class TodoList extends React.Component<Props, State> {
     selectedQuery: '',
   };
 
-  handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  handleChange = (event: InputOrSelect) => {
     const { name, value } = event.target;
 
     this.setState({ [name]: value } as Pick<State, keyof State>);
@@ -58,33 +59,11 @@ export class TodoList extends React.Component<Props, State> {
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <div className="TodoList__form">
-          <label className="TodoList__label" htmlFor="filterTitle">
-            <input
-              type="text"
-              name="filteredQuery"
-              id="filterTitle"
-              className="form-control"
-              placeholder="find title"
-              value={filteredQuery}
-              onChange={this.handleChange}
-            />
-          </label>
-
-          <label className="TodoList__label" htmlFor="selectedTodo">
-            <select
-              name="selectedQuery"
-              id="selectedTodo"
-              value={selectedQuery}
-              className="form-control"
-              onChange={this.handleChange}
-            >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
-        </div>
+        <TodoForm
+          onHandleChange={this.handleChange}
+          filteredQuery={filteredQuery}
+          selectedQuery={selectedQuery}
+        />
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
