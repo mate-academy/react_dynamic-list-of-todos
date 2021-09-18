@@ -21,13 +21,7 @@ export class TodoList extends React.Component<Props, State> {
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
-    if (name === 'filterQuery') {
-      this.setState({ filteredQuery: value, selectedQuery: 'Choose todo' });
-    }
-
-    if (name === 'selectedQuery') {
-      this.setState({ filteredQuery: '', selectedQuery: value });
-    }
+    this.setState({ [name]: value } as Pick<State, keyof State>);
   };
 
   getFilteredTodos = () => {
@@ -36,19 +30,22 @@ export class TodoList extends React.Component<Props, State> {
 
     switch (this.state.selectedQuery) {
       case 'all':
-        return todos;
+        return todos
+          .filter(todo => todo.title.toLowerCase().includes(query));
 
       case 'active':
-        return todos.filter(todo => !todo.completed);
+        return todos
+          .filter(todo => !todo.completed
+          && todo.title.toLowerCase().includes(query));
 
       case 'completed':
-        return todos.filter(todo => todo.completed);
+        return todos
+          .filter(todo => todo.completed
+          && todo.title.toLowerCase().includes(query));
 
       default:
         return todos
-          .filter((todo: Todo) => (
-            todo.title && todo.title.toLowerCase().includes(query)
-          ));
+          .filter(todo => todo.title.toLowerCase().includes(query));
     }
   };
 
@@ -65,7 +62,7 @@ export class TodoList extends React.Component<Props, State> {
           <label className="TodoList__label" htmlFor="filterTitle">
             <input
               type="text"
-              name="filterQuery"
+              name="filteredQuery"
               id="filterTitle"
               className="form-control"
               placeholder="find title"
@@ -82,7 +79,6 @@ export class TodoList extends React.Component<Props, State> {
               className="form-control"
               onChange={this.handleChange}
             >
-              <option value="Choose todo">Choose todo</option>
               <option value="all">All</option>
               <option value="active">Active</option>
               <option value="completed">Completed</option>
