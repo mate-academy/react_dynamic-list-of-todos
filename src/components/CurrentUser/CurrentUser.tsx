@@ -33,11 +33,11 @@ export class CurrentUser extends React.Component<Props, State> {
       const { userId } = this.props;
       const user = await loadUsers(userId);
 
-      this.setState(() => ({
-        user, errorMessage: '',
-      }));
+      this.setState(() => ({ user, errorMessage: '' }));
     } catch (error) {
-      this.setState({ errorMessage: 'There is no such user' });
+      const e = error as Error;
+
+      this.setState({ errorMessage: e.message });
     }
   }
 
@@ -46,7 +46,11 @@ export class CurrentUser extends React.Component<Props, State> {
     const { onClearUserId } = this.props;
 
     if (!user) {
-      throw new Error('Unable to load data Check your connection');
+      return (
+        <div>
+          {errorMessage}
+        </div>
+      );
     }
 
     return (

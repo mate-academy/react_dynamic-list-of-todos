@@ -28,11 +28,13 @@ class App extends React.Component<{}, State> {
 
       this.setState({ todos, errorMessage: '' });
     } catch (error) {
-      this.setState({ errorMessage: 'Can\'t load todos' });
+      const e = error as Error;
+
+      this.setState({ errorMessage: e.message });
     }
   }
 
-  getUsersId = (userId: number) => {
+  setUsersId = (userId: number) => {
     this.setState(() => ({ selectedUserId: userId }));
   };
 
@@ -49,7 +51,7 @@ class App extends React.Component<{}, State> {
           {!errorMessage ? (
             <TodoList
               todos={todos}
-              onUsersId={this.getUsersId}
+              onUsersId={this.setUsersId}
             />
           ) : errorMessage}
         </div>
