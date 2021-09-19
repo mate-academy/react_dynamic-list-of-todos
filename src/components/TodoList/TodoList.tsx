@@ -5,6 +5,7 @@ import { loadTodos } from '../../api';
 
 interface Props {
   getSelectedUserId: (selectedUserId: number) => void;
+  selectedUserId: number;
 }
 
 interface State {
@@ -90,7 +91,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   render() {
-    const { getSelectedUserId } = this.props;
+    const { getSelectedUserId, selectedUserId } = this.props;
     const {
       visibleTodos,
       filteredTitle,
@@ -156,11 +157,11 @@ export class TodoList extends React.Component<Props, State> {
                 </label>
 
                 <button
-                  className="
+                  className={`
                     TodoList__user-button
-                    TodoList__user-button--selected
+                    ${selectedUserId === todo.userId ? 'TodoList__user-button--selected' : ''}
                     button
-                  "
+                  `}
                   type="button"
                   onClick={() => getSelectedUserId(todo.userId)}
                 >

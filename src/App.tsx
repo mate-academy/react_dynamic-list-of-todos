@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 interface State {
-  selectedUserId: number | null;
+  selectedUserId: number;
 }
 
 class App extends React.Component<{}, State> {
@@ -31,6 +31,7 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             getSelectedUserId={this.getSelectedUserId}
+            selectedUserId={selectedUserId}
           />
         </div>
 
