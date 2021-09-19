@@ -1,44 +1,177 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { loadTodos } from '../../api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  getSelectedUserId: (selectedUserId: number) => void;
+  selectedUserId: number;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface State {
+  filteredTitle: string;
+  filteredByStatus: string;
+  todos: Todo[];
+  visibleTodos: Todo[];
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    filteredTitle: '',
+    filteredByStatus: 'all',
+    todos: [],
+    visibleTodos: [],
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  async componentDidMount() {
+    const data = await loadTodos();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({
+      todos: data,
+      visibleTodos: [...data],
+    });
+  }
+
+  todoStatusChanger = (todoId: number) => {
+    this.setState(currentState => ({
+      todos: currentState.todos.map(todo => {
+        if (todo.id === todoId) {
+          // eslint-disable-next-line no-param-reassign
+          todo.completed = !todo.completed;
+        }
+
+        return todo;
+      }),
+    }));
+  };
+
+  titleFilter = (filterFor: string) => {
+    this.statusFilter(this.state.filteredByStatus);
+    this.setState((currentState => ({
+      visibleTodos: currentState.visibleTodos
+        .filter(todo => todo.title.includes(filterFor)),
+    })));
+  };
+
+  statusFilter = (status: string) => {
+    this.setState((currentState => ({
+      visibleTodos: currentState.todos
+        .filter(todo => {
+          switch (status) {
+            case 'all':
+              return todo;
+
+            case 'active':
+              return !todo.completed;
+
+            case 'completed':
+              return todo.completed;
+
+            default:
+              return todo;
+          }
+        }),
+    })));
+  };
+
+  selectHandler = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    await this.setState({ filteredByStatus: value });
+
+    this.statusFilter(this.state.filteredByStatus);
+  };
+
+  changeHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    await this.setState({ filteredTitle: value });
+
+    this.titleFilter(this.state.filteredTitle);
+  };
+
+  render() {
+    const { getSelectedUserId, selectedUserId } = this.props;
+    const {
+      visibleTodos,
+      filteredTitle,
+      filteredByStatus,
+    } = this.state;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <form className="field">
+          <div className="control mb-3">
+            <input
+              name="todo-title"
+              type="text"
+              value={filteredTitle}
+              onChange={(event) => this.changeHandler(event)}
+              className="input"
+            />
+          </div>
+
+          <div className="control">
+            <div className="select">
+              <select
+                name="todo-filter"
+                value={filteredByStatus}
+                onChange={(event) => this.selectHandler(event)}
+              >
+                <option value="all">
+                  All
+                </option>
+                <option value="active">
+                  Active
+                </option>
+                <option value="completed">
+                  Completed
+                </option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onClick={() => this.todoStatusChanger(todo.id)}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className={`
+                    TodoList__user-button
+                    ${selectedUserId === todo.userId ? 'TodoList__user-button--selected' : ''}
+                    button
+                  `}
+                  type="button"
+                  onClick={() => getSelectedUserId(todo.userId)}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}

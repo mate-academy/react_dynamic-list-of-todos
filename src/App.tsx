@@ -13,20 +13,34 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
+  getSelectedUserId = (selectedUserId: number) => {
+    this.setState({ selectedUserId });
+  };
+
+  clearUser = () => {
+    this.setState({ selectedUserId: 0 });
+  };
+
   render() {
-    const { selectedUserId } = this.state;
+    const {
+      selectedUserId,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            getSelectedUserId={this.getSelectedUserId}
+            selectedUserId={selectedUserId}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
+            <CurrentUser
+              selectedUserId={selectedUserId}
+              clearUser={this.clearUser}
+            />
           </div>
         </div>
       </div>
