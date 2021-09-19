@@ -12,20 +12,32 @@ interface Props {
 interface State {
   query: string;
   filter: string;
+  random: number;
 }
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     query: '',
     filter: 'All',
+    random: -1,
   };
 
-  handleQuery = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ query: target.value });
+  handleQuerier = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    this.setState({ query: value });
   };
 
-  handleFilter = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ filter: target.value });
+  handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    this.setState({ filter: value });
+  };
+
+  handleRandomize = () => {
+    const randomNumber = Math.ceil(Math.random() * 100);
+
+    this.setState({ random: randomNumber });
   };
 
   getFilteredTodos = () => {
@@ -37,7 +49,7 @@ export class TodoList extends React.Component<Props, State> {
         .includes(query.toLowerCase())
     ));
 
-    filteredTodos = filteredTodos.filter(todo => {
+    filteredTodos = [...filteredTodos].filter(todo => {
       switch (filter) {
         case 'Active':
           return todo.completed === false;
@@ -48,6 +60,26 @@ export class TodoList extends React.Component<Props, State> {
           return todos;
       }
     });
+
+    if (this.state.random > 0) {
+      const getRandomSort = (arr: Todo[]) => {
+        let j;
+        let temp;
+
+        for (let i = arr.length - 1; i > 0; i -= 1) {
+          j = Math.floor(Math.random() * (i + 1));
+          temp = arr[j];
+          // eslint-disable-next-line no-param-reassign
+          arr[j] = arr[i];
+          // eslint-disable-next-line no-param-reassign
+          arr[i] = temp;
+        }
+
+        return arr;
+      };
+
+      filteredTodos = getRandomSort([...filteredTodos]);
+    }
 
     return filteredTodos;
   };
@@ -66,8 +98,16 @@ export class TodoList extends React.Component<Props, State> {
             name="query"
             value={query}
             className="TodoList__item"
-            onChange={(this.handleQuery)}
+            onChange={(this.handleQuerier)}
           />
+
+          <button
+            className="button"
+            type="button"
+            onClick={this.handleRandomize}
+          >
+            Randomize
+          </button>
 
           <select
             name="filter"
