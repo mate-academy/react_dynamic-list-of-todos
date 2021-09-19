@@ -49,7 +49,7 @@ export class TodoList extends React.Component<Props, State> {
         .includes(query.toLowerCase())
     ));
 
-    filteredTodos = [...filteredTodos].filter(todo => {
+    filteredTodos = filteredTodos.filter(todo => {
       switch (filter) {
         case 'Active':
           return todo.completed === false;
@@ -61,7 +61,9 @@ export class TodoList extends React.Component<Props, State> {
       }
     });
 
-    if (this.state.random > 0) {
+    const prevState = this.state.random;
+
+    if (this.state.random !== prevState) {
       const getRandomSort = (arr: Todo[]) => {
         let randomNumber;
         let randomKey;
