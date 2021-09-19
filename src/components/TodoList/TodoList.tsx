@@ -63,16 +63,16 @@ export class TodoList extends React.Component<Props, State> {
 
     if (this.state.random > 0) {
       const getRandomSort = (arr: Todo[]) => {
-        let j;
-        let temp;
+        let randomNumber;
+        let randomKey;
 
         for (let i = arr.length - 1; i > 0; i -= 1) {
-          j = Math.floor(Math.random() * (i + 1));
-          temp = arr[j];
+          randomNumber = Math.floor(Math.random() * (i + 1));
+          randomKey = arr[randomNumber];
           // eslint-disable-next-line no-param-reassign
-          arr[j] = arr[i];
+          arr[randomNumber] = arr[i];
           // eslint-disable-next-line no-param-reassign
-          arr[i] = temp;
+          arr[i] = randomKey;
         }
 
         return arr;
