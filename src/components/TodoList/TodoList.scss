@@ -28,4 +28,10 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
 }
