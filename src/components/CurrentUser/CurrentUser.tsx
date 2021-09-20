@@ -10,16 +10,17 @@ interface Props {
 type State = {
   user: User | null;
 };
+
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
     user: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.loadUser();
   }
 
-  async componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.selectedUserId !== this.props.selectedUserId) {
       this.loadUser();
     }

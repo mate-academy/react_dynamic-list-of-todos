@@ -7,12 +7,14 @@ type Props = {
   selectedUserId: number;
   onSelectedId: (userId: number) => void;
 };
+
 type State = {
   userId: number;
   todos: [] | Todo[];
   query: string;
   filterBy: string;
 };
+
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     userId: 0,
@@ -35,10 +37,11 @@ export class TodoList extends React.Component<Props, State> {
     this.setState({ filterBy: event.target.value });
   };
 
-  prepareTodos = () => {
+  getPrepareTodos = () => {
     const { todos, query, filterBy } = this.state;
+    const copyQuery = query.toLowerCase();
     let visibleTodos = todos.filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
+      todo.title.toLowerCase().includes(copyQuery)
     ));
 
     if (filterBy) {
@@ -51,7 +54,7 @@ export class TodoList extends React.Component<Props, State> {
           case 'completed':
             return todo.completed;
           default:
-            return 0;
+            return todo;
         }
       });
     }
@@ -62,7 +65,7 @@ export class TodoList extends React.Component<Props, State> {
   render() {
     const { userId, query, filterBy } = this.state;
     const { onSelectedId, selectedUserId } = this.props;
-    const visibleTodos = this.prepareTodos();
+    const visibleTodos = this.getPrepareTodos();
 
     return (
       <div className="TodoList">
