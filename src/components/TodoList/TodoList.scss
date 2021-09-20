@@ -29,3 +29,44 @@
     color: #ff3626;
   }
 }
+
+.TittleFilterInput,
+.TaskStatusSelect {
+  width: 150px;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  border: none;
+  background-color: plum;
+  color: white;
+
+  &::placeholder {
+  color: white;
+}
+  &:focus {
+    outline: none;
+  }
+}
+
+.ButtonBlock {
+ display: flex;
+ justify-content: space-between;
+}
+
+.RandomListButton {
+  padding: 8px 12px;
+  border: none;
+  background-color: plum;
+  color: white;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 1.3rem;
+
+  &:hover {
+    background-color: palevioletred;
+  }
+  &:active {
+    background-color: purple;
+  }
+}
+

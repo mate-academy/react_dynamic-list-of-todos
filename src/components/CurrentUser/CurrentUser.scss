@@ -27,3 +27,30 @@
     margin: 20px auto 0;
   }
 }
+
+.ResetButton {
+  display: block;
+  padding: 15px 25px;
+  margin: 15px auto;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: none;
+
+  &:hover {
+    background-color: lightgray;
+  }
+  &:active {
+    background-color: darkgray;
+  }
+}
+.ResetList {
+
+  padding: 15px 20px;
+  border: none;
+  background-color: plum;
+  color: white;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 1.3rem;
+}
