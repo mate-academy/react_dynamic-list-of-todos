@@ -112,7 +112,7 @@ export class TodoList extends React.Component<Props, State> {
             </select>
           </label>
         </div>
-        <div className="TodoList__list-container">
+        <div>
           {filteredTodos.length > 0
             ? (
               <ul className="TodoList__list">
