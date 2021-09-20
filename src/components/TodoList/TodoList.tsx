@@ -110,86 +110,9 @@ export class TodoList extends React.Component<Props, State> {
                 </button>
               </li>
             ))}
-
-            <li className="TodoList__item TodoList__item--checked">
-              <label>
-                <input type="checkbox" checked readOnly />
-                <p>distinctio vitae autem nihil ut molestias quo</p>
-              </label>
-
-              <button
-                className="TodoList__user-button button"
-                type="button"
-              >
-                User&nbsp;#2
-              </button>
-            </li>
           </ul>
         </div>
       </div>
     );
   }
 }
-
-// export const TodoList: React.FC<Props> = (props) => {
-//   const { todos, handleUserSelection } = props;
-
-//   return (
-//     <div className="TodoList">
-//       <h2>Todos:</h2>
-
-//       <div className="TodoList__list-container">
-//         <ul className="TodoList__list">
-//           {todos.map(todo => (
-//             <li
-//               key={todo.id}
-//               className={classnames(
-//                 'TodoList__item',
-//                 {
-//                   'TodoList__item--unchecked': !todo.completed,
-//                   'TodoList__item--checked': todo.completed,
-//                 },
-//               )}
-//             >
-//               <label>
-//                 <input
-//                   type="checkbox"
-//                   checked={todo.completed}
-//                   readOnly
-//                 />
-//                 <p>{todo.title}</p>
-//               </label>
-
-//               <button
-//                 className="
-//                   TodoList__user-button
-//                   TodoList__user-button--selected
-//                   button
-//                 "
-//                 type="button"
-//                 onClick={() => (handleUserSelection(todo.userId))}
-//               >
-//                 User&nbsp;#
-//                 {todo.userId}
-//               </button>
-//             </li>
-//           ))}
-
-//           <li className="TodoList__item TodoList__item--checked">
-//             <label>
-//               <input type="checkbox" checked readOnly />
-//               <p>distinctio vitae autem nihil ut molestias quo</p>
-//             </label>
-
-//             <button
-//               className="TodoList__user-button button"
-//               type="button"
-//             >
-//               User&nbsp;#2
-//             </button>
-//           </li>
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// };
