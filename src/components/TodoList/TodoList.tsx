@@ -158,13 +158,11 @@ export class TodoList extends React.Component<Props, State> {
         </button>
 
         <div className="TodoList__list-container">
-          <ul className="TodoList__list">
-            <TodoItems
-              selectedUser={selectedUser}
-              onChangeUser={onChangeUser}
-              visibleTodos={visibleTodos}
-            />
-          </ul>
+          <TodoItems
+            selectedUser={selectedUser}
+            onChangeUser={onChangeUser}
+            visibleTodos={visibleTodos}
+          />
         </div>
       </div>
     );

@@ -8,9 +8,11 @@ type Props = {
 };
 
 export const TodoItems: React.FC<Props> = (props) => {
+  const { visibleTodos, selectedUser, onChangeUser } = props;
+
   return (
-    <>
-      {props.visibleTodos.map(todo => (
+    <ul>
+      {visibleTodos.map(todo => (
         <li
           key={todo.id}
           className={classNames(
@@ -34,16 +36,16 @@ export const TodoItems: React.FC<Props> = (props) => {
               {
                 button: true,
                 'TodoList__user-button': true,
-                'TodoList__user-button--selected': props.selectedUser === todo.userId,
+                'TodoList__user-button--selected': selectedUser === todo.userId,
               },
             )}
             type="button"
-            onClick={() => props.onChangeUser(todo.userId)}
+            onClick={() => onChangeUser(todo.userId)}
           >
             {`User #${todo.userId}`}
           </button>
         </li>
       ))}
-    </>
+    </ul>
   );
 };
