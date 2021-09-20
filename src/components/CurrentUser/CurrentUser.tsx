@@ -53,7 +53,7 @@ export class CurrentUser extends React.Component<Props, State> {
         </h2>
         <h3 className="CurrentUser__name">{currentUser.name}</h3>
         <p className="CurrentUser__email">{currentUser.email}</p>
-        <p className="CurrentUser__phone">213</p>
+        <p className="CurrentUser__phone">{currentUser.phone}</p>
         <button
           className="ResetList"
           type="button"
