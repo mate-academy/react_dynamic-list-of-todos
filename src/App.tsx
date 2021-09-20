@@ -15,13 +15,13 @@ export class App extends React.Component<{}, State> {
   };
 
   chooseUser = (userId: number) => {
-    this.reset();
+    this.resetState();
     this.setState({
       selectedUserId: userId,
     });
   };
 
-  reset = () => {
+  resetState = () => {
     this.setState({
       selectedUserId: 0,
     });
