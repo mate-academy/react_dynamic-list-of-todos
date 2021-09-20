@@ -1,16 +1,30 @@
 import React from 'react';
-import './App.scss';
-import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+
+import './App.scss';
+import './styles/general.scss';
 
 interface State {
   selectedUserId: number;
 }
 
-class App extends React.Component<{}, State> {
+export class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+  };
+
+  chooseUser = (userId: number) => {
+    this.resetState();
+    this.setState({
+      selectedUserId: userId,
+    });
+  };
+
+  resetState = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
   };
 
   render() {
@@ -19,13 +33,19 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            chooseUser={this.chooseUser}
+            selectedUserId={selectedUserId}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser
+                selectedUserId={selectedUserId}
+                chooseUser={this.chooseUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>
@@ -33,5 +53,3 @@ class App extends React.Component<{}, State> {
     );
   }
 }
-
-export default App;
