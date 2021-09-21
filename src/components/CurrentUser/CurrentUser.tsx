@@ -1,12 +1,74 @@
 import React from 'react';
+import { getUser } from '../api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number,
+  clear: any,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export class CurrentUser extends React.Component<Props> {
+  state = {
+    user: {
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
+    },
+  };
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  componentDidUpdate(prevProps: { userId: number; }) {
+    if (prevProps.userId !== this.props.userId) {
+      this.getData();
+    }
+  }
+
+  getData = () => {
+    getUser(this.props.userId)
+      .then(person => {
+        this.setState({ user: person });
+      })
+      .catch(() => {
+        this.setState({ user: null });
+      });
+  };
+
+  render() {
+    const { user } = this.state;
+    const { clear } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        {user ? (
+          <>
+            <button
+              type="button"
+              onClick={clear}
+            >
+              Clear
+            </button>
+            <h2 className="CurrentUser__title">
+              <span>
+                Selected user:
+                {user.id}
+              </span>
+            </h2>
+            <h3 className="CurrentUser__name">
+              {user.name}
+            </h3>
+            <p className="CurrentUser__email">
+              {user.email}
+            </p>
+            <p className="CurrentUser__phone">
+              {user.phone}
+            </p>
+          </>
+        ) : 'NO DATA' }
+      </div>
+    );
+  }
+}
