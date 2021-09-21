@@ -6,7 +6,7 @@ export const loadTodos = async (limit = 15) => {
   return getTodos.json();
 };
 
-export const loadUsers = async (userId: number) => {
+export const loadUser = async (userId: number) => {
   const getUsers = await fetch(`${API_URL}/users/${userId}`);
 
   return getUsers.json();

@@ -29,9 +29,6 @@ class App extends React.Component<{}, State> {
   render() {
     const { selectedUserId, todos } = this.state;
 
-    // eslint-disable-next-line no-console
-    console.log(todos);
-
     return (
       <div className="App">
         <div className="App__sidebar">

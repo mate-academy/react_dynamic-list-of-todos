@@ -9,13 +9,13 @@ interface Props {
 
 interface State {
   title: string;
-  activities: string;
+  status: string;
 }
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     title: '',
-    activities: '',
+    status: '',
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,11 +38,11 @@ export class TodoList extends React.Component<Props, State> {
   selectOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    this.setState({ activities: value });
+    this.setState({ status: value });
   };
 
   filterBySelect = () => {
-    const { activities } = this.state;
+    const { status: activities } = this.state;
 
     if (activities === 'active') {
       return (
@@ -60,18 +60,13 @@ export class TodoList extends React.Component<Props, State> {
       );
     }
 
-    return (
-      this.filterByTitle()
-    );
+    return (this.filterByTitle());
   };
 
   render() {
     const { onUserSelection } = this.props;
 
     const filteredTodos = this.filterBySelect();
-
-    // eslint-disable-next-line no-console
-    console.log(this.state.activities);
 
     return (
       <div className="TodoList" onChange={this.filterByTitle}>
@@ -85,7 +80,7 @@ export class TodoList extends React.Component<Props, State> {
 
         <select
           name="activities"
-          value={this.state.activities}
+          value={this.state.status}
           onChange={this.selectOption}
         >
           <option value="all">All</option>
