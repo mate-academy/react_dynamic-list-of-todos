@@ -1,6 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
-import { getData } from '../../api';
+import { fetchUser } from '../../api';
 
 type Props = {
   userId: number;
@@ -27,7 +27,7 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   async reloadUser(userId: number) {
-    const user = await getData('users', userId);
+    const user = await fetchUser(userId);
 
     this.setState({
       user,

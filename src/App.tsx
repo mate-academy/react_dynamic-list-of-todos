@@ -4,7 +4,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getData } from './api';
+import { getUsers } from './api';
 import { Filters } from './components/Filters';
 
 interface State {
@@ -21,7 +21,7 @@ class App extends React.Component<{}, State> {
   };
 
   async componentDidMount() {
-    const todos = await getData('todos?limit=20');
+    const todos = await getUsers('todos?limit=20');
 
     this.setState({
       todos,
@@ -54,7 +54,7 @@ class App extends React.Component<{}, State> {
           const filtered = currentState.todos.filter(todo => todo.completed);
 
           return ({
-            filteredTodos: [...filtered],
+            filteredTodos: filtered,
           });
         });
         break;
