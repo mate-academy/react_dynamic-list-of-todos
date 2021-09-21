@@ -1,37 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { loadTodos } from './api/api';
 
-interface State {
-  selectedUserId: number;
-}
+export const App: React.FC = () => {
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    selectedUserId: 0,
+  useEffect(() => {
+    (
+      async () => {
+        const data = await loadTodos(20);
+
+        return setTodos(data);
+      }
+    )();
+  }, []);
+
+  const handleUserClear = () => {
+    setSelectedUserId(0);
   };
 
-  render() {
-    const { selectedUserId } = this.state;
+  const handleUserSelected = (userId: number) => {
+    setSelectedUserId(userId);
+  };
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+  return (
+    <div className="App">
+      <div className="App__sidebar">
+        <TodoList
+          todos={todos}
+          onUserSelection={handleUserSelected}
+        />
+      </div>
 
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
-          </div>
+      <div className="App__content">
+        <div className="App__content-container">
+          {selectedUserId ? (
+            <CurrentUser
+              userId={selectedUserId}
+              onUserClear={handleUserClear}
+            />
+          ) : 'No user selected'}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
