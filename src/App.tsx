@@ -1,9 +1,9 @@
 import React from 'react';
 import { loadTodos } from './api/api';
-import './App.scss';
-import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import './App.scss';
+import './styles/general.scss';
 
 interface State {
   selectedUserId: number;

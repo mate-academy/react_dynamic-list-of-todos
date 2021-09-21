@@ -28,25 +28,23 @@ export class TodoList extends React.Component<Props, State> {
   getFilteredTodos = () => {
     const { todos } = this.props;
     const query = this.state.filteredQuery.toLowerCase();
+    const filteredTodos = todos
+      .filter(todo => todo.title.toLowerCase().includes(query));
 
     switch (this.state.selectedQuery) {
       case 'all':
-        return todos
-          .filter(todo => todo.title.toLowerCase().includes(query));
+        return filteredTodos;
 
       case 'active':
-        return todos
-          .filter(todo => !todo.completed
-          && todo.title.toLowerCase().includes(query));
+        return filteredTodos
+          .filter(todo => !todo.completed);
 
       case 'completed':
-        return todos
-          .filter(todo => todo.completed
-          && todo.title.toLowerCase().includes(query));
+        return filteredTodos
+          .filter(todo => todo.completed);
 
       default:
-        return todos
-          .filter(todo => todo.title.toLowerCase().includes(query));
+        return filteredTodos;
     }
   };
 
