@@ -9,13 +9,13 @@ type Props = {
 
 type State = {
   value: string;
-  show: string;
+  filterBy: string;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     value: '',
-    show: 'all',
+    filterBy: 'all',
   };
 
   onClear = () => {
@@ -33,32 +33,30 @@ export class TodoList extends React.Component<Props, State> {
   handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.currentTarget;
 
-    // eslint-disable-next-line no-console
-    console.log(value);
-
-    if (value === this.state.show) {
+    if (value === this.state.filterBy) {
       return;
     }
 
-    this.setState({ show: value });
+    this.setState({ filterBy: value });
   };
 
   filterTodos = (todo: Todo) => {
-    const { show, value } = this.state;
-    const isAll = show === 'all';
+    const { filterBy, value } = this.state;
     const showTodo = todo.title.includes(value);
-    const isCompleted = show === 'completed';
-    const isActive = show === 'active';
 
-    if (isActive) {
-      return showTodo && todo.completed === false;
+    // eslint-disable-next-line no-console
+    console.log(value);
+
+    switch (filterBy) {
+      case 'all':
+        return showTodo;
+      case 'active':
+        return showTodo && todo.completed === false;
+      case 'completed':
+        return showTodo && todo.completed === true;
+      default:
+        return true;
     }
-
-    if (isCompleted) {
-      return showTodo && todo.completed === true;
-    }
-
-    return showTodo && isAll;
   };
 
   render() {
