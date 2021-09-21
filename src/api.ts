@@ -6,7 +6,7 @@ export const getUsers = async (path: string) => {
   return response.json();
 };
 
-export const fetchUser = async (userId: number) => {
+export const getUser = async (userId: number) => {
   const response = await fetch(`${API_URL}/users/${userId}`);
 
   return response.json();

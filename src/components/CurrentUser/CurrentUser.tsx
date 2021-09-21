@@ -1,6 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
-import { fetchUser } from '../../api';
+import { getUser } from '../../api';
 
 type Props = {
   userId: number;
@@ -17,17 +17,17 @@ export class CurrentUser extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    this.reloadUser(this.props.userId);
+    this.reloadUser();
   }
 
   async componentDidUpdate(prevProps: Props) {
     if (prevProps.userId !== this.props.userId) {
-      this.reloadUser(this.props.userId);
+      this.reloadUser();
     }
   }
 
-  async reloadUser(userId: number) {
-    const user = await fetchUser(userId);
+  async reloadUser() {
+    const user = await getUser(this.props.userId);
 
     this.setState({
       user,
