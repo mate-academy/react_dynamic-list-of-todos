@@ -17,6 +17,7 @@
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 5px;
+    outline: none;
   }
 
   &__item--checked {
@@ -27,5 +28,11 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
   }
 }
