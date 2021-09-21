@@ -34,14 +34,14 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             selectedUserId={selectedUserId}
-            onSelectUser={this.onSelectUser} 
+            onSelectUser={this.onSelectUser}
           />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser 
+              <CurrentUser
                 userId={selectedUserId}
                 resetUserSelection={this.resetUserSelection}
               />
