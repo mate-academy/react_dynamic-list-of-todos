@@ -15,9 +15,13 @@ class App extends React.Component<{}, State> {
   };
 
   onSelectUser = (userId: number): void => {
-    this.setState({
-      selectedUserId: userId,
-    });
+    const { selectedUserId } = this.state;
+
+    if (userId !== selectedUserId) {
+      this.setState({
+        selectedUserId: userId,
+      });
+    }
   };
 
   resetUserSelection = (): void => {

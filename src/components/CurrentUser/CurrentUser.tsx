@@ -53,7 +53,7 @@ export class CurrentUser extends React.Component<Props, State> {
         </button>
         <h2 className="CurrentUser__title">
           <span>
-            {(isUserError && 'OOPS..something went wrong...🙁') || `Selected user: ${user && user.id}`}
+            {(isUserError && 'OOPS..something went wrong...🙁') || ((user && user.id != null) && `Selected user: ${user.id}`)}
           </span>
         </h2>
         {!isUserError && (
