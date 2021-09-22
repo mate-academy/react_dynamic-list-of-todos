@@ -91,4 +91,13 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__filters {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 }
