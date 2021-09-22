@@ -96,6 +96,7 @@ input[type="checkbox"]:checked + p:before {
     display: flex;
     justify-content: space-between;
     padding-left: 5px;
+    align-items: center;
     gap: 10px;
     margin-bottom: 20px;
   }

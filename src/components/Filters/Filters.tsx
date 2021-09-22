@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   filterTodosByTitle: (title: string) => void;
-  filterTodosByStatus: (todoStatus: string) => void;
+  filterTodosByStatus: (todoStatus: string, title: string) => void;
 };
 
 type State = {
@@ -31,15 +31,14 @@ export class Filters extends React.Component<Props, State> {
             this.props.filterTodosByTitle(event.target.value);
           }}
         />
+        <p>Filter&#160;by:</p>
         <div className="select is-primary">
           <select
             name="todoStatus"
-            value=""
             onChange={(event) => {
-              this.props.filterTodosByStatus(event.target.value);
+              this.props.filterTodosByStatus(event.target.value, todoTitle);
             }}
           >
-            <option value="" disabled>Filter by:</option>
             <option value="all">all</option>
             <option value="active">active</option>
             <option value="completed">completed</option>

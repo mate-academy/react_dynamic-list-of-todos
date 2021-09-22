@@ -16,11 +16,11 @@ export class CurrentUser extends React.Component<Props, State> {
     user: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.reloadUser();
   }
 
-  async componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.userId !== this.props.userId) {
       this.reloadUser();
     }

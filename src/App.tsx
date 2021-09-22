@@ -11,6 +11,7 @@ interface State {
   todos: Todo[];
   filteredTodos: Todo[];
   selectedUserId: number;
+  filterType: string;
 }
 
 class App extends React.Component<{}, State> {
@@ -18,6 +19,7 @@ class App extends React.Component<{}, State> {
     todos: [],
     filteredTodos: [],
     selectedUserId: 0,
+    filterType: 'all',
   };
 
   async componentDidMount() {
@@ -42,19 +44,37 @@ class App extends React.Component<{}, State> {
   };
 
   filterTodosByTitle = (title: string) => {
-    this.setState(currentState => ({
-      filteredTodos: [...currentState.todos].filter(todo => todo.title.includes(title)),
-    }));
+    if (this.state.filterType === 'all') {
+      this.setState(currentState => ({
+        filteredTodos: [...currentState.todos].filter(todo => todo.title.includes(title)),
+      }));
+    }
+
+    if (this.state.filterType === 'completed') {
+      this.setState(currentState => ({
+        filteredTodos: [...currentState.todos]
+          .filter(todo => todo.title.includes(title) && (todo.completed)),
+      }));
+    }
+
+    if (this.state.filterType === 'active') {
+      this.setState(currentState => ({
+        filteredTodos: [...currentState.todos]
+          .filter(todo => todo.title.includes(title) && (!todo.completed)),
+      }));
+    }
   };
 
-  filterTodosByStatus = (todoStatus: string) => {
+  filterTodosByStatus = (todoStatus: string, title: string) => {
     switch (todoStatus) {
       case 'completed':
         this.setState(currentState => {
-          const filtered = currentState.todos.filter(todo => todo.completed);
+          const filtered = currentState.todos
+            .filter(todo => todo.completed && todo.title.includes(title));
 
           return ({
             filteredTodos: filtered,
+            filterType: 'completed',
           });
         });
         break;
@@ -62,13 +82,15 @@ class App extends React.Component<{}, State> {
       case 'active':
         this.setState(currentState => ({
           filteredTodos: [...currentState.todos]
-            .filter(todo => !todo.completed),
+            .filter(todo => !todo.completed && todo.title.includes(title)),
+          filterType: 'active',
         }));
         break;
 
       default:
         this.setState(currentState => ({
           filteredTodos: currentState.todos,
+          filterType: 'all',
         }));
     }
   };
