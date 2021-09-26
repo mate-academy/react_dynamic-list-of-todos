@@ -28,4 +28,21 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__input {
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 18px;
+  }
+
+  &__select {
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 18px;
+  }
 }
