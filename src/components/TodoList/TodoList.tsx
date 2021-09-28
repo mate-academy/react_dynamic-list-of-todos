@@ -1,44 +1,181 @@
 import React from 'react';
+import classNames from 'classnames';
+import { getTasks } from '../../api';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+enum CompletenessTypes {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface State {
+  tasks: [] | Todo[];
+  filterQuery: string;
+  completenessQuery: CompletenessTypes;
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+interface Props {
+  selectedUserId: number;
+  chooseAUser: (event: React.MouseEvent) => void;
+}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+export class TodoList extends React.Component<Props, State> {
+  state = {
+    tasks: [],
+    filterQuery: '',
+    completenessQuery: 'all' as CompletenessTypes.all,
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  async componentDidMount() {
+    const tasks = await getTasks();
+
+    this.setState({ tasks });
+  }
+
+  filterQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      filterQuery: event.target.value,
+    });
+  };
+
+  completenessQueryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({
+      completenessQuery: event.target.value as CompletenessTypes.active
+      | CompletenessTypes.completed
+      | CompletenessTypes.all,
+    });
+  };
+
+  randomize = () => {
+    const { tasks } = this.state;
+    const tasksCopy = [...tasks];
+
+    for (let i = tasksCopy.length - 1; i > 0; i -= 1) {
+      const randomIndex = Math.floor(Math.random() * i);
+      const temp = tasksCopy[i];
+
+      tasksCopy[i] = tasksCopy[randomIndex];
+      tasksCopy[randomIndex] = temp;
+    }
+
+    this.setState({ tasks: tasksCopy });
+  };
+
+  getFilteredTasks = () => {
+    const {
+      tasks,
+      filterQuery,
+      completenessQuery,
+    } = this.state;
+
+    let filteredTasks = tasks.filter((task: Todo) => (
+      task.title
+      && task.title.toLowerCase()
+        .includes(filterQuery.toLowerCase())
+    ));
+
+    filteredTasks = filteredTasks.filter((task: Todo) => {
+      switch (completenessQuery) {
+        case 'active' as CompletenessTypes:
+          return task.completed === false;
+        case 'completed' as CompletenessTypes:
+          return task.completed === true;
+        case 'all' as CompletenessTypes.all:
+        default:
+          return task;
+      }
+    });
+
+    return filteredTasks;
+  };
+
+  render() {
+    const { filterQuery } = this.state;
+    const { selectedUserId, chooseAUser } = this.props;
+    const filteredTasks = this.getFilteredTasks();
+
+    return (
+      filteredTasks && (
+        <div className="TodoList">
+          <h2>Todos:</h2>
+          <div className="TodoList__list-container">
+            <div className="TodoList__filters">
+              <input
+                type="text"
+                placeholder="Write key words here"
+                value={filterQuery}
+                onChange={this.filterQueryChange}
+                className="TodoList__filter"
+              />
+
+              <button
+                className="TodoList__user-button button"
+                type="button"
+                onClick={this.randomize}
+              >
+                Randomize
+              </button>
+
+              <select
+                onChange={this.completenessQueryChange}
+                defaultValue=""
+              >
+                <option
+                  value=""
+                  disabled
+                >
+                  Filter by completeness
+                </option>
+                <option value="all">
+                  all
+                </option>
+                <option value="active">
+                  active
+                </option>
+                <option value="completed">
+                  completed
+                </option>
+              </select>
+            </div>
+
+            <ul className="TodoList__list">
+              {filteredTasks.map((task: Todo) => (
+                <li
+                  className={classNames('TodoList__item', {
+                    'TodoList__item--unchecked': !task.completed,
+                    'TodoList__item--checked': task.completed,
+                  })}
+                  key={task.id}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      readOnly
+                    />
+                    <p>
+                      {task.title}
+                    </p>
+                  </label>
+
+                  <button
+                    className={classNames('TodoList__user-button button', {
+                      'TodoList__user-button--selected': task.userId === selectedUserId,
+                    })}
+                    type="button"
+                    value={task.userId}
+                    onClick={chooseAUser}
+                  >
+                    User&nbsp;#
+                    {task.userId}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )
+    );
+  }
+}
