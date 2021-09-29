@@ -28,4 +28,22 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__search {
+    width: 200px;
+    font-family: "Roboto", sans-serif;
+  }
+
+  &__select {
+    font-family: "Roboto", sans-serif;
+  }
+
+  &__searchContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__select {
+    display: flex;
+  }
 }
