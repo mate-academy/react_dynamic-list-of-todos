@@ -28,4 +28,30 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    border: none;
+    border-bottom: 2px solid #4d457b;
+    height: 40px;
+    font-size: 20px;
+    color: #4d457b;
+    padding-left: 5px;
+
+    &:focus-visible {
+      outline: none;
+      border: 2px solid #4d457b;
+      border-radius: 4px;
+    }
+
+    &::placeholder {
+      color: #4d457b;
+      font-size: 20px;
+    }
+  }
+
+  &__inputs {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
 }
