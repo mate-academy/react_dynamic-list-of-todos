@@ -1,4 +1,8 @@
 .CurrentUser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -26,4 +30,17 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  // &__button {
+  //   display: inline-block;
+  //   margin-top: 25px;
+  //   padding: 10px 25px;
+  //   border: 0 solid transparent;
+  //   border-radius: 5px;
+  //   background-color: rgb(82, 82, 214);
+  //   text-transform: uppercase;
+  //   font-weight: 700;
+  //   color: white;
+  //   cursor: pointer;
+  // }
 }
