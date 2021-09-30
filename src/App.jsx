@@ -17,14 +17,18 @@ class App extends React.Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
-    const todos = await this.loadTodos();
+    const todos = await getAllTodos();
+
+    this.setState({
+      isLoading: false,
+    });
 
     this.setState({ todos });
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevState.inputValue !== this.state.inputValue) {
-      const searchResult = await this.loadTodos();
+      const searchResult = await getAllTodos();
       const filteredTodos = searchResult
         .filter(el => el.title.toUpperCase()
           .search(this.state.inputValue.toUpperCase()) !== -1);
@@ -33,7 +37,7 @@ class App extends React.Component {
     }
 
     if (prevState.selectedValue !== this.state.selectedValue) {
-      const searchResult = await this.loadTodos();
+      const searchResult = await getAllTodos();
 
       const filteredTodos = this.selectedFilter(
         this.state.selectedValue,
@@ -58,16 +62,6 @@ class App extends React.Component {
 
    onSelectHandler = (e) => {
      this.setState({ selectedValue: e.target.value });
-   }
-
-   async loadTodos() {
-     const todos = await getAllTodos();
-
-     this.setState({
-       isLoading: false,
-     });
-
-     return todos;
    }
 
    selectedFilter = (selectedValue, state) => {

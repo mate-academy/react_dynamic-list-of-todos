@@ -1,5 +1,5 @@
 export function getAllTodos() {
-  return fetch(`https://mate-api.herokuapp.com/todos`)
+  return fetch(`https://jsonplaceholder.typicode.com/todos`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`${response.status} - ${response.statusText}`);
@@ -7,12 +7,12 @@ export function getAllTodos() {
 
       return response.json();
     })
-    .then(res => res.data
+    .then(res => res
       .filter(el => (el.userId !== null && el.completed !== null)));
 }
 
 export function getUser(id = '') {
-  return fetch(`https://mate-api.herokuapp.com/users${id}`)
+  return fetch(`https://jsonplaceholder.typicode.com/users${id}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`${response.status} - ${response.statusText}`);
@@ -20,5 +20,5 @@ export function getUser(id = '') {
 
       return response.json();
     })
-    .then(res => res.data);
+    .then(res => res);
 }
