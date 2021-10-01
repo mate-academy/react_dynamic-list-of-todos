@@ -24,8 +24,10 @@ export class CurrentUser extends React.Component<Props> {
     this.request(this.props.userID);
   }
 
-  componentDidUpdate() {
-    this.request(this.props.userID);
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.userID !== prevProps.userID) {
+      this.request(this.props.userID);
+    }
   }
 
   clear = () => {
