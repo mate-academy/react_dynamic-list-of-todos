@@ -13,7 +13,7 @@ Add the data loading, so the App works as described below:
 1. Todos are fetched on page load from [GET todos endpoint](https://mate.academy/students-api/todos). (Use `componentDidMount`)
 1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
 1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate.academy/students-api/users/1) (replace 1 with a given `userId`).
-1. If I select another user the details should be updated. (use `componentDidUpdate`).
+1. If I select another user the details should be updated. (use `componentDidUpdate`). 
 1. If I select the same user there should not be a request to the server.
 1. Add a button `Clear` into the `CurrentUser` to clear the selectedUser in the `App`
 1. Add an `<input>` to the `TodoList` to filter the todos by title
