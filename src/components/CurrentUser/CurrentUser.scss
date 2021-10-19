@@ -26,4 +26,10 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__error {
+    width: max-content;
+    margin: 0 auto;
+    border: 1px solid red;
+  }
 }

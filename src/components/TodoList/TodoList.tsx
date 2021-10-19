@@ -1,44 +1,90 @@
 import React from 'react';
+
 import './TodoList.scss';
+import { TodoInfo } from '../TodoInfo';
+import { ListFilter } from './ListFilter';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  selectedUserId: number | null;
+  onUserSelect: (userId: number) => void;
+  onTodosShuffle: () => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  filterQuery: string;
+  filterBy: FilterOption;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props> {
+  state: State = {
+    filterQuery: '',
+    filterBy: 'all',
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  handleQuery = (filterQuery: string) => {
+    this.setState({ filterQuery });
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  handleFilterChange = (filterBy: FilterOption) => {
+    this.setState({ filterBy });
+  };
+
+  render() {
+    const { filterQuery, filterBy } = this.state;
+    const {
+      todos,
+      selectedUserId,
+      onUserSelect,
+      onTodosShuffle,
+    } = this.props;
+
+    const todosByOption = todos.filter(todo => {
+      switch (filterBy) {
+        case 'active':
+          return !todo.completed;
+
+        case 'completed':
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+
+    const todosByQuery = todosByOption.filter(({ title }) => {
+      return title.toLowerCase().includes(filterQuery.toLowerCase());
+    });
+
+    return (
+      <div className="TodoList">
+        <ListFilter
+          query={filterQuery}
+          filterOption={filterBy}
+          onQueryChange={this.handleQuery}
+          onFilterChange={this.handleFilterChange}
+          onShuffle={onTodosShuffle}
+        />
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {todosByQuery.map(({
+              id, title, userId, completed,
+            }) => (
+              <TodoInfo
+                key={id}
+                id={id}
+                userId={userId}
+                completed={completed}
+                isSelected={userId === selectedUserId}
+                title={title}
+                onUserSelect={onUserSelect}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
