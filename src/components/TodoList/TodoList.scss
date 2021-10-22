@@ -28,4 +28,10 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__select-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
 }
