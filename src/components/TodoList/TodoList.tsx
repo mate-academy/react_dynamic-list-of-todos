@@ -1,44 +1,118 @@
 import React from 'react';
+import 'bulma';
+import classNames from 'classnames';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface State {
+  searchPut: string;
+  sortBy: string;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface Props {
+  todos: Todo[];
+  setUser: (id: number) => Promise<void>;
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    searchPut: '',
+    sortBy: 'all',
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  isVisible = (todo: Todo) => {
+    const { title, completed } = todo;
+    const { searchPut, sortBy } = this.state;
+    const search = title.toLowerCase().includes(searchPut.toLowerCase());
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    if (!search) {
+      return false;
+    }
+
+    if (sortBy === 'all') {
+      return true;
+    }
+
+    const isDone = completed && sortBy === 'completed';
+    const isActive = !completed && sortBy === 'active';
+
+    return isDone || isActive;
+  };
+
+  handleChange = (key: string, value: string) => {
+    this.setState({
+      [key]: value,
+    } as Pick<State, keyof State>);
+  };
+
+  render() {
+    const { searchPut } = this.state;
+    const { todos, setUser } = this.props;
+
+    const visibleTodos = todos.filter(this.isVisible);
+
+    return (
+      <div className="TodoList">
+        <h2 className="title">Todos:</h2>
+
+        <input
+          className="input is-link"
+          type="text"
+          value={searchPut}
+          placeholder="Search"
+          onChange={event => this.handleChange('searchPut', event.target.value)}
+        />
+
+        <div className="TodoList__select-group my-3 pl-3">
+          {'Sorted by: '}
+          <div className="select">
+            <select onChange={event => this.handleChange('sortBy', event.currentTarget.value)}>
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': todo.completed },
+                  { 'TodoList__item--unchecked': !todo.completed },
+                )}
+              >
+                <label htmlFor="input">
+                  <input
+                    type="checkbox"
+                    id="input"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className={classNames(
+                    'button',
+                    { 'is-success': todo.completed },
+                    { 'is-danger': !todo.completed },
+                  )}
+                  type="button"
+                  onClick={() => setUser(todo.userId)}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default TodoList;
