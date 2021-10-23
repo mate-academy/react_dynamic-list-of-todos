@@ -1,12 +1,18 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  currentUser: User | null;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({ currentUser }) => {
+  return currentUser && (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title"><span>{currentUser.id ? `Selected user: ${currentUser.id}` : 'Could not find user'}</span></h2>
+
+      <h3 className="CurrentUser__name">{currentUser.id ? currentUser.name : 'No information about this user'}</h3>
+      <p className="CurrentUser__email">{currentUser.email}</p>
+      <p className="CurrentUser__phone">{currentUser.phone}</p>
+    </div>
+  );
+};
