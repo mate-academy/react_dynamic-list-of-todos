@@ -10,7 +10,7 @@ export const CurrentUser: React.FC<Props> = ({ currentUser }) => {
     <div className="CurrentUser">
       <h2 className="CurrentUser__title"><span>{currentUser.id ? `Selected user: ${currentUser.id}` : 'Could not find user'}</span></h2>
 
-      <h3 className="CurrentUser__name">{currentUser.id ? currentUser.name : 'No information about this user'}</h3>
+      <h3 className="CurrentUser__name">{currentUser.name ? currentUser.name : 'No information about this user'}</h3>
       <p className="CurrentUser__email">{currentUser.email}</p>
       <p className="CurrentUser__phone">{currentUser.phone}</p>
     </div>

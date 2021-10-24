@@ -9,6 +9,9 @@ export async function getTodos(): Promise<Todo[]> {
 export async function getCurrentUser(id: number): Promise<User> {
   return fetch(`${API_URL}/users/${id}`)
     .then(response => response.json())
-    .catch(reason => reason)
+    .catch(() => ({
+      id: 0,
+      name: '',
+    }))
     .then(user => user);
 }
