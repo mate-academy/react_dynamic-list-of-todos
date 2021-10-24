@@ -8,12 +8,16 @@ import { getTodos } from './api';
 interface State {
   selectedUserId: number;
   todos: Todo[],
+  query: string,
+  status: string,
 }
 
 class App extends React.Component<{}, State> {
   state = {
     selectedUserId: 0,
     todos: [],
+    query: '',
+    status: 'all',
   };
 
   async componentDidMount() {
@@ -26,16 +30,53 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: id });
   };
 
+  changedQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    this.setState({
+      query: value,
+    });
+  };
+
+  selectStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ status: event.target.value });
+  };
+
   render() {
-    const { selectedUserId, todos } = this.state;
+    const {
+      selectedUserId,
+      todos,
+      query,
+      status,
+    } = this.state;
+    let visibleTodos: Todo[] = todos.filter((todo: Todo) => {
+      const search: string = query.toLowerCase();
+
+      return todo.title.toLowerCase().includes(search);
+    });
+
+    switch (status) {
+      case 'active':
+        visibleTodos = visibleTodos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        visibleTodos = visibleTodos.filter(todo => todo.completed);
+        break;
+      default:
+        break;
+    }
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             selectedUserId={selectedUserId}
-            callback={this.selecteUserId}
+            selectUser={this.selecteUserId}
+            changeQuery={this.changedQuery}
+            selectStatus={this.selectStatus}
+            query={query}
+            status={status}
           />
         </div>
 

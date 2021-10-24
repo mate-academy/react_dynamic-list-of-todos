@@ -5,13 +5,54 @@ import classNames from 'classnames';
 interface Props {
   todos: Todo[],
   selectedUserId: number,
-  callback: (id: number) => void,
+  query: string,
+  selectUser: (id: number) => void,
+  changeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  selectStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void,
+  status: string,
 }
 
-export const TodoList: React.FC<Props> = ({ todos, selectedUserId, callback }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedUserId,
+  selectUser,
+  changeQuery,
+  selectStatus,
+  query,
+  status,
+}) => (
   <div className="TodoList">
     <h2>Todos:</h2>
-
+    <input
+      type="text"
+      value={query}
+      placeholder="find todo"
+      onChange={changeQuery}
+    />
+    <select
+      onChange={selectStatus}
+      value={status}
+      className="App-AddSelect"
+    >
+      <option
+        value="all"
+        className="App-AddOption"
+      >
+        all
+      </option>
+      <option
+        value="active"
+        className="App-AddOption"
+      >
+        active
+      </option>
+      <option
+        value="completed"
+        className="App-AddOption"
+      >
+        completed
+      </option>
+    </select>
     <div className="TodoList__list-container">
 
       {todos.map(todo => (
@@ -40,7 +81,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectedUserId, callback }) =
                 { 'TodoList__user-button--selected': todo.userId !== selectedUserId },
               )}
               type="button"
-              onClick={() => callback(todo.userId)}
+              onClick={() => selectUser(todo.userId)}
             >
               {`User #${todo.userId}`}
             </button>
