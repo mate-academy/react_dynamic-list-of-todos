@@ -21,7 +21,7 @@ export class TodoList extends React.Component<Props, State> {
 
   inputTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    this.setState({ inputTodoTitle: event.target.value.toLowerCase() });
+    this.setState({ inputTodoTitle: event.target.value });
   };
 
   selectTodoStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -60,7 +60,7 @@ export class TodoList extends React.Component<Props, State> {
             <option value="all" selected>All todos</option>
             {
               todos
-                .map(todo => (todo.completed ? 'Done' : 'Performed'))
+                .map(todo => (todo.completed ? 'Completed' : 'Active'))
                 .filter((item, index, array) => array.indexOf(item) === index)
                 .map(item => (
                   <>
@@ -75,14 +75,18 @@ export class TodoList extends React.Component<Props, State> {
           <ul className="TodoList__list">
             {
               todos
-                .filter(todo => (todo.title.toLowerCase()).includes(inputTodoTitle))
                 .filter(todo => {
                   if (selectTodoStatus === 'all') {
                     return todo;
                   }
 
-                  return todo.completed === (selectTodoStatus === 'Done');
+                  if (selectTodoStatus === 'Active') {
+                    return !todo.completed;
+                  }
+
+                  return todo.completed;
                 })
+                .filter(todo => (todo.title.toLowerCase()).includes(inputTodoTitle.toLowerCase()))
                 .map(todo => (
                   <>
                     {todo.completed ? (

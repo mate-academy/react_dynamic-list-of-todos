@@ -71,8 +71,6 @@ class App extends React.Component<{}, State> {
             <div>Loading data</div>
           )
         }
-
-        <div>{userId}</div>
       </div>
     );
   }
