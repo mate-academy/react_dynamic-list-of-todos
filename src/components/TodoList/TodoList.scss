@@ -28,4 +28,23 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__searchbar {
+    margin: 0;
+    margin-left: 5px;
+
+    font-size: 24px;
+
+    border-radius: 6px;
+  }
+
+  &__select {
+    margin: 0;
+    margin-left: 15px;
+    margin-top: -1px;
+
+    font-size: 26px;
+
+    border-radius: 6px;
+  }
 }
