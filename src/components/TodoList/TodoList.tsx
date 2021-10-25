@@ -2,19 +2,13 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
-interface Todo {
-  id: number,
-  userId: number,
-  title: string,
-  completed: boolean,
-}
-
-interface Props {
+type Props = {
   todos: Todo[],
   currentUser: number,
   selectedUserId: (userId: number) => void,
-}
+};
 
 type State = {
   query: string,

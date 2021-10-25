@@ -4,18 +4,12 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
-interface Todo {
-  id: number,
-  userId: number,
-  title: string,
-  completed: boolean,
-}
-
-interface State {
+type State = {
   todos: Todo[],
   selectedUserId: number;
-}
+};
 
 class App extends React.Component<{}, State> {
   state: State = {

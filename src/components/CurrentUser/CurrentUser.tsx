@@ -1,18 +1,12 @@
 import React from 'react';
 import { getUsers } from '../../api';
 import './CurrentUser.scss';
+import { User } from '../../types/User';
 
 type Props = {
   userId: number,
   clearSelectedUser: () => void,
 };
-
-interface User {
-  id: number,
-  name: string,
-  email: string,
-  phone: number,
-}
 
 type State = {
   user: User | null,
