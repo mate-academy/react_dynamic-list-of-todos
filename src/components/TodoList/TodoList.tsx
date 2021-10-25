@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import './TodoList.scss';
 import { Todo, User } from '../../Types';
 
@@ -16,7 +17,7 @@ interface State {
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     inputTodoTitle: '',
-    selectTodoStatus: 'all',
+    selectTodoStatus: 'All',
   };
 
   inputTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +40,20 @@ export class TodoList extends React.Component<Props, State> {
     const { todos, users } = this.props;
     const { inputTodoTitle, selectTodoStatus } = this.state;
 
+    const preparedTodos: Todo[] = todos
+      .filter(todo => (todo.title.toLowerCase()).includes(inputTodoTitle.toLowerCase()))
+      .filter(todo => {
+        if (selectTodoStatus === 'All') {
+          return todo;
+        }
+
+        if (selectTodoStatus === 'Active') {
+          return !todo.completed;
+        }
+
+        return todo.completed;
+      });
+
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
@@ -57,87 +72,54 @@ export class TodoList extends React.Component<Props, State> {
             name="selectTodoStatus"
             id="selectTodoStatus"
           >
-            <option value="all" selected>All todos</option>
-            {
-              todos
-                .map(todo => (todo.completed ? 'Completed' : 'Active'))
-                .filter((item, index, array) => array.indexOf(item) === index)
-                .map(item => (
-                  <>
-                    <option value={item} key={item}>{item}</option>
-                  </>
-                ))
-            }
+            <option value="All" selected>All todos</option>
+            <option value="Active" selected>Active</option>
+            <option value="Completed" selected>Completed</option>
           </select>
         </form>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {
-              todos
-                .filter(todo => {
-                  if (selectTodoStatus === 'all') {
-                    return todo;
-                  }
-
-                  if (selectTodoStatus === 'Active') {
-                    return !todo.completed;
-                  }
-
-                  return todo.completed;
-                })
-                .filter(todo => (todo.title.toLowerCase()).includes(inputTodoTitle.toLowerCase()))
+              preparedTodos
                 .map(todo => (
                   <>
-                    {todo.completed ? (
-                      <li
-                        key={todo.id}
-                        className="TodoList__item TodoList__item--checked"
-                      >
-                        <label htmlFor="todoDone">
-                          <input id="todoDone" type="checkbox" checked readOnly />
-                          <p>{todo.title}</p>
-                        </label>
+                    <li
+                      key={todo.id}
+                      className={
+                        classnames(
+                          'TodoList__item',
+                          { 'TodoList__item--checked': todo.completed },
+                          { 'TodoList__item--unchecked': !todo.completed },
+                        )
+                      }
+                    >
+                      <label htmlFor="todoDone">
+                        {
+                          todo.completed
+                            ? <input id="todoDone" type="checkbox" checked readOnly />
+                            : <input id="todoToPerform" type="checkbox" readOnly />
+                        }
+                        <p>{todo.title}</p>
+                      </label>
 
-                        <button
-                          onClick={() => (this.props.selectedUserId(todo.userId))}
-                          className="TodoList__user-button button"
-                          type="button"
-                        >
-                          {
-                            users.find(user => user.id === todo.userId)
-                              ? users.find(user => user.id === todo.userId)?.name
-                              : 'No user'
-                          }
-                        </button>
-                      </li>
-                    ) : (
-                      <li
-                        key={todo.id}
-                        className="TodoList__item TodoList__item--unchecked"
+                      <button
+                        onClick={() => (this.props.selectedUserId(todo.userId))}
+                        className={
+                          classnames(
+                            'TodoList__user-button button',
+                            { 'TodoList__user-button--selected': todo.completed },
+                          )
+                        }
+                        type="button"
                       >
-                        <label htmlFor="todoToPerform">
-                          <input id="todoToPerform" type="checkbox" readOnly />
-                          <p>{todo.title}</p>
-                        </label>
-
-                        <button
-                          onClick={() => (this.props.selectedUserId(todo.userId))}
-                          className="
-                            TodoList__user-button
-                            TodoList__user-button--selected
-                            button
-                          "
-                          type="submit"
-                        >
-                          {
-                            users.find(user => user.id === todo.userId)
-                              ? users.find(user => user.id === todo.userId)?.name
-                              : 'No user'
-                          }
-                        </button>
-                      </li>
-                    )}
+                        {
+                          users.find(user => user.id === todo.userId)
+                            ? users.find(user => user.id === todo.userId)?.name
+                            : 'No user'
+                        }
+                      </button>
+                    </li>
                   </>
                 ))
             }
