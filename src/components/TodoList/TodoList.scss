@@ -28,4 +28,25 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__control {
+    display: flex;
+    gap: 5px;
+  }
+
+  &__input {
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 20px;
+    outline: none;
+  }
+
+  &__select {
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 20px;
+    outline: none;
+  }
 }
