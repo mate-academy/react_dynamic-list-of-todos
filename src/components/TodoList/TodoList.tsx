@@ -30,7 +30,7 @@ export class TodoList extends React.Component<Props, State> {
   render() {
     const { query, todos, visibilitySetting } = this.state;
     const visibleList = todos.filter(todo => {
-      if (!todo.title.includes(query)) {
+      if (!todo.title.toLowerCase().includes(query.toLowerCase())) {
         return false;
       }
 
