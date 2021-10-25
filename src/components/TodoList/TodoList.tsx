@@ -35,6 +35,7 @@ export class TodoList extends React.Component<Props, State> {
   }
 
   render() {
+    const { selectedUserId, selectUser } = this.props;
     const { query, todos, showTodosValue } = this.state;
     const visibleTodos = todos.filter(todo => {
       if (!todo.title.toLowerCase().includes(query.toLowerCase())) {
@@ -85,9 +86,11 @@ export class TodoList extends React.Component<Props, State> {
                   </label>
 
                   <button
-                    className="TodoList__user-button button"
+                    className={className('TodoList__user-button', 'button',
+                      `TodoList__user-button--${selectedUserId === userId ? 'selected' : 'unselected'
+                      }`)}
                     type="button"
-                    onClick={() => this.props.selectUser(todo.userId)}
+                    onClick={() => selectUser(todo.userId)}
                   >
                     {`User#${userId}`}
                   </button>
