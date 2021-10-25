@@ -43,19 +43,6 @@ class App extends React.Component<{}, State> {
     this.setState({ filterValue });
   };
 
-  callbackFilterFn = (todo: Todo) => {
-    switch (this.state.filterValue) {
-      case 'all':
-        return todo;
-      case 'completed':
-        return todo.completed === true;
-      case 'active':
-        return todo.completed === false;
-      default:
-        return todo;
-    }
-  };
-
   render() {
     const {
       todos,
@@ -63,8 +50,21 @@ class App extends React.Component<{}, State> {
       query,
     } = this.state;
 
+    const callbackFilterFn = (todo: Todo) => {
+      switch (this.state.filterValue) {
+        case 'all':
+          return todo;
+        case 'completed':
+          return todo.completed === true;
+        case 'active':
+          return todo.completed === false;
+        default:
+          return todo;
+      }
+    };
+
     const preparedTodos = todos
-      .filter(this.callbackFilterFn)
+      .filter(callbackFilterFn)
       .filter(todo => (todo.title.toLowerCase().includes(query.toLowerCase())));
 
     return (
