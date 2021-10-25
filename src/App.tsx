@@ -31,34 +31,34 @@ class App extends React.Component<{}, {}> {
     this.setState({ selectedUserId: 0 });
   };
 
-  changeFilterValue = async (value: string) => {
-    await this.setState({ filterValue: value });
+  changeFilterValue = (value: string) => {
+    this.setState({ filterValue: value });
     this.filter();
   };
 
-  changeSelectValue = async (value: string) => {
-    await this.setState({ selectValue: value });
+  changeSelectValue = (value: string) => {
+    this.setState({ selectValue: value });
     this.filter();
   };
 
   filter = () => {
     const {
-      selectValue, filterValue, todos,
+      selectValue, filterValue,
     } = this.state;
+    let { todos } = this.state;
 
-    let copy = [...todos];
 
     if (selectValue === 'active') {
-      copy = copy.filter((todo: Todo) => todo.completed === false);
+      todos = todos.filter((todo: Todo) => todo.completed === false);
     }
 
     if (selectValue === 'completed') {
-      copy = copy.filter((todo: Todo) => todo.completed === true);
+      todos = todos.filter((todo: Todo) => todo.completed === true);
     }
 
     this.setState(() => {
       return {
-        todosToRender: copy.filter((todo: Todo) => {
+        todosToRender: todos.filter((todo: Todo) => {
           return (todo.title).toLowerCase().includes(filterValue.toLowerCase());
         }),
       };
@@ -73,21 +73,14 @@ class App extends React.Component<{}, {}> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <input
-            type="text"
-            value={filterValue}
-            onChange={event => this.changeFilterValue(event.target.value)}
+          <TodoList
+            todos={todosToRender}
+            onUser={this.chooseUsers}
+            filterValue={filterValue}
+            selectValue={selectValue}
+            changeFilterValue={this.changeFilterValue}
+            changeSelectValue={this.changeSelectValue}
           />
-          <select
-            value={selectValue}
-            onChange={event => this.changeSelectValue(event.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-
-          </select>
-          <TodoList todos={todosToRender} onUser={this.chooseUsers} />
         </div>
 
         <div className="App__content">

@@ -15,3 +15,7 @@ export const request = (url: string) => {
 };
 
 export const getTodos = () => request('todos');
+
+export function getUser(userId: number): Promise<User> {
+  return request(`users/${userId}`);
+}

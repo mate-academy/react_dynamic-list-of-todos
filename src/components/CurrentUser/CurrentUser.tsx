@@ -1,6 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
-import { request } from '../../api';
+import { getUser } from '../../api';
 
 interface Props {
   selectedUserId: number
@@ -24,9 +24,7 @@ export class CurrentUser extends React.PureComponent<Props, {}> {
   }
 
   requestUser = () => {
-    const getUser = () => request(`users/${this.props.selectedUserId}`);
-
-    getUser()
+    getUser(this.props.selectedUserId)
       .then(user => {
         this.setState({
           user,
