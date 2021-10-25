@@ -3,7 +3,7 @@ const API_URL = 'https://mate.academy/students-api';
 export async function getTodos(): Promise<Todo[]> {
   return fetch(`${API_URL}/todos`)
     .then(response => response.json())
-    .then(todos => todos);
+    .then(todos => todos.sort((a: Todo, b: Todo) => a.userId - b.userId));
 }
 
 export async function getCurrentUser(id: number): Promise<User> {
