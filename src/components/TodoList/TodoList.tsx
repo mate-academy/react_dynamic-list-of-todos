@@ -1,8 +1,8 @@
 import React from 'react';
 import './TodoList.scss';
 
-import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
@@ -57,7 +57,7 @@ export const TodoList: React.FC<Props> = ({
           return (
             <li
               className={classNames('TodoList__item', {
-                'TodoList__item--unchecked': !todo.completed
+                'TodoList__item--unchecked': !todo.completed,
               })}
               key={todo.id}
             >
