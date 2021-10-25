@@ -92,3 +92,27 @@ input[type="checkbox"]:checked + p:before {
     top: 20px;
   }
 }
+.filter {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.select {
+  border: 2px solid black;
+  border-radius: 8px;
+  &:focus {
+    outline: none;
+  }
+}
+.input {
+  width: 100%;
+  font-size: 30px;
+  border: 2px solid black;
+  border-radius: 8px;
+  &::placeholder {
+    text-align: center;
+  }
+  &:focus {
+    outline: none;
+  }
+}

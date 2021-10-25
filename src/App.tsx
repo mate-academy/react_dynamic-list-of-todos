@@ -3,29 +3,107 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api/api';
+import { Todo } from './react-app-env';
 
 interface State {
-  selectedUserId: number;
+  selectedUserId: number,
+  todos: Todo[],
+  input: string,
+  todoStatus:string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+    todos: [],
+    input: '',
+    todoStatus: 'All',
   };
 
+  componentDidMount() {
+    getTodos().then(todos => this.setState({ todos }));
+  }
+
+  todoFilter = () => {
+    getTodos()
+      .then(todos => this.setState((prevState) => ({
+        todos: todos.filter((todo:Todo) => todo.title.includes(prevState.input)
+          && this.todoStatus(todo.completed)),
+      })));
+  };
+
+  inputHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = event.currentTarget.value;
+
+    this.setState({ input: newInput });
+    this.todoFilter();
+  };
+
+  optionHandler = (event:React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ todoStatus: event.currentTarget.value });
+    this.todoFilter();
+  };
+
+  selectUser = (event:React.MouseEvent<HTMLButtonElement>) => {
+    const newId = +event.currentTarget.name;
+
+    this.setState({ selectedUserId: newId });
+  };
+
+  clearUser = () => {
+    this.setState({ selectedUserId: 0 });
+  };
+
+  todoStatus(status:boolean) {
+    switch (this.state.todoStatus) {
+      case 'completed':
+        return status;
+      case 'uncompleted':
+        return !status;
+      default:
+        return true;
+    }
+  }
+
   render() {
-    const { selectedUserId } = this.state;
+    const { selectedUserId, todos, todoStatus } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <div className="filter">
+            <input
+              type="text"
+              className="input"
+              value={this.state.input}
+              placeholder="Type your todo here"
+              onChange={this.inputHandler}
+            />
+            <select
+              value={todoStatus}
+              className="select"
+              onChange={this.optionHandler}
+            >
+              <option value="All">all</option>
+              <option value="completed">completed</option>
+              <option value="uncompleted">uncompleted</option>
+            </select>
+          </div>
+
+          {todos
+            && (
+              <TodoList
+                todos={todos}
+                callb={this.selectUser}
+              />
+            )}
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={selectedUserId} clearUser={this.clearUser} />
             ) : 'No user selected'}
           </div>
         </div>
