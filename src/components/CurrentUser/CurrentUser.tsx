@@ -35,13 +35,6 @@ export class CurrentUser extends React.Component<Props, State> {
   render() {
     const { currentUser } = this.state;
 
-    // // eslint-disable-next-line no-console
-    // console.log(currentUser);
-    // // eslint-disable-next-line no-console
-    // console.log(getUser(this.props.selectedUserId));
-    // // eslint-disable-next-line no-console
-    // console.log(this.props.selectedUserId);
-
     return currentUser && (
       <div className="CurrentUser">
         <button
