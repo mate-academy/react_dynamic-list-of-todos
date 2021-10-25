@@ -25,5 +25,12 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    background-color: #4d457b;
+    transition: 0.3s;
+
+    &:hover {
+      transform: scale(1.1);
+      transition: 0.3s;
+    }
   }
 }
