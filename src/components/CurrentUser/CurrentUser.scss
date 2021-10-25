@@ -26,4 +26,16 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__button {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    background-color: #4d457b;
+    color: #fff;
+    margin: 20px auto 0;
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+  }
 }
