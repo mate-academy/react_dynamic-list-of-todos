@@ -3,29 +3,52 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos, getUser } from './api/api';
 
 interface State {
-  selectedUserId: number;
+  currentUser: User | null;
+  todos : Todo[];
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
-    selectedUserId: 0,
+    currentUser: null,
+    todos: [],
+  };
+
+  async componentDidMount() {
+    this.setState({
+      todos: await getTodos(),
+    });
+  }
+
+  clearUser = () => {
+    this.setState({ currentUser: null });
+  };
+
+  currentUser = async (id: number): Promise<void> => {
+    const { currentUser } = this.state;
+
+    if (currentUser?.id !== id) {
+      this.setState({
+        currentUser: await getUser(id),
+      });
+    }
   };
 
   render() {
-    const { selectedUserId } = this.state;
+    const { currentUser, todos } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList todos={todos} setUser={this.currentUser} />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
+            {currentUser ? (
+              <CurrentUser user={currentUser} clear={this.clearUser} />
             ) : 'No user selected'}
           </div>
         </div>
