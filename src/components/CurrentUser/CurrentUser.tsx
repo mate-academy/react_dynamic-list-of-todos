@@ -30,7 +30,7 @@ export class CurrentUser extends React.Component<Props, State> {
   loadSelectedUser = () => {
     getUser(`${this.props.selectedUserId}`)
       .then(userFromServer => {
-        this.setState({ user: userFromServer });
+        this.setState({ user: userFromServer || null });
       });
   };
 
@@ -39,27 +39,35 @@ export class CurrentUser extends React.Component<Props, State> {
 
     const { clear } = this.props;
 
-    return (
-      <div className="CurrentUser">
+    return user
+      ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              {`Selected user: ${user.id}`}
+            </span>
+          </h2>
+
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
+          <button
+            className="CurrentUser__button"
+            type="button"
+            onClick={
+              () => clear()
+            }
+          >
+            clear
+          </button>
+        </div>
+      )
+      : (
         <h2 className="CurrentUser__title">
           <span>
-            {`Selected user: ${user && user.id}`}
+            User not found
           </span>
         </h2>
-
-        <h3 className="CurrentUser__name">{user && user.name}</h3>
-        <p className="CurrentUser__email">{user && user.email}</p>
-        <p className="CurrentUser__phone">{user && user.phone}</p>
-        <button
-          className="CurrentUser__button"
-          type="button"
-          onClick={
-            () => clear()
-          }
-        >
-          clear
-        </button>
-      </div>
-    );
+      );
   }
 }

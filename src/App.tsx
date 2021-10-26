@@ -25,9 +25,11 @@ class App extends React.Component<{}, State> {
   }
 
   selectUser = (userId: number) => {
-    this.setState({
-      selectedUserId: userId,
-    });
+    if (userId) {
+      this.setState({
+        selectedUserId: userId,
+      });
+    }
   };
 
   clearSelectedUser = () => {

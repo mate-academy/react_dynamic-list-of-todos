@@ -68,6 +68,7 @@ export class TodoList extends React.Component<Props, State> {
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
               <li
+                key={todo.id}
                 className={classNames(
                   'TodoList__item',
                   { 'TodoList__item--unchecked': !todo.completed },
