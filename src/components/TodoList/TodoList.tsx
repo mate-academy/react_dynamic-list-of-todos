@@ -1,44 +1,109 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { getTodos } from '../../api/api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  selectedUserId: number;
+  changeUser(id: number): void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  todos: Todo[];
+  searchQuery: string;
+  settingsOfVisibility: string;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    todos: [],
+    searchQuery: '',
+    settingsOfVisibility: '',
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  componentDidMount() {
+    getTodos().then(todos => this.setState({ todos }));
+  }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  render() {
+    const { todos, searchQuery, settingsOfVisibility } = this.state;
+    const visibleList = todos
+      .filter(todo => {
+        if (!todo.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+          return false;
+        }
+
+        if (settingsOfVisibility === 'active' && todo.completed) {
+          return false;
+        }
+
+        if (settingsOfVisibility === 'completed' && !todo.completed) {
+          return false;
+        }
+
+        return true;
+      });
+
+    return (
+      <div className="TodoList">
+        <input
+          placeholder="Search"
+          value={searchQuery}
+          onChange={event => this.setState({ searchQuery: event.target.value })}
+        />
+        <select
+          onChange={event => this.setState({ settingsOfVisibility: event.target.value })}
+        >
+          <option value="all">
+            All
+          </option>
+          <option value="active">
+            Active
+          </option>
+          <option value="completed">
+            Completed
+          </option>
+        </select>
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleList.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+              >
+                <label htmlFor="input">
+                  <input
+                    name="input"
+                    type="checkbox"
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    { 'TodoList__user-button--selected': this.props.selectedUserId === todo.userId },
+                  )}
+                  type="button"
+                  onClick={() => this.props.changeUser(todo.userId)}
+                >
+                  {`User: #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}

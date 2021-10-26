@@ -1,12 +1,25 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUser: User | null;
+  changeUser(id: number): void;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({ selectedUser, changeUser }) => {
+  return selectedUser && (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title"><span>{selectedUser.id ? `Selected user: ${selectedUser.id}` : 'No such user'}</span></h2>
+
+      <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+      <p className="CurrentUser__email">{selectedUser.email}</p>
+      <p className="CurrentUser__phone">{selectedUser.phone}</p>
+      <button
+        type="button"
+        onClick={() => changeUser(0)}
+      >
+        Clear
+      </button>
+    </div>
+  );
+};
