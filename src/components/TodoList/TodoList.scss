@@ -28,4 +28,20 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__input {
+    width: 100%;
+    height: 25px;
+
+    outline: none;
+  }
+
+  &__select {
+    width: 100%;
+    height: 25px;
+
+    margin-top: 25px;
+
+    outline: none;
+  }
 }
