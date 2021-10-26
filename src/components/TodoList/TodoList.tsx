@@ -1,44 +1,130 @@
 import React from 'react';
+import classNames from 'classnames';
+import { loadTodos } from '../../api/api';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  selectedUserId: number,
+  selectUser: (userId: number) => void,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  todos: Todo[],
+  query: string,
+  filterBy: string,
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component <Props, State> {
+  state: State = {
+    todos: [],
+    query: '',
+    filterBy: '',
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  async componentDidMount() {
+    const todos = await loadTodos();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({ todos });
+  }
+
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    this.setState({ query: value });
+  };
+
+  hanldeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    this.setState({ filterBy: value });
+  };
+
+  getPreparedTodos = () => {
+    const { todos, query, filterBy } = this.state;
+
+    let preparedTodos = todos.filter(todo => (
+      todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+    ));
+
+    preparedTodos = preparedTodos.filter(todo => {
+      switch (filterBy) {
+        case 'active':
+          return !todo.completed;
+        case 'compleated':
+          return todo.completed;
+        case 'all':
+        default:
+          return todo;
+      }
+    });
+
+    return preparedTodos;
+  };
+
+  render() {
+    const { query, filterBy } = this.state;
+    const { selectedUserId, selectUser } = this.props;
+    const visibleTodos = this.getPreparedTodos();
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__filter">
+          <div>
+            <input
+              type="text"
+              placeholder="Search"
+              value={query}
+              onChange={this.handleChange}
+            />
+            <select
+              value={filterBy}
+              onChange={this.hanldeSelect}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="compleated">Compleated</option>
+            </select>
+          </div>
+        </div>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map((todo) => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+                <button
+                  type="button"
+                  className={classNames(
+                    'TodoList__user-button',
+                    {
+                      'TodoList__user-button--selected': todo.userId === selectedUserId,
+                    },
+                  )}
+                  onClick={() => {
+                    selectUser(todo.userId);
+                  }}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
