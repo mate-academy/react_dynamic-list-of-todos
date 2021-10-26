@@ -33,17 +33,15 @@ class App extends React.Component<{}, State> {
       })));
   };
 
-  inputHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
+  universalHandler = (event:React.ChangeEvent<HTMLSelectElement|HTMLInputElement>) => {
+    const fieldName = event.currentTarget.name;
     const newInput = event.currentTarget.value;
 
-    this.setState({ input: newInput });
+    this.setState({
+        [fieldName]: newInput,
+      } as unknown as Pick<State, keyof State>);
     this.todoFilter();
-  };
-
-  optionHandler = (event:React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ todoStatus: event.currentTarget.value });
-    this.todoFilter();
-  };
+  }
 
   selectUser = (event:React.MouseEvent<HTMLButtonElement>) => {
     const newId = +event.currentTarget.name;
@@ -67,35 +65,20 @@ class App extends React.Component<{}, State> {
   }
 
   render() {
-    const { selectedUserId, todos, todoStatus } = this.state;
+    const { selectedUserId, todos, todoStatus, input } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <div className="filter">
-            <input
-              type="text"
-              className="input"
-              value={this.state.input}
-              placeholder="Type your todo here"
-              onChange={this.inputHandler}
-            />
-            <select
-              value={todoStatus}
-              className="select"
-              onChange={this.optionHandler}
-            >
-              <option value="All">all</option>
-              <option value="completed">completed</option>
-              <option value="uncompleted">uncompleted</option>
-            </select>
-          </div>
 
           {todos
             && (
               <TodoList
                 todos={todos}
                 callb={this.selectUser}
+                handler={this.universalHandler}
+                input={input}
+                todoStatus={todoStatus}
               />
             )}
         </div>

@@ -4,12 +4,34 @@ import './TodoList.scss';
 
 interface Props {
   todos:Todo[],
-  callb:(event:React.MouseEvent<HTMLButtonElement>)=>void
+  callb:(event:React.MouseEvent<HTMLButtonElement>)=>void,
+  handler: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void,
+  input:string,
+  todoStatus:string,
 }
-export const TodoList: React.FC<Props> = ({ todos, callb }) => (
+export const TodoList: React.FC<Props> = ({ todos, callb, handler, input, todoStatus }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
-
+    <div className="filter">
+            <input
+              type="text"
+              className="input"
+              name="input"
+              value={input}
+              placeholder="Type your todo here"
+              onChange={handler}
+            />
+            <select
+              className="select"
+              name="todoStatus"
+              value={todoStatus}
+              onChange={handler}
+            >
+              <option value="All">all</option>
+              <option value="completed">completed</option>
+              <option value="uncompleted">uncompleted</option>
+            </select>
+          </div>
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
         {todos.map((todo) => (
