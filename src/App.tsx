@@ -31,7 +31,11 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList todos={todos} selectedUserId={selectedUserId} selectUser={this.selectUser} />
+          <TodoList
+            todos={todos}
+            selectedUserId={selectedUserId}
+            selectUser={this.selectUser}
+          />
         </div>
 
         <div className="App__content">
