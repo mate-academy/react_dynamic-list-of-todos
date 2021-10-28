@@ -72,8 +72,8 @@ export class TodoList extends React.Component<Props, State> {
               <li
                 key={todo.id}
                 className={classNames(
-                  'TodoList__item',
                   {
+                    TodoList__item: true,
                     'TodoList__item--unchecked': !todo.completed,
                     'TodoList__item--checked': todo.completed,
                   },
@@ -83,7 +83,6 @@ export class TodoList extends React.Component<Props, State> {
                   <input
                     name="input"
                     type="checkbox"
-                    readOnly
                   />
                   <p>{todo.title}</p>
                 </label>

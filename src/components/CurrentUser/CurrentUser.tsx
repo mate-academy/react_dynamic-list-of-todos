@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
+import { getUser } from '../../api/api';
 
 type Props = {
-  selectedUser: User | null;
+  selectedUserId: number;
   changeUser(id: number): void;
 };
 
-export const CurrentUser: React.FC<Props> = ({ selectedUser, changeUser }) => {
+export const CurrentUser: React.FC<Props> = ({ selectedUserId, changeUser }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getUser(selectedUserId).then(user => setSelectedUser(user));
+  });
+
   return selectedUser && (
     <div className="CurrentUser">
       <h2 className="CurrentUser__title"><span>{selectedUser.id ? `Selected user: ${selectedUser.id}` : 'No such user'}</span></h2>
