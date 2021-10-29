@@ -1,44 +1,105 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
+
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  selectUserId: (id: number) => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  searcInput: string;
+  optionSelected: string,
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export class TodoList extends React.Component<Props, State> {
+  state = {
+    searcInput: '',
+    optionSelected: 'all',
+  };
+
+  handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ optionSelected: e.target.value });
+  };
+
+  searcInput = (e: string) => {
+    this.setState({ searcInput: e });
+  };
+
+  render() {
+    const { todos, selectUserId } = this.props;
+    const { searcInput, optionSelected } = this.state;
+
+    let todosFiltered = todos.filter(({ title }) => (
+      title.toLowerCase().includes(searcInput.toLowerCase().trim())
+    ));
+
+    if (optionSelected === 'completed') {
+      todosFiltered = todosFiltered.filter(({ completed }) => completed === true);
+    } else if (optionSelected === 'inProgress') {
+      todosFiltered = todosFiltered.filter(({ completed }) => completed === false);
+    }
+
+    return (
+      <div className="TodoList">
+        <h2
+          className="title is-2"
+        >
+          Todos:
+        </h2>
+
+        <form action="">
+          <input
+            type="text"
+            className="input"
+            placeholder="Write a title here"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              this.searcInput(e.target.value);
+            }}
+          />
+          <select
+            id="select"
+            className="select is-fullwidth mt-3 mb-5"
+            onChange={this.handleSelect}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="inProgress">In progress</option>
+          </select>
+        </form>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {todosFiltered.map(todo => (
+              <li
+                key={todo.id}
+                className={
+                  todo.completed === false
+                    ? 'TodoList__item TodoList__item--unchecked'
+                    : 'TodoList__item TodoList__item--checked'
+                }
+              >
+                <label htmlFor="title">
+                  <input
+                    type="checkbox"
+                    readOnly
+                    id="title"
+                  />
+                  <p>{todo.title}</p>
+                </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                <button
+                  type="button"
+                  className="button is-info is-normal"
+                  onClick={() => selectUserId(todo.userId)}
+                >
+                  {`User: ${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
