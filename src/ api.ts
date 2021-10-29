@@ -5,5 +5,5 @@ export function request(url: string) {
     .then(response => response.json());
 }
 
-export const getTodos = () => request('todos');
-export const getUser = (id: number) => request(`users/${id}`);
+export const getTodos = (): Promise<Todo[]> => request('todos');
+export const getUser = (id: number): Promise<User> => request(`users/${id}`);

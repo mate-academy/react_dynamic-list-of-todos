@@ -4,7 +4,7 @@ import './TodoList.scss';
 
 type Props = {
   todos: Todo[];
-  setUser: (id: number) => Promise<void>;
+  selectUserId: (id: number) => void;
 };
 
 type State = {
@@ -27,7 +27,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   render() {
-    const { todos, setUser } = this.props;
+    const { todos, selectUserId } = this.props;
     const { searcInput, optionSelected } = this.state;
 
     let todosFiltered = todos.filter(({ title }) => (
@@ -91,7 +91,7 @@ export class TodoList extends React.Component<Props, State> {
                 <button
                   type="button"
                   className="button is-info is-normal"
-                  onClick={() => setUser(todo.userId)}
+                  onClick={() => selectUserId(todo.userId)}
                 >
                   {`User: ${todo.userId}`}
                 </button>

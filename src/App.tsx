@@ -3,16 +3,16 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUser } from './ api';
+import { getTodos } from './ api';
 
 interface State {
-  currentUser: User | null;
+  selectedUserId: number;
   todos: Todo[];
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
-    currentUser: null,
+    selectedUserId: 0,
     todos: [],
   };
 
@@ -23,30 +23,31 @@ class App extends React.Component<{}, State> {
       });
   }
 
-  currentUser = async (id: number): Promise<void> => {
-    if (this.state.currentUser?.id !== id) {
-      this.setState({ currentUser: await getUser(id) });
-    }
+  setUserId = (id: number) => {
+    this.setState({ selectedUserId: id });
   };
 
   clear = () => {
-    this.setState({ currentUser: null });
+    this.setState({ selectedUserId: 0 });
   };
 
   render() {
-    const { currentUser, todos } = this.state;
+    const { selectedUserId, todos } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList {...{ todos, setUser: this.currentUser }} />
+          <TodoList
+            selectUserId={this.setUserId}
+            todos={todos}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {currentUser ? (
+            {selectedUserId > 0 ? (
               <CurrentUser
-                user={currentUser}
+                userId={selectedUserId}
                 clear={this.clear}
               />
             ) : 'No user selected'}
