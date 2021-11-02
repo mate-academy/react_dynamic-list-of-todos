@@ -10,14 +10,14 @@ type Props = {
 type State = {
   query: string;
   todos: Todo[];
-  filterTodos: string;
+  filterTodosBy: string;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     query: '',
     todos: [],
-    filterTodos: '',
+    filterTodosBy: '',
   };
 
   componentDidMount() {
@@ -29,16 +29,16 @@ export class TodoList extends React.Component<Props, State> {
 
   render() {
     const { changeUser } = this.props;
-    const { query, todos } = this.state;
+    const { query, todos, filterTodosBy } = this.state;
 
     let filteredTodos = todos
       .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
-    if (this.state.filterTodos === 'completed') {
+    if (filterTodosBy === 'completed') {
       filteredTodos = filteredTodos.filter(todo => todo.completed === true);
     }
 
-    if (this.state.filterTodos === 'not completed') {
+    if (filterTodosBy === 'not completed') {
       filteredTodos = filteredTodos.filter(todo => todo.completed === false);
     }
 
