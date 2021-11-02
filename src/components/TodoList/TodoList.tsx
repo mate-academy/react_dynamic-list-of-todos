@@ -63,7 +63,7 @@ export class TodoList extends React.Component<Props, State> {
             name="filter"
             id="filter"
             onChange={(event) => (
-              this.setState({ filterTodos: event.target.value })
+              this.setState({ filterTodosBy: event.target.value })
             )}
           >
             <option value="all">
