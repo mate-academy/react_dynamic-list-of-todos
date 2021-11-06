@@ -27,20 +27,24 @@ export class TodoList extends React.Component<Props, State> {
       });
   }
 
-  render() {
-    const { changeUser } = this.props;
-    const { query, todos, filterTodosBy } = this.state;
+  getFilteredTodos = () => {
+    let filteredTodos = this.state.todos
+      .filter(todo => todo.title.toLowerCase().includes(this.state.query.toLowerCase()));
 
-    let filteredTodos = todos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-
-    if (filterTodosBy === 'completed') {
+    if (this.state.filterTodosBy === 'completed') {
       filteredTodos = filteredTodos.filter(todo => todo.completed === true);
     }
 
-    if (filterTodosBy === 'not completed') {
+    if (this.state.filterTodosBy === 'not completed') {
       filteredTodos = filteredTodos.filter(todo => todo.completed === false);
     }
+
+    return filteredTodos;
+  };
+
+  render() {
+    const { changeUser } = this.props;
+    const { query } = this.state;
 
     return (
       <div className="TodoList">
@@ -78,7 +82,7 @@ export class TodoList extends React.Component<Props, State> {
           </select>
 
           <ul className="TodoList__list">
-            {filteredTodos.map(todo => (
+            {this.getFilteredTodos().map(todo => (
               <li
                 key={todo.id}
                 className={classNames(
