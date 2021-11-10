@@ -3,30 +3,57 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
 
 interface State {
-  selectedUserId: number;
+  todos: Todo[],
+  selectedUserId: number,
+  isLoading: boolean,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
+    todos: [] as Todo[],
     selectedUserId: 0,
+    isLoading: true,
+  };
+
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({
+      todos,
+      isLoading: false,
+    });
+  }
+
+  setUser = (userId = 0) => {
+    this.setState({ selectedUserId: userId });
   };
 
   render() {
-    const { selectedUserId } = this.state;
+    const { selectedUserId, todos, isLoading } = this.state;
 
     return (
       <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+        {isLoading ? 'Loading todos' : (
+          <div className="App__sidebar">
+            <TodoList
+              todos={todos}
+              selectedUser={selectedUserId}
+              onUserSelect={this.setUser}
+            />
+          </div>
+        )}
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
+            {!!selectedUserId && (
+              <CurrentUser
+                userId={selectedUserId}
+                resetUser={this.setUser}
+              />
+            )}
           </div>
         </div>
       </div>
