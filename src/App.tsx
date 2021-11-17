@@ -64,7 +64,7 @@ class App extends React.Component<{}, State> {
       completed,
     } = this.state;
 
-    const prepareTodos = this.prepareTodos();
+    const preparedTodos = this.prepareTodos();
 
     return (
       <div className="App">
@@ -75,7 +75,7 @@ class App extends React.Component<{}, State> {
                 title={title}
                 completed={completed}
                 handleUserSelect={this.onUserSelect}
-                todos={prepareTodos}
+                todos={preparedTodos}
                 onInputChange={this.handleInputChange}
               />
             )}
