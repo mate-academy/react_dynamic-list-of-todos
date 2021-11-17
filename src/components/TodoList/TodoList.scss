@@ -29,3 +29,14 @@
     color: #ff3626;
   }
 }
+
+.TodosSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__label {
+    display: flex;
+    gap: 5px;
+  }
+}
