@@ -18,14 +18,14 @@
     padding: 10px;
     margin-bottom: 5px;
   }
+}
 
-  &__item--checked {
-    background-color: #cde4e4;
-    color: #459595;
-  }
+.TodoList__item.checked {
+  background-color: #cde4e4;
+  color: #459595;
+}
 
-  &__item--unchecked {
-    background-color: #ffe0db;
-    color: #ff3626;
-  }
+.TodoList__item.unchecked {
+  background-color: #ffe0db;
+  color: #ff3626;
 }
