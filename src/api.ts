@@ -8,9 +8,7 @@ export const request = async (url: string) => {
       throw new Error(`${response.status} - ${response.statusText}`);
     }
 
-    const goods = await response.json();
-
-    return goods;
+    return await response.json();
   } catch (error) {
     throw new Error(`The problem is here ${error}`);
   }
