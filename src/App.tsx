@@ -34,7 +34,14 @@ class App extends React.Component<{}, State> {
   | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value } as unknown as Pick<State, keyof State>);
+    this.setState(state => ({
+      ...state,
+      [name]: value,
+    }));
+  };
+
+  handleClearUser = () => {
+    this.setState({ selectedUserId: 0 });
   };
 
   prepareTodos = () => {
@@ -84,7 +91,10 @@ class App extends React.Component<{}, State> {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser
+                clearUser={this.handleClearUser}
+                userId={selectedUserId}
+              />
             ) : 'No user selected'}
           </div>
         </div>

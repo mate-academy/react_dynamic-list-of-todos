@@ -4,10 +4,11 @@ import { getUserById } from '../../api/api';
 
 interface Props {
   userId: number,
+  clearUser: () => void,
 }
 
 interface State {
-  user?: User,
+  user: User | null,
   showErrorMessage: boolean,
 }
 export class CurrentUser extends React.Component<Props, State> {
@@ -27,7 +28,10 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   handleClearButton = () => {
-    this.setState({ user: undefined });
+    this.setState({ user: null });
+    const clear = this.props.clearUser;
+
+    clear();
   };
 
   async loadData() {
