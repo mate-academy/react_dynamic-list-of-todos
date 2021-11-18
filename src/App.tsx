@@ -43,11 +43,11 @@ class App extends React.Component<{}, State> {
   };
 
   handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     this.setState(prevState => ({
       ...prevState,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value.toLowerCase(),
     }));
   };
 
@@ -56,7 +56,7 @@ class App extends React.Component<{}, State> {
 
     return todos.filter(todo => {
       if (titleToSearch) {
-        return todo.title.includes(titleToSearch);
+        return todo.title.toLowerCase().includes(titleToSearch);
       }
 
       return todo;
