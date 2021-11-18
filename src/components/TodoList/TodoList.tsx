@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -8,16 +7,19 @@ type Props = {
   todos: Todo[],
   selectedUserId: number | null,
   selectUser: (userId: number) => void,
+  randomizeTodos: () => void,
+  toggleComplete: (todoId: number) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos, selectUser, selectedUserId,
+  randomizeTodos, toggleComplete,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [renderer, setRenderer] = useState(true);
 
-  let displayedTodos = [...todos]
+  const displayedTodos = [...todos]
     .filter(todo => {
       const titleIncludes = todo.title.toLowerCase()
         .includes(searchInput.toLowerCase());
@@ -40,21 +42,8 @@ export const TodoList: React.FC<Props> = ({
       }
     });
 
-  const randomizeTodos = () => {
-    const sourceArr = [...displayedTodos];
-    const newTodos: any = [];
-
-    for (let i = 0; i < sourceArr.length; i + 1) {
-      const randIndex = Math.floor(sourceArr.length * Math.random());
-
-      newTodos.push(sourceArr.splice(randIndex, 1));
-    }
-
-    return newTodos.flat();
-  };
-
   useEffect(() => {
-    displayedTodos = randomizeTodos();
+    console.log('TodoList render');
   }, [renderer]);
 
   return (
@@ -65,7 +54,7 @@ export const TodoList: React.FC<Props> = ({
         className="TodoList__randomize-button"
         type="button"
         onClick={() => {
-          console.log('randomize clicked');
+          randomizeTodos();
           setRenderer(!renderer);
         }}
       >
@@ -111,7 +100,7 @@ export const TodoList: React.FC<Props> = ({
                   id={todo.id.toString()}
                   type="checkbox"
                   checked={todo.completed}
-                  onChange={(event) => console.log(+event.target.id)}
+                  onChange={(event) => toggleComplete(+event.target.id)}
                 />
                 <p>{`${todo.id}: ${todo.title}`}</p>
               </label>

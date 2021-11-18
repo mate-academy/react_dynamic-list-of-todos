@@ -18,6 +18,18 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
+  const randomizeTodos = () => {
+    setTodos(prevTodos => prevTodos.sort(() => Math.random() - 0.5));
+  };
+
+  const toggleComplete = (todoId: number) => {
+    setTodos(prevTodos => prevTodos.map(todo => {
+      return todo.id !== todoId
+        ? todo
+        : { ...todo, completed: !todo.completed };
+    }));
+  };
+
   return (
     <div className="App">
       <div className="App__sidebar">
@@ -27,6 +39,8 @@ export const App: React.FC = () => {
           selectUser={(userId: number) => {
             setSelectedUserId(userId);
           }}
+          randomizeTodos={randomizeTodos}
+          toggleComplete={toggleComplete}
         />
       </div>
 
