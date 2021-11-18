@@ -59,6 +59,8 @@ class App extends React.Component<{}, State> {
         return todo.title.includes(titleToSearch);
       }
 
+      return todo;
+    }).filter(todo => {
       if (completeStatus === 'completed') {
         return todo.completed;
       }
@@ -77,15 +79,13 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          {this.preparedTodos().length > 0 && (
-            <TodoList
-              titleToSearch={titleToSearch}
-              completeStatus={completeStatus}
-              todos={this.preparedTodos()}
-              selectUser={this.selectUser}
-              handleInputChange={this.handleInputChange}
-            />
-          )}
+          <TodoList
+            titleToSearch={titleToSearch}
+            completeStatus={completeStatus}
+            todos={this.preparedTodos()}
+            selectUser={this.selectUser}
+            handleInputChange={this.handleInputChange}
+          />
         </div>
 
         <div className="App__content">

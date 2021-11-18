@@ -65,46 +65,48 @@ export const TodoList: React.FC<Props> = ({
 
     <h2>Todos:</h2>
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        {todos.map(todo => {
-          const {
-            title, completed, id, userId,
-          } = todo;
+    {todos.length > 0 && (
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todos.map(todo => {
+            const {
+              title, completed, id, userId,
+            } = todo;
 
-          return (
-            <li
-              className={classNames(
-                'TodoList__item',
-                { 'TodoList__item--checked': completed },
-                { 'TodoList__item--unchecked': !completed },
-              )}
-              key={id}
-            >
-              <label>
-                <input
-                  type="checkbox"
-                  checked={completed}
-                  readOnly
-                />
-                <p>{title}</p>
-              </label>
-
-              <button
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
-                type="button"
-                onClick={() => selectUser(userId)}
+            return (
+              <li
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': completed },
+                  { 'TodoList__item--unchecked': !completed },
+                )}
+                key={id}
               >
-                {`User ${userId}`}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={completed}
+                    readOnly
+                  />
+                  <p>{title}</p>
+                </label>
+
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => selectUser(userId)}
+                >
+                  {`User ${userId}`}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )}
   </div>
 );
