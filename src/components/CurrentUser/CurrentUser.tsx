@@ -4,10 +4,12 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number,
+  onClear: () => void,
 };
 
 type State = {
   user: User,
+  isCleared: boolean,
 };
 
 export class CurrentUser extends React.Component<Props, State> {
@@ -20,6 +22,7 @@ export class CurrentUser extends React.Component<Props, State> {
       phone: '',
       website: '',
     },
+    isCleared: false,
   };
 
   async componentDidMount() {
@@ -33,24 +36,43 @@ export class CurrentUser extends React.Component<Props, State> {
       const user = await getUser(this.props.userId);
 
       /* eslint-disable-next-line */
-      this.setState({ user });
+      this.setState({ user, isCleared: false });
     }
+  };
+
+  clear = () => {
+    this.setState({ isCleared: true });
   };
 
   render() {
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {this.state.user.id}
-          </span>
-        </h2>
+      !this.state.isCleared ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {this.state.user.id}
+            </span>
+          </h2>
 
-        <h3 className="CurrentUser__name">{this.state.user.name}</h3>
-        <p className="CurrentUser__email">{this.state.user.email}</p>
-        <p className="CurrentUser__phone">{this.state.user.phone}</p>
-      </div>
+          <h3 className="CurrentUser__name">{this.state.user.name}</h3>
+          <p className="CurrentUser__email">{this.state.user.email}</p>
+          <p className="CurrentUser__phone">{this.state.user.phone}</p>
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              this.clear();
+              this.props.onClear();
+            }}
+          >
+            clear
+          </button>
+        </div>
+      ) : (
+        'No user selected'
+      )
     );
   }
 }
