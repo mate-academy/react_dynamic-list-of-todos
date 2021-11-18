@@ -1,44 +1,79 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { Todo } from '../../react-app-env';
+import { requestTodoList } from '../../api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  selectedUserId: number,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface State {
+  todos: Todo[],
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state:State = {
+    todos: [],
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  async componentDidMount() {
+    const loadedTodos = await requestTodoList();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({
+      todos: loadedTodos,
+    });
+  }
+
+  render() {
+    const { todos } = this.state;
+    const { selectedUserId } = this.props;
+
+    return (
+      <div className="TodoList">
+        <input
+          type="text"
+        />
+        <select name="select">
+          <option value="0">All</option>
+          <option value="1">Completed</option>
+          <option value="2">Active</option>
+        </select>
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {todos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item', {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>
+                  {todo.title}
+                </p>
+                <button
+                  type="button"
+                  className={classNames('TodoList__user-button button', {
+                    'TodoList__item--checked': todo.userId === selectedUserId,
+                  })}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}

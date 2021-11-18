@@ -8,10 +8,13 @@ interface State {
   selectedUserId: number;
 }
 
-class App extends React.Component<{}, State> {
+export class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
   };
+
+  componentDidMount() {
+  }
 
   render() {
     const { selectedUserId } = this.state;
@@ -19,13 +22,16 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectedUserId={selectedUserId}
+
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={selectedUserId} />
             ) : 'No user selected'}
           </div>
         </div>
@@ -33,5 +39,3 @@ class App extends React.Component<{}, State> {
     );
   }
 }
-
-export default App;
