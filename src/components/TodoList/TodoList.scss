@@ -1,3 +1,19 @@
+.form {
+  width: 30vw;
+
+  &__label {
+    display: block;
+    font-size: 1.2rem;
+  }
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .TodoList {
   width: 100%;
 
@@ -27,5 +43,11 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+  &__randomize-btn {
+    
+    &:hover {
+      background-color: #4d457b;
+    }
   }
 }
