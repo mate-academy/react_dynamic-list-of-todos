@@ -23,7 +23,7 @@ export class TodoList extends React.Component<Props, State> {
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value } as unknown as Pick<State, keyof State>);
+    this.setState({ [name]: value } as Pick<State, keyof State>);
   };
 
   todosFilter() {
@@ -58,13 +58,13 @@ export class TodoList extends React.Component<Props, State> {
             className="form__input"
             placeholder="Enter task title"
             value={this.state.title}
-            onChange={event => this.handleChange(event)}
+            onChange={this.handleChange}
           />
           <select
             name="select"
             className="form__select"
             value={this.state.select}
-            onChange={event => this.handleChange(event)}
+            onChange={this.handleChange}
           >
             <option
               value="all"
