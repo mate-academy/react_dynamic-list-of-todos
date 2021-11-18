@@ -2,7 +2,6 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 
-
 type Props = {
   todos: Todo[];
   onChecked: (userId: number) => void,
@@ -12,7 +11,7 @@ type Props = {
 type State = {
   title: string,
   sortBy: string,
-}
+};
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
@@ -22,13 +21,15 @@ export class TodoList extends React.Component<Props, State> {
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    this.setState({ title: value.toLowerCase() })
-  }
+
+    this.setState({ title: value.toLowerCase() });
+  };
 
   handleSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
-    this.setState({ sortBy: value })
-  }
+
+    this.setState({ sortBy: value });
+  };
 
   getSortedTodos = (todos: Todo[]) => {
     const { sortBy } = this.state;
@@ -36,24 +37,24 @@ export class TodoList extends React.Component<Props, State> {
     if (sortBy !== 'all') {
       switch (sortBy) {
         case 'active':
-          return todos.filter(todo => todo.completed === false)
+          return todos.filter(todo => todo.completed === false);
         default:
           return todos.filter(todo => todo.completed === true);
       }
     }
 
     return todos;
-  }
+  };
 
   getSearchedTodos = (todos: Todo[]) => {
     const { title } = this.state;
 
     if (title) {
-      return todos.filter(todo => todo.title.includes(title));
+      return todos.filter(todo => todo.title.toLowerCase().includes(title));
     }
 
     return todos;
-  }
+  };
 
   render() {
     const { onChecked, selectedUserId } = this.props;
