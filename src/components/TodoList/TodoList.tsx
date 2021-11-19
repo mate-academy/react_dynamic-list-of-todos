@@ -1,44 +1,115 @@
 import React from 'react';
 import './TodoList.scss';
+import { TodoListItem } from './TodoListItem';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+enum Status {
+  all = 'All',
+  completed = 'Completed',
+  notCompleted = 'Not completed',
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[];
+  setSelectedId: (userId: number) => void;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+type State = {
+  queryFieldSearch: string;
+  status: Status;
+};
+
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    queryFieldSearch: '',
+    status: Status.all,
+  };
+
+  componentDidUpdate(_prevProps: Props, prevState: State) {
+    if (prevState.status !== this.state.status) {
+      this.filterShowStatus(this.state.status);
+    }
+  }
+
+  handleChange = (value: string, name: string) => {
+    this.setState((state) => ({
+      ...state,
+      [name]: value,
+    }));
+  };
+
+  filterTodos = () => {
+    const query = this.state.queryFieldSearch.toLowerCase();
+
+    return this.props.todos.filter(todo => {
+      return todo.title.toLowerCase().includes(query);
+    });
+  };
+
+  filterShowStatus = (status = '') => {
+    switch (status) {
+      case Status.completed:
+        return this.filterTodos().filter(todo => todo.completed);
+
+      case Status.notCompleted:
+        return this.filterTodos().filter(todo => !todo.completed);
+
+      case Status.all:
+      default:
+        return this.filterTodos();
+    }
+  };
+
+  render() {
+    const { setSelectedId } = this.props;
+    const { queryFieldSearch, status } = this.state;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__header">
+          <input
+            name="queryFieldSearch"
+            placeholder="filter"
+            className="input"
+            value={queryFieldSearch}
+            onChange={(e) => {
+              this.handleChange(e.target.value, e.target.name);
+              this.filterTodos();
+            }}
+          />
+
+          <select
+            className="select"
+            name="status"
+            value={status}
+            onChange={(e) => {
+              this.handleChange(e.target.value, e.target.name);
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            {Object.entries(Status).map(valueStatus => (
+              <option
+                key={valueStatus[0]}
+                value={valueStatus[1]}
+              >
+                {valueStatus[1]}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {this.filterShowStatus(status).map(todo => (
+              <TodoListItem
+                key={todo.id}
+                todo={todo}
+                setSelectedId={setSelectedId}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
