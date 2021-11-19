@@ -8,9 +8,23 @@ interface State {
   selectedUserId: number;
 }
 
-class App extends React.Component<{}, State> {
+export class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+  };
+
+  changeUser = (id: number) => {
+    if (this.state.selectedUserId !== id) {
+      this.setState({
+        selectedUserId: id,
+      });
+    }
+  };
+
+  clearUserId = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
   };
 
   render() {
@@ -19,13 +33,16 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectedUserId={selectedUserId}
+            onChangeUser={this.changeUser}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={selectedUserId} clearUserId={this.clearUserId} />
             ) : 'No user selected'}
           </div>
         </div>
@@ -33,5 +50,3 @@ class App extends React.Component<{}, State> {
     );
   }
 }
-
-export default App;
