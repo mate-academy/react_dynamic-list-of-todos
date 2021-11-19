@@ -30,8 +30,8 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: userId });
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>
-  | React.ChangeEvent<HTMLSelectElement>) => {
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement
+  | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
     this.setState(state => ({

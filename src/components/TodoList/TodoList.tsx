@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import './TodoList.scss';
 
 interface Prop {
@@ -67,7 +68,10 @@ export const TodoList: React.FC<Prop> = ({
         {todos.length > 0 && todos.map(todo => (
           <li
             key={todo.id}
-            className={todo.completed ? 'TodoList__item checked' : 'TodoList__item unchecked'}
+            className={classNames(
+              'TodoList__item unchecked',
+              { 'TodoList__item checked': todo.completed },
+            )}
           >
             <label htmlFor="completion">
               <input
