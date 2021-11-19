@@ -12,8 +12,8 @@ interface State {
   showErrorMessage: boolean,
 }
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {} as User,
+  state: State = {
+    user: null,
     showErrorMessage: false,
   };
 
@@ -43,8 +43,10 @@ export class CurrentUser extends React.Component<Props, State> {
         showErrorMessage: false,
       });
     } catch (error) {
-      this.handleClearButton();
-      this.setState({ showErrorMessage: true });
+      this.setState({
+        user: null,
+        showErrorMessage: true,
+      });
     }
   }
 
