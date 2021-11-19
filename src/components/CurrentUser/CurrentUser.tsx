@@ -25,8 +25,17 @@ export class CurrentUser extends React.Component<Props, State> {
     userError: false,
   };
 
-  // `No user with ${this.props.userId} found
   async componentDidMount() {
+    this.loadUsers();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.userId !== prevProps.userId) {
+      this.loadUsers();
+    }
+  };
+
+  loadUsers = async () => {
     try {
       const user = await getUser(this.props.userId);
 
@@ -35,20 +44,6 @@ export class CurrentUser extends React.Component<Props, State> {
       this.setState({ userError: true });
     }
   }
-
-  componentDidUpdate = async (prevProps: Props) => {
-    try {
-      if (this.props.userId !== prevProps.userId) {
-        const user = await getUser(this.props.userId);
-
-/* eslint-disable */
-        this.setState({ user, userError: false });
-      }
-    } catch {
-      this.setState({ userError: true });
-    }
-/* eslint-disable */
-  };
 
   render() {
     return (
