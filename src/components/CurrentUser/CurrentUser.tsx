@@ -5,6 +5,7 @@ import { requestUserById } from '../../api';
 
 type Props = {
   userId: number,
+  clearUserId: () => void,
 };
 
 interface State {
@@ -25,6 +26,17 @@ export class CurrentUser extends React.Component<Props, State> {
     });
   }
 
+  async componentDidUpdate(prevProps: Readonly<Props>) {
+    if (prevProps.userId !== this.props.userId) {
+      const loadedUser = await requestUserById(this.props.userId);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        user: loadedUser,
+      });
+    }
+  }
+
   render() {
     const {
       name,
@@ -40,6 +52,12 @@ export class CurrentUser extends React.Component<Props, State> {
         <h3 className="CurrentUser__name">{name}</h3>
         <p className="CurrentUser__email">{email}</p>
         <p className="CurrentUser__phone">{phone}</p>
+        <button
+          type="button"
+          onClick={this.props.clearUserId}
+        >
+          Clear
+        </button>
       </div>
     );
   }

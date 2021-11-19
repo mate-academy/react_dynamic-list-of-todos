@@ -13,8 +13,19 @@ export class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
-  componentDidMount() {
-  }
+  changeUser = (id: number) => {
+    if (this.state.selectedUserId !== id) {
+      this.setState({
+        selectedUserId: id,
+      });
+    }
+  };
+
+  clearUserId = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
+  };
 
   render() {
     const { selectedUserId } = this.state;
@@ -24,14 +35,14 @@ export class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             selectedUserId={selectedUserId}
-
+            onChangeUser={this.changeUser}
           />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser userId={selectedUserId} clearUserId={this.clearUserId} />
             ) : 'No user selected'}
           </div>
         </div>
