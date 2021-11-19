@@ -9,7 +9,7 @@ type Props = {
 
 type State = {
   user: User,
-  isCleared: boolean,
+  userError: boolean,
 };
 
 export class CurrentUser extends React.Component<Props, State> {
@@ -22,31 +22,37 @@ export class CurrentUser extends React.Component<Props, State> {
       phone: '',
       website: '',
     },
-    isCleared: false,
+    userError: false,
   };
 
+  // `No user with ${this.props.userId} found
   async componentDidMount() {
-    const user = await getUser(this.props.userId);
+    try {
+      const user = await getUser(this.props.userId);
 
-    this.setState({ user });
+      this.setState({ user, userError: false });
+    } catch {
+      this.setState({ userError: true });
+    }
   }
 
   componentDidUpdate = async (prevProps: Props) => {
-    if (this.props.userId !== prevProps.userId) {
-      const user = await getUser(this.props.userId);
+    try {
+      if (this.props.userId !== prevProps.userId) {
+        const user = await getUser(this.props.userId);
 
-      /* eslint-disable-next-line */
-      this.setState({ user, isCleared: false });
+/* eslint-disable */
+        this.setState({ user, userError: false });
+      }
+    } catch {
+      this.setState({ userError: true });
     }
-  };
-
-  clear = () => {
-    this.setState({ isCleared: true });
+/* eslint-disable */
   };
 
   render() {
     return (
-      !this.state.isCleared ? (
+      !this.state.userError ? (
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
             <span>
@@ -63,7 +69,6 @@ export class CurrentUser extends React.Component<Props, State> {
             type="button"
             className="button"
             onClick={() => {
-              this.clear();
               this.props.onClear();
             }}
           >
@@ -71,8 +76,9 @@ export class CurrentUser extends React.Component<Props, State> {
           </button>
         </div>
       ) : (
-        'No user selected'
+        `User with id #${this.props.userId} doesn't exist`
       )
     );
   }
 }
+// `User with id #${this.props.userId} doesn't exist`
