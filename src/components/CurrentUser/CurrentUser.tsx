@@ -41,7 +41,6 @@ export class CurrentUser extends React.Component<Props, State> {
       this.setState({ user, isUserLoaded: true });
     } catch (error) {
       this.setState({ isUserLoaded: false });
-      throw new Error(`User isn't loaded ${error}`);
     }
   }
 
