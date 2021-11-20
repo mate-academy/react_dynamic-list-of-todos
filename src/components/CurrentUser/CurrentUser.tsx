@@ -10,11 +10,13 @@ interface Props {
 
 interface State {
   user: User | null;
+  isUserLoaded: boolean;
 }
 
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
     user: null,
+    isUserLoaded: false,
   };
 
   componentDidMount() {
@@ -28,18 +30,25 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   async loadData() {
-    const user = await getUser(this.props.selectedUserId);
+    try {
+      const user = await getUser(this.props.selectedUserId);
 
-    this.setState({ user });
+      this.setState({
+        user,
+        isUserLoaded: true,
+      });
+    } catch (error) {
+      this.setState({ isUserLoaded: false });
+    }
   }
 
   render() {
-    const { user } = this.state;
+    const { user, isUserLoaded } = this.state;
     const { clearSelectedUser } = this.props;
 
     return (
       <div className="CurrentUser">
-        {user && (
+        {user && isUserLoaded ? (
           <>
             <h2 className="CurrentUser__title">
               <span>{`Selected user: ${user.id}`}</span>
@@ -57,7 +66,7 @@ export class CurrentUser extends React.Component<Props, State> {
               Clear
             </button>
           </>
-        )}
+        ) : 'User is not found'}
       </div>
     );
   }

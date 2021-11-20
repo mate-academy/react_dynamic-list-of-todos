@@ -46,13 +46,9 @@ class App extends React.Component<{}, State> {
     }));
   };
 
-  render() {
-    const {
-      todos,
-      selectedUserId,
-      search,
-      status,
-    } = this.state;
+  todosFilter = () => {
+    const { todos, status, search } = this.state;
+
     let filteredTodos = todos.filter(todo => todo.title.includes(search));
 
     if (status === 'active') {
@@ -62,6 +58,12 @@ class App extends React.Component<{}, State> {
     if (status === 'completed') {
       filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
+
+    return filteredTodos;
+  };
+
+  render() {
+    const { selectedUserId, search } = this.state;
 
     return (
       <div className="App">
@@ -91,7 +93,7 @@ class App extends React.Component<{}, State> {
           </select>
 
           <TodoList
-            todos={filteredTodos}
+            todos={this.todosFilter()}
             selectUser={this.selectUser}
           />
         </div>
