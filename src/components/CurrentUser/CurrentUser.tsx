@@ -1,12 +1,73 @@
 import React from 'react';
 import './CurrentUser.scss';
+import { getUser } from '../../api/api';
+import { User } from '../../types/types';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+interface Props {
+  selectedUserId: number;
+  clearSelectedUser: () => void;
+}
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+interface State {
+  user: User | null;
+  isUserLoaded: boolean;
+}
+
+export class CurrentUser extends React.Component<Props, State> {
+  state: State = {
+    user: null,
+    isUserLoaded: false,
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    try {
+      const user = await getUser(this.props.selectedUserId);
+
+      this.setState({
+        user,
+        isUserLoaded: true,
+      });
+    } catch (error) {
+      this.setState({ isUserLoaded: false });
+    }
+  }
+
+  render() {
+    const { user, isUserLoaded } = this.state;
+    const { clearSelectedUser } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        {user && isUserLoaded ? (
+          <>
+            <h2 className="CurrentUser__title">
+              <span>{`Selected user: ${user.id}`}</span>
+            </h2>
+
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+
+            <button
+              type="button"
+              className="button"
+              onClick={clearSelectedUser}
+            >
+              Clear
+            </button>
+          </>
+        ) : 'User is not found'}
+      </div>
+    );
+  }
+}
