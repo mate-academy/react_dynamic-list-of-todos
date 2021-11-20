@@ -26,4 +26,17 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &>button {
+    display: block;
+    background-color: #d34026;
+    color: white;
+    text-align: center;
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+    margin: 0 auto;
+    cursor: pointer;
+  }
 }
