@@ -1,43 +1,48 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
+interface Props {
+  todo: Todo[],
+  showUser: (id:number) => void,
+  selectedUserId:number | null;
+}
+
+export const TodoList: React.FC<Props> = ({ todo, showUser, selectedUserId }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {todo.map(({
+          id, title, completed, userId,
+        }) => (
+          <li
+            key={id}
+            className={`TodoList__item 
+            ${completed ? 'TodoList__item--checked' : 'TodoList__item--unchecked'}
+            `}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label htmlFor="qwe">
+              <input type="checkbox" checked={completed} readOnly />
+              <p>{title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <button
+              onClick={() => {
+                showUser(userId);
+              }}
+              className={`
+                TodoList__user-button
+                ${selectedUserId === userId ? 'TodoList__user-button--selected' : ''}
+                button
+              `}
+              type="button"
+            >
+              User&nbsp;
+              {userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
