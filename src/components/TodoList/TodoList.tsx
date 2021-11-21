@@ -56,6 +56,19 @@ export class TodoList extends React.Component<Props, State> {
     });
   };
 
+  onRandomize = () => {
+    const { todos } = this.state;
+    const suffeledTodos = [...todos];
+
+    for (let i = suffeledTodos.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [suffeledTodos[i], suffeledTodos[j]] = [suffeledTodos[j], suffeledTodos[i]];
+    }
+
+    this.setState({ todos: suffeledTodos });
+  };
+
   render() {
     const { setSelectedId } = this.props;
     const { query, status } = this.state;
@@ -69,6 +82,7 @@ export class TodoList extends React.Component<Props, State> {
           query={query}
           status={status}
           handleChange={this.handleChange}
+          onRandomize={this.onRandomize}
         />
 
         <div className="TodoList__list-container">

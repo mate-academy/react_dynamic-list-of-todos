@@ -4,6 +4,7 @@ import { Status } from '../../types/FilterStatus';
 type Props = {
   filterTodos: (status?: Status) => void;
   handleChange: (value: string, name: string) => void;
+  onRandomize: () => void;
   query: string,
   status: Status;
 };
@@ -15,6 +16,7 @@ export class TodoListHeader extends React.PureComponent<Props, {}> {
       status,
       filterTodos,
       handleChange,
+      onRandomize,
     } = this.props;
 
     return (
@@ -47,6 +49,14 @@ export class TodoListHeader extends React.PureComponent<Props, {}> {
             </option>
           ))}
         </select>
+
+        <button
+          type="button"
+          className="button"
+          onClick={onRandomize}
+        >
+          Randomize
+        </button>
       </div>
     );
   }
