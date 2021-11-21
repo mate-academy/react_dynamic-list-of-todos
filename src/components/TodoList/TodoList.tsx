@@ -1,13 +1,9 @@
 import React from 'react';
 import { API } from '../../utils/api';
 import './TodoList.scss';
+import { TodoListHeader } from './TodoListHeader';
 import { TodoListItem } from './TodoListItem';
-
-enum Status {
-  all = 'All',
-  completed = 'Completed',
-  notCompleted = 'Not completed',
-}
+import { Status } from '../../types/FilterStatus';
 
 type Props = {
   setSelectedId: (userId: number) => void;
@@ -15,14 +11,14 @@ type Props = {
 
 type State = {
   todos: Todo[];
-  queryFieldSearch: string;
+  query: string;
   status: Status;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     todos: [],
-    queryFieldSearch: '',
+    query: '',
     status: Status.all,
   };
 
@@ -41,7 +37,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   filterTodos = (status = Status.all) => {
-    const query = this.state.queryFieldSearch.toLowerCase();
+    const query = this.state.query.toLowerCase();
 
     return this.state.todos.filter(todo => {
       const todoTitle = todo.title.toLowerCase();
@@ -62,50 +58,18 @@ export class TodoList extends React.Component<Props, State> {
 
   render() {
     const { setSelectedId } = this.props;
-    const { queryFieldSearch, status } = this.state;
+    const { query, status } = this.state;
 
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <div className="TodoList__header">
-          <input
-            name="queryFieldSearch"
-            placeholder="filter"
-            className="input"
-            value={queryFieldSearch}
-            onChange={(e) => {
-              this.handleChange(e.target.value, e.target.name);
-              this.filterTodos();
-            }}
-          />
-
-          <select
-            className="select"
-            name="status"
-            value={status}
-            onChange={(e) => {
-              this.handleChange(e.target.value, e.target.name);
-            }}
-          >
-            {Object.entries(Status).map(valueStatus => (
-              <option
-                key={valueStatus[0]}
-                value={valueStatus[1]}
-              >
-                {valueStatus[1]}
-              </option>
-            ))}
-          </select>
-
-          <button
-            type="button"
-            onClick={() => {
-            }}
-          >
-            Randomize
-          </button>
-        </div>
+        <TodoListHeader
+          filterTodos={this.filterTodos}
+          query={query}
+          status={status}
+          handleChange={this.handleChange}
+        />
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
