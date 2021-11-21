@@ -26,4 +26,10 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__error-message {
+    text-align: center;
+    color: #ff2400;
+    font-size: 24px;
+  }
 }
