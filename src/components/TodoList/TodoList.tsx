@@ -1,4 +1,5 @@
 import React from 'react';
+import { API } from '../../utils/api';
 import './TodoList.scss';
 import { TodoListItem } from './TodoListItem';
 
@@ -9,25 +10,27 @@ enum Status {
 }
 
 type Props = {
-  todos: Todo[];
   setSelectedId: (userId: number) => void;
 };
 
 type State = {
+  todos: Todo[];
   queryFieldSearch: string;
   status: Status;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
+    todos: [],
     queryFieldSearch: '',
     status: Status.all,
   };
 
-  componentDidUpdate(_prevProps: Props, prevState: State) {
-    if (prevState.status !== this.state.status) {
-      this.filterShowStatus(this.state.status);
-    }
+  componentDidMount() {
+    API.getTodos()
+      .then(todos => {
+        this.setState({ todos });
+      });
   }
 
   handleChange = (value: string, name: string) => {
@@ -37,26 +40,24 @@ export class TodoList extends React.Component<Props, State> {
     }));
   };
 
-  filterTodos = () => {
+  filterTodos = (status = Status.all) => {
     const query = this.state.queryFieldSearch.toLowerCase();
 
-    return this.props.todos.filter(todo => {
-      return todo.title.toLowerCase().includes(query);
+    return this.state.todos.filter(todo => {
+      const todoTitle = todo.title.toLowerCase();
+
+      switch (status) {
+        case Status.completed:
+          return todoTitle.includes(query) && todo.completed;
+
+        case Status.notCompleted:
+          return todoTitle.includes(query) && !todo.completed;
+
+        case Status.all:
+        default:
+          return todoTitle.includes(query);
+      }
     });
-  };
-
-  filterShowStatus = (status = '') => {
-    switch (status) {
-      case Status.completed:
-        return this.filterTodos().filter(todo => todo.completed);
-
-      case Status.notCompleted:
-        return this.filterTodos().filter(todo => !todo.completed);
-
-      case Status.all:
-      default:
-        return this.filterTodos();
-    }
   };
 
   render() {
@@ -96,11 +97,19 @@ export class TodoList extends React.Component<Props, State> {
               </option>
             ))}
           </select>
+
+          <button
+            type="button"
+            onClick={() => {
+            }}
+          >
+            Randomize
+          </button>
         </div>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {this.filterShowStatus(status).map(todo => (
+            {this.filterTodos(status).map(todo => (
               <TodoListItem
                 key={todo.id}
                 todo={todo}
