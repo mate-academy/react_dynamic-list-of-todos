@@ -1,6 +1,10 @@
 .TodoList {
   width: 100%;
 
+  &__user-button {
+    background-color: #b8c2b4;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
