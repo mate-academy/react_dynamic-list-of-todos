@@ -95,8 +95,8 @@ export class TodoList extends React.Component<Props, State> {
               <li
                 key={todo.id}
                 className={classNames('TodoList__item',
-                  { 'TodoList__item--unchecked': todo.completed === false },
-                  { 'TodoList__item--checked': todo.completed === true })}
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed })}
               >
                 <>{ /* eslint-disable-next-line jsx-a11y/label-has-associated-control */}</>
                 <label>
