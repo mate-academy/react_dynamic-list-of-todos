@@ -27,16 +27,6 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: userId });
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement
-  | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-
-    this.setState(state => ({
-      ...state,
-      [name]: value,
-    }));
-  };
-
   handleClearUser = () => {
     this.setState({ selectedUserId: 0 });
   };
