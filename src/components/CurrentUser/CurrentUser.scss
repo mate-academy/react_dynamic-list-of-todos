@@ -3,7 +3,7 @@
     font-size: 1rem;
     color: white;
 
-    span {
+    &--span {
       background-color: #4d457b;
       padding: 5px;
       border-radius: 5px;
@@ -25,5 +25,13 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+  }
+
+  &__button {
+    background-color: #4d457b;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: white;
   }
 }
