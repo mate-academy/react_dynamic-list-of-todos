@@ -13,8 +13,8 @@ interface State {
 }
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {} as User,
+  state: State = {
+    user: null,
     errorMessage: false,
   };
 
