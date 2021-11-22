@@ -34,16 +34,14 @@ export class TodoList extends React.Component<Props, State> {
   getSortedTodos = (todos: Todo[]) => {
     const { sortBy } = this.state;
 
-    if (sortBy !== 'all') {
-      switch (sortBy) {
-        case 'active':
-          return todos.filter(todo => todo.completed === false);
-        default:
-          return todos.filter(todo => todo.completed === true);
-      }
+    switch (sortBy) {
+      case 'active':
+        return todos.filter(todo => todo.completed === false);
+      case 'all':
+        return todos;
+      default:
+        return todos.filter(todo => todo.completed === true);
     }
-
-    return todos;
   };
 
   getSearchedTodos = (todos: Todo[]) => {

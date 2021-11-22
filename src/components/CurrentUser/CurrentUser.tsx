@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUser } from '../api/api';
+import { getUserById } from '../api/api';
 import './CurrentUser.scss';
 
 type Props = {
@@ -33,17 +33,17 @@ export class CurrentUser extends React.Component<Props, State> {
     if (this.props.userId !== prevProps.userId) {
       this.loadUsers();
     }
-  };
+  }
 
   loadUsers = async () => {
     try {
-      const user = await getUser(this.props.userId);
+      const user = await getUserById(this.props.userId);
 
       this.setState({ user, userError: false });
     } catch {
       this.setState({ userError: true });
     }
-  }
+  };
 
   render() {
     return (
@@ -63,9 +63,7 @@ export class CurrentUser extends React.Component<Props, State> {
           <button
             type="button"
             className="button"
-            onClick={() => {
-              this.props.onClear();
-            }}
+            onClick={this.props.onClear}
           >
             clear
           </button>

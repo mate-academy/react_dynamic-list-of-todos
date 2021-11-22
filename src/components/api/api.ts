@@ -5,7 +5,7 @@ export const getTodos = async (): Promise<Todo[]> => {
     .then(result => result.json());
 };
 
-export const getUser = async (userId: number): Promise<User> => {
+export const getUserById = async (userId: number): Promise<User> => {
   return fetch(`${API_URL}/users/${userId}`)
     .then(result => result.json());
 };
