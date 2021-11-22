@@ -35,7 +35,7 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             todos={this.state.todos}
-            getId={this.selectUser}
+            selectUser={this.selectUser}
             selectedUserId={this.state.selectedUserId}
           />
         </div>

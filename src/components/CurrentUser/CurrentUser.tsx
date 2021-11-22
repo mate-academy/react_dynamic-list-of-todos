@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUser } from '../../api/api';
+import { getUserById } from '../../api/api';
 import { User } from '../../types/type';
 import './CurrentUser.scss';
 
@@ -36,7 +36,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
   async loadUser() {
     try {
-      const user = await getUser(this.props.id);
+      const user = await getUserById(this.props.id);
 
       this.setState({ user, isUserLoaded: true });
     } catch (error) {

@@ -5,42 +5,42 @@ import { Todo } from '../../types/type';
 
 interface Props {
   todos: Todo[];
-  getId: (id: number) => void;
+  selectUser: (id: number) => void;
   selectedUserId: number;
 }
 
 interface State {
   title: string;
-  select: string;
+  status: string;
 }
 
 export class TodoList extends React.Component<Props, State> {
   state = {
     title: '',
-    select: 'all',
+    status: 'all',
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value } as Pick<State, keyof State>);
+    this.setState({ [name]: value } as unknown as Pick<State, keyof State>);
   };
 
   todosFilter() {
-    const { title, select } = this.state;
+    const { title, status } = this.state;
     const query = title.toLowerCase();
 
-    const filtered = this.props.todos.filter(todo => todo.title.toLowerCase().includes(query));
+    const todosfiltered = this.props.todos.filter(todo => todo.title.toLowerCase().includes(query));
 
-    if (select === 'active') {
-      return filtered.filter(todo => !todo.completed);
+    if (status === 'active') {
+      return todosfiltered.filter(todo => !todo.completed);
     }
 
-    if (select === 'completed') {
-      return filtered.filter(todo => todo.completed);
+    if (status === 'completed') {
+      return todosfiltered.filter(todo => todo.completed);
     }
 
-    return filtered;
+    return todosfiltered;
   }
 
   render() {
@@ -61,9 +61,9 @@ export class TodoList extends React.Component<Props, State> {
             onChange={this.handleChange}
           />
           <select
-            name="select"
+            name="status"
             className="form__select"
-            value={this.state.select}
+            value={this.state.status}
             onChange={this.handleChange}
           >
             <option
@@ -118,7 +118,7 @@ export class TodoList extends React.Component<Props, State> {
                       { 'TodoList__user-button--selected': isActive },
                     )}
                     type="button"
-                    onClick={() => this.props.getId(todo.userId)}
+                    onClick={() => this.props.selectUser(todo.userId)}
                   >
                     {`User #${todo.userId}`}
                   </button>

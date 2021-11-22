@@ -17,13 +17,13 @@ export async function getTodos(): Promise<Todo[]> {
   throw new Error('Failed to load todos');
 }
 
-export async function getUser(id: number): Promise<User> {
+export async function getUserById(id: number): Promise<User> {
   const response = await fetch(`${API_USERS_URL}/${id}`);
 
   if (response.ok) {
-    const users = await response.json();
+    const user = await response.json();
 
-    return users;
+    return user;
   }
 
   throw new Error('Failed to load users');
