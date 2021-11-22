@@ -8,16 +8,12 @@ import { getTodos } from './api/api';
 interface State {
   selectedUserId: number;
   todos: Todo[],
-  searchQuery: string,
-  todoStatus: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
-    searchQuery: '',
-    todoStatus: '',
   };
 
   async componentDidMount() {
@@ -25,43 +21,6 @@ class App extends React.Component<{}, State> {
 
     this.setState({ todos });
   }
-
-  handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-
-    this.setState(state => ({
-      ...state,
-      [name]: value,
-    }));
-  };
-
-  filterTodos = () => {
-    const { todos, searchQuery, todoStatus } = this.state;
-
-    let filtredTodos = todos;
-
-    if (searchQuery) {
-      filtredTodos = filtredTodos.filter(({ title }) => title
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()));
-    }
-
-    if (todoStatus) {
-      filtredTodos = filtredTodos.filter(({ completed }) => {
-        if (todoStatus === 'completed') {
-          return completed;
-        }
-
-        if (todoStatus === 'not completed') {
-          return !completed;
-        }
-
-        return true;
-      });
-    }
-
-    return filtredTodos;
-  };
 
   selectUser = (userId: number) => {
     this.setState({ selectedUserId: userId });
@@ -89,8 +48,6 @@ class App extends React.Component<{}, State> {
     const {
       selectedUserId,
       todos,
-      searchQuery,
-      todoStatus,
     } = this.state;
 
     return (
@@ -98,10 +55,7 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           {!!todos.length && (
             <TodoList
-              todos={this.filterTodos()}
-              searchQuery={searchQuery}
-              todoStatus={todoStatus}
-              onSearchChange={this.handleChange}
+              todos={todos}
               onSelectUser={this.selectUser}
               onRandomize={this.randomizeTodosOrder}
             />
