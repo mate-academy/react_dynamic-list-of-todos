@@ -29,3 +29,19 @@
     color: #ff3626;
   }
 }
+
+.form {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  &__input {
+    padding: 5px;
+    width: 150px;
+  }
+
+  &__select {
+    padding: 5px;
+    width: 150px;
+  }
+}
