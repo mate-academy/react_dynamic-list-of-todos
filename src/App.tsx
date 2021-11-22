@@ -8,16 +8,13 @@ import { getAllTodos } from './api/api';
 interface State {
   selectedUserId: number;
   todos: Todo[],
-  title: string,
-  completed: string,
+
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
-    title: '',
-    completed: 'not selected',
   };
 
   async componentDidMount() {
@@ -44,34 +41,11 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
-  prepareTodos = () => {
-    const { todos, title, completed } = this.state;
-
-    return todos.filter(todo => {
-      if (title) {
-        return todo.title.toLowerCase().includes(title.toLowerCase());
-      }
-
-      if (completed === 'completed') {
-        return todo.completed;
-      }
-
-      if (completed === 'not completed') {
-        return !todo.completed;
-      }
-
-      return todo;
-    });
-  };
-
   render() {
     const {
       selectedUserId,
-      title,
-      completed,
+      todos,
     } = this.state;
-
-    const preparedTodos = this.prepareTodos();
 
     return (
       <div className="App">
@@ -79,11 +53,8 @@ class App extends React.Component<{}, State> {
           {this.state.todos.length > 0
             && (
               <TodoList
-                title={title}
-                completed={completed}
+                todos={todos}
                 handleUserSelect={this.onUserSelect}
-                todos={preparedTodos}
-                onInputChange={this.handleInputChange}
               />
             )}
         </div>
