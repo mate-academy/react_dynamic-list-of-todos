@@ -79,7 +79,7 @@ export class CurrentUser extends React.Component<Props, State> {
         </div>
       )
         : (
-          `User id #${this.state.user.id} not found`
+          `User id #${this.props.userId} not found`
         )
     );
   }
