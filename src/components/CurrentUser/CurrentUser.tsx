@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUser } from '../../api';
+import { getUserById } from '../../api';
 import './CurrentUser.scss';
 
 interface Props {
@@ -7,26 +7,26 @@ interface Props {
 }
 
 interface State {
-  user: User,
+  user: User | null,
 }
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {} as User,
+  state: State = {
+    user: null,
   };
 
   componentDidMount() {
-    this.loadUserDate();
+    this.loadUser();
   }
 
   componentDidUpdate(prevProps: { userId: number; }) {
     if (prevProps.userId !== this.props.userId) {
-      this.loadUserDate();
+      this.loadUser();
     }
   }
 
-  loadUserDate() {
-    getUser(this.props.userId)
+  loadUser() {
+    getUserById(this.props.userId)
       .then(user => this.setState({ user }));
   }
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -8,16 +8,12 @@ import { getTodos } from './api';
 interface State {
   selectedUserId: number;
   todos: Todo[],
-  title: string,
-  select: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
-    title: '',
-    select: 'all',
   };
 
   async componentDidMount() {
@@ -38,48 +34,10 @@ class App extends React.Component<{}, State> {
     });
   };
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState(prevState => ({
-      ...prevState,
-      title: event.target.value,
-    }));
-  };
-
-  handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    this.setState(prevState => ({
-      ...prevState,
-      select: event.target.value,
-    }));
-  };
-
-  filterTodos = (a: Todo[]) => {
-    return a.filter(todo => (
-      todo.title.toLowerCase().includes(this.state.title.toLowerCase())
-    ));
-  };
-
-  readyTodos = () => {
-    const { select, todos } = this.state;
-
-    switch (select) {
-      case 'all':
-        return this.filterTodos(todos);
-
-      case 'completed':
-        return this.filterTodos(todos.filter(todo => todo.completed));
-
-      case 'active':
-        return this.filterTodos(todos.filter(todo => !todo.completed));
-
-      default:
-        throw new Error('Error');
-    }
-  };
-
   render() {
-    const { selectedUserId, title, todos } = this.state;
+    const { selectedUserId, todos } = this.state;
 
-    if (!todos) {
+    if (todos.length === 0) {
       return '';
     }
 
@@ -87,12 +45,9 @@ class App extends React.Component<{}, State> {
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={this.readyTodos()}
+            todos={todos}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
-            title={title}
-            handleInputChange={this.handleInputChange}
-            handleSelectChange={this.handleSelectChange}
           />
         </div>
 
