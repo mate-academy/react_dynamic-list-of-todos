@@ -19,6 +19,15 @@ export class TodoList extends React.Component<Props, State> {
     selectFilterValue: 'all',
   };
 
+  filterHandler = (event: FilterEvent) => {
+    const { name, value } = event.target;
+
+    this.setState(state => ({
+      ...state,
+      [name]: value,
+    }));
+  };
+
   compareText = (title: string, inputFilterValue: string) => {
     return title.toLowerCase().includes(inputFilterValue.toLowerCase());
   };
@@ -55,26 +64,18 @@ export class TodoList extends React.Component<Props, State> {
 
         <div className="TodoList__list-container">
           <input
-            name="filter-by-title"
+            name="inputFilterValue"
             type="text"
             placeholder="Filter by task title"
             value={inputFilterValue}
-            onChange={(event) => {
-              this.setState({
-                inputFilterValue: event.target.value,
-              });
-            }}
+            onChange={this.filterHandler}
           />
 
           <select
-            name="select-filter"
+            name="selectFilterValue"
             id="select-filter"
             value={selectFilterValue}
-            onChange={(event) => {
-              this.setState({
-                selectFilterValue: event.target.value,
-              });
-            }}
+            onChange={this.filterHandler}
           >
             <option value="all">
               Select all

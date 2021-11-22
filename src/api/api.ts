@@ -7,7 +7,7 @@ export const getTodos = async () => {
   return todos;
 };
 
-export const getUser = async (userId: number) => {
+export const getUserById = async (userId: number) => {
   const response = await fetch(`${BASE_URL}/users/${userId}`);
   const user = await response.json();
 

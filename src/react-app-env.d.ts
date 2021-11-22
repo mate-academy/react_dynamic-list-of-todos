@@ -19,3 +19,5 @@ interface User {
   phone: string | null,
   website: string | null,
 }
+
+type FilterEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;

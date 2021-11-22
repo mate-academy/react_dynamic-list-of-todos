@@ -1,6 +1,6 @@
 import React from 'react';
 import './CurrentUser.scss';
-import { getUser } from '../../api/api';
+import { getUserById } from '../../api/api';
 
 interface Props {
   userId: number,
@@ -8,13 +8,13 @@ interface Props {
 }
 
 interface State {
-  user: User,
+  user: User | null,
   userLoadError: boolean,
 }
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {} as User,
+  state: State = {
+    user: null,
     userLoadError: false,
   };
 
@@ -30,7 +30,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
   getCurrentUser = async () => {
     try {
-      const currentUser = await getUser(this.props.userId);
+      const currentUser = await getUserById(this.props.userId);
 
       this.setState({
         user: currentUser,
@@ -38,27 +38,24 @@ export class CurrentUser extends React.Component<Props, State> {
       });
     } catch {
       this.setState({
+        user: null,
         userLoadError: true,
       });
     }
   };
 
   render() {
-    const {
-      id,
-      name,
-      email,
-      phone,
-    } = this.state.user;
+    const { user, userLoadError } = this.state;
 
     return (
-      !this.state.userLoadError ? (
+      (user && !userLoadError) ? (
         <div className="CurrentUser">
-          <h2 className="CurrentUser__title"><span>{`Selected user: ${id}`}</span></h2>
-          <h3 className="CurrentUser__name">{name}</h3>
-          <p className="CurrentUser__email">{email}</p>
-          <p className="CurrentUser__phone">{phone}</p>
+          <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
           <button
+            className="button"
             type="button"
             onClick={this.props.onClear}
           >
