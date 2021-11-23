@@ -18,12 +18,19 @@ export class TodoList extends React.Component<Props, State> {
     filterBy: 'All',
   };
 
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     this.setState({
       findTitle: value,
     });
+  };
+
+  handleChangeSelect = (event:ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    this.filterTodo();
+    this.setState({ filterBy: value });
   };
 
   filterTodo = () => {
@@ -48,12 +55,9 @@ export class TodoList extends React.Component<Props, State> {
 
   render() {
     const { findTitle } = this.state;
-    const { todos, onFind } = this.props;
+    const { onFind } = this.props;
 
-    const newTodos = this.filterTodo();
-
-    // eslint-disable-next-line no-console
-    console.log('Todos', todos);
+    const filteredTodos = this.filterTodo();
 
     return (
       <>
@@ -66,17 +70,14 @@ export class TodoList extends React.Component<Props, State> {
               value={findTitle}
               type="text"
               onChange={(event) => {
-                this.handleChange(event);
+                this.handleChangeInput(event);
               }}
             />
 
             <select
               name="filterTodos"
               onChange={(event) => {
-                const { value } = event.target;
-
-                this.filterTodo();
-                this.setState({ filterBy: value });
+                this.handleChangeSelect(event);
               }}
             >
               <option value="All">All</option>
@@ -84,7 +85,7 @@ export class TodoList extends React.Component<Props, State> {
               <option value="Completed">Completed</option>
             </select>
           </form>
-          { newTodos.map((todo:Todo) => (
+          { filteredTodos.map((todo:Todo) => (
             <div key={todo.id} className="TodoList__list-container">
               <ul className="TodoList__list">
                 <li
