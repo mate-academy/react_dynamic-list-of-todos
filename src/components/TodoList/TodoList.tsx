@@ -91,9 +91,9 @@ export class TodoList extends React.Component<Props, State> {
                 key={todo.id}
                 className={classNames('TodoList__item', { TodoList__item__unchecked: todo.completed === false }, { TodoList__item__checked: todo.completed === true })}
               >
-                { /*eslint-disable*/
-                  <label>
-                    <input type="checkbox" readOnly />
+                {
+                  <label htmlFor={'id'}>
+                    <input id={'id'} type="checkbox" readOnly />
                     <p>{todo.title}</p>
                   </label>
                 }

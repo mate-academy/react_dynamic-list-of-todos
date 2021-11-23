@@ -74,4 +74,3 @@ export class CurrentUser extends React.Component<Props, State> {
     );
   }
 }
-// `User with id #${this.props.userId} doesn't exist`

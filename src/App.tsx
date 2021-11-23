@@ -22,7 +22,7 @@ class App extends React.Component<{}, State> {
     this.setState({ todos });
   }
 
-  getsChecked = (userId: number) => {
+  selectUser = (userId: number) => {
     this.setState({ selectedUserId: userId });
   };
 
@@ -40,7 +40,7 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             todos={this.state.todos}
-            onChecked={this.getsChecked}
+            onChecked={this.selectUser}
             selectedUserId={selectedUserId}
           />
         </div>
