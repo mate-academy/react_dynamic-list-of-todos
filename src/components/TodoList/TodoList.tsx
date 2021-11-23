@@ -1,44 +1,110 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { Todo } from '../../types/Todo';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface Props {
+  todos: Todo[],
+  buttonHandler: (userId: number) => void,
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+interface State {
+  query: string,
+  statusSearch: string,
+}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+export class TodoList extends React.PureComponent<Props, State> {
+  state = {
+    query: '',
+    statusSearch: 'all',
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  queryHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ query: event.target.value });
+  };
+
+  selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ statusSearch: event.target.value });
+  };
+
+  todoFinder = () => {
+    const { todos } = this.props;
+    const { query, statusSearch } = this.state;
+
+    return todos
+      .filter(todo => todo.title.toLowerCase()
+        .includes(query.toLowerCase()))
+      .filter(todo => {
+        switch (statusSearch) {
+          case 'completed':
+            return todo.completed;
+
+          case 'active':
+            return todo.completed === false;
+
+          default:
+            return todo;
+        }
+      });
+  };
+
+  render() {
+    const { buttonHandler } = this.props;
+    const { query } = this.state;
+    const sortedTodos = this.todoFinder();
+
+    return (
+      <div className="TodoList">
+        <input
+          value={query}
+          type="text"
+          placeholder="Title..."
+          onChange={this.queryHandler}
+        />
+        <select onChange={this.selectHandler}>
+          <option value="all">
+            All
+          </option>
+          <option value="completed">
+            Completed
+          </option>
+          <option value="active">
+            Still in progress
+          </option>
+        </select>
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {
+              sortedTodos.map((todo) => (
+                <li
+                  className={
+                    todo.completed
+                      ? 'TodoList__item TodoList__item--checked'
+                      : 'TodoList__item TodoList__item--unchecked'
+                  }
+                  key={todo.id}
+                >
+                  <input type="checkbox" readOnly />
+                  <p>{todo.title}</p>
+
+                  <button
+                    className="
+                  TodoList__user-button
+                  button
+                "
+                    type="button"
+                    onClick={() => buttonHandler(todo.userId)}
+                  >
+                    {`User ${todo.userId}`}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
