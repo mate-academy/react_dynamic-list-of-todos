@@ -17,7 +17,7 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     todos: [],
     filterByTitle: '',
-    selectedStatus: 'all',
+    selectedStatus: '',
   };
 
   componentDidMount() {

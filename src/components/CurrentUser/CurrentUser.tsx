@@ -5,16 +5,18 @@ import { getUser } from '../../api';
 
 type Props = {
   userId: number;
-  clearUser: () => void
+  clearUser: () => void;
 };
 
 interface State {
   user: User | null;
+  isUserDataExist: boolean;
 }
 
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
     user: null,
+    isUserDataExist: true,
   };
 
   componentDidMount() {
@@ -27,27 +29,41 @@ export class CurrentUser extends React.Component<Props, State> {
     }
   }
 
-  loadUserInfo() {
-    getUser(this.props.userId).then((user) => {
-      this.setState({ user });
-    });
+  async loadUserInfo() {
+    try {
+      const user = await getUser(this.props.userId);
+
+      this.setState({ user, isUserDataExist: true });
+    } catch (error) {
+      this.setState({ isUserDataExist: false });
+    }
   }
 
   render() {
-    const { user } = this.state;
+    const { user, isUserDataExist } = this.state;
 
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${user?.id}`}</span>
-        </h2>
+        {user && isUserDataExist ? (
+          <>
+            <h2 className="CurrentUser__title">
+              <span>{`Selected user: ${user?.id}`}</span>
+            </h2>
 
-        <h3 className="CurrentUser__name">{user?.name}</h3>
-        <p className="CurrentUser__email">{user?.email}</p>
-        <p className="CurrentUser__phone">{user?.phone}</p>
-        <button type="button" className="button" onClick={this.props.clearUser}>
-          Clear
-        </button>
+            <h3 className="CurrentUser__name">{user?.name}</h3>
+            <p className="CurrentUser__email">{user?.email}</p>
+            <p className="CurrentUser__phone">{user?.phone}</p>
+            <button
+              type="button"
+              className="button"
+              onClick={this.props.clearUser}
+            >
+              Clear
+            </button>
+          </>
+        ) : (
+          <p>User is not exist</p>
+        )}
       </div>
     );
   }
