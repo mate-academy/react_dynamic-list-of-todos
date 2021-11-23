@@ -1,44 +1,126 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface State {
+  findTitle: string;
+  filterBy: string;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface Props {
+  todos: Todo[]
+  onFind:(userId:number) => void
+}
 
-          <button
-            className="
+export class TodoList extends React.Component<Props, State> {
+  state = {
+    findTitle: '',
+    filterBy: 'All',
+  };
+
+  handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    this.setState({
+      findTitle: value,
+    });
+  };
+
+  handleChangeSelect = (event:ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    this.filterTodo();
+    this.setState({ filterBy: value });
+  };
+
+  filterTodo = () => {
+    const { findTitle, filterBy } = this.state;
+    const { todos } = this.props;
+
+    const newTodos = todos.filter(todo => {
+      switch (filterBy) {
+        case 'All':
+          return (todo.title.toLocaleLowerCase()).includes(findTitle.toLowerCase());
+        case 'Active':
+          return (todo.completed);
+        case 'Completed':
+          return (!todo.completed);
+        default:
+          return (todo.title.toLocaleLowerCase()).includes(findTitle.toLowerCase());
+      }
+    });
+
+    return newTodos;
+  };
+
+  render() {
+    const { findTitle } = this.state;
+    const { onFind } = this.props;
+
+    const filteredTodos = this.filterTodo();
+
+    return (
+      <>
+        <div className="TodoList">
+          <h2>Todos:</h2>
+          Search Todo:
+          {' '}
+          <form action="">
+            <input
+              value={findTitle}
+              type="text"
+              onChange={(event) => {
+                this.handleChangeInput(event);
+              }}
+            />
+
+            <select
+              name="filterTodos"
+              onChange={(event) => {
+                this.handleChangeSelect(event);
+              }}
+            >
+              <option value="All">All</option>
+              <option value="Active">Active</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </form>
+          { filteredTodos.map((todo:Todo) => (
+            <div key={todo.id} className="TodoList__list-container">
+              <ul className="TodoList__list">
+                <li
+                  className={classNames(
+                    'TodoList__item',
+                    {
+                      'TodoList__item--unchecked': !todo.completed,
+                      'TodoList__item--checked': todo.completed,
+                    },
+                  )}
+                >
+                  <label htmlFor="123123">
+                    <input id="123123" type="checkbox" readOnly />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
+                    className="
               TodoList__user-button
               TodoList__user-button--selected
               button
             "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                    type="button"
+                    value=""
+                    onClick={() => onFind(todo.userId)}
+                  >
+                    User&nbsp;#
+                    {todo.userId}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
+}
