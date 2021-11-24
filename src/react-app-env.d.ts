@@ -6,7 +6,7 @@ export interface Todo {
   updatedAt: string,
   userId: number,
   title: string,
-  completed: boolean,
+  completed: boolean | null,
 }
 
 export interface User {

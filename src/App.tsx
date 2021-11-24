@@ -10,6 +10,7 @@ interface State {
   selectedUserId: number,
   todos: Todo[] | [],
   selectedUser: User | null,
+  errorGettingUser: boolean,
 }
 
 class App extends React.Component<{}, State> {
@@ -17,6 +18,7 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     todos: [],
     selectedUser: null,
+    errorGettingUser: false,
   };
 
   componentDidMount() {
@@ -28,21 +30,38 @@ class App extends React.Component<{}, State> {
     }
   }
 
-  componentDidUpdate() {
-    const userId = this.state.selectedUserId;
+  componentDidUpdate = () => {
+    const currentUserId = this.state.selectedUser && this.state.selectedUser.id;
+    const { errorGettingUser, selectedUserId } = this.state;
 
-    getUser(userId)
-      .then(user => {
-        this.setState({ selectedUser: user });
-      });
-  }
+    if (selectedUserId && selectedUserId !== currentUserId) {
+      getUser(selectedUserId)
+        .then(selectedUser => {
+          this.setState({ selectedUser, errorGettingUser: false });
+        })
+        .catch(() => {
+          if (!errorGettingUser) {
+            this.setState({ selectedUser: null, errorGettingUser: true });
+          }
+        });
+    }
+  };
 
-  deselectCurrentUser() {
-    this.setState({ selectedUser: null });
-  }
+  deselectCurrentUser = () => {
+    this.setState({
+      selectedUser: null,
+      selectedUserId: 0,
+    });
+  };
 
   render() {
-    const { selectedUserId, todos, selectedUser } = this.state;
+    const {
+      selectedUserId,
+      todos,
+      selectedUser,
+      errorGettingUser,
+    } = this.state;
+    const message = errorGettingUser ? 'Opps, something went wrong :)' : 'No user selected';
 
     return (
       <div className="App">
@@ -70,7 +89,7 @@ class App extends React.Component<{}, State> {
                   user={selectedUser}
                 />
               </>
-            ) : 'No user selected'}
+            ) : message}
           </div>
         </div>
       </div>

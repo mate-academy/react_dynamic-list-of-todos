@@ -31,14 +31,16 @@ export class TodoList extends React.Component<Props, State> {
     return args.some(todo => todo.toLowerCase().includes(this.state.query.toLowerCase()));
   };
 
-  checkTodosCompleted = (completedStatus: boolean, status: string) => {
+  checkTodosCompleted = (completedStatus: boolean | null, status: string) => {
+    const statusToCheck = completedStatus || false;
+
     switch (status) {
       case 'active':
-        return completedStatus === false;
+        return statusToCheck === false;
       case 'completed':
-        return completedStatus === true;
+        return statusToCheck === true;
       default:
-        return completedStatus === true || completedStatus === false;
+        return statusToCheck === true || statusToCheck === false;
     }
   };
 
@@ -88,51 +90,55 @@ export class TodoList extends React.Component<Props, State> {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {visibleTodos.map(todo => (
-              <li
-                key={todo.id}
-                className="TodoList__item TodoList__item--unchecked"
-              >
-                <label htmlFor="check1">
-                  <input
-                    type="checkbox"
-                    id="check1"
-                    checked={todo.completed}
-                    readOnly
-                  />
-                  <p>{todo.title}</p>
-                </label>
+            {visibleTodos.map(todo => {
+              const isChecked = todo.completed || false;
 
-                {(todo.userId === selectedIdUser) ? (
-                  <button
-                    className="
-                  TodoList__user-button
-                  button
-                "
-                    type="button"
-                    onClick={() => {
-                      selectUserId(0);
-                    }}
-                  >
-                    {todo.userId}
-                  </button>
-                ) : (
-                  <button
-                    className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
-                    type="button"
-                    onClick={() => {
-                      selectUserId(todo.userId);
-                    }}
-                  >
-                    {todo.userId}
-                  </button>
-                )}
-              </li>
-            ))}
+              return (
+                <li
+                  key={todo.id}
+                  className="TodoList__item TodoList__item--unchecked"
+                >
+                  <label htmlFor="check1">
+                    <input
+                      type="checkbox"
+                      id="check1"
+                      checked={isChecked}
+                      readOnly
+                    />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  {(todo.userId === selectedIdUser) ? (
+                    <button
+                      className="
+                    TodoList__user-button--selected
+                    TodoList__user-button
+                    button
+                  "
+                      type="button"
+                      onClick={() => {
+                        selectUserId(0);
+                      }}
+                    >
+                      {todo.userId}
+                    </button>
+                  ) : (
+                    <button
+                      className="
+                    TodoList__user-button
+                    button
+                  "
+                      type="button"
+                      onClick={() => {
+                        selectUserId(todo.userId);
+                      }}
+                    >
+                      {todo.userId}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
