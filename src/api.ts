@@ -8,9 +8,6 @@ const request = (url: string) => {
       }
 
       return response.json();
-    })
-    .catch(error => {
-      throw new Error(`${error.status} - ${error.message}`);
     });
 };
 
