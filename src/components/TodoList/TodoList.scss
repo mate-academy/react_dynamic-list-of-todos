@@ -28,4 +28,26 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__field {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}
+
+.label {
+  &__text {
+    margin-right: 10px;
+  }
+}
+
+.input {
+  padding: 5px;
+  width: 55%;
+}
+
+.select {
+  margin-top: 10px;
+  padding: 5px;
 }
