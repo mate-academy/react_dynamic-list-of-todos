@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Requirement } from '../../enums/Requirement';
+import { Status } from '../../enums/Status';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import './TodoList.scss';
@@ -13,13 +13,13 @@ type Props = {
 
 type State = {
   titleQuery: string;
-  todoRequirement: Requirement;
+  selectedStatus: Status;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     titleQuery: '',
-    todoRequirement: Requirement.ALL,
+    selectedStatus: Status.ALL,
   };
 
   handleChange = (
@@ -36,12 +36,12 @@ export class TodoList extends React.Component<Props, State> {
     const { todos } = this.props;
     const { titleQuery } = this.state;
 
-    const meetRequirement = (todo: Todo) => {
-      switch (this.state.todoRequirement) {
-        case Requirement.ACTIVE:
+    const hasCorrectStatus = (todo: Todo) => {
+      switch (this.state.selectedStatus) {
+        case Status.ACTIVE:
           return !todo.completed;
 
-        case Requirement.COMPLETED:
+        case Status.COMPLETED:
           return todo.completed;
 
         default:
@@ -50,13 +50,13 @@ export class TodoList extends React.Component<Props, State> {
     };
 
     return todos.filter(
-      (todo) => todo.title.includes(titleQuery) && meetRequirement(todo),
+      (todo) => todo.title.includes(titleQuery) && hasCorrectStatus(todo),
     );
   };
 
   render() {
     const { todos, selectedUserId, onSelect } = this.props;
-    const { titleQuery, todoRequirement } = this.state;
+    const { titleQuery, selectedStatus } = this.state;
 
     const visibleTodos = this.getVisibleTodos();
 
@@ -75,14 +75,22 @@ export class TodoList extends React.Component<Props, State> {
           />
 
           <select
-            name="todoRequirement"
-            value={todoRequirement}
+            name="selectedStatus"
+            value={selectedStatus}
             onChange={this.handleChange}
-            id="todoRequirement"
+            id="selectedStatus"
           >
-            <option value={Requirement.ALL}>All</option>
-            <option value={Requirement.ACTIVE}>Not completed</option>
-            <option value={Requirement.COMPLETED}>Completed</option>
+            <option value={Status.ALL}>
+              All
+            </option>
+
+            <option value={Status.ACTIVE}>
+              Not completed
+            </option>
+
+            <option value={Status.COMPLETED}>
+              Completed
+            </option>
           </select>
 
           {todos && (
@@ -99,7 +107,11 @@ export class TodoList extends React.Component<Props, State> {
                   )}
                 >
                   <label htmlFor="todoStatus">
-                    <input type="checkbox" checked={todo.completed} readOnly />
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      readOnly
+                    />
                     <p>{todo.title}</p>
                   </label>
 
