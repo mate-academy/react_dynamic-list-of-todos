@@ -12,7 +12,7 @@ interface State {
 
 export class CurrentUser extends React.Component<Props, State> {
   state = {
-    user: {} as User,
+    user: null,
   };
 
   componentDidMount() {
