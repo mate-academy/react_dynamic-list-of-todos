@@ -27,15 +27,19 @@ export class TodoList extends React.Component<Props, {}> {
       this.setState({
         todos: this.props.todos
           .filter(todo => {
-            if (value === 'active') {
-              return !todo.completed;
-            }
+            switch (value) {
+              case 'active':
+                return !todo.completed;
+                break;
 
-            if (value === 'completed') {
-              return todo.completed;
-            }
+              case 'completed':
+                return todo.completed;
+                break;
 
-            return todo.title;
+              default:
+                return todo.title;
+                break;
+            }
           }),
       });
     }

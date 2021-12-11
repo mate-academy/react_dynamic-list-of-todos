@@ -38,7 +38,7 @@ export class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          {todos.length > 0 && (
+          {!!todos.length && (
             <TodoList
               todos={todos}
               onSelectUser={this.selectUser}
