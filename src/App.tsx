@@ -49,19 +49,45 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
+  handleChecked = (id:number) => {
+    const newTodos = this.state.todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    });
+
+    this.setState(() => ({
+      todos: newTodos,
+    }));
+  };
+
   render() {
     const { selectedUserId, todos, loading } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          {loading ? 'loading' : <TodoList todos={todos} selectUser={this.selectUser} />}
+          {loading
+            ? 'loading'
+            : (
+              <TodoList
+                todos={todos}
+                selectUser={this.selectUser}
+                selectedUserId={selectedUserId}
+                handleChecked={this.handleChecked}
+              />
+            )}
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} clearUser={this.clearUser} />
+              <CurrentUser
+                userId={selectedUserId}
+                clearUser={this.clearUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>

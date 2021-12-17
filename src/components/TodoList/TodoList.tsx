@@ -7,6 +7,8 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   selectUser: (id:number) => void;
+  selectedUserId: User['id'];
+  handleChecked: (id:number) => void;
 };
 
 type State = {
@@ -50,22 +52,8 @@ export class TodoList extends React.Component<Props, State> {
     ));
   };
 
-  // randomize = () => {
-  //   const { todos } = this.props;
-
-  //   for (let a = 0; a < todos.length; a += 1) {
-  //     const x = todos[a];
-  //     const y = Math.floor(Math.random() * (a + 1));
-
-  //     todos[a] = todos[y];
-  //     todos[y] = x;
-  //   }
-
-  //   console.log(todos);
-  // };
-
   render() {
-    const { todos, selectUser } = this.props;
+    const { todos, selectUser, selectedUserId } = this.props;
     const { status } = this.state;
 
     const displayedTodos = this.TodosToDisplay();
@@ -94,14 +82,6 @@ export class TodoList extends React.Component<Props, State> {
             <option value="notCompleted">Still in process</option>
           </select>
         </div>
-
-        {/* <button
-          type="button"
-          // onClick={this.randomize}
-        >
-          Randomize
-        </button> */}
-
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {todos && displayedTodos.map(todo => (
@@ -115,16 +95,24 @@ export class TodoList extends React.Component<Props, State> {
                 }
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    checked={todo.completed}
+                    onChange={() => {
+                      this.props.handleChecked(todo.id);
+                    }}
+                    type="checkbox"
+                    readOnly
+                  />
                   <p>{todo.title}</p>
                 </label>
 
                 <button
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
+                  className={
+                    classNames(
+                      'TodoList__user-button', 'button',
+                      { 'TodoList__user-button--selected': todo.userId === selectedUserId },
+                    )
+                  }
                   type="button"
                   onClick={() => selectUser(todo.userId)}
                 >
