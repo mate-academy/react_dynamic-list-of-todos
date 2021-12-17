@@ -1,4 +1,6 @@
 .CurrentUser {
+  text-align: center;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -20,6 +22,7 @@
     color: #c4bdd9;
     text-align: center;
     margin: 5px;
+    margin-bottom: 10px;
   }
 
   &__clear {
