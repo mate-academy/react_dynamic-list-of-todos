@@ -13,7 +13,7 @@ type State = {
 };
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
+  state: State = {
     user: null,
     errorMessage: '',
   };
@@ -54,9 +54,9 @@ export class CurrentUser extends React.Component<Props, State> {
         </h2>
         {user ? (
           <>
-            <h3 className="CurrentUser__name">{(user as unknown as User).name}</h3>
-            <p className="CurrentUser__email">{(user as unknown as User).email}</p>
-            <p className="CurrentUser__phone">{(user as unknown as User).phone}</p>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
 
             <button
               className="CurrentUser__button button"
