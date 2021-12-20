@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from 'react';
-import './CurrentUser.scss';
 import { getUsers } from '../../api/api';
+import './CurrentUser.scss';
 
 type Props = {
   userId: number;
