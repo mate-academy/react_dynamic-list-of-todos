@@ -3,14 +3,33 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
+import { Todo } from './components/types/Todo';
 
 interface State {
   selectedUserId: number;
+  todos: Todo[] | null
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+    todos: null,
+  };
+
+  componentDidMount() {
+    getTodos()
+      .then(todosFromServer => {
+        this.setState({ todos: todosFromServer });
+      });
+  }
+
+  toSelectUser = (userId: number) => {
+    if (userId !== this.state.selectedUserId) {
+      this.setState({
+        selectedUserId: userId,
+      });
+    }
   };
 
   render() {
@@ -18,14 +37,16 @@ class App extends React.Component<{}, State> {
 
     return (
       <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+        {this.state.todos && (
+          <div className="App__sidebar">
+            <TodoList todos={this.state.todos} callback={this.toSelectUser} />
+          </div>
+        )}
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={this.state.selectedUserId} />
             ) : 'No user selected'}
           </div>
         </div>
