@@ -8,18 +8,24 @@ import { CurrentUser } from './components/CurrentUser';
 interface State {
   todos: Todo[] | [];
   selectedUserId: number;
+  errorMessage: string
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     todos: [],
     selectedUserId: 0,
+    errorMessage: '',
   };
 
   async componentDidMount() {
-    const todos = await getData('todos');
+    try {
+      const todos = await getData('tods');
 
-    this.setState({ todos });
+      this.setState({ todos });
+    } catch {
+      this.setState({ errorMessage: 'List wasn\'t found' });
+    }
   }
 
   selectUser = (id: number) => {
@@ -31,16 +37,20 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { selectedUserId, todos } = this.state;
+    const { selectedUserId, todos, errorMessage } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList
-            todos={todos}
-            selectedUserId={selectedUserId}
-            selectUser={this.selectUser}
-          />
+          {todos.length > 0 ? (
+            <TodoList
+              todos={todos}
+              selectedUserId={selectedUserId}
+              selectUser={this.selectUser}
+            />
+          ) : (
+            <p>{errorMessage}</p>
+          ) }
         </div>
 
         <div className="App__content">

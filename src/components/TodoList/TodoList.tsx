@@ -19,10 +19,6 @@ export class TodoList extends React.Component<Props, State> {
     searchQuery: '',
   };
 
-  componentDidMount() {
-    this.getVisible();
-  }
-
   componentDidUpdate(prevProps: Props) {
     if (prevProps.todos !== this.props.todos) {
       this.getVisible();
