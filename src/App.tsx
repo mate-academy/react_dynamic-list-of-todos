@@ -20,7 +20,7 @@ class App extends React.Component<{}, State> {
 
   async componentDidMount() {
     try {
-      const todos = await getData('tods');
+      const todos = await getData('todos');
 
       this.setState({ todos });
     } catch {
