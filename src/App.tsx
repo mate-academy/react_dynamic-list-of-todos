@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
@@ -64,8 +63,6 @@ class App extends React.Component<{}, State> {
       hasLoadingError,
       isInitialized,
     } = this.state;
-
-    console.log('App render');
 
     if (isLoading) {
       return (
