@@ -6,7 +6,7 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 interface State {
-  todos: Todo[] | [];
+  todos: Todo[];
   selectedUserId: number;
   errorMessage: string
 }
@@ -32,7 +32,7 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: id });
   };
 
-  handleClear = () => {
+  handleClearUser = () => {
     this.setState({ selectedUserId: 0 });
   };
 
@@ -42,7 +42,7 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          {todos.length > 0 ? (
+          {todos.length ? (
             <TodoList
               todos={todos}
               selectedUserId={selectedUserId}
@@ -58,7 +58,7 @@ class App extends React.Component<{}, State> {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                handleClear={this.handleClear}
+                handleClearUser={this.handleClearUser}
               />
             ) : 'No user selected'}
           </div>

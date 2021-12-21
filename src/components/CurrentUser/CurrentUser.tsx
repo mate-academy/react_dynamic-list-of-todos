@@ -4,7 +4,7 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number,
-  handleClear: () => void,
+  handleClearUser: () => void,
 };
 
 type State = {
@@ -19,7 +19,9 @@ export class CurrentUser extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.loadUser();
+    if (this.props.userId !== 0) {
+      this.loadUser();
+    }
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -40,7 +42,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const { user, errorMessage } = this.state;
-    const { userId, handleClear } = this.props;
+    const { userId, handleClearUser } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -61,7 +63,7 @@ export class CurrentUser extends React.Component<Props, State> {
             <button
               className="CurrentUser__button button"
               type="button"
-              onClick={handleClear}
+              onClick={handleClearUser}
             >
               Clear
             </button>

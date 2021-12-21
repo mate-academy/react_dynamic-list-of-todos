@@ -45,7 +45,6 @@ export class TodoList extends React.Component<Props, State> {
         break;
       default:
         this.setState({ visibleTodos: this.props.todos });
-        break;
     }
   };
 
