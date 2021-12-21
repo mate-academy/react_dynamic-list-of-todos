@@ -1,3 +1,15 @@
 /// <reference types="react-scripts" />
 
-type Todo = {}; /* TODO: DESCRIBE */
+export interface User {
+  id: number,
+  name: string,
+  email: string,
+  phone: number,
+}
+
+export interface Todo {
+  id: number,
+  title: string,
+  userId: number,
+  completed: boolean,
+}
