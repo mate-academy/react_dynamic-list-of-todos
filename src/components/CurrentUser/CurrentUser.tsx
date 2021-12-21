@@ -5,6 +5,7 @@ import { getUser } from '../../API/api';
 
 type Props = {
   UserId: number,
+  onClearUser: () => void,
 };
 
 type State = {
@@ -29,7 +30,7 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   setCurrentUser(user: User) {
-    this.setState({ currentUser: user });
+    this.setState(() => ({ currentUser: user }));
   }
 
   render(): React.ReactNode {
@@ -56,6 +57,13 @@ export class CurrentUser extends React.Component<Props, State> {
             <h3 className="CurrentUser__name">{name}</h3>
             <p className="CurrentUser__email">{email}</p>
             <p className="CurrentUser__phone">{phone}</p>
+            <button
+              type="button"
+              className="CurrentUser__button"
+              onClick={() => this.props.onClearUser()}
+            >
+              Clear user
+            </button>
           </>
         )}
       </div>

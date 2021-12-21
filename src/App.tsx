@@ -32,7 +32,11 @@ class App extends React.Component<{}, State> {
   }
 
   changeUserId(newUserId: number) {
-    this.setState({ selectedUserId: newUserId });
+    this.setState(() => ({ selectedUserId: newUserId }));
+  }
+
+  clearUser() {
+    this.setState({ selectedUserId: 0 });
   }
 
   render() {
@@ -46,7 +50,7 @@ class App extends React.Component<{}, State> {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser UserId={selectedUserId} />
+              <CurrentUser UserId={selectedUserId} onClearUser={this.clearUser.bind(this)} />
             ) : 'No user selected'}
           </div>
         </div>
