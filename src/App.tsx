@@ -22,16 +22,12 @@ class App extends React.Component<{}, State> {
   componentDidMount() {
     getTodos()
       .then(todosFromServer => {
-        this.setState({ todos: todosFromServer });
+        this.setState({ todos: todosFromServer, errorMessage: '' });
       })
       .catch(() => {
         this.setState({ errorMessage: 'Can\'t load todos' });
       });
   }
-  //     .then(todosFromServer => {
-  //       this.setState({ todos: todosFromServer });
-  //     });
-  // }
 
   selectUser = (userId: number) => {
     if (userId !== this.state.selectedUserId) {

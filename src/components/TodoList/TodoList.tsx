@@ -5,7 +5,7 @@ import './TodoList.scss';
 
 type Props = {
   todos: Todo[]
-  selectUser: (ususerId:number) => void,
+  selectUser: (userId:number) => void,
 };
 
 type State = {
