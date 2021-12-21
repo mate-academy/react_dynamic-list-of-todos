@@ -6,7 +6,7 @@
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
-    "@types/node": "^12.20.18",
+    "@types/node": "^12.20.38",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
     "bulma": "^0.9.3",
