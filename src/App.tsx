@@ -8,23 +8,32 @@ import { Todo } from './components/types/Todo';
 
 interface State {
   selectedUserId: number;
-  todos: Todo[] | null
+  todos: Todo[] | null,
+  errorMessage: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: null,
+    errorMessage: '',
   };
 
   componentDidMount() {
     getTodos()
       .then(todosFromServer => {
         this.setState({ todos: todosFromServer });
+      })
+      .catch(() => {
+        this.setState({ errorMessage: 'Can\'t load todos' });
       });
   }
+  //     .then(todosFromServer => {
+  //       this.setState({ todos: todosFromServer });
+  //     });
+  // }
 
-  toSelectUser = (userId: number) => {
+  selectUser = (userId: number) => {
     if (userId !== this.state.selectedUserId) {
       this.setState({
         selectedUserId: userId,
@@ -39,7 +48,8 @@ class App extends React.Component<{}, State> {
       <div className="App">
         {this.state.todos && (
           <div className="App__sidebar">
-            <TodoList todos={this.state.todos} callback={this.toSelectUser} />
+            {this.state.errorMessage}
+            <TodoList todos={this.state.todos} selectUser={this.selectUser} />
           </div>
         )}
 

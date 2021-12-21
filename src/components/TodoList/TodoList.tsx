@@ -1,10 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import './TodoList.scss';
 
 type Props = {
   todos: Todo[]
-  callback: (user:number) => void,
+  selectUser: (ususerId:number) => void,
 };
 
 type State = {
@@ -18,20 +19,6 @@ export class TodoList extends React.Component<Props, State> {
     selected: 'all',
   };
 
-  // shuffleArray = (todos: Todo[]) => {
-  //   const array = todos;
-
-  //   for (let i = array.length - 1; i > 0; i -= 1) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     const temp = array[i];
-
-  //     array[i] = array[j];
-  //     array[j] = temp;
-  //   }
-
-  //   return array;
-  // };
-
   getPreparedTodos = () => this.props.todos.filter(todo => {
     switch (this.state.selected) {
       case 'completed':
@@ -44,7 +31,7 @@ export class TodoList extends React.Component<Props, State> {
   });
 
   render() {
-    const { callback } = this.props;
+    const { selectUser } = this.props;
     const filtredTodos = this.getPreparedTodos()
       .filter(todo => todo.title.includes(this.state.value));
 
@@ -76,19 +63,21 @@ export class TodoList extends React.Component<Props, State> {
             </option>
           </select>
 
-          {/* <button
-            type="button"
-            onClick={() => this.setState({ displayedTodos: this.shuffleArray(preparedTodos) })}
-          >
-            Randomize
-          </button> */}
           <ul className="TodoList__list">
             {filtredTodos.map(todo => (
-              <li className="TodoList__item TodoList__item--unchecked" key={todo.id}>
+              <li
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': todo.completed },
+                  { 'TodoList__item--unchecked': !todo.completed },
+                )}
+                key={todo.id}
+              >
                 <label htmlFor={String(todo.id)}>
                   <input
                     type="checkbox"
                     id={String(todo.id)}
+                    checked={todo.completed}
                     readOnly
                   />
                   <p>{todo.title}</p>
@@ -102,7 +91,7 @@ export class TodoList extends React.Component<Props, State> {
                     "
                   type="button"
                   onClick={() => {
-                    callback(todo.userId);
+                    selectUser(todo.userId);
                   }}
                 >
                   {todo.userId}

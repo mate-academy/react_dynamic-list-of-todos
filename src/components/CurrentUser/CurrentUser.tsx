@@ -17,23 +17,20 @@ export class CurrentUser extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.getUser();
+    getUsers(this.props.userId)
+      .then(response => {
+        this.setState({ user: response });
+      });
   }
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.userId !== this.props.userId) {
-      this.getUser();
+      getUsers(this.props.userId)
+        .then(response => {
+          this.setState({ user: response });
+        });
     }
   }
-
-  getUser = () => {
-    getUsers()
-      .then(users => {
-        this.setState({
-          user: users.find((user:User) => user.id === this.props.userId),
-        });
-      });
-  };
 
   render() {
     return (
@@ -41,8 +38,7 @@ export class CurrentUser extends React.Component<Props, State> {
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
             <span>
-              Selected user:
-              {this.props.userId}
+              {`Selected user: ${this.props.userId}`}
             </span>
           </h2>
 
