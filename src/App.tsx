@@ -13,19 +13,27 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
+  changeUser = async (id: number) => {
+    const { selectedUserId } = this.state;
+
+    if (selectedUserId !== id) {
+      this.setState({ selectedUserId: id });
+    }
+  };
+
   render() {
     const { selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList changeUser={this.changeUser} selectedUserId={selectedUserId} />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser selectedUserId={selectedUserId} changeUser={this.changeUser} />
             ) : 'No user selected'}
           </div>
         </div>
