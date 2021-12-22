@@ -13,17 +13,8 @@ type State = {
 };
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {
-      id: 0,
-      createdAt: '',
-      updatedAt: '',
-      name: '',
-      username: '',
-      email: '',
-      phone: '',
-      website: '',
-    },
+  state: State = {
+    user: null,
     errorMessage: '',
   };
 
