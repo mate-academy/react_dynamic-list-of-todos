@@ -1,3 +1,10 @@
 /// <reference types="react-scripts" />
 
-type Todo = {}; /* TODO: DESCRIBE */
+export interface Todo {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  title: string;
+  completed: boolean;
+}
