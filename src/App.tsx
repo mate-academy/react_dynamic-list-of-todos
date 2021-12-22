@@ -9,7 +9,7 @@ import { Todo } from './types/Todo';
 
 interface State {
   selectedUserId: number;
-  todos: Todo[] | [],
+  todos: Todo[],
   errorMessage: string,
 }
 

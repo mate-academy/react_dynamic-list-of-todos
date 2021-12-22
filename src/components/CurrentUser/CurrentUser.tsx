@@ -12,22 +12,11 @@ type Props = {
 
 type State = {
   user: User | null,
-  errorMessage: string,
 };
 
 export class CurrentUser extends React.Component<Props, State> {
-  state = {
-    user: {
-      id: 1,
-      createdAt: '',
-      updatedAt: '',
-      name: '',
-      username: '',
-      email: '',
-      phone: '',
-      website: '',
-    },
-    errorMessage: '',
+  state: State = {
+    user: null,
   };
 
   async componentDidMount() {
@@ -44,14 +33,14 @@ export class CurrentUser extends React.Component<Props, State> {
     try {
       const user = await getUser(this.props.userId);
 
-      this.setState({ user, errorMessage: '' });
+      this.setState({ user });
     } catch (error) {
-      this.setState({ user: null, errorMessage: 'User was not found' });
+      this.setState({ user: null });
     }
   };
 
   render() {
-    const { user, errorMessage } = this.state;
+    const { user } = this.state;
 
     if (!user) {
       return (
@@ -62,33 +51,22 @@ export class CurrentUser extends React.Component<Props, State> {
     }
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {this.props.userId}
-          </span>
-        </h2>
-        {user ? (
-          <>
+      <>
+        {user && (
+          <div className="CurrentUser">
             <h3 className="CurrentUser__name">{user.name}</h3>
             <p className="CurrentUser__email">{user.email}</p>
             <p className="CurrentUser__phone">{user.phone}</p>
-
-            <button
-              className="CurrentUser__button button"
-              type="button"
-              onClick={this.props.clearUser}
-            >
-              Clear
-            </button>
-          </>
-        ) : (
-          <p>
-            {errorMessage}
-          </p>
+          </div>
         )}
-      </div>
+        <button
+          className="CurrentUser__button button"
+          type="button"
+          onClick={this.props.clearUser}
+        >
+          Clear
+        </button>
+      </>
     );
   }
 }

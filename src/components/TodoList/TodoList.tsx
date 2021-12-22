@@ -100,8 +100,7 @@ export class TodoList extends React.Component<Props, State> {
                     type="button"
                     onClick={() => this.props.selectUser(todo.userId)}
                   >
-                    User&nbsp;#
-                    {todo.userId}
+                    {`User ${todo.userId}`}
                   </button>
                 </li>
               );
