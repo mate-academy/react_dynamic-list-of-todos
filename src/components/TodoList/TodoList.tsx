@@ -1,43 +1,50 @@
 import React from 'react';
 import './TodoList.scss';
+import { Todo } from '../../types';
 
-export const TodoList: React.FC = () => (
+interface Props {
+  todos: Todo[];
+  onSelectUser(userId: number): void;
+  selectedUserId: number;
+}
+
+export const TodoList: React.FC<Props> = ({ todos, onSelectUser, selectedUserId }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map((todo) => {
+          const rootClasses = ['TodoList__item'];
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+          if (todo.completed) {
+            rootClasses.push('TodoList__item--checked');
+          } else {
+            rootClasses.push('TodoList__item--unchecked');
+          }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+          const buttonClasses = ['TodoList__user-button', 'button'];
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+          if (selectedUserId === todo.userId) {
+            buttonClasses.push('TodoList__user-button--selected');
+          }
+
+          return (
+            <li key={todo.id} className={rootClasses.join(' ')}>
+              <input type="checkbox" readOnly checked={todo.completed} />
+              <p>{todo.title}</p>
+
+              <button
+                className={buttonClasses.join(' ')}
+                type="button"
+                onClick={() => onSelectUser(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   </div>
