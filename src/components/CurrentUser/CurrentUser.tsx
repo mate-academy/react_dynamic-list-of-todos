@@ -15,6 +15,7 @@ type User = {
 
 interface Props {
   userId: number;
+  clearUser(): void;
 }
 
 interface State {
@@ -33,10 +34,11 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prewProps: Props) {
-    if (prewProps !== this.props) {
+    if (prewProps.userId !== this.props.userId) {
       fetch(`https://mate.academy/students-api/users/${this.props.userId}`)
         .then(response => response.json())
         .then(user => this.setState({ user }));
+      console.log('add');
     }
   }
 
@@ -56,6 +58,10 @@ export class CurrentUser extends React.Component<Props, State> {
         </h3>
         <p className="CurrentUser__email">{this.state.user?.email}</p>
         <p className="CurrentUser__phone">{this.state.user?.phone}</p>
+
+        <button className="button CurrentUser__button-clear" type="button" onClick={() => this.props.clearUser()}>
+          Clear
+        </button>
       </div>
     );
   }
