@@ -82,29 +82,26 @@ export class TodoList extends React.Component<Props, State> {
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {searchedTodos.map(todo => {
-              return (
-                <li
-                  className={todo.completed
-                    ? 'TodoList__item TodoList__item--checked'
-                    : 'TodoList__item TodoList__item--unchecked'}
-                  key={todo.id}
+            {searchedTodos.map(todo => (
+              <li
+                className={todo.completed
+                  ? 'TodoList__item TodoList__item--checked'
+                  : 'TodoList__item TodoList__item--unchecked'}
+                key={todo.id}
+              >
+                <input type="checkbox" checked={todo.completed} readOnly />
+                <p>{todo.title}</p>
+                <button
+                  className={todo.userId === this.props.selectedUserId
+                    ? 'TodoList__user-button--selected button'
+                    : 'TodoList__user-button button'}
+                  type="button"
+                  onClick={() => this.props.selectUser(todo.userId)}
                 >
-                  <input type="checkbox" checked={todo.completed} readOnly />
-                  <p>{todo.title}</p>
-
-                  <button
-                    className={todo.userId === this.props.selectedUserId
-                      ? 'TodoList__user-button--selected button'
-                      : 'TodoList__user-button button'}
-                    type="button"
-                    onClick={() => this.props.selectUser(todo.userId)}
-                  >
-                    {`User ${todo.userId}`}
-                  </button>
-                </li>
-              );
-            })}
+                  {`User ${todo.userId}`}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
