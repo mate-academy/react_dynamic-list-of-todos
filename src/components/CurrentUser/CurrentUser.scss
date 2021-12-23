@@ -1,4 +1,9 @@
 .CurrentUser {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -25,5 +30,21 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+  }
+
+  &__button {
+    background-color: #4d457b;
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    color: white;
+    width: fit-content;
+    transition-duration: 300ms;
+
+    &:hover {
+      background-color: #a9a0e5;
+    }
   }
 }
