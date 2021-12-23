@@ -1,6 +1,21 @@
 .TodoList {
   width: 100%;
 
+  &__search {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  &__form {
+    display: flex;
+    gap: 20px;
+  }
+
+  &__input {
+    padding: 8px 12px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
