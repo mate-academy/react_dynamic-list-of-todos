@@ -96,7 +96,9 @@ export class TodoList extends Component<Props, State> {
                   {
                     'TodoList__item--checked': todo.completed,
                   },
-                  { 'TodoList__item--unchecked': !todo.completed },
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                  },
                 )}
               >
                 <label htmlFor="todoStatus">

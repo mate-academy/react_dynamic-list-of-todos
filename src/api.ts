@@ -9,7 +9,7 @@ export const requestTodos = () => {
     });
 };
 
-export const requestUsers = (id: number) => {
+export const requestUser = (id: number) => {
   return fetch(`https://mate.academy/students-api/users/${id}`)
     .then(response => {
       if (!response.ok) {
