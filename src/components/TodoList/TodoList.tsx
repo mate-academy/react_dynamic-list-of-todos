@@ -1,44 +1,115 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { Todo } from '../../react-app-env';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[];
+  selectedUserId: number;
+  onSelect: (userId: number) => void;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+type State = {
+  sortBy: string,
+  query: string,
+};
+
+export class TodoList extends React.PureComponent<Props, State> {
+  state: State = {
+    sortBy: 'all',
+    query: '',
+  };
+
+  handleChanges = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    } as State);
+  };
+
+  render() {
+    const { todos, selectedUserId, onSelect } = this.props;
+    const { sortBy, query } = this.state;
+
+    const filtered = todos.filter((todo) => {
+      if (query) {
+        return (
+          todo.title !== null && todo.title.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+
+      return todo;
+    }).filter((todo) => {
+      if (sortBy === 'active') {
+        return !todo.completed;
+      }
+
+      if (sortBy === 'completed') {
+        return todo.completed;
+      }
+
+      return todo;
+    });
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <input
+            type="text"
+            name="query"
+            value={query}
+            onChange={this.handleChanges}
+            placeholder="Search"
+          />
+
+          <select
+            name="sortBy"
+            value={sortBy}
+            onChange={this.handleChanges}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+          <ul className="TodoList__list">
+            {filtered.map((todo) => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--checked': todo.completed,
+                    'TodoList__item--unchecked': !todo.completed,
+                  },
+                )}
+              >
+                <label htmlFor="todoStatus">
+                  <input type="checkbox" checked={todo.completed} readOnly />
+                  <p>{todo.title}</p>
+                </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                <button
+                  className={classNames('TodoList__user-button button',
+                    { 'TodoList__user-button--selected': todo.userId === selectedUserId })}
+                  type="button"
+                  onClick={() => onSelect(todo.userId)}
+                >
+                  {`User # ${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}

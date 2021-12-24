@@ -1,3 +1,15 @@
 /// <reference types="react-scripts" />
 
-type Todo = {}; /* TODO: DESCRIBE */
+export type Todo = {
+  id: number;
+  userId: number;
+  title: string;
+  completed: boolean;
+};
+
+export type User = {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+};
