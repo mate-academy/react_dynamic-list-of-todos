@@ -30,7 +30,7 @@ export class TodoList extends React.PureComponent<Props, State> {
 
     this.setState({
       [name]: value,
-    } as Pick<State, 'sortBy' | 'query'>);
+    } as State);
   };
 
   render() {
@@ -88,8 +88,8 @@ export class TodoList extends React.PureComponent<Props, State> {
                   'TodoList__item',
                   {
                     'TodoList__item--checked': todo.completed,
+                    'TodoList__item--unchecked': !todo.completed,
                   },
-                  { 'TodoList__item--unchecked': !todo.completed },
                 )}
               >
                 <label htmlFor="todoStatus">
@@ -103,8 +103,7 @@ export class TodoList extends React.PureComponent<Props, State> {
                   type="button"
                   onClick={() => onSelect(todo.userId)}
                 >
-                  User&nbsp;#
-                  {todo.userId}
+                  {`User # ${todo.userId}`}
                 </button>
               </li>
             ))}

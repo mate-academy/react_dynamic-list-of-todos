@@ -1,6 +1,6 @@
 const BASE_URL = 'https://mate.academy/students-api';
 
-export const getUsers = (userId: number) => {
+export const getUser = (userId: number) => {
   return fetch(`${BASE_URL}/users/${userId}`)
     .then(response => response.json());
 };

@@ -36,14 +36,14 @@ class App extends React.Component<{}, State> {
   }
 
   render() {
-    const { selectedUserId } = this.state;
+    const { selectedUserId, todos } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={this.state.todos}
-            selectedUserId={this.state.selectedUserId}
+            todos={todos}
+            selectedUserId={selectedUserId}
             onSelect={this.onSelect}
           />
         </div>

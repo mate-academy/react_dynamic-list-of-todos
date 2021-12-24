@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { User } from '../../react-app-env';
-import { getUsers } from '../../api';
+import { getUser } from '../../api';
 
 import './CurrentUser.scss';
 
@@ -30,7 +30,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   }
 
   async load() {
-    const user = await getUsers(this.props.userId);
+    const user = await getUser(this.props.userId);
 
     this.setState({ user });
   }
