@@ -1,5 +1,6 @@
 .button {
   cursor: pointer;
+  width: 76px;
   padding: 5px 10px;
   border-radius: 5px;
   font-weight: bold;
@@ -8,8 +9,10 @@
   color: white;
   transition: background-color 0.12s;
   font-size: inherit;
+  cursor: pointer;
 
   &:hover {
     background-color: #4d457b;
+
   }
 }
