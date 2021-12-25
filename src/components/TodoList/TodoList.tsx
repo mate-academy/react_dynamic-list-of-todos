@@ -60,7 +60,7 @@ export class TodoList extends React.PureComponent<Props, State> {
               <li
                 className={
                   classNames('TodoList__item',
-                    { 'TodoList__item--unchecked': todo.completed })
+                    { 'TodoList__item--unchecked': !todo.completed })
                 }
                 key={todo.id}
               >
