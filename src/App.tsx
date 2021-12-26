@@ -36,12 +36,12 @@ class App extends React.Component<{}, State> {
       todosFromServer: [
         ...state.todosFromServer.map((todo) => {
           if (todo.id === todoId) {
-            const newTodo = {
+            const todoWithChangedCompleted = {
               ...todo,
               completed: !todo.completed,
             };
 
-            return newTodo;
+            return todoWithChangedCompleted;
           }
 
           return todo;
