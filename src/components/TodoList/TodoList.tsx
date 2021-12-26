@@ -12,29 +12,29 @@ type Props = {
 type State = {
   titleFilter: string,
   selected: string,
-  shuffle: boolean,
 };
 
 export class TodoList extends React.Component<Props, State> {
   state = {
     titleFilter: '',
     selected: 'all',
-    shuffle: false,
   };
 
   shuffle = () => {
-    this.setState({ shuffle: true });
+    this.props.preparedTodos.sort(() => Math.random() - 0.5);
+    this.forceUpdate();
   };
 
   reset = () => {
-    this.setState({ shuffle: false, selected: 'all', titleFilter: '' });
+    this.setState({ selected: 'all', titleFilter: '' });
+    this.props.preparedTodos.sort((a, b) => a.id - b.id);
   };
 
   render() {
     const { selectedUserId, preparedTodos, selectUser } = this.props;
-    const { titleFilter, selected, shuffle } = this.state;
+    const { titleFilter, selected } = this.state;
 
-    let filteredTodos = preparedTodos.filter(
+    const filteredTodos = preparedTodos.filter(
       (todo) => todo.title.toLowerCase().includes(titleFilter.toLowerCase()) && (
         selected === 'completed' ? (
           todo.completed === true
@@ -44,10 +44,6 @@ export class TodoList extends React.Component<Props, State> {
         || selected === 'all'
       ),
     );
-
-    if (shuffle) {
-      filteredTodos = filteredTodos.sort(() => Math.random() - 0.5);
-    }
 
     return (
       <div className="TodoList">
@@ -63,6 +59,7 @@ export class TodoList extends React.Component<Props, State> {
           <select
             name="selected"
             onChange={(event) => this.setState({ selected: event.target.value })}
+            value={this.state.selected}
           >
             <option value="all">All</option>
             <option value="completed">Completed</option>
