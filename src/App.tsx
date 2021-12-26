@@ -3,14 +3,38 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
+import { Todo } from './components/types/Todo';
 
 interface State {
   selectedUserId: number;
+  todos: Todo[] | null,
+  errorMessage: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+    todos: null,
+    errorMessage: '',
+  };
+
+  componentDidMount() {
+    getTodos()
+      .then(todosFromServer => {
+        this.setState({ todos: todosFromServer, errorMessage: '' });
+      })
+      .catch(() => {
+        this.setState({ errorMessage: 'Can\'t load todos' });
+      });
+  }
+
+  selectUser = (userId: number) => {
+    if (userId !== this.state.selectedUserId) {
+      this.setState({
+        selectedUserId: userId,
+      });
+    }
   };
 
   render() {
@@ -18,14 +42,17 @@ class App extends React.Component<{}, State> {
 
     return (
       <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+        {this.state.todos && (
+          <div className="App__sidebar">
+            {this.state.errorMessage}
+            <TodoList todos={this.state.todos} selectUser={this.selectUser} />
+          </div>
+        )}
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={this.state.selectedUserId} />
             ) : 'No user selected'}
           </div>
         </div>
