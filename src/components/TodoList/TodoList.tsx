@@ -7,6 +7,7 @@ type Props = {
   preparedTodos: Todo[];
   selectUser: (id: number | null) => void;
   selectedUserId: number | null;
+  completeToggle: (todoId: number) => void;
 };
 
 type State = {
@@ -22,7 +23,7 @@ export class TodoList extends React.Component<Props, State> {
 
   shuffle = () => {
     this.props.preparedTodos.sort(() => Math.random() - 0.5);
-    this.forceUpdate();
+    this.setState({});
   };
 
   reset = () => {
@@ -31,7 +32,13 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   render() {
-    const { selectedUserId, preparedTodos, selectUser } = this.props;
+    const {
+      selectedUserId,
+      preparedTodos,
+      selectUser,
+      completeToggle,
+    } = this.props;
+
     const { titleFilter, selected } = this.state;
 
     const filteredTodos = preparedTodos.filter(
@@ -90,20 +97,27 @@ export class TodoList extends React.Component<Props, State> {
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly checked={todo.completed} />
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                    onClick={() => completeToggle(todo.id)}
+                  />
                   <p>{todo.title}</p>
                 </label>
 
-                <button
-                  className={
-                    classNames('TodoList__user-button', 'button',
-                      { 'TodoList__user-button--selected': todo.userId === selectedUserId })
-                  }
-                  onClick={() => selectUser(todo.userId)}
-                  type="button"
-                >
-                  {todo.userId}
-                </button>
+                {todo.userId && (
+                  <button
+                    className={
+                      classNames('TodoList__user-button', 'button',
+                        { 'TodoList__user-button--selected': todo.userId === selectedUserId })
+                    }
+                    onClick={() => selectUser(todo.userId)}
+                    type="button"
+                  >
+                    {todo.userId}
+                  </button>
+                )}
               </li>
             ))}
           </ul>

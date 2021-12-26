@@ -31,6 +31,25 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
+  completeChanger = (todoId: number) => {
+    this.setState(state => ({
+      todosFromServer: [
+        ...state.todosFromServer.map((todo) => {
+          if (todo.id === todoId) {
+            const newTodo = {
+              ...todo,
+              completed: !todo.completed,
+            };
+
+            return newTodo;
+          }
+
+          return todo;
+        }),
+      ],
+    }));
+  };
+
   render() {
     const { selectedUserId, todosFromServer } = this.state;
 
@@ -41,6 +60,7 @@ class App extends React.Component<{}, State> {
             preparedTodos={todosFromServer}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
+            completeToggle={this.completeChanger}
           />
         </div>
 
