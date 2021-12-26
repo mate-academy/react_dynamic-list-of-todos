@@ -12,19 +12,29 @@ type Props = {
 type State = {
   titleFilter: string,
   selected: string,
+  shuffle: boolean,
 };
 
-export class TodoList extends React.PureComponent<Props, State> {
+export class TodoList extends React.Component<Props, State> {
   state = {
     titleFilter: '',
     selected: 'all',
+    shuffle: false,
+  };
+
+  shuffle = () => {
+    this.setState({ shuffle: true });
+  };
+
+  reset = () => {
+    this.setState({ shuffle: false, selected: 'all', titleFilter: '' });
   };
 
   render() {
     const { selectedUserId, preparedTodos, selectUser } = this.props;
-    const { titleFilter, selected } = this.state;
+    const { titleFilter, selected, shuffle } = this.state;
 
-    const filteredTodos = preparedTodos.filter(
+    let filteredTodos = preparedTodos.filter(
       (todo) => todo.title.toLowerCase().includes(titleFilter.toLowerCase()) && (
         selected === 'completed' ? (
           todo.completed === true
@@ -34,6 +44,10 @@ export class TodoList extends React.PureComponent<Props, State> {
         || selected === 'all'
       ),
     );
+
+    if (shuffle) {
+      filteredTodos = filteredTodos.sort(() => Math.random() - 0.5);
+    }
 
     return (
       <div className="TodoList">
@@ -54,6 +68,20 @@ export class TodoList extends React.PureComponent<Props, State> {
             <option value="completed">Completed</option>
             <option value="active">Active</option>
           </select>
+
+          <button
+            type="button"
+            onClick={this.shuffle}
+          >
+            shuffle
+          </button>
+
+          <button
+            type="button"
+            onClick={this.reset}
+          >
+            reset
+          </button>
 
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
