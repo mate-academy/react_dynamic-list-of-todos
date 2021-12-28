@@ -13,3 +13,19 @@
     background-color: #4d457b;
   }
 }
+
+.todos__nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.search__todo {
+  padding: 5px 10px;
+}
+
+.todos__filter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
