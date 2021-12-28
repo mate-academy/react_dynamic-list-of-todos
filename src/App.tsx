@@ -34,10 +34,28 @@ class App extends React.Component<{}, State> {
     }
   };
 
-  filterTodo = (value: boolean | string) => {
+  filterTodo = (value: string) => {
     this.setState(state => ({
       searchValue: '',
-      visibleTodo: state.todos.filter(todo => todo.completed !== value),
+      visibleTodo: state.todos.filter(todo => {
+        switch (value) {
+          case 'completed':
+            return todo.completed;
+          case 'active':
+            return !todo.completed;
+          default:
+            return todo;
+        }
+      }),
+    }));
+  };
+
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState(state => ({
+      searchValue: event.target.value,
+      visibleTodo: state.todos
+        .filter(todo => todo.title.toLowerCase()
+          .includes(event.target.value.toLowerCase())),
     }));
   };
 
@@ -60,14 +78,7 @@ class App extends React.Component<{}, State> {
                   className="search__todo"
                   placeholder="search"
                   value={searchValue}
-                  onChange={(event) => {
-                    this.setState(state => ({
-                      searchValue: event.target.value,
-                      visibleTodo: state.todos
-                        .filter(todo => todo.title.toLowerCase()
-                          .includes(event.target.value.toLowerCase())),
-                    }));
-                  }}
+                  onChange={(event) => this.handleChange(event)}
                 />
                 <div className="todos__filter">
                   Show:
@@ -82,7 +93,7 @@ class App extends React.Component<{}, State> {
                   <button
                     type="button"
                     onClick={() => {
-                      this.filterTodo(true);
+                      this.filterTodo('active');
                     }}
                   >
                     Active
@@ -90,7 +101,7 @@ class App extends React.Component<{}, State> {
                   <button
                     type="button"
                     onClick={() => {
-                      this.filterTodo(false);
+                      this.filterTodo('completed');
                     }}
                   >
                     Completed
