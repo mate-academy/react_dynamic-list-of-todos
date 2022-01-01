@@ -9,16 +9,18 @@ import { getResponse } from './api';
 interface State {
   todos: Todo[] | [],
   selectedUserId: number,
+  isLoading: boolean,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     todos: [],
     selectedUserId: 0,
+    isLoading: true,
   };
 
   componentDidMount = async () => {
-    this.setState({ todos: await getResponse('todos') });
+    this.setState({ todos: await getResponse('todos'), isLoading: false });
   };
 
   setSelectedUserId = (id: number) => {
@@ -44,20 +46,17 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { selectedUserId, todos } = this.state;
-    const {
-      setTodosByChecked,
-      setSelectedUserId,
-      clearUser,
-    } = this;
+    const { todos, selectedUserId, isLoading } = this.state;
+    const { setTodosByChecked, setSelectedUserId, clearUser } = this;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
             todos={todos}
-            setTodosByChecked={setTodosByChecked}
+            isLoading={isLoading}
             selectedUserId={selectedUserId}
+            setTodosByChecked={setTodosByChecked}
             setSelectedUserId={setSelectedUserId}
           />
         </div>
