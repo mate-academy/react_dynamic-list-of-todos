@@ -25,9 +25,14 @@ export class CurrentUser extends React.Component<Props, State> {
 
   componentDidUpdate(props: Props) {
     if (props.selectedUserId !== this.props.selectedUserId) {
+      this.setIsLoading();
       this.loadData();
     }
   }
+
+  setIsLoading = () => {
+    this.setState({ isLoading: true });
+  };
 
   loadData = async () => {
     const newSelectedUser = await getResponse(`users/${this.props.selectedUserId}`);
