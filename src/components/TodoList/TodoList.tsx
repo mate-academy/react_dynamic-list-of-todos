@@ -4,7 +4,7 @@ import React from 'react';
 import './TodoList.scss';
 
 type Props = {
-  todos: Todo[] | [],
+  todos: Todo[],
   isLoading: boolean,
   selectedUserId: number,
   setTodosByChecked: (id: number) => void;
@@ -22,12 +22,11 @@ export class TodoList extends React.Component<Props, State> {
     filterBy: 'all',
   };
 
-  setSearchRequest = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchRequest: e.target.value });
-  };
+  setChangedValue = (e: React.ChangeEvent<HTMLSelectElement>
+  | React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  setFilterBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ filterBy: e.target.value });
+    this.setState(prevState => ({ ...prevState, [name]: value }));
   };
 
   getfilteredTodos = () => {
@@ -59,7 +58,7 @@ export class TodoList extends React.Component<Props, State> {
       setTodosByChecked,
       setSelectedUserId,
     } = this.props;
-    const { getfilteredTodos, setSearchRequest, setFilterBy } = this;
+    const { getfilteredTodos, setChangedValue } = this;
     const todos = getfilteredTodos();
 
     return (
@@ -73,10 +72,11 @@ export class TodoList extends React.Component<Props, State> {
             className="TodoList__search-bar"
             placeholder="write a title"
             value={this.state.searchRequest}
-            onChange={setSearchRequest}
+            onChange={setChangedValue}
+            name="searchRequest"
           />
         </label>
-        <select onChange={setFilterBy}>
+        <select onChange={setChangedValue} name="filterBy">
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
