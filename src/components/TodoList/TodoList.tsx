@@ -14,7 +14,6 @@ type State = {
   todos: Todo[];
   query: string;
   selectedTodos: string;
-  // status: boolean;
 };
 
 export class TodoList extends React.Component<Props, State> {
@@ -22,7 +21,6 @@ export class TodoList extends React.Component<Props, State> {
     todos: [],
     query: '',
     selectedTodos: 'all',
-    // status: false,
   };
 
   async componentDidMount() {
@@ -118,39 +116,41 @@ export class TodoList extends React.Component<Props, State> {
               preparedTodos.map(({
                 id, userId, title, completed,
               }) => (
-                <li
-                  className={classnames(
-                    'TodoList__item',
-                    { 'TodoList__item--unchecked': !completed },
-                    { 'TodoList__item--checked': completed },
-                  )}
-                  key={id}
-                >
-                  <label>
-                    <input
-                      id={String(id)}
-                      name="status"
-                      type="checkbox"
-                      onChange={this.getInputParam}
-                      checked={completed}
-                      readOnly
-                    />
-                    <p>{title}</p>
-                  </label>
-
-                  <button
-                    className="
-                      TodoList__user-button
-                      TodoList__user-button--selected
-                      button
-                    "
-                    type="button"
-                    onClick={() => this.props.onClick(userId)}
+                userId && (
+                  <li
+                    className={classnames(
+                      'TodoList__item',
+                      { 'TodoList__item--unchecked': !completed },
+                      { 'TodoList__item--checked': completed },
+                    )}
+                    key={id}
                   >
-                    User&nbsp;#
-                    {userId}
-                  </button>
-                </li>
+                    <label>
+                      <input
+                        id={String(id)}
+                        name="status"
+                        type="checkbox"
+                        onChange={this.getInputParam}
+                        checked={completed}
+                        readOnly
+                      />
+                      <p>{title}</p>
+                    </label>
+
+                    <button
+                      className="
+                        TodoList__user-button
+                        TodoList__user-button--selected
+                        button
+                      "
+                      type="button"
+                      onClick={() => this.props.onClick(userId)}
+                    >
+                      User&nbsp;#
+                      {userId}
+                    </button>
+                  </li>
+                )
               ))
             }
           </ul>

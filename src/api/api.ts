@@ -4,7 +4,10 @@ const API_URL = 'https://mate.academy/students-api';
 
 const request = (url: string) => {
   return fetch(`${API_URL}${url}`)
-    .then(response => response.json());
+    .then(response => response.json())
+    .catch(error => (
+      error && 'User is not defined'
+    ));
 };
 
 export const getTodos = (): Promise<Todo[]> => {
