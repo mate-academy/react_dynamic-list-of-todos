@@ -28,4 +28,30 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__status {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+.status {
+  &__item {
+    padding: 12px 24px;
+    border: 2px solid #cde4e4;
+    border-radius: 4px;
+
+    &:focus {
+      outline-color: #a9d2d2;
+    }
+  }
+
+  &__button {
+    cursor: pointer;
+    transition: background-color 0.3s ease-in;
+
+    &:hover {
+      background-color: #a9d2d2;
+    }
+  }
 }
