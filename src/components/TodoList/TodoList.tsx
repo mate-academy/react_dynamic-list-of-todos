@@ -36,7 +36,7 @@ export class TodoList extends React.Component<Props, State> {
     this.setState({ title: e.target.value });
   };
 
-  filterTodosByTitle = () => {
+  filterTodos = () => {
     const { title, todosStatus } = this.state;
     const filteredByStatusTodos = this.filterTodosByStatus(todosStatus);
 
@@ -77,7 +77,7 @@ export class TodoList extends React.Component<Props, State> {
   render() {
     const { title, todosStatus } = this.state;
     const { todoId, selectUser } = this.props;
-    const filterTodos: Todo[] = this.filterTodosByTitle();
+    const filterTodos: Todo[] = this.filterTodos();
 
     return (
       <div className="TodoList">

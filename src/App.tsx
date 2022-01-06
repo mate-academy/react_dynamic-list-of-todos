@@ -10,7 +10,7 @@ interface State {
   selectedUserId: number;
   todos: Todo[];
   todoId: number;
-  isLoading: boolean;
+  hasLoaded: boolean;
 }
 
 class App extends React.Component<{}, State> {
@@ -18,7 +18,7 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     todos: [],
     todoId: 0,
-    isLoading: false,
+    hasLoaded: false,
   };
 
   async componentDidMount() {
@@ -26,7 +26,7 @@ class App extends React.Component<{}, State> {
 
     this.setState({
       todos,
-      isLoading: true,
+      hasLoaded: true,
     });
   }
 
@@ -46,13 +46,13 @@ class App extends React.Component<{}, State> {
       selectedUserId,
       todos,
       todoId,
-      isLoading,
+      hasLoaded,
     } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          {isLoading
+          {hasLoaded
             ? (
               <TodoList
                 todos={todos}
