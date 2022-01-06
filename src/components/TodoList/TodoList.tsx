@@ -135,7 +135,7 @@ export class TodoList extends React.Component<Props, State> {
                   type="button"
                   onClick={() => selectUser(todo.userId, todo.id)}
                 >
-                  {`User #${todo.id}`}
+                  {`User #${todo.userId}`}
                 </button>
               </li>
             ))}
