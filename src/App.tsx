@@ -66,6 +66,10 @@ class App extends React.Component<{}, State> {
     });
   };
 
+  shuffle = () => {
+    this.setState(state => ({ todos: state.todos.sort(() => Math.random() - 0.5) }));
+  };
+
   render() {
     const { selectedUserId, user } = this.state;
 
@@ -86,6 +90,7 @@ class App extends React.Component<{}, State> {
               <option value="completed">Completed</option>
               <option value="active">Active</option>
             </select>
+            <button type="button" onClick={this.shuffle}>Random todos</button>
           </nav>
           <TodoList
             todos={this.filterTodos()}
