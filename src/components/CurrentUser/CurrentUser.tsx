@@ -2,7 +2,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import './CurrentUser.scss';
-import { User } from '../../type/user';
 import { getUserById } from '../../api';
 
 interface Props {
@@ -11,17 +10,18 @@ interface Props {
 }
 
 interface State {
-  user: User;
+  name: string,
+  id: number,
+  email: string,
+  phone: string,
 }
 
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
-    user: {
-      name: '',
-      id: 0,
-      email: '',
-      phone: '',
-    },
+    name: '',
+    id: 0,
+    email: '',
+    phone: '',
   };
 
   componentDidMount() {
@@ -38,7 +38,9 @@ export class CurrentUser extends React.Component<Props, State> {
     try {
       const user = await getUserById(this.props.userId);
 
-      this.setState({ user });
+      this.setState({
+        name: user.name, id: user.id, email: user.email, phone: user.phone,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +49,7 @@ export class CurrentUser extends React.Component<Props, State> {
   render() {
     const {
       name, id, email, phone,
-    } = this.state.user;
+    } = this.state;
 
     return (
       <div className="CurrentUser">
@@ -73,5 +75,3 @@ export class CurrentUser extends React.Component<Props, State> {
     );
   }
 }
-
-// export default CurrentUser;
