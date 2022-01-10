@@ -9,13 +9,11 @@ interface Props {
   handleSelectedUserId: (userId: number) => void,
 }
 
-const OShowTodos = {
-  All: 0,
-  Active: 1,
-  Completed: 2,
-} as const;
-
-type ShowTodos = typeof OShowTodos[keyof typeof OShowTodos];
+enum ShowTodos {
+  All,
+  Active,
+  Completed,
+}
 
 interface State {
   filterTitle: string,
@@ -25,7 +23,7 @@ interface State {
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     filterTitle: '',
-    selectedTodo: OShowTodos.All,
+    selectedTodo: ShowTodos.All,
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,13 +33,13 @@ export class TodoList extends React.Component<Props, State> {
   handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
       case 'Active':
-        this.setState({ selectedTodo: OShowTodos.Active });
+        this.setState({ selectedTodo: ShowTodos.Active });
         break;
       case 'Completed':
-        this.setState({ selectedTodo: OShowTodos.Completed });
+        this.setState({ selectedTodo: ShowTodos.Completed });
         break;
       default:
-        this.setState({ selectedTodo: OShowTodos.All });
+        this.setState({ selectedTodo: ShowTodos.All });
         break;
     }
   };
@@ -56,10 +54,10 @@ export class TodoList extends React.Component<Props, State> {
     let selectedTodos = null;
 
     switch (selectedTodo) {
-      case OShowTodos.Active:
+      case ShowTodos.Active:
         selectedTodos = filteredTodos.filter(todo => !todo.completed);
         break;
-      case OShowTodos.Completed:
+      case ShowTodos.Completed:
         selectedTodos = filteredTodos.filter(todo => todo.completed);
         break;
 
