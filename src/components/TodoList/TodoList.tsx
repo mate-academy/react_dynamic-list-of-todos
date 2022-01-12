@@ -1,44 +1,122 @@
 import React from 'react';
 import './TodoList.scss';
+import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  preparedTodos: Todo[];
+  selectUser: (id: number | null) => void;
+  selectedUserId: number | null;
+  completeToggle: (todo: Todo) => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  titleFilter: string,
+  selected: string,
+};
+
+export class TodoList extends React.Component<Props, State> {
+  state = {
+    titleFilter: '',
+    selected: 'all',
+  };
+
+  shuffle = () => {
+    this.props.preparedTodos.sort(() => Math.random() - 0.5);
+    this.setState({});
+  };
+
+  reset = () => {
+    this.setState({ selected: 'all', titleFilter: '' });
+    this.props.preparedTodos.sort((a, b) => a.id - b.id);
+  };
+
+  changeToggler = (
+    event:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+
+    if (name === 'selected') {
+      this.setState({ selected: value });
+    }
+
+    if (name === 'titleFilter') {
+      this.setState({ titleFilter: value });
+    }
+  };
+
+  render() {
+    const {
+      selectedUserId,
+      preparedTodos,
+      selectUser,
+      completeToggle,
+    } = this.props;
+
+    const { titleFilter, selected } = this.state;
+
+    let filteredTodos = preparedTodos.filter(
+      (todo) => todo.title.toLowerCase().includes(titleFilter.toLowerCase()),
+    );
+
+    switch (selected) {
+      case 'active':
+        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+        break;
+      case 'completed':
+        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__list-container">
+          <input
+            type="text"
+            name="titleFilter"
+            value={this.state.titleFilter}
+            onChange={this.changeToggler}
+          />
+
+          <select
+            name="selected"
+            onChange={this.changeToggler}
+            value={this.state.selected}
+          >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="active">Active</option>
+          </select>
 
           <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
             type="button"
+            onClick={this.shuffle}
           >
-            User&nbsp;#1
+            shuffle
           </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
 
           <button
-            className="TodoList__user-button button"
             type="button"
+            onClick={this.reset}
           >
-            User&nbsp;#2
+            reset
           </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+
+          <ul className="TodoList__list">
+            {filteredTodos.map(todo => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                completeToggle={completeToggle}
+                userId={selectedUserId}
+                selectUser={selectUser}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
