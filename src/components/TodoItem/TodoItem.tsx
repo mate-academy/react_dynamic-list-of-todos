@@ -22,7 +22,6 @@ export const TodoItem: React.FC<Props> = (
       classNames('TodoList__item',
         { 'TodoList__item--unchecked': !todo.completed })
     }
-    key={todo.id}
   >
     <label>
       <input

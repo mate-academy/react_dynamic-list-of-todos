@@ -107,6 +107,7 @@ export class TodoList extends React.Component<Props, State> {
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
               <TodoItem
+                key={todo.id}
                 todo={todo}
                 completeToggle={completeToggle}
                 userId={selectedUserId}
