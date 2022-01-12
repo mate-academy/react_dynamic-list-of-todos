@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import classNames from 'classnames';
 
@@ -23,9 +24,8 @@ export const TodoItem: React.FC<Props> = (
     }
     key={todo.id}
   >
-    <label htmlFor="checkbox">
+    <label>
       <input
-        id="checkbox"
         type="checkbox"
         readOnly
         checked={todo.completed}

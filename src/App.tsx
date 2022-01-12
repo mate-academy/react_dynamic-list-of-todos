@@ -40,7 +40,6 @@ class App extends React.Component<{}, State> {
       return {
         todosFromServer: [
           ...state.todosFromServer,
-          changedTodo,
         ],
       };
     });
