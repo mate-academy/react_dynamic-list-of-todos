@@ -1,13 +1,12 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import './TodoList.scss';
-import classNames from 'classnames';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   preparedTodos: Todo[];
   selectUser: (id: number | null) => void;
   selectedUserId: number | null;
-  completeToggle: (todoId: number) => void;
+  completeToggle: (todo: Todo) => void;
 };
 
 type State = {
@@ -31,6 +30,20 @@ export class TodoList extends React.Component<Props, State> {
     this.props.preparedTodos.sort((a, b) => a.id - b.id);
   };
 
+  changeToggler = (
+    event:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+
+    if (name === 'selected') {
+      this.setState({ selected: value });
+    }
+
+    if (name === 'titleFilter') {
+      this.setState({ titleFilter: value });
+    }
+  };
+
   render() {
     const {
       selectedUserId,
@@ -41,16 +54,20 @@ export class TodoList extends React.Component<Props, State> {
 
     const { titleFilter, selected } = this.state;
 
-    const filteredTodos = preparedTodos.filter(
-      (todo) => todo.title.toLowerCase().includes(titleFilter.toLowerCase()) && (
-        selected === 'completed' ? (
-          todo.completed === true
-        ) : (
-          todo.completed === false
-        )
-        || selected === 'all'
-      ),
+    let filteredTodos = preparedTodos.filter(
+      (todo) => todo.title.toLowerCase().includes(titleFilter.toLowerCase()),
     );
+
+    switch (selected) {
+      case 'active':
+        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+        break;
+      case 'completed':
+        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
+        break;
+      default:
+        break;
+    }
 
     return (
       <div className="TodoList">
@@ -60,12 +77,12 @@ export class TodoList extends React.Component<Props, State> {
             type="text"
             name="titleFilter"
             value={this.state.titleFilter}
-            onChange={(event) => this.setState({ titleFilter: event.target.value })}
+            onChange={this.changeToggler}
           />
 
           <select
             name="selected"
-            onChange={(event) => this.setState({ selected: event.target.value })}
+            onChange={this.changeToggler}
             value={this.state.selected}
           >
             <option value="all">All</option>
@@ -89,36 +106,12 @@ export class TodoList extends React.Component<Props, State> {
 
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
-              <li
-                className={
-                  classNames('TodoList__item',
-                    { 'TodoList__item--unchecked': !todo.completed })
-                }
-                key={todo.id}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    readOnly
-                    checked={todo.completed}
-                    onClick={() => completeToggle(todo.id)}
-                  />
-                  <p>{todo.title}</p>
-                </label>
-
-                {todo.userId && (
-                  <button
-                    className={
-                      classNames('TodoList__user-button', 'button',
-                        { 'TodoList__user-button--selected': todo.userId === selectedUserId })
-                    }
-                    onClick={() => selectUser(todo.userId)}
-                    type="button"
-                  >
-                    {todo.userId}
-                  </button>
-                )}
-              </li>
+              <TodoItem
+                todo={todo}
+                completeToggle={completeToggle}
+                userId={selectedUserId}
+                selectUser={selectUser}
+              />
             ))}
           </ul>
         </div>

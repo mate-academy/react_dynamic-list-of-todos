@@ -31,23 +31,19 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
-  completeChanger = (todoId: number) => {
-    this.setState(state => ({
-      todosFromServer: [
-        ...state.todosFromServer.map((todo) => {
-          if (todo.id === todoId) {
-            const todoWithChangedCompleted = {
-              ...todo,
-              completed: !todo.completed,
-            };
+  completeChanger = (todo: Todo) => {
+    const changedTodo = todo;
 
-            return todoWithChangedCompleted;
-          }
+    changedTodo.completed = !changedTodo.completed;
 
-          return todo;
-        }),
-      ],
-    }));
+    this.setState(state => {
+      return {
+        todosFromServer: [
+          ...state.todosFromServer,
+          changedTodo,
+        ],
+      };
+    });
   };
 
   render() {
