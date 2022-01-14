@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-console */
 import classNames from 'classnames';
 import React from 'react';
 import './TodoList.scss';

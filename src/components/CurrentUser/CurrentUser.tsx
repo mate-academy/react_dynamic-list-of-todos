@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import './CurrentUser.scss';
 import { getUsers } from '../../api/api';
