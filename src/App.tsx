@@ -3,23 +3,32 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getData } from './api/api';
 
 interface State {
-  selectedUserId: number;
+  todos: Todo[],
+  selectedUserId: number,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
+    todos: [],
     selectedUserId: 0,
   };
 
+  async componentDidMount() {
+    const todos = await getData('/todos');
+
+    this.setState({ todos });
+  }
+
   render() {
-    const { selectedUserId } = this.state;
+    const { selectedUserId, todos } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList todos={todos} />
         </div>
 
         <div className="App__content">
