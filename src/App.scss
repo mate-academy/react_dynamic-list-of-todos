@@ -37,9 +37,6 @@ input[type="checkbox"] + p {
   position: relative;
   padding-left: 35px;
   cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 input[type="checkbox"] + p:before {
@@ -91,4 +88,38 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__button {
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+    padding: 5px;
+
+    &:focus {
+      border: 2px solid #4d457b;
+      outline: none;
+    }
+  }
+ 
 }
+
+  .button-input {
+    &::placeholder {
+      color: #4d457b;
+      opacity: 0.5;
+    }
+  }
+
+  .button-select {
+    color: #4d457b;
+  }
+
+  .button-random {
+    background-color: #4d457b;
+    color: #fff;
+    text-align: center;
+  }
