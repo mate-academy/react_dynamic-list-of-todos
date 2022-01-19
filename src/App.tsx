@@ -8,33 +8,59 @@ import { getData } from './api/api';
 interface State {
   todos: Todo[],
   selectedUserId: number,
+  errorMessage: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     todos: [],
-    selectedUserId: 0,
+    selectedUserId: 1,
+    errorMessage: '',
   };
 
-  async componentDidMount() {
-    const todos = await getData('/todos');
+  // async componentDidMount() {
+  //   const todos = await getData('/todos');
 
-    this.setState({ todos });
+  //   this.setState({ todos });
+  // }
+
+  componentDidMount() {
+    getData('/todos')
+      .then(todos => {
+        this.setState({ todos });
+      });
+    // .catch(() => {
+    //   this.setState({ errorMessage: 'Can\'t load data' });
+    // });
+    // не получается обработать ошибку
   }
 
+  selectUser = (userId: number) => {
+    if (userId !== this.state.selectedUserId) {
+      this.setState({ selectedUserId: userId });
+    }
+  };
+
   render() {
-    const { selectedUserId, todos } = this.state;
+    const { selectedUserId, todos, errorMessage } = this.state;
 
     return (
       <div className="App">
-        <div className="App__sidebar">
-          <TodoList todos={todos} />
-        </div>
+        {todos ? (
+          <div className="App__sidebar">
+            <TodoList
+              todos={todos}
+              selectUser={this.selectUser}
+            />
+          </div>
+        ) : (
+          { errorMessage }
+        )}
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={this.state.selectedUserId} />
             ) : 'No user selected'}
           </div>
         </div>

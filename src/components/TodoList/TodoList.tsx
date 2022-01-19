@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[],
+  selectUser: (userId: number) => void,
 };
 
 type State = {
@@ -53,6 +54,7 @@ export class TodoList extends React.Component <Props, State> {
 
   render() {
     const { visibleTodos, inputFilter } = this.state;
+    const { selectUser } = this.props;
 
     const filtredTodos = visibleTodos.filter(todo => (
       todo.title.toLowerCase().includes(inputFilter.toLowerCase())));
@@ -95,8 +97,9 @@ export class TodoList extends React.Component <Props, State> {
                     completed ? 'checked' : 'unchecked'
                   }`)}
                 >
-                  <label>
+                  <label htmlFor="input">
                     <input
+                      id="input"
                       type="checkbox"
                       readOnly
                       checked={completed}
@@ -107,6 +110,9 @@ export class TodoList extends React.Component <Props, State> {
                   <button
                     className="TodoList__user-button button"
                     type="button"
+                    onClick={() => {
+                      selectUser(userId);
+                    }}
                   >
                     {`User #${userId}`}
                   </button>
