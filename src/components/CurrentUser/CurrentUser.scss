@@ -1,4 +1,12 @@
 .CurrentUser {
+  &__button {
+    border: 2px solid #4d457b;
+    background-color: #fff;
+    color: #4d457b;
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
   &__title {
     font-size: 1rem;
     color: white;
@@ -26,4 +34,13 @@
     display: block;
     margin: 20px auto 0;
   }
+}
+
+.error {
+  border: 1px solid #4d457b;
+  border-radius: 5px;
+  background-color: #4d457b;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
 }
