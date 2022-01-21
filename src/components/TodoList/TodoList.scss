@@ -28,4 +28,18 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto 12px;
+
+    &--input,
+    &--select {
+      height: 24px;
+      border-radius: 8px;
+      padding-left: 4px;
+    }
+  }
 }
