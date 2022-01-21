@@ -11,15 +11,21 @@ type Props = {
   handleChecked(id:number): void,
 };
 
+enum Status {
+  All = 'All',
+  Completed = 'completed',
+  NotCompleted = 'notCompleted',
+}
+
 type State = {
   titleQuery: string;
-  status: string;
+  status: Status;
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     titleQuery: '',
-    status: 'All',
+    status: Status.All,
   };
 
   handleChange = (
@@ -37,9 +43,9 @@ export class TodoList extends React.Component<Props, State> {
 
     const filterByStatus = (todo:Todo) => {
       switch (status) {
-        case 'completed':
+        case Status.Completed:
           return todo.completed;
-        case 'notCompleted':
+        case Status.NotCompleted:
           return !todo.completed;
         default:
           return true;
@@ -78,9 +84,9 @@ export class TodoList extends React.Component<Props, State> {
             defaultValue={status}
             onChange={this.handleChange}
           >
-            <option value="All">All</option>
-            <option value="completed">Completed</option>
-            <option value="notCompleted">Still in process</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Completed}>Completed</option>
+            <option value={Status.NotCompleted}>Still in process</option>
           </select>
         </div>
 

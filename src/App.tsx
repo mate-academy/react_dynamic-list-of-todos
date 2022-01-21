@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
@@ -10,6 +9,7 @@ interface State {
   selectedUserId: number;
   todos: Todo[];
   isLoading: boolean;
+  errorMessage: string;
 }
 
 class App extends React.Component<{}, State> {
@@ -17,6 +17,7 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     todos: [],
     isLoading: false,
+    errorMessage: '',
   };
 
   componentDidMount() {
@@ -34,8 +35,13 @@ class App extends React.Component<{}, State> {
         isLoading: false,
       });
     } catch (error) {
-      console.warn(error);
-      this.setState({ isLoading: false });
+      this.setState({
+        errorMessage: 'Cant load todos',
+      });
+    } finally {
+      this.setState({
+        isLoading: false,
+      });
     }
   };
 
@@ -67,6 +73,8 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
+          {this.state.errorMessage}
+
           {isLoading
             ? 'loading'
             : (
