@@ -1,44 +1,111 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[],
+  userId: number,
+  selectUser: (userId: number) => void,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  query: string,
+  filter: string,
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    query: '',
+    filter: '',
+  };
+
+  render() {
+    const { query, filter } = this.state;
+    const { todos, userId, selectUser } = this.props;
+
+    const visibleTodos = todos.filter(todo => {
+      if (filter === 'active') {
+        return !todo.completed
+        && todo.title.toLowerCase().includes(query.toLowerCase());
+      }
+
+      if (filter === 'completed') {
+        return todo.completed
+        && todo.title.toLowerCase().includes(query.toLowerCase());
+      }
+
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    });
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <div className="TodoList__filter">
+          <input
+            type="text"
+            id="search-query"
+            className="TodoList__filter-item"
+            placeholder="Type search word"
+            onChange={(event) => {
+              this.setState({
+                query: event.target.value,
+              });
+            }}
+          />
+          <select
+            name="filter"
+            value={this.state.filter}
+            className="TodoList__filter-item"
+            onChange={(event) => {
+              this.setState({ filter: event.target.value });
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="all">
+              Show all
+            </option>
+            <option value="active">
+              Show active
+            </option>
+            <option value="completed">
+              Show completed
+            </option>
+          </select>
+        </div>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed },
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+                <button
+                  type="button"
+                  className={classNames(
+                    'button',
+                    'TodoList__user-button',
+                    { 'TodoList__user-button--selected': userId === todo.userId },
+                  )}
+                  onClick={() => selectUser(todo.userId)}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
