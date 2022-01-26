@@ -1,1 +1,3 @@
-export * from './CurrentUser';
+import CurrentUser from './CurrentUser';
+
+export default CurrentUser;
