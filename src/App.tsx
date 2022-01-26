@@ -21,24 +21,22 @@ class App extends React.Component<{}, State> {
   }
 
   loader = async () => {
-    this.setState({ todos: await getToods });
+    const todos = await getToods;
+
+    this.setState({ todos });
   };
 
   onSelectedUserId = (selectedUserId: number) => {
     this.setState({ selectedUserId });
   };
 
-  sortByTitle = async (title: string) => {
-    await this.loader();
-
+  sortByTitle = (title: string) => {
     this.setState(state => (
       { todos: state.todos.filter((todo: Todo) => todo.title.includes(title)) }
     ));
   };
 
-  sortByCompleted = async (by: string) => {
-    await this.loader();
-
+  sortByCompleted = (by: string) => {
     switch (by) {
       case 'all':
         this.setState(state => ({ todos: state.todos }));
