@@ -8,14 +8,12 @@ import { getToods } from './api/api';
 interface State {
   selectedUserId: number;
   todos: Todo[];
-  checkedTodo: number,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
-    checkedTodo: 0,
   };
 
   componentDidMount() {
@@ -23,15 +21,11 @@ class App extends React.Component<{}, State> {
   }
 
   loader = async () => {
-    await getToods
-      .then(todos => this.setState({ todos }));
+    this.setState({ todos: await getToods });
   };
 
-  onSelectedUserId = (selectedUserId: number, checkedTodo: number) => {
-    this.setState({
-      selectedUserId,
-      checkedTodo,
-    });
+  onSelectedUserId = (selectedUserId: number) => {
+    this.setState({ selectedUserId });
   };
 
   sortByTitle = async (title: string) => {
@@ -51,13 +45,13 @@ class App extends React.Component<{}, State> {
         break;
       case 'active':
         this.setState(state => (
-          { todos: state.todos.filter((todo: Todo) => todo.completed === false) }
+          { todos: state.todos.filter((todo: Todo) => !todo.completed) }
         ));
         break;
 
       default:
         this.setState(state => (
-          { todos: state.todos.filter((todo: Todo) => todo.completed === true) }
+          { todos: state.todos.filter((todo: Todo) => todo.completed) }
         ));
     }
   };
@@ -68,7 +62,7 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { selectedUserId, todos, checkedTodo } = this.state;
+    const { selectedUserId, todos } = this.state;
     const {
       onSelectedUserId,
       sortByTitle,
@@ -82,7 +76,6 @@ class App extends React.Component<{}, State> {
           <TodoList
             todos={todos}
             onSelectedUserId={onSelectedUserId}
-            checkedTodo={checkedTodo}
             sortByTitle={sortByTitle}
             sortByCompleted={sortByCompleted}
             randomize={randomize}

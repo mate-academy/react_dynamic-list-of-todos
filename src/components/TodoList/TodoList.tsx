@@ -3,9 +3,8 @@ import classNames from 'classnames';
 import './TodoList.scss';
 
 type Props = {
-  checkedTodo: number,
   todos: Todo[],
-  onSelectedUserId: (selectedUserId: number, checkedTodo: number) => void,
+  onSelectedUserId: (selectedUserId: number) => void,
   sortByTitle: (title: string) => void,
   sortByCompleted: (by: string) => void,
   randomize: () => void,
@@ -18,7 +17,6 @@ export class TodoList extends React.Component<Props> {
     const {
       todos,
       onSelectedUserId,
-      checkedTodo,
       sortByCompleted,
       sortByTitle,
       randomize,
@@ -64,8 +62,8 @@ export class TodoList extends React.Component<Props> {
                 key={todo.id}
                 className={classNames(
                   'TodoList__item',
-                  { 'TodoList__item--checked': checkedTodo === todo.id },
-                  { 'TodoList__item--unchecked': checkedTodo !== todo.id },
+                  { 'TodoList__item--checked': todo.completed },
+                  { 'TodoList__item--unchecked': !todo.completed },
                 )}
               >
                 <label htmlFor={`${todo.id}`}>
@@ -73,7 +71,7 @@ export class TodoList extends React.Component<Props> {
                     id={`${todo.id}`}
                     type="checkbox"
                     readOnly
-                    checked={checkedTodo === todo.id}
+                    checked={todo.completed}
                   />
                   <p>
                     {todo.title}
@@ -84,11 +82,10 @@ export class TodoList extends React.Component<Props> {
                   className={classNames(
                     'TodoList__user-button',
                     'button',
-                    { 'TodoList__user-button--selected': checkedTodo !== todo.id },
                   )}
                   type="button"
                   onClick={() => {
-                    onSelectedUserId(todo.userId, todo.id);
+                    onSelectedUserId(todo.userId);
                   }}
                 >
                   User&nbsp;

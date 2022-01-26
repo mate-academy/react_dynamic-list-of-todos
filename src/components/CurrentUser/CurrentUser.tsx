@@ -5,7 +5,7 @@ import './CurrentUser.scss';
 
 type Props = {
   selectedUserId: number,
-  onSelectedUserId: (selectedUserId: number, checkedTodo: number) => void,
+  onSelectedUserId: (selectedUserId: number) => void,
 };
 
 type State = {
@@ -22,16 +22,13 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps !== this.props) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
       this.loader();
     }
   }
 
   loader = async () => {
-    await getUser(this.props.selectedUserId)
-      .then((user: User) => {
-        return this.setState({ user });
-      });
+    this.setState({ user: await getUser(this.props.selectedUserId) });
   };
 
   render() {
@@ -59,7 +56,7 @@ export class CurrentUser extends React.Component<Props, State> {
         <button
           className="button"
           type="button"
-          onClick={() => onSelectedUserId(0, 0)}
+          onClick={() => onSelectedUserId(0)}
         >
           Clear
         </button>
