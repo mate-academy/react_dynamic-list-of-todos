@@ -10,7 +10,9 @@
     padding-left: 5px;
   }
 
-  &__item {
+  &__item,
+  &__select,
+  &__input {
     display: flex;
     justify-content: space-between;
     align-items: center;
