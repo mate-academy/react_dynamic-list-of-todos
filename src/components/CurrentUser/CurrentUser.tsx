@@ -68,7 +68,7 @@ class CurrentUser extends React.Component<Props, State> {
     } catch (error) {
       serverError = true;
 
-      const str = `An error has ocurred while getting data from server: ${String(error)}`;
+      const str = 'An error has ocurred while getting data from server, please contact our support team';
 
       this.props.handleUserError(str);
     }
