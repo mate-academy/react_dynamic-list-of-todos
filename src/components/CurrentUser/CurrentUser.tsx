@@ -3,10 +3,12 @@ import './CurrentUser.scss';
 import { getUser } from '../../Api/Api';
 
 type ClearUser = () => void;
+type HandleUserError = (error: string) => void;
 
 type Props = {
   selectedUserId: number;
   clearUser: ClearUser;
+  handleUserError: HandleUserError;
 };
 
 type State = {
@@ -33,7 +35,7 @@ class CurrentUser extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     if (this.props.selectedUserId !== prevProps.selectedUserId) {
-      this.getUserFromServer();
+      this.loadUsers();
     }
   }
 
@@ -41,19 +43,60 @@ class CurrentUser extends React.Component<Props, State> {
     this.props.clearUser();
   };
 
-  getUserFromServer = async () => {
-    const user = await getUser(this.props.selectedUserId);
-
-    this.setState((state) => ({
-      ...state,
-      user,
-    }));
+  loadUsers = () => {
+    this.setState({
+      user: {
+        id: 0,
+        createdAt: '',
+        updatedAt: '',
+        name: '',
+        username: '',
+        email: '',
+        phone: '',
+        website: '',
+      },
+    });
+    this.getUserFromServer();
   };
 
-  render() {
+  getUserFromServer = async () => {
+    let user: User;
+    let serverError = false;
+
+    try {
+      user = await getUser(this.props.selectedUserId);
+    } catch (error) {
+      serverError = true;
+
+      const str = `An error has ocurred while getting data from server: ${String(error)}`;
+
+      this.props.handleUserError(str);
+    }
+
+    if (!serverError) {
+      this.setState((state) => ({
+        ...state,
+        user,
+      }));
+    }
+  };
+
+  userLoader = () => {
     const {
       id, name, email, phone,
     } = this.state.user;
+
+    if (this.state.user.id === 0) {
+      return (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              The data is loading
+            </span>
+          </h2>
+        </div>
+      );
+    }
 
     return (
       <div className="CurrentUser">
@@ -77,6 +120,14 @@ class CurrentUser extends React.Component<Props, State> {
           Clear
         </button>
       </div>
+    );
+  };
+
+  render() {
+    return (
+      <>
+        {this.userLoader()}
+      </>
     );
   }
 }

@@ -2,16 +2,11 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 
-enum FilterParameters {
-  All,
-  Active,
-  Completed,
-}
-
 type HandleUserSelect = (userId: number) => void;
 type ChangeTodoStatus = (todoTitle: string) => void;
 type HandleSearch = (searchTitle: string) => void;
-type HandleFilter = (filterParameter: FilterParameters) => void;
+type HandleFilter = (filterParameter: string) => void;
+type HandleUserError = (error: string) => void;
 
 type Props = {
   todos: Todo[];
@@ -20,6 +15,7 @@ type Props = {
   changeTodoStatus: ChangeTodoStatus;
   handleSearch: HandleSearch;
   handleFilter: HandleFilter;
+  handleUserError: HandleUserError;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
@@ -30,6 +26,7 @@ export const TodoList: React.FC<Props> = (props) => {
     changeTodoStatus,
     handleSearch,
     handleFilter,
+    handleUserError,
   } = props;
 
   const searchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,21 +36,14 @@ export const TodoList: React.FC<Props> = (props) => {
   };
 
   const filterSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (event.target.value) {
-      case '1':
-        handleFilter(FilterParameters.Active);
-        break;
+    const param = event.target.value;
 
-      case '2':
-        handleFilter(FilterParameters.Completed);
-        break;
-
-      default:
-        handleFilter(FilterParameters.All);
-    }
+    handleFilter(param);
   };
 
   const changeUser = (event: React.MouseEvent<HTMLButtonElement>) => {
+    handleUserError('');
+
     const { id } = event.currentTarget.dataset;
 
     if (id) {
@@ -84,9 +74,9 @@ export const TodoList: React.FC<Props> = (props) => {
         placeholder="Input title"
         onChange={filterSelect}
       >
-        <option value={FilterParameters.All}>Show all</option>
-        <option value={FilterParameters.Active}>Show active</option>
-        <option value={FilterParameters.Completed}>Show completed</option>
+        <option value="All">Show all</option>
+        <option value="Active">Show active</option>
+        <option value="Completed">Show completed</option>
       </select>
 
       <div className="TodoList__list-container">
@@ -121,40 +111,6 @@ export const TodoList: React.FC<Props> = (props) => {
             </button>
           </li>
         ))}
-
-        {/* <ul className="TodoList__list">
-          <li className="TodoList__item TodoList__item--unchecked">
-            <label htmlFor="delectus">
-              <input type="checkbox" readOnly id="delectus" />
-              <p>delectus aut autem</p>
-            </label>
-
-            <button
-              className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
-              type="button"
-            >
-              User&nbsp;#1
-            </button>
-          </li>
-
-          <li className="TodoList__item TodoList__item--checked">
-            <label htmlFor="distinctio">
-              <input type="checkbox" checked readOnly id="distinctio" />
-              <p>distinctio vitae autem nihil ut molestias quo</p>
-            </label>
-
-            <button
-              className="TodoList__user-button button"
-              type="button"
-            >
-              User&nbsp;#2
-            </button>
-          </li>
-        </ul> */}
       </div>
     </div>
   );
