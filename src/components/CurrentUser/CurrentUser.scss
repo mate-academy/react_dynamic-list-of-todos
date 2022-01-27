@@ -27,3 +27,23 @@
     margin: 20px auto 0;
   }
 }
+
+.clearUser {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: lightgray;
+
+  &:hover {
+    cursor: pointer;
+    background-color: coral;
+    font-weight: bold;
+  }
+
+  &:active {
+    background-color: lightgreen;
+    font-weight: bold;
+  }
+}

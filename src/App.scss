@@ -37,9 +37,9 @@ input[type="checkbox"] + p {
   position: relative;
   padding-left: 35px;
   cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  // -webkit-user-select: none;
+  // -moz-user-select: none;
+  // -ms-user-select: none;
 }
 
 input[type="checkbox"] + p:before {
