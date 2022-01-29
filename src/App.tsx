@@ -49,6 +49,21 @@ class App extends React.Component<{}, State> {
     });
   };
 
+  todoCompletedStatus = (todoId: number) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: true,
+        };
+      }),
+    }));
+  };
+
   selectHandler = (type: string) => {
     this.setState({
       sortType: type,
@@ -151,6 +166,8 @@ class App extends React.Component<{}, State> {
           <TodoList
             todos={todos}
             selectUser={this.selectUser}
+            selectedUserId={selectedUserId}
+            onChangeStatus={this.todoCompletedStatus}
           />
         </div>
 

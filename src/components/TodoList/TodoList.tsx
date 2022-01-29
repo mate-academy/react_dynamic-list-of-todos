@@ -11,73 +11,89 @@ interface Todo {
 
 type Props = {
   todos: Todo[],
-  selectUser: (userId: number) => void
+  selectUser: (userId: number) => void,
+  selectedUserId: number,
+  onChangeStatus: (todoId: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectUser }) => (
-  <div className="TodoList">
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectUser,
+  selectedUserId,
+  onChangeStatus,
+}) => {
+  const todoList = selectedUserId === 0 ? todos
+    : todos.filter(todo => todo.userId === selectedUserId);
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        {todos.map(todo => (
-          todo.completed ? (
-            <li
-              key={todo.id}
-              className="TodoList__item TodoList__item--checked"
-            >
-              <label htmlFor={todo.id.toString()}>
-                <input
-                  type="checkbox"
-                  checked
-                  readOnly
-                  id={todo.id.toString()}
-                />
-                {todo.title}
-              </label>
+  return (
+    <div className="TodoList">
 
-              <button
-                className="TodoList__user-button button"
-                type="button"
-                onClick={() => {
-                  selectUser(todo.userId);
-                }}
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todoList.map(todo => (
+            todo.completed ? (
+              <li
+                key={todo.id}
+                className="TodoList__item TodoList__item--checked"
               >
-                User&nbsp;
-                {todo.userId}
-              </button>
-            </li>
-          ) : (
-            <li
-              key={todo.id}
-              className="TodoList__item TodoList__item--unchecked"
-            >
-              <label htmlFor={todo.id.toString()}>
-                <input
-                  type="checkbox"
-                  readOnly
-                  id={todo.id.toString()}
-                />
-                <p>{todo.title}</p>
-              </label>
+                <label htmlFor={todo.id.toString()}>
+                  <input
+                    type="checkbox"
+                    checked
+                    readOnly
+                    id={todo.id.toString()}
+                    onChange={() => (
+                      todo.completed === false
+                    )}
+                  />
+                  {todo.title}
+                </label>
 
-              <button
-                className="
+                <button
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => {
+                    selectUser(todo.userId);
+                  }}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
+            ) : (
+              <li
+                key={todo.id}
+                className="TodoList__item TodoList__item--unchecked"
+              >
+                <label htmlFor={todo.id.toString()}>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    id={todo.id.toString()}
+                    onChange={() => onChangeStatus(todo.id)}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className="
                   TodoList__user-button
                   TodoList__user-button--selected
                   button"
-                type="button"
-                onClick={() => {
-                  selectUser(todo.userId);
-                }}
-              >
-                User&nbsp;
-                {todo.userId}
-              </button>
-            </li>
-          )
-        ))}
+                  type="button"
+                  onClick={() => {
+                    selectUser(todo.userId);
+                  }}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
+            )
+          ))}
 
-      </ul>
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
