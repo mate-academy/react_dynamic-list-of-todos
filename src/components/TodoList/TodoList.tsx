@@ -1,44 +1,89 @@
+import classNames from 'classnames';
 import React from 'react';
+import { getTodos } from '../../api/api';
+import { FilterForm } from '../FilterForm';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type State = {
+  todos: Todo[];
+  filteredTodos: Todo[];
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  selectedUserId: number;
+  selectUser: (userId: number) => void;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    todos: [],
+    filteredTodos: [],
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  async componentDidMount() {
+    const todos = await getTodos();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    this.setState({
+      todos,
+      filteredTodos: todos,
+    });
+  }
+
+  handleFilterTodos = (filterTodos: FilterTodosCallback, sybstr: string, status: string) => {
+    this.setState((state) => ({
+      filteredTodos: filterTodos(state.todos, sybstr, status),
+    }));
+  };
+
+  render() {
+    const { filteredTodos } = this.state;
+    const { selectedUserId, selectUser } = this.props;
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <FilterForm handleFilterTodos={this.handleFilterTodos} />
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {
+              filteredTodos.map(todo => (
+                <li
+                  key={todo.id}
+                  className={classNames(
+                    'TodoList__item',
+                    { 'TodoList__item--unchecked': !todo.completed },
+                    { 'TodoList__item--checked': todo.completed },
+                  )}
+                >
+                  <label htmlFor="done">
+                    <input
+                      id="done"
+                      type="checkbox"
+                      readOnly
+                      checked={todo.completed}
+                    />
+                    <p>{todo.title}</p>
+                  </label>
+
+                  <button
+                    className={classNames(
+                      'TodoList__user-button',
+                      { 'TodoList__user-button--selected': selectedUserId === todo.userId },
+                      'button',
+                    )}
+                    type="button"
+                    onClick={() => selectUser(todo.userId)}
+                  >
+                    {`User #${todo.userId}`}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
