@@ -1,6 +1,10 @@
 .TodoList {
   width: 100%;
 
+  &__user-button {
+    width: 100px;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
@@ -27,5 +31,17 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__title-input {
+    width: 300px;
+  }
+
+  &__search-bar {
+    margin: 0 10px 10px;
+  }
+
+  &__randomize-button {
+    margin-left: 10px;
   }
 }
