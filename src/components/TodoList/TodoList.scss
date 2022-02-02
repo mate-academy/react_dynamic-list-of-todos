@@ -28,4 +28,18 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__interactive {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #4d457b;
+    font-weight: bold;
+
+    &-input {
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: 2px solid #4d457b;
+    }
+  }
 }

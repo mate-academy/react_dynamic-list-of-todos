@@ -1,43 +1,100 @@
 import React from 'react';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
+export enum SortBy {
+  true = 'true',
+  false = 'false',
+  default = '',
+}
+
+type Props = {
+  todos: Todo[];
+  onSelectUser: (userId: number) => void;
+  selectedUserId: number;
+  query: string;
+  onChangeSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  filterCompleted: SortBy;
+  onSelectCompletionChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onRandomize: () => void;
+};
+
+export const TodoList: React.FC<Props> = (props) => (
   <div className="TodoList">
     <h2>Todos:</h2>
+    <div className="TodoList__interactive">
+      <label htmlFor="search-query" className="label">
+        Search todo&nbsp;
+        <input
+          className="TodoList__interactive-input"
+          type="text"
+          id="search-query"
+          placeholder="Type search todo"
+          value={props.query}
+          onChange={(event => props.onChangeSearchInput(event))}
+        />
+      </label>
+      <label htmlFor="select-completed">
+        Toggle completion status&nbsp;
+        <select
+          className="TodoList__interactive-input"
+          id="select-completed"
+          value={props.filterCompleted}
+          onChange={(event) => props.onSelectCompletionChange(event)}
+        >
+          <option value={SortBy.default}>All</option>
+          <option value={SortBy.true}>Completed</option>
+          <option value={SortBy.false}>Active</option>
+
+        </select>
+      </label>
+      <span>
+        Random todos&nbsp;
+        <button
+          className=" TodoList__user-button--selected button"
+          type="button"
+          onClick={props.onRandomize}
+        >
+          Randomize
+        </button>
+      </span>
+    </div>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+        {props.todos.map(todo => (
+          <li
+            key={todo.id}
+            className={classNames('TodoList__item',
+              { 'TodoList__item--checked': todo.completed },
+              { 'TodoList__item--unchecked': !todo.completed })}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <label htmlFor="checkbox">
+              <input
+                id="checkbox"
+                checked={todo.completed}
+                type="checkbox"
+                readOnly
+              />
+              <p>{todo.title}</p>
+            </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+            <button
+              onClick={() => {
+                if (todo.userId !== props.selectedUserId) {
+                  props.onSelectUser(todo.userId);
+                }
+              }}
+              className={classNames('TodoList__user-button button',
+                { 'TodoList__user-button--selected': todo.userId === props.selectedUserId })}
+              type="button"
+            >
+              User&nbsp;#
+              {todo.userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
