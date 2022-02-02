@@ -13,19 +13,33 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
+  handleChangeUser = (userId: number) => {
+    this.setState({ selectedUserId: userId });
+  };
+
+  handleClearUser = () => {
+    this.setState({ selectedUserId: 0 });
+  };
+
   render() {
     const { selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectedUserId={this.state.selectedUserId}
+            onUserChange={this.handleChangeUser}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser
+                currentUserId={this.state.selectedUserId}
+                clearUser={this.handleClearUser}
+              />
             ) : 'No user selected'}
           </div>
         </div>
