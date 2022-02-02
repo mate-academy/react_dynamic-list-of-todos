@@ -1,44 +1,91 @@
+import classnames from 'classnames';
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[],
+  selectUser: (userId: number) => void,
+  changeStatus: (id: number) => void,
+  title: string,
+  handleTitle: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  status: string,
+  handleStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = (props) => {
+  const {
+    todos,
+    selectUser,
+    changeStatus,
+    title,
+    handleTitle,
+    status,
+    handleStatus,
+  } = props;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      <label htmlFor="title">
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={handleTitle}
+          className="input TodoList__findByTitle"
+          placeholder="Find by title"
+        />
+      </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      <div className="select TodoList__findByComplited">
+        <select
+          value={status}
+          onChange={handleStatus}
+        >
+          <option value="">All</option>
+          <option value="complited">Complited</option>
+          <option value="active">Active</option>
+        </select>
+      </div>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todos.map(todo => (
+            <li
+              key={todo.id}
+              className={classnames(
+                'TodoList__item',
+                { 'TodoList__item--checked': todo.completed },
+                { 'TodoList__item--unchecked': !todo.completed },
+              )}
+            >
+              <label htmlFor={`checkbox-${todo.id}`}>
+                <input
+                  type="checkbox"
+                  id={`checkbox-${todo.id}`}
+                  checked={todo.completed}
+                  onChange={() => changeStatus(todo.id)}
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                type="button"
+                className="
+                TodoList__user-button
+                TodoList__user-button--selected
+                button
+                "
+                onClick={() => selectUser(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
