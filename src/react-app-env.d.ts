@@ -20,4 +20,3 @@ interface User {
   website: string;
 }
 
-type FilterTodosCallback = (todos: Todo[], substr: string, status: string) => Todo[];
