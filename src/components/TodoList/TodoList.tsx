@@ -29,9 +29,9 @@ export class TodoList extends React.Component<Props, State> {
     });
   }
 
-  handleFilterTodos = (filterTodos: FilterTodosCallback, sybstr: string, status: string) => {
+  handleFilterTodos = (filterTodos: FilterTodosCallback, title: string, status: string) => {
     this.setState((state) => ({
-      filteredTodos: filterTodos(state.todos, sybstr, status),
+      filteredTodos: filterTodos(state.todos, title, status),
     }));
   };
 

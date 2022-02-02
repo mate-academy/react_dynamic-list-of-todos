@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 
 type State = {
-  searchField: string;
+  titleSearch: string;
   statusOfTodos: string;
 };
 
 type Props = {
-  handleFilterTodos: (filterTodos: FilterTodosCallback, sybstr: string, status: string) => void;
+  handleFilterTodos: (filterTodos: FilterTodosCallback, title: string, status: string) => void;
 };
 
 export class FilterForm extends Component<Props, State> {
   state = {
-    searchField: '',
+    titleSearch: '',
     statusOfTodos: 'any',
   };
 
-  filterTodos = (todos: Todo[], substr: string, status: string): Todo[] => {
+  filterTodos = (todos: Todo[], title: string, status: string): Todo[] => {
     let filteredTodos;
 
     switch (status) {
@@ -32,14 +32,14 @@ export class FilterForm extends Component<Props, State> {
     }
 
     return filteredTodos.filter(todo => (
-      todo.title.toLowerCase().includes(substr.toLocaleLowerCase())
+      todo.title.toLowerCase().includes(title.toLocaleLowerCase())
     ));
   };
 
   handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
 
-    this.setState({ searchField: value });
+    this.setState({ titleSearch: value });
     this.props.handleFilterTodos(this.filterTodos, value, this.state.statusOfTodos);
   };
 
@@ -47,11 +47,11 @@ export class FilterForm extends Component<Props, State> {
     const { value } = e.currentTarget;
 
     this.setState({ statusOfTodos: value });
-    this.props.handleFilterTodos(this.filterTodos, this.state.searchField, value);
+    this.props.handleFilterTodos(this.filterTodos, this.state.titleSearch, value);
   };
 
   render() {
-    const { searchField, statusOfTodos } = this.state;
+    const { titleSearch, statusOfTodos } = this.state;
 
     return (
       <div>
@@ -60,7 +60,7 @@ export class FilterForm extends Component<Props, State> {
           <input
             type="text"
             id="filter"
-            value={searchField}
+            value={titleSearch}
             onChange={this.handleChangeSearch}
           />
         </label>
