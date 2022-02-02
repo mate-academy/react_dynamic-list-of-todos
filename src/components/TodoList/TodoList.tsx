@@ -1,44 +1,151 @@
+import classNames from 'classnames';
 import React from 'react';
+import { getTodos } from '../../api/api';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type State = {
+  todos: Todo[];
+  titleSearch: string;
+  statusOfTodos: string;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
+type Props = {
+  selectedUserId: number;
+  selectUser: (userId: number) => void;
+};
+
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    todos: [],
+    titleSearch: '',
+    statusOfTodos: 'any',
+  };
+
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({
+      todos,
+    });
+  }
+
+  handleChangeTodoStatus = (todoId: number) => {
+    const { todos } = this.state;
+
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === todoId) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    });
+
+    this.setState({
+      todos: updatedTodos,
+    });
+  };
+
+  handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ titleSearch: e.currentTarget.value });
+  };
+
+  handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ statusOfTodos: e.currentTarget.value });
+  };
+
+  filterTodos = (): Todo[] => {
+    const { todos, statusOfTodos, titleSearch } = this.state;
+    let filteredTodos;
+
+    switch (statusOfTodos) {
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
+        break;
+
+      case 'completed':
+        filteredTodos = todos.filter(todo => todo.completed);
+        break;
+
+      default:
+        filteredTodos = [...todos];
+    }
+
+    return filteredTodos.filter(todo => (
+      todo.title.toLowerCase().includes(titleSearch.toLocaleLowerCase())
+    ));
+  };
+
+  render() {
+    const { titleSearch, statusOfTodos } = this.state;
+    const { selectedUserId, selectUser } = this.props;
+
+    const filteredTodos = this.filterTodos();
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div>
+          <label htmlFor="filter">
+            Filter by title
+            <input
+              type="text"
+              id="filter"
+              value={titleSearch}
+              onChange={this.handleChangeSearch}
+            />
           </label>
-
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+          <select
+            value={statusOfTodos}
+            onChange={this.handleChangeSelect}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="any">Show all</option>
+            <option value="active">Show active</option>
+            <option value="completed">Show completed</option>
+          </select>
+        </div>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {
+              filteredTodos.map(todo => (
+                <li
+                  key={todo.id}
+                  className={classNames(
+                    'TodoList__item',
+                    { 'TodoList__item--unchecked': !todo.completed },
+                    { 'TodoList__item--checked': todo.completed },
+                  )}
+                >
+                  <label htmlFor={String(todo.id)}>
+                    <input
+                      id={String(todo.id)}
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => {
+                        this.handleChangeTodoStatus(todo.id);
+                      }}
+                    />
+                    <p>{todo.title}</p>
+                  </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+                  <button
+                    className={classNames(
+                      'TodoList__user-button',
+                      { 'TodoList__user-button--selected': selectedUserId === todo.userId },
+                      'button',
+                    )}
+                    type="button"
+                    onClick={() => selectUser(todo.userId)}
+                  >
+                    {`User #${todo.userId}`}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
