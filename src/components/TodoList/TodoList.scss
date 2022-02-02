@@ -28,4 +28,26 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__search {
+    display: flex;
+    justify-content: space-between;
+    height: 30px;
+  }
+
+  &__searchbar {
+    width: 70%;
+    height: 100%;
+    border:solid 1px #ccc;
+    border-radius: 10px;
+    font-size: 1.25em;
+  }
+
+  &__selector {
+    width: 25%;
+    height: 115%;
+    border:solid 1px #ccc;
+    border-radius: 10px;
+    font-size: 1.25em;
+  }
 }
