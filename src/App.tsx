@@ -43,6 +43,12 @@ export class App extends React.Component<Props, State> {
     this.loadData();
   };
 
+  randomaizer = () => {
+    this.setState((prevState) => ({
+      filteredTodo: [...prevState.filteredTodo].sort(() => Math.random() - 0.5),
+    }));
+  };
+
   clearUser = () => {
     this.setState({ selectedUserId: 0 });
   };
@@ -100,6 +106,7 @@ export class App extends React.Component<Props, State> {
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
             query={query}
+            randomaizer={this.randomaizer}
           />
         </div>
 

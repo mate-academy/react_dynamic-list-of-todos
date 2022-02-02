@@ -8,12 +8,20 @@ type Props = {
   selectUser: (userId: number) => void;
   selectedUserId: number,
   query: string,
+  randomaizer: () => void,
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, selectedUserId, selectUser, query,
+  todos, selectedUserId, selectUser, query, randomaizer,
 }) => (
   <div className="TodoList">
+    <button
+      type="button"
+      className="button TodoList__user-button--selected"
+      onClick={randomaizer}
+    >
+      Randomizer
+    </button>
     <h2>Todos:</h2>
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
