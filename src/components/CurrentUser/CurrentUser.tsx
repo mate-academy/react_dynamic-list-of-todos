@@ -1,12 +1,95 @@
 import React from 'react';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number
+  clear: () => void
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type State = {
+  user: User | null
+  isUser: boolean,
+};
+
+export class CurrentUser extends React.PureComponent<Props, State> {
+  state: State = {
+    user: null,
+    isUser: false,
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.userId !== prevProps.userId) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    const { userId } = this.props;
+
+    try {
+      const user = await getUser(String(userId));
+
+      this.setState({
+        user,
+        isUser: true,
+      });
+    } catch (error) {
+      this.setState({ isUser: false });
+    }
+  }
+
+  render() {
+    const { user, isUser } = this.state;
+    const { clear } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        {user ? (
+          <>
+            {isUser ? (
+              <>
+                <h2 className="CurrentUser__title">
+                  <span>
+                    Selected user:
+                    {' '}
+                    {this.props.userId}
+                  </span>
+                </h2>
+
+                <h3 className="CurrentUser__name">{user.name}</h3>
+                <p className="CurrentUser__email">{user.email}</p>
+                <p className="CurrentUser__phone">{user.phone}</p>
+              </>
+            ) : (
+              <h3 className="CurrentUser__name">User is not defined</h3>
+            )}
+            <button
+              className="button CurrentUser__clear"
+              type="button"
+              onClick={clear}
+            >
+              Clear
+            </button>
+          </>
+        ) : (
+          <>
+            <h3 className="CurrentUser__name">User is not defined</h3>
+            <button
+              className="button CurrentUser__clear"
+              type="button"
+              onClick={clear}
+            >
+              Clear
+            </button>
+          </>
+
+        )}
+      </div>
+    );
+  }
+}
