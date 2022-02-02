@@ -1,43 +1,68 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
+type Props = {
+  todos: Todo[],
+  selectUser: (userId: number) => void;
+  selectedUserId: number,
+  query: string,
+};
+
+export const TodoList: React.FC<Props> = ({
+  todos, selectedUserId, selectUser, query,
+}) => (
   <div className="TodoList">
     <h2>Todos:</h2>
-
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map(todo => {
+          if (todo.title.toLocaleLowerCase().includes(query)) {
+            return (
+              (
+                <li
+                  key={todo.id}
+                  className={classNames(
+                    'TodoList__item ',
+                    {
+                      'TodoList__item--unchecked': !todo.completed,
+                      'TodoList__item--checked': todo.completed,
+                    },
+                  )}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      readOnly
+                    />
+                    <p>
+                      {todo.title}
+                      {query}
+                    </p>
+                  </label>
+                  <button
+                    className={classNames(
+                      'button',
+                      'TodoList__user-button',
+                      {
+                        'TodoList__user-button--selected': todo.userId === selectedUserId
+                          || selectedUserId === 0,
+                      },
+                    )}
+                    type="button"
+                    onClick={() => selectUser(todo.userId)}
+                  >
+                    {`User #${todo.userId}`}
+                  </button>
+                </li>
+              )
+            );
+          }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+          return null;
+        })}
       </ul>
     </div>
   </div>
