@@ -1,25 +1,26 @@
 import React from 'react';
 import classNames from 'classnames';
+
 import './TodoList.scss';
 
 type Props = {
   todos: Todo[];
   selectedUserId: (id: number) => void;
-  filter: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleButtonFilter: (event: React.ChangeEvent<HTMLInputElement>) => void;
   query: string;
-  filterStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleSelectorStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   selectorStatus: number;
-  random: () => void;
+  randomizer: () => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedUserId,
-  filter,
+  handleButtonFilter,
   query,
   selectorStatus,
-  filterStatus,
-  random,
+  handleSelectorStatus,
+  randomizer,
 }) => (
 
   <div className="TodoList">
@@ -29,12 +30,12 @@ export const TodoList: React.FC<Props> = ({
       className="input"
       placeholder="Type search word"
       value={query}
-      onChange={filter}
+      onChange={handleButtonFilter}
     />
 
     <select
       value={selectorStatus}
-      onChange={filterStatus}
+      onChange={handleSelectorStatus}
     >
       <option value="0">all</option>
       <option value="1">active</option>
@@ -43,7 +44,7 @@ export const TodoList: React.FC<Props> = ({
 
     <button
       type="button"
-      onClick={random}
+      onClick={randomizer}
     >
       Randomize
     </button>

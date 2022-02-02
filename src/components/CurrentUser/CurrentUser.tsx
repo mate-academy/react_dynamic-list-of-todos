@@ -5,7 +5,7 @@ import { getAllUsers } from '../../Api/api';
 
 type Props = {
   selectedUserId: number;
-  functSelectUser: (id: number) => void;
+  getSelectedUserId: (id: number) => void;
 };
 
 type State = {
@@ -33,14 +33,14 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   async loadData() {
-    const usr = await getAllUsers(this.props.selectedUserId);
+    const user = await getAllUsers(this.props.selectedUserId);
 
-    this.setState({ user: usr });
+    this.setState({ user });
   }
 
   render() {
     const { user } = this.state;
-    const { selectedUserId, functSelectUser } = this.props;
+    const { selectedUserId, getSelectedUserId } = this.props;
 
     return (
       <div className="CurrentUser">
@@ -54,7 +54,7 @@ export class CurrentUser extends React.Component<Props, State> {
         )}
         <button
           type="button"
-          onClick={() => functSelectUser(0)}
+          onClick={() => getSelectedUserId(0)}
         >
           Clear
         </button>

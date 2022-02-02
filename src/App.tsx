@@ -1,9 +1,10 @@
 import React from 'react';
+
 import './App.scss';
 import './styles/general.scss';
+
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-
 import { getAllTodos } from './Api/api';
 
 interface State {
@@ -22,9 +23,9 @@ class App extends React.Component<{}, State> {
   };
 
   async componentDidMount() {
-    const tod = await getAllTodos();
+    const todos = await getAllTodos();
 
-    this.setState({ todos: tod });
+    this.setState({ todos });
   }
 
   getSelectedUserId = (id: number) => {
@@ -40,68 +41,62 @@ class App extends React.Component<{}, State> {
   };
 
   getFilteredData = () => {
-    if (this.state.query) {
-      const filterTodos = this.state.todos.filter((e) => {
-        const lowerCaseQuery = this.state.query.toLowerCase();
+    const { todos, query, selectorStatus } = this.state;
+
+    if (query) {
+      const filterTodos = todos.filter((todo) => {
+        const lowerCaseQuery = query.toLowerCase();
 
         return (
-          e.title.toLowerCase().includes(lowerCaseQuery)
+          todo.title.toLowerCase().includes(lowerCaseQuery)
         );
       });
 
       return filterTodos;
     }
 
-    if (this.state.selectorStatus === 1) {
-      const sort = this.state.todos.filter(todo => todo.completed === false);
-
-      return sort;
+    switch (selectorStatus) {
+      case 1:
+        return todos.filter(todo => todo.completed === false);
+      case 2:
+        return todos.filter(todo => todo.completed === true);
+      default:
+        return todos;
     }
-
-    if (this.state.selectorStatus === 2) {
-      const sort = this.state.todos.filter(todo => todo.completed === true);
-
-      return sort;
-    }
-
-    return this.state.todos;
   };
 
-  handleStatusFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  handleSelectorStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.setState({
       selectorStatus: +event.target.value,
     });
   };
 
-  handleRandomize = () => {
+  handleRandomizer = () => {
     const { todos } = this.state;
+    const randomOrder = todos.sort(() => Math.random() - 0.5);
 
-    const random = todos.sort(() => Math.random() - 0.5);
-
-    this.setState({ todos: random });
+    this.setState({ todos: randomOrder });
   };
 
   render() {
     const {
-      selectedUserId, query, selectorStatus,
+      selectedUserId,
+      query,
+      selectorStatus,
     } = this.state;
-    const filteredList = this.getFilteredData();
-
-    if (!filteredList) {
-      return 'Where user?';
-    }
+    const filteredTodoList = this.getFilteredData();
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={filteredList}
+            todos={filteredTodoList}
             selectedUserId={this.getSelectedUserId}
-            filter={this.handleButtonFilter}
+            handleButtonFilter={this.handleButtonFilter}
             query={query}
-            filterStatus={this.handleStatusFilter}
+            handleSelectorStatus={this.handleSelectorStatus}
             selectorStatus={selectorStatus}
-            random={this.handleRandomize}
+            randomizer={this.handleRandomizer}
           />
         </div>
 
@@ -110,7 +105,7 @@ class App extends React.Component<{}, State> {
             {selectedUserId ? (
               <CurrentUser
                 selectedUserId={selectedUserId}
-                functSelectUser={this.getSelectedUserId}
+                getSelectedUserId={this.getSelectedUserId}
               />
             ) : 'No user selected'}
           </div>
