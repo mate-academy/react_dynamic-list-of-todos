@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { getUsers } from '../../Api';
 import './CurrentUser.scss';
@@ -21,7 +22,7 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   componentDidUpdate(_: Props, prevState: State) {
-    if (this.state.user !== prevState.user) {
+    if (this.state.user.id !== prevState.user.id) {
       this.handleFetch();
     }
   }
