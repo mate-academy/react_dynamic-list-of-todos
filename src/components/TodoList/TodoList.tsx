@@ -26,15 +26,14 @@ export class TodoList extends React.Component<Props, State> {
     const filteredTodosByTitle = this.props.todos
       .filter(todo => todo.title.includes(this.state.todoTitle));
 
-    if (this.state.status === 'active') {
-      return filteredTodosByTitle.filter(todo => !todo.completed);
+    switch (this.state.status) {
+      case 'active':
+        return filteredTodosByTitle.filter(todo => !todo.completed);
+      case 'completed':
+        return filteredTodosByTitle.filter(todo => todo.completed);
+      default:
+        return filteredTodosByTitle;
     }
-
-    if (this.state.status === 'completed') {
-      return filteredTodosByTitle.filter(todo => todo.completed);
-    }
-
-    return filteredTodosByTitle;
   };
 
   handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
