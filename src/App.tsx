@@ -1,11 +1,11 @@
 import React from 'react';
 
-import './App.scss';
-import './styles/general.scss';
-
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getAllTodos } from './Api/api';
+
+import './styles/general.scss';
+import './App.scss';
 
 interface State {
   todos: Todo[];
@@ -40,6 +40,10 @@ class App extends React.Component<{}, State> {
     });
   };
 
+  getFiltredTodos = (todos: Todo[], status: boolean) => {
+    return todos.filter(todo => todo.completed === status);
+  };
+
   getFilteredData = () => {
     const { todos, query, selectorStatus } = this.state;
 
@@ -52,14 +56,22 @@ class App extends React.Component<{}, State> {
         );
       });
 
+      if (selectorStatus === 1) {
+        return this.getFiltredTodos(filterTodos, false);
+      }
+
+      if (selectorStatus === 2) {
+        return this.getFiltredTodos(filterTodos, true);
+      }
+
       return filterTodos;
     }
 
     switch (selectorStatus) {
       case 1:
-        return todos.filter(todo => todo.completed === false);
+        return this.getFiltredTodos(todos, false);
       case 2:
-        return todos.filter(todo => todo.completed === true);
+        return this.getFiltredTodos(todos, true);
       default:
         return todos;
     }
