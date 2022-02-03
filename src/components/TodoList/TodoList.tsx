@@ -8,7 +8,7 @@ export const TodoList: React.FC = () => (
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
         <li className="TodoList__item TodoList__item--unchecked">
-          <label>
+          <label htmlFor="checkbox">
             <input type="checkbox" readOnly />
             <p>delectus aut autem</p>
           </label>
@@ -26,7 +26,7 @@ export const TodoList: React.FC = () => (
         </li>
 
         <li className="TodoList__item TodoList__item--checked">
-          <label>
+          <label htmlFor="checkbox">
             <input type="checkbox" checked readOnly />
             <p>distinctio vitae autem nihil ut molestias quo</p>
           </label>
