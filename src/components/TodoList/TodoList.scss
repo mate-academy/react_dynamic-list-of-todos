@@ -45,6 +45,10 @@
     display: flex;
     justify-content: space-between;
   }
+
+  &__container {
+    margin: 0 20px;
+  }
 }
 
 .mb-3, .input-group {

@@ -3,13 +3,15 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getAllTodos, getTodoByComlete } from './api';
+import { getTodosFromServer } from './api';
 
 interface State {
   todos: Todo[],
   selectedUserId: number,
   inputValue: string,
   selectValue: string,
+  loading: boolean,
+  errorMessage: string,
 }
 
 class App extends React.Component<{}, State> {
@@ -18,19 +20,36 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     inputValue: '',
     selectValue: 'all',
+    loading: false,
+    errorMessage: '',
   };
 
   componentDidMount() {
-    this.getTodosFromServer();
+    this.getTodos();
   }
 
-  getTodosFromServer = () => {
-    getAllTodos()
-      .then(todosFromServer => {
-        this.setState({
-          todos: [...todosFromServer],
-        });
+  getTodos = async (completed?: boolean) => {
+    this.setState({
+      loading: true,
+    });
+
+    try {
+      const todosFromServer = await getTodosFromServer(completed);
+
+      this.setState({
+        todos: [...todosFromServer],
       });
+    } catch (error) {
+      this.setState({
+        errorMessage: 'Oops... Server is not responding',
+      });
+    } finally {
+      setTimeout(() => {
+        this.setState({
+          loading: false,
+        });
+      }, 500);
+    }
   };
 
   selectUserHandler = (userId: string) => {
@@ -59,29 +78,22 @@ class App extends React.Component<{}, State> {
     });
   };
 
-  filterBySelect = (selectValue: string) => {
+  filterBySelect = async (selectValue: string) => {
+    this.setState({
+      loading: true,
+    });
+
     switch (selectValue) {
       case 'completed':
-        getTodoByComlete(true)
-          .then(todosFromServer => {
-            this.setState({ todos: [...todosFromServer] });
-          });
+        this.getTodos(true);
         break;
 
       case 'not completed':
-        getTodoByComlete(false)
-          .then(todosFromServer => {
-            this.setState({ todos: [...todosFromServer] });
-          });
+        this.getTodos(false);
         break;
 
       default:
-        getAllTodos()
-          .then(todosFromServer => {
-            this.setState({
-              todos: [...todosFromServer],
-            });
-          });
+        this.getTodos();
         break;
     }
   };
@@ -123,7 +135,12 @@ class App extends React.Component<{}, State> {
       selectValue,
       inputValue,
       todos,
+      loading,
+      errorMessage,
     } = this.state;
+
+    // eslint-disable-next-line no-console
+    console.log(errorMessage);
 
     return (
       <>
@@ -134,6 +151,8 @@ class App extends React.Component<{}, State> {
               selectedUserId={selectedUserId}
               inputValue={this.state.inputValue}
               selectValue={selectValue}
+              loading={loading}
+              errorMessage={errorMessage}
               selectUserHandler={this.selectUserHandler}
               changeInputValue={this.changeInputValue}
               changeSelectValue={this.changeSelectValue}

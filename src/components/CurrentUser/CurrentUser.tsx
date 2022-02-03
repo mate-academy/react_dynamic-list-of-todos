@@ -2,6 +2,7 @@ import React from 'react';
 import './CurrentUser.scss';
 
 import { getUser } from '../../api';
+import { Loader } from '../Loader';
 
 type Props = {
   userId: number,
@@ -11,15 +12,17 @@ type Props = {
 type State = {
   user: User | null,
   isNoUserErrorVisible: boolean,
+  loading: boolean,
 };
 
 export class CurrentUser extends React.PureComponent<Props, State> {
   state: State = {
     user: null,
     isNoUserErrorVisible: false,
+    loading: false,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.selectUser();
   }
 
@@ -38,6 +41,8 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   };
 
   async selectUser() {
+    this.setState({ loading: true });
+
     try {
       const user: User = await getUser(this.props.userId);
 
@@ -47,11 +52,21 @@ export class CurrentUser extends React.PureComponent<Props, State> {
       });
     } catch (error) {
       this.setState({ isNoUserErrorVisible: true });
+    } finally {
+      setTimeout(() => {
+        this.setState({ loading: false });
+      }, 500);
     }
   }
 
   render() {
-    const { user, isNoUserErrorVisible } = this.state;
+    const { user, isNoUserErrorVisible, loading } = this.state;
+
+    if (loading) {
+      return (
+        <Loader />
+      );
+    }
 
     return (
       <div>

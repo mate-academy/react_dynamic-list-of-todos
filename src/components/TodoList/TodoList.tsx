@@ -7,12 +7,16 @@ import {
   FormControl,
   Form,
 } from 'react-bootstrap';
+import { Loader } from '../Loader';
+import { ErrorMessage } from '../ErrorMessage';
 
 type Props = {
   todos: Todo[],
   selectedUserId: number,
   inputValue: string,
   selectValue: string,
+  loading: boolean,
+  errorMessage: string,
   selectUserHandler: (userId: string) => void,
   changeInputValue: (event: React.ChangeEvent<HTMLInputElement>) => void,
   changeSelectValue: (event: React.ChangeEvent<HTMLSelectElement>) => void,
@@ -24,6 +28,8 @@ export const TodoList: React.FC<Props> = ({
   selectedUserId,
   inputValue,
   selectValue,
+  loading,
+  errorMessage,
   selectUserHandler,
   changeInputValue,
   changeSelectValue,
@@ -47,8 +53,8 @@ export const TodoList: React.FC<Props> = ({
               onChange={changeSelectValue}
             >
               <option value="all">All</option>
+              <option value="not completed">Active</option>
               <option value="completed">Completed</option>
-              <option value="not completed">Not completed</option>
             </Form.Select>
           </div>
           <button
@@ -62,37 +68,47 @@ export const TodoList: React.FC<Props> = ({
       </InputGroup>
     </div>
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        {todos.length !== 0 && todos.map(todo => (
-          <li
-            className={cn('TodoList__item',
-              { 'TodoList__item--checked': todo.completed },
-              { 'TodoList__item--unchecked': !todo.completed })}
-            key={todo.id}
-          >
-            <label htmlFor={todo.id}>
-              <input
-                id={todo.id}
-                type="checkbox"
-                checked={todo.completed}
-                readOnly
-              />
-              <p>{todo.title}</p>
-            </label>
+    {loading ? (
+      <Loader />
+    ) : (
+      <>
+        {errorMessage.length ? (
+          <ErrorMessage errorMessage={errorMessage} />
+        ) : (
+          <div className="TodoList__list-container">
+            <ul className="TodoList__list">
+              {todos.length !== 0 && todos.map(todo => (
+                <li
+                  className={cn('TodoList__item',
+                    { 'TodoList__item--checked': todo.completed },
+                    { 'TodoList__item--unchecked': !todo.completed })}
+                  key={todo.id}
+                >
+                  <label htmlFor={todo.id}>
+                    <input
+                      id={todo.id}
+                      type="checkbox"
+                      checked={todo.completed}
+                      readOnly
+                    />
+                    <p>{todo.title}</p>
+                  </label>
 
-            <button
-              className={cn('TodoList__user-button button',
-                { 'TodoList__user-button--selected': +todo.userId === selectedUserId })}
-              type="button"
-              value={todo.userId}
-              onClick={() => selectUserHandler(todo.userId)}
-            >
-              {`User #${todo.userId}`}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+                  <button
+                    className={cn('TodoList__user-button button',
+                      { 'TodoList__user-button--selected': +todo.userId === selectedUserId })}
+                    type="button"
+                    value={todo.userId}
+                    onClick={() => selectUserHandler(todo.userId)}
+                  >
+                    {`User #${todo.userId}`}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </>
+    )}
   </div>
 );

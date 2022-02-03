@@ -13,3 +13,5 @@ type User = {
   email: string,
   phone: string,
 };
+
+type Todos = Todo[];
