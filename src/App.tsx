@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getAllTodos, UpdateCheckTodo } from './api/api';
+import { getAllTodos, updateCheckTodo, getSelectTodos } from './api/api';
 
 interface State {
   selectedUserId: number;
@@ -28,13 +28,23 @@ class App extends React.Component<{}, State> {
 
   componentDidUpdate(_: any, prevState: State) {
     if (this.state.inputFilterValue !== prevState.inputFilterValue
-      || this.state.selectFilterValue !== prevState.selectFilterValue) {
+      || this.state.todos !== prevState.todos) {
       this.filterTodos();
     }
   }
 
   loadAllTodos = () => {
     getAllTodos()
+      .then(todos => {
+        this.setState({
+          todos: [...todos],
+          visibleTodos: [...todos],
+        });
+      });
+  };
+
+  loadCheckTodo = async (isChecked: boolean) => {
+    getSelectTodos(isChecked)
       .then(todos => {
         this.setState({
           todos: [...todos],
@@ -52,14 +62,8 @@ class App extends React.Component<{}, State> {
   };
 
   setCheckTodo = async (id: number, isChecked: boolean) => {
-    await UpdateCheckTodo(id, isChecked);
-    await getAllTodos()
-      .then(todos => {
-        this.setState({
-          todos: [...todos],
-        });
-      });
-    this.filterTodos();
+    await updateCheckTodo(id, isChecked);
+    this.updateTodos(this.state.selectFilterValue);
   };
 
   clearSelectedUser = () => {
@@ -79,27 +83,30 @@ class App extends React.Component<{}, State> {
   hendlerFilterSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
+    this.updateTodos(value);
+
     this.setState({
       selectFilterValue: value,
     });
   };
 
-  filterTodos = () => {
-    const { inputFilterValue, selectFilterValue, todos } = this.state;
-    const visibleTodos = todos.filter(todo => {
-      switch (selectFilterValue) {
-        case 'active':
-          return todo.title.includes(inputFilterValue) && !todo.completed;
-        case 'complated':
-          return todo.title.includes(inputFilterValue) && todo.completed;
-        default:
-          return todo.title.includes(inputFilterValue);
-      }
-    });
+  updateTodos = (value: string) => {
+    switch (value) {
+      case 'active':
+        this.loadCheckTodo(true);
+        break;
+      case 'complated':
+        this.loadCheckTodo(false);
+        break;
+      default:
+        this.loadAllTodos();
+    }
+  };
 
-    this.setState({
-      visibleTodos,
-    });
+  filterTodos = () => {
+    this.setState(state => ({
+      visibleTodos: state.todos.filter(todo => (todo.title.includes(state.inputFilterValue))),
+    }));
   };
 
   randomSortTodos = () => {
@@ -127,38 +134,16 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <input
-            type="text"
-            name="titleFilter"
-            className="input"
-            placeholder="Search todo"
-            value={inputFilterValue}
-            onChange={this.hendlerFilterInput}
-          />
-          <select
-            name="selectTodos"
-            defaultValue={selectFilterValue}
-            className="select"
-            onChange={this.hendlerFilterSelect}
-          >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="complated">Complated</option>
-          </select>
-
-          <button
-            type="button"
-            className="button is-primary is-light"
-            onClick={this.randomSortTodos}
-          >
-            Randomize
-          </button>
-
           <TodoList
             todos={visibleTodos}
             selectUsersbyId={this.selectUsersbyId}
             selectedUserId={selectedUserId}
             setCheckTodo={this.setCheckTodo}
+            inputFilterValue={inputFilterValue}
+            hendlerFilterInput={this.hendlerFilterInput}
+            selectFilterValue={selectFilterValue}
+            hendlerFilterSelect={this.hendlerFilterSelect}
+            randomSortTodos={this.randomSortTodos}
           />
         </div>
 

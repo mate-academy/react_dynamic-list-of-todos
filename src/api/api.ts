@@ -10,7 +10,12 @@ export function getUserById(id: number): Promise<User> {
     .then(response => response.json());
 }
 
-export function UpdateCheckTodo(id: number, isChecked: boolean) {
+export const getSelectTodos = async (complete: boolean): Promise<Todo[]> => {
+  return fetch(`${API_BASE_URL}/todos?completed=${complete}`)
+    .then(response => response.json());
+};
+
+export function updateCheckTodo(id: number, isChecked: boolean) {
   return fetch(`${API_BASE_URL}/todos/${id}`, {
     method: 'PATCH',
     headers: {

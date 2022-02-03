@@ -7,6 +7,11 @@ type Props = {
   selectedUserId: number;
   selectUsersbyId: (id: number) => void;
   setCheckTodo: (id: number, isChecked: boolean) => void;
+  inputFilterValue: string;
+  hendlerFilterInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectFilterValue: string;
+  hendlerFilterSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  randomSortTodos: () => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -14,12 +19,44 @@ export const TodoList: React.FC<Props> = ({
   selectUsersbyId,
   selectedUserId,
   setCheckTodo,
+  inputFilterValue,
+  hendlerFilterInput,
+  selectFilterValue,
+  hendlerFilterSelect,
+  randomSortTodos,
 }) => (
   <div className="TodoList">
 
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
+      <input
+        type="text"
+        name="titleFilter"
+        className="input"
+        placeholder="Search todo"
+        value={inputFilterValue}
+        onChange={hendlerFilterInput}
+      />
+      <select
+        name="selectTodos"
+        defaultValue={selectFilterValue}
+        className="select"
+        onChange={hendlerFilterSelect}
+      >
+        <option value="all">All</option>
+        <option value="active">Active</option>
+        <option value="complated">Complated</option>
+      </select>
+
+      <button
+        type="button"
+        className="button is-primary is-light"
+        onClick={randomSortTodos}
+      >
+        Randomize
+      </button>
+
       <ul className="TodoList__list">
         {
           todos.map(todo => (
