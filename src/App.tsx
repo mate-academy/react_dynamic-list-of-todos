@@ -1,16 +1,50 @@
 import React from 'react';
-import './App.scss';
+import './styles/App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
 
 interface State {
-  selectedUserId: number;
+  selectedUserId: number,
+  todos: Todo[],
 }
 
-class App extends React.Component<{}, State> {
+export class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+    todos: [],
+  };
+
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({ todos });
+  }
+
+  chooseUser = (userId: number) => {
+    this.setState({ selectedUserId: userId });
+  };
+
+  unselectAll = () => {
+    this.setState({
+      selectedUserId: 0,
+    });
+  };
+
+  checkTodo = (todoId: number) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map(todo => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
   };
 
   render() {
@@ -19,13 +53,21 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            todos={this.state.todos}
+            chooseUser={this.chooseUser}
+            selectedUserId={selectedUserId}
+            markTodo={this.checkTodo}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser
+                selectedUserId={this.state.selectedUserId}
+                unselectAll={this.unselectAll}
+              />
             ) : 'No user selected'}
           </div>
         </div>
@@ -33,5 +75,3 @@ class App extends React.Component<{}, State> {
     );
   }
 }
-
-export default App;
