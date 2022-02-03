@@ -5,7 +5,7 @@ import { getUser } from '../../api';
 
 type Props = {
   userId: number,
-  removeUser: () => void,
+  clearUser: () => void,
 };
 
 type State = {
@@ -57,7 +57,7 @@ export class CurrentUser extends React.Component<Props, State> {
         <button
           className="button"
           type="button"
-          onClick={() => this.props.removeUser()}
+          onClick={this.props.clearUser}
         >
           Clear
         </button>

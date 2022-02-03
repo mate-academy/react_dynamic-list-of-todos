@@ -5,11 +5,17 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
 
+enum CompletionStatus {
+  All = '',
+  Completed = 'completed',
+  Active = 'active',
+}
+
 interface State {
   selectedUserId: number;
   todos: Todo[],
   titleQuery: string,
-  statusQuery: string,
+  statusQuery: CompletionStatus,
 }
 
 class App extends React.Component<{}, State> {
@@ -17,19 +23,19 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     todos: [],
     titleQuery: '',
-    statusQuery: '',
+    statusQuery: CompletionStatus.All,
   };
 
   async componentDidMount() {
     const todosFromServer = await getTodos();
 
     this.setState({
-      todos: todosFromServer,
+      todos: [...todosFromServer],
     });
   }
 
   handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ statusQuery: event.currentTarget.value });
+    this.setState({ statusQuery: event.currentTarget.value as CompletionStatus });
   };
 
   handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,19 +70,20 @@ class App extends React.Component<{}, State> {
 
   getPreparedTodos = () => {
     const { todos, titleQuery, statusQuery } = this.state;
+    const titleQueryToLowerCase = titleQuery.toLowerCase();
     let isCompletedStatus: boolean;
 
     switch (statusQuery) {
-      case 'active':
+      case CompletionStatus.Active:
         isCompletedStatus = false;
         break;
-      case 'completed':
+      case CompletionStatus.Completed:
         isCompletedStatus = true;
         break;
       default:
         return todos.filter(todo => (
           todo.title.toLowerCase()
-            .includes(titleQuery.toLowerCase())
+            .includes(titleQueryToLowerCase)
         ));
     }
 
@@ -110,7 +117,7 @@ class App extends React.Component<{}, State> {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                removeUser={this.clearUserSelection}
+                clearUser={this.clearUserSelection}
               />
             ) : 'No user selected'}
           </div>

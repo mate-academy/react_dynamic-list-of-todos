@@ -2,6 +2,12 @@ import React from 'react';
 import classnames from 'classnames';
 import './TodoList.scss';
 
+enum CompletionStatus {
+  All = '',
+  Completed = 'completed',
+  Active = 'active',
+}
+
 type Props = {
   todos: Todo[],
   selectUser: (userId: number) => void,
@@ -14,9 +20,13 @@ type Props = {
 
 export const TodoList: React.FC<Props> = (props) => {
   const {
-    todos, selectUser, changeTodoStatus,
-    handleQuery, titleQuery,
-    handleStatus, statusQuery,
+    todos,
+    selectUser,
+    changeTodoStatus,
+    handleQuery,
+    titleQuery,
+    handleStatus,
+    statusQuery,
   } = props;
 
   return (
@@ -34,9 +44,9 @@ export const TodoList: React.FC<Props> = (props) => {
       </label>
 
       <select value={statusQuery} onChange={handleStatus}>
-        <option value="">all</option>
-        <option value="completed">completed</option>
-        <option value="active">active</option>
+        <option value={CompletionStatus.All}>all</option>
+        <option value={CompletionStatus.Completed}>completed</option>
+        <option value={CompletionStatus.Active}>active</option>
       </select>
 
       <div className="TodoList__list-container">
@@ -46,8 +56,9 @@ export const TodoList: React.FC<Props> = (props) => {
               key={todo.id}
               className={classnames(
                 'TodoList__item',
-                { 'TodoList__item--checked': todo.completed },
-                { 'TodoList__item--unchecked': !todo.completed },
+                {
+                  'TodoList__item--checked': todo.completed, 'TodoList__item--unchecked': !todo.completed,
+                },
               )}
             >
               <label htmlFor={`checkbox-${todo.id}`}>
