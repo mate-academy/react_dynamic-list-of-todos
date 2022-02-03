@@ -98,7 +98,9 @@ class App extends React.Component<{}, State> {
     }
   };
 
-  getTodosFilteredByInput = (todos: Todo[], inputValue: string) => {
+  getTodosFilteredByInput = (todos: Todo[]) => {
+    const { inputValue } = this.state;
+
     if (inputValue.length) {
       return todos
         .filter(todo => todo.title.toLowerCase().includes(inputValue.toLowerCase()));
@@ -133,45 +135,43 @@ class App extends React.Component<{}, State> {
     const {
       selectedUserId,
       selectValue,
-      inputValue,
       todos,
       loading,
       errorMessage,
     } = this.state;
 
-    // eslint-disable-next-line no-console
-    console.log(errorMessage);
-
     return (
-      <>
-        <div className="App">
-          <div className="App__sidebar">
-            <TodoList
-              todos={this.getTodosFilteredByInput(todos, inputValue)}
-              selectedUserId={selectedUserId}
-              inputValue={this.state.inputValue}
-              selectValue={selectValue}
-              loading={loading}
-              errorMessage={errorMessage}
-              selectUserHandler={this.selectUserHandler}
-              changeInputValue={this.changeInputValue}
-              changeSelectValue={this.changeSelectValue}
-              randomize={this.randomize}
-            />
-          </div>
+      <div className="App">
+        <div className="App__sidebar">
+          <TodoList
+            todos={this.getTodosFilteredByInput(todos)}
+            selectedUserId={selectedUserId}
+            inputValue={this.state.inputValue}
+            selectValue={selectValue}
+            loading={loading}
+            errorMessage={errorMessage}
+            selectUserHandler={this.selectUserHandler}
+            changeInputValue={this.changeInputValue}
+            changeSelectValue={this.changeSelectValue}
+            randomize={this.randomize}
+          />
+        </div>
 
-          <div className="App__content">
-            <div className="App__content-container">
-              {selectedUserId ? (
+        <div className="App__content">
+          <div className="App__content-container">
+            {selectedUserId
+              ? (
                 <CurrentUser
                   userId={selectedUserId}
                   clearUser={this.clearUser}
                 />
-              ) : 'No user selected'}
-            </div>
+              )
+              : (
+                'No user selected'
+              )}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

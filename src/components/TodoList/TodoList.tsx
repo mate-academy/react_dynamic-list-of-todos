@@ -79,9 +79,13 @@ export const TodoList: React.FC<Props> = ({
             <ul className="TodoList__list">
               {todos.length !== 0 && todos.map(todo => (
                 <li
-                  className={cn('TodoList__item',
-                    { 'TodoList__item--checked': todo.completed },
-                    { 'TodoList__item--unchecked': !todo.completed })}
+                  className={cn(
+                    'TodoList__item',
+                    {
+                      'TodoList__item--checked': todo.completed,
+                      'TodoList__item--unchecked': !todo.completed,
+                    },
+                  )}
                   key={todo.id}
                 >
                   <label htmlFor={todo.id}>
@@ -95,8 +99,10 @@ export const TodoList: React.FC<Props> = ({
                   </label>
 
                   <button
-                    className={cn('TodoList__user-button button',
-                      { 'TodoList__user-button--selected': +todo.userId === selectedUserId })}
+                    className={cn(
+                      'TodoList__user-button button',
+                      { 'TodoList__user-button--selected': +todo.userId === selectedUserId },
+                    )}
                     type="button"
                     value={todo.userId}
                     onClick={() => selectUserHandler(todo.userId)}

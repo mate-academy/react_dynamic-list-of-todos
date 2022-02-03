@@ -1,21 +1,21 @@
-export function getTodosFromServer(complited?: boolean): Promise<Todo[]> {
-  let API_TODOS_URL: string;
+const API_URL = 'https://mate.academy/students-api';
 
-  if (complited !== undefined) {
-    API_TODOS_URL = `https://mate.academy/students-api/todos?completed=${complited.toString()}`;
+export function getTodosFromServer(completed?: boolean): Promise<Todo[]> {
+  let url: string;
+
+  if (completed !== undefined) {
+    url = `${API_URL}/todos?completed=${completed.toString()}`;
   } else {
-    // eslint-disable-next-line
-    API_TODOS_URL = `https://mate.academy/students-api/todos`;
+    url = `${API_URL}/todos`;
   }
 
-  return fetch(API_TODOS_URL)
+  return fetch(url)
     .then(response => response.json());
 }
 
-export function getUser(userId: number): Promise<User> {
-  // eslint-disable-next-line
-  const API_USERS_URL = `https://mate.academy/students-api/users/${userId}`;
+export function getUserFromServer(userId: number): Promise<User> {
+  const url = `${API_URL}/users/${userId}`;
 
-  return fetch(API_USERS_URL)
+  return fetch(url)
     .then(response => response.json());
 }

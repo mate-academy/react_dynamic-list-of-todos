@@ -1,7 +1,8 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-import { getUser } from '../../api';
+import cn from 'classnames';
+import { getUserFromServer } from '../../api';
 import { Loader } from '../Loader';
 
 type Props = {
@@ -44,7 +45,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
     this.setState({ loading: true });
 
     try {
-      const user: User = await getUser(this.props.userId);
+      const user: User = await getUserFromServer(this.props.userId);
 
       this.setState({
         user,
@@ -69,43 +70,36 @@ export class CurrentUser extends React.PureComponent<Props, State> {
     }
 
     return (
-      <div>
-        {isNoUserErrorVisible && (
-          <div>
-            <h2
-              className="CurrentUser__title CurrentUser__title--error"
-            >
-              <span>Error: Can not find the user!</span>
-            </h2>
-            <div className="CurrentUser__button">
-              <button
-                className="button"
-                type="button"
-                onClick={this.clear}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+      <div className="CurrentUser">
+        <h2 className={cn(
+          'CurrentUser__title',
+          { 'CurrentUser__title--error': isNoUserErrorVisible },
         )}
-        {!isNoUserErrorVisible && (
-          <div className="CurrentUser">
-            <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
+        >
+          <span>
+            {isNoUserErrorVisible
+              ? 'Error: Can not find the user!'
+              : `Selected user: ${user?.id}`}
+          </span>
+        </h2>
 
+        {!isNoUserErrorVisible && (
+          <>
             <h3 className="CurrentUser__name">{user?.name}</h3>
             <p className="CurrentUser__email">{user?.email}</p>
             <p className="CurrentUser__phone">{user?.phone}</p>
-            <div className="CurrentUser__button">
-              <button
-                className="button"
-                type="button"
-                onClick={this.clear}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+          </>
         )}
+
+        <div className="CurrentUser__button">
+          <button
+            className="button"
+            type="button"
+            onClick={this.clear}
+          >
+            Clear
+          </button>
+        </div>
       </div>
     );
   }
