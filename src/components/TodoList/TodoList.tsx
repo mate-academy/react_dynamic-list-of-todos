@@ -73,7 +73,7 @@ export const TodoList: React.FC<Props> = ({
               type="button"
               onClick={() => selectUser(todo.userId)}
             >
-              {`User: № ${todo.userId}`}
+              {`User: ${todo.userId}`}
             </button>
           </li>
         ))}

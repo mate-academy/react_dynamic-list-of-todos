@@ -57,6 +57,12 @@ export class App extends React.Component<{}, State> {
   preparedTododos = () => {
     const { todos, input, select } = this.state;
 
+    const filteredTodos = todos
+      .filter(todo => (
+        todo.title.toLowerCase()
+          .includes(input.toLowerCase())
+      ));
+
     switch (select) {
       case 'not':
         return todos.filter(todo => {
@@ -72,11 +78,7 @@ export class App extends React.Component<{}, State> {
         });
 
       default:
-        return todos
-          .filter(todo => (
-            todo.title.toLowerCase()
-              .includes(input.toLowerCase())
-          ));
+        return filteredTodos;
     }
   };
 

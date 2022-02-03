@@ -8,6 +8,7 @@ type Todo = {
   createdAt: string,
   updatedAt: string,
 };
+
 type User = {
   id: number,
   name: string,
