@@ -3,12 +3,12 @@ import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
 type Props = {
-  userId: number
-  clear: () => void
+  userId: number,
+  clear: () => void,
 };
 
 type State = {
-  user: User | null
+  user: User | null,
   isUser: boolean,
 };
 
@@ -57,7 +57,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
                   <span>
                     Selected user:
                     {' '}
-                    {this.props.userId}
+                    {user.id}
                   </span>
                 </h2>
 
@@ -87,7 +87,6 @@ export class CurrentUser extends React.PureComponent<Props, State> {
               Clear
             </button>
           </>
-
         )}
       </div>
     );

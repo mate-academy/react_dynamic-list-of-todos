@@ -56,8 +56,9 @@ class App extends React.Component<{}, State> {
 
     return todos.filter(todo => {
       const { title } = todo;
+      const lowerQuery = query.toLocaleLowerCase();
 
-      return title.toLowerCase().includes(query.toLocaleLowerCase());
+      return title.toLowerCase().includes(lowerQuery);
     });
   };
 

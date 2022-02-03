@@ -38,10 +38,13 @@ export const TodoList: React.FC<Props> = ({
       <ul className="TodoList__list">
         {todos.map(todo => (
           <li
-            className={classNames('TodoList__item', {
-              'TodoList__item--unchecked': !todo.completed,
-              'TodoList__item--checked': todo.completed,
-            })}
+            className={classNames(
+              'TodoList__item',
+              {
+                'TodoList__item--unchecked': !todo.completed,
+                'TodoList__item--checked': todo.completed,
+              },
+            )}
             key={todo.id}
           >
             <input
@@ -51,7 +54,11 @@ export const TodoList: React.FC<Props> = ({
             <p>{todo.title}</p>
 
             <button
-              className={classNames('button', 'TodoList__user-button', { 'TodoList__user-button--selected': todo.userId === selectedUserId })}
+              className={classNames(
+                'button',
+                'TodoList__user-button',
+                { 'TodoList__user-button--selected': todo.userId === selectedUserId },
+              )}
               type="button"
               onClick={() => onClick(todo.userId)}
             >
