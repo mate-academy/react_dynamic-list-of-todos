@@ -9,7 +9,7 @@ interface State {
   selectedUserId: number;
   visibleTodos: Todo[];
   query: string;
-  sortBy: number;
+  sortBy: string;
 }
 
 class App extends React.Component<{}, State> {
@@ -17,7 +17,7 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
     visibleTodos: [],
     query: '',
-    sortBy: 0,
+    sortBy: 'all',
   };
 
   async componentDidMount() {
@@ -44,10 +44,10 @@ class App extends React.Component<{}, State> {
     let todos;
 
     switch (sortBy) {
-      case 2:
+      case 'active':
         todos = visibleTodos.filter(todo => !todo.completed);
         break;
-      case 1:
+      case 'completed':
         todos = visibleTodos.filter(todo => todo.completed);
         break;
       default:
@@ -62,7 +62,7 @@ class App extends React.Component<{}, State> {
   };
 
   handleSelectTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ sortBy: Number(event.target.value) });
+    this.setState({ sortBy: event.target.value });
   };
 
   handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {

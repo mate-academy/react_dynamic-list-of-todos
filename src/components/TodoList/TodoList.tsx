@@ -7,7 +7,7 @@ type Props = {
   onClick: (id: number) => void,
   onChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void,
   query: string,
-  sortBy: number,
+  sortBy: string,
   select: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   selectedUserId: number,
 };
@@ -31,9 +31,9 @@ export const TodoList: React.FC<Props> = ({
         value={sortBy}
         onChange={select}
       >
-        <option value="0">All todos</option>
-        <option value="2">Active</option>
-        <option value="1">Completed</option>
+        <option value="all">All todos</option>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
       </select>
       <ul className="TodoList__list">
         {todos.map(todo => (
