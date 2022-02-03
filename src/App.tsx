@@ -1,10 +1,10 @@
 import React from 'react';
 
+import './styles/general.scss';
+import './App.scss';
 import * as API from './api';
 import { TodoList, SortBy } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import './styles/general.scss';
-import './App.scss';
 
 interface State {
   selectedUserId: number;

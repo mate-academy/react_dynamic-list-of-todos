@@ -1,12 +1,12 @@
 /// <reference types="react-scripts" />
 
 type Todo = {
-  'id': 134,
+  'id': number,
   'createdAt': string;
   'updatedAt': string;
   'userId': number;
   'title': string;
-  'completed': false;
+  'completed': boolean;
 };
 
 type User = {

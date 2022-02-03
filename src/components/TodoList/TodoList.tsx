@@ -52,7 +52,7 @@ export const TodoList: React.FC<Props> = (props) => (
       <span>
         Random todos&nbsp;
         <button
-          className=" TodoList__user-button--selected button"
+          className="button TodoList__user-button TodoList__user-button--selected"
           type="button"
           onClick={props.onRandomize}
         >
@@ -86,7 +86,7 @@ export const TodoList: React.FC<Props> = (props) => (
                   props.onSelectUser(todo.userId);
                 }
               }}
-              className={classNames('TodoList__user-button button',
+              className={classNames('button TodoList__user-button',
                 { 'TodoList__user-button--selected': todo.userId === props.selectedUserId })}
               type="button"
             >
