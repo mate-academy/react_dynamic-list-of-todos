@@ -21,13 +21,7 @@ class App extends React.Component<{}, State> {
   };
 
   componentDidMount() {
-    this.loadUser();
-  }
-
-  componentDidUpdate(prevProps: State) {
-    if (prevProps.selectedUserId !== this.state.selectedUserId) {
-      this.loadUser();
-    }
+    this.loadTodos();
   }
 
   handelSelectUser = (userId: number) => {
@@ -58,8 +52,6 @@ class App extends React.Component<{}, State> {
     this.setState({
       inputValue: value,
     });
-
-    this.filterByInput(this.state.inputValue);
   };
 
   filterTodos = (): Todo[] => {
@@ -84,14 +76,7 @@ class App extends React.Component<{}, State> {
     ));
   };
 
-  filterByInput = (inputValue: string) => {
-    this.setState(state => ({
-      ...state,
-      todos: [...state.todos.filter(todo => todo.title.includes(inputValue))],
-    }));
-  };
-
-  loadUser() {
+  loadTodos() {
     getTodos()
       .then(todosFromServer => {
         this.setState({
