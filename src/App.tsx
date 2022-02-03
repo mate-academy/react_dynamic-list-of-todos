@@ -56,15 +56,21 @@ export class App extends React.Component<{}, State> {
 
   preparedTododos = () => {
     const { todos, input, select } = this.state;
-    let isCompleted: boolean;
 
     switch (select) {
       case 'not':
-        isCompleted = false;
-        break;
+        return todos.filter(todo => {
+          const titleCase = todo.title.toLowerCase();
+
+          return todo.completed === false && titleCase.includes(input.toLowerCase());
+        });
       case 'completed':
-        isCompleted = true;
-        break;
+        return todos.filter(todo => {
+          const titleCase = todo.title.toLowerCase();
+
+          return todo.completed === true && titleCase.includes(input.toLowerCase());
+        });
+
       default:
         return todos
           .filter(todo => (
@@ -72,16 +78,6 @@ export class App extends React.Component<{}, State> {
               .includes(input.toLowerCase())
           ));
     }
-
-    return todos
-      .filter(todo => (
-        todo.title.toLowerCase()
-          .includes(input.toLowerCase())
-        && (isCompleted
-          ? todo.completed
-          : !todo.completed
-        )
-      ));
   };
 
   render() {

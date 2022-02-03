@@ -70,7 +70,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
         <button
           type="button"
-          onClick={() => this.props.removeUser()}
+          onClick={this.props.removeUser}
         >
           Clear
         </button>
