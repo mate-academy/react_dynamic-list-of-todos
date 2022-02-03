@@ -44,10 +44,10 @@ export class CurrentUser extends React.Component<Props, State> {
 
         <h3 className="CurrentUser__name">{user?.name}</h3>
         <p className="CurrentUser__email">{user?.email}</p>
-        <p className="CurrentUser__phone">{user?.phone}</p>
+        <p className="CurrentUser__phone pb-2">{user?.phone}</p>
 
         <button
-          className="button is-info"
+          className="button is-danger"
           type="button"
           onClick={clearUser}
         >
