@@ -8,7 +8,7 @@ import { getTodosByStatus } from './api/api';
 
 interface State {
   selectedUserId: number,
-  selectedTodos: string,
+  status: string,
   todos: Todo[],
   query: string,
 }
@@ -16,7 +16,7 @@ interface State {
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
-    selectedTodos: 'all',
+    status: 'all',
     todos: [],
     query: '',
   };
@@ -26,7 +26,7 @@ class App extends React.Component<{}, State> {
   }
 
   componentDidUpdate(prevState: State) {
-    if (this.state.selectedTodos !== prevState.selectedTodos) {
+    if (this.state.status !== prevState.status) {
       this.loadTodosByStatus();
     }
   }
@@ -37,7 +37,7 @@ class App extends React.Component<{}, State> {
 
   setStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.setState({
-      selectedTodos: event.target.value,
+      status: event.target.value,
       query: '',
     });
   };
@@ -59,8 +59,8 @@ class App extends React.Component<{}, State> {
   };
 
   async loadTodosByStatus() {
-    const { selectedTodos } = this.state;
-    const todos = await getTodosByStatus(selectedTodos);
+    const { status } = this.state;
+    const todos = await getTodosByStatus(status);
 
     this.setState({ todos });
   }
@@ -68,7 +68,7 @@ class App extends React.Component<{}, State> {
   render() {
     const {
       selectedUserId,
-      selectedTodos,
+      status,
       query,
     } = this.state;
 
@@ -93,7 +93,7 @@ class App extends React.Component<{}, State> {
                 <label>Choose status</label>
                 <select
                   className="ui fluid dropdown"
-                  value={selectedTodos}
+                  value={status}
                   onChange={this.setStatus}
                 >
                   <option value="all">All</option>

@@ -12,10 +12,8 @@ export function getUserById(userId: number): Promise<User> {
 
 export function getTodosByStatus(status: string): Promise<Todo[]> {
   if (status === 'true' || status === 'false') {
-    return getTodos()
-      .then(todos => (
-        todos.filter((todo: Todo) => `${todo.completed}` === status)
-      ));
+    return fetch(`${API_URL}/todos?completed=${status}`)
+      .then(response => response.json());
   }
 
   return getTodos();
