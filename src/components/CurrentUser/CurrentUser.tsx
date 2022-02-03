@@ -1,12 +1,36 @@
 import React from 'react';
+
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  user: User;
+  onClearUser: () => void;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
+export const CurrentUser: React.FC<Props> = ({ user, onClearUser }) => (
+  <div className="CurrentUser">
+    <button
+      onClick={() => onClearUser()}
+      className="
+        TodoList__user-button
+        TodoList__user-button--selected
+        button
+      "
+      type="button"
+    >
+      Clear
+    </button>
+
+    <h2 className="CurrentUser__title">
+      <span>
+        Selected user:
+        {' '}
+        {user.id}
+      </span>
+    </h2>
+
+    <h3 className="CurrentUser__name">{user.name}</h3>
+    <p className="CurrentUser__email">{user.website}</p>
+    <p className="CurrentUser__phone">{user.phone}</p>
   </div>
 );
