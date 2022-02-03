@@ -26,7 +26,7 @@ class App extends React.Component<{}, State> {
     this.setState({ todosFromServer: [...todos] });
   }
 
-  componentDidUpdate(_: {}, prevState: State) {
+  async componentDidUpdate(_: {}, prevState: State) {
     if (prevState.filterBy !== this.state.filterBy) {
       switch (this.state.filterBy) {
         case 'active':
@@ -52,7 +52,7 @@ class App extends React.Component<{}, State> {
     }
   }
 
-  selectUser = (userId: number): void => {
+  selectUser = (userId: number) => {
     this.setState({ selectedUserId: userId });
   };
 
