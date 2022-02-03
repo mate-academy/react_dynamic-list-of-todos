@@ -32,53 +32,26 @@ class App extends React.Component<Props, State> {
       });
   }
 
-  componentDidUpdate(prevState: State) {
-    if (prevState.sortByStatus !== this.state.sortByStatus) {
-      this.sortByStatus(this.state.sortByStatus);
-    }
+  filterTodos = (): Todo[] => {
+    const { todos, sortByStatus, sortByName } = this.state;
+    let filteredTodos;
 
-    // if (prevState.sortByName !== this.state.sortByName) {
-    //   this.handelSortByName(this.state.sortByName);
-    // }
-  }
-
-  // handelSortByName = (value: string) => {
-  //   this.setState({
-  //     todos: this.state.todos.filter(todo => value.includes(todo.title)),
-  //   });
-  // };
-
-  sortByStatus = (status: string) => {
-    switch (status) {
-      case 'all':
-        getAllTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos],
-            });
-          });
+    switch (sortByStatus) {
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
         break;
 
       case 'completed':
-        getAllTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos].filter(todo => todo.completed),
-            });
-          });
-        break;
-
-      case 'notCompleted':
-        getAllTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos].filter(todo => !todo.completed),
-            });
-          });
+        filteredTodos = todos.filter(todo => todo.completed);
         break;
 
       default:
+        filteredTodos = [...todos];
     }
+
+    return filteredTodos.filter(todo => (
+      todo.title.toLowerCase().includes(sortByName.toLocaleLowerCase())
+    ));
   };
 
   handleSelectUser = (userId: number) => {
@@ -118,7 +91,7 @@ class App extends React.Component<Props, State> {
   };
 
   render() {
-    const { selectedUserId, todos, selectedUserInfo } = this.state;
+    const { selectedUserId, selectedUserInfo } = this.state;
 
     return (
       <div className="App">
@@ -142,7 +115,7 @@ class App extends React.Component<Props, State> {
             />
           </span>
           <TodoList
-            todos={todos}
+            todos={this.filterTodos()}
             selectedUserId={selectedUserId}
             handleSelectUser={this.handleSelectUser}
           />
@@ -150,7 +123,7 @@ class App extends React.Component<Props, State> {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId >= 3 && selectedUserInfo !== null ? (
+            {selectedUserId >= 3 ? (
               <CurrentUser
                 selectedUser={selectedUserInfo}
                 clearSelectedUser={this.clearSelectedUser}
