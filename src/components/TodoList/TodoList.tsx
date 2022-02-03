@@ -9,6 +9,7 @@ type Props = {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   select: string,
+  userId: number,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const TodoList: React.FC<Props> = ({
   handleChange,
   select,
   handleSelectChange,
+  userId,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -61,15 +63,15 @@ export const TodoList: React.FC<Props> = ({
               <p>{todo.title}</p>
             </label>
             <button
-              className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+              className={classNames(
+                'TodoList__user-button',
+                'button',
+                { 'TodoList__user- button--selected': todo.userId === userId },
+              )}
               type="button"
               onClick={() => selectUser(todo.userId)}
             >
-              {todo.userId}
+              {`User: № ${todo.userId}`}
             </button>
           </li>
         ))}

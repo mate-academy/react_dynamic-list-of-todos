@@ -103,6 +103,7 @@ export class App extends React.Component<{}, State> {
             todos={preparedTodos}
             selectUser={this.selectUser}
             handleSelectChange={this.handleSelectChange}
+            userId={selectedUserId}
           />
         </div>
 
