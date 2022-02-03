@@ -5,6 +5,7 @@ import { getUser } from '../../api';
 type Props = {
   selectedUserId: number;
   selectUser: (selectedUserId: number) => void;
+  changeLoadingStatus: () => void;
 };
 
 type State = {
@@ -22,14 +23,20 @@ export class CurrentUser extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     if (this.props.selectedUserId !== prevProps.selectedUserId) {
+      this.clearUser();
       this.loadUser();
     }
   }
+
+  clearUser = () => {
+    this.setState({ user: null });
+  };
 
   async loadUser() {
     const user = await getUser(this.props.selectedUserId);
 
     this.setState({ user });
+    this.props.changeLoadingStatus();
   }
 
   render() {
@@ -38,12 +45,11 @@ export class CurrentUser extends React.Component<Props, State> {
 
     return (
       <>
+        <h2 className="CurrentUser__title">
+          <span>{`Selected user: ${selectedUserId}`}</span>
+        </h2>
         {user && (
           <div className="CurrentUser">
-            <h2 className="CurrentUser__title">
-              <span>{`Selected user: ${selectedUserId}`}</span>
-            </h2>
-
             <h3 className="CurrentUser__name">{user.name}</h3>
             <p className="CurrentUser__email">{user.email}</p>
             <p className="CurrentUser__phone">{user.phone}</p>

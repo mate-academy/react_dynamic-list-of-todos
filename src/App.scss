@@ -85,10 +85,18 @@ input[type="checkbox"]:checked + p:before {
 
     flex-basis: 30%;
     position: relative;
+
+    &--hidden {
+      opacity: 0;
+    }
   }
 
   &__content-container {
     position: sticky;
     top: 20px;
   }
+}
+
+progress {
+  background-color: yellow;
 }

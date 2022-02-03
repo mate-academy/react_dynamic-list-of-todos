@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import './styles/general.scss';
+import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
@@ -10,6 +11,7 @@ interface State {
   todos: Todo[];
   titleToSearch: string;
   todosToShow: string;
+  loading: boolean;
 }
 
 class App extends React.Component<{}, State> {
@@ -18,6 +20,7 @@ class App extends React.Component<{}, State> {
     todos: [],
     titleToSearch: '',
     todosToShow: 'all',
+    loading: false,
   };
 
   async componentDidMount() {
@@ -27,10 +30,9 @@ class App extends React.Component<{}, State> {
   }
 
   selectUser = (selectedUserId: number) => {
-    if (selectedUserId === this.state.selectedUserId) {
-      this.setState({ selectedUserId: 0 });
-    } else {
-      this.setState({ selectedUserId });
+    this.setState({ selectedUserId });
+    if (selectedUserId !== this.state.selectedUserId && selectedUserId !== 0) {
+      this.changeLoadingStatus();
     }
   };
 
@@ -63,7 +65,7 @@ class App extends React.Component<{}, State> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>
   | React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.currentTarget;
+    const { name, value } = event.target;
 
     this.setState((state) => ({
       ...state,
@@ -101,11 +103,16 @@ class App extends React.Component<{}, State> {
     });
   };
 
+  changeLoadingStatus = () => {
+    this.setState((prevState) => ({ loading: !prevState.loading }));
+  };
+
   render() {
     const {
       selectedUserId,
       titleToSearch,
       todosToShow,
+      loading,
     } = this.state;
     const preparedTodos = this.prepareTodos();
 
@@ -126,10 +133,22 @@ class App extends React.Component<{}, State> {
 
         <div className="App__content">
           <div className="App__content-container">
+            <progress
+              className={classNames(
+                'progress',
+                'is-small',
+                'is-link',
+                { 'App__content--hidden': !loading },
+              )}
+              max="100"
+            >
+              10%
+            </progress>
             {selectedUserId ? (
               <CurrentUser
                 selectedUserId={selectedUserId}
                 selectUser={this.selectUser}
+                changeLoadingStatus={this.changeLoadingStatus}
               />
             ) : 'No user selected'}
           </div>
