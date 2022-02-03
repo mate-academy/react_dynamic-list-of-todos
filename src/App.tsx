@@ -1,37 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { addTodo, getTodos } from './api/todos';
 
-interface State {
-  selectedUserId: number;
-}
+const App: React.FC = () => {
+  const [selectedUserId, setUserId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    selectedUserId: 0,
+  const loadTodos = async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
   };
 
-  render() {
-    const { selectedUserId } = this.state;
+  useEffect(() => {
+    const fetchTodos = async () => {
+      await loadTodos();
+    };
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+    fetchTodos();
+  }, []);
 
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
-          </div>
+  return (
+    <div className="App">
+      <div className="App__sidebar">
+        <button
+          type="button"
+          onClick={async () => {
+            const date = new Date();
+            const title = `Todo ${date.toLocaleTimeString()}`;
+
+            await addTodo(title, 3, Math.random() > 0.5);
+            await loadTodos();
+          }}
+        >
+          Add
+        </button>
+
+        <TodoList
+          todos={todos}
+          setUserId={setUserId}
+        />
+      </div>
+
+      <div className="App__content">
+        <div className="App__content-container">
+          {selectedUserId ? (
+            <CurrentUser
+              userId={selectedUserId}
+            />
+          ) : 'No user selected'}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;

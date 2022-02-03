@@ -1,43 +1,52 @@
 import React from 'react';
+import cn from 'classnames';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
+type Props = {
+  todos: Todo[];
+  setUserId: (userId: number) => void;
+};
+
+export const TodoList: React.FC<Props> = ({ todos, setUserId }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label htmlFor="checkbox">
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {todos.map((todo) => (
+          <li
+            key={todo.id}
+            className={cn({
+              TodoList__item: true,
+              'TodoList__item--checked': todo.completed,
+              'TodoList__item--unchecked': !todo.completed,
+            })}
+          >
+            <label htmlFor={`Todo-${todo.id}`}>
+              <input
+                id={`Todo-${todo.id}`}
+                type="checkbox"
+                readOnly
+                checked={todo.completed}
+              />
 
-          <button
-            className="
+              <p>{todo.title}</p>
+            </label>
+
+            <button
+              className="
               TodoList__user-button
               TodoList__user-button--selected
               button
             "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
-        <li className="TodoList__item TodoList__item--checked">
-          <label htmlFor="checkbox">
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
+              type="button"
+              onClick={() => setUserId(todo.userId)}
+            >
+              User&nbsp;#
+              {todo.userId}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
