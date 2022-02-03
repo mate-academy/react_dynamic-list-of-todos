@@ -21,19 +21,12 @@ class App extends React.Component<{}, State> {
   };
 
   componentDidMount() {
-    getTodos()
-      .then(todosFromServer => {
-        this.setState({
-          todos: [...todosFromServer],
-        });
-      });
+    this.loadUser();
   }
 
-  componentDidUpdate(prevState: State) {
-    const { selectFilterValue } = this.state;
-
-    if (prevState.selectFilterValue !== selectFilterValue) {
-      this.filterTodos(selectFilterValue);
+  componentDidUpdate(prevProps: State) {
+    if (prevProps.selectedUserId !== this.state.selectedUserId) {
+      this.loadUser();
     }
   }
 
@@ -65,45 +58,51 @@ class App extends React.Component<{}, State> {
     this.setState({
       inputValue: value,
     });
+
+    this.filterByInput(this.state.inputValue);
   };
 
-  filterTodos = (filterValue: string) => {
-    switch (filterValue) {
-      case 'all':
-        getTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos],
-            });
-          });
+  filterTodos = (): Todo[] => {
+    const { todos, selectFilterValue, inputValue } = this.state;
+    let filteredTodos;
+
+    switch (selectFilterValue) {
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
         break;
 
       case 'completed':
-        getTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos].filter(todo => todo.completed),
-            });
-          });
-        break;
-
-      case 'notCompleted':
-        getTodos()
-          .then(todos => {
-            this.setState({
-              todos: [...todos].filter(todo => !todo.completed),
-            });
-          });
+        filteredTodos = todos.filter(todo => todo.completed);
         break;
 
       default:
+        filteredTodos = [...todos];
     }
+
+    return filteredTodos.filter(todo => (
+      todo.title.toLowerCase().includes(inputValue.toLocaleLowerCase())
+    ));
   };
+
+  filterByInput = (inputValue: string) => {
+    this.setState(state => ({
+      ...state,
+      todos: [...state.todos.filter(todo => todo.title.includes(inputValue))],
+    }));
+  };
+
+  loadUser() {
+    getTodos()
+      .then(todosFromServer => {
+        this.setState({
+          todos: [...todosFromServer],
+        });
+      });
+  }
 
   render() {
     const {
       selectedUserId,
-      todos,
       selectFilterValue,
       inputValue,
     } = this.state;
@@ -116,7 +115,7 @@ class App extends React.Component<{}, State> {
             onChange={this.handelSelect}
           >
             <option value="all">all</option>
-            <option value="notCompleted">not completed</option>
+            <option value="active">active</option>
             <option value="completed">completed</option>
           </select>
           <br />
@@ -128,7 +127,7 @@ class App extends React.Component<{}, State> {
           <TodoList
             handelSelectUser={this.handelSelectUser}
             selectedUserId={selectedUserId}
-            todos={todos}
+            todos={this.filterTodos()}
           />
         </div>
 
