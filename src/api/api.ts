@@ -1,7 +1,7 @@
 const API_URL = 'https://mate.academy/students-api/';
 
 export const getTodos = async (complete: string): Promise<Todo[]> => {
-  let url = `${API_URL}todos/`;
+  let url = `${API_URL}todos`;
 
   if (complete !== '') {
     url += `?completed=${complete}`;

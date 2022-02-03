@@ -7,10 +7,10 @@ type Props = {
   onClearUser: () => void;
 };
 
-export const CurrentUser: React.FC<Props> = (props) => (
+export const CurrentUser: React.FC<Props> = ({ user, onClearUser }) => (
   <div className="CurrentUser">
     <button
-      onClick={() => props.onClearUser()}
+      onClick={() => onClearUser()}
       className="
         TodoList__user-button
         TodoList__user-button--selected
@@ -25,12 +25,12 @@ export const CurrentUser: React.FC<Props> = (props) => (
       <span>
         Selected user:
         {' '}
-        {props.user.id}
+        {user.id}
       </span>
     </h2>
 
-    <h3 className="CurrentUser__name">{props.user.name}</h3>
-    <p className="CurrentUser__email">{props.user.website}</p>
-    <p className="CurrentUser__phone">{props.user.phone}</p>
+    <h3 className="CurrentUser__name">{user.name}</h3>
+    <p className="CurrentUser__email">{user.website}</p>
+    <p className="CurrentUser__phone">{user.phone}</p>
   </div>
 );

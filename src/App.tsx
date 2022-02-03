@@ -69,7 +69,9 @@ class App extends React.Component<{}, State> {
   };
 
   getVisibleTodos = (todos: Todo[], str: string): Todo[] => {
-    return todos.filter(todo => todo.title.toLowerCase().includes(str.toLowerCase()));
+    const query = str.toLowerCase();
+
+    return todos.filter(todo => todo.title.toLowerCase().includes(query));
   };
 
   shuffle = (array: Todo[]): Todo[] => {
@@ -118,7 +120,7 @@ class App extends React.Component<{}, State> {
 
         <div className="App__content">
           <div className="App__content-container">
-            {user !== null ? (
+            {user ? (
               <CurrentUser
                 user={user}
                 onClearUser={this.handleClearUser}

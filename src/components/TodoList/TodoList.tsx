@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = (props) => (
           id="search-query"
           placeholder="Type search todo"
           value={props.query}
-          onChange={(event => props.onChangeSearchInput(event))}
+          onChange={event => props.onChangeSearchInput(event)}
         />
       </label>
       <label htmlFor="select-completed">
