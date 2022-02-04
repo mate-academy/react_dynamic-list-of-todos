@@ -34,38 +34,13 @@ class App extends React.Component<{}, State> {
   }
 
   componentDidUpdate(_: unknown, prevState: State) {
-    const { filterInputValue, todos, filterBy } = this.state;
+    const { filterInputValue, todos } = this.state;
 
     if (prevState.filterInputValue !== filterInputValue) {
       const filtredTodos = todos.filter(todo => todo.title.includes(filterInputValue));
 
       this.setState({ filtredTodos });
     }
-
-    if (prevState.filterBy !== filterBy) {
-      switch (filterBy) {
-        case 'all':
-          this.setState({ filtredTodos: todos });
-          break;
-
-        case 'not completed':
-          const filtredByNotCompleted = todos.filter(todo => todo.completed === false);
-
-          this.setState({ filtredTodos: filtredByNotCompleted });
-          break;
-
-        case 'completed':
-          const filtredByCompleted = todos.filter(todo => todo.completed === true);
-
-          this.setState({ filtredTodos: filtredByCompleted });
-          break;
-
-        default:
-          return null;
-      }
-    }
-
-    return null;
   }
 
   handleSelectUser = (userId: number) => {
@@ -77,7 +52,35 @@ class App extends React.Component<{}, State> {
   };
 
   handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ filterBy: event.target.value });
+    const { filterBy, todos } = this.state;
+    const { value } = event.target;
+
+    this.setState({ filterBy: value });
+
+    if (filterBy !== value) {
+      switch (value) {
+        case 'all':
+          this.setState({ filtredTodos: todos });
+          break;
+
+        case 'not completed':
+          const filtredByNotCompleted = todos.filter(todo => !todo.completed);
+
+          this.setState({ filtredTodos: filtredByNotCompleted });
+          break;
+
+        case 'completed':
+          const filtredByCompleted = todos.filter(todo => todo.completed);
+
+          this.setState({ filtredTodos: filtredByCompleted });
+          break;
+
+        default:
+          return null;
+      }
+    }
+
+    return null;
   };
 
   render() {
