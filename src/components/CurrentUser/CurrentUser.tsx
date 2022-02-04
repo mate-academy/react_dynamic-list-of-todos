@@ -40,25 +40,21 @@ export class CurrentUser extends React.Component<Props, State> {
     const { user } = this.state;
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title"><span>{`Selected user: ${this.props.selectedUserId}`}</span></h2>
-
-        {user && (
-          <>
-            <h3 className="CurrentUser__name">{user.name}</h3>
-            <p className="CurrentUser__email">{user.email}</p>
-            <p className="CurrentUser__phone">{user.phone}</p>
-          </>
-        )}
-
-        <button
-          className="button button--centered"
-          type="button"
-          onClick={() => this.clearUser()}
-        >
-          Clear
-        </button>
-      </div>
+      user && (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
+          <h3 className="CurrentUser__name">{user.name}</h3>
+          <p className="CurrentUser__email">{user.email}</p>
+          <p className="CurrentUser__phone">{user.phone}</p>
+          <button
+            className="button button--centered"
+            type="button"
+            onClick={this.clearUser}
+          >
+            Clear
+          </button>
+        </div>
+      )
     );
   }
 }

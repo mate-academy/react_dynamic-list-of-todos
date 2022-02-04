@@ -4,19 +4,19 @@ import './TodoList.scss';
 
 type Props = {
   todos: Todo[],
-  onUserSelect: (newUserId: number) => void
+  onUserSelect: (newUserId: number) => void,
   selectedUserId: number,
 };
 
 type State = {
   search: string,
-  filter: string,
+  filterBy: string,
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     search: '',
-    filter: 'nofilter',
+    filterBy: 'nofilter',
   };
 
   handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,20 +24,20 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ filter: event.target.value });
+    this.setState({ filterBy: event.target.value });
   };
 
-  prepareTodos = () => {
+  getPreparedTodos = () => {
     let { todos } = this.props;
 
     if (this.state.search) {
       todos = this.props.todos.filter(todo => todo.title.includes(this.state.search));
     }
 
-    if (this.state.filter !== 'nofilter') {
-      todos = this.state.filter === 'completed'
-        ? todos.filter(todo => todo.completed === true)
-        : todos.filter(todo => todo.completed === false);
+    if (this.state.filterBy !== 'nofilter') {
+      todos = this.state.filterBy === 'completed'
+        ? todos.filter(todo => todo.completed)
+        : todos.filter(todo => !todo.completed);
     }
 
     return todos;
@@ -45,7 +45,7 @@ export class TodoList extends React.Component<Props, State> {
 
   render() {
     const { onUserSelect, selectedUserId } = this.props;
-    const preparedTodos = this.prepareTodos();
+    const preparedTodos = this.getPreparedTodos();
 
     return (
       <div className="TodoList">
@@ -63,7 +63,7 @@ export class TodoList extends React.Component<Props, State> {
             name=""
             id=""
             className="TodoList__selector"
-            value={this.state.filter}
+            value={this.state.filterBy}
             onChange={this.handleSelect}
           >
             <option value="nofilter">all</option>
@@ -77,11 +77,11 @@ export class TodoList extends React.Component<Props, State> {
             {preparedTodos.map(todo => (
               <li
                 key={todo.id}
-                className={
-                  `TodoList__item ${todo.completed
-                    ? 'TodoList__item--checked'
-                    : 'TodoList__item--unchecked'}`
-                }
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--checked': todo.completed },
+                  { 'TodoList__item--unchecked': !todo.completed },
+                )}
               >
                 <label htmlFor="isCompleted">
                   <input
