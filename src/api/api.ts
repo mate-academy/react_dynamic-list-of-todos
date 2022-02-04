@@ -1,17 +1,19 @@
-export const getTodos = async (): Promise<Todo[]> => {
-  const url = 'https://mate.academy/students-api/todos';
+const API_URL = 'https://mate.academy/students-api/';
 
-  return fetch(url).then(response => response.json());
+const getData = async (url: string) => {
+  const response = await fetch(`${API_URL}${url}`);
+
+  return response.json();
 };
 
-export const getUser = async (userId: number): Promise<User> => {
-  const url = `https://mate.academy/students-api/users/${userId}`;
+export const getTodos = (): Promise<Todo[]> => (
+  getData('todos')
+);
 
-  return fetch(url).then(response => response.json());
-};
+export const getUser = (userId: number): Promise<User> => (
+  getData(`users/${userId}`)
+);
 
-export const filterTodos = async (completed: boolean): Promise<Todo[]> => {
-  const url = `https://mate.academy/students-api/todos?completed=${completed}`;
-
-  return fetch(url).then(response => response.json());
-};
+export const filterTodos = (completed: boolean): Promise<Todo[]> => (
+  getData(`todos?completed=${completed}`)
+);
