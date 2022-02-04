@@ -27,6 +27,8 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   };
 
   async loadData() {
+    this.setState({ user: null });
+
     const user = await getUserById(this.props.selectedUserId);
 
     this.setState({ user });
@@ -38,7 +40,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
 
     return (
       !user
-        ? 'User not founded'
+        ? '...Loading'
         : (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUserId}`}</span></h2>

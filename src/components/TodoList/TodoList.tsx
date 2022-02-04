@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[],
-  selectUser: (userId: number) => void;
+  selectUser: (userId: number) => void,
   selectedUserId: number,
   query: string,
   randomaizer: () => void,

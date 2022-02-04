@@ -6,7 +6,11 @@ type Props = {
   todoStatus: string,
 };
 
-export const SearchTodo: React.FC <Props> = ({ changeHandler, query, todoStatus }) => (
+export const SearchTodo: React.FC <Props> = ({
+  changeHandler,
+  query,
+  todoStatus,
+}) => (
   <form className="form">
     <input
       className="input"

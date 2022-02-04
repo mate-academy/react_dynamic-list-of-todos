@@ -7,11 +7,11 @@ import { SearchTodo } from './components/SearchTodo';
 import { getAllTodos } from './api/api';
 
 type State = {
-  selectedUserId: number;
+  selectedUserId: number,
   todos: Todo[],
   filteredTodo: Todo[],
   query: string,
-  todoStatus: 'all' | 'active' | 'completed'
+  todoStatus: 'all' | 'active' | 'completed',
 };
 
 type Props = {};
@@ -34,12 +34,12 @@ export class App extends React.Component<Props, State> {
     });
   };
 
-  changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  changeHandler = async (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     event.preventDefault();
     const { name, value } = event.target;
     const newState = { [name]: value } as Pick<State, 'query' | 'todoStatus'>;
 
-    this.setState(newState);
+    await this.setState(newState);
     this.loadData();
   };
 
@@ -72,17 +72,19 @@ export class App extends React.Component<Props, State> {
 
     switch (todoStatus) {
       case 'active':
-        newTodos = this.filteredTodo(false);
+        newTodos = this.filteredTodo(true);
         break;
       case 'completed':
-        newTodos = this.filteredTodo(true);
+        newTodos = this.filteredTodo(false);
         break;
       default:
         newTodos = [...todos];
         break;
     }
 
-    this.setState({ filteredTodo: newTodos });
+    this.setState({
+      filteredTodo: newTodos,
+    });
   }
 
   render() {
