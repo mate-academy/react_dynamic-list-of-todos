@@ -29,22 +29,26 @@ export class CurrentUser extends React.Component<Props, State> {
 
   async loadUser() {
     const { userId } = this.props;
-    const user = await getUserById(userId);
+    const user = await getUserById(userId) || null;
 
     this.setState({ user });
   }
 
   render() {
     const { user } = this.state;
-    const { clearUser } = this.props;
+    const { clearUser, userId } = this.props;
 
     return (
       <div className="CurrentUser box">
-        <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
+        <h2 className="CurrentUser__title"><span>{`Selected user: ${userId}`}</span></h2>
 
-        <h3 className="CurrentUser__name">{user?.name}</h3>
-        <p className="CurrentUser__email">{user?.email}</p>
-        <p className="CurrentUser__phone pb-2">{user?.phone}</p>
+        {user && (
+          <>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone pb-2">{user.phone}</p>
+          </>
+        )}
 
         <button
           className="button is-danger"
