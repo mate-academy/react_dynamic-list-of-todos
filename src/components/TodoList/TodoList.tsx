@@ -6,23 +6,24 @@ type Props = {
   todos: Todo[];
   selectUser: (selectedUserId: number) => void;
   selectedUserId: number;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>
-  | React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChangeStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   changeTodoStatus: (todoId: number) => void;
   titleToSearch: string;
   todosToShow: string;
   randomize: () => void;
+  handleChangeTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectUser,
   selectedUserId,
-  handleChange,
+  handleChangeStatus,
   changeTodoStatus,
   titleToSearch,
   todosToShow,
   randomize,
+  handleChangeTitle,
 }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
@@ -37,7 +38,7 @@ export const TodoList: React.FC<Props> = ({
             name="titleToSearch"
             placeholder="Title"
             value={titleToSearch}
-            onChange={(event) => handleChange(event)}
+            onChange={(event) => handleChangeTitle(event)}
           />
         </div>
       </label>
@@ -46,7 +47,7 @@ export const TodoList: React.FC<Props> = ({
         <select
           name="todosToShow"
           value={todosToShow}
-          onChange={(event) => handleChange(event)}
+          onChange={(event) => handleChangeStatus(event)}
         >
           <option value="">Show all</option>
           <option value="active">Active</option>
@@ -61,7 +62,7 @@ export const TodoList: React.FC<Props> = ({
           'TodoList__randomize-button',
           'is-light',
         )}
-        onClick={() => randomize()}
+        onClick={randomize}
       >
         Randomize
       </button>

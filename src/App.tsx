@@ -9,15 +9,17 @@ import { getTodos } from './api';
 interface State {
   selectedUserId: number;
   todos: Todo[];
-  titleToSearch: string;
+  title: string;
   todosToShow: string;
   loading: boolean;
+  titleToSearch: string;
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
     todos: [],
+    title: '',
     titleToSearch: '',
     todosToShow: 'all',
     loading: false,
@@ -47,7 +49,7 @@ class App extends React.Component<{}, State> {
 
     if (titleToSearch) {
       copiedTodos = copiedTodos.filter(
-        todo => todo.title.toLowerCase().includes(titleToSearch.toLowerCase()),
+        todo => todo.title.toLowerCase().includes(titleToSearch),
       );
     }
 
@@ -63,14 +65,21 @@ class App extends React.Component<{}, State> {
     }
   };
 
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>
-  | React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target;
+  handleChangeStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
 
-    this.setState((state) => ({
-      ...state,
-      [name]: value,
-    }));
+    this.setState({
+      todosToShow: value,
+    });
+  };
+
+  handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    this.setState({
+      title: value,
+      titleToSearch: value.toLowerCase(),
+    });
   };
 
   changeTodoStatus = (todoId: number) => {
@@ -110,7 +119,7 @@ class App extends React.Component<{}, State> {
   render() {
     const {
       selectedUserId,
-      titleToSearch,
+      title,
       todosToShow,
       loading,
     } = this.state;
@@ -123,8 +132,9 @@ class App extends React.Component<{}, State> {
             todos={preparedTodos}
             selectUser={this.selectUser}
             selectedUserId={selectedUserId}
-            handleChange={this.handleChange}
-            titleToSearch={titleToSearch}
+            handleChangeStatus={this.handleChangeStatus}
+            handleChangeTitle={this.handleChangeTitle}
+            titleToSearch={title}
             todosToShow={todosToShow}
             randomize={this.randomizeOrder}
             changeTodoStatus={this.changeTodoStatus}
