@@ -21,7 +21,7 @@ export const TodoList: React.FC<Props> = ({
 }) => (
   <div className="TodoList">
     <label htmlFor="selectTodosByStatus">
-      Выберите ваш любимый вкус:
+      Choose an status of todo:
       <select
         value={todoStatus}
         onChange={handleSelectByStatus}
