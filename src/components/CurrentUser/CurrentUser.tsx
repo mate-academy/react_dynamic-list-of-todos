@@ -9,20 +9,20 @@ interface Props {
 }
 
 interface State {
-  user: User,
+  user: User | null,
 }
 
 export class CurrentUser extends React.Component<Props, State> {
   state: State = {
-    user: {} as User,
+    user: null,
   };
 
   componentDidMount() {
     this.handleFetch();
   }
 
-  componentDidUpdate(_: Props, prevState: State) {
-    if (this.state.user.id !== prevState.user.id) {
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.userId !== this.props.userId) {
       this.handleFetch();
     }
   }
@@ -35,13 +35,13 @@ export class CurrentUser extends React.Component<Props, State> {
 
   resetUser = () => {
     this.props.selectUserId(0);
-    this.setState({ user: {} as User });
+    this.setState({ user: null });
   };
 
   render() {
     const { user } = this.state;
 
-    return (
+    return user && (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
           <span>{`Selected user: ${user.id}`}</span>
