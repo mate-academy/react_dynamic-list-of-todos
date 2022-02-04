@@ -37,7 +37,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
     return (
       <>
-        {selectedUser !== null && (
+        {selectedUser && (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
               <span>{`Selected user: ${selectedUser.id}`}</span>
