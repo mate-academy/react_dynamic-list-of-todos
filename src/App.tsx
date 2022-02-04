@@ -28,9 +28,13 @@ class App extends React.Component<{}, State> {
     this.setState({ todos });
   }
 
-  selectUser = (userId: number) => (
-    this.setState({ selectedUserId: userId })
-  );
+  selectUser = (userId: number) => {
+    if (this.state.selectedUserId !== userId) {
+      this.setState({
+        selectedUserId: userId,
+      });
+    }
+  };
 
   clearUser = () => (
     this.setState({ selectedUserId: 0 })
@@ -75,7 +79,6 @@ class App extends React.Component<{}, State> {
         <div className="App__sidebar">
           <TodoList
             visibleTodos={visibleTodos}
-            selectedUserId={selectedUserId}
             query={query}
             filterBy={filterBy}
             selectUser={this.selectUser}
