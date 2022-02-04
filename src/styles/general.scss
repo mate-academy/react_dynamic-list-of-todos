@@ -9,6 +9,11 @@
   transition: background-color 0.12s;
   font-size: inherit;
 
+  &--centered {
+    display: block;
+    margin: 1.5rem auto;
+  }
+
   &:hover {
     background-color: #4d457b;
   }
