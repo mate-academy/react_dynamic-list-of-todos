@@ -54,31 +54,23 @@ export class App extends React.Component<{}, State> {
     });
   };
 
-  preparedTododos = () => {
+  getPreparedTodos = () => {
     const { todos, input, select } = this.state;
+    const inputCase = input.toLowerCase();
 
-    const filteredTodos = todos
-      .filter(todo => (
-        todo.title.toLowerCase()
-          .includes(input.toLowerCase())
-      ));
+    let preparedTodos = [...todos];
+
+    if (input) {
+      preparedTodos = todos.filter(todo => todo.title.toLowerCase().includes(inputCase));
+    }
 
     switch (select) {
-      case 'not':
-        return todos.filter(todo => {
-          const titleCase = todo.title.toLowerCase();
-
-          return todo.completed === false && titleCase.includes(input.toLowerCase());
-        });
       case 'completed':
-        return todos.filter(todo => {
-          const titleCase = todo.title.toLowerCase();
-
-          return todo.completed === true && titleCase.includes(input.toLowerCase());
-        });
-
+        return preparedTodos.filter(todo => todo.completed);
+      case 'not':
+        return preparedTodos.filter(todo => !todo.completed);
       default:
-        return filteredTodos;
+        return preparedTodos;
     }
   };
 
@@ -89,7 +81,7 @@ export class App extends React.Component<{}, State> {
       input,
     } = this.state;
 
-    const preparedTodos = this.preparedTododos();
+    const preparedTodos = this.getPreparedTodos();
 
     return (
       <div className="App">
