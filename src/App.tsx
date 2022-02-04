@@ -43,12 +43,8 @@ class App extends React.Component<{}, State> {
   getTodos = () => {
     const { searchTitle, todos, selectTodo } = this.state;
 
-    let copyTodos = [...todos];
-
-    if (searchTitle) {
-      copyTodos = copyTodos.filter(todo => todo.title.toLowerCase()
-        .includes(searchTitle.toLowerCase()));
-    }
+    const copyTodos = todos.filter(todo => todo.title.toLowerCase()
+      .includes(searchTitle.toLowerCase()));
 
     if (selectTodo === 'active') {
       return copyTodos.filter(todo => !todo.completed);
@@ -67,7 +63,7 @@ class App extends React.Component<{}, State> {
     });
   };
 
-  removeUser = () => {
+  removeUserInfo = () => {
     this.setState({ selectedUserId: 0 });
   };
 
@@ -112,7 +108,7 @@ class App extends React.Component<{}, State> {
             {selectedUserId ? (
               <CurrentUser
                 userId={selectedUserId}
-                removeUser={this.removeUser}
+                removeUserInfo={this.removeUserInfo}
               />
             ) : 'No user selected'}
           </div>

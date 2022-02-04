@@ -5,7 +5,7 @@ import { getUsers } from '../../api';
 
 type Props = {
   userId: number,
-  removeUser: () => void,
+  removeUserInfo: () => void,
 };
 
 type State = {
@@ -38,7 +38,7 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const { user } = this.state;
-    const { userId, removeUser } = this.props;
+    const { userId, removeUserInfo } = this.props;
 
     return (
       <div>
@@ -58,7 +58,7 @@ export class CurrentUser extends React.Component<Props, State> {
             <button
               type="button"
               className="button"
-              onClick={removeUser}
+              onClick={removeUserInfo}
             >
               Remove
             </button>
