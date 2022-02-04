@@ -4,18 +4,18 @@ import './TodoList.scss';
 type Props = {
   todos: Todo[],
   selectUserId: (id: number) => void,
+  enableRandom: () => void,
 };
+
 type State = {
   title: string,
   completed: string,
-  randomize: boolean,
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     title: '',
     completed: '',
-    randomize: false,
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -27,27 +27,8 @@ export class TodoList extends React.Component<Props, State> {
     }));
   };
 
-  enableRandom = () => {
-    this.setState({ randomize: true });
-  };
-
   adjustContent = (todos: Todo[]) => {
-    const { title, completed, randomize } = this.state;
-
-    const shuffleTodos = (todoList: Todo[]) => {
-      const newTodos = [...todoList];
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = newTodos.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = newTodos[i];
-
-        newTodos[i] = newTodos[j];
-        newTodos[j] = temp;
-      }
-
-      return newTodos;
-    };
+    const { title, completed } = this.state;
 
     const newTodos = [...todos]
       .filter(todo => todo.title.includes(title))
@@ -59,12 +40,12 @@ export class TodoList extends React.Component<Props, State> {
         return true;
       });
 
-    return randomize ? shuffleTodos(newTodos) : newTodos;
+    return newTodos;
   };
 
   render() {
     const { title, completed } = this.state;
-    const { todos, selectUserId } = this.props;
+    const { todos, selectUserId, enableRandom } = this.props;
 
     return (
       <div className="TodoList">
@@ -90,7 +71,7 @@ export class TodoList extends React.Component<Props, State> {
 
         <button
           type="button"
-          onClick={this.enableRandom}
+          onClick={enableRandom}
         >
           Randomize
         </button>
