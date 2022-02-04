@@ -49,45 +49,30 @@ export class CurrentUser extends React.PureComponent<Props, State> {
 
     return (
       <div className="CurrentUser">
-        {user ? (
-          <>
-            {isUser ? (
-              <>
-                <h2 className="CurrentUser__title">
-                  <span>
-                    Selected user:
-                    {' '}
-                    {user.id}
-                  </span>
-                </h2>
+        {user && isUser
+          ? (
+            <>
+              <h2 className="CurrentUser__title">
+                <span>
+                  Selected user:
+                  {' '}
+                  {user.id}
+                </span>
+              </h2>
 
-                <h3 className="CurrentUser__name">{user.name}</h3>
-                <p className="CurrentUser__email">{user.email}</p>
-                <p className="CurrentUser__phone">{user.phone}</p>
-              </>
-            ) : (
-              <h3 className="CurrentUser__name">User is not defined</h3>
-            )}
-            <button
-              className="button CurrentUser__clear"
-              type="button"
-              onClick={clear}
-            >
-              Clear
-            </button>
-          </>
-        ) : (
-          <>
-            <h3 className="CurrentUser__name">User is not defined</h3>
-            <button
-              className="button CurrentUser__clear"
-              type="button"
-              onClick={clear}
-            >
-              Clear
-            </button>
-          </>
-        )}
+              <h3 className="CurrentUser__name">{user.name}</h3>
+              <p className="CurrentUser__email">{user.email}</p>
+              <p className="CurrentUser__phone">{user.phone}</p>
+            </>
+          )
+          : <h3 className="CurrentUser__name">User is not defined</h3>}
+        <button
+          className="button CurrentUser__clear"
+          type="button"
+          onClick={clear}
+        >
+          Clear
+        </button>
       </div>
     );
   }
