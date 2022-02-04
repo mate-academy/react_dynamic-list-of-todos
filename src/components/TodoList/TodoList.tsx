@@ -3,22 +3,16 @@ import './TodoList.scss';
 import classNames from 'classnames';
 
 type Props = {
-  todos: Todo[],
-  selectUser: (userId: number) => void;
+  visibleTodos: Todo[],
   selectedUserId: number;
-};
-
-type State = {
   query: string;
   filterBy: string;
+  selectUser: (userId: number) => void;
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectorInput: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export class TodoList extends React.Component<Props, State> {
-  state: State = {
-    query: '',
-    filterBy: 'all',
-  };
-
+export class TodoList extends React.PureComponent<Props, {}> {
   onUserSelected = (userId: number) => {
     if (userId === this.props.selectedUserId) {
       return null;
@@ -27,39 +21,14 @@ export class TodoList extends React.Component<Props, State> {
     return this.props.selectUser(userId);
   };
 
-  handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      query: event.target.value.toLowerCase(),
-    });
-  };
-
-  getFilteredTodos = () => (
-    this.props.todos.filter(todo => todo.title.toLowerCase().includes(this.state.query))
-  );
-
-  handleSelectorInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({
-      filterBy: event.target.value,
-    });
-  };
-
   render() {
-    const { filterBy } = this.state;
-
-    let visibleTodos = this.getFilteredTodos();
-
-    visibleTodos = visibleTodos.filter(todo => {
-      switch (filterBy) {
-        case 'all':
-          return todo;
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return 0;
-      }
-    });
+    const {
+      visibleTodos,
+      query,
+      filterBy,
+      handleSearch,
+      handleSelectorInput,
+    } = this.props;
 
     return (
 
@@ -71,21 +40,21 @@ export class TodoList extends React.Component<Props, State> {
             id="search-query"
             className="input"
             placeholder="Search by title"
-            value={this.state.query}
-            onChange={this.handleSearch}
+            value={query}
+            onChange={handleSearch}
           />
         </div>
 
-        <section className="select is-info">
+        <div className="select is-info">
           <select
             value={filterBy}
-            onChange={this.handleSelectorInput}
+            onChange={handleSelectorInput}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
-        </section>
+        </div>
 
         <div className="TodoList__list-container pt-2">
           <ul className="TodoList__list">
@@ -95,8 +64,6 @@ export class TodoList extends React.Component<Props, State> {
                 className={classNames('TodoList__item',
                   {
                     'TodoList__item--unchecked': !todo.completed,
-                  },
-                  {
                     'TodoList__item--checked': todo.completed,
                   })}
               >
