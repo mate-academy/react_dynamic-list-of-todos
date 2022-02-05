@@ -25,7 +25,7 @@ class App extends React.Component<{}, State> {
     this.loadTodosByStatus();
   }
 
-  componentDidUpdate(prevState: State) {
+  componentDidUpdate(_: {}, prevState: State) {
     if (this.state.status !== prevState.status) {
       this.loadTodosByStatus();
     }
@@ -35,12 +35,14 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: userId });
   };
 
-  setStatus = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-
+  setStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.setState({
-      [name]: value,
-    } as Pick<State, 'query' | 'status'>);
+      status: event.target.value,
+    });
+  };
+
+  setQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ query: event.target.value });
   };
 
   getTodosByQuery = () => {
@@ -83,7 +85,7 @@ class App extends React.Component<{}, State> {
                   id="search-query"
                   placeholder="Type search word"
                   value={query}
-                  onChange={this.setStatus}
+                  onChange={this.setQuery}
                 />
               </div>
               <div className="field">
