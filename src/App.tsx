@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, filterTodos } from './api/api';
+import { getTodos, getFilteredTodosByStatus } from './api/api';
 
 type Props = {};
 type State = {
@@ -31,14 +31,14 @@ export class App extends React.Component<Props, State> {
     if (prevState.selectedFilter !== this.state.selectedFilter) {
       switch (this.state.selectedFilter) {
         case 'active':
-          filterTodos(false)
+          getFilteredTodosByStatus(false)
             .then(todos => {
               this.setState({ todos: [...todos] });
             });
           break;
 
         case 'completed':
-          filterTodos(true)
+          getFilteredTodosByStatus(true)
             .then(todos => {
               this.setState({ todos: [...todos] });
             });

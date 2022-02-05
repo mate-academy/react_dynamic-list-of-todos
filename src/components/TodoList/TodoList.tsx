@@ -29,10 +29,10 @@ export const TodoList: React.FC<Props> = ({
               },
             )}
           >
-            <label htmlFor={`${todo.id}`}>
+            <label htmlFor={todo.id}>
               <input
                 type="checkbox"
-                id={`${todo.id}`}
+                id={todo.id}
                 checked={todo.completed}
                 onChange={() => changeTodoStatus(+todo.id)}
               />

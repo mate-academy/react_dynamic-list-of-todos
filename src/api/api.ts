@@ -14,6 +14,6 @@ export const getUser = (userId: number): Promise<User> => (
   getData(`users/${userId}`)
 );
 
-export const filterTodos = (completed: boolean): Promise<Todo[]> => (
+export const getFilteredTodosByStatus = (completed: boolean): Promise<Todo[]> => (
   getData(`todos?completed=${completed}`)
 );
