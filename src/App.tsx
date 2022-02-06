@@ -1,37 +1,101 @@
-import React from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos, deleteTodo, addTodo } from './api/todos';
 
-interface State {
-  selectedUserId: number;
+function debounce(f: (...args: any[]) => void, delay: number) {
+  let timerId: NodeJS.Timeout;
+
+  return (...args: any[]) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(f, delay, ...args);
+  };
 }
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    selectedUserId: 0,
+const App: React.FC = () => {
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [queryForFilter, setQueryForFilter] = useState('');
+
+  const loadTodos = async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
   };
 
-  render() {
-    const { selectedUserId } = this.state;
+  const addNewTodo = async () => {
+    const date = new Date();
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
+    const title = `TODO - ${date.toLocaleTimeString()}`;
 
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
-          </div>
+    await addTodo(
+      title,
+      3,
+      Math.random() > 0.5,
+    );
+
+    loadTodos();
+  };
+
+  const deleteSelectedTodo = useCallback(async (todoId: number) => {
+    await deleteTodo(todoId);
+    await loadTodos();
+  }, []);
+
+  const filteredTodos = useMemo(() => (
+    todos.filter(todo => todo.title.includes(queryForFilter))
+  ), [queryForFilter, todos]);
+
+  const setQueryForFilterWithDebounce = useCallback(
+    debounce(setQueryForFilter, 1000),
+    [],
+  );
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  return (
+    <div className="App">
+      <div className="App__sidebar">
+        <button
+          type="button"
+          onClick={addNewTodo}
+        >
+          Add New Todo
+        </button>
+
+        <input
+          type="text"
+          value={query}
+          onChange={({ target }) => {
+            setQueryForFilterWithDebounce(target.value);
+            setQuery(target.value);
+          }}
+        />
+        <TodoList
+          todos={filteredTodos}
+          setUserId={setSelectedUserId}
+          deleteTodo={deleteSelectedTodo}
+        />
+      </div>
+
+      <div className="App__content">
+        <div className="App__content-container">
+          {selectedUserId ? (
+            <CurrentUser
+              userId={selectedUserId}
+            />
+          ) : 'No user selected'}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
