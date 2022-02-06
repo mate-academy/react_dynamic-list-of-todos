@@ -4,6 +4,7 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import CurrentUser from './components/CurrentUser';
 import { getTodos } from './Api/Api';
+import getFilteredTodos from './components/FilterTodos';
 
 interface State {
   selectedUserId: number;
@@ -56,30 +57,6 @@ class App extends React.Component<{}, State> {
     });
   };
 
-  getFilteredTodos = () => {
-    const { filterParameter, searchTitle } = this.state;
-    const todosCopy = [...this.state.todos];
-    let filtered: Todo[];
-
-    switch (filterParameter) {
-      case 'Active':
-        filtered = todosCopy.filter(todo => todo.completed !== true);
-        break;
-
-      case 'Completed':
-        filtered = todosCopy.filter(todo => todo.completed === true);
-        break;
-
-      default:
-        filtered = todosCopy;
-        break;
-    }
-
-    filtered = filtered.filter(todo => todo.title.includes(searchTitle));
-
-    return filtered;
-  };
-
   changeTodoStatus = (todoTitle: string) => {
     const todoCopy = [...this.state.todos];
     const changedTodoIndex = todoCopy.findIndex(todo => todo.title === todoTitle);
@@ -121,13 +98,18 @@ class App extends React.Component<{}, State> {
   };
 
   render() {
-    const { selectedUserId } = this.state;
+    const {
+      selectedUserId,
+      todos,
+      searchTitle,
+      filterParameter,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={this.getFilteredTodos()}
+            todos={getFilteredTodos(todos, searchTitle, filterParameter)}
             selectedUserId={selectedUserId}
             handleUserSelect={this.handleUserSelect}
             changeTodoStatus={this.changeTodoStatus}
