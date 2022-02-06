@@ -51,11 +51,13 @@ export const TodoList: React.FC<Props> = (props) => {
           {visibleTodos.map((todo) => (
             <li
               key={todo.id}
-              className={classNames('TodoList__item',
+              className={classNames(
+                'TodoList__item',
                 {
                   'TodoList__item--unchecked': !todo.completed,
                   'TodoList__item--checked': todo.completed,
-                })}
+                },
+              )}
             >
               <input type="checkbox" checked={todo.completed} readOnly />
               <p>{todo.title}</p>

@@ -36,11 +36,11 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const { user } = this.state;
-    const { clearUser, userId } = this.props;
+    const { clearUser } = this.props;
 
     return (
       <div className="CurrentUser box">
-        <h2 className="CurrentUser__title"><span>{`Selected user: ${userId}`}</span></h2>
+        <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
 
         {user && (
           <>

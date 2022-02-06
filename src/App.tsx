@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import 'bulma/css/bulma.min.css';
 
-import { getAll } from './api/api';
+import { getAllTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -23,7 +23,7 @@ class App extends React.Component<{}, State> {
   };
 
   async componentDidMount() {
-    const todos = await getAll();
+    const todos = await getAllTodos();
 
     this.setState({ todos });
   }
