@@ -13,3 +13,25 @@ export function getTodos() {
 export function getUser(userId: number) {
   return getData<User>(`/users/${userId}`);
 }
+
+export async function addTodo(
+  title: string,
+  userId: number,
+  completed = false,
+) {
+  const response = await fetch(`${API_URL}/todos`, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify({ title, userId, completed }),
+  });
+
+  return response.json();
+}
+
+export function deleteTodo(todoId: number) {
+  return fetch(`${API_URL}/todos/${todoId}`, {
+    method: 'DELETE',
+  });
+}
