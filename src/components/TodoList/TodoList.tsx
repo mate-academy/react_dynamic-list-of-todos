@@ -33,7 +33,7 @@ export class TodoList extends React.Component<Props, State> {
   sortTodos = () => {
     const { currentInput, statusTodo } = this.state;
     const { todos } = this.props;
-    let copyTodos = [...todos];
+    let copyTodos;
 
     const lowerCaseCurrentInput = currentInput.toLowerCase();
 
@@ -45,6 +45,7 @@ export class TodoList extends React.Component<Props, State> {
         copyTodos = todos.filter((value) => (value.completed));
         break;
       default:
+        copyTodos = todos;
         break;
     }
 
