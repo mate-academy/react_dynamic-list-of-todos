@@ -1,44 +1,83 @@
 import React from 'react';
 import './TodoList.scss';
+import 'bulma';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  handleUserIdChange: (todo: Todo) => void;
+  todos: Todo[],
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type State = {
+  query: string;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state = {
+    query: '',
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  handleTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      query: event.target.value,
+    });
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  getVisibleTodos = () => {
+    const searchQuery = this.state.query.toLowerCase();
+
+    return this.props.todos.filter(todo => todo.title.toLowerCase().includes(searchQuery));
+  };
+
+  render() {
+    const { handleUserIdChange } = this.props;
+    const filteredTodos = this.getVisibleTodos();
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <div className="box">
+          <div className="field">
+            <label htmlFor="search-query" className="label">
+              Search Todo
+              <input
+                type="text"
+                id="search-query"
+                className="input"
+                placeholder="Type search word"
+                value={this.state.query}
+                onChange={this.handleTodoChange}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {filteredTodos.map(todo => (
+              <li className="TodoList__item TodoList__item--unchecked" key={todo.id}>
+                <label htmlFor="checkbox">
+                  <input type="checkbox" readOnly />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className="
+                    button
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                  "
+                  type="button"
+                  key={todo.id}
+                  onClick={() => handleUserIdChange(todo)}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
