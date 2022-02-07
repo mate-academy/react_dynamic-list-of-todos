@@ -77,8 +77,6 @@ class App extends React.Component<{}, State> {
         return copyTodos;
       }
     }
-
-    return todos;
   }
 
   render() {
@@ -94,6 +92,7 @@ class App extends React.Component<{}, State> {
             todos={this.filterTodos()}
             getSelectedUser={this.getSelectedUser}
             queryHandler={this.queryHandler}
+            selectedUserId={selectedUserId}
           />
         </div>
 

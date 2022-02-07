@@ -32,7 +32,11 @@ export class CurrentUser extends React.Component<Props, State> {
   async loadUser() {
     const user = await getSelectedUserDetails(this.props.selectedUserId);
 
-    this.setState({ user });
+    if (user !== null) {
+      this.setState({ user });
+    } else {
+      throw new Error('Invalid User');
+    }
   }
 
   render(): React.ReactNode {

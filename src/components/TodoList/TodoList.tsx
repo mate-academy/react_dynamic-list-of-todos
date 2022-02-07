@@ -9,6 +9,7 @@ type Props = {
   query: string,
   getSelectedUser: (selectedUserId: number) => void,
   todos: Todo[],
+  selectedUserId: number,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const TodoList: React.FC<Props> = ({
   todos,
   getSelectedUser,
   queryHandler,
+  selectedUserId,
 }) => (
   <div className="TodoList">
     <label htmlFor="selectTodosByStatus">
@@ -59,11 +61,8 @@ export const TodoList: React.FC<Props> = ({
               <p>{todo.title}</p>
             </label>
             <button
-              className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
+              className={classNames('TodoList__user-button button',
+                { 'TodoList__user-button--selected': todo.userId === selectedUserId })}
               type="button"
               onClick={() => {
                 getSelectedUser(todo.userId);

@@ -10,8 +10,13 @@ export async function getAllTodos() {
 
 export async function getSelectedUserDetails(userId: number) {
   const editedUrl = `https://mate.academy/students-api/users/${userId}`;
-  const response = await fetch(editedUrl);
-  const selectedUserDetails = await response.json();
 
-  return selectedUserDetails;
+  try {
+    const response = await fetch(editedUrl);
+    const selectedUserDetails = await response.json();
+
+    return selectedUserDetails;
+  } catch (error) {
+    return null;
+  }
 }
