@@ -23,8 +23,6 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    // eslint-disable-next-line no-console
-    console.log(this.props.currentUserId);
     if (this.props.currentUserId !== prevProps.currentUserId) {
       this.newUser();
     }

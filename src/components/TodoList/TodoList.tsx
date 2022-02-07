@@ -38,8 +38,6 @@ export class TodoList extends React.Component<Props, State> {
     if (this.state.filterByStatus !== this.state.prevStatus
       || this.state.prevTitle !== this.state.titleFilter) {
       this.handleStatusFilter();
-      // eslint-disable-next-line no-console
-      console.log('test');
     }
   }
 
