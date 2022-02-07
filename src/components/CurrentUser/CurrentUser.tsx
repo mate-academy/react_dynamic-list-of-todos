@@ -1,12 +1,76 @@
 import React from 'react';
+import { getUserById } from '../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number,
+  onClear: () => void,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type State = {
+  user: User,
+  userError: boolean,
+};
+
+export class CurrentUser extends React.Component<Props, State> {
+  state: State = {
+    user: {
+      id: 0,
+      name: '',
+      username: '',
+      email: '',
+      phone: '',
+      website: '',
+    },
+    userError: false,
+  };
+
+  async componentDidMount() {
+    this.loadUsers();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.userId !== prevProps.userId) {
+      this.loadUsers();
+    }
+  }
+
+  loadUsers = async () => {
+    try {
+      const user = await getUserById(this.props.userId);
+
+      this.setState({ user, userError: false });
+    } catch {
+      this.setState({ userError: true });
+    }
+  };
+
+  render() {
+    return (
+      !this.state.userError ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {this.state.user.id}
+            </span>
+          </h2>
+
+          <h3 className="CurrentUser__name">{this.state.user.name}</h3>
+          <p className="CurrentUser__email">{this.state.user.email}</p>
+          <p className="CurrentUser__phone">{this.state.user.phone}</p>
+          <button
+            type="button"
+            className="button"
+            onClick={this.props.onClear}
+          >
+            clear
+          </button>
+        </div>
+      ) : (
+        `User with id #${this.props.userId} doesn't exist`
+      )
+    );
+  }
+}
