@@ -1,22 +1,32 @@
 import React from 'react';
-import './TodoList.scss';
 import classNames from 'classnames';
+import { getTodos } from '../../api/api';
+import './TodoList.scss';
 
 type Props = {
-  todos: Todo[];
   selectUser: (id: number) => void;
 };
 
 type State = {
   input: string;
   option: string;
+  todos: Todo[];
 };
 
 export class TodoList extends React.Component<Props, State> {
-  state = {
+  state: State = {
     input: '',
     option: 'all',
+    todos: [],
   };
+
+  async componentDidMount() {
+    const todos = await getTodos();
+
+    this.setState({
+      todos: [...todos],
+    });
+  }
 
   changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -31,8 +41,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   filterTodos = () => {
-    const { todos } = this.props;
-    const { input, option } = this.state;
+    const { input, option, todos } = this.state;
     let filteredTodos;
 
     switch (option) {
@@ -54,7 +63,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   findCompleted = () => {
-    const { todos } = this.props;
+    const { todos } = this.state;
 
     return todos.filter(({ completed }) => (
       completed
@@ -66,9 +75,6 @@ export class TodoList extends React.Component<Props, State> {
     const { input, option } = this.state;
 
     const filteredTodos = this.filterTodos();
-
-    // eslint-disable-next-line no-console
-    console.log(filteredTodos);
 
     return (
       <>
@@ -105,12 +111,10 @@ export class TodoList extends React.Component<Props, State> {
                   )}
                 >
                   <label htmlFor="todo">
-                    {todo.completed
-                      ? (
-                        <input type="checkbox" checked readOnly />
-                      ) : (
-                        <input type="checkbox" readOnly />
-                      )}
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                    />
                     <p>{todo.title}</p>
                   </label>
 
