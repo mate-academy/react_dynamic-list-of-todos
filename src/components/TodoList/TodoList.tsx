@@ -4,14 +4,8 @@ import './TodoList.scss';
 import { getTodos } from '../../api/todos';
 
 type Props = {
-  // todos: Todo[],
   currentUserId: number,
   selectUserId: (userId: number) => void;
-  // changeStatusTodo: (todoId: string) => void;
-  // query: string,
-  // changeInput: (text: string) => void;
-  // selectedBy: string,
-  // selectHandler: (text:string) => void;
 };
 
 type State = {
@@ -30,25 +24,16 @@ export class TodoList extends React.Component<Props, State> {
   async componentDidMount() {
     const todos = await getTodos('/todos');
 
-    // eslint-disable-next-line no-console
-    console.log(Object.keys(todos[0]));
-
     this.setState({
       todos,
     });
   }
 
   changeInput = (query: string) => {
-    // eslint-disable-next-line no-console
-    console.log(query);
-
     this.setState({ query });
   };
 
   selectHandler = async (selectBy: string) => {
-    // eslint-disable-next-line no-console
-    console.log('select changed');
-
     let addUrl = '';
 
     switch (selectBy) {
@@ -64,9 +49,6 @@ export class TodoList extends React.Component<Props, State> {
         addUrl = '/todos';
     }
 
-    // eslint-disable-next-line no-console
-    console.log(addUrl);
-
     const todos = await getTodos(addUrl);
 
     this.setState({
@@ -76,10 +58,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   filterTodos = () => {
-    const { query, todos, selectedBy } = this.state;
-
-    // eslint-disable-next-line no-console
-    console.log('selectedBy=', selectedBy, typeof selectedBy);
+    const { query, todos } = this.state;
 
     if (query.length === 0) {
       return todos;
@@ -91,14 +70,9 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   changeStatusTodo = (todoId: string) => {
-    // eslint-disable-next-line no-console
-    console.log(todoId);
     const todosChanged = this.state.todos.map(todo => {
       if (todo.id === todoId) {
         const currentData = Date();
-
-        // eslint-disable-next-line no-console
-        console.log(todo, currentData);
 
         return {
           ...todo,
@@ -129,23 +103,13 @@ export class TodoList extends React.Component<Props, State> {
   render() {
     const {
       selectUserId,
-      // changeStatusTodo,
       currentUserId,
-      // query,
-      // changeInput,
-      // selectedBy,
-      // selectHandler,
     } = this.props;
 
     const {
       todos,
-      // selectUserId,
-      // changeStatusTodo,
-      // currentUserId,
       query,
-      // changeInput,
       selectedBy,
-      // selectHandler,
     } = this.state;
 
     const filteredTodos = this.filterTodos();
