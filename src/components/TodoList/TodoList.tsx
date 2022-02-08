@@ -2,25 +2,51 @@ import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import { Todo } from '../../react-app-env';
+import { getTodos } from '../../api';
 
 type Props = {
-  todos: Todo[]
   selectUser: (userId: number) => void,
-  changeTodoStatus: (todoId: number) => void,
-  selectedId: number,
+  selectedUserId: number,
 };
 
 type State = {
   query: string,
   selectValue: string,
   buttonSelected: boolean,
+  todos: Todo[],
 };
 
 export class TodoList extends React.PureComponent<Props, State> {
   state: State = {
+    todos: [],
     query: '',
     selectValue: '',
     buttonSelected: false,
+  };
+
+  async componentDidMount() {
+    const todosFromServer = await getTodos();
+
+    this.setState({
+      todos: todosFromServer,
+    });
+  }
+
+  changeTodoStatus = (todoId: number) => {
+    const newTodos = this.state.todos.map(todo => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    });
+
+    this.setState(() => ({
+      todos: newTodos,
+    }));
   };
 
   handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,18 +84,18 @@ export class TodoList extends React.PureComponent<Props, State> {
   filterTodosBySelect = () => {
     switch (this.state.selectValue) {
       case 'All todos':
-        return this.props.todos;
-      case 'Active todos':
-        return this.props.todos.filter(todo => todo.completed === false);
+        return this.state.todos;
+      case 'Not completed todos':
+        return this.state.todos.filter(todo => todo.completed === false);
       case 'Completed todos':
-        return this.props.todos.filter(todo => todo.completed === true);
+        return this.state.todos.filter(todo => todo.completed === true);
       default:
-        return this.props.todos;
+        return this.state.todos;
     }
   };
 
   render() {
-    const { selectUser, selectedId, changeTodoStatus } = this.props;
+    const { selectUser, selectedUserId } = this.props;
     const {
       query,
       selectValue,
@@ -89,7 +115,7 @@ export class TodoList extends React.PureComponent<Props, State> {
 
         <select value={selectValue} onChange={this.handleSelect}>
           <option value="All todos">All todos</option>
-          <option value="Active todos">Active todos</option>
+          <option value="Not completed todos">Not completed todos</option>
           <option value="Completed todos">Completed todos</option>
         </select>
 
@@ -109,7 +135,7 @@ export class TodoList extends React.PureComponent<Props, State> {
                     id={`Todo-${todo.id}`}
                     checked={todo.completed}
                     onChange={() => {
-                      changeTodoStatus(todo.id);
+                      this.changeTodoStatus(todo.id);
                     }}
                   />
                   <p>{todo.title}</p>
@@ -117,7 +143,7 @@ export class TodoList extends React.PureComponent<Props, State> {
 
                 <button
                   className={classNames('TodoList__user-button button', {
-                    'TodoList__user-button--selected': selectedId === todo.userId,
+                    'TodoList__user-button--selected': selectedUserId === todo.userId,
                   })}
                   type="button"
                   onClick={() => {

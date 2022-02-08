@@ -4,7 +4,7 @@ import { User } from '../../react-app-env';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedId: number,
+  selectedUserId: number,
   selectUser: (userId: number) => void,
 };
 
@@ -18,7 +18,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   };
 
   async componentDidMount() {
-    const user = await getUser(this.props.selectedId);
+    const user = await getUser(this.props.selectedUserId);
 
     this.setState({
       selectedUser: user,
@@ -26,7 +26,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.selectedId !== this.props.selectedId) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
       this.loadUser();
     }
   }
@@ -40,7 +40,7 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   };
 
   async loadUser() {
-    const user = await getUser(this.props.selectedId);
+    const user = await getUser(this.props.selectedUserId);
 
     this.setState({ selectedUser: user });
   }
