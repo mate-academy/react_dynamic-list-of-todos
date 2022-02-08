@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 interface State {
-  selectedUserId: number;
+  selectedUserId: number,
 }
 
 class App extends React.Component<{}, State> {
@@ -13,19 +13,35 @@ class App extends React.Component<{}, State> {
     selectedUserId: 0,
   };
 
+  selectUserId = (userId: number) => {
+    this.setState({ selectedUserId: userId });
+  };
+
+  clearHandler = () => {
+    this.setState({ selectedUserId: 0 });
+  };
+
   render() {
-    const { selectedUserId } = this.state;
+    const {
+      selectedUserId,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            currentUserId={selectedUserId}
+            selectUserId={this.selectUserId}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser
+                userId={selectedUserId}
+                clearHandler={this.clearHandler}
+              />
             ) : 'No user selected'}
           </div>
         </div>

@@ -1,12 +1,86 @@
 import React from 'react';
+import { getCurrentUser } from '../../api/todos';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number,
+  clearHandler: () => void,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export class CurrentUser extends React.Component<Props> {
+  state = {
+    user: {
+      id: 0,
+      name: '',
+      username: '',
+      email: '',
+      phone: '',
+    },
+    showCurrentUser: false,
+  };
+
+  componentDidMount() {
+    this.loadCurrentUser();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadCurrentUser();
+    }
+  }
+
+  async loadCurrentUser() {
+    try {
+      const user = await getCurrentUser(this.props.userId);
+
+      this.setState({
+        user,
+        showCurrentUser: true,
+      });
+    } catch (error) {
+      this.setState({ showCurrentUser: false });
+    }
+  }
+
+  render() {
+    const {
+      id,
+      name,
+      username,
+      email,
+      phone,
+    } = this.state.user;
+
+    return (
+      <div className="CurrentUser">
+        {this.state.showCurrentUser ? (
+          <>
+            <h2 className="CurrentUser__title">
+              <span>
+                Selected user:&nbsp;
+                {id}
+              </span>
+            </h2>
+
+            <h3 className="CurrentUser__name">
+              {name}
+              {username}
+            </h3>
+            <p className="CurrentUser__email">{email}</p>
+            <p className="CurrentUser__phone">{phone}</p>
+
+            <button
+              type="button"
+              onClick={() => this.props.clearHandler()}
+              className="button"
+            >
+              Clear
+            </button>
+          </>
+        ) : (
+          <p>No selected user</p>
+        )}
+      </div>
+    );
+  }
+}
