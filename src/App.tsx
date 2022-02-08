@@ -7,19 +7,15 @@ import { getAllTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
-interface State {
+type State = {
   todos: Todo[];
   selectedUserId: number;
-  query: string;
-  filterBy: string;
-}
+};
 
 class App extends React.Component<{}, State> {
   state: State = {
     todos: [],
     selectedUserId: 0,
-    query: '',
-    filterBy: 'all',
   };
 
   async componentDidMount() {
@@ -40,50 +36,15 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 })
   );
 
-  handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      query: event.target.value.toLowerCase(),
-    });
-  };
-
-  handleSelectorInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({
-      filterBy: event.target.value,
-    });
-  };
-
-  getFilteredTodos = () => (
-    this.state.todos.filter(todo => todo.title.toLowerCase().includes(this.state.query))
-  );
-
   render() {
-    const { selectedUserId, filterBy, query } = this.state;
-
-    let visibleTodos = this.getFilteredTodos();
-
-    visibleTodos = visibleTodos.filter(todo => {
-      switch (filterBy) {
-        case 'all':
-          return todo;
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return 0;
-      }
-    });
+    const { todos, selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            visibleTodos={visibleTodos}
-            query={query}
-            filterBy={filterBy}
+            todos={todos}
             selectUser={this.selectUser}
-            handleSearch={this.handleSearch}
-            handleSelectorInput={this.handleSelectorInput}
           />
         </div>
 
