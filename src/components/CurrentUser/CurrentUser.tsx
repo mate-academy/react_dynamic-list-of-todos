@@ -7,7 +7,7 @@ import { Loader } from '../Loader';
 
 type Props = {
   userId: number,
-  clearUser: () => void,
+  selectUserHandler: (userId: string) => void,
 };
 
 type State = {
@@ -34,11 +34,11 @@ export class CurrentUser extends React.PureComponent<Props, State> {
   }
 
   clear = () => {
+    this.props.selectUserHandler('0');
+
     this.setState({
       user: null,
     });
-
-    this.props.clearUser();
   };
 
   async selectUser() {
