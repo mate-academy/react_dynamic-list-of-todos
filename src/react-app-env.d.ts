@@ -1,3 +1,15 @@
 /// <reference types="react-scripts" />
 
-type Todo = {}; /* TODO: DESCRIBE */
+type Todo = {
+  id: number;
+  title: string;
+  userId: number;
+  completed: boolean;
+};
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+};

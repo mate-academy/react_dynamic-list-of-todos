@@ -6,11 +6,20 @@ import { CurrentUser } from './components/CurrentUser';
 
 interface State {
   selectedUserId: number;
+  checkedTodo: boolean;
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+    checkedTodo: false,
+  };
+
+  selectUser = (id: number) => {
+    this.setState(state => ({
+      selectedUserId: id,
+      checkedTodo: !state.checkedTodo,
+    }));
   };
 
   render() {
@@ -19,13 +28,15 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectUser={this.selectUser}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser userId={selectedUserId} />
             ) : 'No user selected'}
           </div>
         </div>
