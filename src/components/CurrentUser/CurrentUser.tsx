@@ -60,6 +60,9 @@ export class CurrentUser extends React.Component<Props, State> {
 
               <button
                 type="button"
+                className="TodoList__user-button
+                TodoList__user-button--selected
+                button"
                 onClick={() => clearUser()}
               >
                 Clear
