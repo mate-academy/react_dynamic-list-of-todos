@@ -3,33 +3,36 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getAllTodos, getTodos } from './api/todos';
+// import {
+//   // getAllTodos,
+//   // getTodos,
+// } from './api/todos';
 
 interface State {
-  todos: Todo[],
+  // todos: Todo[],
   selectedUserId: number,
-  query: string,
-  selectedBy: string,
+  // query: string,
+  // selectedBy: string,
 }
 
 class App extends React.Component<{}, State> {
   state: State = {
-    todos: [],
+    // todos: [],
     selectedUserId: 0,
-    query: '',
-    selectedBy: 'all',
+    // query: '',
+    // selectedBy: 'all',
   };
 
-  async componentDidMount() {
-    const todos = await getAllTodos();
+  // async componentDidMount() {
+  //   const todos = await getAllTodos();
 
-    // eslint-disable-next-line no-console
-    console.log(Object.keys(todos[0]));
+  //   // eslint-disable-next-line no-console
+  //   console.log(Object.keys(todos[0]));
 
-    this.setState({
-      todos,
-    });
-  }
+  //   this.setState({
+  //     todos,
+  //   });
+  // }
 
   selectUserId = (userId: number) => {
     // eslint-disable-next-line no-console
@@ -38,30 +41,30 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: userId });
   };
 
-  changeStatusTodo = (todoId: string) => {
-    // eslint-disable-next-line no-console
-    console.log(todoId);
-    const todosChanged = this.state.todos.map(todo => {
-      if (todo.id === todoId) {
-        const currentData = Date();
+  // changeStatusTodo = (todoId: string) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log(todoId);
+  //   const todosChanged = this.state.todos.map(todo => {
+  //     if (todo.id === todoId) {
+  //       const currentData = Date();
 
-        // eslint-disable-next-line no-console
-        console.log(todo, currentData);
+  //       // eslint-disable-next-line no-console
+  //       console.log(todo, currentData);
 
-        return {
-          ...todo,
-          completed: !todo.completed,
-          updatedAt: currentData,
-        };
-      }
+  //       return {
+  //         ...todo,
+  //         completed: !todo.completed,
+  //         updatedAt: currentData,
+  //       };
+  //     }
 
-      return todo;
-    });
+  //     return todo;
+  //   });
 
-    this.setState(() => ({
-      todos: todosChanged,
-    }));
-  };
+  //   this.setState(() => ({
+  //     todos: todosChanged,
+  //   }));
+  // };
 
   clearHandler = () => {
     // eslint-disable-next-line no-console
@@ -70,74 +73,78 @@ class App extends React.Component<{}, State> {
     this.setState({ selectedUserId: 0 });
   };
 
-  changeInput = (query: string) => {
-    // eslint-disable-next-line no-console
-    console.log(query);
+  // changeInput = (query: string) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log(query);
 
-    this.setState({ query });
-  };
+  //   this.setState({ query });
+  // };
 
-  selectHandler = async (selectBy: string) => {
-    // eslint-disable-next-line no-console
-    console.log('select changed');
+  // selectHandler = async (selectBy: string) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log('select changed');
 
-    let addUrl = '';
+  //   let addUrl = '';
 
-    switch (selectBy) {
-      case 'active':
-        addUrl = '/todos?completed=false';
-        break;
+  //   switch (selectBy) {
+  //     case 'active':
+  //       addUrl = '/todos?completed=false';
+  //       break;
 
-      case 'completed':
-        addUrl = '/todos?completed=true';
-        break;
+  //     case 'completed':
+  //       addUrl = '/todos?completed=true';
+  //       break;
 
-      default:
-        addUrl = '/todos';
-    }
+  //     default:
+  //       addUrl = '/todos';
+  //   }
 
-    // eslint-disable-next-line no-console
-    console.log(addUrl);
+  //   // eslint-disable-next-line no-console
+  //   console.log(addUrl);
 
-    const todos = await getTodos(addUrl);
+  //   const todos = await getTodos(addUrl);
 
-    this.setState({
-      todos,
-      selectedBy: selectBy,
-    });
-  };
+  //   this.setState({
+  //     todos,
+  //     selectedBy: selectBy,
+  //   });
+  // };
 
-  filterTodos = () => {
-    const { query, todos, selectedBy } = this.state;
+  // filterTodos = () => {
+  //   const { query, todos, selectedBy } = this.state;
 
-    // eslint-disable-next-line no-console
-    console.log('selectedBy=', selectedBy, typeof selectedBy);
+  //   // eslint-disable-next-line no-console
+  //   console.log('selectedBy=', selectedBy, typeof selectedBy);
 
-    if (query.length === 0) {
-      return todos;
-    }
+  //   if (query.length === 0) {
+  //     return todos;
+  //   }
 
-    const queryToLowerCase: string = query.toLowerCase();
+  //   const queryToLowerCase: string = query.toLowerCase();
 
-    return todos.filter(todo => todo.title.toLocaleLowerCase().includes(queryToLowerCase));
-  };
+  //   return todos.filter(todo => todo.title.toLocaleLowerCase().includes(queryToLowerCase));
+  // };
 
   render() {
-    const { selectedUserId, query, selectedBy } = this.state;
-    const filteredTodos = this.filterTodos();
+    const {
+      selectedUserId,
+      //  query,
+      //  selectedBy,
+    } = this.state;
+    // const filteredTodos = this.filterTodos();
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={filteredTodos}
+            // todos={filteredTodos}
             currentUserId={selectedUserId}
             selectUserId={this.selectUserId}
-            changeStatusTodo={this.changeStatusTodo}
-            query={query}
-            changeInput={this.changeInput}
-            selectedBy={selectedBy}
-            selectHandler={this.selectHandler}
+            // changeStatusTodo={this.changeStatusTodo}
+            // query={query}
+            // changeInput={this.changeInput}
+            // selectedBy={selectedBy}
+            // selectHandler={this.selectHandler}
           />
         </div>
 
