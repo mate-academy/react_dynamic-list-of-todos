@@ -1,13 +1,63 @@
 .TodoList {
   width: 100%;
 
-  &__user-button--selected {
-    background-color: #4d457b;
+  &__search-label{
+    display: inline-block;
+  }
+
+  &__search-input{
+    cursor: pointer;
+    display: block;
+    width: 200px;
+    height: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    opacity: 0.6;
+    -webkit-transition: all 0.12s, border-color 0.08s;
+    transition: all 0.12s, border-color 0.08s;
+
+    &--empty{
+      background-color: yellow;
+    }
+  }
+
+  &__select{
+    display: inline-block;
+    cursor: pointer;
+    width: 200px;
+    height: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    opacity: 0.6;
+    -webkit-transition: all 0.12s, border-color 0.08s;
+    transition: all 0.12s, border-color 0.08s;
+  }
+
+  &__user-button{
+    &--selected {
+      background-color: #b8b3d2;
+
+      &:hover {
+        color: #fff;
+        background-color: #b8b3d2;
+        cursor: auto;
+      }
+    }
+
+    &--not-selected {
+      background-color: #4d457b;
+
+      &:hover {
+        color:  yellow;
+      }
+    }
   }
 
   &__list {
     list-style: none;
-    padding-left: 5px;
+    padding-left: 0;
   }
 
   &__item {
