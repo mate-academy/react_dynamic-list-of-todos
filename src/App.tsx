@@ -5,28 +5,48 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 interface State {
-  selectedUserId: number;
+  selectedUserId: number,
 }
 
-class App extends React.Component<{}, State> {
+class App extends React.PureComponent<{}, State> {
   state: State = {
     selectedUserId: 0,
   };
 
+  selectUserHandler = (userId: string) => {
+    const userNewId = +userId;
+
+    if (this.state.selectedUserId !== userNewId) {
+      this.setState({ selectedUserId: userNewId });
+    }
+  };
+
   render() {
-    const { selectedUserId } = this.state;
+    const {
+      selectedUserId,
+    } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectedUserId={selectedUserId}
+            selectUserHandler={this.selectUserHandler}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
+            {selectedUserId
+              ? (
+                <CurrentUser
+                  userId={selectedUserId}
+                  selectUserHandler={this.selectUserHandler}
+                />
+              )
+              : (
+                'No user selected'
+              )}
           </div>
         </div>
       </div>

@@ -1,12 +1,106 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+import cn from 'classnames';
+import { getUserFromServer } from '../../api';
+import { Loader } from '../Loader';
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type Props = {
+  userId: number,
+  selectUserHandler: (userId: string) => void,
+};
+
+type State = {
+  user: User | null,
+  isNoUserErrorVisible: boolean,
+  loading: boolean,
+};
+
+export class CurrentUser extends React.PureComponent<Props, State> {
+  state: State = {
+    user: null,
+    isNoUserErrorVisible: false,
+    loading: false,
+  };
+
+  componentDidMount() {
+    this.selectUser();
+  }
+
+  async componentDidUpdate(prevProps: Props) {
+    if (this.props.userId !== prevProps.userId) {
+      await this.selectUser();
+    }
+  }
+
+  clear = () => {
+    this.props.selectUserHandler('0');
+
+    this.setState({
+      user: null,
+    });
+  };
+
+  async selectUser() {
+    this.setState({ loading: true });
+
+    try {
+      const user: User = await getUserFromServer(this.props.userId);
+
+      this.setState({
+        user,
+        isNoUserErrorVisible: false,
+      });
+    } catch (error) {
+      this.setState({ isNoUserErrorVisible: true });
+    } finally {
+      setTimeout(() => {
+        this.setState({ loading: false });
+      }, 500);
+    }
+  }
+
+  render() {
+    const { user, isNoUserErrorVisible, loading } = this.state;
+
+    if (loading) {
+      return (
+        <Loader />
+      );
+    }
+
+    return (
+      <div className="CurrentUser">
+        <h2 className={cn(
+          'CurrentUser__title',
+          { 'CurrentUser__title--error': isNoUserErrorVisible },
+        )}
+        >
+          <span>
+            {isNoUserErrorVisible
+              ? 'Error: Can not find the user!'
+              : `Selected user: ${user?.id}`}
+          </span>
+        </h2>
+
+        {!isNoUserErrorVisible && (
+          <>
+            <h3 className="CurrentUser__name">{user?.name}</h3>
+            <p className="CurrentUser__email">{user?.email}</p>
+            <p className="CurrentUser__phone">{user?.phone}</p>
+          </>
+        )}
+
+        <div className="CurrentUser__button">
+          <button
+            className="button"
+            type="button"
+            onClick={this.clear}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    );
+  }
+}

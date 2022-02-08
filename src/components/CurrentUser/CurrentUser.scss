@@ -8,6 +8,10 @@
       padding: 5px;
       border-radius: 5px;
     }
+
+    &--error span {
+      background-color: #ec482f;
+    }
   }
 
   &__name {
@@ -25,5 +29,11 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    transition: 0.3s;
   }
 }
