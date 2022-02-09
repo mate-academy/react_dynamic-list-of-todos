@@ -57,13 +57,13 @@ export class CurrentUser extends React.Component<Props, State> {
             <p className="CurrentUser__email">{user.email}</p>
             <p className="CurrentUser__phone">{user.phone}</p>
           </>
-        ) : <p>User not faund...</p>}
+        ) : <p>User not found...</p>}
         <button
           className="
-          TodoList__user-button
-          TodoList__user-button--selected
-          button
-        "
+            TodoList__user-button
+            TodoList__user-button--selected
+            button
+          "
           type="button"
           onClick={() => getSelectedUserId(0)}
         >
