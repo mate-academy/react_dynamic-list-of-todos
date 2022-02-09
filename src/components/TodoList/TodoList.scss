@@ -1,6 +1,25 @@
 .TodoList {
   width: 100%;
 
+  &__input, &__select {
+    margin-right: 10px;
+    height: 30px;
+
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+
+    transition: border-color 0.3s;
+
+    &:hover {
+      border-color: #b9b5cc
+    }
+  }
+
+  &__select {
+    height: 35px;
+    cursor: pointer;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
