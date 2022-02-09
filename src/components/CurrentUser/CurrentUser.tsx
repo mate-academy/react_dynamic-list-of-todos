@@ -38,16 +38,16 @@ export class CurrentUser extends React.Component<Props, State> {
 
   render() {
     const { user } = this.state;
-    const { userId, removeUserInfo } = this.props;
+    const { removeUserInfo } = this.props;
 
     return (
       <div>
-        {user && (
+        {user ? (
           <div className="CurrentUser">
             <h2 className="CurrentUser__title">
               <span>
                 Selected user:
-                {userId}
+                {user.id}
               </span>
             </h2>
 
@@ -63,7 +63,8 @@ export class CurrentUser extends React.Component<Props, State> {
               Remove
             </button>
           </div>
-        )}
+        )
+          : <p>User is not found</p>}
       </div>
     );
   }
