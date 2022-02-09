@@ -35,46 +35,39 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   render() {
-    if (!this.state.user) {
-      return (
-        <span>
-          No user
-        </span>
-      );
-    }
-
-    const {
-      name,
-      id,
-      email,
-      phone,
-    } = this.state.user;
+    const { user } = this.state;
+    const { removeUser } = this.props;
 
     return (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>
-            Selected user:
-            {id}
-          </span>
-        </h2>
+      <>
+        { user ? (
+          <div className="CurrentUser">
+            <h2 className="CurrentUser__title">
+              <span>
+                Selected user:
+                {user.id}
+              </span>
+            </h2>
 
-        <h3 className="CurrentUser__name">
-          {name}
-        </h3>
-        <p className="CurrentUser__email">
-          {email}
-        </p>
-        <p className="CurrentUser__phone">
-          {phone}
-        </p>
-        <button
-          type="button"
-          onClick={this.props.removeUser}
-        >
-          Clear
-        </button>
-      </div>
+            <h3 className="CurrentUser__name">
+              {user.name}
+            </h3>
+            <p className="CurrentUser__email">
+              {user.email}
+            </p>
+            <p className="CurrentUser__phone">
+              {user.phone}
+            </p>
+            <button
+              type="button"
+              onClick={removeUser}
+            >
+              Clear
+            </button>
+          </div>
+        )
+          : <p style={{ color: 'red' }}> User not found </p>}
+      </>
     );
   }
 }
