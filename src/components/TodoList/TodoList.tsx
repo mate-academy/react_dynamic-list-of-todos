@@ -1,22 +1,30 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { getAllTodos } from '../../api/api';
 
 type Props = {
-  todos: Todo[],
   selectUser: (id: number) => void;
 };
 
 type State = {
+  todos: Todo[];
   query: string;
   filterBy: string;
 };
 
 export class TodoList extends React.Component<Props, State> {
-  state = {
+  state: State = {
+    todos: [],
     query: '',
     filterBy: 'all',
   };
+
+  async componentDidMount() {
+    const todos = await getAllTodos();
+
+    this.setState({ todos });
+  }
 
   handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -31,7 +39,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   getFilteredTodos = () => (
-    this.props.todos.filter(todo => todo.title.toLowerCase().includes(this.state.query))
+    this.state.todos.filter(todo => todo.title.toLowerCase().includes(this.state.query))
   );
 
   render() {

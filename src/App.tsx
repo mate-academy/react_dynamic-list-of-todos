@@ -3,26 +3,17 @@ import './App.scss';
 import './styles/general.scss';
 import 'bulma/css/bulma.min.css';
 
-import { getAllTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 type State = {
-  todos: Todo[];
   selectedUserId: number;
 };
 
 class App extends React.Component<{}, State> {
   state: State = {
-    todos: [],
     selectedUserId: 0,
   };
-
-  async componentDidMount() {
-    const todos = await getAllTodos();
-
-    this.setState({ todos });
-  }
 
   selectUser = (userId: number) => {
     if (this.state.selectedUserId !== userId) {
@@ -37,13 +28,12 @@ class App extends React.Component<{}, State> {
   );
 
   render() {
-    const { todos, selectedUserId } = this.state;
+    const { selectedUserId } = this.state;
 
     return (
       <div className="App">
         <div className="App__sidebar">
           <TodoList
-            todos={todos}
             selectUser={this.selectUser}
           />
         </div>
