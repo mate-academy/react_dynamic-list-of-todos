@@ -10,8 +10,6 @@ type State = {
   todos: Todo[],
   filterByStatus: string,
   titleFilter: string,
-  prevStatus: string,
-  prevTitle: string,
 };
 
 export class TodoList extends React.Component<Props, State> {
@@ -26,17 +24,15 @@ export class TodoList extends React.Component<Props, State> {
     }],
     filterByStatus: 'all',
     titleFilter: '',
-    prevStatus: '',
-    prevTitle: '',
   };
 
   async componentDidMount() {
     this.setState({ todos: await getTodos() });
   }
 
-  componentDidUpdate() {
-    if (this.state.filterByStatus !== this.state.prevStatus
-      || this.state.prevTitle !== this.state.titleFilter) {
+  componentDidUpdate(_prevProps: Props, prevState: State) {
+    if (this.state.filterByStatus !== prevState.filterByStatus
+      || prevState.titleFilter !== this.state.titleFilter) {
       this.handleStatusFilter();
     }
   }
@@ -52,24 +48,22 @@ export class TodoList extends React.Component<Props, State> {
   handleStatusFilter = async () => {
     const { titleFilter } = this.state;
 
-    this.setState(state => ({ prevStatus: state.filterByStatus, prevTitle: state.titleFilter }));
+    let serverTodos = await getTodos().then(todos => todos
+      .filter(todo => todo.title.includes(titleFilter)));
 
-    if (this.state.filterByStatus === 'completed') {
-      this.setState({
-        todos: await getTodos().then(todos => todos
-          .filter(todo => todo.completed === true && todo.title.includes(titleFilter))),
-      });
-    } else if (this.state.filterByStatus === 'not completed') {
-      this.setState({
-        todos: await getTodos().then(todos => todos
-          .filter(todo => todo.completed === false && todo.title.includes(titleFilter))),
-      });
-    } else if (this.state.filterByStatus === 'all') {
-      this.setState({
-        todos: await getTodos().then(todos => todos
-          .filter(todo => todo.title.includes(titleFilter))),
-      });
+    switch (this.state.filterByStatus) {
+      case 'completed':
+        serverTodos = serverTodos.filter(todo => todo.completed === true);
+        break;
+      case 'not completed':
+        serverTodos = serverTodos.filter(todo => todo.completed === false);
+        break;
+      default:
     }
+
+    this.setState({
+      todos: serverTodos,
+    });
   };
 
   render() {
