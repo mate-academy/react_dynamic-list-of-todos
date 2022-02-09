@@ -4,13 +4,23 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
-interface State {
-  selectedUserId: number;
-}
+type State = {
+  selectedUserId: number,
+};
 
 class App extends React.Component<{}, State> {
   state: State = {
     selectedUserId: 0,
+  };
+
+  selectedUser = (selectedUserId: number) => {
+    this.setState({
+      selectedUserId,
+    });
+  };
+
+  removeUserInfo = () => {
+    this.setState({ selectedUserId: 0 });
   };
 
   render() {
@@ -19,13 +29,18 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <div className="App__sidebar">
-          <TodoList />
+          <TodoList
+            selectedUser={this.selectedUser}
+          />
         </div>
 
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser />
+              <CurrentUser
+                userId={selectedUserId}
+                removeUserInfo={this.removeUserInfo}
+              />
             ) : 'No user selected'}
           </div>
         </div>
