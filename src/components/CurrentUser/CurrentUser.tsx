@@ -1,12 +1,75 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+import { getUser } from '../../Api/api';
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type Props = {
+  selectedUserId: number;
+  getSelectedUserId: (id: number) => void;
+};
+
+type State = {
+  user: User;
+  error: boolean;
+};
+
+export class CurrentUser extends React.Component<Props, State> {
+  state = {
+    user: {
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
+    },
+    error: false,
+  };
+
+  async componentDidMount() {
+    this.loadData();
+  }
+
+  async componentDidUpdate(prev: Props) {
+    if (prev.selectedUserId !== this.props.selectedUserId) {
+      this.loadData();
+    }
+  }
+
+  async loadData() {
+    try {
+      const user = await getUser(this.props.selectedUserId);
+
+      this.setState({ user, error: false });
+    } catch (error) {
+      this.setState({ error: true });
+    }
+  }
+
+  render() {
+    const { user, error } = this.state;
+    const { selectedUserId, getSelectedUserId } = this.props;
+
+    return (
+      <div className="CurrentUser">
+        {!error ? (
+          <>
+            <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUserId}`}</span></h2>
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+          </>
+        ) : <p>User not found...</p>}
+        <button
+          className="
+            TodoList__user-button
+            TodoList__user-button--selected
+            button
+          "
+          type="button"
+          onClick={() => getSelectedUserId(0)}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
