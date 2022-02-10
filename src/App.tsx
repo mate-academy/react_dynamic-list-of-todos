@@ -31,7 +31,7 @@ class App extends React.Component<{}, State> {
         <div className="App__content">
           <div className="App__content-container">
             {selectedUserId ? (
-              <CurrentUser userId={selectedUserId} />
+              <CurrentUser userId={selectedUserId} selectUser={this.selectUser} />
             ) : 'No user selected'}
           </div>
         </div>

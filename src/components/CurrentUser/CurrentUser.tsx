@@ -4,6 +4,7 @@ import { getUserFromServer } from '../../api/loadData';
 
 type Props = {
   userId: number,
+  selectUser: (userId: number) => void,
 };
 
 type State = {
@@ -33,6 +34,8 @@ export class CurrentUser extends React.Component<Props, State> {
 
   clearUser = () => {
     this.setState({ user: null });
+
+    this.props.selectUser(0);
   };
 
   render() {

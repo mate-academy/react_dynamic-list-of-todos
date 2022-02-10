@@ -56,9 +56,16 @@ export class TodoList extends React.Component<Props, State> {
 
   async loadTodosByStatus() {
     const { status } = this.state;
-    const todos = await getTodosByStatus(status);
 
-    this.setState({ todos });
+    if (status === 'all') {
+      const allTodos = await getTodosFromServer();
+
+      this.setState({ todos: allTodos });
+    } else {
+      const todos = await getTodosByStatus(status);
+
+      this.setState({ todos });
+    }
   }
 
   render() {
