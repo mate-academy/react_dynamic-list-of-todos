@@ -13,9 +13,8 @@ export async function getSelectedUserDetails(userId: number) {
 
   try {
     const response = await fetch(editedUrl);
-    const selectedUserDetails = await response.json();
 
-    return selectedUserDetails;
+    return await response.json();
   } catch (error) {
     return null;
   }
