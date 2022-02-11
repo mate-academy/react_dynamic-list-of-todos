@@ -1,12 +1,69 @@
 import React from 'react';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+import { getSelectedUserDetails } from '../../api/todos';
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type Props = {
+  selectedUserId: number,
+  clearSelectedUser: () => void,
+};
+
+type State = {
+  user: User | null,
+};
+
+export class CurrentUser extends React.Component<Props, State> {
+  state: State = {
+    user: null,
+  };
+
+  async componentDidMount() {
+    const user = await getSelectedUserDetails(this.props.selectedUserId);
+
+    this.setState({ user });
+  }
+
+  async componentDidUpdate(prevProps: Props) {
+    if (prevProps.selectedUserId !== this.props.selectedUserId) {
+      this.loadUser();
+    }
+  }
+
+  async loadUser() {
+    const user = await getSelectedUserDetails(this.props.selectedUserId);
+
+    if (user !== null) {
+      this.setState({ user });
+    } else {
+      throw new Error('Invalid User');
+    }
+  }
+
+  render(): React.ReactNode {
+    const { user } = this.state;
+
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            {'Selected user: '}
+            {this.props.selectedUserId}
+          </span>
+        </h2>
+        <h3 className="CurrentUser__name">{user?.name}</h3>
+        <p className="CurrentUser__email">{user?.email}</p>
+        <p className="CurrentUser__phone">{user?.phone}</p>
+        <button
+          type="button"
+          className="TodoList__user-button TodoList__user-button--selected
+          button"
+          onClick={() => (
+            this.props.clearSelectedUser()
+          )}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
