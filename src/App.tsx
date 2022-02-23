@@ -15,7 +15,7 @@ const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       });
-  });
+  }, []);
 
   return (
     <div className="App">
