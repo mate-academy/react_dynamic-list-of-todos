@@ -17,14 +17,10 @@ const App: React.FC = () => {
       });
   });
 
-  const onUserSelect = (id: number) => {
-    setSelectedUserId(id);
-  };
-
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList todos={todos} onUserSelect={onUserSelect} selectedUserId={selectedUserId} />
+        <TodoList todos={todos} onUserSelect={setSelectedUserId} selectedUserId={selectedUserId} />
       </div>
 
       <div className="App__content">
