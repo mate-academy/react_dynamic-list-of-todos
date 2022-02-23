@@ -1,37 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { Todo } from './types/Todo';
+import { getAllTodos } from './api/api';
 
-interface State {
-  selectedUserId: number;
-}
+const App: React.FC = () => {
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    selectedUserId: 0,
+  useEffect(() => {
+    getAllTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      });
+  });
+
+  const onUserSelect = (id: number) => {
+    setSelectedUserId(id);
   };
 
-  render() {
-    const { selectedUserId } = this.state;
+  return (
+    <div className="App">
+      <div className="App__sidebar">
+        <TodoList todos={todos} onUserSelect={onUserSelect} selectedUserId={selectedUserId} />
+      </div>
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          <TodoList />
-        </div>
-
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser />
-            ) : 'No user selected'}
-          </div>
+      <div className="App__content">
+        <div className="App__content-container">
+          {selectedUserId ? (
+            <CurrentUser userId={selectedUserId} />
+          ) : 'No user selected'}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
