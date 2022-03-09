@@ -35,7 +35,7 @@
     "stylelint": "^13.13.1"
   },
   "scripts": {
-    "start": "mate-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "build": "mate-scripts build",
     "test": "mate-scripts test",
     "lint-js": "mate-scripts lint -j",
