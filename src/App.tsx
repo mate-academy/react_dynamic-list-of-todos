@@ -17,10 +17,22 @@ const App: React.FC = () => {
       });
   }, []);
 
+  // useEffect(() => {
+  //   const todosFromServer = async () => {
+  //     await getAllTodos();
+  //     setTodos(todos);
+  //     setIsFetching(isFetching);
+  //   };
+  // }, []);
+
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList todos={todos} onUserSelect={setSelectedUserId} selectedUserId={selectedUserId} />
+        <TodoList
+          todos={todos}
+          onUserSelect={setSelectedUserId}
+          selectedUserId={selectedUserId}
+        />
       </div>
       <div className="App__content">
         <div className="App__content-container">
