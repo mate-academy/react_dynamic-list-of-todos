@@ -3,15 +3,12 @@ import { User } from '../types/User';
 
 const BASE_URL = 'https://mate.academy/students-api';
 
-const request = (url: string) => {
-  return fetch(url)
-    .then(response => response.json());
+const request = async (url: string) => {
+  const responce = await fetch(`${BASE_URL}${url}`);
+
+  return responce.json();
 };
 
-export const getAllTodos = (): Promise<Todo[]> => {
-  return request(`${BASE_URL}/todos`);
-};
+export const getAllTodos = (): Promise<Todo[]> => request('/todos');
 
-export const getUserById = (id: number): Promise<User> => {
-  return request(`${BASE_URL}/users/${id}`);
-};
+export const getUserById = (userId: number): Promise<User> => request(`/users/${userId}`);
