@@ -11,19 +11,14 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getAllTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
-  }, []);
+    async function fatchingTodos() {
+      const todosFromAPI = await getAllTodos();
 
-  // useEffect(() => {
-  //   const todosFromServer = async () => {
-  //     await getAllTodos();
-  //     setTodos(todos);
-  //     setIsFetching(isFetching);
-  //   };
-  // }, []);
+      setTodos(todosFromAPI);
+    }
+
+    fatchingTodos();
+  });
 
   return (
     <div className="App">
