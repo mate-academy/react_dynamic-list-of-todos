@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
 import './CurrentUser.scss';
+
 import { getUser } from '../../api/api';
+import { Loader } from '../Loader';
 
 type Props = {
   selectedUserId: number,
@@ -14,18 +22,27 @@ export const CurrentUser: React.FC<Props> = React.memo(({
   setSelectedTodoId,
 }) => {
   const [user, setUser] = useState<User>();
+  const [isLoading, setLoading] = useState(true);
 
-  const fetchUser = async () => {
+  const placeholder = useMemo(() => {
+    return isLoading ? <Loader /> : <p>User not found</p>;
+  }, [isLoading]);
+
+  const fetchUser = useCallback(async () => {
+    setLoading(true);
+    setUser(undefined);
     setUser(await getUser(selectedUserId));
-  };
+    setLoading(false);
+  }, [selectedUserId]);
 
   useEffect(() => {
     fetchUser();
   }, [selectedUserId]);
 
   return (
-    <>
-      {user ? (
+    !user
+      ? placeholder
+      : (
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
             <span>{`Selected user: ${selectedUserId}`}</span>
@@ -46,9 +63,6 @@ export const CurrentUser: React.FC<Props> = React.memo(({
             Clear
           </button>
         </div>
-      ) : (
-        <p>User not found</p>
-      )}
-    </>
+      )
   );
 });

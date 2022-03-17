@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -10,9 +10,9 @@ const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const fetchTodos = async () => {
+  const fetchTodos = useCallback(async () => {
     setTodos(await getTodos());
-  };
+  }, []);
 
   useEffect(() => {
     fetchTodos();
@@ -21,23 +21,21 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList {...{
-          todos,
-          setSelectedUserId,
-          selectedTodoId,
-          setSelectedTodoId,
-        }}
+        <TodoList
+          todos={todos}
+          setSelectedUserId={setSelectedUserId}
+          selectedTodoId={selectedTodoId}
+          setSelectedTodoId={setSelectedTodoId}
         />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser {...{
-              selectedUserId,
-              setSelectedUserId,
-              setSelectedTodoId,
-            }}
+            <CurrentUser
+              selectedUserId={selectedUserId}
+              setSelectedUserId={setSelectedUserId}
+              setSelectedTodoId={setSelectedTodoId}
             />
           ) : 'No user selected'}
         </div>
