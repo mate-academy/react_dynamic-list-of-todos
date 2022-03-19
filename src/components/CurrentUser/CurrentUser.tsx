@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(userId)

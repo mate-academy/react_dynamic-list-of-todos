@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-console */
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import './TodoList.scss';
@@ -9,25 +8,6 @@ type Props = {
   selectedUserId: number,
   onUserSelectButton: (userId: number) => void,
 };
-
-// const shufle = (array: Todo[]) => {
-//   const a = array;
-
-//   let j;
-//   let x;
-//   let i;
-
-//   for (i = a.length - 1; i > 0; i -= 1) {
-//     j = Math.floor(Math.random() * (i + 1));
-//     x = a[i];
-//     a[i] = a[j];
-//     a[j] = x;
-//   }
-
-//   console.log(a.map(b => b.id).splice(0, 5));
-
-//   return a;
-// };
 
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -97,13 +77,6 @@ export const TodoList: React.FC<Props> = ({
           completed
         </option>
       </select>
-
-      <button
-        type="button"
-      >
-        Shufle list
-        {console.log('render')}
-      </button>
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
