@@ -19,3 +19,21 @@ export type User = {
   phone: string,
   website: string,
 };
+
+type TodoListType = {
+  todos: Todo[],
+  selectId: (id: number) => void,
+  activeUser: number,
+  changeCompleted: (id: number) => void,
+  setNewFilter: (value: string) => void,
+  filtered: string,
+  selectFilter: string,
+  setSelectFilter: (value: React.ChangeEvent<HTMLSelectElement>) => void,
+};
+
+type TodoType = {
+  todo: Todo,
+  selectId: (id: number) => void,
+  activeUser: number,
+  changeCompleted: (id: number) => void,
+};

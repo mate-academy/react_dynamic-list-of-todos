@@ -10,10 +10,7 @@ export const CurrentUser: React.FC<{ userId: number }> = ({ userId }) => {
 
   useEffect(() => {
     getUser(userId).then((newUser: User) => setUser(newUser));
-  }, []);
-
-  // getTodos().then((todosFromAPI: Todo[]) => setTodos(todosFromAPI));
-  // const [todos, setTodos] = useState<Todo[]>([]);
+  }, [userId]);
 
   return (
     <div className="CurrentUser">

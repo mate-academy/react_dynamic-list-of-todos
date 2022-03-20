@@ -10,5 +10,5 @@ export const getTodos = async () => {
 export const getUser = async (userId: number) => {
   const user = await fetch(`${URL_USERS_LINK}/${userId}`);
 
-  return user.json;
+  return user.json();
 };
