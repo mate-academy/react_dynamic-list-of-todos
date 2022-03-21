@@ -1,17 +1,24 @@
 import { User } from '../types/User';
 import { Todo } from '../types/Todo';
 
-const URL = 'https://mate.academy/students-api';
+const BASE_URL = 'https://mate.academy/students-api';
 
-const request = (url: string) => {
-  return fetch(url)
-    .then(response => response.json());
+const request = async (endpoint: string) => {
+  const url = await fetch(`${BASE_URL}${endpoint}`);
+
+  return url.json();
 };
+
+function wait(delay: number) {
+  return new Promise(resolve => setTimeout(resolve, delay));
+}
 
 export const getTodos = (): Promise<Todo[]> => {
-  return request(`${URL}/todos`);
+  return request('/todos');
 };
 
-export const getUser = (id: number): Promise<User> => {
-  return request(`${URL}/users/${id}`);
+export const getUser = async (id: number): Promise<User> => {
+  await wait(1000);
+
+  return request(`/users/${id}`);
 };

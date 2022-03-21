@@ -9,32 +9,40 @@ import { CurrentUser } from './components/CurrentUser';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [progress, setProgress] = useState(false);
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-      });
+      })
+      .then(() => setProgress(true));
   }, []);
 
   return (
-    <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          selectedUserId={selectedUserId}
-          selectedUser={setSelectedUserId}
-          todos={todos}
-        />
-      </div>
+    <>
+      {progress ? (
+        <div className="App">
+          <div className="App__sidebar">
+            <TodoList
+              selectedUserId={selectedUserId}
+              selectedUser={setSelectedUserId}
+              todos={todos}
+            />
+          </div>
 
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser userId={selectedUserId} />
-          ) : 'No user selected'}
+          <div className="App__content">
+            <div className="App__content-container">
+              {selectedUserId ? (
+                <CurrentUser userId={selectedUserId} />
+              ) : 'No user selected'}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <p>Loading data...</p>
+      )}
+    </>
   );
 };
 
