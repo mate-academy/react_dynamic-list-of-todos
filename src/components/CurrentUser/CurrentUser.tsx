@@ -40,7 +40,7 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
           </button>
         </>
       ) : (
-        <p>loading...</p>
+        <p>No user selected</p>
       )}
     </div>
   );

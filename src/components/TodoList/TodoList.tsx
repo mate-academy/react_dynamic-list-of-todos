@@ -66,6 +66,7 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
       />
 
       <select
+        className="TodoList__select"
         value={selectedOption}
         onChange={getSelectedOption}
       >
