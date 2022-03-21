@@ -70,43 +70,45 @@ export const TodoList: React.FC<Props> = ({
         </select>
       </label>
 
-      <div className="TodoList__list-container">
-        <ul className="TodoList__list">
-          {getPreparedTodos().map(todo => (
-            <li
-              key={todo.id}
-              className={classNames(
-                'TodoList__item',
-                {
-                  'TodoList__item--checked': todo.completed,
-                  'TodoList__item--unchecked': !todo.completed,
-                },
-              )}
-            >
-              <label htmlFor={`${todo.id}`}>
-                <input
-                  id={`${todo.id}`}
-                  type="checkbox"
-                  readOnly
-                  checked={todo.completed}
-                />
-                <p>{todo.title}</p>
-              </label>
-              <button
+      {todos.length ? (
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {getPreparedTodos().map(todo => (
+              <li
+                key={todo.id}
                 className={classNames(
-                  'TodoList__user-button',
-                  'button',
-                  { 'TodoList__user-button--selected': todo.userId === userId },
+                  'TodoList__item',
+                  {
+                    'TodoList__item--checked': todo.completed,
+                    'TodoList__item--unchecked': !todo.completed,
+                  },
                 )}
-                type="button"
-                onClick={() => onUserSelect(todo.userId)}
               >
-                {`User: ${todo.userId}`}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+                <label htmlFor={`${todo.id}`}>
+                  <input
+                    id={`${todo.id}`}
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    { 'TodoList__user-button--selected': todo.userId === userId },
+                  )}
+                  type="button"
+                  onClick={() => onUserSelect(todo.userId)}
+                >
+                  {`User: ${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : <p>Please wait, loading...</p>}
     </div>
   );
 };
