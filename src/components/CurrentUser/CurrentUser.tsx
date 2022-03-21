@@ -25,7 +25,7 @@ export const CurrentUser: React.FC<Props> = ({ selectedUser, clearSelectedUser }
       : <span>User not found</span>}
 
     <button
-      onClick={() => clearSelectedUser()}
+      onClick={clearSelectedUser}
       type="button"
       className="button TodoList__user-button--selected clear-button"
     >

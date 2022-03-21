@@ -104,7 +104,7 @@ class App extends React.Component<Props, State> {
             >
               <option value="all">All</option>
               <option value="completed">Completed</option>
-              <option value="notCompleted">Not completed</option>
+              <option value="active">Not completed</option>
             </select>
             <br />
             Find by name:
@@ -123,7 +123,7 @@ class App extends React.Component<Props, State> {
 
         <div className="App__content">
           <div className="App__content-container">
-            {selectedUserId >= 3 ? (
+            {selectedUserId ? (
               <CurrentUser
                 selectedUser={selectedUserInfo}
                 clearSelectedUser={this.clearSelectedUser}
