@@ -1,15 +1,13 @@
-/* eslint-disable no-console */
-const API_TODOS = 'https://mate.academy/students-api/todos';
-const API_USERS = 'https://mate.academy/students-api/users';
+const API_URL = 'https://mate.academy/students-api';
 
-export const getTodos = (): Promise<Todo[]> => {
-  return fetch(API_TODOS)
+const getData = (endpoint: string): Promise<Todo[]> => {
+  return fetch(`${API_URL}${endpoint}`)
     .then(response => response.json());
 };
 
-export const getUser = (userId: number): Promise<User> => {
-  console.log('asdasdasd');
+export const getTodos = () => getData('/todos');
 
-  return fetch(`${API_USERS}/${userId}`)
+export const getUser = (userId: number): Promise<User> => {
+  return fetch(`${API_URL}/users/${userId}`)
     .then(response => response.json());
 };

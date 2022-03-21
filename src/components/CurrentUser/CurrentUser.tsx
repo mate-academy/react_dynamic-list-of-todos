@@ -9,25 +9,45 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [dataIsFetched, setDataIsFetched] = useState(false);
+  const [dataError, setDataError] = useState(false);
 
   useEffect(() => {
     getUser(userId)
-      .then(response => setUser(response));
+      .then(setUser)
+      .then(() => setDataIsFetched(true))
+      .catch(() => setDataError(true));
   }, [userId]);
 
   return (
-    <div className="CurrentUser">
-      <button
-        type="button"
-        onClick={() => selectUser(0)}
-      >
-        ClearUser
-      </button>
-      <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
+    <div>
+      {!dataIsFetched && (
+        <div>
+          Loading user
+        </div>
+      )}
 
-      <h3 className="CurrentUser__name">{user?.name}</h3>
-      <p className="CurrentUser__email">{user?.email}</p>
-      <p className="CurrentUser__phone">{user?.phone}</p>
+      {(dataIsFetched && dataError) && (
+        <div>
+          Faled to load user
+        </div>
+      )}
+
+      {(dataIsFetched && !dataError) && (
+        <div className="CurrentUser">
+          <button
+            type="button"
+            onClick={() => selectUser(0)}
+          >
+            ClearUser
+          </button>
+          <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
+
+          <h3 className="CurrentUser__name">{user?.name}</h3>
+          <p className="CurrentUser__email">{user?.email}</p>
+          <p className="CurrentUser__phone">{user?.phone}</p>
+        </div>
+      )}
     </div>
   );
 };
