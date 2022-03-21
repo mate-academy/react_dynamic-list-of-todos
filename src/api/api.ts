@@ -1,7 +1,7 @@
 const BASE_URL = 'https://mate.academy/students-api/';
 
-const getData = (url: string) => {
-  return fetch(`${BASE_URL}${url}`)
+const getData = (endpoint: string) => {
+  return fetch(`${BASE_URL}${endpoint}`)
     .then(response => response.json());
 };
 

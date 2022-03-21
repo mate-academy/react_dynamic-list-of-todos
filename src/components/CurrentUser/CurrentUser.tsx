@@ -37,7 +37,6 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectedUser }) => {
               {user?.id}
             </span>
           </h2>
-
           <h3 className="CurrentUser__name">{user?.name}</h3>
           <p className="CurrentUser__email">{user?.email}</p>
           <p className="CurrentUser__phone">{user?.phone}</p>

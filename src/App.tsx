@@ -42,6 +42,7 @@ const App: React.FC = () => {
       case TodoCase.Completed:
         return preparedTodos.filter(todo => todo.completed);
       case TodoCase.Not:
+
         return preparedTodos.filter(todo => !todo.completed);
       default:
         return preparedTodos;
