@@ -28,12 +28,12 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
         <button
           className="CurrentUser__button button"
           type="button"
-          onClick={() => clearUser()}
+          onClick={clearUser}
         >
           clear
         </button>
       </>
     )
-      : <p>No user selected</p>
+      : <p>Loading...</p>
   );
 };
