@@ -14,9 +14,14 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectValue, setSelectValue] = useState<string>('all');
+  const [isLoading, setLoading] = useState(false);
+  const [hasLoadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
-    getTodos().then(response => setTodos(response));
+    getTodos()
+      .then(response => setTodos(response))
+      .then(() => setLoading(true))
+      .catch(() => setLoadingError(true));
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,28 +56,40 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          handleChange={handleChange}
-          handleSelectChange={handleSelectChange}
-          todos={getPreparedTodos()}
-          onUserSelect={setSelectedUserId}
-          userId={selectedUserId}
-          query={query}
-          selectValue={selectValue}
-        />
-      </div>
-
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              userId={selectedUserId}
-              selectedUser={setSelectedUserId}
-            />
-          ) : 'No user selected'}
+      {hasLoadingError ? (
+        <div className="App__sidebar">
+          <p>Failed loading data</p>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="App__sidebar">
+            {isLoading ? (
+              <TodoList
+                handleChange={handleChange}
+                handleSelectChange={handleSelectChange}
+                todos={getPreparedTodos()}
+                onUserSelect={setSelectedUserId}
+                userId={selectedUserId}
+                query={query}
+                selectValue={selectValue}
+              />
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
+
+          <div className="App__content">
+            <div className="App__content-container">
+              {selectedUserId ? (
+                <CurrentUser
+                  userId={selectedUserId}
+                  selectedUser={setSelectedUserId}
+                />
+              ) : 'No user selected'}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
