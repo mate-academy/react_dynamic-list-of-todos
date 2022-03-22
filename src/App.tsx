@@ -15,14 +15,11 @@ const App: React.FC = () => {
   const [selectUserId, setSelectUserId] = useState(0);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
     getTodos()
-      .then((todosFromAPI: Todo[]) => {
-        setTodos(todosFromAPI);
-        setVisibleTodos(todosFromAPI);
-      });
+      .then((todosFromAPI: Todo[]) => setTodos(todosFromAPI));
   }, []);
 
   const selectNewUser = (id: number) => {
@@ -87,7 +84,9 @@ const App: React.FC = () => {
       <div className="App__content">
         <div className="App__content-container">
           {selectUserId ? (
-            <CurrentUser userId={selectUserId} />
+            <CurrentUser
+              userId={selectUserId}
+            />
           ) : 'No user selected'}
         </div>
       </div>
