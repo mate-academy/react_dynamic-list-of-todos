@@ -32,7 +32,7 @@ export const CurrentUser: React.FC<Props> = ({
           <p className="CurrentUser__phone">{user.phone}</p>
         </>
       ) : (
-        <p className="CurrentUser__title">Loading...</p>
+        <p>Loarding...</p>
       )}
     </div>
   );
