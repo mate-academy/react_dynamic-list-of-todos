@@ -8,20 +8,39 @@ import { getTodos } from './api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [loaded, setLoaded] = useState(true);
+  const [loadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos)
+      .then(() => setLoaded(true))
+      .catch(() => setLoadingError(true));
   }, []);
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          todos={todos}
-          selectedUserId={selectedUserId}
-          changeUserId={setSelectedUserId}
-        />
-      </div>
+      {loadingError ? (
+        <div className="App__sidebar">
+          <p>Oops... Page loading error! Try again...</p>
+        </div>
+      ) : (
+        <>
+          {loaded ? (
+            <div className="App__sidebar">
+              <TodoList
+                todos={todos}
+                selectedUserId={selectedUserId}
+                changeUserId={setSelectedUserId}
+              />
+            </div>
+          ) : (
+            <div className="App__sidebar">
+              <p>Loading...</p>
+            </div>
+          )}
+        </>
+      )}
 
       <div className="App__content">
         <div className="App__content-container">
