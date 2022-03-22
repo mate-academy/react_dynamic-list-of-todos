@@ -33,7 +33,7 @@ export const CurrentUser: React.FC<Props> = ({
           <p className="CurrentUser__phone">{user.phone}</p>
 
           <button
-            className="button"
+            className="button button--center"
             type="button"
             onClick={() => clearUsers(0)}
           >
