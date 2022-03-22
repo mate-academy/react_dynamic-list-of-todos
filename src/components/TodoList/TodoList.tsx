@@ -1,44 +1,111 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { Todo } from '../../types/Todo';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[];
+  changeUser: (userId: number) => void;
+  selectedUserId: number;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+enum Options {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+export const TodoList: React.FC<Props> = ({
+  todos, changeUser, selectedUserId,
+}) => {
+  const [qwery, setQwery] = useState('');
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [selectedOption, setSelectedOption] = useState('');
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  useEffect(() => {
+    const finalQwery = qwery.toLowerCase();
+
+    setVisibleTodos(todos.filter(todo => {
+      if (!todo.title.includes(finalQwery)) {
+        return false;
+      }
+
+      switch (selectedOption) {
+        case Options.all:
+          return true;
+
+        case Options.active:
+          return !todo.completed;
+
+        case Options.completed:
+          return todo.completed;
+
+        default:
+          return true;
+      }
+    }));
+  }, [qwery, selectedOption, todos]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <input
+        type="text"
+        placeholder="Enter text"
+        value={qwery}
+        onChange={(event) => setQwery(event.target.value)}
+      />
+
+      <select
+        value={selectedOption}
+        onChange={(event) => setSelectedOption(event.target.value)}
+      >
+        <option value="all"> All </option>
+        <option value="active"> Active </option>
+        <option value="completed"> Completed </option>
+      </select>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {visibleTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--unchecked': !todo.completed },
+                { 'TodoList__item--checked': todo.completed },
+              )}
+            >
+              <label htmlFor={`${todo.id}`}>
+                <input
+                  type="checkbox"
+                  id={`${todo.id}`}
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className={classNames(
+                  'TodoList__user-button',
+                  { 'TodoList__user-button--selected': selectedUserId === todo.userId },
+                  'button',
+                )}
+                type="button"
+                onClick={() => {
+                  changeUser(todo.userId);
+                }}
+              >
+                {`User#${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
