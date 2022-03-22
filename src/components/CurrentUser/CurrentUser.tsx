@@ -11,8 +11,6 @@ export const CurrentUser: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  getUser(userId);
-
   useEffect(() => {
     getUser(userId).then(setUser);
   }, [userId]);
@@ -32,7 +30,7 @@ export const CurrentUser: React.FC<Props> = ({
           <p className="CurrentUser__phone">{user.phone}</p>
         </>
       ) : (
-        <p>Loarding...</p>
+        <p>Loading...</p>
       )}
     </div>
   );

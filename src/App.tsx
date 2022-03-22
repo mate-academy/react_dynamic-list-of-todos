@@ -9,10 +9,6 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState([]);
 
-  getTodos().then(todosFromServer => {
-    setTodos(todosFromServer);
-  });
-
   useEffect(() => {
     getTodos().then(todosFromServer => {
       setTodos(todosFromServer);
