@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import './TodoList.scss';
 import cn from 'classnames';
@@ -58,7 +59,7 @@ export const TodoList: React.FC<Props> = ({
         onChange={
           (event) => {
             setInput(event.target.value);
-            filter(input);
+            filter(event.target.value);
           }
         }
       />
