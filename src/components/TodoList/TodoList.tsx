@@ -11,6 +11,12 @@ type Props = {
   selectedUserId: number;
 };
 
+enum Options {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({
   todos, changeUser, selectedUserId,
 }) => {
@@ -27,13 +33,13 @@ export const TodoList: React.FC<Props> = ({
       }
 
       switch (selectedOption) {
-        case 'all':
+        case Options.all:
           return true;
 
-        case 'active':
+        case Options.active:
           return !todo.completed;
 
-        case 'completed':
+        case Options.completed:
           return todo.completed;
 
         default:
