@@ -8,7 +8,12 @@ export interface Todo {
 export type TodoProps = {
   todos: Todo[],
   selectUser: (userId: number) => void,
+  search: (event: string) => void,
   selectedUserId: number,
+  display: (format: string) => void,
+  curentDisplay: string,
+  loading: boolean,
+
 };
 
 export type User = {
@@ -19,6 +24,5 @@ export type User = {
 };
 
 export type CurrentUserProps = {
-  users: User[],
   selectedUserId: number,
 };

@@ -1,24 +1,36 @@
-import React from 'react';
-import { CurrentUserProps } from '../../types/types';
+import React, { useEffect, useState } from 'react';
+import { request } from '../../api';
+import { CurrentUserProps, User } from '../../types/types';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC<CurrentUserProps> = ({ users, selectedUserId }) => {
-  const selectedUser = users.find(user => user.id === selectedUserId);
+export const CurrentUser: React.FC<CurrentUserProps> = ({ selectedUserId }) => {
+  const [users, setUsers] = useState<User[]>([]);
 
-  return selectedUser ? (
+  useEffect(() => {
+    request('users')
+      .then(usersFromServer => {
+        setUsers(usersFromServer);
+      });
+  }, []);
+
+  const user = users.find(selectedUser => selectedUserId === selectedUser.id);
+
+  return user ? (
     <div className="CurrentUser">
       <h2 className="CurrentUser__title">
         <span>
           Selected user:
-          {selectedUser.id}
+          {user.id}
         </span>
       </h2>
 
-      <h3 className="CurrentUser__name">{selectedUser.name}</h3>
-      <p className="CurrentUser__email">{selectedUser.email}</p>
-      <p className="CurrentUser__phone">{selectedUser.phone}</p>
+      <h3 className="CurrentUser__name">{user.name}</h3>
+      <p className="CurrentUser__email">{user.email}</p>
+      <p className="CurrentUser__phone">{user.phone}</p>
     </div>
   ) : (
-    null
+    <p>
+      loading...
+    </p>
   );
 };

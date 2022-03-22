@@ -3,38 +3,66 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getAllTodos, getAllUsers } from './api';
+import { request } from './api';
+import { Todo } from './types/types';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [todos, setTodos] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [curentDisplay, setCurrentDisplay] = useState('all');
+  const [todoDelay, setTodoDelay] = useState(true);
 
   const displayUser = (userId: number) => {
     setSelectedUserId(userId);
   };
 
   useEffect(() => {
-    getAllTodos()
+    request('todos')
       .then(todosFromServer => {
         setTodos(todosFromServer);
+        setTodoDelay(false);
       });
   }, []);
 
-  useEffect(() => {
-    getAllUsers()
-      .then(usersFromServer => {
-        setUsers(usersFromServer);
-      });
-  }, [selectedUserId]);
+  const display = (format: string) => {
+    setCurrentDisplay(format);
+  };
+
+  const search = (searchQuery: string) => {
+    setQuery(searchQuery);
+  };
+
+  const filteredTodos = (() => {
+    const filtredTodo = todos.filter(todo => (
+      todo.title.toLowerCase().includes(query.toLowerCase())
+    ));
+
+    switch (curentDisplay) {
+      case 'active':
+        return filtredTodo.filter(todo => !todo.completed);
+
+      case 'completed':
+        return filtredTodo.filter(todo => todo.completed);
+
+      default:
+        return filtredTodo;
+    }
+  });
+
+  const displayedTodos = filteredTodos();
 
   return (
     <div className="App">
       <div className="App__sidebar">
         <TodoList
-          todos={todos}
+          todos={displayedTodos}
           selectUser={displayUser}
+          search={search}
           selectedUserId={selectedUserId}
+          display={display}
+          curentDisplay={curentDisplay}
+          loading={todoDelay}
         />
       </div>
 
@@ -43,7 +71,6 @@ const App: React.FC = () => {
           {selectedUserId ? (
             <>
               <CurrentUser
-                users={users}
                 selectedUserId={selectedUserId}
               />
               <button
