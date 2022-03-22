@@ -23,30 +23,22 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
     todosFromServer: Todo[],
     queryFromInput: string,
   ): Todo[] => {
-    const lowerQuery = queryFromInput.toLowerCase();
     let filteredTodos: Todo[] = todos;
 
-    if (selectedOption === 'all') {
-      filteredTodos = todosFromServer.filter(
-        (todo) => todo.title.toLowerCase().includes(lowerQuery),
-      );
-    }
+    filteredTodos = todosFromServer.filter(todo => (
+      todo.title.toLowerCase().includes(queryFromInput.toLowerCase())
+    ));
 
-    if (selectedOption === 'completed') {
-      filteredTodos = todosFromServer.filter(
-        (todo) => todo.title.toLowerCase().includes(lowerQuery)
-          && todo.completed === true,
-      );
-    }
+    switch (selectedOption) {
+      case 'active':
+        return filteredTodos.filter(todo => !todo.completed);
 
-    if (selectedOption === 'not completed') {
-      filteredTodos = todosFromServer.filter(
-        (todo) => todo.title.toLowerCase().includes(lowerQuery)
-          && todo.completed === false,
-      );
-    }
+      case 'completed':
+        return filteredTodos.filter(todo => todo.completed);
 
-    return filteredTodos;
+      default:
+        return filteredTodos;
+    }
   };
 
   const visibleTodos = getVisibleTodos(todos, query);

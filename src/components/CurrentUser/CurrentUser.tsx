@@ -4,9 +4,10 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number,
+  onSetSelectedUserId: (id: number) => void,
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId }) => {
+export const CurrentUser: React.FC<Props> = ({ userId, onSetSelectedUserId }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -34,13 +35,13 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
               button
             "
             type="button"
-            onClick={() => setUser(null)}
+            onClick={() => onSetSelectedUserId(0)}
           >
             Clear
           </button>
         </>
       ) : (
-        <p>No user selected</p>
+        <p>loading...</p>
       )}
     </div>
   );
