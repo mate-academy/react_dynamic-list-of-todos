@@ -9,11 +9,24 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
   const [user, setUser] = useState<User>();
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
+    setFetchError(false);
     getCurrentUser(selectedUserId)
-      .then(setUser);
+      .then(setUser)
+      .catch(() => setFetchError(true));
   }, [selectedUserId]);
+
+  if (fetchError) {
+    return (
+      <div
+        className="Error"
+      >
+        Неверный адрес пользователя!!!
+      </div>
+    );
+  }
 
   return (
     user ? (

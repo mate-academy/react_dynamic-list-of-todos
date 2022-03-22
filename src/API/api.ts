@@ -5,7 +5,13 @@ const userEnd = '/users/';
 
 export function request(end: string, userId: number | string = '') {
   return fetch(`${BASE_URL}${end}${userId}`)
-    .then(response => response.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${response.status} - ${response.statusText}`);
+      }
+
+      return response.json();
+    });
 }
 
 export function getTodos(): Promise<Todo[]> {
@@ -13,6 +19,5 @@ export function getTodos(): Promise<Todo[]> {
 }
 
 export function getCurrentUser(userId: number): Promise<User> {
-  return request(userEnd, userId)
-    .catch(() => 0);
+  return request(userEnd, userId);
 }
