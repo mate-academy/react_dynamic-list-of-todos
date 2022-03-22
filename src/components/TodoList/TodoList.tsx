@@ -30,7 +30,7 @@ export const TodoList: React.FC<TodoListType> = ({
             value={filtered}
             onChange={(e) => setNewFilter(e.target.value)}
           />
-          <select name="select" value={selectFilter} onChange={(e) => setSelectFilter(e)}>
+          <select name="select" value={selectFilter} onChange={setSelectFilter}>
             <option defaultValue="allTodos">all</option>
             <option value="completedTodos">completed</option>
             <option value="notCompletedTodos">need to complete</option>
