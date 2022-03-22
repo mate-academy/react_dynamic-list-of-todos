@@ -9,12 +9,17 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
   const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
+    setIsLoading(false);
     setFetchError(false);
     getCurrentUser(selectedUserId)
-      .then(setUser)
+      .then(userFromServer => {
+        setIsLoading(true);
+        setUser(userFromServer);
+      })
       .catch(() => setFetchError(true));
   }, [selectedUserId]);
 
@@ -29,7 +34,7 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
   }
 
   return (
-    user ? (
+    isLoading && user ? (
       <>
         <div className="CurrentUser">
           <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
