@@ -17,20 +17,13 @@ const App: React.FC = () => {
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
 
   useEffect(() => {
-    async function fatchingTodos() {
-      setHasDataLoaded(true);
-
-      try {
-        const todosFromAPI = await getTodos();
-
-        setTodos(todosFromAPI);
-      } catch (error) {
-        setHasDataLoaded(true);
+    getTodos()
+      .then(setTodos)
+      .then(() => setHasDataLoaded(true))
+      .catch(() => {
         setHasLoadingError(true);
-      }
-    }
-
-    fatchingTodos();
+        setHasDataLoaded(true);
+      });
   }, []);
 
   const [query, setQuery] = useState('');
@@ -62,6 +55,7 @@ const App: React.FC = () => {
             <input
               type="text"
               onChange={(event) => setQuery(event.target.value)}
+              placeholder="filter the todos by title"
             />
 
             <select
