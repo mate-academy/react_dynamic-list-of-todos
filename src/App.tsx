@@ -41,7 +41,7 @@ const App: React.FC = () => {
     setVisibleTodos(newVisibleTodo);
   };
 
-  function filteredUsers() {
+  const filteredUsers = () => {
     const filteredTodos = todos
       .filter(todo => {
         switch (selectFilter) {
@@ -55,7 +55,7 @@ const App: React.FC = () => {
       }).filter(todo => todo.title.includes(filtered));
 
     setVisibleTodos(filteredTodos);
-  }
+  };
 
   const setNewFilter = (value: string) => {
     setFiltered(value);
@@ -70,6 +70,8 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
+        <button type="button" className="button" onClick={() => setSelectUserId(0)}>Clear</button>
+
         <TodoList
           todos={visibleTodos}
           selectId={selectNewUser}

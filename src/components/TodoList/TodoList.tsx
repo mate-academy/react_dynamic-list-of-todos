@@ -22,7 +22,6 @@ export const TodoList: React.FC<TodoListType> = ({
       <h2>Todos:</h2>
       <div className="TodoList__list-container">
         <div className="TodoList__nav">
-          <button type="button" className="button" onClick={() => selectId(0)}>Clear</button>
           <input
             type="text"
             className="TodoList__input"
