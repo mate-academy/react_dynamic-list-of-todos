@@ -1,13 +1,16 @@
-const BASE_URL = 'https://mate.academy/students-api';
+const API_URL = 'https://mate.academy/students-api/';
 
-export const getTodos = async (): Promise<Todo[]> => {
-  const response = await fetch(`${BASE_URL}/todos`);
+const getData = (endpoint: string) => {
+  return fetch(`${API_URL}/${endpoint}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Status of error: ${response.status}`);
+      }
 
-  return response.json();
+      return response.json();
+    });
 };
 
-export const getUser = async (userId: number): Promise<User> => {
-  const response = await fetch(`${BASE_URL}/users/${userId}`);
+export const getTodos = (): Promise<Todo[]> => getData('todos');
 
-  return response.json();
-};
+export const getUser = (userId: number): Promise<User> => getData(`users/${userId}`);
