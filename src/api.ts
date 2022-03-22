@@ -12,7 +12,7 @@ const request = (url: string) => {
 };
 
 export const getAllTodos = () => {
-  return request('/todoss');
+  return request('/todos');
 };
 
 export const getUserByID = (userId: number) => {
