@@ -10,18 +10,26 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [progress, setProgress] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      })
-      .then(() => setProgress(true));
+      .then(todoFromServe => setTodos(todoFromServe))
+      .then(() => setProgress(true))
+      .catch(() => setLoadingError(true));
   }, []);
 
   return (
     <>
-      {progress ? (
+      {!progress && (
+        <p>Loading data...</p>
+      )}
+
+      {(loadingError && progress) && (
+        <p>Failed loading data</p>
+      )}
+
+      {(!loadingError && progress) && (
         <div className="App">
           <div className="App__sidebar">
             <TodoList
@@ -39,8 +47,6 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <p>Loading data...</p>
       )}
     </>
   );
