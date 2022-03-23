@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import './TodoList.scss';
 
@@ -12,31 +10,27 @@ export const TodoList: React.FC<TodoListType> = ({
   selectId,
   activeUser,
   changeCompleted,
-  setNewFilter,
   filtered,
   selectFilter,
-  setSelectFilter,
 }) => {
+  const filteredUsers = () => {
+    return [...todos].filter(todo => {
+      switch (selectFilter) {
+        case 'completedTodos':
+          return todo.completed;
+        case 'notCompletedTodos':
+          return !todo.completed;
+        default:
+          return todo;
+      }
+    }).filter(todo => todo.title.includes(filtered));
+  };
+
   return (
     <div className="TodoList">
-      <h2>Todos:</h2>
       <div className="TodoList__list-container">
-        <div className="TodoList__nav">
-          <input
-            type="text"
-            className="TodoList__input"
-            placeholder="search"
-            value={filtered}
-            onChange={(e) => setNewFilter(e.target.value)}
-          />
-          <select name="select" value={selectFilter} onChange={setSelectFilter}>
-            <option defaultValue="allTodos">all</option>
-            <option value="completedTodos">completed</option>
-            <option value="notCompletedTodos">need to complete</option>
-          </select>
-        </div>
         <ul className="TodoList__list">
-          {todos.map(todo => (
+          {filteredUsers().map(todo => (
             <TodoItem
               key={todo.id}
               todo={todo}

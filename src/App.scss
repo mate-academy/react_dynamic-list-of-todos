@@ -74,6 +74,10 @@ input[type="checkbox"]:checked + p:before {
   justify-content: stretch;
   align-content: stretch;
 
+  &__error {
+    margin: 10px 0 0 5px;
+  }
+
   &__sidebar {
     @extend %stretch-panel;
 

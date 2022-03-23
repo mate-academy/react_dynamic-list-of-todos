@@ -28,7 +28,6 @@ type TodoListType = {
   setNewFilter: (value: string) => void,
   filtered: string,
   selectFilter: string,
-  setSelectFilter: (value: React.ChangeEvent<HTMLSelectElement>) => void,
 };
 
 type TodoType = {

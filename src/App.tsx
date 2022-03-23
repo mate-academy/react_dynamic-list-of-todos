@@ -13,45 +13,18 @@ const App: React.FC = () => {
   const [filtered, setFiltered] = useState('');
   const [selectFilter, setSelectFilter] = useState('allTodos');
   const [selectUserId, setSelectUserId] = useState(0);
+  const [errorFromServer, setErrorFromServer] = useState(false);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
     getTodos()
-      .then((todosFromAPI: Todo[]) => setTodos(todosFromAPI));
+      .then(response => setTodos(response))
+      .catch(() => setErrorFromServer(true));
   }, []);
 
   const selectNewUser = (id: number) => {
     setSelectUserId(id);
-  };
-
-  const changeCompleted = (todoId: number) => {
-    const newVisibleTodo = [...visibleTodos].map((todo) => {
-      if (todo.id === todoId) {
-        todo.completed = !todo.completed;
-      }
-
-      return todo;
-    });
-
-    setVisibleTodos(newVisibleTodo);
-  };
-
-  const filteredUsers = () => {
-    const filteredTodos = todos
-      .filter(todo => {
-        switch (selectFilter) {
-          case 'completedTodos':
-            return todo.completed;
-          case 'notCompletedTodos':
-            return !todo.completed;
-          default:
-            return todo;
-        }
-      }).filter(todo => todo.title.includes(filtered));
-
-    setVisibleTodos(filteredTodos);
   };
 
   const setNewFilter = (value: string) => {
@@ -62,23 +35,52 @@ const App: React.FC = () => {
     setSelectFilter(e.target.value);
   };
 
-  useEffect(() => filteredUsers(), [filtered, selectFilter, selectUserId]);
+  const changeCompleted = (todoId: number) => {
+    setTodos([...todos].map((todo) => {
+      if (todo.id === todoId) {
+        todo.completed = !todo.completed;
+      }
+
+      return todo;
+    }));
+  };
+
+  useEffect(() => {
+    setTodos([...todos]);
+  }, [filtered, selectFilter, selectUserId]);
 
   return (
     <div className="App">
       <div className="App__sidebar">
         <button type="button" className="button" onClick={() => setSelectUserId(0)}>Clear</button>
+        <h2>Todos:</h2>
 
-        <TodoList
-          todos={visibleTodos}
-          selectId={selectNewUser}
-          activeUser={selectUserId}
-          changeCompleted={changeCompleted}
-          setNewFilter={setNewFilter}
-          filtered={filtered}
-          selectFilter={selectFilter}
-          setSelectFilter={newSelectFilter}
-        />
+        <div className="TodoList__nav">
+          <input
+            type="text"
+            className="TodoList__input"
+            placeholder="search"
+            value={filtered}
+            onChange={(e) => setNewFilter(e.target.value)}
+          />
+          <select name="select" value={selectFilter} onChange={newSelectFilter}>
+            <option defaultValue="allTodos">all</option>
+            <option value="completedTodos">completed</option>
+            <option value="notCompletedTodos">need to complete</option>
+          </select>
+        </div>
+
+        {!errorFromServer ? (
+          <TodoList
+            todos={todos}
+            selectId={selectNewUser}
+            activeUser={selectUserId}
+            changeCompleted={changeCompleted}
+            setNewFilter={setNewFilter}
+            filtered={filtered}
+            selectFilter={selectFilter}
+          />
+        ) : (<p className="App__error">Oops... Can`t read data from server</p>)}
       </div>
 
       <div className="App__content">
