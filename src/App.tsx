@@ -8,14 +8,14 @@ import { getTodos } from './api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [errorText, setError] = useState('');
+  const [errorText, setErrorText] = useState('');
   const [query, setQuery] = useState('');
   const [selectValue, setSelectValue] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(data => setTodos(data))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => setErrorText(error.toString()));
   }, []);
 
   if (errorText) {
@@ -43,15 +43,12 @@ const App: React.FC = () => {
     ));
 
     switch (selectValue) {
-      case TodoStatus.All:
-        return filteredTodos;
-
       case TodoStatus.Active:
         return filteredTodos.filter(todo => !todo.completed);
-
       case TodoStatus.Completed:
         return filteredTodos.filter(todo => todo.completed);
 
+      case TodoStatus.All:
       default:
         return filteredTodos;
     }
