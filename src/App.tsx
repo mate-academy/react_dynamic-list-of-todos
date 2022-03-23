@@ -8,20 +8,31 @@ import { getTodos } from './api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState([]);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .catch(() => {
+        setHasError(true);
+      });
   }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList
-          todos={todos}
-          selectUserId={setSelectedUserId}
-        />
+        {hasError ? (
+          <div>
+            <p>Error loading :(</p>
+          </div>
+        ) : (
+          <TodoList
+            todos={todos}
+            selectUserId={setSelectedUserId}
+          />
+        )}
       </div>
 
       <div className="App__content">
