@@ -12,24 +12,23 @@ export const TodoList: React.FC<Props> = ({
   todos,
   selectUserId,
 }) => {
-  const [actualTodos, setActualTodos] = useState(todos);
-  const [input, setInput] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [selectValue, setSelectValue] = useState('all');
 
-  function filter(value: string) {
-    switch (value) {
-      case 'all':
-        setActualTodos(todos);
-        break;
-      case 'active':
-        setActualTodos(todos.filter(todo => todo.completed === false));
-        break;
-      case 'completed':
-        setActualTodos(todos.filter(todo => todo.completed === true));
-        break;
-      default:
-        setActualTodos(actualTodos.filter(todo => todo.title.includes(value)));
-        break;
-    }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectValue(event.target.value);
+  };
+
+  let filteredTodos: Todo[] = [...todos].filter(({ title }) => title.includes(inputValue));
+
+  if (selectValue === 'completed') {
+    filteredTodos = filteredTodos.filter(({ completed }) => completed === true);
+  } else if (selectValue === 'active') {
+    filteredTodos = filteredTodos.filter(({ completed }) => completed === false);
   }
 
   return (
@@ -38,15 +37,13 @@ export const TodoList: React.FC<Props> = ({
       <select
         className="TodoList__inputs"
         id="filter"
+        value={selectValue}
         onChange={
           (event) => {
-            filter(event.target.value);
-            setInput('');
-            event.preventDefault();
+            handleSelectChange(event);
           }
         }
       >
-        <option value="0" selected disabled>Please choose users</option>
         <option value="all">all</option>
         <option value="active">active</option>
         <option value="completed">completed</option>
@@ -55,17 +52,16 @@ export const TodoList: React.FC<Props> = ({
       <input
         className="TodoList__inputs"
         type="text"
-        value={input}
+        value={inputValue}
         onChange={
           (event) => {
-            setInput(event.target.value);
-            filter(event.target.value);
+            handleInputChange(event);
           }
         }
       />
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {actualTodos.map(todo => (
+          {filteredTodos.map(todo => (
             <>
               <li
                 key={todo.id}
