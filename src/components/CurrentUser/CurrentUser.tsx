@@ -9,7 +9,7 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, onSetSelectedUserId }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [errorText, setError] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     getUser(userId)
