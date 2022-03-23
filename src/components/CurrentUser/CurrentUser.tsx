@@ -14,7 +14,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, onSetSelectedUserId }) =>
   useEffect(() => {
     getUser(userId)
       .then(setUser)
-      .catch((error) => setError(error.toString()));
+      .catch((error) => setErrorText(error.toString()));
   }, [userId]);
 
   if (errorText) {
