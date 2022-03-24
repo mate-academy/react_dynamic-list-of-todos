@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -7,11 +7,11 @@ import { getTodos } from './components/api';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-  getTodos().then((todosFromServer) => {
-    setTodos(todosFromServer);
-  });
+  useEffect(() => {
+    getTodos().then((setTodos));
+  }, []);
 
   return (
     <div className="App">

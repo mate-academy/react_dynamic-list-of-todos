@@ -1,13 +1,21 @@
 const BASE_URL = 'https://mate.academy/students-api/';
 
+function request(endpoint: string) {
+  return (
+    fetch(`${BASE_URL}${endpoint}`).then((response) => response.json())
+  );
+}
+
 export function getTodos() {
   return (
-    fetch(`${BASE_URL}/todos`).then((response) => response.json())
+    request('/todos')
   );
 }
 
 export function getUser(userId: number) {
+  const endPoint = `/users/${userId}`;
+
   return (
-    fetch(`${BASE_URL}/users/${userId}`).then((response) => response.json())
+    request(endPoint)
   );
 }
