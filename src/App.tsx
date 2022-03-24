@@ -12,7 +12,7 @@ import { Todo } from './react-app-env';
 const App: React.FC = () => {
   const [titleQuery, setTitleQuery] = useState('');
   const [selectValue, setSelectValue] = useState('allTodos');
-  const [selectUserId, setSelectUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
   const [errorFromServer, setErrorFromServer] = useState(false);
 
   const [todos, setTodos] = useState<Todo[]>([]);
