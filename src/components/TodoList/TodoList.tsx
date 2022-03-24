@@ -1,44 +1,121 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
+import classNames from 'classnames';
+import { Todo } from '../../react-app-env';
 import './TodoList.scss';
+import { getFilteredTodos } from '../../api/api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  selectedTodoId: number
+  setSelectedId: (key: string, id: number) => void;
+  todosSearch: string;
+  todosStatus: string;
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement>;
+  setTodos: (todos: Todo[]) => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export class TodoList extends React.PureComponent<Props> {
+  componentDidUpdate(prevProps: Props) {
+    const {
+      todosSearch,
+      todosStatus,
+      setTodos,
+    } = this.props;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    if (prevProps.todosSearch !== todosSearch || prevProps.todosStatus !== todosStatus) {
+      getFilteredTodos(todosSearch, todosStatus)
+        .then(todos => setTodos(todos));
+    }
+  }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  render() {
+    const {
+      todos,
+      selectedTodoId,
+      setSelectedId,
+      todosSearch,
+      todosStatus,
+      onChange,
+    } = this.props;
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+    return (
+      <div className="TodoList">
+        <input
+          type="text"
+          name="todosSearch"
+          value={todosSearch}
+          placeholder="Search todo"
+          onChange={onChange}
+        />
+
+        <select
+          name="todosStatus"
+          value={todosStatus}
+          onChange={onChange}
+        >
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+
+        <h2>Todos:</h2>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {todos.map(({
+              id,
+              title,
+              userId,
+              completed,
+            }) => (
+              <li
+                key={id}
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--checked': completed,
+                    'TodoList__item--unchecked': !completed,
+                  },
+                )}
+              >
+                <label htmlFor={`${id}`}>
+                  <input
+                    id={`${id}`}
+                    type="checkbox"
+                    checked={completed}
+                    readOnly
+                  />
+                  <p>{title}</p>
+                </label>
+
+                {selectedTodoId === id ? (
+                  <button
+                    type="button"
+                    className="TodoList__user-button TodoList__user-button--selected button"
+                    onClick={() => {
+                      setSelectedId('selectedTodoId', 0);
+                      setSelectedId('selectedUserId', 0);
+                    }}
+                  >
+                    {`User #${userId}`}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="TodoList__user-button button"
+                    onClick={() => {
+                      setSelectedId('selectedTodoId', id);
+                      setSelectedId('selectedUserId', userId);
+                    }}
+                  >
+                    {`User #${userId}`}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
