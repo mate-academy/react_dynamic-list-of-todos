@@ -1,44 +1,44 @@
 import React from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { TodoItem } from '../TodoItem/TodoItem';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+import { TodoListType } from '../../react-app-env';
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<TodoListType> = ({
+  todos,
+  selectId,
+  selectedUserId,
+  changeCompleted,
+  titleQuery,
+  selectValue,
+}) => {
+  const newTodo = todos.filter(todo => {
+    switch (selectValue) {
+      case 'completedTodos':
+        return todo.completed;
+      case 'notCompletedTodos':
+        return !todo.completed;
+      default:
+        return todo;
+    }
+  }).filter(todo => todo.title.includes(titleQuery));
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  return (
+    <div className="TodoList">
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {newTodo.map(todo => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              selectId={selectId}
+              selectedUserId={selectedUserId}
+              changeCompleted={changeCompleted}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
