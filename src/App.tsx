@@ -10,7 +10,7 @@ import { getTodos } from './api';
 import { Todo } from './react-app-env';
 
 const App: React.FC = () => {
-  const [filtered, setFiltered] = useState('');
+  const [titleQuery, setTitleQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState('allTodos');
   const [selectUserId, setSelectUserId] = useState(0);
   const [errorFromServer, setErrorFromServer] = useState(false);
