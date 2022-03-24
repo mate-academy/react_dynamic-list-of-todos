@@ -23,16 +23,15 @@ export type User = {
 type TodoListType = {
   todos: Todo[],
   selectId: (id: number) => void,
-  activeUser: number,
+  selectedUserId: number,
   changeCompleted: (id: number) => void,
-  setNewFilter: (value: string) => void,
-  filtered: string,
-  selectFilter: string,
+  titleQuery: string,
+  selectValue: string,
 };
 
 type TodoType = {
   todo: Todo,
   selectId: (id: number) => void,
-  activeUser: number,
+  selectedUserId: number,
   changeCompleted: (id: number) => void,
 };

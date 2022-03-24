@@ -8,34 +8,32 @@ import { TodoListType } from '../../react-app-env';
 export const TodoList: React.FC<TodoListType> = ({
   todos,
   selectId,
-  activeUser,
+  selectedUserId,
   changeCompleted,
-  filtered,
-  selectFilter,
+  titleQuery,
+  selectValue,
 }) => {
-  const filteredUsers = () => {
-    return [...todos].filter(todo => {
-      switch (selectFilter) {
-        case 'completedTodos':
-          return todo.completed;
-        case 'notCompletedTodos':
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    }).filter(todo => todo.title.includes(filtered));
-  };
+  const newTodo = todos.filter(todo => {
+    switch (selectValue) {
+      case 'completedTodos':
+        return todo.completed;
+      case 'notCompletedTodos':
+        return !todo.completed;
+      default:
+        return todo;
+    }
+  }).filter(todo => todo.title.includes(titleQuery));
 
   return (
     <div className="TodoList">
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {filteredUsers().map(todo => (
+          {newTodo.map(todo => (
             <TodoItem
               key={todo.id}
               todo={todo}
               selectId={selectId}
-              activeUser={activeUser}
+              selectedUserId={selectedUserId}
               changeCompleted={changeCompleted}
             />
           ))}

@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { TodoType } from '../../react-app-env';
 
 export const TodoItem: React.FC<TodoType> = ({
-  todo, selectId, activeUser, changeCompleted,
+  todo, selectId, selectedUserId, changeCompleted,
 }) => {
   return (
     <li
@@ -18,14 +18,14 @@ export const TodoItem: React.FC<TodoType> = ({
     >
       <label>
         <input type="checkbox" checked={todo.completed} onChange={() => changeCompleted(todo.id)} />
-        <p>delectus aut autem</p>
+        <p>{todo.title}</p>
       </label>
 
       <button
         className={classnames(
           'button',
           'TodoList__user-button',
-          { 'TodoList__user-button--selected': activeUser === todo.userId },
+          { 'TodoList__user-button--selected': selectedUserId === todo.userId },
         )}
         type="button"
         onClick={() => selectId(todo.userId)}

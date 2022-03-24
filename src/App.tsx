@@ -4,14 +4,12 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-
 import { getTodos } from './api';
-
 import { Todo } from './react-app-env';
 
 const App: React.FC = () => {
   const [titleQuery, setTitleQuery] = useState('');
-  const [selectValue, setSelectValue] = useState('allTodos');
+  const [selectValue, setSelectValue] = useState('');
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [hasErrorFromServer, setHasErrorFromServer] = useState(false);
 
@@ -20,20 +18,8 @@ const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(response => setTodos(response))
-      .catch(() => setErrorFromServer(true));
+      .catch(() => setHasErrorFromServer(true));
   }, []);
-
-  const selectNewUser = (id: number) => {
-    setSelectUserId(id);
-  };
-
-  const setNewFilter = (value: string) => {
-    setFiltered(value);
-  };
-
-  const newSelectFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectFilter(e.target.value);
-  };
 
   const changeCompleted = (todoId: number) => {
     setTodos([...todos].map((todo) => {
@@ -47,12 +33,12 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setTodos([...todos]);
-  }, [filtered, selectFilter, selectUserId]);
+  }, [titleQuery, selectValue, selectedUserId]);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <button type="button" className="button" onClick={() => setSelectUserId(0)}>Clear</button>
+        <button type="button" className="button" onClick={() => setSelectedUserId(0)}>Clear</button>
         <h2>Todos:</h2>
 
         <div className="TodoList__nav">
@@ -60,34 +46,37 @@ const App: React.FC = () => {
             type="text"
             className="TodoList__input"
             placeholder="search"
-            value={filtered}
-            onChange={(e) => setNewFilter(e.target.value)}
+            value={titleQuery}
+            onChange={(e) => setTitleQuery(e.target.value)}
           />
-          <select name="select" value={selectFilter} onChange={newSelectFilter}>
+          <select
+            name="select"
+            value={selectValue}
+            onChange={(event) => setSelectValue(event.target.value)}
+          >
             <option defaultValue="allTodos">all</option>
             <option value="completedTodos">completed</option>
             <option value="notCompletedTodos">need to complete</option>
           </select>
         </div>
 
-        {!errorFromServer ? (
+        {!hasErrorFromServer ? (
           <TodoList
             todos={todos}
-            selectId={selectNewUser}
-            activeUser={selectUserId}
+            selectedUserId={selectedUserId}
+            selectValue={selectValue}
+            titleQuery={titleQuery}
+            selectId={id => setSelectedUserId(id)}
             changeCompleted={changeCompleted}
-            setNewFilter={setNewFilter}
-            filtered={filtered}
-            selectFilter={selectFilter}
           />
         ) : (<p className="App__error">Oops... Can`t read data from server</p>)}
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectUserId ? (
+          {selectedUserId ? (
             <CurrentUser
-              userId={selectUserId}
+              userId={selectedUserId}
             />
           ) : 'No user selected'}
         </div>
