@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [titleQuery, setTitleQuery] = useState('');
   const [selectValue, setSelectValue] = useState('allTodos');
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [errorFromServer, setErrorFromServer] = useState(false);
+  const [hasErrorFromServer, setHasErrorFromServer] = useState(false);
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
