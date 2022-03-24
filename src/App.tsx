@@ -20,7 +20,13 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos().then((setTodos))
+    getTodos().then(async response => {
+      if (response.ok) {
+        setTodos(await response.json());
+      } else {
+        setServerError(true);
+      }
+    })
       .then(loading)
       .catch(getServerError);
   }, []);
@@ -32,23 +38,25 @@ const App: React.FC = () => {
       ) : (
         <>
           {isLoading ? (
-            <div className="App__sidebar">
-              <TodoList
-                todos={todos}
-                selectUserId={setSelectedUserId}
-              />
-            </div>
+            <>
+              <div className="App__sidebar">
+                <TodoList
+                  todos={todos}
+                  selectUserId={setSelectedUserId}
+                />
+              </div>
+
+              <div className="App__content">
+                <div className="App__content-container">
+                  {selectedUserId ? (
+                    <CurrentUser userId={selectedUserId} selectUserId={setSelectedUserId} />
+                  ) : 'No user selected'}
+                </div>
+              </div>
+            </>
           ) : (
             <p>Loading...</p>
           )}
-
-          <div className="App__content">
-            <div className="App__content-container">
-              {selectedUserId ? (
-                <CurrentUser userId={selectedUserId} selectUserId={setSelectedUserId} />
-              ) : 'No user selected'}
-            </div>
-          </div>
         </>
       )}
     </div>

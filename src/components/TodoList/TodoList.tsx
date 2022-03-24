@@ -19,14 +19,14 @@ export const TodoList: React.FC<Props> = ({ todos, selectUserId }) => {
     setSelect(event.target.value);
   };
 
-  let searchTodo: Todo[] = todos.filter(todo => todo.title.includes(input));
+  let visibleTodos: Todo[] = todos.filter(todo => todo.title.includes(input));
 
   if (selectValue === 'completed') {
-    searchTodo = searchTodo.filter(todo => todo.completed);
+    visibleTodos = visibleTodos.filter(todo => todo.completed);
   }
 
   if (selectValue === 'active') {
-    searchTodo = searchTodo.filter(todo => !todo.completed);
+    visibleTodos = visibleTodos.filter(todo => !todo.completed);
   }
 
   return (
@@ -52,7 +52,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectUserId }) => {
           placeholder="Search todo"
         />
         <ul className="TodoList__list">
-          {searchTodo.map(todo => (
+          {visibleTodos.map(todo => (
             <>
               <li
                 key={todo.id}
