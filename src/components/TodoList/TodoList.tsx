@@ -15,19 +15,19 @@ export const TodoList: React.FC<Props> = ({ todos, selectUserId }) => {
 
   useEffect(() => {
     setList(todos.filter(todo => {
-      if (todo.title.includes(value)) {
-        if (select === 'active') {
-          return !todo.completed;
-        }
-
-        if (select === 'completed') {
-          return todo.completed;
-        }
-
-        return true;
+      if (!todo.title.includes(value)) {
+        return false;
       }
 
-      return false;
+      if (select === 'active') {
+        return !todo.completed;
+      }
+
+      if (select === 'completed') {
+        return todo.completed;
+      }
+
+      return true;
     }));
   }, [todos, value, select]);
 
