@@ -9,9 +9,13 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, selectUserId }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    getUser(userId).then(setUser);
+    getUser(userId)
+      .then(setUser)
+      .then(() => setError(false))
+      .catch(() => setError(true));
   }, [userId]);
 
   return (
@@ -22,15 +26,14 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectUserId }) => {
           {userId}
         </span>
       </h2>
-      {user ? (
+      {user && (
         <>
           <h3 className="CurrentUser__name">{user.name}</h3>
           <p className="CurrentUser__email">{user.email}</p>
           <p className="CurrentUser__phone">{user.phone}</p>
         </>
-      ) : (
-        <p>No user</p>
       )}
+      {error && <p>We have a problem</p>}
       <button
         className="CurrentUser__clear"
         type="button"
