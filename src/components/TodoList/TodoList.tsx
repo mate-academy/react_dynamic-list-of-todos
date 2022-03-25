@@ -56,7 +56,6 @@ export const TodoList: React.FC<Props> = ({ todos, selectUserId }) => {
             <li
               key={todo.id}
               className={cn({
-                TodoList__item: true,
                 'TodoList__item--unchecked': !todo.completed,
                 'TodoList__item--checked': todo.completed,
               })}
