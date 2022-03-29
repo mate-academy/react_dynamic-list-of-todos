@@ -5,9 +5,9 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api/api';
 
-enum TodoCase {
+enum TodoStatus {
   Completed = 'completed',
-  Not = 'not',
+  NotCompleted = 'not',
 }
 
 const App: React.FC = () => {
@@ -15,9 +15,27 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectValue, setSelectValue] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<boolean>(false);
+
+  const loading = () => {
+    setIsLoading(true);
+  };
+
+  const getServerError = () => {
+    setServerError(true);
+  };
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos().then(async response => {
+      if (response.ok) {
+        setTodos(await response.json());
+      } else {
+        setServerError(true);
+      }
+    })
+      .then(loading)
+      .catch(getServerError);
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,9 +58,9 @@ const App: React.FC = () => {
     ));
 
     switch (selectValue) {
-      case TodoCase.Completed:
+      case TodoStatus.Completed:
         return preparedTodos.filter(todo => todo.completed);
-      case TodoCase.Not:
+      case TodoStatus.NotCompleted:
 
         return preparedTodos.filter(todo => !todo.completed);
       default:
@@ -52,27 +70,39 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          handleChange={handleChange}
-          handleSelectChange={handleSelectChange}
-          todos={getPreparedTodos()}
-          selectUserId={setSelectedUserId}
-          query={query}
-          selectValue={selectValue}
-        />
-      </div>
+      {serverError ? (
+        <p>Server error...</p>
+      ) : (
+        <>
+          {isLoading ? (
+            <>
+              <div className="App__sidebar">
+                <TodoList
+                  handleChange={handleChange}
+                  handleSelectChange={handleSelectChange}
+                  todos={getPreparedTodos()}
+                  selectUserId={setSelectedUserId}
+                  query={query}
+                  selectValue={selectValue}
+                />
+              </div>
 
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              userId={selectedUserId}
-              selectedUser={setSelectedUserId}
-            />
-          ) : 'No user selected'}
-        </div>
-      </div>
+              <div className="App__content">
+                <div className="App__content-container">
+                  {selectedUserId ? (
+                    <CurrentUser
+                      userId={selectedUserId}
+                      selectedUser={setSelectedUserId}
+                    />
+                  ) : 'No user selected'}
+                </div>
+              </div>
+            </>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </>
+      )}
     </div>
   );
 };
