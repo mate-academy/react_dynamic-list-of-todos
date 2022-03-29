@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './TodoList.scss';
 
 type Props = {
-  setSelectedUserId: any,
+  setSelectedUserId: (userId: number) => void,
   todos: Todo[],
 };
 
@@ -71,15 +71,16 @@ export const TodoList: React.FC<Props> = ({
               completed,
               userId,
             } = todo;
-            const checkStatus = completed ? 'checked' : 'unchecked';
-            const itemCheckClass = `TodoList__item--${checkStatus}`;
             const isTodoSelected = selectedTodo === id;
 
             return (
               <li
                 className={classNames(
                   'TodoList__item',
-                  itemCheckClass,
+                  {
+                    'TodoList__item--checked': completed,
+                    'TodoList__item--unchecked': !completed,
+                  },
                 )}
                 key={id}
               >

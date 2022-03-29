@@ -4,7 +4,7 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number,
-  setSelectedUserId: any,
+  setSelectedUserId: (userId: number) => void,
 };
 
 interface User {
@@ -24,35 +24,54 @@ export const CurrentUser: React.FC<Props> = ({
   setSelectedUserId,
 }) => {
   const [user, setUser] = useState<User>(defaultUser);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
+    setHasLoadingError(false);
+    setIsLoading(true);
+
     getUser(userId)
-      .then(currentUser => setUser(currentUser));
+      .then(currentUser => {
+        if (!currentUser.error) {
+          setUser(currentUser);
+        } else {
+          setHasLoadingError(true);
+        }
+
+        setIsLoading(false);
+      });
   }, [userId]);
 
   const { name, email, phone } = user;
+  const currentUserContent = hasLoadingError ? 'Some error...'
+    : (
+      <>
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {' '}
+            {userId}
+          </span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{name}</h3>
+        <p className="CurrentUser__email">{email}</p>
+        <p className="CurrentUser__phone">{phone}</p>
+
+        <button
+          type="button"
+          onClick={() => setSelectedUserId(0)}
+          className="button"
+        >
+          Clear
+        </button>
+      </>
+    );
 
   return (
     <div className="CurrentUser">
-      <h2 className="CurrentUser__title">
-        <span>
-          Selected user:
-          {' '}
-          {userId}
-        </span>
-      </h2>
-
-      <h3 className="CurrentUser__name">{name}</h3>
-      <p className="CurrentUser__email">{email}</p>
-      <p className="CurrentUser__phone">{phone}</p>
-
-      <button
-        type="button"
-        onClick={() => setSelectedUserId(0)}
-        className="button"
-      >
-        Clear
-      </button>
+      {isLoading ? 'Loading...' : currentUserContent}
     </div>
   );
 };

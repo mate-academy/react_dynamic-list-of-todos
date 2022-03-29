@@ -8,22 +8,39 @@ import { getTodos } from './api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
+    setHasLoadingError(false);
+    setIsLoading(true);
+
     getTodos()
       .then(todoList => {
-        setTodos(todoList);
+        if (!todoList.error) {
+          setTodos(todoList);
+        } else {
+          setHasLoadingError(true);
+        }
+
+        setIsLoading(false);
       });
   }, []);
 
-  return (
-    <div className="App">
+  const sidebarContent = hasLoadingError ? 'Some Error...'
+    : (
       <div className="App__sidebar">
         <TodoList
           setSelectedUserId={setSelectedUserId}
           todos={todos}
         />
       </div>
+    );
+
+  return (
+    <div className="App">
+      {isLoading ? 'Loading'
+        : sidebarContent}
 
       <div className="App__content">
         <div className="App__content-container">
