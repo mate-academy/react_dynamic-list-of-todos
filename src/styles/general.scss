@@ -1,3 +1,21 @@
+$c-magenta: #4d457b;
+$c-white: #fff;
+
+@mixin transitions($props, $time: $transition-time) {
+  transition-property: $props;
+  transition-duration: $time;
+}
+
+@mixin onHover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+$transition-time: 0.3s;
+
 .button {
   cursor: pointer;
   padding: 5px 10px;
@@ -10,6 +28,52 @@
   font-size: inherit;
 
   &:hover {
-    background-color: #4d457b;
+    background-color: $c-magenta;
+  }
+}
+
+.input {
+  display: block;
+  padding: 0 10px;
+
+  margin: 0 auto 10px;
+
+  outline: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: $c-magenta;
+  caret-color: $c-magenta;
+
+  background-color: transparent;
+
+  @include transitions((border-color, color));
+
+  &::placeholder {
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &:focus {
+    border-color: $c-magenta;
+  }
+
+  &--center {
+    text-align: center;
+    padding: 2px 10px;
+  }
+
+  &--one-line {
+    border: none;
+    border-bottom: 1px solid $c-magenta;
+
+    &[type="text"] {
+      text-transform: uppercase;
+    }
+  }
+
+  &--outline {
+    border: 1px solid $c-magenta;
   }
 }

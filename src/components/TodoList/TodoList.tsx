@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent, memo, useEffect, useState,
 } from 'react';
+import '../../styles/general.scss';
 import { StatusQuery } from '../../StatusQuery';
 import './TodoList.scss';
 
@@ -34,11 +35,13 @@ export const TodoList: React.FC<Props> = memo(({
 
       <input
         type="text"
+        className="input input--center input--outline"
         onChange={handleChange}
       />
 
       <select
         name="status"
+        className="input input--one-line"
         id="statusSelector"
         onChange={(event) => onSelectStatus(event.target.value)}
       >
