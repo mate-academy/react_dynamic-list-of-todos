@@ -1,8 +1,5 @@
 # React dynamic list of TODOs
-- Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/)
-- Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
-- Use [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript)
+- [DEMO LINK](https://andr1yk.github.io/react_dynamic-list-of-todos/)
 
 ## Description
 You are given a basic markup for the App, TodosList and CurrentUser components and [the API](https://mate-academy.github.io/fe-students-api/).
