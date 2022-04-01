@@ -1,44 +1,98 @@
-import React from 'react';
+import React, {
+  ChangeEvent, memo, useEffect, useState,
+} from 'react';
+import '../../styles/general.scss';
+import { StatusQuery } from '../../StatusQuery';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[],
+  onSelectUser: CallableFunction;
+  onSelectStatus: CallableFunction;
+  selectedUserId: number,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = memo(({
+  todos, onSelectUser, selectedUserId, onSelectStatus,
+}) => {
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const filterTodos = (tilteQuery: string) => {
+    const newTodos = todos.filter(({ title }) => {
+      return title.toLowerCase().includes(tilteQuery.toLowerCase());
+    });
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    setVisibleTodos(newTodos);
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => filterTodos(event.target.value);
+
+  useEffect(() => setVisibleTodos(todos), [todos]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <input
+        type="text"
+        className="input input--center input--outline"
+        onChange={handleChange}
+      />
+
+      <select
+        name="status"
+        className="input input--one-line"
+        id="statusSelector"
+        onChange={(event) => onSelectStatus(event.target.value)}
+      >
+        <option value={StatusQuery.all}>all</option>
+        <option value={StatusQuery.active}>active</option>
+        <option value={StatusQuery.completed}>completed</option>
+      </select>
+
+      <div className="TodoList__list-container">
+        {visibleTodos.length ? (
+          <ul className="TodoList__list">
+            {visibleTodos.map(({
+              completed, title, userId, id,
+            }) => (
+              <li
+                key={id}
+                className={`
+                  TodoList__item
+                  TodoList__item--${completed ? 'checked' : 'unchecked'}
+                `}
+              >
+                <label htmlFor="completed">
+                  <input
+                    id="completed"
+                    type="checkbox"
+                    readOnly
+                    checked={completed}
+                  />
+                  <p>{title}</p>
+                </label>
+
+                <button
+                  className={`
+                    TodoList__user-button
+                    ${selectedUserId !== userId && 'TodoList__user-button--selected'}
+                    button
+                  `}
+                  type="button"
+                  onClick={onSelectUser(userId)}
+                >
+                  User&nbsp;
+                  {userId}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Not found</p>
+        )}
+
+      </div>
     </div>
-  </div>
-);
+  );
+});

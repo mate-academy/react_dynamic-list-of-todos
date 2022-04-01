@@ -1,12 +1,52 @@
-import React from 'react';
+import React, {
+  useEffect, useState, memo, useCallback,
+} from 'react';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number,
+  onClear: () => void,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = memo(({ userId, onClear }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const clear = useCallback(() => {
+    setUser(null);
+    setError(null);
+  }, []);
+
+  useEffect(() => {
+    clear();
+
+    getUser(userId)
+      .then(data => setUser(data))
+      .catch(err => setError(err.message));
+  }, [userId]);
+
+  return (
+    user ? (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>{`Selected user: ${user.id}`}</span>
+        </h2>
+
+        <h3 className="CurrentUser__name">{user.name}</h3>
+        <p className="CurrentUser__email">{user.email}</p>
+        <p className="CurrentUser__phone">{user.phone}</p>
+
+        <button
+          onClick={onClear}
+          className="button CurrentUser__button CurrentUser___lear"
+          type="button"
+        >
+          Clear
+        </button>
+      </div>
+    ) : (
+      <p>{error ? 'Error' : 'LOADING...'}</p>
+    )
+  );
+});
