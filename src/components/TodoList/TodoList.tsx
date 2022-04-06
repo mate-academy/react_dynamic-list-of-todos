@@ -1,44 +1,90 @@
-import React from 'react';
+import classnames from 'classnames';
+import React, { useState, useEffect } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[],
+  selectedUserId: number,
+  filterValue: string,
+  selectedValue: string,
+  random: number,
+  selectId: (userId:number) => void
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedUserId,
+  selectId,
+  selectedValue,
+  random,
+  filterValue,
+}) => {
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  useEffect(() => {
+    const copyTodo = [...todos]
+      .filter(todo => todo.title.includes(filterValue))
+      .filter(todo => {
+        switch (selectedValue) {
+          case 'all':
+            return true;
+          case 'completed':
+            return todo.completed;
+          case 'active':
+            return !todo.completed;
+          default:
+            return true;
+        }
+      });
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    if (random !== 0) {
+      copyTodo.sort(() => 0.5 - Math.random());
+    }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+    setVisibleTodos(copyTodo);
+  }, [filterValue, todos, selectedValue, random]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {visibleTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={classnames(
+                'TodoList__item',
+                { 'TodoList__item--unchecked': !todo.completed },
+                { 'TodoList__item--checked': todo.completed },
+              )}
+            >
+              <label htmlFor={todo.id.toString()}>
+                <input
+                  id={todo.id.toString()}
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className={classnames(
+                  'TodoList__user-button',
+                  'button',
+                  { 'TodoList__user-button--selected': (todo.userId === selectedUserId) },
+                )}
+                type="button"
+                onClick={() => selectId(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
