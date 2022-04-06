@@ -16,9 +16,6 @@ export const TodoList = React.memo<Props>(
     changeSelectedStatus,
     randomizeTodos,
   }) => {
-    // eslint-disable-next-line no-console
-    console.log('render');
-
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
