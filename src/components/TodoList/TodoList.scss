@@ -28,4 +28,17 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__control {
+    display: flex;
+    gap: 20px;
+  }
+
+  &__search {
+    border-radius: 10px;
+  }
+
+  &__select {
+    border-radius: 10px;
+  }
 }
