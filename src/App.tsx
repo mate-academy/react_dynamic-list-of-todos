@@ -3,35 +3,16 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos, getUsers } from './api/api';
-
-const defaultUser = {
-  id: 0,
-  createdAt: '',
-  updatedAt: '',
-  name: '',
-  username: '',
-  email: '',
-  phone: '',
-  website: '',
-};
+import { getTodos } from './api/api';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todosList, setTodosList] = useState<Todo[]>([]);
-  const [currentUser, setCurrentUser] = useState<User>(defaultUser);
 
   useEffect(() => {
     getTodos()
       .then(todos => setTodosList(todos));
   }, []);
-
-  useEffect(() => {
-    if (selectedUserId) {
-      getUsers(selectedUserId)
-        .then(users => setCurrentUser(users));
-    }
-  }, [selectedUserId]);
 
   const handlerSelectUser = (userId: number): void => {
     setSelectedUserId(userId);
@@ -63,7 +44,6 @@ const App: React.FC = () => {
               </button>
               <CurrentUser
                 selectedUser={selectedUserId}
-                currentUser={currentUser}
               />
             </>
           ) : 'No user selected'}
