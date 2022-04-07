@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
+import { getUsers } from '../../api/api';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUser: number,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({ selectedUser }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (selectedUser) {
+      getUsers(selectedUser)
+        .then(users => setCurrentUser(users));
+    }
+  }, [selectedUser]);
+
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser}`}</span></h2>
+      {selectedUser && (
+        <>
+          <h3 className="CurrentUser__name">{currentUser?.name}</h3>
+          <p className="CurrentUser__email">{currentUser?.email}</p>
+          <p className="CurrentUser__phone">{currentUser?.phone}</p>
+        </>
+      )}
+    </div>
+  );
+};
