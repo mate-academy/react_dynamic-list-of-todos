@@ -5,7 +5,10 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 const App: React.FC = () => {
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [
+    selectedUserId,
+    // setSelectedUserId,
+  ] = useState(0);
 
   return (
     <div className="App">
@@ -22,6 +25,6 @@ const App: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;
