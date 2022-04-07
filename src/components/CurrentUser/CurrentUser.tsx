@@ -20,8 +20,10 @@ export class CurrentUser extends React.Component<Props, State> {
     this.getUser();
   }
 
-  async componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     if (this.props.userId !== prevProps.userId) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ user: null });
       this.getUser();
     }
   }
@@ -33,8 +35,6 @@ export class CurrentUser extends React.Component<Props, State> {
   }
 
   clearUser = () => {
-    this.setState({ user: null });
-
     this.props.selectUser(0);
   };
 
@@ -43,21 +43,31 @@ export class CurrentUser extends React.Component<Props, State> {
 
     return (
       <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${this.props.userId}`}</span>
-        </h2>
 
-        <h3 className="CurrentUser__name">{user?.name}</h3>
-        <p className="CurrentUser__email">{user?.email}</p>
-        <p className="CurrentUser__phone">{user?.phone}</p>
+        {user !== null ? (
+          <>
+            <h2 className="CurrentUser__title">
+              <span>{`Selected user: ${this.props.userId}`}</span>
+            </h2>
 
-        {user !== null && (
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+
+            <button
+              type="button"
+              className="button"
+              onClick={this.clearUser}
+            >
+              Clear
+            </button>
+          </>
+        ) : (
           <button
             type="button"
-            className="button"
-            onClick={this.clearUser}
+            className="button button-l is-loading"
           >
-            Clear
+            Loading
           </button>
         )}
       </div>
