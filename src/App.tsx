@@ -14,7 +14,7 @@ const App: React.FC = () => {
       .then(todos => setTodosList(todos));
   }, []);
 
-  const handlerSelectUser = (userId: number): void => {
+  const selectUser = (userId: number): void => {
     setSelectedUserId(userId);
   };
 
@@ -27,7 +27,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           todos={todosList}
-          onClickSelectUser={handlerSelectUser}
+          selectUser={selectUser}
         />
       </div>
 

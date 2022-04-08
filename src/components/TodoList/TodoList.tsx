@@ -4,45 +4,29 @@ import './TodoList.scss';
 
 type Props = {
   todos: Todo[],
-  onClickSelectUser: (userId: number) => void,
+  selectUser : (userId: number) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onClickSelectUser,
+  selectUser,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [selectValue, setSelectValue] = useState('all');
 
-  const todosSelectArrFilter = (arr: Todo[], completedValue: string) => {
-    switch (completedValue) {
+  const getFilteredTodos = () => {
+    const result = todos.filter(todo => todo.title.includes(inputValue));
+
+    switch (selectValue) {
       case 'active':
-        return arr.filter(todo => todo.completed === false);
+        return result.filter(todo => todo.completed === false);
 
       case 'completed':
-        return arr.filter(todo => todo.completed === true);
+        return result.filter(todo => todo.completed === true);
 
       default:
-        return arr;
+        return result;
     }
-  };
-
-  const todosInputFilter = (arr: Todo[], titleValue: string) => {
-    if (!titleValue) {
-      return arr;
-    }
-
-    return arr.filter(todo => todo.title.includes(titleValue));
-  };
-
-  const preparedTodosArr = () => {
-    const copyTodos = [...todos];
-
-    const filterByInput = todosInputFilter(copyTodos, inputValue);
-
-    const filterBySelect = todosSelectArrFilter(filterByInput, selectValue);
-
-    return filterBySelect;
   };
 
   const handlerInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -86,7 +70,7 @@ export const TodoList: React.FC<Props> = ({
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {preparedTodosArr().map(todo => (
+          {getFilteredTodos().map(todo => (
             <li
               className={classNames(
                 'TodoList__item',
@@ -114,7 +98,7 @@ export const TodoList: React.FC<Props> = ({
                   button
                 "
                 type="button"
-                onClick={() => onClickSelectUser(todo.userId)}
+                onClick={() => selectUser(todo.userId)}
               >
                 {`User ${todo.userId}`}
               </button>

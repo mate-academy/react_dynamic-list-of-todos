@@ -7,9 +7,6 @@ export function getTodos(): Promise<Todo[]> {
 }
 
 export function getUsers(userId: number) {
-  return fetch(`${API_URL_USERS}`)
-    .then(response => response.json())
-    .then(users => {
-      return users.find((user: { id: number; }) => user.id === userId);
-    });
+  return fetch(`${API_URL_USERS}/${userId}`)
+    .then(response => response.json());
 }
