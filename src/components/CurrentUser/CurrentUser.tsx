@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, selectedUserId }) => {
-  const [userMan, setUserMan] = useState<User>({
+  const [selectedUser, setSelectedUser] = useState<User>({
     name: '',
     phone: 0,
     email: '',
@@ -18,7 +18,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectedUserId }) => {
   useEffect(() => {
     getUser(userId)
       .then(user => {
-        setUserMan(user);
+        setSelectedUser(user);
       });
   }, [userId]);
 
@@ -27,13 +27,13 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectedUserId }) => {
       <h2 className="CurrentUser__title">
         <span>
           Selected user:
-          {userMan.id}
+          {selectedUser.id}
         </span>
       </h2>
 
-      <h3 className="CurrentUser__name">{userMan.name}</h3>
-      <p className="CurrentUser__email">{userMan.email}</p>
-      <p className="CurrentUser__phone">{userMan.phone}</p>
+      <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+      <p className="CurrentUser__email">{selectedUser.email}</p>
+      <p className="CurrentUser__phone">{selectedUser.phone}</p>
       <button
         type="button"
         onClick={() => selectedUserId(0)}
