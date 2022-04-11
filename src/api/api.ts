@@ -1,24 +1,20 @@
-const API_URL = 'https://mate.academy/students-api/todos';
-const USER_URL = 'https://mate.academy/students-api/users/';
+const API_URL = 'https://mate.academy/students-api/';
 
-export function getAllTodo(): Promise<Todo[]> {
-  return fetch(API_URL)
+function request(url: string, errorMessage: string) {
+  return fetch(url)
     .then(response => {
       if (!response.ok) {
-        throw new Error(`${response.status} - list not found`);
+        throw new Error(`${response.status} - ${errorMessage}`);
       }
 
       return response.json();
     });
 }
 
-export function getUserDetail(userId: number): Promise<User> {
-  return fetch(`${USER_URL}${userId}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`${response.status} - user not found`);
-      }
+export function getAllTodo(): Promise<Todo[]> {
+  return request(`${API_URL}todos`, 'list not found');
+}
 
-      return response.json();
-    });
+export function getUserDetail(userId: number): Promise<User> {
+  return request(`${API_URL}users/${userId}`, 'user not found');
 }
