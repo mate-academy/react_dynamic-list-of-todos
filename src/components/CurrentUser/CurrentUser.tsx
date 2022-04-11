@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useState } from 'react';
-// import { getUser } from '../../api';
 import { BASE_URL } from '../../api';
 import './CurrentUser.scss';
 
@@ -10,17 +8,6 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId }) => {
   const [user, setUser] = useState<User | null>();
-  // const [id, setId] = useState<number>(userId);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const result = await getUser(userId);
-
-  //     setUser(result);
-  //   };
-
-  //   fetchUser();
-  // }, [userId]);
 
   const getUser = async (endpoint: number) => {
     const response = await fetch(`${BASE_URL}/users/${endpoint}`);
@@ -37,7 +24,6 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
 
   return (
     <>
-      {/* {userId === user?.id ? ( */}
       {userId === user?.id && (
         <>
           <div className="CurrentUser">
@@ -65,8 +51,6 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
             Clear
           </button>
         </>
-      // ) : (
-      //   <span>No user selected</span>
       )}
     </>
   );
