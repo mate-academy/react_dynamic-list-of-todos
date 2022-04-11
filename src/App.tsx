@@ -19,16 +19,13 @@ const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const handleUserSelect = (userId: number) => {
-    setSelectedUserId(userId);
-  };
-
   return (
     <div className="App">
       <div className="App__sidebar">
         <TodoList
           todos={todos}
-          onUserSelect={handleUserSelect}
+          onUserSelect={setSelectedUserId}
+          userId={selectedUserId}
         />
       </div>
 
@@ -36,6 +33,7 @@ const App: React.FC = () => {
         <div className="App__content-container">
           {selectedUserId ? (
             <CurrentUser
+              setCurrentUserId={setSelectedUserId}
               userId={selectedUserId}
             />
           ) : 'No user selected'}

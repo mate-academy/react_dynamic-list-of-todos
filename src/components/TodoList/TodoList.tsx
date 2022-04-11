@@ -1,19 +1,22 @@
-/* eslint-disable no-else-return */
-/* eslint-disable @typescript-eslint/indent */
-import React, { ChangeEvent, useState } from 'react';
+import React, {
+  ChangeEvent, Dispatch,
+  SetStateAction, useState,
+} from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 
 type Props = {
   todos: Todo[],
-  onUserSelect: (userId: number) => void,
+  onUserSelect: Dispatch<SetStateAction<number>>,
+  userId: number,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
+export const TodoList: React.FC<Props> = ({
+  todos, onUserSelect, userId,
+}) => {
   const [selectedTodo, setSelectedTodo] = useState(false);
   const [input, setInput] = useState('');
   const [select, setSelect] = useState('');
-  const [userId, setUserId] = useState<string | null>();
 
   // Get a new array to map, depending on Input Title
   let filteredTodos = todos
@@ -44,8 +47,8 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
 
         const activeTodos = filteredTodos
           .filter(todo => todo.title
-          .toLowerCase()
-          .includes(input.toLowerCase()));
+            .toLowerCase()
+            .includes(input.toLowerCase()));
 
         return activeTodos;
       }
@@ -55,8 +58,8 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
 
         const completedTodos = filteredTodos
           .filter(todo => todo.title
-          .toLowerCase()
-          .includes(input.toLowerCase()));
+            .toLowerCase()
+            .includes(input.toLowerCase()));
 
         return completedTodos;
       }
@@ -114,21 +117,14 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
                   {
                     'TodoList__user-button--selected': (
                       selectedTodo === true
-                      && (todo.userId.toString()) === userId
+                      && todo.userId === userId
                     ),
                   },
                 )}
                 type="button"
-                onClick={(e) => {
+                onClick={() => {
                   setSelectedTodo(prev => !prev);
                   onUserSelect(todo.userId);
-
-                  const id = e.currentTarget.textContent?.slice(-1);
-
-                  setUserId(id);
-
-                  // eslint-disable-next-line no-console
-                  console.log(id?.slice(-1), todo.userId);
                 }}
               >
                 User&nbsp;#

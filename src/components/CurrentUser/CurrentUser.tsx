@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  Dispatch, SetStateAction,
+  useEffect, useState,
+} from 'react';
+
 import { BASE_URL } from '../../api';
 import './CurrentUser.scss';
 
 type Props = {
-  userId: User['id'],
+  setCurrentUserId: Dispatch<SetStateAction<number>>
+  userId: number,
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId }) => {
+export const CurrentUser: React.FC<Props> = ({
+  userId, setCurrentUserId,
+}) => {
   const [user, setUser] = useState<User | null>();
 
   const getUser = async (endpoint: number) => {
     const response = await fetch(`${BASE_URL}/users/${endpoint}`);
-    const data: Promise<User> = await response.json();
+    const data = await response.json();
 
-    setUser(await data);
+    setUser(data);
   };
 
   useEffect(() => {
@@ -46,6 +53,7 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
             type="button"
             onClick={() => {
               setUser(null);
+              setCurrentUserId(0);
             }}
           >
             Clear
