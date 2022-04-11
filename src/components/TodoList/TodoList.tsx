@@ -37,8 +37,10 @@ export class TodoList extends React.Component<Props, State> {
   }
 
   getTodosBySearch = (todos: Todo[], searchInput: string): Todo[] => {
+    const searchInputLowerCase = searchInput.toLowerCase();
+
     return todos.filter(todo => (
-      todo.title.toLowerCase().includes(searchInput.toLowerCase())
+      todo.title.toLowerCase().includes(searchInputLowerCase)
     ));
   };
 
