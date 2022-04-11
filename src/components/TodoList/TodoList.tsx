@@ -12,7 +12,8 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
   const [selectedTodo, setSelectedTodo] = useState(false);
   const [input, setInput] = useState('');
-  const [selectTodo, setSelectTodo] = useState('');
+  const [select, setSelect] = useState('');
+  const [userId, setUserId] = useState<string | null>();
 
   // Get a new array to map, depending on Input Title
   let filteredTodos = todos
@@ -29,12 +30,12 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>): void => {
     const val = e.target.value;
 
-    setSelectTodo(val);
+    setSelect(val);
   };
 
   // Filtered Array of Todos depending on Input & Select Option
   const filterTodos = () => {
-    switch (selectTodo) {
+    switch (select) {
       case 'all':
         return filteredTodos;
 
@@ -79,7 +80,6 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
       />
 
       <select onChange={(e) => handleSelect(e)}>
-        {/* <option>select</option> */}
         <option value="all">all</option>
         <option value="active">active</option>
         <option value="completed">completed</option>
@@ -94,9 +94,9 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
               className={classNames(
                 'TodoList__item',
                 {
-                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--checked': todo.completed === true,
                   'TodoList__item--unchecked':
-                    !todo.completed,
+                    todo.completed === false,
                 },
               )}
             >
@@ -113,14 +113,22 @@ export const TodoList: React.FC<Props> = ({ todos, onUserSelect }) => {
                   'TodoList__user-button button',
                   {
                     'TodoList__user-button--selected': (
-                      selectedTodo === true && todo.completed
+                      selectedTodo === true
+                      && (todo.userId.toString()) === userId
                     ),
                   },
                 )}
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
                   setSelectedTodo(prev => !prev);
                   onUserSelect(todo.userId);
+
+                  const id = e.currentTarget.textContent?.slice(-1);
+
+                  setUserId(id);
+
+                  // eslint-disable-next-line no-console
+                  console.log(id?.slice(-1), todo.userId);
                 }}
               >
                 User&nbsp;#
