@@ -94,7 +94,14 @@ const App: React.FC = () => {
           Randomize
         </button>
         { isLoading
-          ? <img src="./image/Spinner-3.gif" alt="Loading" width="100px" height="100px" />
+          ? (
+            <img
+              src="./image/Spinner-3.gif"
+              alt="Loading"
+              width="100px"
+              height="100px"
+            />
+          )
           : (
             <TodoList
               todos={visibleTodos}

@@ -40,7 +40,10 @@ export const TodoList: React.FC<Props> = ({
               className={classnames(
                 'TodoList__user-button',
                 'button',
-                { 'TodoList__user-button--selected': (todo.userId === selectedUserId) },
+                {
+                  'TodoList__user-button--selected':
+                    (todo.userId === selectedUserId),
+                },
               )}
               type="button"
               onClick={() => selectId(todo.userId)}
