@@ -22,11 +22,13 @@ export const TodoList: React.FC<Props> = memo(({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
+    setSelected('all');
     onFilter('input', event.target.value);
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelected(event.target.value);
+    setTitle('');
     onFilter('select', event.target.value);
   };
 
