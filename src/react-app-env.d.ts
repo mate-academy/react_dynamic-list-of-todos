@@ -1,18 +1,18 @@
 /// <reference types="react-scripts" />
 
 interface Todo {
-  'id': number,
-  'createdAt': string,
-  'updatedAt': string,
-  'userId': number,
-  'title': string,
-  'completed': boolean,
+  id: number,
+  createdAt: string,
+  updatedAt: string,
+  userId: number,
+  title: string,
+  completed: boolean,
 }
 
 interface User {
-  'id': number,
-  'name': string,
-  'email': string,
-  'phone': number,
-  'error'?: string,
+  id: number,
+  name: string,
+  email: string,
+  phone: number,
+  error?: string,
 }
