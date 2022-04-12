@@ -1,25 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
 
 const App: React.FC = () => {
   const [
     selectedUserId,
-    // setSelectedUserId,
+    setSelectedUserId,
   ] = useState(0);
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+
+  const filterTodos = (source: string, value: string) => {
+    setFilteredTodos(todos
+      .filter(todo => {
+        if (source === 'input') {
+          return todo.title.includes(value);
+        }
+
+        switch (value) {
+          case 'active':
+            return todo.completed === false;
+          case 'completed':
+            return todo.completed === true;
+          case 'all':
+          default:
+            return todo;
+        }
+      }));
+  };
+
+  const selectUser = (userId: number) => {
+    setSelectedUserId(userId);
+  };
+
+  useEffect(() => {
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos([...todosFromServer]);
+      });
+  }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList />
+        <TodoList
+          todos={filteredTodos}
+          onSelect={selectUser}
+          onFilter={filterTodos}
+        />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser />
+            <CurrentUser
+              id={selectedUserId}
+              onClearSelection={selectUser}
+            />
           ) : 'No user selected'}
         </div>
       </div>

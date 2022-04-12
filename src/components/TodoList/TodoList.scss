@@ -3,6 +3,7 @@
 
   &__user-button--selected {
     background-color: #4d457b;
+    color: white;
   }
 
   &__list {
@@ -27,5 +28,9 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__form {
+    margin-bottom: 40px;
   }
 }
