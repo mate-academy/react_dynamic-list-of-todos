@@ -1,44 +1,110 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import cn from 'classnames';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface Props {
+  todos: Todo[];
+  selectedUserId: number;
+  selectUser: (userId: number) => void;
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Props> = React.memo(
+  ({
+    todos, selectedUserId, selectUser,
+  }) => {
+    const [query, setQuery] = useState('');
+    const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
+    const [selectedOption, setSelectedOption] = useState('all');
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    useEffect(() => {
+      setSelectedTodos(todos.filter(todo => {
+        const lowerCaseQuery = query.toLowerCase();
+        const lowerCaseTitle = todo.title.toLowerCase();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+        if (!lowerCaseTitle.includes(lowerCaseQuery)) {
+          return false;
+        }
+
+        switch (selectedOption) {
+          case 'active':
+            return !todo.completed;
+
+          case 'completed':
+            return todo.completed;
+
+          default:
+            return true;
+        }
+      }));
+    }, [selectedOption, query, todos]);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <input
+          className="TodoList__input"
+          type="text"
+          placeholder="Search title"
+          value={query}
+          onChange={event => setQuery(event.target.value)}
+        />
+
+        <select
+          className="TodoList__input"
+          value={selectedOption}
+          onChange={event => setSelectedOption(event.target.value)}
+        >
+          <option value="all">all</option>
+          <option value="active">active</option>
+          <option value="completed">completed</option>
+        </select>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {selectedTodos.map(({
+              id, completed, title, userId,
+            }) => (
+              <li
+                key={id}
+                className={cn(
+                  'TodoList__item',
+                  { 'TodoList__item--unchecked': !completed },
+                  { 'TodoList__item--checked': completed },
+                )}
+              >
+                <label htmlFor={String(id)}>
+                  <input
+                    type="checkbox"
+                    id={String(id)}
+                    checked={completed}
+                    readOnly
+                  />
+                  <p className="TodoList__title">
+                    {title}
+                  </p>
+                </label>
+
+                <button
+                  className={cn(
+                    'TodoList__user-button',
+                    // eslint-disable-next-line max-len
+                    { 'TodoList__user-button--selected': selectedUserId === userId },
+                    'button',
+                  )}
+                  type="button"
+                  onClick={() => {
+                    selectUser(userId);
+                  }}
+                >
+                  {`User# ${userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  },
 );

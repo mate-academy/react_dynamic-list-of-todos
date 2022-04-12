@@ -1,6 +1,33 @@
 .TodoList {
   width: 100%;
 
+  &__input {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    margin: 5px;
+    font-size: 1em;
+    color: #4d457b;
+    border-radius: 5px;
+    border: solid 1px #d3d3d3;
+
+    transition: box-shadow 0.2s, border-color 0.2s;
+
+    &::placeholder {
+      font-size: 0.9em;
+    }
+
+    &:hover {
+      box-shadow: 0 0 3px 0.5px #6d62ad;
+    }
+
+    &:focus {
+      box-shadow: 0 0 3px 2px #7d70c3;
+      outline: none;
+      border-color: #8374d5;
+    }
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
@@ -27,5 +54,11 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__title {
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 }
