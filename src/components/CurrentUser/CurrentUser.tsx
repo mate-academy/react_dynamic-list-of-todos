@@ -1,7 +1,7 @@
 import React, {
   useEffect, useState, memo, useCallback,
 } from 'react';
-import { getUser } from '../../api/api';
+import { getUserById } from '../../api/api';
 import './CurrentUser.scss';
 
 type Props = {
@@ -21,7 +21,7 @@ export const CurrentUser: React.FC<Props> = memo(({ userId, onClear }) => {
   useEffect(() => {
     clear();
 
-    getUser(userId)
+    getUserById(userId)
       .then(data => setUser(data))
       .catch(err => setError(err.message));
   }, [userId]);

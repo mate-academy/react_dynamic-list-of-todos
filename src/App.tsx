@@ -11,10 +11,10 @@ import { StatusQuery } from './StatusQuery';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [tasksStatusFilter, setTasksStatusFilter] = useState(StatusQuery.all);
+  const [tasksStatusFilter, setTasksStatusFilter] = useState(StatusQuery.All);
 
   useEffect(() => {
-    const query = tasksStatusFilter !== StatusQuery.all
+    const query = tasksStatusFilter !== StatusQuery.All
       ? `completed=${tasksStatusFilter}`
       : '';
 

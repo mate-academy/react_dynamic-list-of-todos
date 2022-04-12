@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent, memo, useEffect, useState,
+  ChangeEvent, memo, useMemo, useState,
 } from 'react';
 import '../../styles/general.scss';
 import { StatusQuery } from '../../StatusQuery';
@@ -15,19 +15,16 @@ type Props = {
 export const TodoList: React.FC<Props> = memo(({
   todos, onSelectUser, selectedUserId, onSelectStatus,
 }) => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [query, setQuery] = useState('');
 
-  const filterTodos = (tilteQuery: string) => {
-    const newTodos = todos.filter(({ title }) => {
-      return title.toLowerCase().includes(tilteQuery.toLowerCase());
-    });
+  const filteredTodos = useMemo(() => {
+    return todos.filter(({ title }) => (
+      title.toLowerCase()
+        .includes(query.toLowerCase())
+    ));
+  }, [todos, query]);
 
-    setVisibleTodos(newTodos);
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => filterTodos(event.target.value);
-
-  useEffect(() => setVisibleTodos(todos), [todos]);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
   return (
     <div className="TodoList">
@@ -37,6 +34,7 @@ export const TodoList: React.FC<Props> = memo(({
         type="text"
         className="input input--center input--outline"
         onChange={handleChange}
+        value={query}
       />
 
       <select
@@ -45,15 +43,15 @@ export const TodoList: React.FC<Props> = memo(({
         id="statusSelector"
         onChange={(event) => onSelectStatus(event.target.value)}
       >
-        <option value={StatusQuery.all}>all</option>
-        <option value={StatusQuery.active}>active</option>
-        <option value={StatusQuery.completed}>completed</option>
+        <option value={StatusQuery.All}>all</option>
+        <option value={StatusQuery.Active}>active</option>
+        <option value={StatusQuery.Completed}>completed</option>
       </select>
 
       <div className="TodoList__list-container">
-        {visibleTodos.length ? (
+        {todos.length ? (
           <ul className="TodoList__list">
-            {visibleTodos.map(({
+            {filteredTodos.map(({
               completed, title, userId, id,
             }) => (
               <li

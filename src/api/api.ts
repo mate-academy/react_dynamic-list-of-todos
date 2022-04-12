@@ -7,4 +7,4 @@ const request = (url: string) => {
 
 export const getTodo = (params = '') => request(`/todos?${params}`);
 
-export const getUser = (id: number) => request(`/users/${id}/`);
+export const getUserById = (id: number) => request(`/users/${id}/`);
