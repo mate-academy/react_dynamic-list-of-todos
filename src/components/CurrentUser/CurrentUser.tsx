@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import { Triangle } from 'react-loader-spinner';
 import { getUser } from '../../api';
@@ -6,10 +7,13 @@ import './CurrentUser.scss';
 
 export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
     setUser(null);
-    getUser(userId).then(loadedUser => setUser(loadedUser));
+    getUser(userId)
+      .then(loadedUser => setUser(loadedUser))
+      .catch(() => setHasError(true));
   }, [userId]);
 
   return (
@@ -35,7 +39,8 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
             Clear
           </button>
         </>
-      ) : (<Triangle ariaLabel="loading-indicator" />)}
+      ) : (!hasError ? <Triangle ariaLabel="loading-indicator" />
+        : 'Error: No user information was founded')}
     </div>
   );
 };
