@@ -1,5 +1,10 @@
 /* eslint-disable no-plusplus */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -18,7 +23,7 @@ const App: React.FC = () => {
     getTodos().then(loadedTodos => setTodos(loadedTodos));
   }, []);
 
-  const selectHandler = (event:React.ChangeEvent<HTMLSelectElement>) => {
+  const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
   };
 
@@ -27,7 +32,7 @@ const App: React.FC = () => {
     [],
   );
 
-  const selectUser = (userId:number) => {
+  const selectUser = (userId: number) => {
     setSelectedUserId(userId);
   };
 
@@ -39,16 +44,18 @@ const App: React.FC = () => {
     return todos.filter(todo => {
       switch (selectedStatus) {
         case 'completed':
-          return todo.title.toLowerCase().startsWith(appliedQuery) && todo.completed;
+          return todo.title.toLowerCase().startsWith(appliedQuery)
+            && todo.completed;
         case 'active':
-          return todo.title.toLowerCase().startsWith(appliedQuery) && !todo.completed;
+          return todo.title.toLowerCase().startsWith(appliedQuery)
+            && !todo.completed;
         default:
           return todo.title.toLowerCase().startsWith(appliedQuery);
       }
     });
   };
 
-  const shuffleTodos = () => {
+  const shuffleTodos = useCallback(() => {
     const shuffled = [...todos];
 
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -60,9 +67,12 @@ const App: React.FC = () => {
     }
 
     setTodos(shuffled);
-  };
+  }, [todos]);
 
-  const filtredTodos = getFiltredTodos();
+  const filtredTodos = useMemo(
+    getFiltredTodos,
+    [appliedQuery, selectedStatus, todos],
+  );
 
   return (
     <div className="App">
