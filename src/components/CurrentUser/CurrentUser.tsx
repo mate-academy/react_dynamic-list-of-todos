@@ -19,6 +19,7 @@ export const CurrentUser: React.FC<Props> = React.memo(
         .then(user => {
           setSelectedUser(user);
           setIsLoaded(true);
+          setHasError(false);
         })
         .catch(() => setHasError(true));
     }, [userId]);
