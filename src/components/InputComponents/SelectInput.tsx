@@ -1,6 +1,5 @@
 import React, { FC, memo } from 'react';
 import classNames from 'classnames';
-import 'bulma';
 
 interface Option {
   id: number,

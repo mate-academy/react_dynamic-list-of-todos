@@ -1,17 +1,18 @@
 import React, { memo, useState } from 'react';
+import classNames from 'classnames';
 import { TextInput } from '../InputComponents/TextInput';
 import './TodoList.scss';
-import 'bulma';
 import { SelectInput } from '../InputComponents/SelectInput';
 
 interface Props {
   todos: Todo[],
+  id: number,
   onSelect: (id: number) => void,
   onFilter: (source: string, value: string) => void,
 }
 
 export const TodoList: React.FC<Props> = memo(({
-  todos, onSelect, onFilter,
+  todos, id, onSelect, onFilter,
 }) => {
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState('all');
@@ -40,7 +41,7 @@ export const TodoList: React.FC<Props> = memo(({
 
   return (
     <div className="TodoList">
-      <h2>Todos:</h2>
+      <h2 className="title">Todos:</h2>
 
       <form onSubmit={handleSubmit} className="TodoList__form">
         <TextInput
@@ -75,11 +76,10 @@ export const TodoList: React.FC<Props> = memo(({
               </label>
 
               <button
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
+                className={classNames(
+                  'TodoList__user-button',
+                  { 'TodoList__user-button--selected': todo.userId === id },
+                )}
                 type="button"
                 onClick={() => onSelect(todo.userId)}
               >

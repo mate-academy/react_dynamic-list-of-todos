@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
+import 'bulma';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
@@ -50,6 +51,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           todos={filteredTodos}
+          id={selectedUserId}
           onSelect={selectUser}
           onFilter={filterTodos}
         />
