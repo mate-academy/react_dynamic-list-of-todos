@@ -19,7 +19,19 @@ export const TodoList: React.FC<Props> = React.memo(({
     );
   };
 
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => filterTodos(e.target.value);
+  const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => filterTodos(e.target.value);
+  const changeQueryHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (e.target.value) {
+      case 'true':
+        changeQuery(true);
+        break;
+      case 'false':
+        changeQuery(false);
+        break;
+      default:
+        changeQuery(null);
+    }
+  };
 
   useEffect(() => setCurrentTodos(todos), [todos]);
 
@@ -29,24 +41,11 @@ export const TodoList: React.FC<Props> = React.memo(({
 
       <input
         type="text"
-        onChange={changeHandler}
+        onChange={searchHandler}
       />
 
       <select
-        name="status"
-        id="status"
-        onChange={(e) => {
-          switch (e.target.value) {
-            case 'true':
-              changeQuery(true);
-              break;
-            case 'false':
-              changeQuery(false);
-              break;
-            default:
-              changeQuery(null);
-          }
-        }}
+        onChange={changeQueryHandler}
       >
         <option value="null">all</option>
         <option value="false">active</option>
