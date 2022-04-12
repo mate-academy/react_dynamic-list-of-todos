@@ -1,7 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types';
@@ -87,6 +83,7 @@ interface Props {
   todos: Todo[],
   selectUser: (userId: number) => void,
   selectedUser: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   changeQuery: (...args: any[]) => void,
   changeSelectedStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   randomizeTodos: () => void,
