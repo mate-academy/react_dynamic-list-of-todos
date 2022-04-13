@@ -4,6 +4,7 @@ import React, {
 
 import './App.scss';
 import './styles/general.scss';
+import './styles/form.scss';
 
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';

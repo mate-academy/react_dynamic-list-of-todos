@@ -28,4 +28,12 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__form {
+    display: flex;
+    gap: 10px;
+    border-radius: 10px;
+    padding: 15px 10px;
+    background-color: #908ba9;
+  }
 }

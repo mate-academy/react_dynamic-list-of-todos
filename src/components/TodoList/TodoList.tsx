@@ -76,20 +76,20 @@ export const TodoList: React.FC<Props> = memo(({
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
-        <form className="form">
+        <form className="TodoList__form form">
           <input
             type="text"
             id="todos-title-input"
             name="todos-title-input"
-            className=""
+            className="form__title-input"
             value={todoTitle}
             onChange={handleChange}
           />
 
           <select
-            id="todos-status-seletor"
+            id="todos-status-selector"
             name="todos-status-selector"
-            className=""
+            className="form__status-selector"
             value={todoStatus}
             onChange={handleChange}
           >
