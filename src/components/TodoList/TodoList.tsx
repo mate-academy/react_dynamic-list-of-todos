@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import './TodoList.scss';
 
 import cn from 'classnames';
@@ -14,11 +14,10 @@ export const TodoList: React.FC<Props> = React.memo(
     todos, selectedUserId, selectUser,
   }) => {
     const [query, setQuery] = useState('');
-    const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
     const [selectedOption, setSelectedOption] = useState('all');
 
-    useEffect(() => {
-      setSelectedTodos(todos.filter(todo => {
+    const visibledTodos = useMemo(() => (
+      todos.filter(todo => {
         const lowerCaseQuery = query.toLowerCase();
         const lowerCaseTitle = todo.title.toLowerCase();
 
@@ -36,8 +35,8 @@ export const TodoList: React.FC<Props> = React.memo(
           default:
             return true;
         }
-      }));
-    }, [selectedOption, query, todos]);
+      })
+    ), [selectedOption, query, todos]);
 
     return (
       <div className="TodoList">
@@ -63,7 +62,7 @@ export const TodoList: React.FC<Props> = React.memo(
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
-            {selectedTodos.map(({
+            {visibledTodos.map(({
               id, completed, title, userId,
             }) => (
               <li
