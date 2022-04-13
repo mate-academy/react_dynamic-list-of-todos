@@ -14,6 +14,8 @@ interface TodosContextInterface {
   setTodoTitle: React.Dispatch<React.SetStateAction<string>>,
   todoStatus: TodoStatus,
   setTodoStatus: React.Dispatch<React.SetStateAction<TodoStatus>>,
+  hasLoadingError: boolean,
+  setHasLoadingError: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const TodosContext
@@ -24,12 +26,15 @@ export const TodosContext
     setTodoTitle: () => {},
     todoStatus: TodoStatus.all,
     setTodoStatus: () => {},
+    hasLoadingError: false,
+    setHasLoadingError: () => {},
   });
 
 export const TodosProvider: React.FC = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
   const [todoStatus, setTodoStatus] = useState(TodoStatus.all);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
     getTodos()
@@ -43,7 +48,9 @@ export const TodosProvider: React.FC = ({ children }) => {
     setTodoTitle,
     todoStatus,
     setTodoStatus,
-  }), [todos, todoTitle, todoStatus]);
+    hasLoadingError,
+    setHasLoadingError,
+  }), [todos, todoTitle, todoStatus, hasLoadingError]);
 
   return (
     <TodosContext.Provider value={contextValue}>

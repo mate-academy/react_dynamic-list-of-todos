@@ -1,5 +1,5 @@
 import React, {
-  Dispatch, memo, SetStateAction, useContext, useEffect, useMemo,
+  Dispatch, memo, SetStateAction, useContext, useMemo,
 } from 'react';
 
 import './TodoList.scss';
@@ -44,8 +44,8 @@ export const TodoList: React.FC<Props> = memo(({
     }
   };
 
-  const prepareTodos = (preparedTodos: Todo[]) => (
-    preparedTodos.filter(todo => {
+  const prepareTodos = (todosToPrepare: Todo[]) => (
+    todosToPrepare.filter(todo => {
       const lowerTodoTitle = todo.title.toLowerCase();
       const lowerSearchWords = todoTitle.toLowerCase();
 
@@ -67,9 +67,6 @@ export const TodoList: React.FC<Props> = memo(({
 
   const visibleTodos = useMemo(() => prepareTodos(todos),
     [todoTitle, todoStatus, todos]);
-
-  useEffect(() => {
-  }, [todoTitle, todoStatus]);
 
   return (
     <>

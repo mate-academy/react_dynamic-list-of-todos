@@ -1,11 +1,13 @@
 import React, {
-  Dispatch, memo, SetStateAction,
+  Dispatch, memo, SetStateAction, useContext,
   useEffect, useState,
 } from 'react';
 
 import './CurrentUser.scss';
 
 import { getUser } from '../../API/api';
+import { TodosContext } from '../../TodosContext';
+import { LoadingError } from '../LoadingError';
 
 interface Props {
   selectedUserId: number,
@@ -17,42 +19,49 @@ export const CurrentUser: React.FC<Props> = memo(({
   setSelectedUserId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const { hasLoadingError, setHasLoadingError } = useContext(TodosContext);
 
   useEffect(() => {
+    setHasLoadingError(false);
+    setUser(null);
     getUser(selectedUserId)
-      .then(loadedUser => setUser(loadedUser));
-  }, [selectedUserId, setSelectedUserId]);
+      .then(loadedUser => setUser(loadedUser))
+      .catch(() => setHasLoadingError(true));
+  }, [selectedUserId, setSelectedUserId, setHasLoadingError]);
 
   return (
     <>
-      {user === null
-        ? 'User is loading'
-        : (
-          <div className="CurrentUser">
-            <h2 className="CurrentUser__title">
-              <span>
-                {`Selected user: ${user?.id}`}
-              </span>
-            </h2>
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {!user ? (
+        hasLoadingError
+          ? <LoadingError />
+          : 'User is loading'
+      ) : (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              {`Selected user: ${user?.id}`}
+            </span>
+          </h2>
 
-            <h3 className="CurrentUser__name">{user?.name}</h3>
+          <h3 className="CurrentUser__name">{user?.name}</h3>
 
-            <p className="CurrentUser__email">{user?.email}</p>
+          <p className="CurrentUser__email">{user?.email}</p>
 
-            <p className="CurrentUser__phone">{user?.phone}</p>
+          <p className="CurrentUser__phone">{user?.phone}</p>
 
-            <button
-              className="
+          <button
+            className="
           CurrentUser__clear
           button
         "
-              type="button"
-              onClick={() => setSelectedUserId(0)}
-            >
-              Clear
-            </button>
-          </div>
-        )}
+            type="button"
+            onClick={() => setSelectedUserId(0)}
+          >
+            Clear
+          </button>
+        </div>
+      )}
     </>
   );
 });
