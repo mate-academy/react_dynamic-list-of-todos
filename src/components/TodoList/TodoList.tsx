@@ -1,44 +1,88 @@
-import React from 'react';
+/* eslint-disable no-console */
+
 import './TodoList.scss';
+import {
+  FC, memo, useCallback, useEffect, useState,
+} from 'react';
+import { TodoItem } from '../TodoItem';
+import { SelectOptions } from '../../enums/SelectOptions';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[];
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: FC<Props> = memo(({ todos }) => {
+  const [query, setQuery] = useState('');
+  const [option, setOption] = useState(String(SelectOptions.All));
+  const [processedTodos, setProcessedTodos] = useState<Todo[]>(todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const queryContains = useCallback((title: string) => (
+    title.toLowerCase().includes(query.toLowerCase())
+  ), [todos, query, option]);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  useEffect(() => {
+    const getProcessedTodos = (): Todo[] => (
+      todos.filter(({ title, completed }) => {
+        switch (option) {
+          case SelectOptions.All:
+            return queryContains(title);
+          case SelectOptions.Completed:
+            return queryContains(title) && completed;
+          case SelectOptions.Active:
+            return queryContains(title) && !completed;
+          default:
+            return false;
+        }
+      })
+    );
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+    setProcessedTodos(getProcessedTodos);
+  }, [todos, query, option]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos</h2>
+
+      <div className="TodoList__controllers">
+        <label>
+          <input
+            type="text"
+            placeholder="Enter your todo..."
+            autoComplete="off"
+            value={query}
+            onChange={({ target }) => setQuery(target.value)}
+          />
+        </label>
+
+        <select
+          value={option}
+          onChange={({ target }) => setOption(target.value)}
+        >
+          {Object.keys(SelectOptions).map(selectOption => (
+            <option
+              key={selectOption}
+              value={selectOption}
+            >
+              {selectOption}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {processedTodos.map(({
+            id, userId, title, completed,
+          }) => (
+            <TodoItem
+              key={id}
+              userId={userId}
+              title={title}
+              completed={completed}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+});
