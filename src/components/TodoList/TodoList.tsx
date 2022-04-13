@@ -24,11 +24,19 @@ export const TodoList: React.FC<Props> = memo(({
       <ul className="TodoList__list">
         {todos.map(todo => (
           <li
-            className="TodoList__item TodoList__item--unchecked"
+            className={classNames(
+              'TodoList__item',
+              { 'TodoList__item--unchecked': !todo.completed },
+              { 'TodoList__item--checked': todo.completed },
+            )}
             key={todo.id}
           >
             <label>
-              <input type="checkbox" readOnly />
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                readOnly
+              />
               <p>{todo.title}</p>
             </label>
 
