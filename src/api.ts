@@ -1,7 +1,5 @@
-const API_URL_TODOS = 'https://mate.academy/students-api/todos';
-
 export function getTodos(): Promise<Todo[]> {
-  return fetch(API_URL_TODOS)
+  return fetch('https://mate.academy/students-api/todos')
     .then(response => response.json());
 }
 
