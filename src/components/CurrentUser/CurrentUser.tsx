@@ -10,6 +10,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
+    setHasError(false);
     setUser(null);
     getUser(userId)
       .then(loadedUser => setUser(loadedUser))
@@ -27,7 +28,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
             </span>
           </h2>
 
-          {/* <h3 className="CurrentUser__name">{user.name}</h3> */}
+          <h3 className="CurrentUser__name">{user.name}</h3>
           <p className="CurrentUser__email">{user.email}</p>
           <p className="CurrentUser__phone">{user.phone}</p>
 
