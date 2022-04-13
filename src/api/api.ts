@@ -9,6 +9,6 @@ export function getTodos(): Promise<Todo[]> {
   return request('/todos');
 }
 
-export function getCurrentUser(userId: number): Promise<User> {
+export function getUserById(userId: number): Promise<User> {
   return request(`/users/${userId}/`);
 }

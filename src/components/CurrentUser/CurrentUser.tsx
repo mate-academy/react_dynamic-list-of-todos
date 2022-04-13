@@ -1,7 +1,7 @@
 import React, {
   memo, useContext, useEffect, useState,
 } from 'react';
-import { getCurrentUser } from '../../api/api';
+import { getUserById } from '../../api/api';
 import './CurrentUser.scss';
 import { SelectUserIdContext } from '../../contexts/SelectUserIdContext';
 
@@ -10,7 +10,7 @@ export const CurrentUser: React.FC = memo(() => {
   const { selectedUserId, setSelectedUserId } = useContext(SelectUserIdContext);
 
   useEffect(() => {
-    getCurrentUser(selectedUserId)
+    getUserById(selectedUserId)
       .then(data => setUser(data));
   }, [selectedUserId]);
 

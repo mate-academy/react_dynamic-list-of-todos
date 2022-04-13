@@ -1,5 +1,5 @@
 import React, {
-  memo, useState, useEffect,
+  memo, useState, useMemo,
 } from 'react';
 import { TodoItem } from '../TodoItem';
 import './TodoList.scss';
@@ -16,31 +16,26 @@ enum SelectOptions {
 
 export const TodoList: React.FC<Props> = memo(({ todos }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedValue, setSelectedValue] = useState(String(SelectOptions.All));
 
-  useEffect(() => {
-    const toFilter = () => (
-      todos.filter(({ title, completed }) => {
-        switch (selectedValue) {
-          case SelectOptions.All:
-            return title.toLowerCase().includes(searchValue.toLowerCase());
-          case SelectOptions.Completed:
-            return title.toLowerCase().includes(searchValue.toLowerCase()) && (
-              completed
-            );
-          case SelectOptions.Active:
-            return title.toLowerCase().includes(searchValue.toLowerCase()) && (
-              !completed
-            );
-          default:
-            return false;
-        }
-      })
-    );
-
-    setFilteredTodos(toFilter);
-  }, [todos, searchValue, selectedValue]);
+  const filteredTodos = useMemo(() => (
+    todos.filter(({ title, completed }) => {
+      switch (selectedValue) {
+        case SelectOptions.All:
+          return title.toLowerCase().includes(searchValue.toLowerCase());
+        case SelectOptions.Completed:
+          return title.toLowerCase().includes(searchValue.toLowerCase()) && (
+            completed
+          );
+        case SelectOptions.Active:
+          return title.toLowerCase().includes(searchValue.toLowerCase()) && (
+            !completed
+          );
+        default:
+          return false;
+      }
+    })
+  ), [todos, searchValue, selectedValue]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
