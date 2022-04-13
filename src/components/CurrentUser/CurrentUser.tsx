@@ -1,5 +1,5 @@
 import React, {
-  Dispatch, SetStateAction,
+  Dispatch, memo, SetStateAction,
   useEffect, useState,
 } from 'react';
 
@@ -12,7 +12,7 @@ interface Props {
   setSelectedUserId: Dispatch<SetStateAction<number>>,
 }
 
-export const CurrentUser: React.FC<Props> = ({
+export const CurrentUser: React.FC<Props> = memo(({
   selectedUserId,
   setSelectedUserId,
 }) => {
@@ -49,4 +49,4 @@ export const CurrentUser: React.FC<Props> = ({
       </button>
     </div>
   );
-};
+});

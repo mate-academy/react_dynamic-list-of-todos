@@ -1,10 +1,10 @@
 import React, {
-  Dispatch, memo, SetStateAction, useContext,
+  Dispatch, memo, SetStateAction, useContext, useEffect, useMemo,
 } from 'react';
 
 import './TodoList.scss';
 
-import { TodosContext } from '../../TodosContext';
+import { TodosContext, TodoStatus } from '../../TodosContext';
 
 interface Props {
   selectedUserId: number,
@@ -15,33 +15,92 @@ export const TodoList: React.FC<Props> = memo(({
   selectedUserId,
   setSelectedUserId,
 }) => {
-  const { todos } = useContext(TodosContext);
+  const {
+    todos,
+    todoStatus,
+    setTodoStatus,
+    todoTitle,
+    setTodoTitle,
+  } = useContext(TodosContext);
+
+  const handleChange = (event: React.ChangeEvent<
+  HTMLFormElement
+  | HTMLSelectElement
+  | HTMLInputElement
+  >) => {
+    const { value, name } = event.target;
+
+    switch (name) {
+      case 'todos-status-selector':
+        setTodoStatus(value);
+        break;
+
+      case 'todos-title-input':
+        setTodoTitle(value);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const prepareTodos = (preparedTodos: Todo[]) => (
+    preparedTodos.filter(todo => {
+      const lowerTodoTitle = todo.title.toLowerCase();
+      const lowerSearchWords = todoTitle.toLowerCase();
+
+      const getStatus = (status: TodoStatus) => {
+        switch (status) {
+          case TodoStatus.active:
+            return todo.completed === false;
+          case TodoStatus.completed:
+            return todo.completed === true;
+          default:
+            return true;
+        }
+      };
+
+      return lowerTodoTitle.includes(lowerSearchWords)
+        && getStatus(todoStatus);
+    })
+  );
+
+  const visibleTodos = useMemo(() => prepareTodos(todos),
+    [todoTitle, todoStatus, todos]);
+
+  useEffect(() => {
+  }, [todoTitle, todoStatus]);
 
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
-        <input
-          type="text"
-          id="title-input"
-          name="title-input"
-          // value={todoTitle}
-        />
+        <form className="form">
+          <input
+            type="text"
+            id="todos-title-input"
+            name="todos-title-input"
+            className=""
+            value={todoTitle}
+            onChange={handleChange}
+          />
 
-        <select>
-          <option>
-            {1234}
-          </option>
-          <option>
-            {123}
-          </option>
-          <option>
-            {123}
-          </option>
-        </select>
+          <select
+            id="todos-status-seletor"
+            name="todos-status-selector"
+            className=""
+            value={todoStatus}
+            onChange={handleChange}
+          >
+            {Object.keys(TodoStatus).map(option => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+        </form>
+
         <ul className="TodoList__list">
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             <li
               className={`TodoList__item TodoList__item--${
                 todo.completed

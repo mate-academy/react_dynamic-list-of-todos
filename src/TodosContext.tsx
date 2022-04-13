@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './API/api';
 
-enum TodoStatus {
-  all,
-  active,
-  completed,
+export enum TodoStatus {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
 }
 
 interface TodosContextInterface {
