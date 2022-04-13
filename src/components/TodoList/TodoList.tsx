@@ -37,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
   };
 
   // Filtered Array of Todos depending on Input & Select Option
-  const filterTodos = () => {
+  const getFilteredTodos = () => {
     switch (select) {
       case 'all':
         return filteredTodos;
@@ -45,23 +45,13 @@ export const TodoList: React.FC<Props> = ({
       case 'active': {
         filteredTodos = todos.filter(todo => todo.completed === false);
 
-        const activeTodos = filteredTodos
-          .filter(todo => todo.title
-            .toLowerCase()
-            .includes(input.toLowerCase()));
-
-        return activeTodos;
+        return filteredTodos;
       }
 
       case 'completed': {
         filteredTodos = todos.filter(todo => todo.completed === true);
 
-        const completedTodos = filteredTodos
-          .filter(todo => todo.title
-            .toLowerCase()
-            .includes(input.toLowerCase()));
-
-        return completedTodos;
+        return filteredTodos;
       }
 
       default:
@@ -69,7 +59,10 @@ export const TodoList: React.FC<Props> = ({
     }
   };
 
-  const newTodos = filterTodos();
+  const newTodos = getFilteredTodos()
+    .filter(todo => todo.title
+      .toLowerCase()
+      .includes(input.toLowerCase()));
 
   return (
     <div className="TodoList">

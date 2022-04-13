@@ -6,12 +6,3 @@ export const getAllTodos = async () => {
 
   return todos;
 };
-
-// export const getUser = async (endpoint: number) => {
-//   const response = await fetch(`${BASE_URL}/users/${endpoint}`);
-//   const data: Promise<User> = await response.json();
-
-//   return data;
-
-//   // setUser(await data);
-// };

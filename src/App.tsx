@@ -9,13 +9,13 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const fetchTodos = async () => {
+    const result = await getAllTodos();
+
+    setTodos(result);
+  };
+
   useEffect(() => {
-    const fetchTodos = async () => {
-      const result = await getAllTodos();
-
-      setTodos(result);
-    };
-
     fetchTodos();
   }, []);
 
