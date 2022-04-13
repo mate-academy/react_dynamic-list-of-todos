@@ -12,41 +12,39 @@ interface Props {
 
 export const TodoList: React.FC<Props> = memo(({
   todos, id, onSelect, onFilter,
-}) => {
-  return (
-    <div className="TodoList">
-      <h2 className="title">Todos:</h2>
+}) => (
+  <div className="TodoList">
+    <h2 className="title">Todos:</h2>
 
-      <FormSection
-        onFilter={onFilter}
-      />
+    <FormSection
+      onFilter={onFilter}
+    />
 
-      <div className="TodoList__list-container">
-        <ul className="TodoList__list">
-          {todos.map(todo => (
-            <li
-              className="TodoList__item TodoList__item--unchecked"
-              key={todo.id}
+    <div className="TodoList__list-container">
+      <ul className="TodoList__list">
+        {todos.map(todo => (
+          <li
+            className="TodoList__item TodoList__item--unchecked"
+            key={todo.id}
+          >
+            <label>
+              <input type="checkbox" readOnly />
+              <p>{todo.title}</p>
+            </label>
+
+            <button
+              className={classNames(
+                'TodoList__user-button',
+                { 'TodoList__user-button--selected': todo.userId === id },
+              )}
+              type="button"
+              onClick={() => onSelect(todo.userId)}
             >
-              <label>
-                <input type="checkbox" readOnly />
-                <p>{todo.title}</p>
-              </label>
-
-              <button
-                className={classNames(
-                  'TodoList__user-button',
-                  { 'TodoList__user-button--selected': todo.userId === id },
-                )}
-                type="button"
-                onClick={() => onSelect(todo.userId)}
-              >
-                {`User #${todo.userId}`}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+              {`User #${todo.userId}`}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
-  );
-});
+  </div>
+));
