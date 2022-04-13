@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import React, {
   useCallback,
   useEffect,
@@ -23,7 +22,7 @@ const App: React.FC = () => {
     getTodos().then(loadedTodos => setTodos(loadedTodos));
   }, []);
 
-  const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
   };
 
@@ -58,7 +57,7 @@ const App: React.FC = () => {
   const shuffleTodos = useCallback(() => {
     const shuffled = [...todos];
 
-    for (let i = shuffled.length - 1; i > 0; i--) {
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
       const currTodo = shuffled[i];
       const randomIndex = Math.floor(Math.random() * (i + 1));
 
@@ -82,7 +81,7 @@ const App: React.FC = () => {
           selectUser={selectUser}
           selectedUser={selectedUserId}
           changeQuery={applyQuery}
-          changeSelectedStatus={selectHandler}
+          changeSelectedStatus={handleSelect}
           randomizeTodos={shuffleTodos}
         />
       </div>

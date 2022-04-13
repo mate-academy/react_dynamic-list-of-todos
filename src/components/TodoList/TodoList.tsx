@@ -83,8 +83,7 @@ interface Props {
   todos: Todo[],
   selectUser: (userId: number) => void,
   selectedUser: number,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  changeQuery: (...args: any[]) => void,
+  changeQuery: (...args: unknown[]) => void,
   changeSelectedStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   randomizeTodos: () => void,
 }
