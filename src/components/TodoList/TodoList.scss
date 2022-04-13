@@ -1,8 +1,20 @@
 .TodoList {
   width: 100%;
 
+  &__user-button {
+    background-color: white;
+    padding: 8px;
+    color: #4d457b;
+    border-radius: 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
+    color: white;
   }
 
   &__list {
