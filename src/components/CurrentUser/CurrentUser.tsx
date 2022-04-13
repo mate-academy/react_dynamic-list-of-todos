@@ -1,34 +1,30 @@
 import React, {
-  Dispatch, memo, SetStateAction, useEffect, useState,
+  Dispatch, SetStateAction,
+  useEffect, useState,
 } from 'react';
+
 import './CurrentUser.scss';
+
 import { getUser } from '../../API/api';
 
 interface Props {
-  userId: number,
-  onClick: Dispatch<SetStateAction<number>>,
+  selectedUserId: number,
+  setSelectedUserId: Dispatch<SetStateAction<number>>,
 }
 
-export const CurrentUser: React.FC<Props> = memo(({ userId, onClick }) => {
+export const CurrentUser: React.FC<Props> = ({
+  selectedUserId,
+  setSelectedUserId,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userId)
+    getUser(selectedUserId)
       .then(loadedUser => setUser(loadedUser));
-  }, [userId]);
+  }, [selectedUserId, setSelectedUserId]);
 
   return (
     <div className="CurrentUser">
-      <button
-        className="
-          CurrentUser__clear
-          button
-        "
-        type="button"
-        onClick={() => onClick(0)}
-      >
-        Clear
-      </button>
       <h2 className="CurrentUser__title">
         <span>
           {`Selected user: ${user?.id}`}
@@ -36,8 +32,21 @@ export const CurrentUser: React.FC<Props> = memo(({ userId, onClick }) => {
       </h2>
 
       <h3 className="CurrentUser__name">{user?.name}</h3>
+
       <p className="CurrentUser__email">{user?.email}</p>
+
       <p className="CurrentUser__phone">{user?.phone}</p>
+
+      <button
+        className="
+          CurrentUser__clear
+          button
+        "
+        type="button"
+        onClick={() => setSelectedUserId(0)}
+      >
+        Clear
+      </button>
     </div>
   );
-});
+};

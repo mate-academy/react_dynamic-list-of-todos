@@ -1,27 +1,22 @@
-import React, { Dispatch, memo, SetStateAction } from 'react';
+import React, {
+  Dispatch, memo, SetStateAction, useContext,
+} from 'react';
+
 import './TodoList.scss';
 
-enum TodoStatus {
-  all,
-  active,
-  completed,
-}
+import { TodosContext } from '../../TodosContext';
 
 interface Props {
-  todos: Todo[],
   selectedUserId: number,
-  todoTitle: string,
-  todoStatus: TodoStatus,
-  onClick: Dispatch<SetStateAction<number>>,
+  setSelectedUserId: Dispatch<SetStateAction<number>>,
 }
 
 export const TodoList: React.FC<Props> = memo(({
-  todos,
   selectedUserId,
-  todoTitle,
-  todoStatus,
-  onClick,
+  setSelectedUserId,
 }) => {
+  const { todos } = useContext(TodosContext);
+
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
@@ -31,10 +26,16 @@ export const TodoList: React.FC<Props> = memo(({
           type="text"
           id="title-input"
           name="title-input"
-          value={todoTitle}
+          // value={todoTitle}
         />
 
         <select>
+          <option>
+            {1234}
+          </option>
+          <option>
+            {123}
+          </option>
           <option>
             {123}
           </option>
@@ -66,7 +67,7 @@ export const TodoList: React.FC<Props> = memo(({
                   }`
                 }
                 type="button"
-                onClick={() => onClick(todo.userId)}
+                onClick={() => setSelectedUserId(todo.userId)}
               >
                 {`User #${todo.userId}`}
               </button>
