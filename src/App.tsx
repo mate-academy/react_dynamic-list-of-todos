@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import 'bulma';
@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
-  const filterTodos = (source: string, value: string) => {
+  const filterTodos = useCallback((source: string, value: string) => {
     setFilteredTodos(todos
       .filter(todo => {
         if (source === 'input') {
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             return todo;
         }
       }));
-  };
+  }, [filteredTodos]);
 
   const selectUser = (userId: number) => {
     setSelectedUserId(userId);
