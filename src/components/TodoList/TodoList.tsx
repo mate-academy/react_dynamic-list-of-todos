@@ -72,68 +72,74 @@ export const TodoList: React.FC<Props> = memo(({
   }, [todoTitle, todoStatus]);
 
   return (
-    <div className="TodoList">
-      <h2>Todos:</h2>
+    <>
+      {todos.length <= 0
+        ? 'Todos are loading'
+        : (
+          <div className="TodoList">
+            <h2>Todos:</h2>
 
-      <div className="TodoList__list-container">
-        <form className="TodoList__form form">
-          <input
-            type="text"
-            id="todos-title-input"
-            name="todos-title-input"
-            className="form__title-input"
-            value={todoTitle}
-            onChange={handleChange}
-          />
-
-          <select
-            id="todos-status-selector"
-            name="todos-status-selector"
-            className="form__status-selector"
-            value={todoStatus}
-            onChange={handleChange}
-          >
-            {Object.keys(TodoStatus).map(option => (
-              <option value={option}>{option}</option>
-            ))}
-          </select>
-        </form>
-
-        <ul className="TodoList__list">
-          {visibleTodos.map(todo => (
-            <li
-              className={`TodoList__item TodoList__item--${
-                todo.completed
-                  ? 'checked'
-                  : 'unchecked'
-              }`}
-              key={todo.id}
-            >
-              <label>
+            <div className="TodoList__list-container">
+              <form className="TodoList__form form">
                 <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  readOnly
+                  type="text"
+                  id="todos-title-input"
+                  name="todos-title-input"
+                  className="form__title-input"
+                  value={todoTitle}
+                  onChange={handleChange}
                 />
-                <p>{todo.title}</p>
-              </label>
 
-              <button
-                className={
-                  'TodoList__user-button button '
-                  + `TodoList__user-button--${
-                    todo.userId === selectedUserId && 'selected'
-                  }`
-                }
-                type="button"
-                onClick={() => setSelectedUserId(todo.userId)}
-              >
-                {`User #${todo.userId}`}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+                <select
+                  id="todos-status-selector"
+                  name="todos-status-selector"
+                  className="form__status-selector"
+                  value={todoStatus}
+                  onChange={handleChange}
+                >
+                  {Object.keys(TodoStatus).map(option => (
+                    <option value={option}>{option}</option>
+                  ))}
+                </select>
+              </form>
+
+              <ul className="TodoList__list">
+                {visibleTodos.map(todo => (
+                  <li
+                    className={`TodoList__item TodoList__item--${
+                      todo.completed
+                        ? 'checked'
+                        : 'unchecked'
+                    }`}
+                    key={todo.id}
+                  >
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        readOnly
+                      />
+                      <p>{todo.title}</p>
+                    </label>
+
+                    <button
+                      className={
+                        'TodoList__user-button button '
+                      + `TodoList__user-button--${
+                        todo.userId === selectedUserId && 'selected'
+                      }`
+                      }
+                      type="button"
+                      onClick={() => setSelectedUserId(todo.userId)}
+                    >
+                      {`User #${todo.userId}`}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+    </>
   );
 });
