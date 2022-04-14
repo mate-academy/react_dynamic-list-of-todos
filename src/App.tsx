@@ -17,12 +17,17 @@ const App: React.FC = () => {
       });
   }, []);
 
+  const selectUser = (userId: number) => {
+    setSelectedUserId(userId);
+  };
+
   return (
     <div className="App">
       <div className="App__sidebar">
         <TodoList
           todos={todos}
-          getId={setSelectedUserId}
+          getId={selectUser}
+          userId={selectedUserId}
         />
       </div>
 

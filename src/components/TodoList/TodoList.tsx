@@ -5,9 +5,10 @@ import { Todo } from '../../interfaces';
 interface Props {
   todos: Todo[];
   getId: (number: number) => void;
+  userId: number;
 }
 
-export const TodoList: FC<Props> = ({ todos, getId }) => {
+export const TodoList: FC<Props> = ({ todos, getId, userId }) => {
   const [query, setQuery] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -73,8 +74,8 @@ export const TodoList: FC<Props> = ({ todos, getId }) => {
                 className={`
                   button
                   TodoList__user-button
-                  ${todo.completed
-                    && 'TodoList__user-button--selected'}
+                  ${userId === todo.userId
+                    && 'TodoList__user-button--selected'}}
                 `}
                 type="button"
                 onClick={() => {
