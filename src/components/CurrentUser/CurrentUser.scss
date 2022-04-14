@@ -26,4 +26,13 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__button {
+    min-width: 90%;
+    margin: 0 0 0 25px;
+  }
+}
+
+.Error {
+  background-color: #f00;
 }
