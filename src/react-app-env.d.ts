@@ -1,9 +1,5 @@
 /// <reference types="react-scripts" />
 
-// type Props = {
-//   userId: User.id,
-// }; /* TODO: DESCRIBE */
-
 interface Todo {
   userId: number;
   id: number;

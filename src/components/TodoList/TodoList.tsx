@@ -43,13 +43,13 @@ export const TodoList: React.FC<Props> = ({
         return filteredTodos;
 
       case 'active': {
-        filteredTodos = todos.filter(todo => todo.completed === false);
+        filteredTodos = todos.filter(todo => !todo.completed);
 
         return filteredTodos;
       }
 
       case 'completed': {
-        filteredTodos = todos.filter(todo => todo.completed === true);
+        filteredTodos = todos.filter(todo => todo.completed);
 
         return filteredTodos;
       }

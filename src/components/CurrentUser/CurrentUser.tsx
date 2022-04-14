@@ -3,7 +3,7 @@ import React, {
   useEffect, useState,
 } from 'react';
 
-import { BASE_URL } from '../../api';
+import { getUser } from '../../api';
 import './CurrentUser.scss';
 
 type Props = {
@@ -16,16 +16,15 @@ export const CurrentUser: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>();
 
-  const getUser = async (endpoint: number) => {
-    const response = await fetch(`${BASE_URL}/users/${endpoint}`);
-    const data = await response.json();
+  const fetchUser = async () => {
+    const res = await getUser(userId);
 
-    setUser(data);
+    setUser(res);
   };
 
   useEffect(() => {
     if (userId) {
-      getUser(userId);
+      fetchUser();
     }
   }, [userId]);
 
