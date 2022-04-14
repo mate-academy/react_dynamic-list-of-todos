@@ -5,7 +5,7 @@ import React, {
 
 import './CurrentUser.scss';
 
-import { getUser } from '../../API/api';
+import { getUserById } from '../../API/api';
 import { TodosContext } from '../../TodosContext';
 import { LoadingError } from '../LoadingError';
 
@@ -24,7 +24,7 @@ export const CurrentUser: React.FC<Props> = memo(({
   useEffect(() => {
     setHasLoadingError(false);
     setUser(null);
-    getUser(selectedUserId)
+    getUserById(selectedUserId)
       .then(loadedUser => setUser(loadedUser))
       .catch(() => setHasLoadingError(true));
   }, [selectedUserId, setSelectedUserId, setHasLoadingError]);
