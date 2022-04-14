@@ -1,44 +1,105 @@
 import React from 'react';
+import classNames from 'classnames';
+import 'bulma/css/bulma.min.css';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  selectedUserId: number;
+  selectUser: (userId: number) => void;
+};
 
+export const TodoList: React.FC<Props> = React.memo(({ todos, selectUser, selectedUserId }) => {
+  const [todoTitle, setTodoTitle] = React.useState('');
+  const [selectCategory, setSelectCategory] = React.useState('All');
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
+  };
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+     setSelectCategory(event.target.value);
+  }
+
+   const filteredTodos = React.useMemo(() => {
+      return todos
+        .filter(todo => (
+          todo.title.toLowerCase().includes(todoTitle.toLowerCase())
+       ))
+        .filter(todo => {
+          switch (selectCategory) {
+            case 'Active':
+              return !todo.completed;
+
+            case 'Completed':
+              return todo.completed;
+
+            default:
+              return  todos;
+          }
+        });
+    
+  }, [todos, todoTitle, selectCategory]);
+
+  return (
+    <div className="TodoList">
+
+    <div className="control">
+      <input 
+        className="input is-hovered" 
+        type="text" 
+        placeholder="Enter todo's name"
+        onChange={event => handleTitleChange(event)}
+      />
+    </div>
+
+    <div className="select">
+      <select
+        value={selectCategory}
+        onChange={event => handleCategoryChange(event)}
+      >
+        <option>All</option>
+        <option>Active</option>
+        <option>Completed</option>
+      </select>
+    </div>
+    
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
+        {filteredTodos.map((todo: Todo) => (
+          <li 
+            key={todo.id} 
+            className={classNames('TodoList__item', {
+              'TodoList__item--checked': todo.completed,
+              'TodoList__item--unchecked': !todo.completed,
+             })}
+           >
           <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
+            <input 
+              type="checkbox"
+              checked={todo.completed} 
+              readOnly 
+             />
+            <p>{todo.title}</p>
           </label>
 
           <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+            className={classNames('TodoList__user-button', 'button', {
+              'TodoList__user-button--selected': todo.userId === selectedUserId,
+             })}
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
 
-          <button
-            className="TodoList__user-button button"
             type="button"
+            onClick={() => {
+              selectUser(todo.userId)
+            }}
           >
-            User&nbsp;#2
+            User&nbsp;#{`${todo.userId}`}
           </button>
-        </li>
+          </li>
+         ))}
       </ul>
     </div>
   </div>
-);
+  )
+});
