@@ -22,7 +22,7 @@ export const TodoList = React.memo<Props>(
         switch (todosStatus) {
           case 'active':
             return !todo.completed && todo.title.includes(query);
-          case 'complited':
+          case 'completed':
             return todo.completed && todo.title.includes(query);
           default:
             return todo.title.includes(query);
