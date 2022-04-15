@@ -7,4 +7,4 @@ export function request(query: string) {
 
 export const getTodos = (): Promise<Todo[]> => request('/todos');
 
-export const getUser = (userId: number): Promise<User> => request(`/users/${userId}`);
+export const getUserById = (userId: number): Promise<User> => request(`/users/${userId}`);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -10,7 +10,10 @@ const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const clearUserId = () => setSelectedUserId(0);
+  const clearUserId = useCallback(
+    () => setSelectedUserId(0),
+    [],
+  );
 
   useEffect(() => {
     getTodos()

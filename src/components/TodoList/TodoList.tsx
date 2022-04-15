@@ -8,7 +8,7 @@ interface Props {
   selectedUserId: number,
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectUser,
   selectedUserId,
@@ -106,4 +106,4 @@ export const TodoList: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+});
