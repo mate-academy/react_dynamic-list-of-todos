@@ -29,3 +29,15 @@
     color: #ff3626;
   }
 }
+
+.filter {
+  display: flex;
+  justify-content: center;
+
+  &__input {
+    color: #352d64;
+    border: 1px solid #4d457b;
+    outline: none;
+    font-size: 1rem;
+  }
+}
