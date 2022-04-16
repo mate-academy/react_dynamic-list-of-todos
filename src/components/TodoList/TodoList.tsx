@@ -1,22 +1,36 @@
 import React from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { getTodos } from '../../api';
 
 type Props = {
-  todos: Todo[],
   setUserId: (userId: number) => void,
 };
 
 type State = {
   currentInput: string,
   statusTodo: string,
+  todos: Todo[],
 };
 
 export class TodoList extends React.Component<Props, State> {
   state:State = {
     currentInput: '',
     statusTodo: '',
+    todos: [],
   };
+
+  componentDidMount() {
+    const loadTodosFromServer = async () => {
+      const todosFromServer = await getTodos();
+
+      this.setState({
+        todos: todosFromServer,
+      });
+    };
+
+    loadTodosFromServer();
+  }
 
   handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -31,8 +45,7 @@ export class TodoList extends React.Component<Props, State> {
   };
 
   sortTodos = () => {
-    const { currentInput, statusTodo } = this.state;
-    const { todos } = this.props;
+    const { todos, currentInput, statusTodo } = this.state;
     let copyTodos;
 
     const lowerCaseCurrentInput = currentInput.toLowerCase();
@@ -82,11 +95,13 @@ export class TodoList extends React.Component<Props, State> {
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {todos.map((todo) => (
-              <li className={classNames(
-                'TodoList__item',
-                { 'TodoList__item--unchecked': !todo.completed },
-                { 'TodoList__item--checked': todo.completed },
-              )}
+              <li
+                key={todo.id}
+                className={classNames(
+                  'TodoList__item',
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed },
+                )}
               >
                 <label htmlFor="checkTodo">
                   <input type="checkbox" readOnly />
