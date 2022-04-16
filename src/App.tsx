@@ -3,19 +3,14 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getUsers, getTodos } from './api';
+import { getTodos } from './api';
+import { Todo } from './react-app-env';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [todos, setTodos] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getUsers()
-      .then(usersFromServer => {
-        setUsers(usersFromServer);
-      });
-
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
@@ -28,6 +23,7 @@ const App: React.FC = () => {
         <TodoList
           todos={todos}
           onSelectedUserId={setSelectedUserId}
+          selectedUserId={selectedUserId}
         />
       </div>
 
@@ -35,7 +31,6 @@ const App: React.FC = () => {
         <div className="App__content-container">
           {selectedUserId ? (
             <CurrentUser
-              users={users}
               selectedUserId={selectedUserId}
               onSetSelectedUserId={setSelectedUserId}
             />

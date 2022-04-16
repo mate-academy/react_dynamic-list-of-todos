@@ -1,40 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUsersById } from '../../api';
 import { User } from '../../react-app-env';
 import './CurrentUser.scss';
 
 interface Props {
-  users: User[];
   selectedUserId: number;
-  onSetSelectedUserId: (number: number) => void;
+  onSetSelectedUserId: (userId: number) => void;
 }
 
 export const CurrentUser: React.FC<Props> = ({
-  users,
   selectedUserId,
   onSetSelectedUserId,
 }) => {
-  const getUser = (userss: User[]) => {
-    return userss.find(user => user.id === selectedUserId);
-  };
+  const [selectedUser, setSelectedUser] = useState<User>();
 
-  const result = getUser(users);
-
-  // eslint-disable-next-line no-console
-  console.log(result);
+  useEffect(() => {
+    getUsersById(selectedUserId)
+      .then(user => {
+        return setSelectedUser(user);
+      });
+  }, [selectedUserId]);
 
   return (
     <div className="CurrentUser">
       <h2 className="CurrentUser__title">
         <span>
-          Selected user:
-          {' '}
-          {result?.id}
+          {`Selected user: ${selectedUser?.id}`}
         </span>
       </h2>
 
-      <h3 className="CurrentUser__name">{result?.username}</h3>
-      <p className="CurrentUser__email">{result?.email}</p>
-      <p className="CurrentUser__phone">{result?.phone}</p>
+      <h3 className="CurrentUser__name">{selectedUser?.username}</h3>
+      <p className="CurrentUser__email">{selectedUser?.email}</p>
+      <p className="CurrentUser__phone">{selectedUser?.phone}</p>
       <button
         className="TodoList__user-button button"
         type="button"

@@ -5,10 +5,15 @@ import './TodoList.scss';
 
 interface Props {
   todos: Todo[];
+  selectedUserId: number;
   onSelectedUserId: (number: number) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, onSelectedUserId }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedUserId,
+  onSelectedUserId,
+}) => {
   const [query, setQuery] = useState('');
   const [selectedActivities, setSelectedActivities] = useState('');
 
@@ -73,7 +78,8 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectedUserId }) => {
             <li
               key={todo.id}
               className={classnames('TodoList__item', (todo.completed
-                ? 'TodoList__item--checked' : 'TodoList__item--unchecked'
+                ? 'TodoList__item--checked'
+                : 'TodoList__item--unchecked'
               ))}
             >
               <label>
@@ -89,7 +95,14 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectedUserId }) => {
 
               <button
                 type="button"
-                className="TodoList__user-button button"
+                className={classnames(
+                  'TodoList__user-button',
+                  {
+                    'TodoList__user-button--selected':
+                   selectedUserId === todo.userId,
+                  },
+                  'button',
+                )}
                 onClick={() => {
                   onSelectedUserId(todo.userId);
                 }}

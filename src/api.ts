@@ -1,4 +1,6 @@
-const BASE_URL = 'https://mate.academy/students-api';
+import { User } from './react-app-env';
+
+const BASE_URL = 'https://mate.academy/students-api/';
 
 export const request = (url: string) => {
   return fetch(`${BASE_URL}${url}`)
@@ -6,9 +8,9 @@ export const request = (url: string) => {
 };
 
 export const getTodos = () => {
-  return request('/todos');
+  return request('todos');
 };
 
-export const getUsers = () => {
-  return request('/users');
+export const getUsersById = (userId: number): Promise<User> => {
+  return request(`users/${userId}`);
 };
