@@ -1,110 +1,132 @@
 /// <reference types="cypress" />
 
 describe('Page', () => {
+  const apiUrl = 'https://mate.academy/students-api/'
+
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/')
   });
 
   it('user details should be updated after selecting a different user', () => {
-    cy.contains('5')
-      .click()
+    cy.intercept(`${apiUrl}` + 'users/5', { fixture: 'user5' });
+    cy.intercept(`${apiUrl}` + 'users/6', { fixture: 'user6' });
 
-    cy.contains('Chelsey Dietrich')
-      .should('have.text', 'Chelsey Dietrich')
+    cy.get('button')
+      .contains('5')
+      .click();
 
-    cy.contains('6')
-      .click()
+    cy.getByDataCy('userName')
+      .should('have.text', 'Chelsey Dietrich');
 
-    cy.contains('Mrs. Dennis Schulist')
-      .should('have.text', 'Mrs. Dennis Schulist')
+    cy.get('button')
+      .contains('6')
+      .click();
+
+    cy.getByDataCy('userName')
+      .should('have.text', 'Mrs. Dennis Schulist');
   });
 
   it('no request to the server after selecting the same user again', () => {
-    cy.intercept('https://mate.academy/students-api/users/5', cy.spy().as('apiCall'))
+    cy.intercept(`${apiUrl}` + 'users/5', cy.spy().as('apiCall'));
 
-    cy.contains('5')
+    cy.get('button')
+      .contains('5')
       .click()
-      .click()
+      .click();
 
     cy.get('@apiCall')
       .its('callCount')
-      .should('equal', 1)
+      .should('equal', 1);
   });
 
   it('selected user is cleared after clicking "Clear" button', () => {
-    cy.contains('5')
-      .click()
+    cy.intercept(`${apiUrl}` + 'users/5', { fixture: 'user5' });
 
-    cy.contains('Chelsey Dietrich')
-      .should('have.text', 'Chelsey Dietrich')
+    cy.get('button')
+      .contains('5')
+      .click();
 
-    cy.contains('Clear')
-      .click()
+    cy.getByDataCy('userName')
+      .should('have.text', 'Chelsey Dietrich');
 
-    cy.contains('No user selected')
-      .should('have.text', 'No user selected')
+    cy.get('button').contains(/[A-z]lear/)
+      .click();
+
+    cy.getByDataCy('userName')
+      .should('not.exist');
   });
 
   it('todos can be filtered by title', () => {
-    cy.request('https://mate.academy/students-api/todos')
-      .then((response) => {
-        const toDoTitle = response.body[0].title;
+    cy.fixture('todos.json').as('todosList');
 
-        cy.get('#input')
-          .type(`${toDoTitle}`)
+    cy.get('@todosList')
+      .then(todosList => {
+        cy.getByDataCy('filterByTitle')
+          .type(todosList[0].title);
 
-        cy.get('ul>li')
-          .should('have.length', 1)
-          .should('contain', `${toDoTitle}`)
-      })
+        cy.getByDataCy('listOfTodos')
+          .children()
+          .should('have.length', 2)
+          .should('contain', 'Todo 4');
+      });
   });
 
   it('all todos can be selected using selector', () => {
-    cy.request('https://mate.academy/students-api/todos')
-      .then((response) => {
-        cy.get('select')
-          .select('All')
+    cy.fixture('todos.json').as('todosList');
 
-        cy.get('ul>li')
-          .should('have.length', response.body.length)
-      })
+    cy.get('@todosList')
+      .then((todosList) => {
+        cy.get('select')
+          .select('all');
+
+        cy.getByDataCy('listOfTodos')
+          .children()
+          .should('have.length', todosList.length);
+      });
   });
 
   it('only active todos can be selected using selector', () => {
-    cy.request('https://mate.academy/students-api/todos')
-      .then((response) => {
+    cy.fixture('todos.json').as('todosList');
+
+    cy.get('@todosList')
+      .then((todosList) => {
         let numberOfTodos = 0;
 
         cy.get('select')
-          .select('Not completed')
+          .select('active');
 
-        response.body.forEach((todo) => {
+        todosList.forEach((todo) => {
           if (todo.completed === false) {
-            numberOfTodos++
+            numberOfTodos++;
           }
-        })
+        });
 
-        cy.get('ul>li')
-          .should('have.length', numberOfTodos)
-      })
+        cy.getByDataCy('listOfTodos')
+          .children()
+          .should('have.length', numberOfTodos);
+      });
   });
 
+
   it('only completed todos can be selected using selector', () => {
-    cy.request('https://mate.academy/students-api/todos')
-      .then((response) => {
+    cy.fixture('todos.json').as('todosList');
+
+    cy.get('@todosList')
+      .then((todosList) => {
         let numberOfTodos = 0;
 
         cy.get('select')
-          .select('Completed')
+          .select('completed');
 
-        response.body.forEach((todo) => {
+        todosList.forEach((todo) => {
           if (todo.completed === true) {
-            numberOfTodos++
+            numberOfTodos++;
           }
         })
 
-        cy.get('ul>li')
-          .should('have.length', numberOfTodos)
-      })
+        cy.getByDataCy('listOfTodos')
+          .children()
+          .should('have.length', numberOfTodos);
+      });
   });
 });
