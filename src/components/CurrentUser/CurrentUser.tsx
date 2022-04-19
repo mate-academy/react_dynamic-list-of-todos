@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCurrentUser } from '../../API/api';
+import { getCurrentUserById } from '../../API/api';
 import './CurrentUser.scss';
 
 type Props = {
@@ -15,7 +15,7 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
   useEffect(() => {
     setIsLoading(false);
     setFetchError(false);
-    getCurrentUser(selectedUserId)
+    getCurrentUserById(selectedUserId)
       .then(userFromServer => {
         setIsLoading(true);
         setUser(userFromServer);

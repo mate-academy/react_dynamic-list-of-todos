@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -7,13 +7,17 @@ import { CurrentUser } from './components/CurrentUser';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
 
-  const chooseUser = (userId: number) => {
-    setSelectedUserId(userId);
-  };
+  const chooseUser = useCallback(
+    (userId: number) => {
+      setSelectedUserId(userId);
+    }, [selectedUserId],
+  );
 
-  const clearUser = () => {
-    setSelectedUserId(0);
-  };
+  const clearUser = useCallback(
+    () => {
+      setSelectedUserId(0);
+    }, [selectedUserId],
+  );
 
   return (
     <div className="App">

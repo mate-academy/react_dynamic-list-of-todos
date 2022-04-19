@@ -1,7 +1,7 @@
 export const BASE_URL = 'https://mate.academy/students-api';
 
-const todosEnd = '/todos';
-const userEnd = '/users/';
+const todosEndpoint = '/todos';
+const userEndpoint = '/users/';
 
 export function request(end: string, userId: number | string = '') {
   return fetch(`${BASE_URL}${end}${userId}`)
@@ -15,9 +15,9 @@ export function request(end: string, userId: number | string = '') {
 }
 
 export function getTodos(): Promise<Todo[]> {
-  return request(todosEnd);
+  return request(todosEndpoint);
 }
 
-export function getCurrentUser(userId: number): Promise<User> {
-  return request(userEnd, userId);
+export function getCurrentUserById(userId: number): Promise<User> {
+  return request(userEndpoint, userId);
 }

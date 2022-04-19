@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { getTodos } from '../../API/api';
 import './TodoList.scss';
 
@@ -22,7 +22,8 @@ export const TodoList: React.FC<Props> = ({ chooseUser, selectedUserId }) => {
       .catch(() => setFetchError(true));
   }, []);
 
-  let visibleTodos = todos.filter(todo => todo.title.includes(filterTodos));
+  let visibleTodos = useMemo(() => todos
+    .filter(todo => todo.title.includes(filterTodos)), [filterTodos]);
 
   switch (progress) {
     case 1:
@@ -54,9 +55,9 @@ export const TodoList: React.FC<Props> = ({ chooseUser, selectedUserId }) => {
           value={progress}
           onChange={(event) => setProgress(+event.target.value)}
         >
-          <option value={0}>Choose progress</option>
-          <option value={1}>completed</option>
-          <option value={2}>in progress</option>
+          <option value={0}>All</option>
+          <option value={1}>Completed</option>
+          <option value={2}>In progress</option>
         </select>
 
         <div className="TodoList__list-container">
