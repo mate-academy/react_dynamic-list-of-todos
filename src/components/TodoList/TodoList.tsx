@@ -71,7 +71,7 @@ export class TodoList extends React.Component <Props, State> {
     return (
       <div className="TodoList">
         <h2>Todos:</h2>
-        <label htmlFor="input">
+        <label htmlFor="input" data-cy="filterByTitle">
           Filter by Title:
           {' '}
           <input
@@ -93,7 +93,7 @@ export class TodoList extends React.Component <Props, State> {
           </select>
         </label>
         <div className="TodoList__list-container">
-          <ul className="TodoList__list">
+          <ul className="TodoList__list" data-cy="listOfTodos">
             {preparedTodos.map(todo => (
               <li
                 className={classNames('TodoList__item', {

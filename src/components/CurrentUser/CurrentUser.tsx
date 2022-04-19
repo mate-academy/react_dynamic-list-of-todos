@@ -49,7 +49,7 @@ export class CurrentUser extends React.Component<Props, State> {
               </span>
             </h2>
 
-            <h3 className="CurrentUser__name">
+            <h3 className="CurrentUser__name" data-cy="userName">
               {user.name}
             </h3>
             <p className="CurrentUser__email">
