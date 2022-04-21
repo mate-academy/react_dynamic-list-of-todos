@@ -4,6 +4,7 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './Api/api';
+import { ControlPanel } from './components/ControlPanel/ControlPanel';
 
 const App: React.FC = () => {
   const [
@@ -17,9 +18,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(res => {
-        setTodos(res);
-      });
+      .then(setTodos);
   },
   []);
 
@@ -69,18 +68,20 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
+        <ControlPanel
+          value={value}
+          changeValue={changeValue}
+          sortBy={sortBy}
+          changeSortBy={changeSortBy}
+          randomSort={randomSort}
+          changeRandomSort={changeRandomSort}
+        />
         {todos.length > 0
           ? (
             <TodoList
               todos={filteredByRandom}
               userId={selectedUserId}
               selectUser={selectUser}
-              value={value}
-              changeValue={changeValue}
-              sortBy={sortBy}
-              changeSortBy={changeSortBy}
-              changeRandomSort={changeRandomSort}
-              randomSort={randomSort}
             />
           )
           : 'No todos yet'}

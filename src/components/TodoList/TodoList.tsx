@@ -5,67 +5,19 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   userId: number;
-  value: string;
-  sortBy: string;
-  randomSort: boolean;
   selectUser: (x: number) => void;
-  changeValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  changeSortBy: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  changeRandomSort: () => void;
 };
 
 export const TodoList: React.FC<Props> = React.memo(
   ({
     todos,
     userId,
-    value,
-    sortBy,
-    randomSort,
     selectUser,
-    changeValue,
-    changeSortBy,
-    changeRandomSort,
   }) => {
     return (
       <div className="TodoList">
-        <h2>Todos:</h2>
-
-        <div className="sorting-form TodoList__sorting-form">
-          <input
-            className="sorting-form__input"
-            type="text"
-            placeholder="Search todo"
-            value={value}
-            onChange={changeValue}
-          />
-
-          <div className="sorting-form__footer">
-            <select
-              className="button sorting-form__select"
-              value={sortBy}
-              onChange={changeSortBy}
-            >
-              <option value="">Select sorting option</option>
-              <option value="all">All todos</option>
-              <option value="completed">Completed todos</option>
-              <option value="active">Active todos</option>
-            </select>
-            <button
-              className={classNames(
-                'button',
-                'sorting-form__button',
-                { 'sorting-form__button--active': randomSort },
-              )}
-              type="button"
-              onClick={changeRandomSort}
-            >
-              Randomize
-            </button>
-          </div>
-
-        </div>
-
         <div className="TodoList__list-container">
+          <h2>Todos:</h2>
           {todos.length > 0 ? (
             <ul className="TodoList__list">
               {todos.map(todo => (
