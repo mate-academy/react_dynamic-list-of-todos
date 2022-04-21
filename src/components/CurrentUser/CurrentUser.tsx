@@ -1,12 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../../Api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number;
+  removeUser: () => void;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
+export const CurrentUser: React.FC<Props> = React.memo(
+  ({ userId, removeUser }) => {
+    const [user, setUser] = useState<User>();
+
+    useEffect(() => {
+      getUser(userId)
+        .then(person => setUser(person));
+    }, [userId]);
+
+    return (
+      <div className="CurrentUser">
+        {user ? (
+          <>
+            <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
+
+            <h3 className="CurrentUser__name">{user.name}</h3>
+            <p className="CurrentUser__email">{user.website}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+
+            <button
+              type="button"
+              className="button CurrentUser__clear"
+              onClick={removeUser}
+            >
+              Clear
+            </button>
+          </>
+        ) : (
+          <h2 className="CurrentUser__title">
+            <span>
+              Waiting for user...
+            </span>
+          </h2>
+        )}
+
+      </div>
+    );
+  },
 );
