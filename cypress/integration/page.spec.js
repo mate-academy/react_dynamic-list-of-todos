@@ -1,25 +1,23 @@
-/// <reference types="cypress" />
-
 describe('Page', () => {
-  const apiUrl = 'https://mate.academy/students-api/'
-
   beforeEach(() => {
-    cy.visit('/')
+    cy.intercept('**/todos', { fixture: 'todos' });
+
+    cy.visit('/');
   });
 
   it('user details should be updated after selecting a different user', () => {
-    cy.intercept(`${apiUrl}` + 'users/5', { fixture: 'user5' });
-    cy.intercept(`${apiUrl}` + 'users/6', { fixture: 'user6' });
+    cy.intercept('**/users/1', { fixture: 'userOne' });
+    cy.intercept('**/users/2', { fixture: 'userTwo' });
 
-    cy.get('button')
-      .contains('5')
+    cy.getByDataCy('userButton')
+      .contains('1')
       .click();
 
     cy.getByDataCy('userName')
       .should('have.text', 'Chelsey Dietrich');
 
-    cy.get('button')
-      .contains('6')
+    cy.getByDataCy('userButton')
+      .contains('2')
       .click();
 
     cy.getByDataCy('userName')
@@ -27,11 +25,15 @@ describe('Page', () => {
   });
 
   it('no request to the server after selecting the same user again', () => {
-    cy.intercept(`${apiUrl}` + 'users/5', cy.spy().as('apiCall'));
+    cy.intercept('**/todos', { fixture: 'todos' });
+    cy.intercept('**/users/*', cy.spy().as('apiCall'));
 
-    cy.get('button')
-      .contains('5')
-      .click()
+    cy.getByDataCy('userButton')
+      .contains('1')
+      .click();
+
+    cy.getByDataCy('userButton')
+      .contains('1')
       .click();
 
     cy.get('@apiCall')
@@ -40,16 +42,17 @@ describe('Page', () => {
   });
 
   it('selected user is cleared after clicking "Clear" button', () => {
-    cy.intercept(`${apiUrl}` + 'users/5', { fixture: 'user5' });
+    cy.intercept('**/users/1', { fixture: 'userOne' });
 
-    cy.get('button')
-      .contains('5')
+    cy.getByDataCy('userButton')
+      .contains('1')
       .click();
 
     cy.getByDataCy('userName')
       .should('have.text', 'Chelsey Dietrich');
 
-    cy.get('button').contains(/[A-z]lear/)
+    cy.get('button')
+      .contains(/[A-z]lear/)
       .click();
 
     cy.getByDataCy('userName')
@@ -57,76 +60,35 @@ describe('Page', () => {
   });
 
   it('todos can be filtered by title', () => {
-    cy.fixture('todos.json').as('todosList');
+    cy.get('input')
+      .type('Todo 4');
 
-    cy.get('@todosList')
-      .then(todosList => {
-        cy.getByDataCy('filterByTitle')
-          .type(todosList[0].title);
-
-        cy.getByDataCy('listOfTodos')
-          .children()
-          .should('have.length', 2)
-          .should('contain', 'Todo 4');
-      });
+    cy.get('li')
+      .should('have.length', 1)
+      .and('contain', 'Todo 4');
   });
 
   it('all todos can be selected using selector', () => {
-    cy.fixture('todos.json').as('todosList');
+    cy.get('select')
+      .select('all');
 
-    cy.get('@todosList')
-      .then((todosList) => {
-        cy.get('select')
-          .select('all');
-
-        cy.getByDataCy('listOfTodos')
-          .children()
-          .should('have.length', todosList.length);
-      });
+    cy.get('li')
+      .should('have.length', 3);
   });
 
   it('only active todos can be selected using selector', () => {
-    cy.fixture('todos.json').as('todosList');
+    cy.get('select')
+      .select('completed');
 
-    cy.get('@todosList')
-      .then((todosList) => {
-        let numberOfTodos = 0;
-
-        cy.get('select')
-          .select('active');
-
-        todosList.forEach((todo) => {
-          if (todo.completed === false) {
-            numberOfTodos++;
-          }
-        });
-
-        cy.getByDataCy('listOfTodos')
-          .children()
-          .should('have.length', numberOfTodos);
-      });
+    cy.get('li')
+      .should('have.length', 1);
   });
 
-
   it('only completed todos can be selected using selector', () => {
-    cy.fixture('todos.json').as('todosList');
+    cy.get('select')
+      .select('active');
 
-    cy.get('@todosList')
-      .then((todosList) => {
-        let numberOfTodos = 0;
-
-        cy.get('select')
-          .select('completed');
-
-        todosList.forEach((todo) => {
-          if (todo.completed === true) {
-            numberOfTodos++;
-          }
-        })
-
-        cy.getByDataCy('listOfTodos')
-          .children()
-          .should('have.length', numberOfTodos);
-      });
+    cy.get('li')
+      .should('have.length', 2);
   });
 });
