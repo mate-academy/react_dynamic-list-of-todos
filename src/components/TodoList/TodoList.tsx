@@ -87,9 +87,9 @@ export class TodoList extends React.Component <Props, State> {
             value={select}
             onChange={this.handleSelectChange}
           >
-            <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="not">Not completed</option>
+            <option value="all">all</option>
+            <option value="completed">completed</option>
+            <option value="not">active</option>
           </select>
         </label>
         <div className="TodoList__list-container">
@@ -118,6 +118,7 @@ export class TodoList extends React.Component <Props, State> {
                     'button',
                     { 'TodoList__user- button--selected': todo.userId === this.props.userId },
                   )}
+                  data-cy="listOfTodos"
                   type="button"
                   onClick={() => this.props.selectUser(todo.userId)}
                 >
