@@ -25,5 +25,24 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+
+    &-button {
+      display: block;
+      margin: auto;
+      cursor: pointer;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: inherit;
+      font-weight: bold;
+      color: white;
+      background-color: #4d457b;
+      transition: background-color 0.12s;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #b8b3d2;
+      }
+    }
   }
 }

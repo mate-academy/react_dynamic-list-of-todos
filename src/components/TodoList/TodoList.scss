@@ -29,3 +29,17 @@
     color: #ff3626;
   }
 }
+
+.error-message {
+  display: block;
+  margin: 15px;
+  padding: 5px 10px;
+  font-size: 18px;
+  width: 40%;
+  min-width: 300px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: darkred;
+  background-color: pink;
+  transition: background-color 0.12s;
+}
