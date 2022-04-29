@@ -25,10 +25,10 @@ export const TodoList: React.FC<Props> = React.memo(({
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    const lowerCaseQuery = query.toLowerCase();
+    // const lowerCaseQuery = query.toLowerCase();
 
     setVisibleTodos(todos.filter(todo => {
-      if (!todo.title.includes(lowerCaseQuery)) {
+      if (!todo.title.toLowerCase().includes(query.toLowerCase())) {
         return false;
       }
 
