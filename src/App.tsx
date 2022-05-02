@@ -5,11 +5,7 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
 
-type Props = {
-  getTodos: () => Todo[];
-};
-
-const App: React.FC<Props> = () => {
+const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 

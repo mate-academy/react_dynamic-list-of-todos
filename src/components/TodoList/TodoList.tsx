@@ -63,9 +63,19 @@ export const TodoList: React.FC<Props> = (props) => {
           {filtredTodos.length === 0
             ? 'No todos'
             : filtredTodos.map(todo => (
-              <li className="TodoList__item TodoList__item--unchecked">
+              <li
+                className={todo.completed
+                  ? 'TodoList__item TodoList__item--checked'
+                  : 'TodoList__item TodoList__item--unchecked'}
+                key={todo.id}
+              >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    onClick={e => e.preventDefault()}
+                    checked={todo.completed}
+                    readOnly
+                  />
                   <p>{todo.title}</p>
                 </label>
 
