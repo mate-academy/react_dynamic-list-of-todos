@@ -1,3 +1,11 @@
+const page = {
+  clickButton(value) {
+    cy.getByDataCy('userButton')
+      .contains(value)
+      .click();
+  }
+};
+
 describe('Page', () => {
   beforeEach(() => {
     cy.intercept('**/todos', { fixture: 'todos' });
@@ -11,16 +19,12 @@ describe('Page', () => {
 
     cy.visit('/');
 
-    cy.getByDataCy('userButton')
-      .contains('1')
-      .click();
+    page.clickButton('1');
 
     cy.getByDataCy('userName')
       .should('have.text', 'Chelsey Dietrich');
 
-    cy.getByDataCy('userButton')
-      .contains('2')
-      .click();
+    page.clickButton('2');
 
     cy.getByDataCy('userName')
       .should('have.text', 'Mrs. Dennis Schulist');
@@ -32,13 +36,9 @@ describe('Page', () => {
 
     cy.visit('/');
 
-    cy.getByDataCy('userButton')
-      .contains('1')
-      .click();
+    page.clickButton('1');
 
-    cy.getByDataCy('userButton')
-      .contains('1')
-      .click();
+    page.clickButton('1');
 
     cy.get('@apiCall')
       .its('callCount')
@@ -50,9 +50,7 @@ describe('Page', () => {
 
     cy.visit('/');
 
-    cy.getByDataCy('userButton')
-      .contains('1')
-      .click();
+    page.clickButton('1');
 
     cy.getByDataCy('userName')
       .should('have.text', 'Chelsey Dietrich');
