@@ -5,7 +5,7 @@ describe('Page', () => {
     cy.visit('/');
   });
 
-  it('user details should be updated after selecting a different user', () => {
+  it('should update user details after selecting a different user', () => {
     cy.intercept('**/users/1', { fixture: 'userOne' });
     cy.intercept('**/users/2', { fixture: 'userTwo' });
 
@@ -24,7 +24,7 @@ describe('Page', () => {
       .should('have.text', 'Mrs. Dennis Schulist');
   });
 
-  it('no request to the server after selecting the same user again', () => {
+  it('should not send request to the server after selecting the same user again', () => {
     cy.intercept('**/todos', { fixture: 'todos' });
     cy.intercept('**/users/*', cy.spy().as('apiCall'));
 
@@ -41,7 +41,7 @@ describe('Page', () => {
       .should('equal', 1);
   });
 
-  it('selected user is cleared after clicking "Clear" button', () => {
+  it('should clear selected user after clicking "Clear" button', () => {
     cy.intercept('**/users/1', { fixture: 'userOne' });
 
     cy.getByDataCy('userButton')
@@ -59,7 +59,7 @@ describe('Page', () => {
       .should('not.exist');
   });
 
-  it('todos can be filtered by title', () => {
+  it('should filter todos by title', () => {
     cy.get('input')
       .type('Todo 4');
 
@@ -68,7 +68,7 @@ describe('Page', () => {
       .and('contain', 'Todo 4');
   });
 
-  it('all todos can be selected using selector', () => {
+  it('should select all todos using selector', () => {
     cy.get('select')
       .select('all');
 
@@ -76,7 +76,7 @@ describe('Page', () => {
       .should('have.length', 3);
   });
 
-  it('only active todos can be selected using selector', () => {
+  it('should select only active todos using selector', () => {
     cy.get('select')
       .select('completed');
 
@@ -84,7 +84,7 @@ describe('Page', () => {
       .should('have.length', 1);
   });
 
-  it('only completed todos can be selected using selector', () => {
+  it('should select only completed todos using selector', () => {
     cy.get('select')
       .select('active');
 
