@@ -9,6 +9,8 @@ describe('Page', () => {
     cy.intercept('**/users/1', { fixture: 'userOne' });
     cy.intercept('**/users/2', { fixture: 'userTwo' });
 
+    cy.visit('/');
+
     cy.getByDataCy('userButton')
       .contains('1')
       .click();
@@ -28,6 +30,8 @@ describe('Page', () => {
     cy.intercept('**/todos', { fixture: 'todos' });
     cy.intercept('**/users/*', cy.spy().as('apiCall'));
 
+    cy.visit('/');
+
     cy.getByDataCy('userButton')
       .contains('1')
       .click();
@@ -43,6 +47,8 @@ describe('Page', () => {
 
   it('should clear selected user after clicking "Clear" button', () => {
     cy.intercept('**/users/1', { fixture: 'userOne' });
+
+    cy.visit('/');
 
     cy.getByDataCy('userButton')
       .contains('1')
