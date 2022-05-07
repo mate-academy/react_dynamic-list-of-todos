@@ -8,13 +8,13 @@ import { Todo } from './components/types';
 
 const App: React.FC = () => {
   const [userId, setUserId] = useState(0);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [allTodos, setTodos] = useState<Todo[]>([]);
   const [todoID, setTodoID] = useState(0);
 
   useEffect(() => {
     getTodos('todos')
-      .then(todo => {
-        setTodos(todo);
+      .then(todos => {
+        setTodos(todos);
       });
   }, []);
 
@@ -22,9 +22,11 @@ const App: React.FC = () => {
     <div className="App">
       <div className="App__sidebar">
         <TodoList
-          todos={todos}
-          selectId={(userID, todoId) => {
+          todos={allTodos}
+          selectId={(userID) => {
             setUserId(userID);
+          }}
+          todoId={(todoId) => {
             setTodoID(todoId);
           }}
           selectedtodoId={todoID}

@@ -7,10 +7,13 @@ type Props = {
   todos: Todo[]
   selectId: (userId: number, todoID: number) => void
   selectedtodoId: number,
+  todoId: (todoId: number) => void
 };
 
 export const TodoList: React.FC<Props>
-  = ({ todos, selectId, selectedtodoId }) => {
+  = ({
+    todos, selectId, selectedtodoId, todoId,
+  }) => {
     const [inputValue, setinputValue] = useState('');
     const [selectValue, setselectValue] = useState('all');
 
@@ -76,7 +79,7 @@ export const TodoList: React.FC<Props>
                       type="checkbox"
                       readOnly
                       onClick={() => {
-                        selectId(0, 0);
+                        todoId(0);
                       }}
                     />
                   ) : (
@@ -84,7 +87,7 @@ export const TodoList: React.FC<Props>
                       type="checkbox"
                       readOnly
                       onClick={() => {
-                        selectId(todo.userId, todo.id);
+                        todoId(todo.id);
                       }}
                     />
                   )}
@@ -97,6 +100,7 @@ export const TodoList: React.FC<Props>
                     TodoList__user-button--selected
                     button"
                   type="button"
+                  onClick={() => selectId(todo.userId, todo.id)}
                 >
                   User&nbsp;
                   {todo.userId}
