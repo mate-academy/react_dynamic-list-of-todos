@@ -7,5 +7,7 @@ export const getTodos = () => {
 
 export const getUsers = (userId:number) => {
   return fetch(`${baseUrl}/users/${userId}`)
-    .then(response => response.json());
+    .then(response => {
+      return response.json();
+    });
 };

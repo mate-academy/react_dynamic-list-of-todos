@@ -7,18 +7,23 @@ type Props = {
   randomize: () => void;
   setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
 };
+enum Options {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
 
 export const TodoList: React.FC<Props> = (props) => {
   const { todos, randomize, setSelectedUserId } = props;
   const [searchTitle, setSearchTitle] = useState('');
-  const [selectOption, setSelectOption] = useState('all');
+  const [selectOption, setSelectOption] = useState<Options>(Options.all);
 
   const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTitle(event.target.value);
   };
 
   const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectOption(event.target.value);
+    setSelectOption(event.target.value as Options);
   };
 
   const filtredTodos = todos.filter(
@@ -44,10 +49,10 @@ export const TodoList: React.FC<Props> = (props) => {
           <label htmlFor="select_todo">Choose a todo:</label>
 
           <select className="TodoList__list-select" onChange={selectHandler}>
-            <option value="all">--Please choose an option--</option>
-            <option value="all">all</option>
-            <option value="active">active</option>
-            <option value="completed">completed</option>
+            <option value={Options.all}>--Please choose an option--</option>
+            <option value={Options.all}>all</option>
+            <option value={Options.active}>active</option>
+            <option value={Options.completed}>completed</option>
           </select>
         </div>
         <button
@@ -64,9 +69,7 @@ export const TodoList: React.FC<Props> = (props) => {
             ? 'No todos'
             : filtredTodos.map(todo => (
               <li
-                className={todo.completed
-                  ? 'TodoList__item TodoList__item--checked'
-                  : 'TodoList__item TodoList__item--unchecked'}
+                className={`TodoList__item TodoList__item--${todo.completed ? 'checked' : 'unchecked'}`}
                 key={todo.id}
               >
                 <label>

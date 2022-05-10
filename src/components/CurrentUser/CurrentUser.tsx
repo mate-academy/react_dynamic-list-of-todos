@@ -11,13 +11,17 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   const [currentUserData, setCurrentUserData] = useState<User | null>(null);
 
   useEffect(() => {
-    getUsers(userId)
-      .then((res) => {
+    getUsers(userId).then(
+      (res) => {
         setCurrentUserData(res);
-      });
+      },
+      () => {
+        setCurrentUserData(null);
+      },
+    );
   }, [userId]);
 
-  if (currentUserData !== null) {
+  if (currentUserData) {
     return (
       <div className="CurrentUser">
         <h2 className="CurrentUser__title">
