@@ -19,28 +19,26 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
   return (
 
     <div className="CurrentUser">
-      {selectedUser
-        ? (
-          <>
-            <h2 className="CurrentUser__title">
-              <span>
-                Selected user:
-                {' '}
-                {selectedUserId}
-              </span>
-            </h2>
-            <h3 className="CurrentUser__name">{selectedUser.name}</h3>
-            <p className="CurrentUser__email">{selectedUser.email}</p>
-            <p className="CurrentUser__phone">{selectedUser.phone}</p>
-            <button
-              type="button"
-              onClick={clearUser}
-            >
-              Clear
-            </button>
-          </>
-        )
-        : 'No data'}
+      {selectedUser && (
+        <>
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {selectedUserId}
+            </span>
+          </h2>
+          <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+          <p className="CurrentUser__email">{selectedUser.email}</p>
+          <p className="CurrentUser__phone">{selectedUser.phone}</p>
+          <button
+            type="button"
+            onClick={clearUser}
+          >
+            Clear
+          </button>
+        </>
+      )}
     </div>
   );
 };
