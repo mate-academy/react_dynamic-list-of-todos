@@ -69,7 +69,7 @@ export const TodoList: React.FC<Props>
           {displayedTodos.map(todo => (
             <li
               className={
-                todo.id === currentTodoId
+                todo.completed
                   ? 'TodoList__item TodoList__item--checked'
                   : 'TodoList__item TodoList__item--unchecked'
               }
@@ -78,10 +78,14 @@ export const TodoList: React.FC<Props>
               <label>
                 <input
                   type="checkbox"
-                  checked={todo.id === currentTodoId}
+                  checked={todo.completed}
                   readOnly
                 />
-                <p>
+                <p
+                  className={
+                    (todo.id === currentTodoId) ? 'Selected' : ''
+                  }
+                >
                   {todo.title}
                 </p>
               </label>
