@@ -29,3 +29,31 @@
     color: #ff3626;
   }
 }
+
+.Search {
+  box-sizing: border-box;
+  margin-left: 20px;
+  margin-right: 10px;
+  
+  &__field {
+    box-sizing: border-box;
+    margin-left: 10px;
+    height: 30px;
+  }
+}
+
+.StatusSelection {
+  box-sizing: border-box;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.Randomize {
+  box-sizing: border-box;
+  width: 150px;
+  height: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
