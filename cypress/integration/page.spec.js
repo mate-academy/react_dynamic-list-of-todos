@@ -63,7 +63,7 @@ describe('Page', () => {
       .should('not.exist');
   });
 
-  it.only('should filter todos by title', () => {
+  it('should filter todos by title', () => {
     cy.getByDataCy('filterByTitle')
       .type('Todo 4');
 
