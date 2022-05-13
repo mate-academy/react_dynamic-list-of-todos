@@ -18,22 +18,7 @@ const App: React.FC = () => {
 
   const [
     todos,
-    setTodos] = useState([{
-    userId: 0,
-    id: 0,
-    title: '',
-    completed: false,
-  }]);
-
-  const [
-    todosRandomized,
-    setTodosRandomized,
-  ] = useState([...todos]);
-
-  const [
-    visibleTodos,
-    setVisibleTodos,
-  ] = useState([...todosRandomized]);
+    setTodos] = useState<Todo[]>([]);
 
   const [
     searchQuery,
@@ -45,7 +30,7 @@ const App: React.FC = () => {
     setStatus,
   ] = useState('all');
 
-  const userSelection = (userId: number, id: number) => {
+  const selectUser = (userId: number, id: number) => {
     setSelectedUserId(userId);
     setSelectedTodoId(id);
   };
@@ -79,17 +64,17 @@ const App: React.FC = () => {
       randomizedTodos.push(currentTodo[0]);
     }
 
-    setTodosRandomized(randomizedTodos);
+    setTodos(randomizedTodos);
   };
 
   const filterByStatus = (receivedStatus: string) => {
     switch (receivedStatus) {
       case 'active':
-        return todosRandomized.filter(todo => todo.completed === false);
+        return todos.filter(todo => todo.completed === false);
       case 'completed':
-        return todosRandomized.filter(todo => todo.completed === true);
+        return todos.filter(todo => todo.completed === true);
       default:
-        return todosRandomized;
+        return todos;
     }
   };
 
@@ -102,15 +87,13 @@ const App: React.FC = () => {
       .includes(query.toLowerCase()));
   };
 
-  useEffect(() => {
-    setVisibleTodos(filterByQuery(filterByStatus(status), searchQuery));
-  }, [status, searchQuery, todosRandomized]);
+  const getVisibleTodos = () => {
+    return filterByQuery(filterByStatus(status), searchQuery);
+  };
 
   useEffect(() => {
     getTodos().then(result => {
       setTodos(result);
-      setVisibleTodos([...result]);
-      setTodosRandomized([...result]);
     });
   }, []);
 
@@ -118,11 +101,11 @@ const App: React.FC = () => {
     <div className="App">
       <div className="App__sidebar">
         <TodoList
-          userSelected={userSelection}
+          userSelected={selectUser}
           filterTodosList={updateSearchQuery}
           filterTodosByStatus={updateStatus}
           randomizeTodosList={randomizeTodos}
-          displayedTodos={visibleTodos}
+          displayedTodos={getVisibleTodos()}
           currentTodoId={selectedTodoId}
         />
       </div>
