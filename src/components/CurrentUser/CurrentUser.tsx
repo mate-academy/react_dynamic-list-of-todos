@@ -1,12 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
+import { getUsers } from '../../api';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  userId: number;
+  clearUser: () => void;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
+  const [currentUserData, setCurrentUserData] = useState<User | null>(null);
+
+  useEffect(() => {
+    getUsers(userId).then(
+      (res) => {
+        setCurrentUserData(res);
+      },
+      () => {
+        setCurrentUserData(null);
+      },
+    );
+  }, [userId]);
+
+  if (currentUserData) {
+    return (
+      <div className="CurrentUser">
+        <h2 className="CurrentUser__title">
+          <span>
+            Selected user:
+            {userId}
+          </span>
+        </h2>
+        <h3 className="CurrentUser__name">{currentUserData.name}</h3>
+        <p className="CurrentUser__email">{currentUserData.email}</p>
+        <p className="CurrentUser__phone">{currentUserData.phone}</p>
+        <button
+          type="button"
+          className="CurrentUser__clear"
+          onClick={clearUser}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <b>User not found</b>
+  );
+};
