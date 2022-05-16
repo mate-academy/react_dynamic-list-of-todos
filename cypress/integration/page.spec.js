@@ -30,7 +30,13 @@ describe('Page', () => {
       .should('have.text', 'Mrs. Dennis Schulist');
   });
 
-  it('should not send request to the server after selecting the same user again', () => {
+  it.only('should not send request to the server after selecting the same user again', () => {
+    Cypress.on('uncaught:exception', (err) => {
+      if (err.message.includes('Unexpected end of JSON input')) {
+        return false
+      };
+    });
+
     cy.intercept('**/todos', { fixture: 'todos' });
     cy.intercept('**/users/*', cy.spy().as('apiCall'));
 
