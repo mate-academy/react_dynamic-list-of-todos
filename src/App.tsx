@@ -6,29 +6,15 @@ import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
 
 const App: React.FC = () => {
-  const [
-    selectedUserId,
-    setSelectedUserId,
-  ] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
 
-  const [
-    selectedTodoId,
-    setSelectedTodoId,
-  ] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
-  const [
-    todos,
-    setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [
-    searchQuery,
-    setSearchQuery,
-  ] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const [
-    status,
-    setStatus,
-  ] = useState('all');
+  const [status, setStatus] = useState('all');
 
   const selectUser = (userId: number, id: number) => {
     setSelectedUserId(userId);
@@ -38,18 +24,6 @@ const App: React.FC = () => {
   const clearUser = () => {
     setSelectedUserId(0);
     setSelectedTodoId(0);
-  };
-
-  const updateSearchQuery = (query: string) => {
-    if (query) {
-      setSearchQuery(query);
-    } else {
-      setSearchQuery('');
-    }
-  };
-
-  const updateStatus = (todoStatus: string) => {
-    setStatus(todoStatus);
   };
 
   const randomizeTodos = () => {
@@ -99,15 +73,58 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          userSelected={selectUser}
-          filterTodosList={updateSearchQuery}
-          filterTodosByStatus={updateStatus}
-          randomizeTodosList={randomizeTodos}
-          displayedTodos={getVisibleTodos()}
-          currentTodoId={selectedTodoId}
-        />
+      <div className="TodoList">
+        <h2>Todos:</h2>
+
+        <label
+          className="Search"
+        >
+          Search todo
+          <input
+            className="Search__field"
+            onChange={
+              (event) => setSearchQuery(event.target.value)
+            }
+          />
+        </label>
+
+        <select
+          className="StatusSelection"
+          defaultValue="all"
+          onChange={(event) => setStatus(event.target.value)}
+        >
+          <option
+            value="all"
+          >
+            Show all todos
+          </option>
+          <option
+            value="active"
+          >
+            Show active todos
+          </option>
+          <option
+            value="completed"
+          >
+            Show completed todos
+          </option>
+        </select>
+
+        <button
+          className="Randomize"
+          type="button"
+          onClick={randomizeTodos}
+        >
+          Randomize
+        </button>
+
+        <div className="App__sidebar">
+          <TodoList
+            selectUser={selectUser}
+            displayedTodos={getVisibleTodos()}
+            currentTodoId={selectedTodoId}
+          />
+        </div>
       </div>
 
       <div className="App__content">

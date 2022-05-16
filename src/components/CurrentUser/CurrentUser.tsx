@@ -10,9 +10,11 @@ type UserProps = {
 export const CurrentUser: React.FC<UserProps> = ({
   userId, clear,
 }) => {
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userPhone, setUserPhone] = useState('');
+  const [curUser, setCurUser] = useState({
+    userName: '',
+    userEmail: '',
+    userPhone: '',
+  });
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
   const loadUser = async (usId: number) => {
@@ -32,9 +34,11 @@ export const CurrentUser: React.FC<UserProps> = ({
   useEffect(() => {
     loadUser(userId).then(user => {
       if (user) {
-        setUserName(user.name);
-        setUserEmail(user.email);
-        setUserPhone(user.phone);
+        setCurUser({
+          userName: user.name,
+          userEmail: user.email,
+          userPhone: user.phone,
+        });
       }
     });
   }, [userId]);
@@ -54,9 +58,9 @@ export const CurrentUser: React.FC<UserProps> = ({
         !hasLoadingError
           ? (
             <>
-              <h3 className="CurrentUser__name">{userName}</h3>
-              <p className="CurrentUser__email">{userEmail}</p>
-              <p className="CurrentUser__phone">{userPhone}</p>
+              <h3 className="CurrentUser__name">{curUser.userName}</h3>
+              <p className="CurrentUser__email">{curUser.userEmail}</p>
+              <p className="CurrentUser__phone">{curUser.userPhone}</p>
             </>
           )
           : <p>User information is absent</p>
