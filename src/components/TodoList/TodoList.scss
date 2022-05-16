@@ -28,4 +28,20 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__filters {
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+  }
+
+  &__filter {
+    width: 30%;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #cde4e4;
+    border: 1px solid #cde4e4;
+  }
 }
