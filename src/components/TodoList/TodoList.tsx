@@ -1,44 +1,120 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { ToDo } from '../../types/Todo';
+import { TodoListControlPanel } from '../TodoListContolPanel';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: ToDo[];
+  setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
+  selectedUserId: number;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedUserId,
+  selectedUserId,
+}) => {
+  const [filterTitle, setFilterTitle] = useState('');
+  const [filterComplete, setFilterComplete] = useState('all');
+  const [visibleTodos, setVisibleTodos] = useState(todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  useEffect(() => {
+    setVisibleTodos(todos.filter(todo => {
+      const titleLower = todo.title.toLowerCase();
+      const filterLower = filterTitle.toLowerCase();
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      switch (filterComplete) {
+        case 'all':
+          return titleLower.includes(filterLower);
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+        case 'active':
+          return titleLower.includes(filterLower) && todo.completed === false;
+
+        case 'completed':
+          return titleLower.includes(filterLower) && todo.completed === true;
+
+        default:
+          return todo;
+      }
+    }));
+  }, [filterTitle, filterComplete, todos]);
+
+  const randomizeTodos = () => {
+    const result = [...visibleTodos];
+    let currentIndex = visibleTodos.length;
+    let randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      [
+        result[currentIndex],
+        result[randomIndex],
+      ] = [
+        result[randomIndex],
+        result[currentIndex],
+      ];
+    }
+
+    setVisibleTodos(result);
+  };
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <TodoListControlPanel
+        filterTitle={filterTitle}
+        setFilterTitle={setFilterTitle}
+        filterComplete={filterComplete}
+        setFilterComplete={setFilterComplete}
+        randomizeTodos={randomizeTodos}
+      />
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {visibleTodos.map(todo => (
+            <li
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--checked': todo.completed },
+                { 'TodoList__item--unchecked': !todo.completed },
+              )}
+              key={todo.id}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  readOnly
+                  checked={todo.completed}
+                />
+                <p>
+                  {todo.title}
+                </p>
+              </label>
+
+              <button
+                className={classNames(
+                  'TodoList__user-button',
+                  {
+                    'TodoList__user-button--selected':
+                      selectedUserId === todo.userId,
+                  },
+                  'button',
+                )}
+                type="button"
+                onClick={() => setSelectedUserId(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};

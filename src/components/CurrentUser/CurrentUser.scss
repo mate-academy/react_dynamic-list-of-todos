@@ -25,5 +25,12 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    padding: 15px;
+
+    color: white;
+    font-size: 1rem;
+    border-radius: 15px;
+    border: none;
+    background-color: #4d457b;
   }
 }
