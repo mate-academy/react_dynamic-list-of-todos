@@ -1,8 +1,18 @@
 const BASE_URL = 'https://mate.academy/students-api';
 
+const request = (url: string) => {
+  return fetch(`${BASE_URL}${url}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`${res.status} - ${res.statusText}`);
+      }
+
+      return res.json();
+    });
+};
+
 export const getTodos = () => {
-  return fetch(`${BASE_URL}/todos`)
-    .then(response => response.json());
+  return request('/todos');
 };
 
 export const getUser = async (userId: number) => {
@@ -12,6 +22,6 @@ export const getUser = async (userId: number) => {
 
     return user;
   } catch {
-    return !Error;
+    return new Error().message;
   }
 };

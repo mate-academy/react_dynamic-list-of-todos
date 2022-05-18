@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api/api';
+import { User } from '../../types';
 
 import './CurrentUser.scss';
 
 type Props = {
   userId: number;
   changeUser: (id: number) => void;
-};
-
-type User = {
-  id: number,
-  createdAt: string,
-  updatedAt: string,
-  name: string,
-  username: string,
-  email: string,
-  phone: string,
-  website: string,
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, changeUser }) => {
@@ -54,9 +44,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, changeUser }) => {
           <p className="CurrentUser__phone">{user.phone}</p>
           <button
             type="button"
-            onClick={() => {
-              clearUser();
-            }}
+            onClick={clearUser}
           >
             Clear
           </button>
