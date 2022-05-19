@@ -6,12 +6,18 @@ import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api/api';
 import { Todo } from './types';
 
+enum SortBy {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState([]);
 
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('all');
+  const [sortBy, setSortBy] = useState<SortBy | string>(SortBy.all);
   const [randomArr, setRandomArr] = useState(false);
 
   useEffect(() => {
@@ -33,10 +39,10 @@ const App: React.FC = () => {
     }
 
     switch (sortBy) {
-      case 'active':
+      case SortBy.active:
         newArr = newArr.filter((todo: Todo) => todo.completed === false);
         break;
-      case 'completed':
+      case SortBy.completed:
         newArr = newArr.filter((todo: Todo) => todo.completed === true);
         break;
       default:
@@ -66,15 +72,15 @@ const App: React.FC = () => {
 
           <select
             className="TodoList__filter TodoList__select"
-            defaultValue={sortBy}
+            defaultValue={SortBy.all}
             onChange={(event) => {
               setSortBy(event.target.value);
               setRandomArr(false);
             }}
           >
-            <option value="all">all</option>
-            <option value="active">active</option>
-            <option value="completed">completed</option>
+            {Object.keys(SortBy).map(opt => (
+              <option value={opt} key={opt}>{opt}</option>
+            ))}
           </select>
 
           <button

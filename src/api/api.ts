@@ -21,7 +21,9 @@ export const getUser = async (userId: number) => {
     const user = await response.json();
 
     return user;
-  } catch {
-    return new Error().message;
+  } catch (error) {
+    const e = error as Error;
+
+    return e.message;
   }
 };
