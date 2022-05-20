@@ -25,5 +25,15 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    width: 150px;
+    height: 25px;
+    background-color: rgb(175, 150, 192);
+    border: transparent;
+    border-radius: 5px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(159, 91, 185);
+    }
   }
 }
