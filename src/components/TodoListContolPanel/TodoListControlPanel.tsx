@@ -7,15 +7,17 @@ type Props = {
   setFilterTitle: React.Dispatch<React.SetStateAction<string>>;
   filterComplete: string;
   setFilterComplete: React.Dispatch<React.SetStateAction<string>>;
-  randomizeTodos: () => void;
+  randomizeTodos: (boolean: boolean) => void;
+  isRandomized: boolean;
 };
 
-export const TodoListControlPanel: React.FC<Props> = ({
+export const TodoListControlPanel: React.FC<Props> = React.memo(({
   filterTitle,
   setFilterTitle,
   filterComplete,
   setFilterComplete,
   randomizeTodos,
+  isRandomized,
 }) => (
   <div className="TodoList__controlPanel controlPanel">
     <label
@@ -60,10 +62,10 @@ export const TodoListControlPanel: React.FC<Props> = ({
 
     <button
       type="button"
-      onClick={randomizeTodos}
+      onClick={() => randomizeTodos(isRandomized)}
       className="button"
     >
       Randomize list
     </button>
   </div>
-);
+));

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import { ToDo } from '../../types/Todo';
@@ -11,7 +11,7 @@ type Props = {
   selectedUserId: number;
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   setSelectedUserId,
   selectedUserId,
@@ -19,6 +19,7 @@ export const TodoList: React.FC<Props> = ({
   const [filterTitle, setFilterTitle] = useState('');
   const [filterComplete, setFilterComplete] = useState('all');
   const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [isRandomized, setRandomized] = useState(false);
 
   useEffect(() => {
     setVisibleTodos(todos.filter(todo => {
@@ -41,7 +42,14 @@ export const TodoList: React.FC<Props> = ({
     }));
   }, [filterTitle, filterComplete, todos]);
 
-  const randomizeTodos = () => {
+  const randomizeTodos = useCallback((boolean: boolean) => {
+    if (boolean) {
+      setVisibleTodos(todos);
+      setRandomized(false);
+
+      return;
+    }
+
     const result = [...visibleTodos];
     let currentIndex = visibleTodos.length;
     let randomIndex;
@@ -60,7 +68,8 @@ export const TodoList: React.FC<Props> = ({
     }
 
     setVisibleTodos(result);
-  };
+    setRandomized(true);
+  }, [isRandomized, visibleTodos]);
 
   return (
     <div className="TodoList">
@@ -72,6 +81,7 @@ export const TodoList: React.FC<Props> = ({
         filterComplete={filterComplete}
         setFilterComplete={setFilterComplete}
         randomizeTodos={randomizeTodos}
+        isRandomized={isRandomized}
       />
 
       <div className="TodoList__list-container">
@@ -117,4 +127,4 @@ export const TodoList: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+});

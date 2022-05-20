@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUserFromServer } from '../../api/api';
 import { User } from '../../types/User';
 import './CurrentUser.scss';
@@ -8,14 +8,14 @@ type Props = {
   clearUser: () => void;
 };
 
-export const CurrentUser: React.FC<Props> = ({
+export const CurrentUser: React.FC<Props> = React.memo(({
   userId,
   clearUser,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoadingError, setLoadingError] = useState(false);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       const newUser = await getUserFromServer(userId);
 
@@ -25,7 +25,7 @@ export const CurrentUser: React.FC<Props> = ({
       setCurrentUser(null);
       setLoadingError(true);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     getUser();
@@ -78,4 +78,4 @@ export const CurrentUser: React.FC<Props> = ({
       )}
     </>
   );
-};
+});
