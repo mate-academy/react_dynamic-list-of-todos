@@ -1,37 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import './TodoList.scss';
-import { ToDo } from '../../types/types'
+import cn from 'classnames';
 
 type Props = {
-  todos: ToDo[],
-  selectedUserId: any,
-  setSelectedUserId: any,
+  todos: Todo[],
+  setSelectedUserId: (arg0: number) => void,
+  selectedUserId: number,
+};
+
+enum Status {
+  Active = 'Active',
+  Completed = 'Completed',
+  All = 'All',
 }
 
-export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedUserId,
+  selectedUserId,
+}) => {
   const [query, setQuery] = useState('');
-  const [completed, setCompleted] = useState('');
+  const [completed, setCompleted] = useState(Status.All);
 
-  const isFiltered = () => {
+  const filterTodos = () => {
+    switch (completed) {
+      case Status.Active:
+        return todos.filter(todo => (
+          todo.title.toLowerCase().includes(query.toLowerCase())
+          && todo.completed === false
+        ));
 
-    if (completed === 'Active') {
-      return todos.filter(todo => (
-        todo.title.toLowerCase().startsWith(query.toLowerCase()) && todo.completed === false
-      ))
+      case Status.Completed:
+        return todos.filter(todo => (
+          todo.title.toLowerCase().includes(query.toLowerCase())
+          && todo.completed === true
+        ));
+
+      case Status.All:
+        return todos.filter(todo => (
+          todo.title.toLowerCase().includes(query.toLowerCase())
+        ));
+
+      default: return todos;
     }
+  };
 
-    if (completed === 'Completed') {
-      return todos.filter(todo => (
-        todo.title.toLowerCase().startsWith(query.toLowerCase()) && todo.completed === true
-      ))
-    }
+  const filtered = useMemo(() => {
+    return filterTodos();
+  }, [todos, completed]);
 
-    return todos.filter(todo => (
-      todo.title.toLowerCase().startsWith(query.toLowerCase())
-    ))
-  }
-
-  const filterd = isFiltered();
+  const changeStatus = useCallback((event) => {
+    setCompleted(event.target.value as Status);
+  }, []);
 
   return (
     <div className="TodoList">
@@ -44,25 +64,24 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
             data-cy="filterByTitle"
             value={query}
             onChange={(event) => {
-              setQuery(event.target.value)
+              setQuery(event.target.value);
             }}
           />
           <select
-            onChange={(event) => {
-              setCompleted(event.target.value)
-            }}
+            value={completed}
+            onChange={changeStatus}
           >
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </form>
         <ul
           className="TodoList__list"
           data-cy="listOfTodos"
         >
-          {
-            filterd.map(todo => (
+          {filtered
+            && filtered.map(todo => (
               <li className={`TodoList__item TodoList__item--${todo.completed}`} key={todo.id}>
                 <label>
                   <input
@@ -73,23 +92,29 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
                   <p>{todo.title}</p>
                 </label>
 
-                <button
-                  data-cy="userButton"
-                  className="
-                    TodoList__user-button
-                    TodoList__user-button--selected
-                    button
-                  "
-                  type="button"
-                  onClick={() => setSelectedUserId(todo.userId)}
-                >
-                  {`User#${todo.userId}`}
-                </button>
+                {todo.userId
+                  && (
+                    <button
+                      data-cy="userButton"
+                      className={cn(
+                        'TodoList__user-button', 'button',
+                        {
+                          'TodoList__user-button--selected':
+                          todo.userId === selectedUserId,
+                        },
+                      )}
+                      type="button"
+                      onClick={() => (
+                        setSelectedUserId(todo.userId)
+                      )}
+                    >
+                      {`User#${todo.userId}`}
+                    </button>
+                  )}
               </li>
-            ))
-          }
+            ))}
         </ul>
       </div>
     </div>
-  )
+  );
 };

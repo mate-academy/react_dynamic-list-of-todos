@@ -1,58 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
-import { getUsers } from '../../styles/api/api'
-import { User } from '../../types/types'
+import { getUsers } from '../../styles/api/api';
 
 type Props = {
   userId: number,
   clearUser: () => void
-}
+};
 
 export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
-  const [isError, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [currentUser, setUser] = useState<User | null>(null);
 
-  const getUser = async() => {
+  const getUser = async () => {
     try {
       const getedUser = await getUsers(userId);
-      setError(false);
-      setUser(getedUser);
-    }
 
-    catch {
-      setError(true);
+      setIsError(false);
+      setUser(getedUser);
+    } catch {
+      setIsError(true);
       setUser(null);
     }
-  }
+  };
 
   useEffect(() => {
-    getUser()
-  }, [userId])
+    getUser();
+  }, [userId]);
 
   return (
-  <>
-    { currentUser && (
+    <>
+      { currentUser && (
         <div className="CurrentUser" key={currentUser.id}>
           <h2 className="CurrentUser__title">
             <span>{`Selected user: ${currentUser.username}`}</span>
           </h2>
-          <h3 className="CurrentUser__name" data-cy="userName">{currentUser.name}</h3>
+          <h3
+            className="CurrentUser__name"
+            data-cy="userName"
+          >
+            {currentUser.name}
+          </h3>
           <p className="CurrentUser__email">{currentUser.email}</p>
           <p className="CurrentUser__phone">{currentUser.phone}</p>
           <button
-            type='button'
+            type="button"
+            className="button is-light CurrentUser__clear"
             onClick={clearUser}
           >
             Clear
           </button>
         </div>
-      )
-    }
-    { isError && (
+      )}
+      { isError && (
         <p>Error</p>
-      )
-    }
-
-  </>
-  )
-}
+      )}
+    </>
+  );
+};
