@@ -17,7 +17,7 @@ export const TodoList: FC<Props> = ({
   setSelectedUserId,
 }) => {
   const [filterByTitle, setFilterByTitle] = useState<string>('');
-  const [isComplete, setIsComplete] = useState('all');
+  const [isComplete, setIsComplete] = useState('show all');
   const [visibleTodos, setVisibleTodos] = useState(todos);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const TodoList: FC<Props> = ({
       const filterByTitleToLower = filterByTitle.toLowerCase();
 
       switch (isComplete) {
-        case 'all':
+        case 'show all':
           return titleToLower.includes(filterByTitleToLower);
 
         case 'not completed':
