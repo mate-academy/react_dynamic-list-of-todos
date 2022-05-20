@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import './CurrentUser.scss';
 import { getUser } from '../../api';
 
@@ -14,7 +19,7 @@ export const CurrentUser: FC<Props> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [errorLoad, setErrorLoad] = useState<boolean | null>(null);
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const newUser = await getUser(userId);
 
@@ -24,7 +29,7 @@ export const CurrentUser: FC<Props> = ({
       setCurrentUser(null);
       setErrorLoad(true);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchUser();

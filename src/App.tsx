@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -9,13 +14,13 @@ const App: FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const clearUser = () => setSelectedUserId(0);
+  const clearUser = useCallback(() => setSelectedUserId(0), []);
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const data = await getTodos();
 
     setTodos(data);
-  };
+  }, []);
 
   useEffect(() => {
     getData();
