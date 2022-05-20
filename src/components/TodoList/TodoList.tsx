@@ -22,18 +22,20 @@ export const TodoList: FC<Props> = ({
 
   useEffect(() => {
     setVisibleTodos(todos.filter(todo => {
-      const titleLower = todo.title.toLowerCase();
-      const toLowerCase = filterByTitle.toLowerCase();
+      const titleToLower = todo.title.toLowerCase();
+      const filterByTitleToLower = filterByTitle.toLowerCase();
 
       switch (isComplete) {
-        case 'show all':
-          return titleLower.includes(toLowerCase);
+        case 'all':
+          return titleToLower.includes(filterByTitleToLower);
 
         case 'not completed':
-          return titleLower.includes(toLowerCase) && todo.completed === false;
+          return titleToLower.includes(filterByTitleToLower)
+            && todo.completed === false;
 
         case 'completed':
-          return titleLower.includes(toLowerCase) && todo.completed === true;
+          return titleToLower.includes(filterByTitleToLower)
+            && todo.completed === true;
 
         default:
           return todo;
@@ -47,7 +49,9 @@ export const TodoList: FC<Props> = ({
 
       <div className="TodoList__sort">
         <label>
+          Sort by title:
           <input
+            className="TodoList__input"
             type="text"
             value={filterByTitle}
             onChange={({ target }) => {
@@ -57,7 +61,9 @@ export const TodoList: FC<Props> = ({
         </label>
 
         <label>
+          Sort by status:
           <select
+            className="TodoList__input"
             name="isCompleted"
             onChange={({ target }) => {
               setIsComplete(target.value);
