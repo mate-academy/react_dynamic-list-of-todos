@@ -64,11 +64,11 @@ export const TodoList: FC<Props> = ({
             }}
           >
             <option value="show all">
-              All
+              Show all
             </option>
 
             <option value="not completed">
-              Active
+              Not completed
             </option>
 
             <option value="completed">
