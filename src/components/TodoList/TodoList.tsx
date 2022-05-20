@@ -21,7 +21,7 @@ export const TodoList: React.FC<Props> = React.memo(({
   const [visibleTodos, setVisibleTodos] = useState(todos);
   const [isRandomized, setRandomized] = useState(false);
 
-  useEffect(() => {
+  const handleFilter = useCallback(() => {
     setVisibleTodos(todos.filter(todo => {
       const titleLower = todo.title.toLowerCase();
       const filterLower = filterTitle.toLowerCase();
@@ -45,6 +45,7 @@ export const TodoList: React.FC<Props> = React.memo(({
   const randomizeTodos = useCallback((boolean: boolean) => {
     if (boolean) {
       setVisibleTodos(todos);
+      handleFilter();
       setRandomized(false);
 
       return;
@@ -52,7 +53,7 @@ export const TodoList: React.FC<Props> = React.memo(({
 
     const result = [...visibleTodos];
     let currentIndex = visibleTodos.length;
-    let randomIndex;
+    let randomIndex: number;
 
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -70,6 +71,10 @@ export const TodoList: React.FC<Props> = React.memo(({
     setVisibleTodos(result);
     setRandomized(true);
   }, [isRandomized, visibleTodos]);
+
+  useEffect(() => {
+    handleFilter();
+  }, [filterTitle, filterComplete, todos]);
 
   return (
     <div className="TodoList">
