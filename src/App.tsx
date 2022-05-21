@@ -39,6 +39,7 @@ const App: React.FC = () => {
                 <TodoList
                   todos={todos}
                   selectNewUser={selectNewUser}
+                  selectedUserId={selectedUserId}
                 />
               </div>
 

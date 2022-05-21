@@ -8,11 +8,13 @@ import cn from 'classnames';
 
 type Props = {
   todo: Todo;
+  selectedUserId: number,
   selectNewUser: (x: number) => void;
 };
 
 export const TodoItem: FC<Props> = ({
   todo,
+  selectedUserId,
   selectNewUser,
 }) => {
   const [checked, setChecked] = useState(todo.completed);
@@ -42,11 +44,17 @@ export const TodoItem: FC<Props> = ({
       </label>
 
       <button
-        className="
-          TodoItem__user-button
-          TodoItem__user-button--selected
-          button
-        "
+        className={cn(
+          'TodoItem__user-button', 'button',
+          {
+            'TodoItem__user-button--selected': todo.userId === selectedUserId,
+          },
+        )}
+        // className="
+        //   TodoItem__user-button
+        //   TodoItem__user-button--selected
+        //   button
+        // "
         type="button"
         onClick={() => selectNewUser(todo.userId)}
         data-cy="userButton"

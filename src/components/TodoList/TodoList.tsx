@@ -15,11 +15,13 @@ enum Status {
 
 type Props = {
   todos: Todo[];
+  selectedUserId: number,
   selectNewUser: (x: number) => void;
 };
 
 export const TodoList: FC<Props> = ({
   todos,
+  selectedUserId,
   selectNewUser,
 }) => {
   const [filterQuery, setFilterQuery] = useState('');
@@ -111,6 +113,7 @@ export const TodoList: FC<Props> = ({
               key={todo.id}
               todo={todo}
               selectNewUser={selectNewUser}
+              selectedUserId={selectedUserId}
             />
           ))}
         </ul>
