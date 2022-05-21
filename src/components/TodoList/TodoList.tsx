@@ -1,44 +1,120 @@
-import React from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useState,
+} from 'react';
 import './TodoList.scss';
+import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+enum Status {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[];
+  selectNewUser: (x: number) => void;
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export const TodoList: FC<Props> = ({
+  todos,
+  selectNewUser,
+}) => {
+  const [filterQuery, setFilterQuery] = useState('');
+  const [status, setStatus] = useState(Status.All);
+  const [shuffle, setShuffle] = useState(false);
+
+  const filteredStatus = () => {
+    switch (status) {
+      case Status.Active:
+        return todos.filter(todo => !todo.completed);
+      case Status.Completed:
+        return todos.filter(todo => todo.completed);
+      case Status.All:
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = filteredStatus().filter(todo => {
+    const title = todo.title.toLowerCase();
+    const query = filterQuery.toLowerCase();
+
+    return title.includes(query);
+  });
+
+  const visibleTodos = shuffle
+    ? filteredTodos.sort(() => Math.random() - 0.5)
+    : filteredTodos;
+
+  const changeStatus = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    setStatus(event.target.value as Status);
+  }, []);
+
+  const changeFilter = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setFilterQuery(event.target.value);
+  }, []);
+
+  const changeShuffle = useCallback(() => {
+    setShuffle(prev => !prev);
+  }, []);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__buttons">
+        <label className="TodoList__label">
+          Filter
+          <input
+            data-cy="filterByTitle"
+            className="TodoList__input"
+            type="text"
+            value={filterQuery}
+            onChange={changeFilter}
+          />
+        </label>
+
+        <label className="TodoList__label">
+          Select
+          <select
+            className="TodoList__input"
+            value={status}
+            onChange={changeStatus}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
+          </select>
+        </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
+        <div className="TodoList__label">
+          Random order
           <button
-            className="TodoList__user-button button"
             type="button"
+            className="TodoList__input"
+            onClick={changeShuffle}
           >
-            User&nbsp;#2
+            Shuffle list
           </button>
-        </li>
-      </ul>
+        </div>
+      </div>
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {visibleTodos.map(todo => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              selectNewUser={selectNewUser}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
