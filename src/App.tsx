@@ -18,11 +18,14 @@ const App: React.FC = () => {
     setSelectedUserId(0);
   }, []);
 
+  const getTodos = async () => {
+    const todosFromServer = await getTodosFromServer();
+
+    setTodos(todosFromServer);
+  };
+
   useEffect(() => {
-    getTodosFromServer()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
+    getTodos();
   }, []);
 
   return (
