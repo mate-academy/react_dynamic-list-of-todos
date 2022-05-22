@@ -57,8 +57,10 @@ const App: React.FC = () => {
       return [...todosArr];
     }
 
+    const lowerQuery = query.toLowerCase();
+
     return todosArr.filter(todo => todo.title.toLowerCase()
-      .includes(query.toLowerCase()));
+      .includes(lowerQuery));
   };
 
   const getVisibleTodos = () => {

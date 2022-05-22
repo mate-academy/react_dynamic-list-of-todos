@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import './TodoList.scss';
 
@@ -17,11 +18,11 @@ export const TodoList: React.FC<Props>
       <ul className="TodoList__list">
         {displayedTodos.map(todo => (
           <li
-            className={
-              todo.completed
-                ? 'TodoList__item TodoList__item--checked'
-                : 'TodoList__item TodoList__item--unchecked'
-            }
+            className={classNames({
+              TodoList__item: true,
+              'TodoList__item--checked': todo.completed,
+              'TodoList__item--unchecked': !todo.completed,
+            })}
             key={todo.id}
           >
             <label>
