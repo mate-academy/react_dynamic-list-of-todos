@@ -27,3 +27,14 @@
     margin: 20px auto 0;
   }
 }
+
+.ClearUserInfo {
+  display: block;
+  margin: 20px auto 0;
+  width: 150px;
+  height: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
