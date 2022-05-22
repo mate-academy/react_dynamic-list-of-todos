@@ -22,8 +22,20 @@
     margin: 5px;
   }
 
-  &__clear {
+  &__clearButton {
+    cursor: pointer;
     display: block;
     margin: 20px auto 0;
+    width: 100px;
+    height: 25px;
+    font-weight: bold;
+    background-color: transparent;
+    border: 1px solid red;
+    border-radius: 5px;
+    transition: background-color 0.12s;
+
+    &:hover {
+      background-color: red;
+    }
   }
 }
