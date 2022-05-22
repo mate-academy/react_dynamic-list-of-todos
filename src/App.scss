@@ -91,4 +91,20 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__input {
+    width: 150px;
+    height: 30px;
+  }
+
+  &__select {
+    width: 150px;
+    height: 30px;
+  }
 }

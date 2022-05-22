@@ -1,44 +1,57 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  chooseUser: (id: number) => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  chooseUser,
+}) => {
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todos.map(({
+            userId,
+            title,
+            completed,
+            id,
+          }) => (
+            <li
+              key={id}
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--checked': completed },
+                { 'TodoList__item--unchecked': !completed },
+              )}
+            >
+              <label>
+                <input type="checkbox" readOnly />
+                <p>{title}</p>
+              </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+              <button
+                className="
+                TodoList__user-button
+                TodoList__user-button--selected
+                button
+              "
+                type="button"
+                value={userId}
+                onClick={() => chooseUser(userId)}
+              >
+                {`User #${userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
