@@ -63,6 +63,7 @@ export const App: React.FC = () => {
             id="search-query"
             className="App__input"
             placeholder="Type key-word"
+            data-cy="filterByTitle"
           />
 
           <select

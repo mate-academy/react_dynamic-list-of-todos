@@ -16,7 +16,7 @@ export const TodoList: React.FC<Props> = ({
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
-        <ul className="TodoList__list">
+        <ul className="TodoList__list" data-cy="listOfTodos">
           {todos.map(({
             userId,
             title,
@@ -43,6 +43,7 @@ export const TodoList: React.FC<Props> = ({
                 button
               "
                 type="button"
+                data-cy="userButton"
                 value={userId}
                 onClick={() => chooseUser(userId)}
               >
