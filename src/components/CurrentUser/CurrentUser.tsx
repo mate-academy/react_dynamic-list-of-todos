@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import './CurrentUser.scss';
 
 type Props = {
   userId: number;
-  setSelectedUser: (userId: number) => void;
+  setSelectedUser: (userId: number | null) => void;
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, setSelectedUser }) => {
   const [user, setUser] = useState<User | null>(null);
 
+  const fetchUser = useCallback(async () => {
+    const newUser = await getUser(userId);
+
+    setUser(newUser);
+  }, [userId]);
+
   useEffect(() => {
-    getUser(userId).then(setUser);
+    fetchUser();
   }, [userId]);
 
   return (
@@ -33,14 +39,17 @@ export const CurrentUser: React.FC<Props> = ({ userId, setSelectedUser }) => {
           </h3>
           <p className="CurrentUser__email">{user.email}</p>
           <p className="CurrentUser__phone">{user.phone}</p>
-          <button
-            data-cy="userButton"
-            className="CurrentUser__button"
-            type="button"
-            onClick={() => setSelectedUser(0)}
-          >
-            Clear
-          </button>
+          {userId && (
+            <button
+              data-cy="userButton"
+              className="CurrentUser__button"
+              type="button"
+              onClick={() => setSelectedUser(0)}
+            >
+              Clear
+            </button>
+          )}
+
         </>
       ) : (
         <p>Loading...</p>

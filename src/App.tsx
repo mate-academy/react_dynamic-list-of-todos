@@ -8,19 +8,25 @@ import { getTodos } from './api';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
   const [selectedValue, setSelectedValue] = useState('all');
 
-  useEffect(() => {
-    getTodos().then(setTodos);
+  const getData = useCallback(async () => {
+    const data = await getTodos();
+
+    setTodos(data);
   }, []);
 
-  const handleChangeInput = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
-    }, [],
-  );
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleChangeInput = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setQuery(event.target.value);
+  }, []);
 
   const handleChangeSelect = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,12 +53,13 @@ const App: React.FC = () => {
     <div className="App">
       <div className="App__sidebar">
         <TodoList
-          selectUserId={setSelectedUserId}
-          loadedTodos={preparedTodos()}
-          inputQuery={query}
           setInputQuery={handleChangeInput}
-          selectedValue={selectedValue}
           handleChangeSelect={handleChangeSelect}
+          loadedTodos={preparedTodos()}
+          selectUserId={setSelectedUserId}
+          userId={selectedUserId}
+          inputQuery={query}
+          selectedValue={selectedValue}
         />
       </div>
 

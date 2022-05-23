@@ -4,6 +4,7 @@ import cn from 'classnames';
 
 type Props = {
   loadedTodos: Todo[];
+  userId: number | null;
   inputQuery: string;
   setInputQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectUserId: (userId: number) => void;
@@ -13,6 +14,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   loadedTodos,
+  userId,
   selectUserId,
   inputQuery,
   setInputQuery,
@@ -72,11 +74,12 @@ export const TodoList: React.FC<Props> = ({
                 </label>
 
                 <button
-                  className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+                  className={cn(
+                    'TodoList__user-button', 'button',
+                    {
+                      'TodoList__user-button--selected': todo.userId === userId,
+                    },
+                  )}
                   type="button"
                   onClick={() => {
                     selectUserId(todo.userId);
