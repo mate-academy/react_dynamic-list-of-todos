@@ -28,4 +28,21 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__control {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__filter-by-title {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__filter-by-completed {
+    font-size: 16px;
+    width: 150px;
+  }
 }
