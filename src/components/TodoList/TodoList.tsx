@@ -25,6 +25,7 @@ export const TodoList: React.FC<Props> = ({
       {loadedTodos ? (
         <div className="TodoList__list-container">
           <input
+            data-cy="filterByTitle"
             className="TodoList__filter"
             name="TodoList__filter"
             type="text"
@@ -48,7 +49,10 @@ export const TodoList: React.FC<Props> = ({
             </select>
           </label>
 
-          <ul className="TodoList__list">
+          <ul
+            data-cy="listOfTodos"
+            className="TodoList__list"
+          >
             {loadedTodos.map(todo => (
               <li
                 key={todo.id}

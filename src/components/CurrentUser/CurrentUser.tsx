@@ -25,10 +25,16 @@ export const CurrentUser: React.FC<Props> = ({ userId, setSelectedUser }) => {
             </span>
           </h2>
 
-          <h3 className="CurrentUser__name">{user.name}</h3>
+          <h3
+            data-cy="userName"
+            className="CurrentUser__name"
+          >
+            {user.name}
+          </h3>
           <p className="CurrentUser__email">{user.email}</p>
           <p className="CurrentUser__phone">{user.phone}</p>
           <button
+            data-cy="userButton"
             className="CurrentUser__button"
             type="button"
             onClick={() => setSelectedUser(0)}
