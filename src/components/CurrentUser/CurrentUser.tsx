@@ -5,9 +5,13 @@ import { getUser } from '../../api/api';
 
 type Props = {
   userId: number,
+  clearUser: (userId: number) => void,
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId }) => {
+export const CurrentUser: React.FC<Props> = ({
+  userId,
+  clearUser,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -28,6 +32,14 @@ export const CurrentUser: React.FC<Props> = ({ userId }) => {
       <h3 className="CurrentUser__name">{user?.name}</h3>
       <p className="CurrentUser__email">{user?.email}</p>
       <p className="CurrentUser__phone">{user?.phone}</p>
+
+      <button
+        type="button"
+        className="button CurrentUser__clear"
+        onClick={() => clearUser(0)}
+      >
+        Clear User
+      </button>
     </div>
   );
 };

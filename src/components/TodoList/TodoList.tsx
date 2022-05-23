@@ -5,17 +5,31 @@ import classnames from 'classnames';
 type Props = {
   todos: Todo[],
   onSelectUserId: (userId: number) => void,
+  query: string,
+  setQuery: (value: string) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectUserId,
+  query,
+  setQuery,
 }) => {
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
+        <label>
+          Filter:
+          {' '}
+          <input
+            type="text"
+            value={query}
+            onChange={(event => setQuery(event.currentTarget.value))}
+          />
+        </label>
+
         <ul className="TodoList__list">
           {todos.map(todo => (
             <li
