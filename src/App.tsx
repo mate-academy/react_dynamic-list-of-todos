@@ -3,17 +3,17 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { API_URL, request } from './components/API/api';
+import { getData } from './components/API/api';
 
 const App: React.FC = () => {
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [todos, setTodos] = useState([]);
   const [downloadError, setDownloadError] = useState('');
 
   useEffect(() => {
     const getDataFromServer = async () => {
       try {
-        const dataFromServer = await request(API_URL, '');
+        const dataFromServer = await getData();
 
         setTodos(dataFromServer);
       } catch {
@@ -28,6 +28,10 @@ const App: React.FC = () => {
     setSelectedUserId(id);
   }, []);
 
+  const onShuffleChange = () => {
+    setTodos([...todos].sort(() => Math.random() - 0.5));
+  };
+
   return (
     <div className="App">
       {
@@ -40,6 +44,7 @@ const App: React.FC = () => {
                   todos={todos}
                   selectNewUser={selectNewUser}
                   selectedUserId={selectedUserId}
+                  onShuffleChange={onShuffleChange}
                 />
               </div>
 

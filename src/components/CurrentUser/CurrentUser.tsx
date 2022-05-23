@@ -4,13 +4,8 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { request, USERS_URL } from '../API/api';
+import { getUsers } from '../API/api';
 import './CurrentUser.scss';
-
-enum Error {
-  Initial = '',
-  Error = 'Can\'t download user',
-}
 
 type Props = {
   userId: number;
@@ -22,18 +17,18 @@ export const CurrentUser: FC<Props> = ({
   selectNewUser,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userError, setUserError] = useState(Error.Initial);
+  const [userError, setUserError] = useState<string | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const userFromServer = await request(USERS_URL, `/${userId}`);
+        const userFromServer = await getUsers(`/${userId}`);
 
         setUser(userFromServer);
-        setUserError(Error.Initial);
+        setUserError(null);
       } catch {
         setUser(null);
-        setUserError(Error.Error);
+        setUserError('Can\'t download user');
       }
     };
 

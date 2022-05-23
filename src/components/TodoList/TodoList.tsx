@@ -15,20 +15,25 @@ enum Status {
 
 type Props = {
   todos: Todo[];
-  selectedUserId: number,
+  selectedUserId: number | null,
   selectNewUser: (x: number) => void;
+  onShuffleChange: () => void;
 };
 
 export const TodoList: FC<Props> = ({
   todos,
   selectedUserId,
   selectNewUser,
+  onShuffleChange,
 }) => {
   const [filterQuery, setFilterQuery] = useState('');
   const [status, setStatus] = useState(Status.All);
-  const [shuffle, setShuffle] = useState(false);
 
-  const filteredStatus = () => {
+  const changeShuffle = () => {
+    onShuffleChange();
+  };
+
+  const filterTodosByStatus = () => {
     switch (status) {
       case Status.Active:
         return todos.filter(todo => !todo.completed);
@@ -40,16 +45,14 @@ export const TodoList: FC<Props> = ({
     }
   };
 
-  const filteredTodos = filteredStatus().filter(todo => {
+  const filteredTodosByTitle = filterTodosByStatus().filter(todo => {
     const title = todo.title.toLowerCase();
     const query = filterQuery.toLowerCase();
 
     return title.includes(query);
   });
 
-  const visibleTodos = shuffle
-    ? filteredTodos.sort(() => Math.random() - 0.5)
-    : filteredTodos;
+  const visibleTodos = filteredTodosByTitle;
 
   const changeStatus = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     setStatus(event.target.value as Status);
@@ -57,10 +60,6 @@ export const TodoList: FC<Props> = ({
 
   const changeFilter = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setFilterQuery(event.target.value);
-  }, []);
-
-  const changeShuffle = useCallback(() => {
-    setShuffle(prev => !prev);
   }, []);
 
   return (
@@ -108,14 +107,18 @@ export const TodoList: FC<Props> = ({
           className="TodoList__list"
           data-cy="listOfTodos"
         >
-          {visibleTodos.map(todo => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              selectNewUser={selectNewUser}
-              selectedUserId={selectedUserId}
-            />
-          ))}
+          {visibleTodos.map(todo => {
+            return (todo.userId)
+              ? (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  selectNewUser={selectNewUser}
+                  selectedUserId={selectedUserId}
+                />
+              )
+              : '';
+          })}
         </ul>
       </div>
     </div>

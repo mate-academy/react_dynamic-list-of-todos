@@ -8,7 +8,7 @@ import cn from 'classnames';
 
 type Props = {
   todo: Todo;
-  selectedUserId: number,
+  selectedUserId: number | null,
   selectNewUser: (x: number) => void;
 };
 
@@ -50,11 +50,6 @@ export const TodoItem: FC<Props> = ({
             'TodoItem__user-button--selected': todo.userId === selectedUserId,
           },
         )}
-        // className="
-        //   TodoItem__user-button
-        //   TodoItem__user-button--selected
-        //   button
-        // "
         type="button"
         onClick={() => selectNewUser(todo.userId)}
         data-cy="userButton"
