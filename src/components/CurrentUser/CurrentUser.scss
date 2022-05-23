@@ -23,7 +23,20 @@
   }
 
   &__clear {
+    font-weight: 600;
     display: block;
     margin: 20px auto 0;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transition: background-color, color, 300ms ease;
+
+    &:hover {
+      background-color: rgb(255, 77, 77);
+      color: #fff;
+    }
   }
 }
