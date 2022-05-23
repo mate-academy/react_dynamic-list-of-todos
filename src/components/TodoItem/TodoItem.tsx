@@ -43,19 +43,21 @@ export const TodoItem: FC<Props> = ({
         <p>{todo.title}</p>
       </label>
 
-      <button
-        className={cn(
-          'TodoItem__user-button', 'button',
-          {
-            'TodoItem__user-button--selected': todo.userId === selectedUserId,
-          },
-        )}
-        type="button"
-        onClick={() => selectNewUser(todo.userId)}
-        data-cy="userButton"
-      >
-        {`User #${todo.userId}`}
-      </button>
+      {todo.userId && (
+        <button
+          className={cn(
+            'TodoItem__user-button', 'button',
+            {
+              'TodoItem__user-button--selected': todo.userId === selectedUserId,
+            },
+          )}
+          type="button"
+          onClick={() => selectNewUser(todo.userId)}
+          data-cy="userButton"
+        >
+          {`User #${todo.userId}`}
+        </button>
+      )}
     </li>
   );
 };

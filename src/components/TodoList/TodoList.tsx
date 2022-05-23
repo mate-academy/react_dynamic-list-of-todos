@@ -107,18 +107,14 @@ export const TodoList: FC<Props> = ({
           className="TodoList__list"
           data-cy="listOfTodos"
         >
-          {visibleTodos.map(todo => {
-            return (todo.userId)
-              ? (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  selectNewUser={selectNewUser}
-                  selectedUserId={selectedUserId}
-                />
-              )
-              : '';
-          })}
+          {visibleTodos.map(todo => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              selectNewUser={selectNewUser}
+              selectedUserId={selectedUserId}
+            />
+          ))}
         </ul>
       </div>
     </div>

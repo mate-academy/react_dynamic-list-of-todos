@@ -9,7 +9,7 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number;
-  selectNewUser: (x: number) => void;
+  selectNewUser: (x: null) => void;
 };
 
 export const CurrentUser: FC<Props> = ({
@@ -36,7 +36,7 @@ export const CurrentUser: FC<Props> = ({
   }, [userId]);
 
   const clearUser = useCallback(() => {
-    selectNewUser(0);
+    selectNewUser(null);
   }, []);
 
   return (
