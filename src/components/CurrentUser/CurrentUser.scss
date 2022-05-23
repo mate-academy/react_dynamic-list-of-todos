@@ -25,5 +25,16 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    border-radius: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: rgb(248, 157, 172);
+    font-size: 19px;
+    font-weight: bold;
+
+    &:hover {
+      background-color: crimson;
+      color: white;
+    }
   }
 }

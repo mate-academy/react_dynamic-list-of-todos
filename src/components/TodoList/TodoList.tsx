@@ -1,44 +1,115 @@
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import './TodoList.scss';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[],
+  setSelectedUserId: (userId: number) => void,
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
+  const [isFiltered, setIsFiltered] = useState('');
+  const [isCompleted, setIsCompleted] = useState('all');
+  const [visibleTodos, setVisibleTodos] = useState(todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+  useEffect(() => {
+    setVisibleTodos(todos.filter(todo => {
+      const titleToLower = todo.title.toLowerCase().includes(isFiltered);
+
+      switch (isCompleted) {
+        case 'all':
+          return titleToLower;
+
+        case 'active':
+          return titleToLower && todo.completed === false;
+
+        case 'completed':
+          return titleToLower && todo.completed === true;
+
+        default:
+          return todo;
+      }
+    }));
+  }, [isFiltered, isCompleted, todos]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__sort">
+        <label>
+          Title:
+          <input
+            className="TodoList__input"
+            type="text"
+            value={isFiltered}
+            onChange={({ target }) => {
+              setIsFiltered(target.value);
+            }}
+          />
+        </label>
+
+        <label>
+          <select
+            className="TodoList__input"
+            name="isCompleted"
+            onChange={({ target }) => {
+              setIsCompleted(target.value);
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="show all">
+              All
+            </option>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+            <option value="not completed">
+              Active
+            </option>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+            <option value="completed">
+              Completed
+            </option>
+          </select>
+        </label>
+      </div>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {visibleTodos.map(item => {
+            return (
+              <li
+                key={item.id}
+                className={`TodoList__item
+                  TodoList__item--${item.completed ? 'checked' : 'unchecked'}`}
+              >
+                <label>
+                  <input
+                    checked={item.completed}
+                    type="checkbox"
+                    readOnly
+                  />
+                  <p>{item.title}</p>
+                </label>
+
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => setSelectedUserId(item.userId)}
+                >
+                  User&nbsp;#
+                  {item.userId}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
