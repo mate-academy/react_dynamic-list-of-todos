@@ -29,7 +29,7 @@ export const CurrentUser: FC<Props> = ({
       setCurrentUser(null);
       setErrorLoad(true);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetchUser();
