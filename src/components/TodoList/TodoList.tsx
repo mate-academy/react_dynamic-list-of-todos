@@ -86,6 +86,7 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
         <div className="actions__filter">
           <h3>Filter</h3>
           <input
+            data-cy="filterByTitle"
             type="text"
             value={filterByString}
             onChange={(event) => setFilterByString(event.target.value)}
@@ -115,7 +116,7 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
       </div>
 
       <div className="TodoList__list-container">
-        <ul className="TodoList__list">
+        <ul className="TodoList__list" data-cy="listOfTodos">
           {prepareTodos.map((todo: Todo) => (
             <li
               key={todo.id}
@@ -132,6 +133,7 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
               </label>
 
               <button
+                data-cy="userButton"
                 onClick={() => setSelectUser(todo.userId)}
                 className={classNames('TodoList__user-button', 'button', {
                   'TodoList__user-button--selected': todo.userId === selectUser,
