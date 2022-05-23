@@ -1,6 +1,10 @@
 .TodoList {
   width: 100%;
 
+  &__box {
+    display: flex;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
@@ -17,9 +21,6 @@
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 5px;
-  }
-
-  &__item--checked {
     background-color: #cde4e4;
     color: #459595;
   }
@@ -27,5 +28,21 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+}
+
+.button {
+  background-color: #7b7795;
+  border: 1px solid rgb(255, 192, 192);
+}
+
+.input {
+  margin-right: 10px;
+  transition: box-shadow 0.5s;
+  outline: none;
+
+  &:hover {
+    transition: box-shadow 0.5s;
+    box-shadow: 0 0 2px 2px rgb(255, 171, 233);
   }
 }
