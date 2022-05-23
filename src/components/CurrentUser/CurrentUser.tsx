@@ -9,15 +9,21 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getUser(userId)
-      .then(newUser => setUser(newUser));
+      .then(userFromServer => {
+        setUser(userFromServer);
+      })
+      .catch(() => {
+        setError('Can not load user');
+      });
   }, [userId]);
 
   return (
     <>
-      {user && (
+      {user ? (
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
             <span>{`Selected user: ${user.id}`}</span>
@@ -26,15 +32,16 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
           <h3 className="CurrentUser__name" data-cy="userName">{user.name}</h3>
           <p className="CurrentUser__email">{user.email}</p>
           <p className="CurrentUser__phone">{user.phone}</p>
+
+          <button
+            type="button"
+            onClick={() => selectUser(0)}
+            className="CurrentUser__clear"
+          >
+            Clear
+          </button>
         </div>
-      )}
-      <button
-        type="button"
-        onClick={() => selectUser(0)}
-        className="CurrentUser__clear"
-      >
-        Clear
-      </button>
+      ) : (<p>{error}</p>)}
     </>
   );
 };
