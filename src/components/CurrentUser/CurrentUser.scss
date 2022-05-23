@@ -26,4 +26,16 @@
     display: block;
     margin: 20px auto 0;
   }
+
+  &__button {
+    display: block;
+    margin: 0 auto;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #4d457b;
+    padding: 5px;
+    border: 1px solid #4d457b;
+    border-radius: 5px;
+  }
 }

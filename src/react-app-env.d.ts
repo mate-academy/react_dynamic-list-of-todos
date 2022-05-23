@@ -1,3 +1,15 @@
 /// <reference types="react-scripts" />
 
-type Todo = {}; /* TODO: DESCRIBE */
+interface Todo {
+  userId: number,
+  id: number,
+  title: string,
+  completed: boolean,
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+}
