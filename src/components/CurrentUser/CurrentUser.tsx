@@ -12,13 +12,17 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    getUser(userId)
-      .then(userFromServer => {
+    async function response() {
+      try {
+        const userFromServer = await getUser(userId);
+
         setUser(userFromServer);
-      })
-      .catch(() => {
+      } catch {
         setError('Can not load user');
-      });
+      }
+    }
+
+    response();
   }, [userId]);
 
   return (

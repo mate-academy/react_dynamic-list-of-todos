@@ -15,13 +15,17 @@ const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
+    async function response() {
+      try {
+        const todosFromServer = await getTodos();
+
         setTodos(todosFromServer);
-      })
-      .catch(() => {
+      } catch {
         setErrorMessage('Can not load todos');
-      });
+      }
+    }
+
+    response();
   }, []);
 
   const selectUser = (userId: number) => {
