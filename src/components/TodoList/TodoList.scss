@@ -28,4 +28,24 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__select {
+    margin-left: 30px;
+    height: 22px;
+  }
+
+  &__random {
+    margin-left: 30px;
+    width: 150px;
+    height: 25px;
+    background-color: rgb(91, 131, 218);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
