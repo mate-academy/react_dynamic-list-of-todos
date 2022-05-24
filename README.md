@@ -26,4 +26,3 @@ Add the data loading, so the App works as described below:
 - the `<input>` element for filtering todos by title in `TodoList` should have a `data-cy="filterByTitle"` attribute
 - the element for the user "name" in `CurrentUser` should have a `data-cy="userName"` attribute
 - the button to select a user should have a `data-cy="userButton"` attribute
-им

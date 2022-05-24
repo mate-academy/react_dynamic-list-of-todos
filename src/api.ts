@@ -1,14 +1,13 @@
 const API_URL = 'https://mate.academy/students-api/';
 
-const getData = (endpoint: string) => {
-  return fetch(`${API_URL}/${endpoint}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Status of error: ${response.status}`);
-      }
+export const getData = async (endpoint: string) => {
+  const response = await fetch(`${API_URL}/${endpoint}`);
 
-      return response.json();
-    });
+  if (!response.ok) {
+    throw new Error(`Status of error: ${response.status}`);
+  }
+
+  return response.json();
 };
 
 export const getTodos = (): Promise<Todo[]> => getData('todos');

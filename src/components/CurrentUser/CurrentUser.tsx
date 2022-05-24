@@ -30,8 +30,8 @@ export const CurrentUser: React.FC<Props>
     <div className="CurrentUser">
       {user ? (
         <>
-          <h2 className="CurrentUser__title" data-cy="userButton">
-            <span>
+          <h2 className="CurrentUser__title">
+            <span data-cy="userButton">
               Selected user:
               {userId}
             </span>

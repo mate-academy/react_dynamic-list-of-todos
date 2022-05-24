@@ -19,10 +19,18 @@ const App: React.FC = () => {
   const [selectValue, setSelectValue] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(data => setTodos(data))
-      .catch((error) => setErrorText(error.toString()));
-  }, []);
+    const getDataFromServer = async () => {
+      try {
+        const dataFromServer = await getTodos();
+
+        setTodos(dataFromServer);
+      } catch (error) {
+        setErrorText('Can\'t download data from server!');
+      }
+    };
+
+    getDataFromServer();
+  });
 
   if (errorText) {
     return (
@@ -31,6 +39,14 @@ const App: React.FC = () => {
       </div>
     );
   }
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectValue(event.target.value);
+  };
 
   const getVisibleTodos = (
     todosFromServer: Todo[],
@@ -64,14 +80,12 @@ const App: React.FC = () => {
           className="TodoList__input"
           placeholder="Type search word"
           value={query}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setQuery(event.currentTarget.value);
-          }}
+          onChange={handleChangeInput}
         />
 
         <select
           className="TodoList__select"
-          onChange={(event) => setSelectValue(event.target.value)}
+          onChange={handleChangeSelect}
           value={selectValue}
         >
           {Object.keys(TodoStatus).map(key => (
