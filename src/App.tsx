@@ -12,7 +12,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(data => setTodos(data));
+      .then(setTodos);
   }, []);
 
   return (
@@ -30,7 +30,7 @@ const App: React.FC = () => {
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId ? (
+          {selectedUserId > 0 ? (
             <CurrentUser
               userId={selectedUserId}
               clearUser={setSelectedUserId}
