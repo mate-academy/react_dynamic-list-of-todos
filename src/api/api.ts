@@ -4,14 +4,9 @@ import { User } from '../types/User';
 const BASE_URL = 'https://mate.academy/students-api';
 
 const request = async (url: string) => {
-  try {
-    const response = await fetch(`${BASE_URL}${url}`);
-    const data = await response.json();
+  const response = await fetch(`${BASE_URL}${url}`);
 
-    return data;
-  } catch (error) {
-    throw new Error(`${error}`);
-  }
+  return response.json();
 };
 
 export const getTodos = (): Promise<Todo[]> => {

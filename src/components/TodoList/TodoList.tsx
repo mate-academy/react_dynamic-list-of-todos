@@ -38,6 +38,14 @@ export const TodoList: React.FC<Props> = React.memo(({
     }));
   }, [filterByTitle, todos, filterByComplited]);
 
+  const titleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterByTitle(event.target.value.toLowerCase());
+  };
+
+  const completedFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterByComplited(event.target.value);
+  };
+
   const randomize = () => {
     setVisibleTodos([...visibleTodos].sort(() => Math.random() - 0.5));
   };
@@ -53,15 +61,14 @@ export const TodoList: React.FC<Props> = React.memo(({
             type="text"
             data-cy="filterByTitle"
             value={filterByTitle}
-            onChange={({ target }) => (
-              setFilterByTitle(target.value.toLowerCase()))}
+            onChange={titleFilter}
           />
         </label>
 
         <select
           className="TodoList__filter-by-completed"
           value={filterByComplited}
-          onChange={({ target }) => setFilterByComplited(target.value)}
+          onChange={completedFilter}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
