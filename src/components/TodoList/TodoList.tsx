@@ -10,9 +10,15 @@ interface Props {
   setSelectedUserId: (userId: number) => void,
 }
 
+enum Status {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
   const [isFiltered, setIsFiltered] = useState('');
-  const [isCompleted, setIsCompleted] = useState('all');
+  const [isCompleted, setIsCompleted] = useState(Status.All);
   const [visibleTodos, setVisibleTodos] = useState(todos);
 
   useEffect(() => {
@@ -20,20 +26,22 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
       const titleToLower = todo.title.toLowerCase().includes(isFiltered);
 
       switch (isCompleted) {
-        case 'all':
+        case Status.All:
           return titleToLower;
 
-        case 'active':
-          return titleToLower && todo.completed === false;
+        case Status.Active:
+          return titleToLower && !todo.completed;
 
-        case 'completed':
-          return titleToLower && todo.completed === true;
+        case Status.Completed:
+          return titleToLower && todo.completed;
 
         default:
           return todo;
       }
     }));
   }, [isFiltered, isCompleted, todos]);
+
+  // console.log(isCompleted);
 
   return (
     <div className="TodoList">
@@ -57,20 +65,12 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
             className="TodoList__input"
             name="isCompleted"
             onChange={({ target }) => {
-              setIsCompleted(target.value);
+              setIsCompleted(target.value as Status);
             }}
           >
-            <option value="show all">
-              All
-            </option>
-
-            <option value="not completed">
-              Active
-            </option>
-
-            <option value="completed">
-              Completed
-            </option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </label>
       </div>
