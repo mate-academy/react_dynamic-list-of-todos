@@ -72,6 +72,16 @@ export const TodoList: React.FC<Props> = ({
             Completed
           </option>
         </select>
+
+        <button
+          type="button"
+          className="button TodoList__user-button--selected"
+          onClick={() => setVisibleTodos(
+            [...todos].sort(() => Math.random() - 0.5),
+          )}
+        >
+          Randomize
+        </button>
       </div>
 
       <div className="TodoList__list-container">

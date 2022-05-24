@@ -2,14 +2,16 @@
   width: 100%;
 
   &__filter {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
   }
 
   &__field {
     box-sizing: border-box;
     height: 25px;
-    width: 180px;
+    // width: 180px;
   }
 
   &__user-button--selected {
