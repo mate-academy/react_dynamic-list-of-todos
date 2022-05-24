@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({
           case 'completed':
             return titleToLower.includes(queryToLower) && todo.completed;
           default:
-            return todo;
+            return todos;
         }
       },
     ));
@@ -77,7 +77,7 @@ export const TodoList: React.FC<Props> = ({
           type="button"
           className="button TodoList__user-button--selected"
           onClick={() => setVisibleTodos(
-            [...todos].sort(() => Math.random() - 0.5),
+            [...visibleTodos].sort(() => Math.random() - 0.5),
           )}
         >
           Randomize
