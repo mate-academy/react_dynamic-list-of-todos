@@ -28,22 +28,6 @@ export const CurrentUser: React.FC<Props> = React.memo(({
       });
   });
 
-  // const getUser = useCallback(async () => {
-  //   try {
-  //     const newUser = await getUserFromServer(userId);
-
-  //     setLoadingError(false);
-  //     setCurrentUser(newUser);
-  //   } catch {
-  //     setCurrentUser(null);
-  //     setLoadingError(true);
-  //   }
-  // }, [userId]);
-
-  // useEffect(() => {
-  //   getUser();
-  // }, [userId]);
-
   return (
     <>
       {currentUser && (
