@@ -81,6 +81,7 @@ export const App: React.FC = () => {
         <TodoList
           todos={showTodos}
           chooseUser={chooseUser}
+          selectedUserId={selectedUserId}
         />
       </div>
 

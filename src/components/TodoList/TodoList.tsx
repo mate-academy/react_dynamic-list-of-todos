@@ -5,11 +5,13 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   chooseUser: (id: number) => void;
+  selectedUserId: number;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   chooseUser,
+  selectedUserId,
 }) => {
   return (
     <div className="TodoList">
@@ -32,23 +34,26 @@ export const TodoList: React.FC<Props> = ({
               )}
             >
               <label>
-                <input type="checkbox" readOnly />
+                <input type="checkbox" checked={completed} readOnly />
                 <p>{title}</p>
               </label>
-
-              <button
-                className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
-                type="button"
-                data-cy="userButton"
-                value={userId}
-                onClick={() => chooseUser(userId)}
-              >
-                {`User #${userId}`}
-              </button>
+              {userId && (
+                <button
+                  className={classNames(
+                    'TodoList__user-button', 'button',
+                    {
+                      'TodoList__user-button--selected': selectedUserId
+                     === userId,
+                    },
+                  )}
+                  type="button"
+                  data-cy="userButton"
+                  value={userId}
+                  onClick={() => chooseUser(userId)}
+                >
+                  {`User #${userId}`}
+                </button>
+              )}
             </li>
           ))}
         </ul>
