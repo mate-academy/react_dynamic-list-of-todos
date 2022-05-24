@@ -11,7 +11,7 @@ type Propps = {
 export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
   const [todos, setTodos] = useState([]);
   const [prepareTodos, setPrepareTodos] = useState(todos);
-  const [todosForRand, setTodosForRand] = useState(prepareTodos);
+  const [todosForRand, setTodosForRand] = useState([]);
   const [filterByString, setFilterByString] = useState('');
   const [filterByComplete, setFilterByComplete] = useState('all');
   const [isRandom, setIsRandom] = useState(false);
@@ -65,16 +65,17 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
   };
 
   useEffect(() => {
+    setTodosForRand([...prepareTodos]);
     filterHandler();
   }, [filterByString, filterByComplete]);
 
   useEffect(() => {
-    setTodosForRand(prepareTodos);
+    setTodosForRand([...prepareTodos]);
 
     if (isRandom) {
       shuffleArray();
     } else {
-      setPrepareTodos(todosForRand);
+      setPrepareTodos([...todosForRand]);
     }
   }, [isRandom]);
 
@@ -128,6 +129,7 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
               <label>
                 <input
                   type="checkbox"
+                  checked={todo.completed}
                 />
                 <p>{todo.title}</p>
               </label>
