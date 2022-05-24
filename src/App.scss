@@ -85,6 +85,7 @@ input[type="checkbox"]:checked + p:before {
 
     flex-basis: 30%;
     position: relative;
+    height: max-content;
   }
 
   &__content-container {
