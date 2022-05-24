@@ -9,11 +9,6 @@ import { getTodos } from './api/api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
-
-  const visibleTodos = todos.filter(todo => {
-    return (todo.title.toLowerCase().includes(query.toLowerCase()));
-  });
 
   useEffect(() => {
     getTodos()
@@ -25,9 +20,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         {todos ? (
           <TodoList
-            todos={visibleTodos}
-            query={query}
-            setQuery={setQuery}
+            todos={todos}
             onSelectUserId={setSelectedUserId}
           />
         ) : (

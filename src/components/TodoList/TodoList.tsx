@@ -1,20 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
 import classnames from 'classnames';
 
 type Props = {
   todos: Todo[],
   onSelectUserId: (userId: number) => void,
-  query: string,
-  setQuery: (value: string) => void,
 };
+
+enum Status {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectUserId,
-  query,
-  setQuery,
 }) => {
+  const [query, setQuery] = useState('');
+  const [todosStatus, setTodosStatus] = useState('');
+
+  const filterByTitle = () => {
+    return todos.filter(todo => {
+      return (todo.title.toLowerCase().includes(query.toLowerCase()));
+    });
+  };
+
+  const preparingTodos = () => {
+    const filteredByTitle = filterByTitle();
+
+    if (todosStatus === Status.Completed) {
+      return filteredByTitle.filter(todo => todo.completed);
+    }
+
+    if (todosStatus === Status.Active) {
+      return filteredByTitle.filter(todo => !todo.completed);
+    }
+
+    return filteredByTitle;
+  };
+
+  const visibleTodos = preparingTodos();
+
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
@@ -30,8 +57,25 @@ export const TodoList: React.FC<Props> = ({
           />
         </label>
 
+        <select
+          onChange={(event) => {
+            setTodosStatus(event.target.value);
+          }}
+          className="TodoList__select"
+        >
+          <option value={Status.All}>
+            All
+          </option>
+          <option value={Status.Active}>
+            Active
+          </option>
+          <option value={Status.Completed}>
+            Completed
+          </option>
+        </select>
+
         <ul className="TodoList__list">
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             <li
               className={classnames({
                 TodoList__item: true,
