@@ -19,6 +19,12 @@
     margin-bottom: 5px;
   }
 
+  &__filter {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   &__item--checked {
     background-color: #cde4e4;
     color: #459595;

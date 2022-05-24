@@ -1,25 +1,47 @@
-import React, { useState } from 'react';
-import './App.scss';
-import './styles/general.scss';
+import React, { useState, useCallback, useEffect } from 'react';
+import { getTodos } from './api/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { Todo } from './react-app-env';
+
+import './App.scss';
+import './styles/general.scss';
 
 const App: React.FC = () => {
-  const [
-    selectedUserId,
-    // setSelectedUserId,
-  ] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const removeUser = useCallback(() => {
+    setSelectedUserId(0);
+  }, []);
+
+  const getTodosList = useCallback(async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
+  }, []);
+
+  useEffect(() => {
+    getTodosList();
+  }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList />
+        <TodoList
+          selectedUser={selectedUserId}
+          selectedUserId={setSelectedUserId}
+          todos={todos}
+        />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser />
+            <CurrentUser
+              userId={selectedUserId}
+              clearUser={removeUser}
+            />
           ) : 'No user selected'}
         </div>
       </div>
