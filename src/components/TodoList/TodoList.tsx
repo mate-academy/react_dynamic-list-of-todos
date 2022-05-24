@@ -51,6 +51,7 @@ export const TodoList: React.FC<Props> = ({
           Filter:
           {' '}
           <input
+            data-cy="filterByTitle"
             type="text"
             value={query}
             onChange={(event => setQuery(event.currentTarget.value))}
@@ -74,7 +75,10 @@ export const TodoList: React.FC<Props> = ({
           </option>
         </select>
 
-        <ul className="TodoList__list">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
           {visibleTodos.map(todo => (
             <li
               className={classnames({
@@ -94,6 +98,7 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
+                data-cy="userButton"
                 className="
                 TodoList__user-button
                 button
