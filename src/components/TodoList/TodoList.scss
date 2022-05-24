@@ -28,4 +28,22 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__controlPanel {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+.controlPanel {
+
+  &__field {
+    width: 150px;
+    padding: 10px 5px;
+    background-color: #ffe0db;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    color: #4d457b;
+  }
 }
