@@ -1,44 +1,119 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+import { Todo } from '../../types/todo';
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type SelectUser = (userId: number) => void;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+type Props = {
+  todos: Todo[];
+  selectedUserId: number;
+  onSelectUser: SelectUser;
+};
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+export const TodoList: React.FC<Props> = React.memo(({
+  todos,
+  selectedUserId,
+  onSelectUser,
+}) => {
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [filterTitle, setFilterTitle] = useState('');
+  const [selectedCompleting, setSelectedCompleting] = useState('all');
+  const handleFilter = useCallback(() => {
+    setVisibleTodos(
+      todos.filter(todo => {
+        const filterTitleLower = filterTitle.toLowerCase();
+        const titleLower = todo.title.toLowerCase();
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+        switch (selectedCompleting) {
+          case 'completed':
+            return titleLower.includes(filterTitleLower) && todo.completed;
+          case 'active':
+            return titleLower.includes(filterTitleLower) && !todo.completed;
+          case 'all':
+            return titleLower.includes(filterTitleLower);
+          default:
+            return todo;
+        }
+      }),
+    );
+  }, [filterTitle, selectedCompleting, todos]);
+
+  useEffect(() => {
+    handleFilter();
+  }, [todos, filterTitle, selectedCompleting]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <div className="is-flex">
+        <label className="label" htmlFor="filterByTitle">
+          Search:
+          <input
+            type="text"
+            name="filterByTitle"
+            className="TodoList__input-filter input is-small is-inline"
+            id="filterByTitle"
+            data-cy="filterByTitle"
+            value={filterTitle}
+            onChange={(event) => {
+              setFilterTitle(event.target.value);
+            }}
+          />
+        </label>
+
+        <select
+          className="select"
+          value={selectedCompleting}
+          onChange={(event) => {
+            setSelectedCompleting(event.target.value);
+          }}
+        >
+          <option value="all">All</option>
+          <option value="active">Not completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {visibleTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={`
+               TodoList__item
+               TodoList__item--${todo.completed ? 'checked' : 'unchecked'}
+               `}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+              <button
+                className="
+                   TodoList__user-button
+                   TodoList__user-button--selected
+                   button
+                 "
+                type="button"
+                disabled={todo.userId === selectedUserId}
+                data-cy="userButton"
+                onClick={() => {
+                  onSelectUser(todo.userId);
+                }}
+              >
+                {`User#${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+});

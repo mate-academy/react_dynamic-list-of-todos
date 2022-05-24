@@ -1,4 +1,11 @@
 .CurrentUser {
+  display: flex;
+  flex-direction: column;
+
+  &__button-clear {
+    margin: 0 auto;
+  }
+
   &__title {
     font-size: 1rem;
     color: white;
