@@ -9,43 +9,55 @@ const App: React.FC = () => {
   const [
     selectedUserId,
     setSelectedUserId,
-  ] = useState(0);
-
+  ] = useState<null | number>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<null | string>(null);
 
   const clearUser = useCallback(() => {
-    setSelectedUserId(0);
+    setSelectedUserId(null);
   }, []);
 
-  const getTodos = async () => {
-    const todosFromServer = await getTodosFromServer();
+  useEffect(() => {
+    const receiveTodosPromise = getTodosFromServer();
 
-    setTodos(todosFromServer);
-  };
+    receiveTodosPromise
+      .then((receiveTodos) => {
+        setTodos(receiveTodos);
+      })
+      .catch((fetchError) => {
+        setError(fetchError.message);
+        setTodos([]);
+      });
+  });
 
   useEffect(() => {
-    getTodos();
+    setTodos([]);
   }, []);
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          todos={todos}
-          setSelectedUserId={setSelectedUserId}
-        />
-      </div>
-
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              userId={selectedUserId}
-              clearUser={clearUser}
+      {error ? (
+        <h1 className="App__error">{error}</h1>
+      ) : (
+        <>
+          <div className="App__sidebar">
+            <TodoList
+              todos={todos}
+              setSelectedUserId={setSelectedUserId}
             />
-          ) : 'No user selected'}
-        </div>
-      </div>
+          </div>
+          <div className="App__content">
+            <div className="App__content-container">
+              {selectedUserId ? (
+                <CurrentUser
+                  userId={selectedUserId}
+                  clearUser={clearUser}
+                />
+              ) : 'No user selected'}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

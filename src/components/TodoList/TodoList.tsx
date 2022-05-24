@@ -89,17 +89,19 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
                   <p>{item.title}</p>
                 </label>
 
-                <button
-                  className="
+                {item.userId && (
+                  <button
+                    className="
                     TodoList__user-button
-                    TodoList__user-button--selected
                     button"
-                  type="button"
-                  onClick={() => setSelectedUserId(item.userId)}
-                >
-                  User&nbsp;#
-                  {item.userId}
-                </button>
+                    type="button"
+                    onClick={() => setSelectedUserId(item.userId)}
+                  >
+                    User&nbsp;#
+                    {item.userId}
+                  </button>
+                )}
+
               </li>
             );
           })}
