@@ -91,8 +91,9 @@ export const TodoList: React.FC<Props> = ({
             <li
               key={todo.id}
               className={classNames(
-                'TodoList__item',
+                'TodoList__item ',
                 { 'TodoList__item--unchecked': !todo.completed },
+                { 'TodoList__item--checked': todo.completed },
               )}
             >
               <label>
