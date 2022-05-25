@@ -1,7 +1,7 @@
 .CurrentUser {
   &__title {
     font-size: 1rem;
-    color: white;
+    color: #4d457b;
 
     span {
       background-color: #4d457b;
@@ -25,5 +25,12 @@
   &__clear {
     display: block;
     margin: 20px auto 0;
+    padding: 6px 20px;
+    transition: 0.3s all;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(105%);
+    }
   }
 }
