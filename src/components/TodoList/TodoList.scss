@@ -19,12 +19,12 @@
     margin-bottom: 5px;
   }
 
-  &__item--checked {
+  &__item--true {
     background-color: #cde4e4;
     color: #459595;
   }
 
-  &__item--unchecked {
+  &__item--false {
     background-color: #ffe0db;
     color: #ff3626;
   }
