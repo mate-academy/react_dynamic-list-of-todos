@@ -13,7 +13,7 @@ const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(data => setTodos(data));
-  });
+  }, []);
 
   return (
     <div className="App">

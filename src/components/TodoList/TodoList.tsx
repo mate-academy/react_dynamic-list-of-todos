@@ -21,6 +21,7 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [query, setQuery] = useState('');
   const [todosStatus, setTodosStatus] = useState('');
+  const [isRandomized, setIsRandomized] = useState(false);
 
   const filterByTitle = () => {
     return todos.filter(todo => (
@@ -42,7 +43,21 @@ export const TodoList: React.FC<Props> = ({
     return filteredByTitle;
   };
 
-  const visibleTodos = preparingTodos();
+  const randomize = (arr: Todo[]) => {
+    const arrToShuffle = [...arr];
+
+    for (let i = arrToShuffle.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [arrToShuffle[i], arrToShuffle[j]] = [arrToShuffle[j], arrToShuffle[i]];
+    }
+
+    return arrToShuffle;
+  };
+
+  const visibleTodos = isRandomized
+    ? randomize(preparingTodos())
+    : preparingTodos();
 
   return (
     <div className="TodoList">
@@ -77,6 +92,14 @@ export const TodoList: React.FC<Props> = ({
             Completed
           </option>
         </select>
+
+        <button
+          className="button button--randomize"
+          type="button"
+          onClick={() => setIsRandomized(prev => !prev)}
+        >
+          Randomize
+        </button>
 
         <ul
           className="TodoList__list"
