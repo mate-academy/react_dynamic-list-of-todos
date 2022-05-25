@@ -11,33 +11,41 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
   const [isComplete, setIsComplete] = useState('show all');
   const [visibleTodos, setVisibleTodos] = useState(todos);
 
+  const filterTodosByTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterByTitle(event.target.value);
+  };
+
+  const changeStatusOfTodo = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsComplete(event.target.value);
+  };
+
+  const preparingTodos = () => {
+    const todosFilteredByTitle = todos.filter(({ title }) => {
+      const titleInLowerCase = title.toLowerCase();
+
+      return titleInLowerCase.includes(filterByTitle.toLowerCase());
+    });
+
+    switch (isComplete) {
+      case 'not completed':
+        return todosFilteredByTitle.filter(
+          ({ completed }) => !completed,
+        );
+
+      case 'completed':
+        return todosFilteredByTitle.filter(
+          ({ completed }) => completed,
+        );
+
+      default:
+        return todosFilteredByTitle;
+    }
+  };
+
+  const preparedTodos = preparingTodos();
+
   useEffect(() => {
-    setVisibleTodos(
-      todos.filter((todo) => {
-        const titleToLower = todo.title.toLowerCase();
-        const filterByTitleToLower = filterByTitle.toLowerCase();
-
-        switch (isComplete) {
-          case 'show all':
-            return titleToLower.includes(filterByTitleToLower);
-
-          case 'not completed':
-            return (
-              titleToLower.includes(filterByTitleToLower)
-              && todo.completed === false
-            );
-
-          case 'completed':
-            return (
-              titleToLower.includes(filterByTitleToLower)
-              && todo.completed === true
-            );
-
-          default:
-            return todo;
-        }
-      }),
-    );
+    setVisibleTodos(preparedTodos);
   }, [filterByTitle, isComplete, todos]);
 
   return (
@@ -51,9 +59,8 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
             className="TodoList__input"
             type="text"
             value={filterByTitle}
-            onChange={({ target }) => {
-              setFilterByTitle(target.value);
-            }}
+            onChange={filterTodosByTitle}
+            data-cy="filterByTitle"
           />
         </label>
 
@@ -62,9 +69,8 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedUserId }) => {
           <select
             className="TodoList__input"
             name="isCompleted"
-            onChange={({ target }) => {
-              setIsComplete(target.value);
-            }}
+            value={isComplete}
+            onChange={changeStatusOfTodo}
           >
             <option value="show all">Show all</option>
 
