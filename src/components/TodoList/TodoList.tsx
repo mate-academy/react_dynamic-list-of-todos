@@ -65,8 +65,10 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
   };
 
   useEffect(() => {
-    setTodosForRand([...prepareTodos]);
     filterHandler();
+
+    return (() => setTodosForRand([...prepareTodos])
+    );
   }, [filterByString, filterByComplete]);
 
   useEffect(() => {
@@ -129,7 +131,7 @@ export const TodoList: React.FC<Propps> = ({ setSelectUser, selectUser }) => {
               <label>
                 <input
                   type="checkbox"
-                  checked={todo.completed}
+                  defaultChecked={todo.completed}
                 />
                 <p>{todo.title}</p>
               </label>
