@@ -26,7 +26,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectUserId }) => {
           selectUserId(0);
         }}
         type="button"
-        className="TodoList__user-button--selected button"
+        className="CurrentUser__clear button"
       >
         Clear
       </button>
