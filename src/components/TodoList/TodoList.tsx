@@ -1,44 +1,106 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[],
+  setUserId: (id: number) => void,
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+enum Show {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setUserId,
+}) => {
+  const [searchTitle, setSearchTitle] = useState('');
+  const [completFilter, setcompletFilter] = useState('All');
+  const [todosToShow, setTodosToShow] = useState(todos);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  useEffect(() => {
+    setTodosToShow(todos.filter(todo => {
+      const filtredByTitle = todo.title.toLowerCase()
+        .includes(searchTitle.toLowerCase());
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      switch (completFilter) {
+        case Show.Active:
+          return filtredByTitle && !todo.completed;
+        case Show.Completed:
+          return filtredByTitle && todo.completed;
+        case Show.All:
+          return filtredByTitle;
+        default:
+          return false;
+      }
+    }));
+  }, [todos, searchTitle, completFilter]);
+
+  return (
+    <div className="TodoList">
+      <h2 className="TodoList__title">Todos: </h2>
+      <label htmlFor="searchBar">
+        <input
+          type="text"
+          value={searchTitle}
+          onChange={({ target }) => {
+            setSearchTitle(target.value);
+          }}
+          id="searchBar"
+          className="TodoList__bar"
+          placeholder="Search Title"
+        />
+      </label>
+      <select
+        className="TodoList__select"
+        value={completFilter}
+        onChange={(event) => {
+          setcompletFilter(event.target.value);
+        }}
+      >
+        <option value={Show.All}>All</option>
+        <option value={Show.Active}>Active</option>
+        <option value={Show.Completed}>Completed</option>
+      </select>
+
+      <div className="TodoList__container">
+        <ul className="TodoList__list">
+          {todosToShow.map(todo => (
+            <li
+              key={todo.id}
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--checked': todo.completed },
+                { 'TodoList__item--unchecked': !todo.completed },
+              )}
+            >
+              <label>
+                <input
+                  checked={todo.completed}
+                  type="checkbox"
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                data-cy="userButton"
+                onClick={() => {
+                  setUserId(todo.userId);
+                }}
+                className="TodoList__user-button button"
+                type="button"
+              >
+                {`User #${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};

@@ -28,4 +28,35 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__select {
+    padding: 10px;
+    outline: none;
+  }
+
+  &__bar {
+    height: 42px;
+    padding: 0 20px;
+    margin: 20px;
+    font-size: 16px;
+    box-shadow: 0 1px 8px #3d4e611a;
+    border: 1px solid #e1e7ed;
+    border-radius: 4px;
+    outline: none;
+
+    &:hover {
+      box-shadow: 0 3px 8px #3d4e6133;
+    }
+
+    &::placeholder {
+      color: rgba(61, 78, 97, 1);
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    &:focus {
+      background-position: 26px;
+      background-size: 19px;
+    }
+  }
 }

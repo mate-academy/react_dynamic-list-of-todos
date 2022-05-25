@@ -1,12 +1,58 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './CurrentUser.scss';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+interface Props {
+  id: number;
+  resetUser: () => void;
+}
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({
+  id,
+  resetUser,
+}) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  const newUser = useCallback(async () => {
+    setCurrentUser(await getUser(id));
+  }, [id]);
+
+  useEffect(() => {
+    newUser();
+  }, [id]);
+
+  return (
+    <>
+      { currentUser && (
+        <div className="currentUser">
+          <h2 className="currentUser__title">
+            <span>
+              {`Selected user: ${currentUser.id}`}
+            </span>
+          </h2>
+
+          <h3 className="currentUser__name">
+            {currentUser.name}
+          </h3>
+
+          <p className="currentUser__email">
+            {currentUser.email}
+          </p>
+
+          <p className="currentUser__phone">
+            {currentUser.phone}
+          </p>
+
+          <button
+            type="button"
+            className="currentUser__clear"
+            onClick={resetUser}
+          >
+            Clear
+          </button>
+        </div>
+      )}
+    </>
+  );
+};
