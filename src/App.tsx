@@ -20,13 +20,18 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    getTodos()
-      .then(all => setTodos(all));
+    const getAll = async () => {
+      const all = await getTodos();
+
+      setTodos(all);
+    };
+
+    getAll();
   }, []);
 
   const filteredTodos
-  = todos.filter(({ title }) => title.toLowerCase()
-    .includes(query.toLowerCase()));
+    = todos.filter(({ title }) => title.toLowerCase()
+      .includes(query.toLowerCase()));
 
   let showTodos = filteredTodos;
 
