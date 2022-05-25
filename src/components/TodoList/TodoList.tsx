@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from 'react';
-import classNames from 'classnames';
 
 import { Todo } from '../../react-app-env';
 
@@ -7,14 +6,12 @@ import './TodoList.scss';
 
 type Props = {
   todos: Todo[],
-  selectedUserId: number,
   setSelectedUserId: (id: number) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setSelectedUserId,
-  selectedUserId,
 }) => {
   const [query, setQuery] = useState('');
   const [selectedTodos, setSelectedTodos] = useState('');
@@ -48,7 +45,7 @@ export const TodoList: React.FC<Props> = ({
     <div className="TodoList">
       <h2>Todos:</h2>
 
-      <div className="TodoList__list-container">
+      <div>
         <label>
           <input
             type="text"
@@ -66,6 +63,8 @@ export const TodoList: React.FC<Props> = ({
           <option value="Active">Active</option>
           <option value="Completed">Completed</option>
         </select>
+      </div>
+      <div className="TodoList__list-container">
         <ul
           className="TodoList__list"
           data-cy="listOfTodos"
@@ -76,15 +75,16 @@ export const TodoList: React.FC<Props> = ({
                 <li
                   className={`
                     TodoList__item
-                    TodoList__item--${todo.completed}
-                  `}
+                    ${todo.completed
+                ? 'TodoList__item--checked'
+                : 'TodoList__item--unchecked'
+              }`}
                   key={todo.id}
                 >
                   <label>
                     <input
                       type="checkbox"
-                      defaultChecked={todo.completed}
-                      disabled
+                      readOnly
                     />
                     <p>{todo.title}</p>
                   </label>
@@ -92,19 +92,15 @@ export const TodoList: React.FC<Props> = ({
                     <button
                       type="button"
                       data-cy="userButton"
-                      className={classNames(
-                        'button',
-                        'TodoList__user - button',
-                        {
-                          'TodoList__user-button--selected':
-                            selectedUserId === todo.userId,
-                        },
-                      )}
+                      className={`TodoList__user-button
+                       ${todo.completed
+                        && 'TodoList__user-button--selected'}
+                        `}
                       onClick={() => (
                         setSelectedUserId(todo.userId)
                       )}
                     >
-                      {`User ${selectedUserId}`}
+                      {`User ${todo.userId}`}
                     </button>
                   )}
                 </li>

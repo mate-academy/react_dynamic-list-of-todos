@@ -36,7 +36,6 @@ const App: React.FC = () => {
         <TodoList
           todos={todos}
           setSelectedUserId={setSelectedUserId}
-          selectedUserId={selectedUserId}
         />
       </div>
 
