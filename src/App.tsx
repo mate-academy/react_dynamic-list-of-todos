@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { ToDo } from './types/ToDo';
@@ -15,7 +15,7 @@ const App: React.FC<{}> = () => {
   const [toDos, setToDos] = useState<Array<ToDo>>([]);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  const getToDos = async () => {
+  const getToDos = useCallback(async () => {
     try {
       const toDosFromServer = await getToDosFromAPI();
 
@@ -25,7 +25,7 @@ const App: React.FC<{}> = () => {
       setToDos([]);
       setIsLoadingError(true);
     }
-  };
+  }, []);
 
   const clearSelectedUser = () => {
     setSelectedUserId(0);

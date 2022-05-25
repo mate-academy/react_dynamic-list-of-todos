@@ -25,7 +25,7 @@ export const TodoList: React.FC<Props> = React.memo(({
   const filter = useCallback(() => {
     const pattern = filterTitlePattern.toLowerCase();
 
-    setVisibleTodos(toDos.filter(toDo => {
+    return (toDos.filter(toDo => {
       const title = toDo.title.toLowerCase();
       const includePattern = title.includes(pattern);
 
@@ -45,25 +45,26 @@ export const TodoList: React.FC<Props> = React.memo(({
     }));
   }, [filterTitlePattern, toDos, filterCompletedToDos]);
 
-  const randomize = useCallback(() => {
+  const randomize = useCallback((arr) => {
     if (isRandomized) {
-      const copyArr = [...visibleTodos];
-
-      for (let i = copyArr.length - 1; i > 0; i -= 1) {
+      for (let i = arr.length - 1; i > 0; i -= 1) {
         const j = Math.floor(Math.random() * (i + 1));
 
-        [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
+        // eslint-disable-next-line no-param-reassign
+        [arr[i], arr[j]] = [arr[j], arr[i]];
       }
-
-      setVisibleTodos(copyArr);
-    } else {
-      filter();
     }
-  }, [filterTitlePattern, toDos, filterCompletedToDos, isRandomized]);
+  }, [filterTitlePattern,
+    toDos,
+    filterCompletedToDos,
+    isRandomized]);
 
   useEffect(() => {
-    filter();
-    randomize();
+    const filteredArr = filter();
+
+    randomize(filteredArr);
+
+    setVisibleTodos(filteredArr);
   }, [filterTitlePattern, toDos, filterCompletedToDos, isRandomized]);
 
   return (
