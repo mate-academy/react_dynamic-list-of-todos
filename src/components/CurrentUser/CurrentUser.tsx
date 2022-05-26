@@ -35,17 +35,18 @@ export const CurrentUser: React.FC<Props> = ({
         className="CurrentUser__name"
         data-cy="userName"
       >
-        {selectedUser ? selectedUser.name : 'Error'}
+        {selectedUser?.name || 'Error'}
       </h3>
       <p className="CurrentUser__email">
-        {selectedUser ? selectedUser.email : 'Error'}
+        {selectedUser?.email || 'Error'}
       </p>
       <p className="CurrentUser__phone">
-        {selectedUser ? selectedUser.phone : 'Error'}
+        {selectedUser?.phone || 'Error'}
       </p>
       <button
         type="button"
-        className="CurrentUser__button"
+        className="CurrentUser__clear
+        button"
         onClick={() => resetUserId(0)}
       >
         Clear

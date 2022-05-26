@@ -16,49 +16,35 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+
+  const handlerFilter = () => {
+    const filteredTodos = todos.filter((selectedTodo) => {
+      const conditionOfSelect = selectedTodo.title
+        .toLowerCase().includes(query.trim().toLowerCase());
+
+      if (query.trim() !== '' && status === 'all') {
+        return conditionOfSelect;
+      }
+
+      if (status === 'completed') {
+        return conditionOfSelect && selectedTodo.completed;
+      }
+
+      if (status === 'active') {
+        return conditionOfSelect && !selectedTodo.completed;
+      }
+
+      return true;
+    });
+
+    setVisibleTodos(filteredTodos);
+  };
 
   useEffect(() => {
     setVisibleTodos(todos);
-  }, [todos]);
-
-  const handlerSelect = (cell: string) => {
-    setStatus(cell);
-
-    let selectedTodos = todos;
-
-    if (cell === 'completed') {
-      selectedTodos = selectedTodos
-        .filter((selectedTodo) => selectedTodo.completed === true);
-    }
-
-    if (cell === 'active') {
-      selectedTodos = selectedTodos
-        .filter((selectedTodo) => selectedTodo.completed === false);
-    }
-
-    if (cell === 'all') {
-      selectedTodos = todos;
-    }
-
-    if (query.trim() !== '') {
-      selectedTodos = selectedTodos.filter((selectedTodo) => (
-        selectedTodo.title.includes(query.trim())
-      ));
-    }
-
-    setVisibleTodos(selectedTodos);
-  };
-
-  const sortTodosAlphabet = (text: string) => {
-    setQuery(text);
-
-    const selectedTodos = todos.filter((todo) => (
-      todo.title.includes(text.trim())
-    ));
-
-    setVisibleTodos(selectedTodos);
-  };
+    handlerFilter();
+  }, [todos, query, status]);
 
   return (
     <div className="TodoList">
@@ -74,14 +60,16 @@ export const TodoList: React.FC<Props> = ({
         type="text"
         name="title"
         value={query}
-        onChange={(event) => sortTodosAlphabet(event.target.value)}
+        onChange={(event) => {
+          setQuery(event.target.value);
+        }}
       />
       <select
         className="Todolist__select"
         name="status"
         value={status}
         onChange={(event) => {
-          handlerSelect(event.target.value);
+          setStatus(event.target.value);
         }}
       >
         <option value="all">
@@ -105,10 +93,8 @@ export const TodoList: React.FC<Props> = ({
               className={classNames(
                 'TodoList__item',
                 {
-                  'TodoList__item--unchecked':
-                    todo.completed === false,
-                  'TodoList__item--checked':
-                    todo.completed === true,
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
                 },
               )}
               key={todo.id}
@@ -126,13 +112,14 @@ export const TodoList: React.FC<Props> = ({
 
               <button
                 type="button"
+                data-cy="userButton"
                 onClick={() => chooseUserId(Number(todo.userId))}
                 className={classNames(
                   'TodoList__user-button',
                   'button',
                   {
                     'TodoList__user-button--selected':
-                      selectedUserId !== Number(todo.userId),
+                      selectedUserId === Number(todo.userId),
                   },
                 )}
               >
