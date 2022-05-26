@@ -102,18 +102,20 @@ export const TodoList: React.FC<Props> = React.memo(({
               <p>{todo.title}</p>
             </label>
 
-            <button
-              className={classNames('TodoList__user-button', 'button',
-                {
-                  'TodoList__user-button--selected':
-                  selectedUserId === todo.userId,
-                })}
-              type="button"
-              data-cy="userButton"
-              onClick={() => setSelectedUserId(todo.userId)}
-            >
-              {`User #${todo.userId}`}
-            </button>
+            {todo.userId && (
+              <button
+                className={classNames('TodoList__user-button', 'button',
+                  {
+                    'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
+                  })}
+                type="button"
+                data-cy="userButton"
+                onClick={() => setSelectedUserId(todo.userId)}
+              >
+                {`User #${todo.userId}`}
+              </button>
+            )}
           </li>
         ))}
       </ul>
