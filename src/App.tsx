@@ -33,8 +33,6 @@ export const App: React.FC = () => {
     = todos.filter(({ title }) => title.toLowerCase()
       .includes(query.toLowerCase()));
 
-  let showTodos = filteredTodos;
-
   const changeStatusTodo = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusTodo(event.target.value);
   };
@@ -42,18 +40,18 @@ export const App: React.FC = () => {
   const preparedTodo = () => {
     switch (statusTodo) {
       case 'All':
-        return showTodos;
+        return filteredTodos;
       case 'Completed':
         return filteredTodos.filter(({ completed }) => completed);
       case 'Active':
         return filteredTodos.filter(({ completed }) => !completed);
 
       default:
-        return showTodos;
+        return filteredTodos;
     }
   };
 
-  showTodos = preparedTodo();
+  const showTodos = preparedTodo();
 
   return (
     <div className="App">

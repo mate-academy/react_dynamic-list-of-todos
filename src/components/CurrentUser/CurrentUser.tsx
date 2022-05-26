@@ -11,8 +11,13 @@ export const CurrentUser: React.FC<Props> = ({ currentUserId, chooseUser }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(currentUserId)
-      .then(newUser => setUser(newUser));
+    const newUser = async () => {
+      const currentUser = await getUser(currentUserId);
+
+      setUser(currentUser);
+    };
+
+    newUser();
   }, [currentUserId]);
 
   return (
