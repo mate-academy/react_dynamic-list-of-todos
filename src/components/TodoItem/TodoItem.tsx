@@ -38,6 +38,7 @@ export const TodoItem: React.FC<Props> = ({
             button
           "
           type="button"
+          data-cy="userButton"
           onClick={() => selectUser(todo.userId)}
         >
           User&nbsp;

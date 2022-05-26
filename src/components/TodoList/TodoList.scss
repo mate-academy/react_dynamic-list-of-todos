@@ -3,6 +3,31 @@
 
   &__user-button--selected {
     background-color: #4d457b;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #4d457b6e;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+  }
+
+  &__search {
+    height: 20px;
+    border: 1px solid #4d457b;
+    outline: none;
+  }
+
+  &__select {
+    height: 25px;
+    color: white;
+    font-weight: bold;
+    border: none;
+    background-color: #4d457b;
   }
 
   &__list {
@@ -19,10 +44,10 @@
     margin-bottom: 5px;
     background-color: #ffe0db;
     color: #ff3626;
-  }
 
-  &__item--checked {
-    background-color: #cde4e4;
-    color: #459595;
+    &--checked {
+      background-color: #cde4e4;
+      color: #459595;
+    }
   }
 }
