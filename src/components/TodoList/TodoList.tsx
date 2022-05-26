@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import classNames from 'classnames';
 import './TodoList.scss';
 
@@ -23,6 +23,18 @@ export const TodoList: React.FC<Props> = ({
   const [todosStatus, setTodosStatus] = useState('');
   const [isRandomized, setIsRandomized] = useState(false);
 
+  const onFilterByTitleHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const onTodoSelectHandleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setTodosStatus(e.target.value);
+  };
+
+  const onRandomizeButtonClick = () => {
+    setIsRandomized(prev => !prev);
+  };
+
   const filterByTitle = () => {
     return todos.filter(todo => (
       todo.title.toLowerCase().includes(query.toLowerCase())
@@ -32,15 +44,18 @@ export const TodoList: React.FC<Props> = ({
   const preparingTodos = () => {
     const filteredByTitle = filterByTitle();
 
-    if (todosStatus === Status.Completed) {
-      return filteredByTitle.filter(todo => todo.completed);
-    }
+    switch (todosStatus) {
+      case Status.Completed: {
+        return filteredByTitle.filter(todo => todo.completed);
+      }
 
-    if (todosStatus === Status.Active) {
-      return filteredByTitle.filter(todo => !todo.completed);
-    }
+      case Status.Active: {
+        return filteredByTitle.filter(todo => !todo.completed);
+      }
 
-    return filteredByTitle;
+      default:
+        return filteredByTitle;
+    }
   };
 
   const randomize = (arr: Todo[]) => {
@@ -66,21 +81,18 @@ export const TodoList: React.FC<Props> = ({
       <div className="TodoList__list-container">
 
         <label>
-          Filter by title:
-          {' '}
+          {'Filter by title: '}
           <input
             data-cy="filterByTitle"
             type="text"
             value={query}
-            onChange={(event => setQuery(event.target.value))}
+            onChange={onFilterByTitleHandleChange}
           />
         </label>
 
         <select
           className="TodoList__select"
-          onChange={(event) => {
-            setTodosStatus(event.target.value);
-          }}
+          onChange={onTodoSelectHandleChange}
         >
           <option value={Status.All}>
             All
@@ -96,7 +108,7 @@ export const TodoList: React.FC<Props> = ({
         <button
           className="button button--randomize"
           type="button"
-          onClick={() => setIsRandomized(prev => !prev)}
+          onClick={onRandomizeButtonClick}
         >
           Randomize
         </button>

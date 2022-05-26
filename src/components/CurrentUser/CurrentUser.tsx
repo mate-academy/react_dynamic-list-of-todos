@@ -5,52 +5,66 @@ import { getUser } from '../../api/api';
 
 type Props = {
   userId: number,
-  clearUser: (userId: number) => void,
+  setSelectedUserId: (userId: number) => void,
 };
 
 export const CurrentUser: React.FC<Props> = ({
   userId,
-  clearUser,
+  setSelectedUserId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getUser(userId)
-      .then(data => setUser(data));
+    async function response() {
+      try {
+        const userFromServer = await getUser(userId);
+
+        setUser(userFromServer);
+      } catch {
+        setErrorMessage('Cant load user from server');
+      }
+    }
+
+    response();
   }, [userId]);
 
   return (
-    <div className="CurrentUser">
-      <h2 className="CurrentUser__title">
-        <span>
-          Selected user:
-          {' '}
-          {user?.id}
-        </span>
-      </h2>
+    <>
+      {user ? (
+        <div className="CurrentUser">
+          <h2 className="CurrentUser__title">
+            <span>
+              {`Selected user: ${user?.id}`}
+            </span>
+          </h2>
 
-      <h3
-        data-cy="userName"
-        className="CurrentUser__name"
-      >
-        {user?.name}
-      </h3>
+          <h3
+            data-cy="userName"
+            className="CurrentUser__name"
+          >
+            {user?.name}
+          </h3>
 
-      <p className="CurrentUser__email">
-        {user?.email}
-      </p>
+          <p className="CurrentUser__email">
+            {user?.email}
+          </p>
 
-      <p className="CurrentUser__phone">
-        {user?.phone}
-      </p>
+          <p className="CurrentUser__phone">
+            {user?.phone}
+          </p>
 
-      <button
-        type="button"
-        className="button CurrentUser__clear"
-        onClick={() => clearUser(0)}
-      >
-        Clear User
-      </button>
-    </div>
+          <button
+            type="button"
+            className="button CurrentUser__clear"
+            onClick={() => setSelectedUserId(0)}
+          >
+            Clear User
+          </button>
+        </div>
+      ) : (
+        <p>{errorMessage}</p>
+      )}
+    </>
   );
 };

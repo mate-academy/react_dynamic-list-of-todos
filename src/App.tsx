@@ -9,32 +9,46 @@ import { getTodos } from './api/api';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(data => setTodos(data));
+    async function response() {
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch {
+        setErrorMessage('Cant load todos from server');
+      }
+    }
+
+    response();
   }, []);
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        {todos ? (
-          <TodoList
-            todos={todos}
-            selectedUserId={selectedUserId}
-            onSelectUserId={setSelectedUserId}
-          />
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
+      {!errorMessage ? (
+        <div className="App__sidebar">
+          {todos ? (
+            <TodoList
+              todos={todos}
+              selectedUserId={selectedUserId}
+              onSelectUserId={setSelectedUserId}
+            />
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
+      ) : (
+        <p>{errorMessage}</p>
+      )}
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
             <CurrentUser
               userId={selectedUserId}
-              clearUser={setSelectedUserId}
+              setSelectedUserId={setSelectedUserId}
             />
           ) : 'No user selected'}
         </div>
