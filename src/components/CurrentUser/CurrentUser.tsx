@@ -6,10 +6,10 @@ import './CurrentUser.scss';
 
 type Props = {
   userId: number,
-  clearUser: () => void,
+  onRemoveUser: () => void,
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
+export const CurrentUser: React.FC<Props> = ({ userId, onRemoveUser }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const getUser = useCallback(async () => {
@@ -37,9 +37,9 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
         <button
           className="CurrentUser__clear button"
           type="button"
-          onClick={clearUser}
+          onClick={onRemoveUser}
         >
-          Clear
+          Remove
         </button>
       )}
     </div>

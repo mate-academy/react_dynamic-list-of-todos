@@ -8,11 +8,11 @@ import './App.scss';
 import './styles/general.scss';
 
 const App: React.FC = () => {
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const removeUser = useCallback(() => {
-    setSelectedUserId(0);
+    setSelectedUserId(null);
   }, []);
 
   const getTodosList = useCallback(async () => {
@@ -40,7 +40,7 @@ const App: React.FC = () => {
           {selectedUserId ? (
             <CurrentUser
               userId={selectedUserId}
-              clearUser={removeUser}
+              onRemoveUser={removeUser}
             />
           ) : 'No user selected'}
         </div>
