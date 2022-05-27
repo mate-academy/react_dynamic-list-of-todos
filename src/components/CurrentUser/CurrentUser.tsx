@@ -1,12 +1,59 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './CurrentUser.scss';
+import { getUser } from '../../api/api';
+import { User } from '../../types/TodoType';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUserId: number,
+  resetUserId: (id: number) => void,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({
+  selectedUserId,
+  resetUserId,
+}) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const getData = useCallback(async () => {
+    try {
+      setSelectedUser(await getUser(selectedUserId));
+    } catch (error) {
+      throw Error(`${error}`);
+    }
+  }, [selectedUserId]);
+
+  useEffect(() => {
+    getData();
+  }, [selectedUserId]);
+
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title">
+        <span>
+          Selected user:&nbsp;
+          {selectedUser ? selectedUser.id : (<div />)}
+        </span>
+      </h2>
+      <h3
+        className="CurrentUser__name"
+        data-cy="userName"
+      >
+        {selectedUser?.username || 'Error'}
+      </h3>
+      <p className="CurrentUser__email">
+        {selectedUser?.email || 'Error'}
+      </p>
+      <p className="CurrentUser__phone">
+        {selectedUser?.phone || 'Error'}
+      </p>
+      <button
+        type="button"
+        className="CurrentUser__clear
+        button"
+        onClick={() => resetUserId(0)}
+      >
+        Clear
+      </button>
+    </div>
+  );
+};
