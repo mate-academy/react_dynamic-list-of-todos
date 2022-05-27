@@ -64,6 +64,7 @@ export const TodoList: React.FC<Props> = ({
           setQuery(event.target.value);
         }}
       />
+
       <select
         className="Todolist__select"
         name="status"
