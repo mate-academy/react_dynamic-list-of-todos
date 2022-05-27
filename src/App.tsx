@@ -10,8 +10,12 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos().then(setTodos);
-  }, []);
+    const todosFromServer = async () => {
+      setTodos(await getTodos());
+    };
+
+    todosFromServer();
+  });
 
   return (
     <div className="App">
