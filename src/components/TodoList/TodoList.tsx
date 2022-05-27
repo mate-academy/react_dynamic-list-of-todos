@@ -110,22 +110,25 @@ export const TodoList: React.FC<Props> = ({
                 </p>
               </label>
 
-              <button
-                type="button"
-                data-cy="userButton"
-                onClick={() => chooseUserId(Number(todo.userId))}
-                className={classNames(
-                  'TodoList__user-button',
-                  'button',
-                  {
-                    'TodoList__user-button--selected':
-                      selectedUserId === Number(todo.userId),
-                  },
-                )}
-              >
-                User&nbsp;#
-                {todo.userId}
-              </button>
+              {todo.userId && (
+                <button
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => chooseUserId(Number(todo.userId))}
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                        selectedUserId === Number(todo.userId),
+                    },
+                  )}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              )}
+
             </li>
           ))}
         </ul>

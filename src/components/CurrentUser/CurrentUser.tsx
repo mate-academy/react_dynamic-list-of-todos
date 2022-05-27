@@ -13,10 +13,13 @@ export const CurrentUser: React.FC<Props> = ({
   resetUserId,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const getData = useCallback(async () => {
-    const user = await getUser(selectedUserId);
 
-    setSelectedUser(user);
+  const getData = useCallback(async () => {
+    try {
+      setSelectedUser(await getUser(selectedUserId));
+    } catch (error) {
+      throw Error(`${error}`);
+    }
   }, [selectedUserId]);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export const CurrentUser: React.FC<Props> = ({
         className="CurrentUser__name"
         data-cy="userName"
       >
-        {selectedUser?.name || 'Error'}
+        {selectedUser?.username || 'Error'}
       </h3>
       <p className="CurrentUser__email">
         {selectedUser?.email || 'Error'}
