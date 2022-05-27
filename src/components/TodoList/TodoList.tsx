@@ -54,36 +54,46 @@ export const TodoList: React.FC<Props> = ({
         &nbsp;from&nbsp;
         {todos.length}
       </h2>
-      <input
-        className="Todolist__input"
-        data-cy="filterByTitle"
-        type="text"
-        name="title"
-        value={query}
-        onChange={(event) => {
-          setQuery(event.target.value);
-        }}
-      />
-
-      <select
-        className="Todolist__select"
-        name="status"
-        value={status}
-        onChange={(event) => {
-          setStatus(event.target.value);
-        }}
-      >
-        <option value="all">
-          Demonstrate all
-        </option>
-        <option value="active">
-          Demonstrate active
-        </option>
-        <option value="completed">
-          Demonstrate completed
-        </option>
-
-      </select>
+      <div className="Todolist__inputs-group">
+        <div className="Todolist__inputs">
+          <input
+            className="Todolist__input"
+            data-cy="filterByTitle"
+            type="text"
+            name="title"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+            }}
+          />
+          <p className="Todolist__input-name">
+            Search a case
+          </p>
+        </div>
+        <div className="Todolist__inputs">
+          <select
+            className="Todolist__input"
+            name="status"
+            value={status}
+            onChange={(event) => {
+              setStatus(event.target.value);
+            }}
+          >
+            <option value="all">
+              Demonstrate all
+            </option>
+            <option value="active">
+              Demonstrate active
+            </option>
+            <option value="completed">
+              Demonstrate completed
+            </option>
+          </select>
+          <p className="Todolist__input-name">
+            Select status
+          </p>
+        </div>
+      </div>
       <div className="TodoList__list-container">
         <ul
           className="TodoList__list"
@@ -111,22 +121,25 @@ export const TodoList: React.FC<Props> = ({
                 </p>
               </label>
 
-              <button
-                type="button"
-                data-cy="userButton"
-                onClick={() => chooseUserId(Number(todo.userId))}
-                className={classNames(
-                  'TodoList__user-button',
-                  'button',
-                  {
-                    'TodoList__user-button--selected':
-                      selectedUserId === Number(todo.userId),
-                  },
-                )}
-              >
-                User&nbsp;#
-                {todo.userId}
-              </button>
+              {todo.userId && (
+                <button
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => chooseUserId(Number(todo.userId))}
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                        selectedUserId === Number(todo.userId),
+                    },
+                  )}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              )}
+
             </li>
           ))}
         </ul>

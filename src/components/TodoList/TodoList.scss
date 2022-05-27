@@ -1,6 +1,20 @@
 .TodoList {
   width: 100%;
 
+  &__inputs-group {
+    display: flex;
+    // flex-direction: column;
+  }
+
+  &__inputs {
+    padding: 50px;
+  }
+
+  &__input-name {
+    color: black;
+    font-weight: bold;
+  }
+
   &__user-button--selected {
     background-color: #4d457b;
   }
