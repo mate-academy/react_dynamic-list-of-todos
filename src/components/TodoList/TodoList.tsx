@@ -54,10 +54,10 @@ export const TodoList: React.FC<Props> = ({
         &nbsp;from&nbsp;
         {todos.length}
       </h2>
-      <div className="Todolist__inputs-group">
-        <div className="Todolist__inputs">
+      <div className="TodoList__inputs-group">
+        <div className="TodoList__inputs">
           <input
-            className="Todolist__input"
+            className="TodoList__input"
             data-cy="filterByTitle"
             type="text"
             name="title"
@@ -66,13 +66,14 @@ export const TodoList: React.FC<Props> = ({
               setQuery(event.target.value);
             }}
           />
-          <p className="Todolist__input-name">
+          <p className="TodoList__input-name">
             Search a case
           </p>
         </div>
-        <div className="Todolist__inputs">
+        <div className="TodoList__inputs">
           <select
-            className="Todolist__input"
+            className="TodoList__input
+            TodoList__input--select"
             name="status"
             value={status}
             onChange={(event) => {
@@ -89,7 +90,7 @@ export const TodoList: React.FC<Props> = ({
               Demonstrate completed
             </option>
           </select>
-          <p className="Todolist__input-name">
+          <p className="TodoList__input-name">
             Select status
           </p>
         </div>

@@ -7,7 +7,17 @@
   }
 
   &__inputs {
-    padding: 50px;
+    padding: 0 50px;
+  }
+
+  &__input {
+    height: 20px;
+    margin-bottom: 5px;
+
+    &--select {
+      height: 25px;
+      cursor: pointer;
+    }
   }
 
   &__input-name {
