@@ -104,23 +104,24 @@ export const TodoList: React.FC<Props> = ({
                 />
                 <p>{todo.title}</p>
               </label>
-
-              <button
-                className={classNames(
-                  'TodoList__user-button',
-                  'button',
-                  {
-                    'TodoList__user-button--selected':
-                      selectedUserId === todo.userId,
-                  },
-                )}
-                type="button"
-                onClick={() => setSelectedUserId(todo.userId)}
-                data-cy="userButton"
-              >
-                User&nbsp;
-                {todo.userId}
-              </button>
+              {todo.userId && (
+                <button
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                        selectedUserId === todo.userId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => setSelectedUserId(todo.userId)}
+                  data-cy="userButton"
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              )}
             </li>
           ))}
         </ul>
