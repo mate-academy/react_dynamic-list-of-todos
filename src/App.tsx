@@ -7,11 +7,11 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 const App: React.FC = () => {
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const resetUser = useCallback(() => {
-    return setSelectedUserId(0);
+    return setSelectedUserId(null);
   }, []);
 
   const loadTodos = useCallback(async () => {
@@ -27,6 +27,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           todos={todos}
+          selectedUserId={selectedUserId}
           setUserId={setSelectedUserId}
         />
       </div>

@@ -6,6 +6,7 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[],
   setUserId: (id: number) => void,
+  selectedUserId: number | null,
 }
 
 enum Show {
@@ -17,9 +18,10 @@ enum Show {
 export const TodoList: React.FC<Props> = ({
   todos,
   setUserId,
+  selectedUserId,
 }) => {
   const [searchTitle, setSearchTitle] = useState('');
-  const [completFilter, setcompletFilter] = useState('All');
+  const [completFilter, setСompletFilter] = useState('All');
   const [todosToShow, setTodosToShow] = useState(todos);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export const TodoList: React.FC<Props> = ({
       <label htmlFor="searchBar">
         <input
           type="text"
+          data-cy="filterByTitle"
           value={searchTitle}
           onChange={({ target }) => {
             setSearchTitle(target.value);
@@ -59,7 +62,7 @@ export const TodoList: React.FC<Props> = ({
         className="TodoList__select"
         value={completFilter}
         onChange={(event) => {
-          setcompletFilter(event.target.value);
+          setСompletFilter(event.target.value);
         }}
       >
         <option value={Show.All}>All</option>
@@ -68,7 +71,7 @@ export const TodoList: React.FC<Props> = ({
       </select>
 
       <div className="TodoList__container">
-        <ul className="TodoList__list">
+        <ul className="TodoList__list" data-cy="listOfTodos">
           {todosToShow.map(todo => (
             <li
               key={todo.id}
@@ -86,17 +89,26 @@ export const TodoList: React.FC<Props> = ({
                 />
                 <p>{todo.title}</p>
               </label>
-
-              <button
+              
+              {todo.userId && (
+                <button
                 data-cy="userButton"
                 onClick={() => {
                   setUserId(todo.userId);
                 }}
-                className="TodoList__user-button button"
+                className={classNames(
+                  'TodoList__user-button',
+                  'button',
+                  {
+                    'TodoList__user-button--selected':
+                      selectedUserId === todo.userId,
+                  },
+                )}
                 type="button"
-              >
-                {`User #${todo.userId}`}
-              </button>
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              )}
             </li>
           ))}
         </ul>

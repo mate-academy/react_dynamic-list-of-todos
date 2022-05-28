@@ -32,7 +32,7 @@ export const CurrentUser: React.FC<Props> = ({
             </span>
           </h2>
 
-          <h3 className="currentUser__name">
+          <h3 className="currentUser__name" data-cy="userName">
             {currentUser.name}
           </h3>
 
@@ -46,7 +46,7 @@ export const CurrentUser: React.FC<Props> = ({
 
           <button
             type="button"
-            className="currentUser__clear"
+            className="currentUser__clear button"
             onClick={resetUser}
           >
             Clear
