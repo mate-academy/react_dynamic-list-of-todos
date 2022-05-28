@@ -22,7 +22,6 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   }, [userId]);
 
   return (
-
     <div
       className="CurrentUser"
       key={user?.id}

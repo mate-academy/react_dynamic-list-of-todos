@@ -4,11 +4,16 @@ import { Todo } from '../../react-app-env';
 import './TodoList.scss';
 
 type Props = {
-  todos: Todo[]
-  selectedUserId: (a: number) => void,
+  todos: Todo[],
+  selectedUserId: number,
+  setSelectedUserId: (a: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectedUserId }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedUserId,
+  selectedUserId,
+}) => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
 
@@ -87,18 +92,24 @@ export const TodoList: React.FC<Props> = ({ todos, selectedUserId }) => {
                   {todo.title}
                 </p>
               </label>
-              <button
-                className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
-                type="button"
-                onClick={() => selectedUserId(todo.userId)}
-              >
-                User&nbsp;
-                {todo.userId}
-              </button>
+
+              {todo.userId && (
+                <button
+                  className={classNames(
+                    'TodoList__item-button', 'button',
+                    {
+                      'TodoList__item-button--selected':
+                        todo.userId === selectedUserId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => setSelectedUserId(todo.userId)}
+                >
+                  User&nbsp;
+                  {todo.userId}
+                </button>
+              )}
+
             </li>
           ))}
         </ul>
