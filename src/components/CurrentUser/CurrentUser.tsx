@@ -1,4 +1,6 @@
-import { FC, useEffect, useState, useCallback } from 'react';
+import {
+  FC, useEffect, useState, useCallback,
+} from 'react';
 import './CurrentUser.scss';
 import { getUser } from '../../api';
 

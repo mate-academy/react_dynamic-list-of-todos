@@ -1,4 +1,6 @@
-import { Dispatch, FC, useState, useEffect } from 'react';
+import {
+  Dispatch, FC, useState, useEffect,
+} from 'react';
 import './TodoList.scss';
 
 interface Props {
@@ -16,19 +18,19 @@ export const TodoList: FC<Props> = ({
 
   useEffect(() => {
     setVisibleTodos(todos.filter(todo => {
-      const titleToLower = todo.title.toLowerCase();
-      const filterByTitleToLower = filterByTitle.toLowerCase();
+      const filterByToLower = filterByTitle.toLowerCase();
+      const titleToLower = todo.title.toLowerCase().includes(filterByToLower);
 
       switch (isComplete) {
         case 'show all':
-          return titleToLower.includes(filterByTitleToLower);
+          return titleToLower;
 
         case 'not completed':
-          return titleToLower.includes(filterByTitleToLower)
+          return titleToLower
             && todo.completed === false;
 
         case 'completed':
-          return titleToLower.includes(filterByTitleToLower)
+          return titleToLower
             && todo.completed === true;
 
         default:
@@ -48,8 +50,8 @@ export const TodoList: FC<Props> = ({
             className="TodoList__input"
             type="text"
             value={filterByTitle}
-            onChange={({ target }) => {
-              setFilterByTitle(target.value);
+            onChange={(event) => {
+              setFilterByTitle(event.target.value);
             }}
           />
         </label>
