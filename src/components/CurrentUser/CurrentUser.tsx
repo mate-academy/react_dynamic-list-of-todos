@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import './CurrentUser.scss';
@@ -13,13 +13,11 @@ export const CurrentUser: React.FC<Props> = React.memo(({
   setSelectedUserId,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const loadUser = useCallback(async () => {
-    try {
-      setCurrentUser(await getUser(selectedUserId));
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
-  }, [selectedUserId]);
+  const loadUser = async () => {
+    const userFromServer = await getUser(selectedUserId);
+
+    setCurrentUser(userFromServer);
+  };
 
   useEffect(() => {
     loadUser();

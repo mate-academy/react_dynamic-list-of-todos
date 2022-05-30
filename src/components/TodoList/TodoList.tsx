@@ -9,6 +9,12 @@ type Props = {
   setSelectedUserId: (userId: number) => void,
 };
 
+enum Show {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectedUserId,
@@ -23,13 +29,13 @@ export const TodoList: React.FC<Props> = React.memo(({
       const filtredTodos = todo.title.toLowerCase().includes(filterByTitle);
 
       switch (filterByComplited) {
-        case 'all':
+        case Show.All:
           return filtredTodos;
 
-        case 'active':
+        case Show.Active:
           return filtredTodos && !todo.completed;
 
-        case 'completed':
+        case Show.Completed:
           return filtredTodos && todo.completed;
 
         default:
@@ -72,9 +78,9 @@ export const TodoList: React.FC<Props> = React.memo(({
             value={filterByComplited}
             onChange={completedFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Show.All}>All</option>
+            <option value={Show.Active}>Active</option>
+            <option value={Show.Completed}>Completed</option>
           </select>
         </label>
 
