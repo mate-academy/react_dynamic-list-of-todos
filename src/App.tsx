@@ -4,8 +4,7 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { Todo } from './types/todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/user';
+import { getTodos } from './api';
 
 const App: React.FC = () => {
   const [
@@ -14,7 +13,7 @@ const App: React.FC = () => {
   ] = useState(0);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getTodos().then((todosFS) => {
@@ -24,14 +23,11 @@ const App: React.FC = () => {
 
   const selectUser = useCallback((userId: number) => {
     setSelectedUserId(userId);
-    getUser(userId).then(userFS => {
-      setUser(userFS);
-    });
   }, []);
 
   const clearUser = useCallback(() => {
     setSelectedUserId(0);
-    setUser(null);
+    // setUser(null);
   }, []);
 
   return (
@@ -46,9 +42,9 @@ const App: React.FC = () => {
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId && user ? (
+          {selectedUserId ? (
             <CurrentUser
-              user={user}
+              userId={selectedUserId}
               onClearUser={clearUser}
             />
           ) : 'No user selected'}

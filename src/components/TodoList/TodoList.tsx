@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './TodoList.scss';
 
+import classNames from 'classnames';
 import { Todo } from '../../types/todo';
 
 type SelectUser = (userId: number) => void;
@@ -96,13 +97,15 @@ export const TodoList: React.FC<Props> = React.memo(({
                 <p>{todo.title}</p>
               </label>
               <button
-                className="
-                   TodoList__user-button
-                   TodoList__user-button--selected
-                   button
-                 "
+                className={classNames(
+                  'TodoList__user-button',
+                  'button',
+                  {
+                    'TodoList__user-button--selected':
+                        selectedUserId === todo.userId,
+                  },
+                )}
                 type="button"
-                disabled={todo.userId === selectedUserId}
                 data-cy="userButton"
                 onClick={() => {
                   onSelectUser(todo.userId);

@@ -10,9 +10,13 @@ export const getTodos = async (): Promise<Todo[]> => {
   return todos;
 };
 
-export const getUser = async (userId: number): Promise<User> => {
-  const response = await fetch(`${API_URL}/users/${userId}`);
-  const user = await response.json();
+export const getUser = async (userId: number): Promise<User | null> => {
+  try {
+    const response = await fetch(`${API_URL}/users/${userId}`);
+    const user = await response.json();
 
-  return user;
+    return user;
+  } catch (error) {
+    return null;
+  }
 };
