@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUsers } from '../../api';
 import { User } from '../../react-app-env';
 import './CurrentUser.scss';
@@ -10,12 +10,19 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<boolean | null>(null);
 
-  const getUserFromServer = async () => {
-    const userFromServer = await getUsers(userId);
+  const getUserFromServer = useCallback(async () => {
+    try {
+      const userFromServer = await getUsers(userId);
 
-    setUser(userFromServer);
-  };
+      setUser(userFromServer);
+      setError(null);
+    } catch {
+      setUser(null);
+      setError(true);
+    }
+  }, [userId]);
 
   useEffect(() => {
     getUserFromServer();
@@ -24,9 +31,8 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   return (
     <div
       className="CurrentUser"
-      key={user?.id}
     >
-      {user ? (
+      {user && (
         <>
           <h2 className="CurrentUser__title">
             <span>
@@ -52,9 +58,11 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
             Clear user
           </button>
         </>
-      ) : (
+      )}
+
+      {error && (
         <div>
-          Loading...
+          Please try again later
         </div>
       )}
     </div>
