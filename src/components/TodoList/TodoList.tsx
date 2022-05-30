@@ -1,44 +1,87 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { TodoListType } from '../../types/TodoListType';
+// import Class from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todoList: TodoListType[],
+  setSelectedUserId: Dispatch<SetStateAction<number>>
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({ todoList, setSelectedUserId }) => {
+  const [filterTitle, setFilterTitle] = useState('');
+  const [shownBy, setShown] = useState(1);
+  let resultList: TodoListType[];
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const todoListCopy = filterTitle.length
+    ? todoList
+      .filter(todo => todo.title.toLowerCase()
+        .includes(filterTitle.toLowerCase()))
+    : [...todoList];
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  if (shownBy !== 1) {
+    resultList = todoListCopy.filter(todo => (shownBy === 2
+      ? todo.completed
+      : !todo.completed));
+  } else {
+    resultList = [...todoListCopy];
+  }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <div className="TodoList__list-container">
+
+        Select:
+        <select
+          name="slect"
+          id="select"
+          onChange={({ target }) => setShown(Number(target.value))}
+        >
+          <option value="1">All</option>
+          <option value="2">Completed</option>
+          <option value="3">Uncompleted</option>
+        </select>
+
+        Filter:
+        <input
+          type="text"
+          value={filterTitle}
+          onChange={({ target }) => setFilterTitle(target.value)}
+        />
+
+        <ul className="TodoList__list">
+          {
+            resultList.map(todo => (
+              <li
+                key={todo.id}
+                className={
+                  classNames('TodoList__item',
+                    { 'TodoList__item--uncompleted': !todo.completed })
+                }
+              >
+                <h3>{todo.id}</h3>
+                <label>
+                  <input type="checkbox" checked readOnly />
+                  <p>{todo.title}</p>
+                </label>
+                <h1>
+                  Completed:
+                  {todo.completed ? 'Yes' : 'No'}
+                </h1>
+                <button
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => setSelectedUserId(todo.userId)}
+                >
+                  Select User
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
