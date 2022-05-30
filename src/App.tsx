@@ -13,7 +13,6 @@ const App: React.FC = () => {
   ] = useState(0);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getTodos().then((todosFS) => {
@@ -27,7 +26,6 @@ const App: React.FC = () => {
 
   const clearUser = useCallback(() => {
     setSelectedUserId(0);
-    // setUser(null);
   }, []);
 
   return (
