@@ -15,13 +15,14 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
 
   const getUser = async () => {
     try {
-      const getedUser = await getUsers(userId);
+      const getUserById = await getUsers(userId);
 
       setError(false);
-      setUser(getedUser);
+      setUser(getUserById);
     } catch {
       setError(true);
       setUser(null);
+      alert('User not found!'); // eslint-disable-line
     }
   };
 

@@ -15,18 +15,23 @@ export const TodoList: React.FC<Props>
   const [completed, setCompleted] = useState('');
 
   const isFiltered = () => {
-    if (completed === 'Active') {
-      return todos.filter(todo => (
-        todo.title.toLowerCase().includes(query.toLowerCase())
-        && todo.completed === false
-      ));
-    }
+    switch (completed) {
+      case 'Active':
+        return todos.filter(todo => (
+          todo.title.toLowerCase().includes(query.toLowerCase())
+          && todo.completed === false
+        ));
+        break;
 
-    if (completed === 'Completed') {
-      return todos.filter(todo => (
-        todo.title.toLowerCase().includes(query.toLowerCase())
-        && todo.completed === true
-      ));
+      case 'Completed':
+        return todos.filter(todo => (
+          todo.title.toLowerCase().includes(query.toLowerCase())
+          && todo.completed === true
+        ));
+        break;
+
+      default:
+        break;
     }
 
     return todos.filter(todo => (
