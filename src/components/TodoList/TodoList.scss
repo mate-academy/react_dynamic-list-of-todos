@@ -1,8 +1,30 @@
+$second-color: #4d457b;
+
 .TodoList {
   width: 100%;
 
+  &__control {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  &__input {
+    border: 1px solid $second-color;
+    border-radius: 4px;
+    padding: 4px;
+    margin-left: 10px;
+  }
+
   &__user-button--selected {
-    background-color: #4d457b;
+    background-color: $second-color;
+    color: $second-color;
+
+    &::before {
+      content: "Selected ";
+      right: 70px;
+      color: #cde4e4;
+    }
   }
 
   &__list {
