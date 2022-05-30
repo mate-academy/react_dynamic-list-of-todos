@@ -27,11 +27,11 @@ export const TodoList: FC<Props> = ({
 
         case 'not completed':
           return titleToLower
-            && todo.completed === false;
+            && !todo.completed;
 
         case 'completed':
           return titleToLower
-            && todo.completed === true;
+            && todo.completed;
 
         default:
           return todo;
