@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
 import './TodoList.scss';
 
 interface Props {
   todos: Todo[],
   selectUser: ((id: number) => void),
+}
+
+enum Option {
+  all = 'all',
+  inprogress = 'inprogress',
+  completed = 'completed',
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -16,17 +22,25 @@ export const TodoList: React.FC<Props> = ({
 
   const filtredTodos = () => {
     switch (selected) {
-      case 'inpropress':
+      case Option.inprogress:
         return todos.filter(todo => todo.completed === false);
-      case 'completed':
+      case Option.completed:
         return todos.filter(todo => todo.completed === true);
       default:
         return todos;
     }
   };
 
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelected(event.target.value);
+  };
+
   const visibleTodos = filtredTodos()
-    .filter(todo => todo.title.includes(search));
+    .filter(todo => todo.title.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="TodoList">
@@ -38,21 +52,17 @@ export const TodoList: React.FC<Props> = ({
           className="TodoList__search"
           value={search}
           placeholder="Try to find"
-          onChange={(event) => {
-            setSearch(event.target.value);
-          }}
+          onChange={handleInputChange}
         />
 
         <select
           value={selected}
           className="TodoList__select"
-          onChange={(event) => {
-            setSelected(event.target.value);
-          }}
+          onChange={handleSelectChange}
         >
-          <option value="all">All</option>
-          <option value="inpropress">In progress</option>
-          <option value="completed">Completed</option>
+          <option value={Option.all}>All</option>
+          <option value={Option.inprogress}>In progress</option>
+          <option value={Option.completed}>Completed</option>
         </select>
       </div>
 
