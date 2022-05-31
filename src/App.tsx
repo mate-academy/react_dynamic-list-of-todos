@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { getTodos } from './api';
 
 const App: React.FC = () => {
   const [
     selectedUserId,
-    // setSelectedUserId,
+    setSelectedUserId,
   ] = useState(0);
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    async function response() {
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch {
+        setErrorMessage('Can not load todos');
+      }
+    }
+
+    response();
+  }, []);
+
+  const selectUser = (userId: number) => {
+    setSelectedUserId(userId);
+  };
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList />
-      </div>
+      {errorMessage.length === 0 ? (
+        <>
+          <div className="App__sidebar">
+            <TodoList
+              todos={todos}
+              selectUser={selectUser}
+              selectedUserId={selectedUserId}
+            />
+          </div>
 
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser />
-          ) : 'No user selected'}
-        </div>
-      </div>
+          <div className="App__content">
+            <div className="App__content-container">
+              {selectedUserId ? (
+                <CurrentUser
+                  userId={selectedUserId}
+                  selectUser={selectUser}
+                />
+              ) : 'No user selected'}
+            </div>
+          </div>
+        </>
+      ) : (<p className="App__error">{errorMessage}</p>)}
     </div>
   );
 };

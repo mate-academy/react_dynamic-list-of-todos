@@ -91,4 +91,9 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__error {
+    color: red;
+    font-size: 28px;
+  }
 }
