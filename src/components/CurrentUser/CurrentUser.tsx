@@ -15,13 +15,16 @@ export const CurrentUser: React.FC<Props> = ({ userId, selectUser }) => {
     email: 'Anonymus',
   });
 
-  useEffect(() => {
+  const userFromServer = async () => {
     const API_USER_URL = `https://mate.academy/students-api/users/${userId}`;
 
-    getUser(API_USER_URL)
-      .then((userFromServer) => {
-        setUser(userFromServer);
-      });
+    const getUsers = await getUser(API_USER_URL);
+
+    setUser(getUsers);
+  };
+
+  useEffect(() => {
+    userFromServer();
   }, [userId]);
 
   return (
