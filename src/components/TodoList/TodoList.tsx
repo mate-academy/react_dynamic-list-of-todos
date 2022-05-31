@@ -135,9 +135,8 @@ export const TodoList: React.FC<Props> = ({
               && (
                 <button
                   data-cy="userButton"
-                  className={classNames('TodoList__user-button button', {
-                    // eslint-disable-next-line max-len
-                    'TodoList__user-button--selected': userId === selectedUserId,
+                  className={classNames('TodoList__user-btn button', {
+                    'TodoList__user-btn--selected': userId === selectedUserId,
                   })}
                   type="button"
                   onClick={() => selectUser(userId)}
