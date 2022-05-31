@@ -13,11 +13,14 @@ const App: React.FC = () => {
 
   const [todos, setTodo] = useState<Todo[]>([]);
 
+  const getTodosFromServer = async () => {
+    const getTodos = await getTodo();
+
+    setTodo(getTodos);
+  };
+
   useEffect(() => {
-    getTodo()
-      .then((todoFromServer) => {
-        setTodo(todoFromServer);
-      });
+    getTodosFromServer();
   }, []);
 
   const selectUser = (userId:number) => {
