@@ -22,6 +22,7 @@ export const CurrentUser: React.FC<Props> = ({
 
         setUser(userFromServer);
       } catch {
+        setUser(null);
         setErrorMessage('Cant load user from server');
       }
     }
@@ -30,7 +31,7 @@ export const CurrentUser: React.FC<Props> = ({
   }, [userId]);
 
   return (
-    <>
+    <div>
       {user ? (
         <div className="CurrentUser">
           <h2 className="CurrentUser__title">
@@ -65,6 +66,6 @@ export const CurrentUser: React.FC<Props> = ({
       ) : (
         <p>{errorMessage}</p>
       )}
-    </>
+    </div>
   );
 };
