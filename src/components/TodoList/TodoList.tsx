@@ -53,6 +53,7 @@ export const TodoList: React.FC<Props> = ({
           <input
             type="text"
             id="filter"
+            data-cy="filterByTitle"
             value={titleQuery}
             onChange={({ target }) => {
               setTitleQuery(target.value);
@@ -93,7 +94,7 @@ export const TodoList: React.FC<Props> = ({
       </div>
       <div className="TodoList__list-container">
 
-        <ul className="TodoList__list">
+        <ul className="TodoList__list" data-cy="listOfTodos">
           {filteredTodos.map(todo => (
             <li
               key={todo.id}
@@ -118,6 +119,7 @@ export const TodoList: React.FC<Props> = ({
                 button
               `}
                   type="button"
+                  data-cy="userButton"
                   onClick={() => onSelectedUserId(todo.userId)}
                 >
                   {`User: ${todo.userId}`}
