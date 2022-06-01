@@ -98,18 +98,20 @@ export const TodoList: FC<Props> = ({
                   <p>{item.title}</p>
                 </label>
 
-                <button
-                  className="
+                {item.userId && (
+                  <button
+                    className="
                     TodoList__user-button
                     TodoList__user-button--selected
                     button
                   "
-                  type="button"
-                  onClick={() => setUserId(item.userId)}
-                >
-                  User&nbsp;#
-                  {item.userId}
-                </button>
+                    type="button"
+                    onClick={() => setUserId(item.userId)}
+                  >
+                    User&nbsp;#
+                    {item.userId}
+                  </button>
+                )}
               </li>
             );
           })}
