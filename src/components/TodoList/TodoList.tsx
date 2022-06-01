@@ -1,44 +1,96 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
+import { TodoListType } from '../../types/TodoListType';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todoList: TodoListType[],
+  setSelectedUserId: Dispatch<SetStateAction<any>>
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+enum TypeOfShow {
+  All = 'all',
+  Completed = 'completed',
+  Uncompleted = 'uncompleted'
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Props> = ({ todoList, setSelectedUserId }) => {
+  const [filterTitle, setFilterTitle] = useState('');
+  const [shownBy, setShown] = useState('all');
+  let resultList: TodoListType[];
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  const todoListCopy = filterTitle.length
+    ? todoList
+      .filter(todo => todo.title.toLowerCase()
+        .includes(filterTitle.toLowerCase()))
+    : [...todoList];
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  switch(shownBy) {
+    case TypeOfShow.Completed:
+      resultList = todoListCopy.filter(todo => todo.completed);
+      break;
+    case TypeOfShow.Uncompleted:
+      resultList = todoListCopy.filter(todo => !todo.completed);
+      break;
+    default:
+      resultList = [...todoListCopy];
+      break;
+  }
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <div className="TodoList__list-container">
+
+        Select:
+        <select
+          name="slect"
+          id="select"
+          onChange={({ target }) => setShown(target.value)}
+        >
+          <option value={TypeOfShow.All}>All</option>
+          <option value={TypeOfShow.Completed}>Completed</option>
+          <option value={TypeOfShow.Uncompleted}>Uncompleted</option>
+        </select>
+
+        Filter:
+        <input
+          type="text"
+          value={filterTitle}
+          onChange={({ target }) => setFilterTitle(target.value)}
+        />
+
+        <ul className="TodoList__list">
+          {
+            resultList.map(todo => (
+              <li
+                key={todo.id}
+                className={
+                  classNames('TodoList__item',
+                    { 'TodoList__item--uncompleted': !todo.completed })
+                }
+              >
+                <h3>{todo.id}</h3>
+                <label>
+                  <input type="checkbox" checked readOnly />
+                  <p>{todo.title}</p>
+                </label>
+                <h1>
+                  Completed:
+                  {todo.completed ? 'Yes' : 'No'}
+                </h1>
+                <button
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => setSelectedUserId(todo.userId)}
+                >
+                  Select User
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};

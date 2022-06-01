@@ -16,7 +16,13 @@
     align-items: center;
     border-radius: 10px;
     padding: 10px;
+    color: #fff;
     margin-bottom: 5px;
+    background-color: green;
+
+    &--uncompleted {
+      background-color: red;
+    }
   }
 
   &__item--checked {
