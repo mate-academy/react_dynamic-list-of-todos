@@ -1,44 +1,132 @@
-import React from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  todos: Todo[];
+  selectedUserId: number;
+  onSelectedUserId: Dispatch<number>;
+  onShuffle: () => void;
+  onDefaulte: () => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedUserId,
+  onSelectedUserId,
+  onShuffle,
+  onDefaulte,
+}) => {
+  const [titleQuery, setTitleQuery] = useState('');
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [typeOfTodos, setTypeOfTodos] = useState('All');
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+  useEffect(() => {
+    setFilteredTodos(todos.filter(todo => {
+      const todoToLowerCase = todo.title.toLowerCase();
+      const queryToLowerCase = titleQuery.toLowerCase();
+
+      const filter = todoToLowerCase.includes(queryToLowerCase);
+
+      switch (typeOfTodos) {
+        case 'All':
+          return filter;
+
+        case 'Not Completed':
+          return filter && todo.completed === false;
+
+        case 'Completed':
+          return filter && todo.completed === true;
+
+        default:
+          return 'Not existing type of filter exception';
+      }
+    }));
+  }, [titleQuery, todos, typeOfTodos]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <div className="TodoList__nav">
+        <label htmlFor="filter">
+          Search:
+          {' '}
+          <input
+            type="text"
+            id="filter"
+            value={titleQuery}
+            onChange={({ target }) => {
+              setTitleQuery(target.value);
+            }}
+          />
+        </label>
+        <label htmlFor="select">
+          Show:
+          {' '}
+          <select
+            name="select"
+            id="select"
+            onChange={({ target }) => {
+              setTypeOfTodos(target.value);
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="All">All</option>
+            <option value="Not Completed">Not Completed</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </label>
+      </div>
+      <div className="TodoList__buttons-container">
+        <button
+          type="button"
+          className="clear"
+          onClick={onShuffle}
+        >
+          Random
+        </button>
+        <button
+          type="button"
+          className="clear"
+          onClick={onDefaulte}
+        >
+          Defaulte
+        </button>
+      </div>
+      <div className="TodoList__list-container">
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <ul className="TodoList__list">
+          {filteredTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={`
+                TodoList__item
+                TodoList__item--${todo.completed ? 'checked' : 'unchecked'}
+              `}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+              {todo.userId && (
+                <button
+                  className={`
+                TodoList__user-button${selectedUserId === todo.userId && '--selected'}
+                button
+              `}
+                  type="button"
+                  onClick={() => onSelectedUserId(todo.userId)}
+                >
+                  {`User: ${todo.userId}`}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
