@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getUser } from '../../../public/api/api';
+import { getUser } from '../../api/api';
 import { User } from '../Types/Types';
 import './CurrentUser.scss';
 

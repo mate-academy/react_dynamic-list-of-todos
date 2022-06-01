@@ -3,7 +3,7 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from '../public/api/api';
+import { getTodos } from './api/api';
 import { Todo } from './components/Types/Types';
 
 const App: React.FC = () => {

@@ -1,4 +1,4 @@
-import { Todo, User } from '../../src/components/Types/Types';
+import { Todo, User } from '../components/Types/Types';
 
 const BASE_URL = 'https://mate.academy/students-api';
 
