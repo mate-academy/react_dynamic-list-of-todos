@@ -2,16 +2,21 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
 import { TodoListType } from '../../types/TodoListType';
-// import Class from 'classnames';
 
 type Props = {
   todoList: TodoListType[],
-  setSelectedUserId: Dispatch<SetStateAction<number>>
+  setSelectedUserId: Dispatch<SetStateAction<any>>
 };
+
+enum TypeOfShow {
+  All = 'all',
+  Completed = 'completed',
+  Uncompleted = 'uncompleted'
+}
 
 export const TodoList: React.FC<Props> = ({ todoList, setSelectedUserId }) => {
   const [filterTitle, setFilterTitle] = useState('');
-  const [shownBy, setShown] = useState(1);
+  const [shownBy, setShown] = useState('all');
   let resultList: TodoListType[];
 
   const todoListCopy = filterTitle.length
@@ -20,12 +25,16 @@ export const TodoList: React.FC<Props> = ({ todoList, setSelectedUserId }) => {
         .includes(filterTitle.toLowerCase()))
     : [...todoList];
 
-  if (shownBy !== 1) {
-    resultList = todoListCopy.filter(todo => (shownBy === 2
-      ? todo.completed
-      : !todo.completed));
-  } else {
-    resultList = [...todoListCopy];
+  switch(shownBy) {
+    case TypeOfShow.Completed:
+      resultList = todoListCopy.filter(todo => todo.completed);
+      break;
+    case TypeOfShow.Uncompleted:
+      resultList = todoListCopy.filter(todo => !todo.completed);
+      break;
+    default:
+      resultList = [...todoListCopy];
+      break;
   }
 
   return (
@@ -37,11 +46,11 @@ export const TodoList: React.FC<Props> = ({ todoList, setSelectedUserId }) => {
         <select
           name="slect"
           id="select"
-          onChange={({ target }) => setShown(Number(target.value))}
+          onChange={({ target }) => setShown(target.value)}
         >
-          <option value="1">All</option>
-          <option value="2">Completed</option>
-          <option value="3">Uncompleted</option>
+          <option value={TypeOfShow.All}>All</option>
+          <option value={TypeOfShow.Completed}>Completed</option>
+          <option value={TypeOfShow.Uncompleted}>Uncompleted</option>
         </select>
 
         Filter:

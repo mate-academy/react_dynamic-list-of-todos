@@ -7,11 +7,12 @@ import { UserType } from '../../types/UserType';
 
 type Props = {
   idOfUser: number,
-  setSelectedUserId: Dispatch<SetStateAction<number>>
+  setSelectedUserId: Dispatch<SetStateAction<any>>
 };
 
 export const CurrentUser: React.FC<Props> = (
-    { idOfUser, setSelectedUserId }) => {
+  { idOfUser, setSelectedUserId },
+) => {
   const [user, setUser] = useState<UserType>({
     name: '',
     phone: '',
@@ -44,7 +45,7 @@ export const CurrentUser: React.FC<Props> = (
       <p className="CurrentUser__phone">{user.phone}</p>
       <button
         type="button"
-        onClick={() => setSelectedUserId(0)}
+        onClick={() => setSelectedUserId(null)}
       >
         Clear
       </button>

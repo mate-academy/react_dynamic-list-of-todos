@@ -16,6 +16,7 @@ export async function prepairingData() {
 }
 
 export async function preparedUser(id: number) {
+
   const User = await requestToUsersData(id);
 
   return User;
