@@ -91,4 +91,8 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+
+  &__ControlPanel {
+    margin: 0 0 15px;
+  }
 }
