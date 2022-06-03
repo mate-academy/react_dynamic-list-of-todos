@@ -4,7 +4,7 @@ import classnames from 'classnames';
 interface Props {
   todo: Todo,
   selectUser: ((id: number) => void),
-  onChange: ((children: Todo) => void),
+  onChange: ((child: Todo) => void),
 }
 
 export const TodoItem: React.FC<Props> = ({

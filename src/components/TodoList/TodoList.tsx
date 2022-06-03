@@ -5,7 +5,7 @@ import './TodoList.scss';
 interface Props {
   todos: Todo[],
   selectUser: ((id: number) => void),
-  onChange: ((children: Todo) => void),
+  onChange: ((child: Todo) => void),
 }
 
 enum Option {

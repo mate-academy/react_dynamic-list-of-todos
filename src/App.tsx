@@ -9,16 +9,16 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const onChange = (children: Todo) => {
-    const copyChildren = { ...children };
+  const onChange = (child: Todo) => {
+    const copyChild = { ...child };
     const copy = [...todos];
-    const index = todos.findIndex(todo => todo.id === children.id);
+    const index = todos.findIndex(todo => todo.id === child.id);
 
     copy.splice(index, 1);
-    copyChildren.completed = !children.completed;
+    copyChild.completed = !child.completed;
     setTodos([
       ...copy,
-      copyChildren,
+      copyChild,
     ].sort((a, b) => a.id - b.id));
   };
 
