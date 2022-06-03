@@ -12,12 +12,6 @@ export const TodoItem: React.FC<Props> = ({
   selectUser,
   onChange,
 }) => {
-  // const [completed, setCompleted] = useState(todo.completed);
-
-  // const changeComplete = () => {
-  //   setCompleted((prev) => !prev);
-  // };
-
   return (
     <li className={classnames(
       'TodoList__item',
