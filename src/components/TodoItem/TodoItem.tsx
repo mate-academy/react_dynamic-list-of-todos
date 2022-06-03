@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 
 interface Props {
   todo: Todo,
   selectUser: ((id: number) => void),
+  onChange: ((children: Todo) => void),
 }
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   selectUser,
+  onChange,
 }) => {
-  const [completed, setCompleted] = useState(false);
+  // const [completed, setCompleted] = useState(todo.completed);
 
-  const changeComplete = () => {
-    setCompleted((prev) => !prev);
-  };
+  // const changeComplete = () => {
+  //   setCompleted((prev) => !prev);
+  // };
 
   return (
     <li className={classnames(
       'TodoList__item',
-      { 'TodoList__item--checked': completed || todo.completed },
+      { 'TodoList__item--checked': todo.completed },
     )}
     >
       <label>
         <input
           type="checkbox"
-          onChange={changeComplete}
+          checked={todo.completed}
+          onChange={() => onChange(todo)}
           readOnly
         />
         <p>{todo.title}</p>

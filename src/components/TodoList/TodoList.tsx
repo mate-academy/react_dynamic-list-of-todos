@@ -5,6 +5,7 @@ import './TodoList.scss';
 interface Props {
   todos: Todo[],
   selectUser: ((id: number) => void),
+  onChange: ((children: Todo) => void),
 }
 
 enum Option {
@@ -16,6 +17,7 @@ enum Option {
 export const TodoList: React.FC<Props> = ({
   todos,
   selectUser,
+  onChange,
 }) => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState('all');
@@ -76,6 +78,7 @@ export const TodoList: React.FC<Props> = ({
               key={todo.id}
               todo={todo}
               selectUser={selectUser}
+              onChange={onChange}
             />
           ))}
         </ul>

@@ -9,6 +9,19 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const onChange = (children: Todo) => {
+    const copyChildren = { ...children };
+    const copy = [...todos];
+    const index = todos.findIndex(todo => todo.id === children.id);
+
+    copy.splice(index, 1);
+    copyChildren.completed = !children.completed;
+    setTodos([
+      ...copy,
+      copyChildren,
+    ].sort((a, b) => a.id - b.id));
+  };
+
   const getServerTodos = async () => {
     const response = await getTodos();
 
@@ -29,6 +42,7 @@ const App: React.FC = () => {
         <TodoList
           todos={todos}
           selectUser={selectUser}
+          onChange={onChange}
         />
       </div>
 
