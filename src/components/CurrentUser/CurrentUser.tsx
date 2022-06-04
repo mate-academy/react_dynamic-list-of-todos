@@ -20,7 +20,7 @@ export const CurrentUser: React.FC<Props> = React.memo(({
 
       setCurrentUser(newCurrentUser);
       setIsError(null);
-    } catch (error) {
+    } catch {
       setCurrentUser(null);
       setIsError(true);
     }
