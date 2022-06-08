@@ -25,7 +25,7 @@ export const TodoList: React.FC<Props> = ({
   selectedUserId,
 }) => {
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<boolean | undefined>(undefined);
+  const [status, setStatus] = useState<boolean | null>(null);
   const [appliedQuery, setAppliedQuery] = useState('');
 
   useEffect(() => {
@@ -38,18 +38,17 @@ export const TodoList: React.FC<Props> = ({
   );
 
   const selectStatus = (input: string) => {
-    let inputStatus: boolean;
-
-    if (input !== 'all') {
-      if (input === 'active') {
-        inputStatus = false;
-      } else {
-        inputStatus = true;
-      }
-
-      setStatus(inputStatus);
-    } else {
-      setStatus(undefined);
+    switch (input) {
+      case 'all':
+        setStatus(null);
+        break;
+      case 'completed':
+        setStatus(true);
+        break;
+      case 'active':
+        setStatus(false);
+        break;
+      default:
     }
   };
 
@@ -72,7 +71,7 @@ export const TodoList: React.FC<Props> = ({
   let filteredTodos = initialTodos
     .filter(todo => todo.title.includes(appliedQuery));
 
-  if (status !== undefined) {
+  if (status !== null) {
     filteredTodos = filteredTodos.filter(todo => todo.completed === status);
   }
 

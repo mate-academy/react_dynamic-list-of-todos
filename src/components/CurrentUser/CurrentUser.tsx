@@ -20,7 +20,9 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
         ? (
           <>
             <div className="CurrentUser">
-              <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUserId}`}</span></h2>
+              <h2 className="CurrentUser__title">
+                <span>{`Selected user: ${selectedUserId}`}</span>
+              </h2>
 
               <h3
                 className="CurrentUser__name"

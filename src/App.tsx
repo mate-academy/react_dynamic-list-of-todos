@@ -36,12 +36,14 @@ const App: React.FC = () => {
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              selectedUserId={selectedUserId}
-              clearUser={clearUser}
-            />
-          ) : <h3>No user selected</h3>}
+          {selectedUserId
+            ? (
+              <CurrentUser
+                selectedUserId={selectedUserId}
+                clearUser={clearUser}
+              />
+            )
+            : <h3>No user selected</h3>}
         </div>
       </div>
     </div>
