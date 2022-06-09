@@ -1,12 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUserId: number,
+  clearUser: () => void,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+type User = {
+  id: number,
+  name: string,
+  email: string,
+  phone: string,
+};
+
+export const CurrentUser: React.FC<Props> = ({ selectedUserId, clearUser }) => {
+  const [user, setUser] = useState<User>();
+
+  const selectedUser = async (userId: number) => {
+    const userData = await getUser(userId);
+
+    setUser(userData);
+  };
+
+  useEffect(() => {
+    selectedUser(selectedUserId);
+  }, [selectedUserId]);
+
+  return (
+    <div className="CurrentUser" data-cy="userName">
+      <button
+        type="button"
+        className="CurrentUser__clear button"
+        onClick={clearUser}
+      >
+        Clear
+      </button>
+
+      {user && (
+        <>
+          <h2 className="CurrentUser__title">
+            <span>
+              Selected user:
+              {' '}
+              {user.id}
+            </span>
+          </h2>
+
+          <h3 className="CurrentUser__name" data-cy="userName">
+            {user.name}
+          </h3>
+          <p className="CurrentUser__email">
+            {user.email}
+          </p>
+          <p className="CurrentUser__phone">
+            {user.phone}
+          </p>
+        </>
+      )}
+    </div>
+  );
+};
