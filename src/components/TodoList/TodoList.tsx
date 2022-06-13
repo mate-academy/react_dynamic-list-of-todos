@@ -10,23 +10,63 @@ interface Props {
 export const TodoList: React.FC<Props> = (
   { listOfTodos, callbackForUserSelect },
 ) => {
-  const [currentFilter, setCurrentFilter]
-  = useState('');
+  const [currentFilter, setCurrentFilter] = useState('');
+  const [filterBySelect, setFilterBySelect] = useState('all');
+
+  function sorter(list : Todo[]) {
+    switch (filterBySelect) {
+      case 'completed': {
+        return list.filter(el => el.completed === true);
+      }
+
+      case 'active': {
+        return list.filter(el => el.completed === false);
+      }
+
+      default: {
+        return list;
+      }
+    }
+  }
 
   return (
     <div className="TodoList">
       <h2>Filter todos:</h2>
-      <input
-        type="text"
-        onChange={(event) => {
-          setCurrentFilter(event.target.value);
-        }}
-      />
+      <label>
+        <p>filter</p>
+        <input
+          type="text"
+          onChange={(event) => {
+            setCurrentFilter(event.target.value);
+          }}
+        />
+      </label>
+      <label>
+        <p>
+          Status
+        </p>
+        <select
+          onChange={(event) => {
+            setFilterBySelect(event.target.value);
+          }}
+        >
+          <option value="all">
+            all
+          </option>
+          <option value="completed">
+            completed
+          </option>
+          <option value="active">
+            active
+          </option>
+        </select>
+      </label>
+
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {listOfTodos.map(singleTodo => (
+          {sorter(listOfTodos).map(singleTodo => (
             singleTodo.title.includes(currentFilter) && (
               <li
                 key={singleTodo.id}
