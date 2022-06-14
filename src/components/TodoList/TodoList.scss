@@ -1,8 +1,21 @@
 .TodoList {
   width: 100%;
 
-  &__user-button--selected {
-    background-color: #4d457b;
+  &__form {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__user-button {
+    cursor: pointer;
+
+    &:hover {
+      background-color: orange;
+    }
+
+    &--selected {
+      background-color: #4d457b;
+    }
   }
 
   &__list {
