@@ -1,44 +1,116 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useState } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Todo = {
+  id: number;
+  createdAt: string;
+  upDatedAt: string;
+  userId: number;
+  title: string;
+  completed: boolean;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[]
+  onSelect: (selectedId: number) => void
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
+  const [inputedValue, setInputedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState('all');
+  const filteredTodos = [...todos].filter((todo) => {
+    return todo.title.includes(inputedValue);
+  });
+
+  const selectedTodos = [...filteredTodos].filter((todo) => {
+    if (selectedValue === 'all') {
+      return todo;
+    }
+
+    if (selectedValue === 'active') {
+      return todo.completed === false;
+    }
+
+    if (selectedValue === 'completed') {
+      return todo.completed === true;
+    }
+
+    return todo;
+  });
+
+  console.log(inputedValue);
+
+  return (
+    <div className="TodoList">
+      <form className="form">
+        <input
+          placeholder="input the title"
+          data-cy="filterByTitle"
+          value={inputedValue}
+          className="form__input"
+          onChange={(event) => {
+            event.preventDefault();
+            setInputedValue(event.target.value);
+          }}
+        />
+
+        <select
+          className="select"
+          onChange={(event) => {
+            setSelectedValue(event.target.value);
+          }}
+        >
+          <option
+            value="all"
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            All
+          </option>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
+          <option
+            value="active"
           >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+            Active
+          </option>
+
+          <option
+            value="completed"
+          >
+            Completed
+          </option>
+        </select>
+      </form>
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {selectedTodos.map((todo) => (
+            <li className="TodoList__item TodoList__item--unchecked">
+              <label>
+                <input type="checkbox" readOnly />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className="
+                  TodoList__user-button
+                  button
+                "
+                type="button"
+                data-cy="userButton"
+                onClick={() => {
+                  onSelect(todo.userId);
+                }}
+              >
+                {`User # ${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};

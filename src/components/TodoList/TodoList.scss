@@ -29,3 +29,39 @@
     color: #ff3626;
   }
 }
+
+.form {
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  &__input {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #ffe0db;
+    color: #ff3626;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #ff3626;
+    }
+
+  }
+}
+
+.select {
+  width: 230px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #ffe0db;
+  color: #ff3626;
+  border: none;
+  outline: none;
+}
