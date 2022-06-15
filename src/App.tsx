@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
@@ -5,21 +6,21 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 const App: React.FC = () => {
-  const [
-    selectedUserId,
-    // setSelectedUserId,
-  ] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList />
+        <TodoList selectUserId={setSelectedUserId} />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser />
+            <CurrentUser
+              userId={selectedUserId}
+              setSelectedUserId={setSelectedUserId}
+            />
           ) : 'No user selected'}
         </div>
       </div>
