@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUsers } from '../API/api';
+import { getSingleUser } from '../API/api';
 import './CurrentUser.scss';
 
 interface Props {
@@ -11,9 +11,9 @@ export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
   const [currentUser, setCurrentUser] = useState<User>();
 
   async function singleUser(id : number) {
-    const result = await getUsers();
+    const result = await getSingleUser(id);
 
-    setCurrentUser(result.find((el : User) => el.id === id));
+    setCurrentUser(result);
   }
 
   useEffect(() => {

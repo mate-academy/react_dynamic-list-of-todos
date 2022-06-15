@@ -16,3 +16,9 @@ export async function getUsers() {
 
   return result;
 }
+
+export async function getSingleUser(id:number) {
+  const result = await (request(`/users/${id}`));
+
+  return result;
+}
