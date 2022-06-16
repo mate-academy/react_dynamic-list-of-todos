@@ -13,10 +13,11 @@ export const CurrentUser: React.FC<Props>
 
     useEffect(() => {
       getUser(selectedUserId)
-        .then(result => setUser(result));
-
-      // eslint-disable-next-line no-console
-      console.log('render');
+        .then(result => setUser(result))
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.log(error, 'something wrong with syntax');
+        });
     }, [selectedUserId]);
 
     return (
