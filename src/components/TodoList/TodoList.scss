@@ -5,6 +5,11 @@
     background-color: #4d457b;
   }
 
+  &__user-button--random {
+    height: 30px;
+    margin-left: 40px;
+  }
+
   &__list {
     list-style: none;
     padding-left: 5px;
@@ -27,5 +32,24 @@
   &__item--unchecked {
     background-color: #ffe0db;
     color: #ff3626;
+  }
+
+  &__select {
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 40px;
+    color: #4d457b;
+    font-weight: bold;
+    outline-color: #4d457b;
+  }
+
+  &__input {
+    width: 500px;
+    height: 25px;
+    line-height: 25px;
+    color: #4d457b;
+    font-weight: bold;
+    outline-color: #4d457b;
   }
 }
