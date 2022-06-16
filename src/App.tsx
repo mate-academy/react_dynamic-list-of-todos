@@ -3,23 +3,11 @@ import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-// import { getTodos } from './api/api';
-// import { Todo } from './react-app-env';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(0);
-  // const [todos, setTodos] = useState<Todo[]>([]);
-
-  // useEffect(() => {
-  //   getTodos()
-  //     .then(todoItems => {
-  //       setTodos(todoItems);
-  //     });
-  // }, []);
 
   const userIdHandler = (id: number) => {
-    // const selectedTodo = todos.find(todo => todo.userId === id) || null;
-
     setSelectedUserId(id || 0);
   };
 
