@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
