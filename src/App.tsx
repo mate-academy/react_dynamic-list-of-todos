@@ -8,10 +8,14 @@ import { CurrentUser } from './components/CurrentUser';
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
 
+  const userIdSelect = (value: number) => (
+    setSelectedUserId(value)
+  );
+
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList selectUserId={setSelectedUserId} />
+        <TodoList selectUserId={userIdSelect} />
       </div>
 
       <div className="App__content">
@@ -19,7 +23,7 @@ const App: React.FC = () => {
           {selectedUserId ? (
             <CurrentUser
               userId={selectedUserId}
-              setSelectedUserId={setSelectedUserId}
+              setSelectedUserId={userIdSelect}
             />
           ) : 'No user selected'}
         </div>

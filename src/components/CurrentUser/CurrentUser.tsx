@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { getUsers } from '../../api/api';
+import { getUser } from '../../api/api';
 import './CurrentUser.scss';
 
 interface Prop {
   userId: number,
-  setSelectedUserId: React.Dispatch<React.SetStateAction<number>>,
+  setSelectedUserId: (value: number) => void,
 }
 
 export const CurrentUser: React.FC<Prop> = ({ userId, setSelectedUserId }) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getUsers(userId)
+    getUser(userId)
       .then(element => setUser(element));
   }, [userId]);
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import classname from 'classnames';
 import { getTodos } from '../../api/api';
 import './TodoList.scss';
 
 interface Prop {
-  selectUserId: React.Dispatch<React.SetStateAction<number>>
+  selectUserId: (value: number) => void,
 }
 
 export const TodoList: React.FC<Prop> = ({ selectUserId }) => {
@@ -61,50 +62,28 @@ export const TodoList: React.FC<Prop> = ({ selectUserId }) => {
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
           {selectTodos().map(todo => (
-            !todo.completed
-              ? (
-                <li
-                  key={todo.id}
-                  className="TodoList__item TodoList__item--unchecked"
-                >
-                  <label>
-                    <input type="checkbox" readOnly />
-                    <p>{todo.title}</p>
-                  </label>
-                  <button
-                    className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
-                    type="button"
-                    onClick={() => selectUserId(todo.userId)}
-                  >
-                    User&nbsp;
-                    {todo.userId}
-                  </button>
-                </li>
-              )
-              : (
-                <li
-                  key={todo.id}
-                  className="TodoList__item TodoList__item--checked"
-                >
-                  <label>
-                    <input type="checkbox" checked readOnly />
-                    <p>{todo.title}</p>
-                  </label>
-
-                  <button
-                    className="TodoList__user-button button"
-                    type="button"
-                    onClick={() => selectUserId(todo.userId)}
-                  >
-                    User&nbsp;
-                    {todo.userId}
-                  </button>
-                </li>
-              )
+            <li
+              key={todo.id}
+              className={classname('TodoList__item',
+                {
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
+                })}
+            >
+              <label>
+                <input type="checkbox" readOnly checked={todo.completed} />
+                <p>{todo.title}</p>
+              </label>
+              <button
+                className={classname('TodoList__user-button button',
+                  { 'TodoList__user-button--selected': !todo.completed })}
+                type="button"
+                onClick={() => selectUserId(todo.userId)}
+              >
+                User&nbsp;
+                {todo.userId}
+              </button>
+            </li>
           ))}
         </ul>
       </div>
