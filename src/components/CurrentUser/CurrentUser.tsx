@@ -4,9 +4,11 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedUserId: number;
+  changeUser: (userId: number) => void;
 };
 
-export const CurrentUser: React.FC<Props> = ({ selectedUserId }) => {
+export const CurrentUser: React.FC<Props>
+= ({ selectedUserId, changeUser }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -25,9 +27,25 @@ export const CurrentUser: React.FC<Props> = ({ selectedUserId }) => {
         </span>
       </h2>
 
-      <h3 className="CurrentUser__name">{selectedUser?.name}</h3>
+      <h3
+        className="CurrentUser__name"
+        data-cy="userName"
+      >
+        {selectedUser?.name}
+      </h3>
       <p className="CurrentUser__email">{selectedUser?.email}</p>
       <p className="CurrentUser__phone">{selectedUser?.phone}</p>
+
+      {selectedUserId && (
+        <button
+          type="submit"
+          className="button"
+          onClick={() => changeUser(0)}
+          data-cy="userButton"
+        >
+          Clear
+        </button>
+      )}
     </div>
   );
 };

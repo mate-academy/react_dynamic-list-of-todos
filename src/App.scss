@@ -74,6 +74,19 @@ input[type="checkbox"]:checked + p:before {
   justify-content: stretch;
   align-content: stretch;
 
+  &__search {
+    padding: 5px 10px;
+    border-color: #4d457b;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+
+  &__select {
+    padding: 5px 10px;
+    border-color: #4d457b;
+    border-radius: 5px;
+  }
+
   &__sidebar {
     @extend %stretch-panel;
 

@@ -31,8 +31,8 @@ export const Todo: React.FC<Props> = ({ todo, changeUser }) => {
 
       <button
         className="
-          TodoList__user-button
-          TodoList__user-button--selected
+          Todo-item__user-button
+          Todo-item__user-button--selected
           button
         "
         type="button"
