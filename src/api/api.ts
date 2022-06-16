@@ -8,7 +8,7 @@ export async function getTodos(): Promise<Todo[]> {
   return response.json();
 }
 
-export async function getUsers(userId: number): Promise<User> {
+export async function getUser(userId: number): Promise<User> {
   return fetch(`${API_URL}/users/${userId}`)
     .then(response => response.json());
 }

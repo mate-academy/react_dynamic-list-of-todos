@@ -8,7 +8,7 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(0);
 
   const userIdHandler = (id: number) => {
-    setSelectedUserId(id || 0);
+    setSelectedUserId(id);
   };
 
   const clearHandler = () => {

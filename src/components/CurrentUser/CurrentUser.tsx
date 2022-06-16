@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './CurrentUser.scss';
-import { getUsers } from '../../api/api';
+import { getUser } from '../../api/api';
 import { User } from '../../react-app-env';
 
 type Props = {
@@ -12,7 +12,7 @@ export const CurrentUser: React.FC<Props> = ({ userId, onHandlerClear }) => {
   const [selectedUser, setSelectedUser] = useState<User>();
 
   useEffect(() => {
-    getUsers(userId)
+    getUser(userId)
       .then(user => {
         setSelectedUser(user);
       });

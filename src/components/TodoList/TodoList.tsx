@@ -12,11 +12,13 @@ export const TodoList: React.FC<Props> = ({ onHandlerUserId }) => {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedOption, setSelectedOption] = useState('');
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const options = ['all', 'active', 'completed'];
 
   useEffect(() => {
     getTodos()
       .then(todoItems => {
+        setAllTodos(todoItems);
         setTodos(todoItems);
       });
   }, []);
@@ -24,16 +26,16 @@ export const TodoList: React.FC<Props> = ({ onHandlerUserId }) => {
   const filteredByTitle = todos
     .filter(todo => todo.title.toLowerCase().includes(title.toLowerCase()));
 
-  const visibleTodos = async () => {
+  const visibleTodos = () => {
     switch (selectedOption) {
       case 'all':
-        setTodos(await getTodos());
+        setTodos(allTodos);
         break;
       case 'active':
-        setTodos((await getTodos()).filter(todo => !todo.completed));
+        setTodos([...allTodos].filter(todo => !todo.completed));
         break;
       case 'completed':
-        setTodos((await getTodos()).filter(todo => todo.completed));
+        setTodos([...allTodos].filter(todo => todo.completed));
         break;
       default:
         break;
