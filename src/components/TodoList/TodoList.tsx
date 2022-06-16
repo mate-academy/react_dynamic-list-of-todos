@@ -9,13 +9,27 @@ interface Props {
 export const TodoList: React.FC<Props>
   = ({ todosFromServer, selectUser }) => {
     const [filter, setFilter] = useState<string>('');
-    // const [selectFilter, setSelectFilter] = useState();
+    const [selectFilter, setSelectFilter] = useState('all');
 
-    // const filteredByStatus
-    //   = todosFromServer.filter(todo => todo.completed === true);
+    const filteredByState
+      = todosFromServer.filter(todo => {
+        if (todo.completed === true && selectFilter === 'completed') {
+          return true;
+        }
+
+        if (todo.completed === false && selectFilter === 'active') {
+          return true;
+        }
+
+        if (selectFilter === 'all') {
+          return true;
+        }
+
+        return false;
+      });
 
     const filteredByTitle
-      = todosFromServer.filter(todo => todo.title.includes(filter));
+      = filteredByState.filter(todo => todo.title.includes(filter));
 
     return (
       <div className="TodoList">
@@ -30,16 +44,26 @@ export const TodoList: React.FC<Props>
           }}
         />
 
-        <div
-          className="select"
-        >
-          <select>
+        <div className="select">
+          <select
+            value={selectFilter}
+            onChange={event => {
+              setSelectFilter(event.target.value);
+            }}
+          >
             <option value="all">all</option>
-            <option value="false">active</option>
-            <option value="true">completed</option>
+            <option value="active">active</option>
+            <option value="completed">completed</option>
           </select>
 
         </div>
+
+        <button
+          type="button"
+          className="button"
+        >
+          Randomize
+        </button>
 
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
