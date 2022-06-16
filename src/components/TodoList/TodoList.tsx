@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
 
 interface Props {
@@ -12,6 +12,7 @@ export const TodoList: React.FC<Props> = (
 ) => {
   const [currentFilter, setCurrentFilter] = useState('');
   const [filterBySelect, setFilterBySelect] = useState('all');
+  const [filtered, setFiltered] = useState<Todo[]>([]);
 
   function sorter(list : Todo[]) {
     switch (filterBySelect) {
@@ -28,6 +29,17 @@ export const TodoList: React.FC<Props> = (
       }
     }
   }
+
+  const filtrato = (option : string) => {
+    const sorted = listOfTodos.filter(el => el.title.includes(option));
+    const result = sorter(sorted);
+
+    setFiltered(result);
+  };
+
+  useEffect(() => {
+    filtrato(currentFilter);
+  }, [filterBySelect, currentFilter, listOfTodos]);
 
   return (
     <div className="TodoList">
@@ -66,8 +78,8 @@ export const TodoList: React.FC<Props> = (
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {sorter(listOfTodos).map(singleTodo => (
-            singleTodo.title.includes(currentFilter) && (
+          {filtered.map(singleTodo => (
+            (
               <li
                 key={singleTodo.id}
                 className={
