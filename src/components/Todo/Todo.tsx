@@ -5,10 +5,21 @@ import classNames from 'classnames';
 type Props = {
   todo: Todo,
   changeUser: (userId: number) => void;
+  selectedUserId: number,
 };
 
-export const Todo: React.FC<Props> = ({ todo, changeUser }) => {
+export const Todo: React.FC<Props> = ({
+  todo,
+  changeUser,
+  selectedUserId,
+}) => {
   const [checked, setChecked] = useState(false);
+  const [userId, setUserId] = useState(0);
+
+  const clickHandler = () => {
+    changeUser(todo.userId);
+    setUserId(todo.userId);
+  };
 
   return (
     <li
@@ -30,13 +41,19 @@ export const Todo: React.FC<Props> = ({ todo, changeUser }) => {
       </label>
 
       <button
-        className="
-          Todo-item__user-button
-          Todo-item__user-button--selected
-          button
-        "
+        className={classNames(
+          'Todo-item__user-button', 'button',
+          {
+            'Todo-item__user-button--selected':
+            userId === selectedUserId,
+          },
+          {
+            'Todo-item__user-button--selected':
+            selectedUserId === 0,
+          },
+        )}
         type="button"
-        onClick={() => changeUser(todo.userId)}
+        onClick={clickHandler}
       >
         {`User ${todo.userId}`}
       </button>

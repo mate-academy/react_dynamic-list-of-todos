@@ -92,6 +92,7 @@ const App: React.FC = () => {
           todos={todos}
           currentQuery={query}
           changeUser={changeUser}
+          selectedUserId={selectedUserId}
         />
       </div>
 

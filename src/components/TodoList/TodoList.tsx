@@ -6,12 +6,14 @@ type Props = {
   todos: Todo[];
   currentQuery: string;
   changeUser: (userId: number) => void;
+  selectedUserId: number,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   currentQuery,
   changeUser,
+  selectedUserId,
 }) => {
   const visibleTodos = todos.filter((todo) => {
     const { title } = todo;
@@ -30,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
               key={todo.id}
               todo={todo}
               changeUser={changeUser}
+              selectedUserId={selectedUserId}
             />
           ))}
         </ul>
