@@ -15,50 +15,22 @@ type Todo = {
 type Props = {
   todos: Todo[]
   onSelect: (selectedId: number) => void
+  onFilter: (inputedValue: string) => void
+  onSelected: (selectedValue: string) => void
+  onSorted: () => void
 };
 
-export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
-  const [inputedValue, setInputedValue] = useState('');
-  const [selectedValue, setSelectedValue] = useState('all');
+export const TodoList: React.FC <Props> = (
+  {
+    todos,
+    onSelect,
+    onFilter,
+    onSelected,
+    onSorted,
+  },
+) => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-
-  const filteredTodos = [...todos].filter((todo) => {
-    return todo.title.includes(inputedValue);
-  });
-
-  const selectedTodos = [...filteredTodos].filter((todo) => {
-    if (selectedValue === 'all') {
-      return todo;
-    }
-
-    if (selectedValue === 'active') {
-      return todo.completed === false;
-    }
-
-    if (selectedValue === 'completed') {
-      return todo.completed === true;
-    }
-
-    return todo;
-  });
-
-  // function shuffleArray(array: Todo[]) {
-  //   let curId = array.length;
-
-  //   while (curId !== 0) {
-  //     const randId = Math.floor(Math.random() * curId);
-
-  //     curId -= 1;
-  //     const tmp = array[curId];
-
-  //     array[curId] = array[randId];
-  //     array[randId] = tmp;
-  //   }
-
-  //   return array;
-  // }
-
-  console.log(inputedValue);
+  const [inputedValue, setInputedValue] = useState('');
 
   return (
     <div className="TodoList">
@@ -66,18 +38,18 @@ export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
         <input
           placeholder="input the title"
           data-cy="filterByTitle"
-          value={inputedValue}
           className="form__input"
+          value={inputedValue}
           onChange={(event) => {
-            event.preventDefault();
             setInputedValue(event.target.value);
+            onFilter(event.target.value);
           }}
         />
 
         <select
           className="select"
           onChange={(event) => {
-            setSelectedValue(event.target.value);
+            onSelected(event.target.value);
           }}
         >
           <option
@@ -98,6 +70,14 @@ export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
             Completed
           </option>
         </select>
+
+        <button
+          type="button"
+          className="btn"
+          onClick={onSorted}
+        >
+          Random sort
+        </button>
       </form>
       <h2>Todos:</h2>
 
@@ -106,8 +86,11 @@ export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
           className="TodoList__list"
           data-cy="listOfTodos"
         >
-          {selectedTodos.map((todo) => (
-            <li className="TodoList__item TodoList__item--unchecked">
+          {todos.map((todo) => (
+            <li
+              key={todo.id}
+              className="TodoList__item TodoList__item--unchecked"
+            >
               <label>
                 <input type="checkbox" readOnly />
                 <p>{todo.title}</p>

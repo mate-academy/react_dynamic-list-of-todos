@@ -64,4 +64,22 @@
   color: #ff3626;
   border: none;
   outline: none;
+  margin-bottom: 10px;
+}
+
+.btn {
+  width: 230px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #ffe0db;
+  color: #ff3626;
+  border: none;
+  outline: none;
+
+  &:hover {
+    cursor: pointer;
+    color: #ffe0db;
+    background-color: #ff3626;
+
+  }
 }

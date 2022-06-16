@@ -23,7 +23,6 @@ export const CurrentUser: React.FC <Props> = ({ selectedUserId, onClear }) => {
           setUser({
             id: 0, name: '', email: '', phone: '',
           });
-          throw new Error('user not found');
         } else {
           response.json()
             .then(userFromServer => {
