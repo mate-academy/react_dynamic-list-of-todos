@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './TodoList.scss';
@@ -19,6 +20,8 @@ type Props = {
 export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
   const [inputedValue, setInputedValue] = useState('');
   const [selectedValue, setSelectedValue] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+
   const filteredTodos = [...todos].filter((todo) => {
     return todo.title.includes(inputedValue);
   });
@@ -38,6 +41,22 @@ export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
 
     return todo;
   });
+
+  // function shuffleArray(array: Todo[]) {
+  //   let curId = array.length;
+
+  //   while (curId !== 0) {
+  //     const randId = Math.floor(Math.random() * curId);
+
+  //     curId -= 1;
+  //     const tmp = array[curId];
+
+  //     array[curId] = array[randId];
+  //     array[randId] = tmp;
+  //   }
+
+  //   return array;
+  // }
 
   console.log(inputedValue);
 
@@ -94,19 +113,38 @@ export const TodoList: React.FC <Props> = ({ todos, onSelect }) => {
                 <p>{todo.title}</p>
               </label>
 
-              <button
-                className="
-                  TodoList__user-button
-                  button
-                "
-                type="button"
-                data-cy="userButton"
-                onClick={() => {
-                  onSelect(todo.userId);
-                }}
-              >
-                {`User # ${todo.userId}`}
-              </button>
+              {selectedTodoId === todo.id ? (
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => {
+                    onSelect(todo.userId);
+                    setSelectedTodoId(todo.id);
+                  }}
+                >
+                  {`User # ${todo.userId}`}
+                </button>
+              ) : (
+                <button
+                  className="
+                    TodoList__user-button
+                    button
+                  "
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => {
+                    onSelect(todo.userId);
+                    setSelectedTodoId(todo.id);
+                  }}
+                >
+                  {`User # ${todo.userId}`}
+                </button>
+              )}
             </li>
           ))}
         </ul>

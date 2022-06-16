@@ -18,34 +18,48 @@ export const CurrentUser: React.FC <Props> = ({ selectedUserId, onClear }) => {
 
   useEffect(() => {
     fetch(urlUser)
-      .then(response => response.json())
-      .then(userFromServer => {
-        if (userFromServer) {
-          setUser(userFromServer);
+      .then(response => {
+        if (!response.ok) {
+          setUser({
+            id: 0, name: '', email: '', phone: '',
+          });
+          throw new Error('user not found');
+        } else {
+          response.json()
+            .then(userFromServer => {
+              setUser(userFromServer);
+            });
         }
       });
   }, [userId]);
 
   return (
     <div className="CurrentUser">
-      {user === null ? ('User not found') : (
-        <>
-          <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
+      {user.id === 0 && user.name === ''
+      && user.email === '' && user.phone === '' ? ('User not found') : (
+          // eslint-disable-next-line react/jsx-indent
+          <>
+            <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
 
-          <h3 className="CurrentUser__name" data-cy="userName">{user.name}</h3>
-          <p className="CurrentUser__email">{user.email}</p>
-          <p className="CurrentUser__phone">{user.phone}</p>
-          <h3>
-            <button
-              type="button"
-              className="CurrentUser__title button"
-              onClick={onClear}
+            <h3
+              className="CurrentUser__name"
+              data-cy="userName"
             >
-              Clear
-            </button>
-          </h3>
-        </>
-      )}
+              {user.name}
+            </h3>
+            <p className="CurrentUser__email">{user.email}</p>
+            <p className="CurrentUser__phone">{user.phone}</p>
+            <h3>
+              <button
+                type="button"
+                className="CurrentUser__title button"
+                onClick={onClear}
+              >
+                Clear
+              </button>
+            </h3>
+          </>
+        )}
     </div>
   );
 };

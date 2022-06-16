@@ -12,13 +12,20 @@ const App: React.FC = () => {
 
   useEffect(() => {
     fetch(urlTodos)
-      .then(response => response.json())
-      .then(todos => {
-        setTheTodos(todos);
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Something is wrong');
+        } else {
+          response.json()
+            .then(todos => {
+              setTheTodos(todos);
+            });
+        }
       });
   }, []);
 
   const [selectedUserId, setSelectedUserId] = useState(0);
+
   const selectUser = (selectedId: number) => {
     if (selectedId !== selectedUserId) {
       setSelectedUserId(selectedId);
