@@ -20,6 +20,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectUser }) => {
 
   if (randomize !== 0) {
     todos.sort(() => random(-1, 1));
+    setRandomize(0);
   }
 
   const filteredTodos = () => {
