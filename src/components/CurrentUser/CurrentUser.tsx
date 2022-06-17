@@ -1,12 +1,89 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUser } from '../../api/api';
+import { User } from '../../types/User';
 import './CurrentUser.scss';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUserId: number,
+  onClear: CallableFunction,
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props> = ({
+  selectedUserId,
+  onClear,
+}) => {
+  const [currentUser, setCurrentUser] = useState<User>();
+
+  const loadUser = async () => {
+    try {
+      return setCurrentUser(
+        await getUser(selectedUserId),
+      );
+    } catch {
+      return setCurrentUser(
+        {
+          id: 0, name: '', phone: '', email: '',
+        },
+      );
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, [selectedUserId]);
+
+  return (
+    <div className="CurrentUser">
+      {currentUser?.id === 0 ? (
+        <>
+          <h2 className="CurrentUser__title">
+            <span>
+              {'Selected user: '}
+              {selectedUserId}
+            </span>
+          </h2>
+
+          <h2 className="CurrentUser__title">
+            <span className="CurrentUser__load-error">
+              No user data
+            </span>
+          </h2>
+        </>
+      ) : (
+        <>
+          <h2 className="CurrentUser__title">
+            <span>
+              {'Selected user: '}
+              {selectedUserId}
+            </span>
+          </h2>
+
+          <h3
+            className="CurrentUser__name"
+            data-cy="userName"
+          >
+            {currentUser?.name}
+          </h3>
+          <p
+            className="CurrentUser__email"
+          >
+            {currentUser?.email}
+          </p>
+          <p
+            className="CurrentUser__phone"
+          >
+            {currentUser?.phone}
+          </p>
+        </>
+      )}
+
+      <button
+        type="button"
+        className="CurrentUser__clear button"
+        onClick={() => onClear()}
+      >
+        Clear user
+      </button>
+    </div>
+  );
+};
