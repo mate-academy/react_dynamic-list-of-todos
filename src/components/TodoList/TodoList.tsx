@@ -39,6 +39,7 @@ export const TodoList: React.FC<Props>
         <input
           className="input"
           type="text"
+          data-cy="filterByTitle"
           value={filter}
           onChange={event => {
             setFilter(event.target.value);
@@ -67,7 +68,10 @@ export const TodoList: React.FC<Props>
         </button>
 
         <div className="TodoList__list-container">
-          <ul className="TodoList__list">
+          <ul
+            className="TodoList__list"
+            data-cy="listOfTodos"
+          >
             {filteredByTitle.map(todo => (
               <li
               // className={`TodoList__item TodoList__item--${todo.completed ? 'checked' : 'unchecked'}`}
@@ -93,6 +97,7 @@ export const TodoList: React.FC<Props>
                     TodoList__user-button--selected
                     button
                   "
+                  data-cy="userButton"
                   type="button"
                   onClick={() => {
                     selectUser(todo.userId);
