@@ -44,7 +44,7 @@ export const CurrentUser: React.FC<Props>
       {selectedUserId && (
         <button
           type="submit"
-          className="button"
+          className="button CurrentUser__clear-button"
           onClick={() => changeUser(0)}
           data-cy="userButton"
         >
