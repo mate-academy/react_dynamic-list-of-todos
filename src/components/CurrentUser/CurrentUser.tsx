@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './CurrentUser.scss';
 
@@ -25,8 +26,13 @@ export const CurrentUser: React.FC <Props> = ({ selectedUserId, onClear }) => {
           });
         } else {
           response.json()
-            .then(userFromServer => {
-              setUser(userFromServer);
+            .then((userFromServer) => setUser(userFromServer))
+            .catch(error => {
+              if (error) {
+                setUser({
+                  id: 0, name: '', email: '', phone: '',
+                });
+              }
             });
         }
       });
