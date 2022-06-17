@@ -13,7 +13,6 @@ export const Todo: React.FC<Props> = ({
   changeUser,
   selectedUserId,
 }) => {
-  const [checked, setChecked] = useState(false);
   const [userId, setUserId] = useState(0);
 
   const clickHandler = () => {
@@ -26,15 +25,15 @@ export const Todo: React.FC<Props> = ({
       key={todo.id}
       className={classNames(
         'Todo-item',
-        { 'Todo-item--unchecked': !checked },
-        { 'Todo-item--checked': checked },
+        { 'Todo-item--unchecked': !todo.completed },
+        { 'Todo-item--checked': todo.completed },
       )}
     >
       <label>
         <input
           type="checkbox"
+          checked={todo.completed}
           name={todo.createdAt}
-          onChange={() => setChecked(!checked)}
           readOnly
         />
         <p>{todo.title}</p>
@@ -55,7 +54,7 @@ export const Todo: React.FC<Props> = ({
         type="button"
         onClick={clickHandler}
       >
-        {`User ${todo.userId}`}
+        {`User #${todo.userId}`}
       </button>
     </li>
   );

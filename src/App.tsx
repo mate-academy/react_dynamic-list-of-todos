@@ -66,12 +66,12 @@ const App: React.FC = () => {
           className="App__select"
           onChange={selectHandler}
         >
-          <option
+          {/* <option
             value="all"
             disabled
           >
             Choose task status
-          </option>
+          </option> */}
           <option
             value="all"
           >
