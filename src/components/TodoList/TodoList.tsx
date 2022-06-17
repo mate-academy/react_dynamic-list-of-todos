@@ -2,6 +2,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
 type Todo = {
@@ -90,9 +92,9 @@ export const TodoList: React.FC <Props> = (
           {todos.map((todo) => (
             <li
               key={todo.id}
-              className={todo.completed === false
-                ? 'TodoList__item TodoList__item--unchecked'
-                : 'TodoList__item TodoList__item--checked'}
+              className={classNames({ TodoList__item: true },
+                { 'TodoList__item--unchecked': todo.completed === false },
+                { 'TodoList__item--checked': todo.completed === true })}
             >
               <label>
                 <input
