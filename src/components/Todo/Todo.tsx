@@ -18,8 +18,10 @@ export const Todo: React.FC<Props> = ({
       key={todo.id}
       className={classNames(
         'Todo-item',
-        { 'Todo-item--unchecked': !todo.completed },
-        { 'Todo-item--checked': todo.completed },
+        {
+          'Todo-item--unchecked': !todo.completed,
+          'Todo-item--checked': todo.completed,
+        },
       )}
     >
       <label>
