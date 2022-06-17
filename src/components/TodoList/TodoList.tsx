@@ -66,11 +66,16 @@ export const TodoList: React.FC<Props> = ({
         >
           {prepearedTodos().map(todo => (
             <li
-              className="TodoList__item TodoList__item--unchecked"
+              className={todo.completed
+                ? 'TodoList__item--checked TodoList__item'
+                : 'TodoList__item--unchecked TodoList__item'}
               key={todo.id}
             >
               <label>
-                <input type="checkbox" readOnly />
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                />
                 <p>{todo.title}</p>
               </label>
 
