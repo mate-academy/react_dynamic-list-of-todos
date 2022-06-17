@@ -62,16 +62,9 @@ const App: React.FC = () => {
           data-cy="filterByTitle"
         />
         <select
-          value="all"
           className="App__select"
           onChange={selectHandler}
         >
-          {/* <option
-            value="all"
-            disabled
-          >
-            Choose task status
-          </option> */}
           <option
             value="all"
           >
