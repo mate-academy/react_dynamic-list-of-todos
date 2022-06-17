@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import './TodoList.scss';
 
@@ -69,11 +70,20 @@ export const TodoList: React.FC<Props>
           <ul className="TodoList__list">
             {filteredByTitle.map(todo => (
               <li
-                className={`TodoList__item TodoList__item--${todo.completed ? 'checked' : 'unchecked'}`}
+              // className={`TodoList__item TodoList__item--${todo.completed ? 'checked' : 'unchecked'}`}
+              // how can I make it using classNames ? I mean now here have duplicate.
+                className={classNames('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
                 key={todo.id}
               >
                 <label>
-                  <input type="checkbox" readOnly />
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
                   <p>{todo.title}</p>
                 </label>
 
