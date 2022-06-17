@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
@@ -89,10 +90,16 @@ export const TodoList: React.FC <Props> = (
           {todos.map((todo) => (
             <li
               key={todo.id}
-              className="TodoList__item TodoList__item--unchecked"
+              className={todo.completed === false
+                ? 'TodoList__item TodoList__item--unchecked'
+                : 'TodoList__item TodoList__item--checked'}
             >
               <label>
-                <input type="checkbox" readOnly />
+                <input
+                  type="checkbox"
+                  checked={todo.completed ? true : false}
+                  readOnly
+                />
                 <p>{todo.title}</p>
               </label>
 
