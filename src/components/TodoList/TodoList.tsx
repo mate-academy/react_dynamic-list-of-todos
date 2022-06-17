@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import classnames from 'classnames';
 import './TodoList.scss';
 import { getTodos } from '../../api/api';
 import { Todo } from '../../react-app-env';
 
 type Props = {
   selectedUserId: (userId: number) => void,
+  currentUserId: number,
 };
 
-export const TodoList: React.FC<Props> = ({ selectedUserId }) => {
+export const TodoList: React.FC<Props> = ({
+  selectedUserId,
+  currentUserId,
+}) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectBy, setSelectBy] = useState('all');
@@ -71,8 +76,8 @@ export const TodoList: React.FC<Props> = ({ selectedUserId }) => {
         type="button"
         className="
         TodoList__user-button
-        TodoList__user-button--selected
         button
+        TodoList__user-button--selected
         TodoList__user-button--random
         "
         onClick={() => {
@@ -87,7 +92,10 @@ export const TodoList: React.FC<Props> = ({ selectedUserId }) => {
         <ul className="TodoList__list" data-cy="listOfTodos">
           {selectTodos().map(todo => (
             <li
-              className="TodoList__item TodoList__item--unchecked"
+              className={classnames('TodoList__item', {
+                'TodoList__item--unchecked': !todo.completed,
+                'TodoList__item--checked': todo.completed,
+              })}
               key={todo.id}
             >
               <label>
@@ -100,11 +108,10 @@ export const TodoList: React.FC<Props> = ({ selectedUserId }) => {
               </label>
 
               <button
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
+                className={classnames('TodoList__user-button', 'button', {
+                  // eslint-disable-next-line max-len
+                  'TodoList__user-button--selected': todo.userId === currentUserId,
+                })}
                 type="button"
                 data-cy="userButton"
                 onClick={() => {
