@@ -6,9 +6,14 @@ import './TodoList.scss';
 type Props = {
   setUseId: (id: number) => void;
   todos: Todo[];
+  selectedUserId: number;
 };
 
-export const TodoList: React.FC<Props> = ({ setUseId, todos }) => {
+export const TodoList: React.FC<Props> = ({
+  setUseId,
+  todos,
+  selectedUserId,
+}) => {
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState('all');
 
@@ -71,11 +76,10 @@ export const TodoList: React.FC<Props> = ({ setUseId, todos }) => {
 
               <button
                 data-cy="userButton"
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
+                className={classNames('TodoList__user-button', 'button', {
+                  'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
+                })}
                 type="button"
                 onClick={() => setUseId(todo.userId)}
               >

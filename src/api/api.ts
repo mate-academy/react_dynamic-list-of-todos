@@ -9,5 +9,11 @@ export const getTodo = () => {
 
 export const getUser = (id: number) => {
   return fetch(`${API_URL_USERS}/${id}`)
-    .then(response => response.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('User Error');
+      }
+
+      return response.json();
+    });
 };

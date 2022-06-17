@@ -22,13 +22,20 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList setUseId={setUserId} todos={todos} />
+        <TodoList
+          setUseId={setUserId}
+          todos={todos}
+          selectedUserId={selectedUserId}
+        />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser userId={selectedUserId} setUseId={setUserId} />
+            <CurrentUser
+              userId={selectedUserId}
+              setUseId={setUserId}
+            />
           ) : 'No user selected'}
         </div>
       </div>
