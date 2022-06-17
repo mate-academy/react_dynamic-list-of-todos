@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Todo.scss';
 import classNames from 'classnames';
 
@@ -13,13 +13,6 @@ export const Todo: React.FC<Props> = ({
   changeUser,
   selectedUserId,
 }) => {
-  const [userId, setUserId] = useState(0);
-
-  const clickHandler = () => {
-    changeUser(todo.userId);
-    setUserId(todo.userId);
-  };
-
   return (
     <li
       key={todo.id}
@@ -44,15 +37,11 @@ export const Todo: React.FC<Props> = ({
           'Todo-item__user-button', 'button',
           {
             'Todo-item__user-button--selected':
-            userId === selectedUserId,
-          },
-          {
-            'Todo-item__user-button--selected':
-            selectedUserId === 0,
+            todo.userId === selectedUserId,
           },
         )}
         type="button"
-        onClick={clickHandler}
+        onClick={() => changeUser(todo.userId)}
       >
         {`User #${todo.userId}`}
       </button>
