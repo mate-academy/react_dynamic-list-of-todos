@@ -17,7 +17,9 @@ export const CurrentUser: React.FC<Props> = ({
   useEffect(() => {
     getUser(selectedUserId)
       .then(userFromServer => setUser(userFromServer))
-      .catch(() => {
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
         setUser(null);
         setSelectedUserId(0);
       });

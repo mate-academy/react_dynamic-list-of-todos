@@ -11,17 +11,24 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => setTodos(todosFromServer));
+    getTodos()
+      .then(todosFromServer => setTodos(todosFromServer))
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
   }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList
-          todos={todos}
-          selectedUserId={selectedUserId}
-          setSelectedUserId={setSelectedUserId}
-        />
+        {todos.length > 0 ? (
+          <TodoList
+            todos={todos}
+            selectedUserId={selectedUserId}
+            setSelectedUserId={setSelectedUserId}
+          />
+        ) : 'Loading...'}
       </div>
 
       <div className="App__content">
