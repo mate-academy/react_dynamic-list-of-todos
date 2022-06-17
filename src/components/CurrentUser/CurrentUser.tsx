@@ -19,7 +19,7 @@ export const CurrentUser: React.FC<Props> = ({
   }, [selectedUserId]);
 
   return (
-    <div className="CurrentUser">
+    <div className="CurrentUser text-center">
       {user
         ? (
           <>
