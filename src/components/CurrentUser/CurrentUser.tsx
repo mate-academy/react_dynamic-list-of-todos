@@ -8,7 +8,10 @@ type Props = {
   deleteUser: () => void;
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId, deleteUser }) => {
+export const CurrentUser: React.FC<Props> = React.memo(({
+  userId,
+  deleteUser,
+}) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -42,4 +45,4 @@ export const CurrentUser: React.FC<Props> = ({ userId, deleteUser }) => {
       </button>
     </div>
   );
-};
+});
