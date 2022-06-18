@@ -1,44 +1,124 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
+import classname from 'classnames';
+import { getTodo } from '../../api/api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  userId: (todo: Todo) => void,
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = ({ userId }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [optionValue, setOptionValue] = useState('123');
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+  const filterTodo = [...todos]
+    .filter(todo => todo.title.toLocaleLowerCase()
+      .includes(inputValue.toLocaleLowerCase()));
+
+  useEffect(() => {
+    getTodo()
+      .then((todosFromServer: Todo[]) => setTodos(todosFromServer));
+  }, []);
+
+  const filterSelect = (currentTodo: Todo[]) => {
+    switch (optionValue) {
+      case 'active': {
+        return currentTodo.filter(todo => todo.completed === false);
+      }
+
+      case 'completed': {
+        return currentTodo.filter(todo => todo.completed === true);
+      }
+
+      default: {
+        return currentTodo;
+      }
+    }
+  };
+
+  const finishTodo = filterSelect(filterTodo);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+
+        <input
+          className="input is-rounded"
+          value={inputValue}
+          placeholder="Enter a title"
+          onChange={(event) => {
+            setInputValue(event.currentTarget.value);
+          }}
+        />
+
+        <div className="select is-rounded is-small">
+          <select
+            value={optionValue}
+            onChange={(event) => {
+              setOptionValue(event.currentTarget.value);
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+            <option
+              value="all"
+            >
+              All
+            </option>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+            <option
+              value="active"
+            >
+              Active
+            </option>
+
+            <option
+              value="completed"
+            >
+              Completed
+            </option>
+
+          </select>
+
+        </div>
+
+        <ul className="TodoList__list">
+          {finishTodo.map(todo => {
+            return (
+              <li
+                key={todo.id}
+                className={classname('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    readOnly
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  onClick={() => userId(todo)}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
