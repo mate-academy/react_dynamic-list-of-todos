@@ -1,0 +1,36 @@
+.TodoList {
+  width: 100%;
+}
+
+.TodoList__user-button--selected {
+  background-color: #4d457b;
+}
+
+.TodoList__list {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.TodoList__item {
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.TodoList__item--checked {
+  background-color: #cde4e4;
+  color: #459595;
+}
+
+.TodoList__item--unchecked {
+  background-color: #ffe0db;
+  color: #ff3626;
+}
+/*# sourceMappingURL=TodoList.css.map */

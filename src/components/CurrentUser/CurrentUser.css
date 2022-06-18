@@ -1,0 +1,28 @@
+.CurrentUser__title {
+  font-size: 1rem;
+  color: white;
+}
+
+.CurrentUser__title span {
+  background-color: #4d457b;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.CurrentUser__name {
+  margin: 30px 0 10px;
+  font-size: 1.5rem;
+}
+
+.CurrentUser__email,
+.CurrentUser__phone {
+  color: #c4bdd9;
+  text-align: center;
+  margin: 5px;
+}
+
+.CurrentUser__clear {
+  display: block;
+  margin: 20px auto 0;
+}
+/*# sourceMappingURL=CurrentUser.css.map */
