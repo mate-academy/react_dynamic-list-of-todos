@@ -10,7 +10,7 @@ interface Props {
 export const TodoList: React.FC<Props> = ({ todos, selectUser }) => {
   const [titleSubstring, setTitleSubstring] = useState('');
   const [filterOption, setFilterOption] = useState('all');
-  const [randomize, setRandomize] = useState(0);
+  const [randomize, setRandomize] = useState(false);
 
   const random = (min: number, max: number):number => {
     const rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -18,9 +18,9 @@ export const TodoList: React.FC<Props> = ({ todos, selectUser }) => {
     return Math.round(rand);
   };
 
-  if (randomize !== 0) {
+  if (randomize) {
     todos.sort(() => random(-1, 1));
-    setRandomize(0);
+    setRandomize(false);
   }
 
   const filteredTodos = () => {
@@ -69,7 +69,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectUser }) => {
             type="button"
             className="btn btn-danger"
             onClick={() => {
-              setRandomize(Math.random() + 1);
+              setRandomize(true);
             }}
           >
             randomize
