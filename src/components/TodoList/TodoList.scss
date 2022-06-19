@@ -28,4 +28,23 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-fields {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+    &-label {
+      display: flex;
+      flex-direction: column;
+    }
+    &-input {
+      height: 40px;
+      margin-top: 20px;
+    }
+  }
 }
