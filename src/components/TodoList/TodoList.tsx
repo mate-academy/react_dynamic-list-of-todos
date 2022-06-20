@@ -9,24 +9,31 @@ type Props = {
   selectedUserId: number;
 };
 
+enum Status {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({
   setUseId,
   todos,
   selectedUserId,
 }) => {
   const [title, setTitle] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<Status | string>(Status.All);
 
   const shownTodo = todos.filter(todo => {
-    if (status === 'completed') {
-      return todo.title.includes(title) && todo.completed;
+    switch (status) {
+      case Status.Completed:
+        return todo.title.toLowerCase().includes(title.toLowerCase())
+        && todo.completed;
+      case Status.Active:
+        return todo.title.toLowerCase().includes(title.toLowerCase())
+        && !todo.completed;
+      default:
+        return todo.title.toLowerCase().includes(title.toLowerCase());
     }
-
-    if (status === 'active') {
-      return todo.title.includes(title) && !todo.completed;
-    }
-
-    return todo.title.includes(title);
   });
 
   return (
@@ -80,7 +87,7 @@ export const TodoList: React.FC<Props> = ({
                   'TodoList__user-button--selected':
                     selectedUserId === todo.userId,
                 })}
-                type="button"
+                type="submit"
                 onClick={() => setUseId(todo.userId)}
               >
                 {`User ${todo.userId}`}

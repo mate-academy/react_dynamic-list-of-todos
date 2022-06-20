@@ -10,11 +10,17 @@ type Props = {
 
 export const CurrentUser: React.FC<Props> = ({ userId, setUseId }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userError, setUserError] = useState('');
 
   useEffect(() => {
     getUser(userId)
-      .then(response => setUser(response));
+      .then(response => setUser(response))
+      .catch(() => setUserError('No user'));
   }, [userId]);
+
+  if (!user) {
+    return (<b>{userError}</b>);
+  }
 
   return (
     <>

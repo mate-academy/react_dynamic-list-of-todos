@@ -4,7 +4,13 @@ const API_URL_USERS = `https://mate.academy/students-api/users`;
 
 export const getTodo = () => {
   return fetch(API_URL_TODO)
-    .then(response => response.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('User Error');
+      }
+
+      return response.json();
+    });
 };
 
 export const getUser = (id: number) => {
