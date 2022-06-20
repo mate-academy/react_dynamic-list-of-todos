@@ -13,15 +13,11 @@
   &__input {
     box-sizing: border-box;
     outline: none;
-    border: none;
     color: #333;
     background-color: #cecece;
     border-radius: 20px;
     padding: 8px;
-    &:hover {
-      transition: 0.4s;
-      border: #ff3626 solid 1px;
-    }
+    border: solid 1px orangered;
     &--select {
       margin-right: 0;
     }

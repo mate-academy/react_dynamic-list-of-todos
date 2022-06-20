@@ -3,10 +3,22 @@ const apiUrlUsers = 'https://mate.academy/students-api/users';
 
 export const getTodos = ():Promise<Todo[]> => {
   return fetch(apiUrlTodos)
-    .then(response => response.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Todo error');
+      }
+
+      return response.json();
+    });
 };
 
 export const getUsers = (selectedUserId: number):Promise<User> => {
   return fetch(`${apiUrlUsers}/${selectedUserId}`)
-    .then(response => response.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('User error');
+      }
+
+      return response.json();
+    });
 };

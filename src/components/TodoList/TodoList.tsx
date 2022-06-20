@@ -1,27 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
 import classNames from 'classnames';
+import { getTodos } from '../../api';
 
 type Props = {
-  todos: Todo[]
   selectIdOfUser: (userId: number) => void
+  selectedUserId: number
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectIdOfUser }) => {
+// eslint-disable-next-line max-len
+export const TodoList: React.FC<Props> = ({
+  selectIdOfUser,
+  selectedUserId,
+}) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
-  const filteredTodos = todos.filter(todo => todo.title.includes(title));
+  const filteredTodos = todos
+    .filter(todo => todo.title.toLowerCase().includes(title.toLowerCase()));
+
+  useEffect(() => {
+    getTodos()
+      .then(fetchedTodos => setTodos(fetchedTodos));
+  }, []);
 
   function filter(prepareForFilterTodos: Todo[]): Todo[] {
-    if (selectedValue === 'completed') {
-      return prepareForFilterTodos.filter(todo => todo.completed);
+    switch (selectedValue) {
+      case 'completed':
+        return prepareForFilterTodos.filter(todo => todo.completed);
+      case 'active':
+        return prepareForFilterTodos.filter(todo => !todo.completed);
+      default:
+        return prepareForFilterTodos;
     }
-
-    if (selectedValue === 'active') {
-      return prepareForFilterTodos.filter(todo => !todo.completed);
-    }
-
-    return prepareForFilterTodos;
   }
 
   return (
@@ -70,11 +81,13 @@ export const TodoList: React.FC<Props> = ({ todos, selectIdOfUser }) => {
 
               <button
                 data-cy="userButton"
-                className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+                className={classNames(
+                  'TodoList__user-button button',
+                  {
+                    'TodoList__user-button--selected':
+                      todo.userId === selectedUserId,
+                  },
+                )}
                 type="button"
                 onClick={() => {
                   selectIdOfUser(todo.userId);
