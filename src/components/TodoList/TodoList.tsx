@@ -1,44 +1,135 @@
-import React from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  listOfTodos : Todo[],
+  selectedUserId: number,
+  callbackForUserSelect: (id : number) => void;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = (
+  { listOfTodos, callbackForUserSelect, selectedUserId },
+) => {
+  enum SelectFilter {
+    active,
+    completed,
+    all,
+  }
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const [currentFilter, setCurrentFilter] = useState('');
+  const [
+    filterBySelect, setFilterBySelect,
+  ] = useState<SelectFilter>(SelectFilter.all);
+  const [filtered, setFiltered] = useState<Todo[]>([]);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  function sorter(list : Todo[]) {
+    switch (filterBySelect) {
+      case SelectFilter.completed: {
+        return list.filter(el => el.completed === true);
+      }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      case SelectFilter.active: {
+        return list.filter(el => el.completed === false);
+      }
+
+      default: {
+        return list;
+      }
+    }
+  }
+
+  const filtrato = (option : string) => {
+    const sorted = listOfTodos.filter(
+      el => el.title.toLowerCase().includes(option.toLowerCase()),
+    );
+    const result = sorter(sorted);
+
+    setFiltered(result);
+  };
+
+  useEffect(() => {
+    filtrato(currentFilter);
+  }, [filterBySelect, currentFilter, listOfTodos, selectedUserId]);
+
+  return (
+    <div className="TodoList">
+      <h2>Filter todos:</h2>
+      <label>
+        <p>filter</p>
+        <input
+          type="text"
+          onChange={(event) => {
+            setCurrentFilter(event.target.value);
+          }}
+        />
+      </label>
+      <label>
+        <p>
+          Status
+        </p>
+        <select
+          onChange={(event) => {
+            setFilterBySelect(Number(event.target.value));
+          }}
+        >
+          <option value={SelectFilter.all}>
+            all
+          </option>
+          <option value={SelectFilter.completed}>
+            completed
+          </option>
+          <option value={SelectFilter.active}>
+            active
+          </option>
+        </select>
+      </label>
+
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {filtered.map(singleTodo => (
+            (
+              <li
+                key={singleTodo.id}
+                className={
+                  classNames(
+                    'TodoList__item',
+                    { 'TodoList__item--checked': singleTodo.completed },
+                    { 'TodoList__item--unchecked': !singleTodo.completed },
+                  )
+                }
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={singleTodo.completed}
+                  />
+                  <p>{singleTodo.title}</p>
+                </label>
+                <button
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      // eslint-disable-next-line max-len
+                      'TodoList__user-button--selected': singleTodo.userId === selectedUserId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => {
+                    callbackForUserSelect(singleTodo.userId);
+                  }}
+                >
+                  {`User ${singleTodo.userId}`}
+                </button>
+              </li>
+            )
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
