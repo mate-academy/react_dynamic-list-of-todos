@@ -1,6 +1,6 @@
 const BASE_URL = 'https://mate.academy/students-api';
 
-export function request(url : string) {
+export function request(url: string) {
   return fetch(`${BASE_URL}${url}`)
     .then(res => res.json());
 }

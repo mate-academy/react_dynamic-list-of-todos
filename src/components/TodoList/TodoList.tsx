@@ -4,23 +4,32 @@ import './TodoList.scss';
 
 interface Props {
   listOfTodos : Todo[],
+  selectedUserId: number,
   callbackForUserSelect: (id : number) => void;
 }
 
 export const TodoList: React.FC<Props> = (
-  { listOfTodos, callbackForUserSelect },
+  { listOfTodos, callbackForUserSelect, selectedUserId },
 ) => {
+  enum SelectFilter {
+    active,
+    completed,
+    all,
+  }
+
   const [currentFilter, setCurrentFilter] = useState('');
-  const [filterBySelect, setFilterBySelect] = useState('all');
+  const [
+    filterBySelect, setFilterBySelect,
+  ] = useState<SelectFilter>(SelectFilter.all);
   const [filtered, setFiltered] = useState<Todo[]>([]);
 
   function sorter(list : Todo[]) {
     switch (filterBySelect) {
-      case 'completed': {
+      case SelectFilter.completed: {
         return list.filter(el => el.completed === true);
       }
 
-      case 'active': {
+      case SelectFilter.active: {
         return list.filter(el => el.completed === false);
       }
 
@@ -31,7 +40,9 @@ export const TodoList: React.FC<Props> = (
   }
 
   const filtrato = (option : string) => {
-    const sorted = listOfTodos.filter(el => el.title.includes(option));
+    const sorted = listOfTodos.filter(
+      el => el.title.toLowerCase().includes(option.toLowerCase()),
+    );
     const result = sorter(sorted);
 
     setFiltered(result);
@@ -39,7 +50,7 @@ export const TodoList: React.FC<Props> = (
 
   useEffect(() => {
     filtrato(currentFilter);
-  }, [filterBySelect, currentFilter, listOfTodos]);
+  }, [filterBySelect, currentFilter, listOfTodos, selectedUserId]);
 
   return (
     <div className="TodoList">
@@ -59,16 +70,16 @@ export const TodoList: React.FC<Props> = (
         </p>
         <select
           onChange={(event) => {
-            setFilterBySelect(event.target.value);
+            setFilterBySelect(Number(event.target.value));
           }}
         >
-          <option value="all">
+          <option value={SelectFilter.all}>
             all
           </option>
-          <option value="completed">
+          <option value={SelectFilter.completed}>
             completed
           </option>
-          <option value="active">
+          <option value={SelectFilter.active}>
             active
           </option>
         </select>
@@ -99,11 +110,14 @@ export const TodoList: React.FC<Props> = (
                   <p>{singleTodo.title}</p>
                 </label>
                 <button
-                  className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      // eslint-disable-next-line max-len
+                      'TodoList__user-button--selected': singleTodo.userId === selectedUserId,
+                    },
+                  )}
                   type="button"
                   onClick={() => {
                     callbackForUserSelect(singleTodo.userId);

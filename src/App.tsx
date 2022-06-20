@@ -28,6 +28,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           listOfTodos={currentTodos}
+          selectedUserId={selectedUserId}
           callbackForUserSelect={setSelectedUserId}
         />
       </div>

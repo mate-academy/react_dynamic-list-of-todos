@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
-  const [currentUser, setCurrentUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   async function singleUser(id : number) {
     const result = await getSingleUser(id);
