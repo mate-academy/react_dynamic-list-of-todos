@@ -6,6 +6,10 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+iframe {
+  display: none !important;
+}
+
 h2 {
   font-size: 2rem;
   text-align: center;
