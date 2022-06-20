@@ -8,10 +8,16 @@ type Props = {
   onHandlerUserId: (id: number) => void
 };
 
+enum Option {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({ onHandlerUserId }) => {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState<Option | string>('');
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const options = ['all', 'active', 'completed'];
 
@@ -28,14 +34,14 @@ export const TodoList: React.FC<Props> = ({ onHandlerUserId }) => {
 
   const visibleTodos = () => {
     switch (selectedOption) {
-      case 'all':
+      case Option.All:
         setTodos(allTodos);
         break;
-      case 'active':
-        setTodos([...allTodos].filter(todo => !todo.completed));
+      case Option.Active:
+        setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
         break;
-      case 'completed':
-        setTodos([...allTodos].filter(todo => todo.completed));
+      case Option.Completed:
+        setTodos(currentTodos => currentTodos.filter(todo => todo.completed));
         break;
       default:
         break;
@@ -64,7 +70,7 @@ export const TodoList: React.FC<Props> = ({ onHandlerUserId }) => {
       <div className="select">
         <select
           value={selectedOption}
-          onChange={event => setSelectedOption(event.target.value)}
+          onChange={event => setSelectedOption(event.target.value || '')}
         >
           <option value="" disabled>Choose an option</option>
           {options.map(option => (
