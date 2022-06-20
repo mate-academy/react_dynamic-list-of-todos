@@ -34,7 +34,7 @@ const App: React.FC = () => {
           <>
             <div className="App__sidebar">
               <TodoList
-                alltodos={todos}
+                allTodos={todos}
                 selectedUserId={selectedUserId}
                 setSelectedUserId={setSelectedUserId}
               />

@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
 import './TodoList.scss';
+import classnames from 'classnames';
+
+enum Selected {
+  All,
+  Active,
+  Complited,
+}
 
 interface Props {
-  alltodos: Todo[];
+  allTodos: Todo[];
   setSelectedUserId: (id: number) => void;
   selectedUserId: number;
 }
 
 export const TodoList: React.FC<Props> = ({
-  alltodos,
+  allTodos,
   setSelectedUserId,
   selectedUserId,
 }) => {
-  const [selectedselect, setSelectedselect] = useState('All');
-  const [currentvalue, setCurrentValue] = useState('');
+  const [selectedSelect, setSelectedSelect] = useState(Selected.All);
+  const [currentValue, setCurrentValue] = useState('');
 
   const prepearedTodos = () => {
-    const filteredTodos = alltodos.filter(todo => {
-      return todo.title.includes(currentvalue);
+    const filteredTodos = allTodos.filter(todo => {
+      return todo.title.includes(currentValue);
     });
 
-    switch (selectedselect) {
-      case 'active':
+    switch (+selectedSelect) {
+      case Selected.Active:
         return filteredTodos.filter(({ completed }) => !completed);
 
-      case 'complited':
+      case Selected.Complited:
         return filteredTodos.filter(({ completed }) => completed);
 
       default:
@@ -42,7 +49,7 @@ export const TodoList: React.FC<Props> = ({
           <input
             type="text"
             placeholder="Search by title"
-            value={currentvalue}
+            value={currentValue}
             data-cy="filterByTitle"
             onChange={(event) => {
               setCurrentValue(event.target.value);
@@ -50,13 +57,13 @@ export const TodoList: React.FC<Props> = ({
           />
           {' '}
           <select
-            onChange={(event) => {
-              setSelectedselect(event.target.value);
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+              setSelectedSelect(+event.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="complited">Complited</option>
+            <option value="0">All</option>
+            <option value="1">Active</option>
+            <option value="2">Complited</option>
           </select>
         </div>
 
@@ -66,9 +73,11 @@ export const TodoList: React.FC<Props> = ({
         >
           {prepearedTodos().map(todo => (
             <li
-              className={todo.completed
-                ? 'TodoList__item--checked TodoList__item'
-                : 'TodoList__item--unchecked TodoList__item'}
+              className={classnames(
+                'TodoList__item',
+                'TodoList__item--unchecked',
+                { 'TodoList__item--checked': todo.completed },
+              )}
               key={todo.id}
             >
               <label>
@@ -80,9 +89,13 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
-                className={selectedUserId === todo.userId
-                  ? 'TodoList__user-button--selected button'
-                  : 'TodoList__user-button button'}
+                className={classnames(
+                  'button',
+                  'TodoList__user-button',
+                  // eslint-disable-next-line max-len
+                  { 'TodoList__user-button--selected': selectedUserId === todo.userId },
+
+                )}
                 type="button"
                 data-cy="userButton"
                 onClick={() => {
