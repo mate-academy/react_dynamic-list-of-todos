@@ -1,6 +1,5 @@
 import React from 'react';
 import './CurrentUser.scss';
-// import { render } from 'react-dom';
 import { getUserInfo } from '../../Api/api';
 import { User } from '../../types/User';
 
