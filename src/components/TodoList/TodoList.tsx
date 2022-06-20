@@ -1,44 +1,102 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useState, useEffect } from 'react';
+import classname from 'classnames';
+import { getTodos } from '../../api/api';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Prop {
+  selectUserId: (value: number) => void,
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+enum TodosFilterValue {
+  checked = 'checked',
+  All = 'All',
+  active = 'active',
+  completed = 'completed',
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Prop> = ({ selectUserId }) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [optionValue, setOptionValue] = useState<TodosFilterValue | string>(TodosFilterValue.checked);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  useEffect(() => {
+    getTodos()
+      .then((element) => setTodos(element));
+  }, []);
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  const filterTodos = todos.filter(todo => todo.title.includes(query));
+
+  const selectTodos = () => {
+    let rezult;
+
+    switch (optionValue) {
+      case (TodosFilterValue.active):
+        rezult = filterTodos.filter(todo => todo.completed === false);
+        break;
+      case (TodosFilterValue.completed):
+        rezult = filterTodos.filter(todo => todo.completed === true);
+        break;
+      default: rezult = filterTodos;
+    }
+
+    return rezult;
+  };
+
+  return (
+    <div className="TodoList">
+      <input
+        type="text"
+        id="search-query"
+        name="query"
+        className="input"
+        placeholder="Type search word"
+        value={query}
+        onChange={(event) => (
+          setQuery(event.target.value)
+        )}
+      />
+      <select
+        value={optionValue}
+        onChange={(event) => {
+          setOptionValue(event.target.value);
+        }}
+      >
+        <option disabled value={TodosFilterValue.checked}>Choose option</option>
+        <option value={TodosFilterValue.All}>All</option>
+        <option value={TodosFilterValue.active}>Active</option>
+        <option value={TodosFilterValue.completed}>Completed</option>
+
+      </select>
+      <h2>Todos:</h2>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {selectTodos().map(todo => (
+            <li
+              key={todo.id}
+              className={classname('TodoList__item',
+                {
+                  'TodoList__item--unchecked': !todo.completed,
+                  'TodoList__item--checked': todo.completed,
+                })}
+            >
+              <label>
+                <input type="checkbox" readOnly checked={todo.completed} />
+                <p>{todo.title}</p>
+              </label>
+              <button
+                className={classname('TodoList__user-button button',
+                  { 'TodoList__user-button--selected': !todo.completed })}
+                type="button"
+                onClick={() => selectUserId(todo.userId)}
+              >
+                User&nbsp;
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
