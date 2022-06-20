@@ -36,7 +36,7 @@ export const TodoList: React.FC<Props> = ({
   const randomizer = () => {
     const copyOfTodos = [...todos];
 
-    for (let i = copyOfTodos.length - 1; i >= 0; i--) {
+    for (let i = copyOfTodos.length - 1; i >= 0; i -= 1) {
       const rev = Math.floor(Math.random() * (i + 1));
 
       [copyOfTodos[i], copyOfTodos[rev]] = [copyOfTodos[rev], copyOfTodos[i]];
