@@ -1,44 +1,116 @@
-import React from 'react';
+import classNames from 'classnames';
+import React, { useState } from 'react';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todosFromServer: Todo[];
+  selectUser: React.Dispatch<React.SetStateAction<number>>;
+  selectedUserId: number;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+enum SeeFiltered {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Props> = ({
+  todosFromServer, selectUser, selectedUserId,
+}) => {
+  const [filter, setFilter] = useState('');
+  const [selectFilter, setSelectFilter] = useState('all');
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  const filteredByState
+    = todosFromServer.filter(todo => {
+      if (todo.completed === true && selectFilter === SeeFiltered.completed) {
+        return true;
+      }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      if (todo.completed === false && selectFilter === SeeFiltered.active) {
+        return true;
+      }
+
+      if (selectFilter === SeeFiltered.all) {
+        return true;
+      }
+
+      return false;
+    });
+
+  const filteredByTitle
+    = filteredByState.filter(todo => todo.title.includes(filter));
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <input
+        className="input"
+        type="text"
+        data-cy="filterByTitle"
+        value={filter}
+        onChange={event => {
+          setFilter(event.target.value);
+        }}
+      />
+
+      <div className="select">
+        <select
+          value={selectFilter}
+          onChange={event => {
+            setSelectFilter(event.target.value);
+          }}
+        >
+          <option value="all">all</option>
+          <option value="active">active</option>
+          <option value="completed">completed</option>
+        </select>
+
+      </div>
+
+      <button
+        type="button"
+        className="button"
+      >
+        Randomize
+      </button>
+
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {filteredByTitle.map(todo => (
+            <li
+              className={classNames('TodoList__item', {
+                'TodoList__item--checked': todo.completed,
+                'TodoList__item--unchecked': !todo.completed,
+              })}
+              key={todo.id}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className={`TodoList__user-button button ${selectedUserId === todo.userId && 'TodoList__user-button--selected'}`}
+                data-cy="userButton"
+                type="button"
+                onClick={() => {
+                  selectUser(todo.userId);
+                }}
+              >
+                {`User #${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
