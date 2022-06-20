@@ -5,21 +5,24 @@ import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
 const App: React.FC = () => {
-  const [
-    selectedUserId,
-    // setSelectedUserId,
-  ] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
+
+  const selectIdOfUser = (userId: number) => {
+    setSelectedUserId(userId);
+  };
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList />
+        {/* eslint-disable-next-line max-len */}
+        <TodoList selectIdOfUser={selectIdOfUser} selectedUserId={selectedUserId} />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser />
+            // eslint-disable-next-line max-len
+            <CurrentUser selectedUserId={selectedUserId} selectIdOfUser={selectIdOfUser} />
           ) : 'No user selected'}
         </div>
       </div>
