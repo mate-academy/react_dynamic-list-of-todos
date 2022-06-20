@@ -1,44 +1,113 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
+import classnames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+enum Selected {
+  All,
+  Active,
+  Complited,
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+interface Props {
+  allTodos: Todo[];
+  setSelectedUserId: (id: number) => void;
+  selectedUserId: number;
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
+export const TodoList: React.FC<Props> = ({
+  allTodos,
+  setSelectedUserId,
+  selectedUserId,
+}) => {
+  const [selectedSelect, setSelectedSelect] = useState(Selected.All);
+  const [currentValue, setCurrentValue] = useState('');
+
+  const prepearedTodos = () => {
+    const filteredTodos = allTodos.filter(todo => {
+      return todo.title.includes(currentValue);
+    });
+
+    switch (+selectedSelect) {
+      case Selected.Active:
+        return filteredTodos.filter(({ completed }) => !completed);
+
+      case Selected.Complited:
+        return filteredTodos.filter(({ completed }) => completed);
+
+      default:
+        return filteredTodos;
+    }
+  };
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+
+        <div className="d">
+          <input
+            type="text"
+            placeholder="Search by title"
+            value={currentValue}
+            data-cy="filterByTitle"
+            onChange={(event) => {
+              setCurrentValue(event.target.value);
+            }}
+          />
+          {' '}
+          <select
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+              setSelectedSelect(+event.target.value);
+            }}
           >
-            User&nbsp;#1
-          </button>
-        </li>
+            <option value="0">All</option>
+            <option value="1">Active</option>
+            <option value="2">Complited</option>
+          </select>
+        </div>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {prepearedTodos().map(todo => (
+            <li
+              className={classnames(
+                'TodoList__item',
+                'TodoList__item--unchecked',
+                { 'TodoList__item--checked': todo.completed },
+              )}
+              key={todo.id}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                />
+                <p>{todo.title}</p>
+              </label>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+              <button
+                className={classnames(
+                  'button',
+                  'TodoList__user-button',
+                  // eslint-disable-next-line max-len
+                  { 'TodoList__user-button--selected': selectedUserId === todo.userId },
+
+                )}
+                type="button"
+                data-cy="userButton"
+                onClick={() => {
+                  setSelectedUserId(todo.userId);
+                }}
+              >
+                {`User ${todo.userId}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
