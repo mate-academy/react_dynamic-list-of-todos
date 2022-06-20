@@ -5,7 +5,7 @@ export function getAllTodos(): Promise<Todo[]> {
     .then(response => response.json());
 }
 
-export function getUser(n: number): Promise<User> {
-  return fetch(`${API_URL}/users/${n}`)
+export function getUser(userId: number): Promise<User> {
+  return fetch(`${API_URL}/users/${userId}`)
     .then(response => response.json());
 }

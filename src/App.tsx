@@ -7,11 +7,15 @@ import { getAllTodos } from './api/api';
 
 const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<number>(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
 
   useEffect(() => {
     getAllTodos()
-      .then(result => setTodosFromServer(result));
+      .then(result => setTodosFromServer(result))
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log(error, 'something wrong here');
+      });
   }, []);
 
   return (
@@ -20,6 +24,7 @@ const App: React.FC = () => {
         <TodoList
           todosFromServer={todosFromServer}
           selectUser={setSelectedUserId}
+          selectedUserId={selectedUserId}
         />
       </div>
 
