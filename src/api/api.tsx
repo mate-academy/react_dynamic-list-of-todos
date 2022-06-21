@@ -1,0 +1,13 @@
+const apiUrl = 'https://mate.academy/students-api/';
+
+export const getUser = async (userId: number): Promise<User> => {
+  const response = await fetch(`${apiUrl}users/${userId}`);
+
+  return response.json();
+};
+
+export const getTodos = async (): Promise<Todo[]> => {
+  const response = await fetch(`${apiUrl}todos`);
+
+  return response.json();
+};
