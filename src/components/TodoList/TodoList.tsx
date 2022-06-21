@@ -1,44 +1,94 @@
-import React from 'react';
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-console */
+import React, { useState } from 'react';
+import classNames from 'classnames';
+
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Todo = {
+  id: number;
+  createdAt: string;
+  upDatedAt: string;
+  userId: number;
+  title: string;
+  completed: boolean;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  todos: Todo[]
+  onSelect: (selectedId: number) => void
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC <Props> = (
+  {
+    todos,
+    onSelect,
+  },
+) => {
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {todos.map((todo) => (
+            <li
+              key={todo.id}
+              className={classNames({ TodoList__item: true },
+                { 'TodoList__item--unchecked': todo.completed === false },
+                { 'TodoList__item--checked': todo.completed === true })}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed ? true : false}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              {selectedTodoId === todo.userId ? (
+                <button
+                  className="
+                    TodoList__user-button
+                    TodoList__user-button--selected
+                    button
+                  "
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => {
+                    onSelect(todo.userId);
+                    setSelectedTodoId(todo.userId);
+                  }}
+                >
+                  {`User # ${todo.userId}`}
+                </button>
+              ) : (
+                <button
+                  className="
+                    TodoList__user-button
+                    button
+                  "
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => {
+                    onSelect(todo.userId);
+                    setSelectedTodoId(todo.userId);
+                  }}
+                >
+                  {`User # ${todo.userId}`}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
