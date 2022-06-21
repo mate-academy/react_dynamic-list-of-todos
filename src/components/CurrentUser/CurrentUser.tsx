@@ -1,12 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
+import { getUser } from '../../api';
 
-export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+type Props = {
+  selectedUserId: number;
+  changeUser: (userId: number) => void;
+};
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
-);
+export const CurrentUser: React.FC<Props>
+= ({ selectedUserId, changeUser }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getUser(selectedUserId)
+      .then((userFromServer) => {
+        setSelectedUser(userFromServer);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log(error.message);
+        setSelectedUser(null);
+      });
+  }, [selectedUserId]);
+
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title">
+        <span>
+          Selected user:
+          {selectedUserId}
+        </span>
+      </h2>
+
+      <h3
+        className="CurrentUser__name"
+        data-cy="userName"
+      >
+        {selectedUser?.name}
+      </h3>
+      <p className="CurrentUser__email">{selectedUser?.email}</p>
+      <p className="CurrentUser__phone">{selectedUser?.phone}</p>
+
+      {selectedUserId && (
+        <button
+          type="submit"
+          className="button CurrentUser__clear-button"
+          onClick={() => changeUser(0)}
+          data-cy="userButton"
+        >
+          Clear
+        </button>
+      )}
+    </div>
+  );
+};
