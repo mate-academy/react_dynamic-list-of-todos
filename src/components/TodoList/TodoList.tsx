@@ -9,11 +9,17 @@ interface Props {
   setSelectedUserId: (userId: number) => void,
 }
 
+enum Select {
+  all,
+  active,
+  completed,
+}
+
 export const TodoList: React.FC<Props> = ({
   todos, selectedUserId, setSelectedUserId,
 }) => {
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState<Select>(Select.all);
 
   const filteredTodos = todos.filter(todo => {
     const lowerQuery = query.toLowerCase();
@@ -23,11 +29,11 @@ export const TodoList: React.FC<Props> = ({
 
   const preparedTodos = filteredTodos.filter(todo => {
     switch (selected) {
-      case 'active': {
+      case Select.active: {
         return todo.completed === false;
       }
 
-      case 'completed': {
+      case Select.completed: {
         return todo.completed === true;
       }
 
@@ -50,21 +56,21 @@ export const TodoList: React.FC<Props> = ({
       />
       <select
         onChange={(event) => {
-          setSelected(event.target.value);
+          setSelected(+event.target.value);
         }}
       >
         <option
-          value="all"
+          value={Select.all}
         >
           Show all
         </option>
         <option
-          value="active"
+          value={Select.active}
         >
           Show active
         </option>
         <option
-          value="completed"
+          value={Select.completed}
         >
           Show completed
         </option>

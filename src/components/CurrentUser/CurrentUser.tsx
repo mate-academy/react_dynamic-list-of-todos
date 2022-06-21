@@ -25,32 +25,36 @@ export const CurrentUser: React.FC<Props> = ({
       });
   }, [selectedUserId]);
 
-  return (
-    user && (
-      <div className="CurrentUser">
-        <h2 className="CurrentUser__title">
-          <span>{`Selected user: ${user.id}`}</span>
-        </h2>
+  if (!user) {
+    return (
+      <div>user not selected</div>
+    );
+  }
 
-        <h3 data-cy="userName" className="CurrentUser__name">
-          {user.name}
-        </h3>
-        <p className="CurrentUser__email">
-          {user.email}
-        </p>
-        <p className="CurrentUser__phone">
-          {user.phone}
-        </p>
-        <button
-          className="button"
-          type="button"
-          onClick={() => {
-            setSelectedUserId(0);
-          }}
-        >
-          Clear
-        </button>
-      </div>
-    )
+  return (
+    <div className="CurrentUser">
+      <h2 className="CurrentUser__title">
+        <span>{`Selected user: ${user.id}`}</span>
+      </h2>
+
+      <h3 data-cy="userName" className="CurrentUser__name">
+        {user.name}
+      </h3>
+      <p className="CurrentUser__email">
+        {user.email}
+      </p>
+      <p className="CurrentUser__phone">
+        {user.phone}
+      </p>
+      <button
+        className="button"
+        type="button"
+        onClick={() => {
+          setSelectedUserId(0);
+        }}
+      >
+        Clear
+      </button>
+    </div>
   );
 };

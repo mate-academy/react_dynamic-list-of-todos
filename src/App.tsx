@@ -33,12 +33,10 @@ export const App: React.FC = () => {
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              selectedUserId={selectedUserId}
-              setSelectedUserId={setSelectedUserId}
-            />
-          ) : 'No user selected'}
+          <CurrentUser
+            selectedUserId={selectedUserId}
+            setSelectedUserId={setSelectedUserId}
+          />
         </div>
       </div>
     </div>
