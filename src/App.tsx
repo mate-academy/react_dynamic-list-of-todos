@@ -8,20 +8,20 @@ const App: React.FC = () => {
   const [
     selectedUserId,
     setSelectedUserId,
-  ] = useState<number | null>(0);
+  ] = useState(0);
 
   const userHandlerId = (id: number) => {
     setSelectedUserId(id);
   };
 
   const clearHandler = useCallback(() => {
-    setSelectedUserId(null);
+    setSelectedUserId(0);
   }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList handler={userHandlerId} />
+        <TodoList handler={userHandlerId} userId={selectedUserId} />
       </div>
 
       <div className="App__content">

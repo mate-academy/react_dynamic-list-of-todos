@@ -9,13 +9,21 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, clearHandler }) => {
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User | null>();
+
+  const requestUser = async () => {
+    try {
+      const userFromServer = await getUser(userId);
+
+      setSelectedUser(userFromServer);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.log('Error: User not found');
+    }
+  };
 
   useEffect(() => {
-    getUser(userId)
-      .then(user => {
-        setSelectedUser(user);
-      });
+    requestUser();
   }, [userId]);
 
   return (

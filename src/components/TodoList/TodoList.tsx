@@ -5,7 +5,8 @@ import { getTodos } from '../../api/api';
 import { Todo } from '../../react-app-env';
 
 type Props = {
-  handler: (id: number) => void
+  handler: (id: number) => void,
+  userId: number,
 };
 
 enum Options {
@@ -14,19 +15,27 @@ enum Options {
   Completed = 'completed',
 }
 
-export const TodoList: React.FC<Props> = ({ handler }) => {
+export const TodoList: React.FC<Props> = ({ handler, userId }) => {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState<Options | string>('');
+  const [selectedOption, setSelectedOption] = useState<Options>();
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const options = ['all', 'active', 'completed'];
 
+  const requestTodo = async () => {
+    try {
+      const todoFromServer = await getTodos();
+
+      setTodos(todoFromServer);
+      setAllTodos(todoFromServer);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.log('Error: User not found');
+    }
+  };
+
   useEffect(() => {
-    getTodos()
-      .then(todoItems => {
-        setAllTodos(todoItems);
-        setTodos(todoItems);
-      });
+    requestTodo();
   }, []);
 
   const filteredByTitle = todos
@@ -70,7 +79,7 @@ export const TodoList: React.FC<Props> = ({ handler }) => {
       <div className="select">
         <select
           value={selectedOption}
-          onChange={event => setSelectedOption(event.target.value || '')}
+          onChange={event => setSelectedOption(event.target.value as Options)}
         >
           <option value="" disabled>Choose an option</option>
           {options.map(option => (
@@ -100,11 +109,13 @@ export const TodoList: React.FC<Props> = ({ handler }) => {
               </label>
 
               <button
-                className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
+                className={classNames(
+                  'TodoList__user-button button',
+                  {
+                    'TodoList__user-button--selected':
+                      todo.userId === userId,
+                  },
+                )}
                 type="button"
                 data-cy="userButton"
                 onClick={() => handler(todo.userId)}
