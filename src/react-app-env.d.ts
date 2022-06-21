@@ -19,3 +19,5 @@ export interface User {
   phone: string,
   website: string,
 }
+
+export type OptionArray = ['all', 'active', 'completed'];

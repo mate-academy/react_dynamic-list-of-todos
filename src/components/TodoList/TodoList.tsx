@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TodoList.scss';
 import cn from 'classnames';
-import { Todo } from '../../react-app-env';
+import { OptionArray, Todo } from '../../react-app-env';
 
 type Props = {
   todos: Todo[],
@@ -12,7 +12,7 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos, onSelect, userId }) => {
   const [query, setQuery] = useState('');
   const [visibleTodos, setVisibleTodos] = useState('all');
-  const options = ['all', 'active', 'completed'];
+  const options: OptionArray = ['all', 'active', 'completed'];
 
   const handleTodo = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
