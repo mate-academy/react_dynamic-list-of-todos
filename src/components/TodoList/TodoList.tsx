@@ -24,12 +24,6 @@ export const TodoList: React.FC<Props> = ({ selectUser }) => {
 
   const [completedTodos, setCompletedTodos] = useState('all');
 
-  // const filteredTitleTodos = (insert: string | ''): Todo[] => {
-  //   return todos.filter(
-  //     todo => todo.title.includes(insert.toLowerCase()),
-  //   );
-  // };
-
   const filteredTitleTodos = todos.filter(todo => todo.title.includes(query));
 
   const filteredCompletedTodos = (allTodos: Todo[]) => {
@@ -58,6 +52,7 @@ export const TodoList: React.FC<Props> = ({ selectUser }) => {
         onChange={(event) => {
           setQuery(event.target.value);
         }}
+        data-cy="filterByTitle"
       />
       <select
         value={completedTodos}
@@ -89,6 +84,7 @@ export const TodoList: React.FC<Props> = ({ selectUser }) => {
                   'TodoList__item--checked': todo.completed,
                   'TodoList__item--unchecked': !todo.completed,
                 })}
+              data-cy="listOfTodos"
             >
               <label>
                 <input
@@ -109,43 +105,12 @@ export const TodoList: React.FC<Props> = ({ selectUser }) => {
                 onClick={() => {
                   selectUser(todo.userId);
                 }}
+                data-cy="userButton"
               >
                 {`User #${todo.userId}`}
               </button>
             </li>
           ))}
-
-          {/* <li className="TodoList__item TodoList__item--unchecked">
-            <label>
-              <input type="checkbox" readOnly />
-              <p>delectus aut autem</p>
-            </label>
-
-            <button
-              className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
-              type="button"
-            >
-              User&nbsp;#1
-            </button>
-          </li> */}
-
-          {/* <li className="TodoList__item TodoList__item--checked">
-            <label>
-              <input type="checkbox" checked readOnly />
-              <p>distinctio vitae autem nihil ut molestias quo</p>
-            </label>
-
-            <button
-              className="TodoList__user-button button"
-              type="button"
-            >
-              User&nbsp;#2
-            </button>
-          </li> */}
         </ul>
       </div>
     </div>
