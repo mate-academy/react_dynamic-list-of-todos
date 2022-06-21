@@ -1,44 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[];
+  changeUser: (userId: number) => void;
+  selectedUserId: number;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+enum Options {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export const TodoList: React.FC<Props> = ({
+  todos, changeUser, selectedUserId,
+}) => {
+  const [title, setTitle] = useState('');
+  const [status, setStatus] = useState('');
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  const filteredByTitle = todos.filter(todo => todo.title.includes(title));
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  const filteredByStatus = filteredByTitle.filter(todo => {
+    switch (status) {
+      case Options.all:
+        return true;
+
+      case Options.active:
+        return !todo.completed;
+
+      case Options.completed:
+        return todo.completed;
+
+      default:
+        return true;
+    }
+  });
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <input
+        type="text"
+        placeholder="Enter the title"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+      />
+      <select
+        value={status}
+        onChange={(event) => setStatus(event.target.value)}
+      >
+        <option value="all"> All </option>
+        <option value="active"> Active </option>
+        <option value="completed"> Completed </option>
+      </select>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {filteredByStatus.map(todo => (
+            <li
+              key={todo.id}
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--unchecked': !todo.completed },
+                { 'TodoList__item--checked': todo.completed },
+              )}
+            >
+              <label htmlFor={`${todo.id}`}>
+                <input
+                  type="checkbox"
+                  id={`${todo.id}`}
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className={classNames(
+                  'TodoList__user-button',
+                  {
+                    'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
+                  },
+                  'button',
+                )}
+                type="button"
+                onClick={() => {
+                  changeUser(todo.userId);
+                }}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
