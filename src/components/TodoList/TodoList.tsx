@@ -9,13 +9,19 @@ type Props = {
   currentUserId: number,
 };
 
+enum SelectByType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({
   selectedUserId,
   currentUserId,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectBy, setSelectBy] = useState('all');
+  const [selectBy, setSelectBy] = useState(SelectByType.All);
 
   useEffect(() => {
     getTodos()
@@ -28,21 +34,19 @@ export const TodoList: React.FC<Props> = ({
     ));
   }, [todos, query]);
 
-  const selectTodos = () => {
+  const selectTodos = visibleTodos.filter(todo => {
     switch (selectBy) {
-      case 'all':
-        return visibleTodos;
+      case SelectByType.Active:
+        return !todo.completed;
 
-      case 'active':
-        return visibleTodos.filter(todo => !todo.completed);
+      case SelectByType.Completed:
+        return todo.completed;
 
-      case 'completed':
-        return visibleTodos.filter(todo => todo.completed);
-
+      case SelectByType.All:
       default:
-        return visibleTodos;
+        return todo;
     }
-  };
+  });
 
   return (
     <div className="TodoList">
@@ -63,7 +67,7 @@ export const TodoList: React.FC<Props> = ({
         value={selectBy}
         className="TodoList__select"
         onChange={(event) => {
-          setSelectBy(event.target.value);
+          setSelectBy(event.target.value as SelectByType);
         }}
       >
         <option value="all" disabled>Choose select</option>
@@ -90,7 +94,7 @@ export const TodoList: React.FC<Props> = ({
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list" data-cy="listOfTodos">
-          {selectTodos().map(todo => (
+          {selectTodos.map(todo => (
             <li
               className={classnames('TodoList__item', {
                 'TodoList__item--unchecked': !todo.completed,
