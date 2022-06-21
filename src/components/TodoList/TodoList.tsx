@@ -10,9 +10,9 @@ interface Props {
 }
 
 enum Select {
-  all,
-  active,
-  completed,
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -56,7 +56,7 @@ export const TodoList: React.FC<Props> = ({
       />
       <select
         onChange={(event) => {
-          setSelected(+event.target.value);
+          setSelected(event.target.value as Select);
         }}
       >
         <option
