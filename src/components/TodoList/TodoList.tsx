@@ -5,24 +5,35 @@ import { getTodos } from '../../api';
 
 type Props = {
   addUserId: (userId: number) => void,
+  selectedUserId: number,
 };
 
+enum Options {
+  all,
+  active,
+  completed,
+}
+
 export const TodoList: React.FC<Props> = ({
-  addUserId,
+  addUserId, selectedUserId,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
-  const [option, setOption] = useState('all');
+  const [option, setOption] = useState<Options>(Options.all);
 
   useEffect(() => {
-    getTodos().then(allTodos => setTodos(allTodos));
+    getTodos()
+      .then(allTodos => setTodos(allTodos))
+      .catch((err) => {
+        alert(`${err}`);
+      });
   }, []);
 
-  const handleOptions = (filterOption: string, todo: Todo) => {
+  const handleOptions = (filterOption: Options, todo: Todo) => {
     switch (filterOption) {
-      case 'active':
+      case Options.active:
         return todo.completed === false;
-      case 'completed':
+      case Options.completed:
         return todo.completed === true;
       default:
         return true;
@@ -60,12 +71,12 @@ export const TodoList: React.FC<Props> = ({
         <select
           value={option}
           onChange={(event) => {
-            setOption(event.target.value);
+            setOption(+event.target.value);
           }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Options.all}>All</option>
+          <option value={Options.active}>Active</option>
+          <option value={Options.completed}>Completed</option>
         </select>
         <button
           type="button"
@@ -95,11 +106,14 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
+                className={classnames(
+                  'TodoList__user-button',
+                  'button',
+                  {
+                    'TodoList__user-button--selected':
+                       todo.userId === selectedUserId,
+                  },
+                )}
                 type="button"
                 onClick={() => {
                   addUserId(todo.userId);

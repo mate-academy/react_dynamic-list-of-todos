@@ -19,6 +19,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           addUserId={selectUser}
+          selectedUserId={selectedUserId}
         />
       </div>
 

@@ -8,17 +8,22 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, changeUser }) => {
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User | null>();
 
   useEffect(() => {
-    getUser()
-      .then(allUsers => setSelectedUser((allUsers
-        .find(user => user.id === userId))));
+    getUser(userId)
+      .then(user => setSelectedUser(user))
+      .catch(() => {
+        changeUser(0);
+        setSelectedUser(null);
+      });
   }, [userId]);
 
   return (
     <div className="CurrentUser">
-      <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser?.id}`}</span></h2>
+      <h2 className="CurrentUser__title">
+        <span>{`Selected user: ${selectedUser?.id}`}</span>
+      </h2>
 
       <h3
         className="CurrentUser__name"
