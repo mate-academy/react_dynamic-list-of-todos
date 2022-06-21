@@ -100,7 +100,10 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <form
           className="form"
-          onSubmit={randomSort}
+          onSubmit={(event) => {
+            event.preventDefault();
+            randomSort();
+          }}
         >
           <input
             placeholder="input the title"
@@ -139,7 +142,7 @@ const App: React.FC = () => {
           </select>
 
           <button
-            type="button"
+            type="submit"
             className="btn"
           >
             Random sort
