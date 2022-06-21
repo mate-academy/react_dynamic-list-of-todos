@@ -18,70 +18,18 @@ type Todo = {
 type Props = {
   todos: Todo[]
   onSelect: (selectedId: number) => void
-  onFilter: (inputedValue: string) => void
-  onSelected: (selectedValue: string) => void
-  onSorted: () => void
 };
 
 export const TodoList: React.FC <Props> = (
   {
     todos,
     onSelect,
-    onFilter,
-    onSelected,
-    onSorted,
   },
 ) => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [inputedValue, setInputedValue] = useState('');
 
   return (
     <div className="TodoList">
-      <form className="form">
-        <input
-          placeholder="input the title"
-          data-cy="filterByTitle"
-          className="form__input"
-          value={inputedValue}
-          onChange={(event) => {
-            setInputedValue(event.target.value);
-            onFilter(event.target.value);
-          }}
-        />
-
-        <select
-          className="select"
-          onChange={(event) => {
-            onSelected(event.target.value);
-          }}
-        >
-          <option
-            value="all"
-          >
-            All
-          </option>
-
-          <option
-            value="active"
-          >
-            Active
-          </option>
-
-          <option
-            value="completed"
-          >
-            Completed
-          </option>
-        </select>
-
-        <button
-          type="button"
-          className="btn"
-          onClick={onSorted}
-        >
-          Random sort
-        </button>
-      </form>
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
@@ -105,7 +53,7 @@ export const TodoList: React.FC <Props> = (
                 <p>{todo.title}</p>
               </label>
 
-              {selectedTodoId === todo.id ? (
+              {selectedTodoId === todo.userId ? (
                 <button
                   className="
                     TodoList__user-button
@@ -116,7 +64,7 @@ export const TodoList: React.FC <Props> = (
                   data-cy="userButton"
                   onClick={() => {
                     onSelect(todo.userId);
-                    setSelectedTodoId(todo.id);
+                    setSelectedTodoId(todo.userId);
                   }}
                 >
                   {`User # ${todo.userId}`}
@@ -131,7 +79,7 @@ export const TodoList: React.FC <Props> = (
                   data-cy="userButton"
                   onClick={() => {
                     onSelect(todo.userId);
-                    setSelectedTodoId(todo.id);
+                    setSelectedTodoId(todo.userId);
                   }}
                 >
                   {`User # ${todo.userId}`}

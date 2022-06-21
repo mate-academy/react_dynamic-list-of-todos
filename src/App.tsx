@@ -1,75 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { request, urlTodos } from './components/api/api';
+
+type Todo = {
+  id: number;
+  createdAt: string;
+  upDatedAt: string;
+  userId: number;
+  title: string;
+  completed: boolean;
+};
 
 const App: React.FC = () => {
-  const urlTodos = 'https://mate.academy/students-api/todos';
-
-  const [theTodos, setTheTodos] = useState([{
-    id: 0,
-    createdAt: '',
-    upDatedAt: '',
-    userId: 0,
-    title: '',
-    completed: false,
-  }]);
+  const [theTodos, setTheTodos] = useState <Todo[]>([]);
+  const [inputedValue, setInputedValue] = useState('');
 
   useEffect(() => {
-    fetch(urlTodos)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Something is wrong');
-        } else {
-          response.json()
-            .then(todos => {
-              setTheTodos(todos);
-            });
-        }
+    request(urlTodos)
+      .then((todos) => {
+        setTheTodos(todos);
       });
   }, []);
 
-  const filterTodos = (inputedValue: string) => {
-    fetch(urlTodos)
-      .then(response => {
-        response.json()
-          .then(todos => {
-            const filtered = [...todos].filter((todo) => {
-              return todo.title.includes(inputedValue);
-            });
+  const filterTodos = (inputed: string) => {
+    request(urlTodos)
+      .then(todos => {
+        const filtered = [...todos].filter((todo) => {
+          return todo.title.toLowerCase().includes(inputed.toLowerCase());
+        });
 
-            setTheTodos(filtered);
-          });
+        setTheTodos(filtered);
       });
   };
 
   const selectTodos = (selectedInput: string) => {
-    fetch(urlTodos)
-      .then(response => {
-        response.json()
-          .then(todos => {
-            const selected = [...todos].filter((todo) => {
-              if (selectedInput === 'all') {
-                return todo;
-              }
-
-              if (selectedInput === 'active') {
-                return todo.completed === false;
-              }
-
-              if (selectedInput === 'completed') {
-                return todo.completed === true;
-              }
-
+    request(urlTodos)
+      .then(todos => {
+        const selected = [...todos].filter((todo) => {
+          switch (selectedInput) {
+            case 'all':
               return todo;
-            });
+            case 'active':
+              return todo.completed === false;
+            case 'completed':
+              return todo.completed === true;
+            default:
+              return todo;
+          }
+        });
 
-            setTheTodos(selected);
-          });
+        setTheTodos(selected);
       });
   };
 
@@ -90,14 +75,11 @@ const App: React.FC = () => {
   }
 
   const randomSort = () => {
-    fetch(urlTodos)
-      .then(response => {
-        response.json()
-          .then(todos => {
-            const sorted = shuffleArray(todos);
+    request(urlTodos)
+      .then(todos => {
+        const sorted = shuffleArray(todos);
 
-            setTheTodos(sorted);
-          });
+        setTheTodos(sorted);
       });
   };
 
@@ -116,12 +98,56 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
+        <form
+          className="form"
+          onSubmit={randomSort}
+        >
+          <input
+            placeholder="input the title"
+            data-cy="filterByTitle"
+            className="form__input"
+            value={inputedValue}
+            onChange={(event) => {
+              setInputedValue(event.target.value);
+              filterTodos(event.target.value);
+            }}
+          />
+
+          <select
+            className="select"
+            onChange={(event) => {
+              selectTodos(event.target.value);
+            }}
+          >
+            <option
+              value="all"
+            >
+              All
+            </option>
+
+            <option
+              value="active"
+            >
+              Active
+            </option>
+
+            <option
+              value="completed"
+            >
+              Completed
+            </option>
+          </select>
+
+          <button
+            type="button"
+            className="btn"
+          >
+            Random sort
+          </button>
+        </form>
         <TodoList
           todos={theTodos}
           onSelect={selectUser}
-          onFilter={filterTodos}
-          onSelected={selectTodos}
-          onSorted={randomSort}
         />
       </div>
 
