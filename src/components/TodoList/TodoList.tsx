@@ -18,7 +18,7 @@ export const TodoList: React.FC<Props> = ({
   const visibleTodos = todos.filter((todo) => {
     const { title } = todo;
 
-    return title.includes(currentQuery);
+    return title.toLowerCase().includes(currentQuery);
   });
 
   return (
