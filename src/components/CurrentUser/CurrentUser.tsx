@@ -9,7 +9,7 @@ type Props = {
 
 export const CurrentUser: React.FC<Props>
 = ({ selectedUserId, changeUser }) => {
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(selectedUserId)
@@ -19,7 +19,7 @@ export const CurrentUser: React.FC<Props>
       .catch(error => {
         // eslint-disable-next-line no-console
         console.log(error.message);
-        setSelectedUser(undefined);
+        setSelectedUser(null);
       });
   }, [selectedUserId]);
 
