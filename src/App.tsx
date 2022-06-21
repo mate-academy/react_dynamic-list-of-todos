@@ -11,15 +11,11 @@ const App: React.FC = () => {
 
   const changeUser = (userId: number) => setSelectedUserId(userId);
 
-  const getCurrentTodos = () => {
+  useEffect(() => {
     getTodos()
       .then((currentTodosFromServer) => {
         setTodos(currentTodosFromServer);
       });
-  };
-
-  useEffect(() => {
-    getCurrentTodos();
   }, []);
 
   return (
