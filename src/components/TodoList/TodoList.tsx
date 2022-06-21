@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({ handler, userId }) => {
       setAllTodos(todoFromServer);
     } catch {
       // eslint-disable-next-line no-console
-      console.log('Error: User not found');
+      console.log('Error: todo not found');
     }
   };
 
