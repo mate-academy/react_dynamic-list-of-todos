@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../react-app-env';
+
 import './TodoList.scss';
 
 interface Props {
@@ -14,10 +15,12 @@ export const TodoList: React.FC<Props> = ({
   onUserIdSelected,
   selectedUserId,
 }) => {
-  const [title, setTitle] = useState('');
-  const [statusTodos, setStatusTodos] = useState('all');
+  const [title, setTitle] = useState<string>('');
+  const [statusTodos, setStatusTodos] = useState<string>('all');
 
-  const filteredTodosByTitle = todos.filter(todo => todo.title.includes(title));
+  const filteredTodosByTitle = (
+    todos.filter(todo => todo.title.includes(title))
+  );
 
   const filteredTodosByStatus = (allTodos: Todo[]) => {
     switch (statusTodos) {
@@ -40,7 +43,7 @@ export const TodoList: React.FC<Props> = ({
       <h2>Todos:</h2>
 
       <div className="TodoList__list-container">
-        <p>Filter todos by title</p>
+        <p>Filter todos</p>
         <input
           type="text"
           value={title}
@@ -48,7 +51,7 @@ export const TodoList: React.FC<Props> = ({
             setTitle(event.target.value);
           }}
         />
-        <p>Show todos by status</p>
+        <p>Show todos</p>
         <select
           onChange={(event) => {
             setStatusTodos(event.target.value);
@@ -59,11 +62,13 @@ export const TodoList: React.FC<Props> = ({
           >
             Show all
           </option>
+
           <option
             value="active"
           >
             Show active
           </option>
+
           <option
             value="completed"
           >
@@ -91,15 +96,15 @@ export const TodoList: React.FC<Props> = ({
               <button
                 type="button"
                 className={classNames('TodoList__user-button', 'button', {
-                  // eslint-disable-next-line max-len
-                  'TodoList__user-button--selected': selectedUserId === todo.userId,
+                  'TodoList__user-button--selected': (
+                    selectedUserId === todo.userId
+                  ),
                 })}
                 onClick={() => {
                   onUserIdSelected(todo.userId);
                 }}
               >
-                User&nbsp;#
-                {todo.userId}
+                {`User # ${todo.userId}`}
               </button>
             </li>
           ))}

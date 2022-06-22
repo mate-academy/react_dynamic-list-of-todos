@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-
-import './App.scss';
-import './styles/general.scss';
-
+import { Todo } from './react-app-env';
 import { getTodos } from './api/api';
-
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-import { Todo } from './react-app-env';
+
+import './App.scss';
 
 export const App: React.FC = () => {
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User } from '../../react-app-env';
 import { getUser } from '../../api/api';
+
 import './CurrentUser.scss';
 
 interface Props {
