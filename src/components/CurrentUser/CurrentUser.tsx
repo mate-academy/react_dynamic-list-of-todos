@@ -24,9 +24,7 @@ export const CurrentUser: React.FC<Props> = ({ userID, newUserSelected }) => {
     <div className="CurrentUser">
       <h2 className="CurrentUser__title">
         <span>
-          Selected user:
-          {' '}
-          {userID}
+          {`Selected user: ${userID}`}
         </span>
 
       </h2>
@@ -34,11 +32,11 @@ export const CurrentUser: React.FC<Props> = ({ userID, newUserSelected }) => {
       <h3 className="CurrentUser__name">
         {userInfo?.name}
       </h3>
-      <p className="CurrentUser__email">
-        {userInfo?.email}
-      </p>
       <p className="CurrentUser__phone">
         {userInfo?.phone}
+      </p>
+      <p className="CurrentUser__email">
+        {userInfo?.email}
       </p>
 
       <button

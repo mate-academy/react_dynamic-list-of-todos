@@ -17,11 +17,14 @@ enum Options {
 export const TodoList: React.FC<Props> = (props) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
-  const [status, setStatus] = useState(Options.all);
+  const [status, setStatus] = useState<Options>(Options.all);
 
   useEffect(() => {
     getAllTodos()
-      .then(response => setTodos(response));
+      .then(response => setTodos(response))
+      .catch((error) => {
+        alert(`${error}`);
+      });
   }, []);
 
   const handleOptions = (filterOption: Options, todo: Todo) => {
