@@ -1,44 +1,166 @@
 import React from 'react';
 import './TodoList.scss';
+import { getTodos } from '../../Api/api';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type State = {
+  todosList: Todo[],
+  completed: string,
+  listFilter: Todo[],
+  searchTodo: string,
+  random: boolean
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+type Props = {
+  selectUser: (num: number) => void
+};
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+export class TodoList extends React.Component<Props, State> {
+  state: State = {
+    todosList: [],
+    listFilter: [],
+    completed: 'all',
+    searchTodo: '',
+    random: false,
+  };
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  componentDidMount() {
+    getTodos()
+      .then(res => {
+        this.setState({ todosList: res });
+        this.setState({ listFilter: res });
+      });
+  }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
+  randomizer = (arr: Todo[]) => {
+    const result = arr;
+
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const numRandom = Math.floor(Math.random() * (i + 1));
+
+      [result[i], result[numRandom]] = [result[numRandom], result[i]];
+    }
+
+    return result;
+  };
+
+  getOnCompleted = () => {
+    this.setState({ random: false });
+    this.setState((prev) => {
+      return {
+        listFilter: prev.todosList.filter((el: Todo) => {
+          switch (prev.completed) {
+            case 'active':
+              return el.completed === false;
+            case 'completed':
+              return el.completed;
+            default:
+              return true;
+          }
+        }),
+      };
+    });
+  };
+
+  onSearch = (arr: Todo[]) => {
+    const result = arr.filter(el => {
+      return el.title.includes(this.state.searchTodo);
+    });
+
+    return result;
+  };
+
+  render() {
+    const {
+      completed, listFilter, searchTodo, random,
+    } = this.state;
+    const { selectUser } = this.props;
+    const arrForRender = (random)
+      ? this.randomizer(this.onSearch(listFilter))
+      : this.onSearch(listFilter);
+
+    return (
+      <div className="TodoList">
+        <h2>Todos:</h2>
+        <select
+          name="todosSelect"
+          value={completed}
+          onChange={(e) => {
+            if (completed !== e.target.value) {
+              this.setState({
+                completed: e.target.value,
+              });
+              this.getOnCompleted();
+            }
+          }}
+        >
+          <option value="all">all</option>
+          <option value="active">active</option>
+          <option value="completed">completed</option>
+        </select>
+        <input
+          type="text"
+          value={searchTodo}
+          onChange={(e) => {
+            this.setState({ searchTodo: e.target.value });
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            this.setState({ random: true });
+          }}
+        >
+          Randomize
+        </button>
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {arrForRender.map((el: Todo) => (
+              <li
+                className="TodoList__item TodoList__item--unchecked"
+                key={el.id}
+              >
+                <label htmlFor={`${el.id}`}>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={el.completed}
+                    id={`${el.id}`}
+                    onChange={() => {
+                      this.setState((prev) => {
+                        return {
+                          todosList: prev.todosList.map((item) => {
+                            const newTodoStatus = (item.id === el.id)
+                              ? { ...item, completed: !item.completed }
+                              : item;
+
+                            return newTodoStatus;
+                          }),
+                        };
+                      });
+                      this.getOnCompleted();
+                    }}
+                  />
+                  <p>{el.title}</p>
+                </label>
+                <button
+                  className="
+                  TodoList__user-button
+                  TodoList__user-button--selected
+                  button
+                "
+                  type="button"
+                  onClick={() => {
+                    selectUser(el.userId);
+                  }}
+                >
+                  {`User #${el.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
