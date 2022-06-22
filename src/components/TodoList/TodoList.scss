@@ -28,4 +28,22 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__item-filters {
+    justify-content: end;
+    gap: 10px;
+    margin-left: 5px;
+    background-color: #daf5f8;
+
+    &--title,
+    &--status {
+      background-color: white;
+      padding: 5px;
+      color: #4d457b;
+      font-family: "Roboto", sans-serif;
+      border: 0.5px solid #b8b3d2;
+      border-radius: 5px;
+      outline: none;
+    }
+  }
 }
