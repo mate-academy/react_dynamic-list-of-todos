@@ -1,44 +1,71 @@
-import React from 'react';
-import './TodoList.scss';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../../react-app-env';
+import { getAllTodos } from '../../api/todos';
+import { loadTodosAction, loadUserAction } from '../../store/actions';
+import { getUserSelector } from '../../store/selectors';
+import { getUserById } from '../../api/user';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export const TodoList: React.FC = () => {
+  const dispatch = useDispatch();
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  const todos = useSelector((state: State) => state.todos);
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  const user = useSelector(getUserSelector);
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+  const loadUser = async (userId: number) => {
+    const userFromServer = await getUserById(userId);
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+    dispatch(loadUserAction(userFromServer));
+  };
+
+  useEffect(() => {
+    const loadTodosFromServer = async () => {
+      const todosFromServer = await getAllTodos();
+
+      dispatch(loadTodosAction(todosFromServer));
+    };
+
+    loadTodosFromServer();
+  }, []);
+
+  // eslint-disable-next-line no-console
+  console.log(user);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list">
+          {todos.map(todo => (
+            <li
+              key={todo.id}
+            >
+              <label htmlFor={`${todo.id}`}>
+                <input
+                  type="checkbox"
+                  id={`${todo.id}`}
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                className="
+                  TodoList__user-button
+                  TodoList__user-button--selected
+                  button
+                "
+                type="button"
+                onClick={() => loadUser(todo.userId)}
+              >
+                User&nbsp;#
+                {todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
