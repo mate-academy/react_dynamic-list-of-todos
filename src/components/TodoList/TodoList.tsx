@@ -1,44 +1,110 @@
-import React from 'react';
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-one-expression-per-line */
+import React, { useState, useEffect } from 'react';
+import { requestTodos } from '../../api/api';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+type Props = {
+  selectedUserId: number,
+  setSelectedUserId: (userId: number) => void;
+};
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+// eslint-disable-next-line max-len
+export const TodoList: React.FC<Props> = ({ selectedUserId, setSelectedUserId }) => {
+  const [query, setQuery] = useState('');
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [selectQuery, setSelectQuery] = useState('');
+  const filteredTodos = todos.filter(todo => todo.title.includes(query)).filter(todo => {
+    switch (selectQuery) {
+      case 'active':
+        return todo.completed === false;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+      case 'completed':
+        return todo.completed === true;
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      default:
+        return todo;
+    }
+  });
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  useEffect(() => {
+    requestTodos().then(response => setTodos(response));
+  }, []);
+
+  // switch (selectQuery) {
+  //   case 'active':
+  //     setTodos(todos.filter(todo => todo.completed === false));
+  //     break;
+  //
+  //   case completed:
+  //     setTodos(todos.filter(todo => todo.completed === true))
+  //
+  //   default:
+  //
+  // }
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+
+      <input
+        data-cy="filterByTitle"
+        type="text"
+        value={query}
+        onChange={
+          (event) => {
+            setQuery(event.target.value);
+          }
+        }
+        placeholder="Search by title"
+      />
+
+      <select value={selectQuery} onChange={(event) => setSelectQuery(event.target.value)}>
+        <option value="all">Show all</option>
+        <option value="active">Show all uncompleted</option>
+        <option value="completed">Show all completed</option>
+      </select>
+
+      <div className="TodoList__list-container">
+
+        <ul data-cy="listOfTodos" className="TodoList__list">
+          {filteredTodos?.map((todo: Todo) => (
+            <li
+              key={todo.id}
+              className={
+                todo.completed
+                  ? 'TodoList__item TodoList__item--checked'
+                  : 'TodoList__item TodoList__item--unchecked'
+              }
+            >
+              <label>
+                <input checked={todo.completed} type="checkbox" readOnly />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                data-cy="userButton"
+                className={
+                  selectedUserId === todo.userId
+                    // eslint-disable-next-line max-len
+                    ? 'TodoList__user-button TodoList__user-button--selected button'
+                    : 'TodoList__user-button button'
+                }
+                type="button"
+                onClick={() => {
+                  if (todo.userId !== selectedUserId) {
+                    return (setSelectedUserId(todo.userId));
+                  }
+
+                  return null;
+                }}
+              >
+                User&nbsp;#{todo.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
