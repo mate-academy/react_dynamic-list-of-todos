@@ -10,7 +10,14 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => setTodos(todosFromServer));
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.log('There are no such todos, something went wrong');
+      });
   }, []);
 
   const selectUserId = (userId: number):void => {

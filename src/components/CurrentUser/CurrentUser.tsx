@@ -11,11 +11,16 @@ export const CurrentUser: React.FC<Props> = ({
   selectedUserId,
   onHandlerClear,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     getUser(selectedUserId)
-      .then(userFromServer => setUser(userFromServer));
+      .then(userFromServer => {
+        setUser(userFromServer);
+      })
+      .catch(() => {
+        setUser(null);
+      });
   }, [selectedUserId]);
 
   return (
@@ -38,7 +43,7 @@ export const CurrentUser: React.FC<Props> = ({
           </>
         )
         : (
-          'Looking for a user...'
+          'User is not found'
         )}
       <button
         className="btn btn-danger"

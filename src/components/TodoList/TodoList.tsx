@@ -57,7 +57,9 @@ export const TodoList: React.FC<Props> = ({ todos, selectUser }) => {
         <div className="col">
           <select
             className="form-select"
-            onChange={(event) => setFilterOption(event.target.value)}
+            onChange={(event) => {
+              setFilterOption(event.target.value);
+            }}
           >
             <option value="all">all</option>
             <option value="active">active</option>
