@@ -14,9 +14,9 @@ enum ShowType {
 }
 
 export const TodoList: React.FC<Props> = ({ todoList, setId }) => {
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState('');
 
-  const [showBy, setShowBy] = useState<string>(ShowType.All);
+  const [showBy, setShowBy] = useState<any>(ShowType.All);
 
   const visibleTodos
     = todoList
@@ -50,7 +50,7 @@ export const TodoList: React.FC<Props> = ({ todoList, setId }) => {
       <select
         name="showby"
         value={showBy}
-        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+        onChange={(event) => {
           setShowBy(event.target.value);
         }}
       >

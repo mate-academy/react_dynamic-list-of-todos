@@ -7,16 +7,26 @@ import { TodoType } from './types/TodoType';
 import { getTodosFromServer } from './api/api';
 
 const App: React.FC = () => {
-
   const [
     selectedUserId,
     setSelectedUserId,
-  ] = useState<number | null>(0);
+  ] = useState<number>(0);
 
   const [todoList, setTodoList] = useState<TodoType[]>([]);
 
+  const [todoErr, setTodoErr] = useState(false);
+
   const getTodos = useCallback(async () => {
-    setTodoList(await getTodosFromServer());
+    try {
+      const todos = await getTodosFromServer();
+
+      if (todos) {
+        setTodoErr(false);
+        setTodoList(todos);
+      }
+    } catch (error) {
+      setTodoErr(true);
+    }
   }, []);
 
   const setId = useCallback((id: number) => {
@@ -24,7 +34,7 @@ const App: React.FC = () => {
   }, []);
 
   const deleteUser = useCallback(() => {
-    setSelectedUserId(null);
+    setSelectedUserId(0);
   }, [selectedUserId]);
 
   useEffect(() => {
@@ -34,10 +44,14 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList
-          todoList={todoList}
-          setId={setId}
-        />
+        {!todoErr
+          ? (
+            <TodoList
+              todoList={todoList}
+              setId={setId}
+            />
+          )
+          : <p>Nothing finded</p>}
       </div>
 
       <div className="App__content">
