@@ -8,42 +8,58 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ userId, clear }) => {
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [hasLoadingError, setHasLoadingError] = useState(true);
 
   useEffect(() => {
-    getUser(userId)
-      .then((user: User) => setSelectedUser(user));
+    try {
+      getUser(userId)
+        .then((user: User) => setSelectedUser(user));
+    } catch (error) {
+      setHasLoadingError(false);
+    }
   }, [userId]);
 
   return (
-    <div className="CurrentUser">
-      {selectedUser
-        ? (
-          <>
-            <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser.id}`}</span></h2>
+    <>
+      {
+        hasLoadingError
+          ? (
+            <div className="CurrentUser">
+              {selectedUser
+                ? (
+                  <>
+                    <h2 className="CurrentUser__title">
+                      <span>
+                        {`Selected user: ${selectedUser.id}`}
+                      </span>
+                    </h2>
 
-            <button
-              type="button"
-              className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-              onClick={() => (
-                clear()
-              )}
-            >
-              Clear
-            </button>
+                    <button
+                      type="button"
+                      className="
+                      TodoList__user-button
+                      TodoList__user-button--selected
+                      button
+                    "
+                      onClick={clear}
+                    >
+                      Clear
+                    </button>
 
-            <h3 className="CurrentUser__name">{selectedUser.name}</h3>
-            <p className="CurrentUser__email">{selectedUser.email}</p>
-            <p className="CurrentUser__phone">{selectedUser.phone}</p>
-          </>
-        )
-        : (
-          'Loading...'
-        )}
-    </div>
+                    <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+                    <p className="CurrentUser__email">{selectedUser.email}</p>
+                    <p className="CurrentUser__phone">{selectedUser.phone}</p>
+                  </>
+                )
+                : (
+                  'Loading...'
+                )}
+            </div>
+          )
+          : <p>No users yet</p>
+      }
+    </>
+
   );
 };
