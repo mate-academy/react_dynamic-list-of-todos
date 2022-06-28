@@ -9,7 +9,7 @@ const App: React.FC = () => {
   const [
     selectedUserId,
     setSelectedUserId,
-  ] = useState(1);
+  ] = useState(0);
 
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
 
@@ -17,31 +17,34 @@ const App: React.FC = () => {
     () => {
       fetchTodos()
         .then(response => {
-          setTodosFromServer(response);
+          return setTodosFromServer(response);
         });
     },
     [],
   );
 
-  const handleSelectUser = (userId: number) => {
+  const onSelectUser = (userId: number) => {
     setSelectedUserId(userId);
   };
 
   return (
     <div className="App">
-      <div className="App__sidebar">
-        <TodoList
-          todoList={todosFromServer}
-          selectedUserId={selectedUserId}
-        />
-      </div>
+      {todosFromServer.length && (
+        <div className="App__sidebar">
+          <TodoList
+            todoList={todosFromServer}
+            selectedUserId={selectedUserId}
+            handleSelectUser={onSelectUser}
+          />
+        </div>
+      )}
 
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
             <CurrentUser
               selectedUserId={selectedUserId}
-              onSelectUser={handleSelectUser}
+              handleSelectUser={onSelectUser}
             />
           ) : 'No user selected'}
         </div>

@@ -1,24 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { fetchUsers } from '../../api/api';
 import './CurrentUser.scss';
 
 type Props = {
   selectedUserId: number;
-  onSelectUser: (userId: number) => void;
+  handleSelectUser: (userId: number) => void;
 };
 
 export const CurrentUser: React.FC<Props> = ({
   selectedUserId,
-  onSelectUser,
+  handleSelectUser,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
+  // I couldn't handle the empty user
+  // when there is no user the app stucks
+  // I tried getUser funct but it didn't work
+
+  const getUser = useCallback(async (id: number) => {
+    try {
+      const userFromServer = await fetchUsers(id);
+
+      if (userFromServer.id) {
+        setUser(userFromServer);
+      } else {
+        setUser(null);
+      }
+    } catch {
+      throw new Error('User could not load from server');
+    }
+  }, [selectedUserId]);
+
   useEffect(
     () => {
-      fetchUsers(selectedUserId)
-        .then(response => {
-          setUser(response);
-        });
+      getUser(selectedUserId);
     },
     [selectedUserId],
   );
@@ -34,7 +49,7 @@ export const CurrentUser: React.FC<Props> = ({
       <button
         className="CurrentUser__clear"
         type="button"
-        onClick={() => onSelectUser(0)}
+        onClick={() => handleSelectUser(0)}
       >
         Clear
       </button>
