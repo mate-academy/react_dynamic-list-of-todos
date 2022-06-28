@@ -29,7 +29,10 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList todos={todos} onSelect={selectHandler} />
+        <TodoList
+          todos={todos}
+          onSelect={selectHandler}
+        />
       </div>
 
       <div className="App__content">

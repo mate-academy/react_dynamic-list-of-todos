@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import './TodoList.scss';
-import { TodoInfo } from '../TodoInfo';
+import cn from 'classnames';
 
 interface Props {
   todos: Todo[];
   onSelect: (userId: number) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelect,
+}) => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedTodoId, setselectedTodoId] = useState(0);
 
   let filteredTodos = todos.filter(todo => (
     todo.title.toLowerCase()
@@ -27,10 +30,6 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
     default:
       break;
   }
-
-  const selectIdHandler = (id: number) => {
-    setSelectedId(id);
-  };
 
   return (
     <div className="TodoList">
@@ -56,16 +55,42 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
       <div className="TodoList__list-container">
         <ul className="TodoList__list" data-cy="listOfTodos">
           {filteredTodos.map(todo => (
-            <TodoInfo
+            <li
               key={todo.id}
-              id={todo.id}
-              completed={todo.completed}
-              title={todo.title}
-              userId={todo.userId}
-              onSelect={onSelect}
-              selectedId={selectedId}
-              onSelectId={selectIdHandler}
-            />
+              className={cn(
+                'TodoList__item',
+                { 'TodoList__item--unchecked': !todo.completed },
+                { 'TodoList__item--checked': todo.completed },
+              )}
+            >
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  readOnly
+                />
+                <p>{todo.title}</p>
+              </label>
+
+              <button
+                type="button"
+                className={cn(
+                  'button',
+                  'TodoList__user-button',
+                  {
+                    'TodoList__user-button--selected':
+                    todo.id === selectedTodoId,
+                  },
+                )}
+                data-cy="userButton"
+                onClick={() => {
+                  onSelect(todo.userId);
+                  setselectedTodoId(todo.id);
+                }}
+              >
+                {`User #${todo.userId}`}
+              </button>
+            </li>
           ))}
         </ul>
       </div>
