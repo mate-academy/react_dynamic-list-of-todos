@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './TodoList.scss';
 import { getTodos, getUser } from '../../api/api';
-import { setTodosAction, setUserAction } from '../../store/actions';
 import { getTodosSelector } from '../../store/selectors';
+import { setTodos, setUser } from '../../store';
 
 export const TodoList: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,16 +14,16 @@ export const TodoList: React.FC = () => {
     const loadTodosFromServer = async () => {
       const todosFromServer = await getTodos();
 
-      dispatch(setTodosAction(todosFromServer));
+      dispatch(setTodos(todosFromServer));
     };
 
     loadTodosFromServer();
   }, []);
 
-  const setUser = async (userId: number) => {
+  const selectUser = async (userId: number) => {
     const userFromServer = await getUser(userId);
 
-    dispatch(setUserAction(userFromServer));
+    dispatch(setUser(userFromServer));
   };
 
   return (
@@ -50,7 +50,7 @@ export const TodoList: React.FC = () => {
             "
                 type="button"
                 onClick={() => {
-                  setUser(todo.userId);
+                  selectUser(todo.userId);
                 }}
               >
                 {`User ${todo.userId}`}

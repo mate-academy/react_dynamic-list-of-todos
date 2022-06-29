@@ -7,6 +7,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@cypress/react": "^5.12.4",
+    "@reduxjs/toolkit": "^1.8.2",
     "@types/react-redux": "^7.1.24",
     "bulma": "^0.9.3",
     "classnames": "^2.3.1",

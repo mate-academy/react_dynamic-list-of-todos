@@ -1,35 +1,29 @@
-import { createStore } from 'redux';
-import { Action, State } from '../react-app-env';
-import { ADD_TODO, SET_TODOS, SET_USER } from './actions';
+import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
+import { State, Todo, User } from '../react-app-env';
 
 const initialState: State = {
   todos: [],
   user: null,
 };
 
-const reducer = (state = initialState, action: Action) => {
-  switch (action.type) {
-    case SET_TODOS:
-      return {
-        ...state,
-        todos: [...action.payload],
-      };
+export const setTodos = createAction<Todo[]>('SET_TODOS');
+export const addTodo = createAction<Todo>('ADD_TODO');
+export const setUser = createAction<User>('SET_USER');
 
-    case ADD_TODO:
-      return {
-        ...state,
-        todos: [...state.todos, action.payload],
-      };
+const reducer = createReducer(initialState, (builder) => {
+  builder.addCase(setTodos, (state, action) => {
+    // eslint-disable-next-line no-param-reassign
+    state.todos = action.payload;
+  });
+  builder.addCase(addTodo, (state, action) => {
+    state.todos.push(action.payload);
+  });
+  builder.addCase(setUser, (state, action) => {
+    // eslint-disable-next-line no-param-reassign
+    state.user = action.payload;
+  });
+});
 
-    case SET_USER:
-      return {
-        ...state,
-        user: { ...action.payload },
-      };
-
-    default:
-      return state;
-  }
-};
-
-export const store = createStore(reducer);
+export const store = configureStore({
+  reducer,
+});
