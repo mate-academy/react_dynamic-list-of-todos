@@ -13,21 +13,15 @@ export const CurrentUser: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // I couldn't handle the empty user
-  // when there is no user the app stucks
-  // I tried getUser funct but it didn't work
-
   const getUser = useCallback(async (id: number) => {
     try {
       const userFromServer = await fetchUsers(id);
 
       if (userFromServer.id) {
         setUser(userFromServer);
-      } else {
-        setUser(null);
       }
     } catch {
-      throw new Error('User could not load from server');
+      setUser(null);
     }
   }, [selectedUserId]);
 
