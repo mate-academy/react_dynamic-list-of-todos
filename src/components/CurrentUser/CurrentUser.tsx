@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUsers } from '../../api';
 import './CurrentUser.scss';
 
@@ -11,16 +11,22 @@ export const CurrentUser: React.FC<Props> = ({
   userId,
   onSelectHandler,
 }) => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const selectUser = async () => {
-    const selectedUser = await getUsers(userId);
+  const selectUser = useCallback(async (id: number) => {
+    try {
+      const selectedUser = await getUsers(id);
 
-    setCurrentUser(selectedUser);
-  };
+      if (selectedUser.id) {
+        setCurrentUser(selectedUser);
+      }
+    } catch {
+      setCurrentUser(null);
+    }
+  }, [userId]);
 
   useEffect(() => {
-    selectUser();
+    selectUser(userId);
   }, [userId]);
 
   return (
