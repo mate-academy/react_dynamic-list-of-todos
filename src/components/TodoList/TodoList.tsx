@@ -1,30 +1,38 @@
 import React from 'react';
+import { Todo } from '../../react-app-env';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
+interface TodoListProps {
+  todos: Todo[];
+}
+
+export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
   <div className="TodoList">
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
       <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        {
+          todos.map(todo => (
+            <li className="TodoList__item TodoList__item--unchecked">
+              <label>
+                <input type="checkbox" readOnly />
+                <p>{todo.title}</p>
+              </label>
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
-
+              <button
+                className="
+                  TodoList__user-button
+                  TodoList__user-button--selected
+                  button
+                "
+                type="button"
+              >
+                {`User #${todo.userId}`}
+              </button>
+            </li>
+          ))
+        }
         <li className="TodoList__item TodoList__item--checked">
           <label>
             <input type="checkbox" checked readOnly />

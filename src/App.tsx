@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
-import { TodoList } from './components/TodoList';
+// import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+// import { getAllTodos } from './apis/api';
 
 const App: React.FC = () => {
   const [
-    selectedUserId,
-    // setSelectedUserId,
-  ] = useState(0);
+    selectedUser,
+    // setSelectedUser,
+  ] = useState(null);
+
+  // const loadTodos = async () => {
+  //   return (getAllTodos());
+  // };
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList />
+        {/* <TodoList todos={loadTodos()} /> */}
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser />
+          {selectedUser ? (
+            <CurrentUser user={selectedUser} />
           ) : 'No user selected'}
         </div>
       </div>
