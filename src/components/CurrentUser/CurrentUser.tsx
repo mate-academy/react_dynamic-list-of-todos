@@ -1,17 +1,60 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getUser } from '../../apis/api';
 import { User } from '../../react-app-env';
 import './CurrentUser.scss';
 
 interface CurrentUserProps {
-  user: User
+  userId: number;
+  onClearSelectedUser: (id: number) => void;
 }
 
-export const CurrentUser: React.FC<CurrentUserProps> = ({ user }) => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>{`Selected user: ${user.id}`}</span></h2>
+export const CurrentUser: React.FC<CurrentUserProps> = (
+  { userId, onClearSelectedUser },
+) => {
+  const [selectedUser, setSelectedUser] = useState<
+  User | null | undefined>(null);
 
-    <h3 className="CurrentUser__name">{user.name}</h3>
-    <p className="CurrentUser__email">{user.email}</p>
-    <p className="CurrentUser__phone">{user.phone}</p>
-  </div>
-);
+  const LoadUser = useCallback(
+    async () => {
+      const user = await getUser(userId);
+
+      setSelectedUser(user);
+    }, [],
+  );
+
+  useEffect(
+    () => {
+      LoadUser();
+
+      return () => setSelectedUser(null);
+    },
+    [userId],
+  );
+
+  return (
+    <div className="CurrentUser">
+      {
+        selectedUser
+          ? (
+            <>
+              <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser.id}`}</span></h2>
+
+              <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+              <p className="CurrentUser__email">{selectedUser.email}</p>
+              <p className="CurrentUser__phone">{selectedUser.phone}</p>
+              <button
+                type="button"
+                onClick={() => onClearSelectedUser(0)}
+                className="button CurrentUser__clear"
+              >
+                Clear
+              </button>
+            </>
+          )
+          : (
+            <p>User loading</p>
+          )
+      }
+    </div>
+  );
+};

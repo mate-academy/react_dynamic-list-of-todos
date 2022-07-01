@@ -1,30 +1,56 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
-// import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
-// import { getAllTodos } from './apis/api';
+import { Todo } from './react-app-env';
+import { getAllTodos } from './apis/api';
+import { TodoList } from './components/TodoList';
 
 const App: React.FC = () => {
   const [
-    selectedUser,
-    // setSelectedUser,
-  ] = useState(null);
+    selectedUserId,
+    setSelectedUserId,
+  ] = useState(0);
 
-  // const loadTodos = async () => {
-  //   return (getAllTodos());
-  // };
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const loadTodos = useCallback(
+    async () => {
+      const loadedTodos = await getAllTodos();
+
+      setTodos(loadedTodos);
+    },
+    [],
+  );
+
+  const loadSelectedUser = useCallback(
+    (newSelectedUserId: number) => {
+      setSelectedUserId(newSelectedUserId);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   return (
     <div className="App">
       <div className="App__sidebar">
-        {/* <TodoList todos={loadTodos()} /> */}
+        <TodoList
+          todos={todos}
+          userId={selectedUserId}
+          onSelectUser={loadSelectedUser}
+        />
       </div>
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUser ? (
-            <CurrentUser user={selectedUser} />
+          {selectedUserId ? (
+            <CurrentUser
+              userId={selectedUserId}
+              onClearSelectedUser={loadSelectedUser}
+            />
           ) : 'No user selected'}
         </div>
       </div>
