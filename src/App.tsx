@@ -14,7 +14,10 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList handleSetSelectedUserId={setSelectedUserId} />
+        <TodoList
+          handleSetSelectedUserId={setSelectedUserId}
+          selectedUserId={selectedUserId}
+        />
       </div>
 
       <div className="App__content">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { getTodos } from '../../api\'s/api';
 import './TodoList.scss';
 
@@ -13,17 +14,22 @@ type HandleSetSelectedUserId = (id: number) => void;
 
 interface Props {
   handleSetSelectedUserId: HandleSetSelectedUserId;
+  selectedUserId: number;
 }
 
-export const TodoList: React.FC<Props> = ({ handleSetSelectedUserId }) => {
+export const TodoList: React.FC<Props> = ({
+  handleSetSelectedUserId,
+  selectedUserId,
+}) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [todosCategory, setTodosCategory] = useState('all');
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      });
   }, []);
 
   function prepareTodos() {
@@ -81,19 +87,31 @@ export const TodoList: React.FC<Props> = ({ handleSetSelectedUserId }) => {
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
-          {visibleTodos.map(({ id, title, userId }) => (
-            <li className="TodoList__item TodoList__item--unchecked" key={id}>
+          {visibleTodos.map(({
+            id,
+            title,
+            userId,
+            completed,
+          }) => (
+            <li
+              className={cn('TodoList__item',
+                {
+                  'TodoList__item--unchecked': !completed,
+                  'TodoList__item--checked': completed,
+                })}
+              key={id}
+            >
               <label>
                 <input type="checkbox" readOnly />
                 <p>{title}</p>
               </label>
 
               <button
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
+                className={cn('TodoList__user-button button',
+                  {
+                    // eslint-disable-next-line max-len
+                    'TodoList__user-button--selected': selectedUserId === userId,
+                  })}
                 type="button"
                 onClick={() => {
                   handleSetSelectedUserId(userId);
