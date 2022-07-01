@@ -38,7 +38,10 @@ const App: React.FC = () => {
       <div className="App__content">
         <div className="App__content-container">
           {selectedUserId ? (
-            <CurrentUser userId={selectedUserId} onSelect={selectHandler} />
+            <CurrentUser
+              userId={selectedUserId}
+              onSelect={selectHandler}
+            />
           ) : 'No user selected'}
         </div>
       </div>
