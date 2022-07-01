@@ -4,19 +4,18 @@ import cn from 'classnames';
 
 type Props = {
   todoList: Todo[];
-  selectedUserId: number;
   handleSelectUser: (userId: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todoList,
-  selectedUserId,
   handleSelectUser,
 }) => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   const [title, setTitle] = useState('');
   const [option, setOption] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(
     () => {
@@ -82,13 +81,16 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
-                onClick={() => handleSelectUser(todo.userId)}
+                onClick={() => {
+                  handleSelectUser(todo.userId);
+                  setSelectedTodoId(todo.id);
+                }}
                 className={cn(
                   'TodoList__user-button',
                   'button',
                   {
                     'TodoList__user-button--selected':
-                    selectedUserId === todo.userId,
+                    selectedTodoId === todo.id,
                   },
                 )}
                 type="button"

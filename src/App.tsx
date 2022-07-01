@@ -33,7 +33,6 @@ const App: React.FC = () => {
         <div className="App__sidebar">
           <TodoList
             todoList={todosFromServer}
-            selectedUserId={selectedUserId}
             handleSelectUser={onSelectUser}
           />
         </div>
