@@ -5,11 +5,13 @@ import cn from 'classnames';
 type Props = {
   todoList: Todo[];
   handleSelectUser: (userId: number) => void;
+  selectedUserId: number;
 };
 
 export const TodoList: React.FC<Props> = ({
   todoList,
   handleSelectUser,
+  selectedUserId,
 }) => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
@@ -35,6 +37,15 @@ export const TodoList: React.FC<Props> = ({
       }));
     },
     [title, option],
+  );
+
+  useEffect(
+    () => {
+      if (selectedUserId === 0) {
+        setSelectedTodoId(0);
+      }
+    },
+    [selectedUserId],
   );
 
   return (
