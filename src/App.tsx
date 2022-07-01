@@ -9,7 +9,7 @@ const App: React.FC = () => {
   const [
     selectedUserId,
     setSelectedUserId,
-  ] = useState(1);
+  ] = useState(0);
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
