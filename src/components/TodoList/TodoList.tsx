@@ -93,49 +93,64 @@ export const TodoList: React.FC<Props> = ({
             userId,
             completed,
           }) => (
-            <li
-              className={cn('TodoList__item',
-                {
-                  'TodoList__item--unchecked': !completed,
-                  'TodoList__item--checked': completed,
-                })}
-              key={id}
-            >
-              <label>
-                <input type="checkbox" readOnly />
-                <p>{title}</p>
-              </label>
+            completed
+              ? (
+                <li
+                  className="TodoList__item TodoList__item--checked"
+                  key={id}
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked
+                      readOnly
+                    />
+                    <p>{title}</p>
+                  </label>
 
-              <button
-                className={cn('TodoList__user-button button',
-                  {
-                    // eslint-disable-next-line max-len
-                    'TodoList__user-button--selected': selectedUserId === userId,
-                  })}
-                type="button"
-                onClick={() => {
-                  handleSetSelectedUserId(userId);
-                }}
-              >
-                User&nbsp;#
-                {userId}
-              </button>
-            </li>
+                  <button
+                    className={cn('TodoList__user-button button',
+                      {
+                        // eslint-disable-next-line max-len
+                        'TodoList__user-button--selected': selectedUserId === userId,
+                      })}
+                    type="button"
+                    onClick={() => {
+                      handleSetSelectedUserId(userId);
+                    }}
+                  >
+                    User&nbsp;#
+                    {userId}
+                  </button>
+                </li>
+              )
+              : (
+                <li
+                  className="TodoList__item TodoList__item--unchecked"
+                  key={id}
+                >
+                  <label>
+                    <input type="checkbox" readOnly />
+                    <p>{title}</p>
+                  </label>
+
+                  <button
+                    className={cn('TodoList__user-button button',
+                      {
+                        // eslint-disable-next-line max-len
+                        'TodoList__user-button--selected': selectedUserId === userId,
+                      })}
+                    type="button"
+                    onClick={() => {
+                      handleSetSelectedUserId(userId);
+                    }}
+                  >
+                    User&nbsp;#
+                    {userId}
+                  </button>
+                </li>
+              )
           ))}
-
-          <li className="TodoList__item TodoList__item--checked">
-            <label>
-              <input type="checkbox" checked readOnly />
-              <p>distinctio vitae autem nihil ut molestias quo</p>
-            </label>
-
-            <button
-              className="TodoList__user-button button"
-              type="button"
-            >
-              User&nbsp;#2
-            </button>
-          </li>
         </ul>
       </div>
     </div>
