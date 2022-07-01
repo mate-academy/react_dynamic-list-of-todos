@@ -19,6 +19,8 @@ const App: React.FC = () => {
       const loadedTodos = await getAllTodos();
 
       setTodos(loadedTodos);
+
+      return loadedTodos;
     },
     [],
   );
@@ -30,32 +32,42 @@ const App: React.FC = () => {
     [],
   );
 
-  const searchTodos = (criteria: string) => {
-    setTodos(todos.filter(todo => todo.title.includes(criteria)));
+  const searchTodos = async (criteria: string) => {
+    const searchedTodos = (await loadTodos())
+      .filter(todo => todo.title
+        .includes(criteria));
+
+    setTodos(searchedTodos);
   };
 
-  const filterTodos = (criteria: string) => {
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  const filterTodos = async (criteria: string) => {
+    let activeTodos: Todo[];
+    let completedtodos: Todo[];
+
     switch (criteria) {
       case 'all':
         loadTodos();
         break;
 
       case 'active':
-        setTodos(todos.filter(todo => !todo.completed));
+        activeTodos = (await loadTodos()).filter(todo => !todo.completed);
+
+        setTodos(activeTodos);
         break;
 
       case 'completed':
-        setTodos(todos.filter(todo => todo.completed));
+        completedtodos = (await loadTodos()).filter(todo => todo.completed);
+        setTodos(completedtodos);
         break;
 
       default:
         throw Error('Something went wrong');
     }
   };
-
-  useEffect(() => {
-    loadTodos();
-  }, []);
 
   return (
     <div className="App">
