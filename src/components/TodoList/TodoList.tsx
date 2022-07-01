@@ -7,26 +7,60 @@ interface TodoListProps {
   todos: Todo[];
   userId: number;
   onSelectUser: (newSelectedUserId: number) => void;
+  onSelectCriteria: (criteria: string) => void;
+  onSearchTodos: (searchKey: string) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = (
-  { todos, userId, onSelectUser },
+  {
+    todos,
+    userId,
+    onSelectUser,
+    onSelectCriteria,
+    onSearchTodos,
+  },
 ) => {
   const [query, setQuery] = useState('');
-  const queryResults = todos.filter(todo => todo.title.includes(query));
 
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
+
       <input
         value={query}
         type="text"
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          onSearchTodos(query);
+        }}
       />
+
+      <select
+        name="criteria"
+        id="criteria"
+        onChange={(event) => onSelectCriteria(event.target.value)}
+      >
+        <option
+          value="all"
+        >
+          All
+        </option>
+        <option
+          value="active"
+        >
+          Active
+        </option>
+        <option
+          value="completed"
+        >
+          Completed
+        </option>
+      </select>
+
       <div className="TodoList__list-container">
         <ul className="TodoList__list">
           {
-            queryResults.map(todo => (
+            todos.map(todo => (
               <li
                 className={classNames(
                   'TodoList__item',
