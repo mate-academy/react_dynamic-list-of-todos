@@ -17,7 +17,7 @@ export const getTodos = async () => {
   return result;
 };
 
-export const getUsers = async (userId: number) => {
+export const getUser = async (userId: number) => {
   const result = await request(`/users/${userId}`);
 
   return result;

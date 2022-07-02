@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getUsers } from '../../api';
+import { getUser } from '../../api';
 import './CurrentUser.scss';
 
 interface Props {
@@ -13,25 +13,30 @@ export const CurrentUser: React.FC<Props> = ({
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const selectUser = useCallback(async (id: number) => {
-    try {
-      const selectedUser = await getUsers(id);
+  const selectUser = useCallback(
+    async (id: number) => {
+      try {
+        const selectedUser = await getUser(id);
 
-      if (selectedUser.id) {
-        setCurrentUser(selectedUser);
+        if (selectedUser.id) {
+          setCurrentUser(selectedUser);
+        }
+      } catch {
+        setCurrentUser(null);
       }
-    } catch {
-      setCurrentUser(null);
-    }
-  }, [userId]);
+    }, [userId],
+  );
 
   useEffect(() => {
     selectUser(userId);
-  }, [userId]);
+
+    return () => setCurrentUser(null); // to clean up previous selected user before new selected user
+  },
+  [userId]);
 
   return (
     <div className="CurrentUser">
-      <h2 className="CurrentUser__title"><span>{`Selected user: ${userId}`}</span></h2>
+      <h2 className="CurrentUser__title"><span>{`Selected user: ${currentUser?.id}`}</span></h2>
 
       <h3 className="CurrentUser__name">{currentUser?.name}</h3>
       <p className="CurrentUser__email">{currentUser?.email}</p>

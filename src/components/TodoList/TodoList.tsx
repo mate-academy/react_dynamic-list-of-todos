@@ -4,12 +4,14 @@ import cn from 'classnames';
 
 interface Props {
   todos: Todo[];
+  selectedUserId: number;
   onSelectHandler: (userId: number) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectHandler,
+  selectedUserId,
 }) => {
   const [title, setTitle] = useState('');
   const [filterByStaus, setFilterByStatus] = useState('all');
@@ -60,27 +62,24 @@ export const TodoList: React.FC<Props> = ({
                 { 'TodoList__item--checked': todo.completed },
               )}
             >
-              {todo.completed
-                ? (
-                  <label>
-                    <input type="checkbox" checked />
-                    <p>{todo.title}</p>
-                  </label>
-                )
-                : (
-                  <label>
-                    <input type="checkbox" />
-                    <p>{todo.title}</p>
-                  </label>
-                )}
-
+              <label>
+                <input
+                  type="checkbox"
+                  readOnly
+                  checked={todo.completed}
+                />
+                <p>{todo.title}</p>
+              </label>
               <button
+                className={cn(
+                  'TodoList__user-button',
+                  'button',
+                  {
+                    'TodoList__user-button--selected':
+                  selectedUserId === todo.userId,
+                  },
+                )}
                 type="button"
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
                 data-cy="userButton"
                 onClick={() => onSelectHandler(todo.userId)}
               >
