@@ -19,36 +19,37 @@ const App: React.FC = () => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   const getTodosFromServer = async () => {
-    const todosFromServer = await getTodos();
-
-    setTodos(todosFromServer);
-    setFilteredTodos(todosFromServer);
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.log('Todo not find');
+      });
   };
 
   const onFilterTitle = (title: string) => {
-    setFilteredTodos([
-      ...todos.filter(item => item.title.includes(title)),
-    ]);
+    setFilteredTodos(todos.filter(item => item.title.includes(title)));
   };
 
   const onFilterStatus = (status: string) => {
-    setFilteredTodos([
-      ...todos.filter(item => {
-        switch (status) {
-          case 'all':
-            return true;
-            break;
-          case 'completed':
-            return item.completed;
-            break;
-          case 'active':
-            return !item.completed;
-            break;
-          default:
-            return false;
-        }
-      }),
-    ]);
+    setFilteredTodos(todos.filter(item => {
+      switch (status) {
+        case 'all':
+          return true;
+          break;
+        case 'completed':
+          return item.completed;
+          break;
+        case 'active':
+          return !item.completed;
+          break;
+        default:
+          return false;
+      }
+    }));
   };
 
   useEffect(() => {

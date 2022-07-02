@@ -7,12 +7,16 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = ({ selectedUserId }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     if (user?.id !== selectedUserId) {
       getUser(selectedUserId)
-        .then(setUser);
+        .then(setUser)
+        .catch(() => {
+          // eslint-disable-next-line no-console
+          console.log('User not find');
+        });
     }
   }, [selectedUserId]);
 
