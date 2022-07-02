@@ -1,20 +1,14 @@
 import { Todo, User } from '../react-app-env';
 
-const TODOS_API = 'https://mate.academy/students-api/todos';
-const USERS_API = 'https://mate.academy/students-api/users';
+const BASE_URL = 'https://mate.academy/students-api';
 
 export const getAllTodos = (): Promise<Todo[]> => (
-  fetch(TODOS_API)
+  fetch(`${BASE_URL}/todos`)
     .then(response => response.json())
 );
 
-export const getAllUsers = (): Promise<User[]> => (
-  fetch(USERS_API)
-    .then(response => response.json())
-);
-
-export const getUser = async (userId: number) => {
-  const userFromServer = await fetch(`${USERS_API}/${userId}`)
+export const getUser = async (id: number): Promise<User> => {
+  const userFromServer = await fetch(`${BASE_URL}/users/${id.toString()}`)
     .then(response => response.json());
 
   return userFromServer;

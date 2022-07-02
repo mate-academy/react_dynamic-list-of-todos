@@ -29,7 +29,7 @@ const App: React.FC = () => {
     (newSelectedUserId: number) => {
       setSelectedUserId(newSelectedUserId);
     },
-    [],
+    [selectedUserId],
   );
 
   const searchTodos = async (criteria: string) => {

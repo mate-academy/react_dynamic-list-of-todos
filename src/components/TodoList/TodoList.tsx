@@ -29,6 +29,7 @@ export const TodoList: React.FC<TodoListProps> = (
       <input
         value={query}
         type="text"
+        data-cy="filterByTitle"
         onChange={(event) => {
           setQuery(event.target.value);
           onSearchTodos(query);
@@ -58,7 +59,10 @@ export const TodoList: React.FC<TodoListProps> = (
       </select>
 
       <div className="TodoList__list-container">
-        <ul className="TodoList__list">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
           {
             todos.map(todo => (
               <li
@@ -81,6 +85,7 @@ export const TodoList: React.FC<TodoListProps> = (
                 </label>
 
                 <button
+                  data-cy="userButton"
                   className={classNames(
                     'TodoList__user-button',
                     'button',

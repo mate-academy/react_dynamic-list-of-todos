@@ -16,19 +16,19 @@ export const CurrentUser: React.FC<CurrentUserProps> = (
 
   const LoadUser = useCallback(
     async () => {
-      const user = await getUser(userId);
+      // const user = getUser(userId);
 
-      setSelectedUser(user);
-    }, [],
+      setSelectedUser(await getUser(userId));
+    }, [selectedUser],
   );
 
   useEffect(
     () => {
       LoadUser();
 
-      return () => setSelectedUser(null);
+      // return () => setSelectedUser(null);
     },
-    [userId],
+    [selectedUser],
   );
 
   return (
@@ -39,7 +39,12 @@ export const CurrentUser: React.FC<CurrentUserProps> = (
             <>
               <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser.id}`}</span></h2>
 
-              <h3 className="CurrentUser__name">{selectedUser.name}</h3>
+              <h3
+                className="CurrentUser__name"
+                data-cy="userName"
+              >
+                {selectedUser.name}
+              </h3>
               <p className="CurrentUser__email">{selectedUser.email}</p>
               <p className="CurrentUser__phone">{selectedUser.phone}</p>
               <button
