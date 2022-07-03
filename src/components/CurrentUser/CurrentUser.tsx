@@ -12,12 +12,9 @@ export const CurrentUser: React.FC<Props> = ({ userId, clear }) => {
   const [hasLoadingError, setHasLoadingError] = useState(true);
 
   useEffect(() => {
-    try {
-      getUser(userId)
-        .then((user: User) => setSelectedUser(user));
-    } catch (error) {
-      setHasLoadingError(false);
-    }
+    getUser(userId)
+      .then((user: User) => setSelectedUser(user))
+      .catch(error => setHasLoadingError(error));
   }, [userId]);
 
   return (

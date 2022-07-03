@@ -13,17 +13,16 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   const [optionValue, setOptionValue] = useState('');
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
+  const lowerInputValue = inputValue.toLowerCase();
+
   const filterTodo = todos
     .filter(todo => todo.title.toLocaleLowerCase()
-      .includes(inputValue.toLocaleLowerCase()));
+      .includes(lowerInputValue));
 
   useEffect(() => {
-    try {
-      getTodos()
-        .then((todosFromServer: Todo[]) => setTodos(todosFromServer));
-    } catch (error) {
-      setHasLoadingError(true);
-    }
+    getTodos()
+      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+      .catch(error => setHasLoadingError(error));
   }, []);
 
   const filterSelect = (currentTodo: Todo[]) => {

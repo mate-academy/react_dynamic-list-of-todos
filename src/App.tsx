@@ -10,7 +10,7 @@ const App: React.FC = () => {
     setSelectedUserId,
   ] = useState(0);
 
-  const userId = (todo: Todo) => (
+  const changeUserId = (todo: Todo) => (
     setSelectedUserId(todo.userId)
   );
 
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
-        <TodoList userId={userId} />
+        <TodoList userId={changeUserId} />
       </div>
 
       <div className="App__content">
