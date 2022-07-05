@@ -14,15 +14,9 @@ export const CurrentUser: React.FC<Props> = ({
   const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined);
 
   const loadUser = useCallback(async () => {
-    try {
-      const user = await getUser(userId);
+    const user = await getUser(userId);
 
-      if (user.id) {
-        setSelectedUser(user);
-      }
-    } catch {
-      setSelectedUser(undefined);
-    }
+    setSelectedUser(user);
   }, [userId]);
 
   useEffect(() => {
