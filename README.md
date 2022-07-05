@@ -1,6 +1,6 @@
 # React dynamic list of TODOs
 - Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/)
+  [DEMO LINK](https://Lilia-Mazur.github.io/react_dynamic-list-of-todos/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 - Use [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript)
 
@@ -12,7 +12,7 @@ Add the data loading, so the App works as described below:
 1. Create a separate file `api.ts` to put all the API calls there.
 1. Todos are fetched on page load from [GET todos endpoint](https://mate.academy/students-api/todos). (`useEffect(() => { ... }, [])`)
 1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
-1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate.academy/students-api/users/1) (replace 1 with a given `userId`).
+1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate.aciademy/students-api/users/1) (replace 1 with a given `userId`).
 1. If I select another user the details should be updated. (`useEffect(() => { ... }, [userId])`).
 1. If I select the same user there should not be a request to the server.
 1. Add a button `Clear` into the `CurrentUser` to clear the selectedUser in the `App`
