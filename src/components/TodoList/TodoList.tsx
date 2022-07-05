@@ -17,7 +17,10 @@ export const TodoList: React.FC<Props> = ({
     <h2>Todos:</h2>
 
     <div className="TodoList__list-container">
-      <ul className="TodoList__list">
+      <ul
+        className="TodoList__list"
+        data-cy="listOfTodos"
+      >
         {todos.map((todo) => (
           <li
             key={todo.id}
@@ -25,6 +28,7 @@ export const TodoList: React.FC<Props> = ({
               'TodoList__item--unchecked': !todo.completed,
               'TodoList__item--checked': todo.completed,
             })}
+            data-cy="filterByTitle"
           >
             <label>
               <input
@@ -45,6 +49,7 @@ export const TodoList: React.FC<Props> = ({
                 },
               )}
               type="button"
+              data-cy="userButton"
               onClick={() => selectedUserChangeHandler(todo.userId)}
             >
               {`User #${todo.userId}`}
