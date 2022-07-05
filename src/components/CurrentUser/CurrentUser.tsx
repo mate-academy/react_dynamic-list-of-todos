@@ -11,12 +11,18 @@ export const CurrentUser: React.FC<Props> = ({
   userId,
   onSelect,
 }) => {
-  const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const loadUser = useCallback(async () => {
-    const user = await getUser(userId);
+    try {
+      const load = await getUser(userId);
 
-    setSelectedUser(user);
+      if (load?.id) {
+        setSelectedUser(load);
+      }
+    } catch {
+      setSelectedUser(null);
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -38,8 +44,8 @@ export const CurrentUser: React.FC<Props> = ({
 
         <button
           type="button"
-          className="CurrentUser__clear button"
-          onClick={() => onSelect(-1)}
+          className="CurrentUser__clear"
+          onClick={() => onSelect(0)}
         >
           Clear
         </button>

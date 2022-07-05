@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './TodoList.scss';
+import cn from 'classnames';
 
 interface Props {
   todos: Todo[];
@@ -11,18 +12,18 @@ export const TodoList: React.FC<Props> = ({
   onSelect,
 }) => {
   const [title, setTitle] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState('all');
 
-  let filterTodos = todos.filter(todo => (
+  let filteredTodos = todos.filter(todo => (
     todo.title.toLowerCase().includes(title.toLowerCase())
   ));
 
   switch (filter) {
     case 'active':
-      filterTodos = filterTodos.filter(todo => !todo.completed);
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
       break;
     case 'completed':
-      filterTodos = filterTodos.filter(todo => todo.completed);
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
       break;
     default:
       break;
@@ -34,7 +35,7 @@ export const TodoList: React.FC<Props> = ({
 
       <input
         type="text"
-        placeholder="Title..."
+        placeholder="Filter by title"
         data-cy="filterByTitle"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
@@ -51,9 +52,13 @@ export const TodoList: React.FC<Props> = ({
 
       <div className="TodoList__list-container">
         <ul className="TodoList__list" data-cy="listOfTodos">
-          {filterTodos.map(todo => (
+          {filteredTodos.map(todo => (
             <li
               key={todo.id}
+              className={cn('TodoList__item', {
+                'TodoList__item--unchecked': !todo.completed,
+                'TodoList__item--checked': todo.completed,
+              })}
             >
               <label>
                 <input
@@ -65,14 +70,14 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
-                className="
-                TodoList__user-button
-                TodoList__user-button--selected
-                button
-              "
+                onClick={() => {
+                  onSelect(todo.userId);
+                }}
+                className={cn(
+                  'TodoList__user-button',
+                  'button',
+                )}
                 type="button"
-                data-cy="userButton"
-                onClick={() => onSelect(todo.userId)}
               >
                 <span>{`User #${todo.userId}`}</span>
               </button>

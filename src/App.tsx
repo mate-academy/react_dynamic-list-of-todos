@@ -7,19 +7,22 @@ import { getTodos } from './api';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [
+    selectedUserId,
+    setSelectedUserId,
+  ] = useState(0);
 
   const loadTodos = async () => {
-    const load = await getTodos();
+    const loadedTodos = await getTodos();
 
-    setTodos(load);
+    setTodos(loadedTodos);
   };
 
   useEffect(() => {
     loadTodos();
   }, []);
 
-  const selectUser = (userId: number) => {
+  const selectHandler = (userId: number) => {
     setSelectedUserId(userId);
   };
 
@@ -28,7 +31,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           todos={todos}
-          onSelect={selectUser}
+          onSelect={selectHandler}
         />
       </div>
 
@@ -37,7 +40,7 @@ const App: React.FC = () => {
           {selectedUserId ? (
             <CurrentUser
               userId={selectedUserId}
-              onSelect={selectUser}
+              onSelect={selectHandler}
             />
           ) : 'No user selected'}
         </div>

@@ -5,7 +5,7 @@ export function getTodos(): Promise<Todo[]> {
     .then(response => response.json());
 }
 
-export function getUser(userId: number): Promise<User> {
+export function getUser(userId: number): Promise<User | null> {
   return fetch(`${API_URL}/users/${userId}`)
     .then(response => response.json());
 }
