@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -22,9 +22,12 @@ const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const selectHandler = (userId: number) => {
-    setSelectedUserId(userId);
-  };
+  const selectHandler = useCallback(
+    (userId: number) => {
+      setSelectedUserId(userId);
+    },
+    [selectedUserId],
+  );
 
   return (
     <div className="App">
