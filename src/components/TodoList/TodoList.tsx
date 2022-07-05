@@ -1,44 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
+import cn from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[];
+  selectedUserId: number;
+  onSelectHandler: (userId: number) => void;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = React.memo(
+  ({
+    todos,
+    onSelectHandler,
+    selectedUserId,
+  }) => {
+    const [title, setTitle] = useState('');
+    const [filterByStaus, setFilterByStatus] = useState('all');
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    let filteredTodos = todos.filter(todo => (
+      todo.title.toLowerCase().includes(title.toLowerCase())
+    ));
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    if (filterByStaus !== 'all') {
+      filteredTodos = filterByStaus === 'completed'
+        ? filteredTodos.filter(todo => todo.completed)
+        : filteredTodos.filter(todo => !todo.completed);
+    }
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+    return (
+      <div className="TodoList">
+        <h2 className="title">Todos</h2>
+
+        <input
+          type="text"
+          data-cy="filterByTitle"
+          placeholder="search by title"
+          value={title}
+          onChange={(event) => (
+            setTitle(event.target.value)
+          )}
+        />
+
+        <select
+          value={filterByStaus}
+          onChange={(event) => (
+            setFilterByStatus(event.target.value)
+          )}
+        >
+          <option value="all">All</option>
+          <option value="active">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+
+        <div className="TodoList__list-container">
+          <ul className="TodoList__list">
+            {filteredTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={cn(
+                  'TodoList__item',
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed },
+                )}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  className={cn(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
+                    },
+                  )}
+                  type="button"
+                  data-cy="userButton"
+                  onClick={() => onSelectHandler(todo.userId)}
+                >
+
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  },
 );
