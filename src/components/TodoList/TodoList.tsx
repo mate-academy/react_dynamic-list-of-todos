@@ -4,6 +4,7 @@ import cn from 'classnames';
 
 interface Props {
   todos: Todo[];
+  selectedUserId: number;
   onSelectHandler: (userId: number) => void;
 }
 
@@ -11,16 +12,17 @@ export const TodoList: React.FC<Props> = React.memo(
   ({
     todos,
     onSelectHandler,
+    selectedUserId,
   }) => {
     const [title, setTitle] = useState('');
-    const [filterByStaus, setFilterByStatus] = useState('all');
+    const [filterByStatus, setFilterByStatus] = useState('all');
 
     let filteredTodos = todos.filter(todo => (
       todo.title.toLowerCase().includes(title.toLowerCase())
     ));
 
-    if (filterByStaus !== 'all') {
-      filteredTodos = filterByStaus === 'completed'
+    if (filterByStatus !== 'all') {
+      filteredTodos = filterByStatus === 'completed'
         ? filteredTodos.filter(todo => todo.completed)
         : filteredTodos.filter(todo => !todo.completed);
     }
@@ -40,7 +42,7 @@ export const TodoList: React.FC<Props> = React.memo(
         />
 
         <select
-          value={filterByStaus}
+          value={filterByStatus}
           onChange={(event) => (
             setFilterByStatus(event.target.value)
           )}
@@ -61,26 +63,25 @@ export const TodoList: React.FC<Props> = React.memo(
                   { 'TodoList__item--checked': todo.completed },
                 )}
               >
-                {todo.completed
-                  ? (
-                    <label>
-                      <input type="checkbox" checked />
-                      <p>{todo.title}</p>
-                    </label>
-                  )
-                  : (
-                    <label>
-                      <input type="checkbox" />
-                      <p>{todo.title}</p>
-                    </label>
-                  )}
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
 
                 <button
                   type="button"
-                  className="
-                    TodoList__user-button
-                    button
-                  "
+                  className={cn(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected':
+                      selectedUserId === todo.userId,
+                    },
+                  )}
                   data-cy="userButton"
                   onClick={() => onSelectHandler(todo.userId)}
                 >

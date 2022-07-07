@@ -4,6 +4,7 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
+import 'bulma';
 
 const App: React.FC = () => {
   const [
@@ -30,7 +31,7 @@ const App: React.FC = () => {
     (userId: number) => {
       setSelectedUserId(userId);
     },
-    [selectedUserId],
+    [],
   );
 
   return (
@@ -38,6 +39,7 @@ const App: React.FC = () => {
       <div className="App__sidebar">
         <TodoList
           todos={todos}
+          selectedUserId={selectedUserId}
           onSelectHandler={selectHandler}
         />
       </div>
