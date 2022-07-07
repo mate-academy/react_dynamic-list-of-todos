@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -13,19 +13,25 @@ const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const loadTodos = async () => {
-    const loadedTodos = await getTodos();
+  const loadTodos = useCallback(
+    async () => {
+      const loadedTodos = await getTodos();
 
-    setTodos(loadedTodos);
-  };
+      setTodos(loadedTodos);
+    },
+    [],
+  );
 
   useEffect(() => {
     loadTodos();
   }, []);
 
-  const selectHandler = (userId: number) => {
-    setSelectedUserId(userId);
-  };
+  const selectHandler = useCallback(
+    (userId: number) => {
+      setSelectedUserId(userId);
+    },
+    [selectedUserId],
+  );
 
   return (
     <div className="App">
