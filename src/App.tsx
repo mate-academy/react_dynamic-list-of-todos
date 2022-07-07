@@ -11,12 +11,16 @@ const App: React.FC = () => {
     selectedUserId,
     setSelectedUserId,
   ] = useState(0);
+  const [count, setCount] = useState(0);
 
-  const loadTodos = async () => {
-    const loadedTodos = await getTodos();
+  const loadTodos = useCallback(
+    async () => {
+      const loadedTodos = await getTodos();
 
-    setTodos(loadedTodos);
-  };
+      setTodos(loadedTodos);
+    },
+    [],
+  );
 
   useEffect(() => {
     loadTodos();
@@ -32,6 +36,12 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App__sidebar">
+        <button
+          type="button"
+          onClick={() => setCount(state => state + 1)}
+        >
+          {count}
+        </button>
         <TodoList
           todos={todos}
           onSelect={selectHandler}
