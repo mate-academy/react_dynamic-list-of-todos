@@ -1,44 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
+import { Todo } from '../../react-app-env';
 import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface TodoListProps {
+  todos: Todo[];
+  userId: number;
+  onSelectUser: (newSelectedUserId: number) => void;
+  onSelectCriteria: (criteria: string) => void;
+  onSearchTodos: (searchKey: string) => void;
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<TodoListProps> = (
+  {
+    todos,
+    userId,
+    onSelectUser,
+    onSelectCriteria,
+    onSearchTodos,
+  },
+) => {
+  const [query, setQuery] = useState('');
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      <input
+        className="TodoList__search-box"
+        placeholder="Type search string"
+        value={query}
+        type="text"
+        data-cy="filterByTitle"
+        onChange={(event) => {
+          setQuery(event.target.value);
+          onSearchTodos(query);
+        }}
+      />
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+      <select
+        className="TodoList__filter-box"
+        name="criteria"
+        id="criteria"
+        onChange={(event) => onSelectCriteria(event.target.value)}
+      >
+        <option
+          value="all"
+        >
+          All
+        </option>
+        <option
+          value="active"
+        >
+          Active
+        </option>
+        <option
+          value="completed"
+        >
+          Completed
+        </option>
+      </select>
+
+      <div className="TodoList__list-container">
+        <ul
+          className="TodoList__list"
+          data-cy="listOfTodos"
+        >
+          {
+            todos.map(todo => (
+              <li
+                className={classNames(
+                  'TodoList__item',
+                  {
+                    'TodoList__item--unchecked': !todo.completed,
+                    'TodoList__item--checked': todo.completed,
+                  },
+                )}
+                key={todo.id}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={todo.completed}
+                  />
+                  <p>{todo.title}</p>
+                </label>
+
+                <button
+                  data-cy="userButton"
+                  className={classNames(
+                    'TodoList__user-button',
+                    'button',
+                    {
+                      'TodoList__user-button--selected': userId === todo.userId,
+                    },
+                  )}
+                  type="button"
+                  onClick={() => onSelectUser(todo.userId)}
+                >
+                  {`User #${todo.userId}`}
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
