@@ -16,50 +16,48 @@ export const CurrentUser: React.FC<CurrentUserProps> = (
 
   const LoadUser = useCallback(
     async () => {
-      // const user = getUser(userId);
-
-      setSelectedUser(await getUser(userId));
+      try {
+        setSelectedUser(await getUser(userId));
+      } catch {
+        setSelectedUser(null);
+      }
     }, [selectedUser],
   );
 
   useEffect(
     () => {
       LoadUser();
-
-      // return () => setSelectedUser(null);
     },
     [selectedUser],
   );
 
   return (
     <div className="CurrentUser">
-      {
-        selectedUser
-          ? (
-            <>
-              <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser.id}`}</span></h2>
+      {selectedUser !== null
+        ? (
+          <>
+            <h2 className="CurrentUser__title"><span>{`Selected user: ${selectedUser?.id}`}</span></h2>
 
-              <h3
-                className="CurrentUser__name"
-                data-cy="userName"
-              >
-                {selectedUser.name}
-              </h3>
-              <p className="CurrentUser__email">{selectedUser.email}</p>
-              <p className="CurrentUser__phone">{selectedUser.phone}</p>
-              <button
-                type="button"
-                onClick={() => onClearSelectedUser(0)}
-                className="button CurrentUser__clear"
-              >
-                Clear
-              </button>
-            </>
-          )
-          : (
-            <p>User loading</p>
-          )
-      }
+            <h3
+              className="CurrentUser__name"
+              data-cy="userName"
+            >
+              {selectedUser?.name}
+            </h3>
+            <p className="CurrentUser__email">{selectedUser?.email}</p>
+            <p className="CurrentUser__phone">{selectedUser?.phone}</p>
+            <button
+              type="button"
+              onClick={() => onClearSelectedUser(0)}
+              className="button CurrentUser__clear"
+            >
+              Clear
+            </button>
+          </>
+        )
+        : (
+          <p>User loading</p>
+        )}
     </div>
   );
 };

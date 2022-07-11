@@ -27,7 +27,11 @@ const App: React.FC = () => {
 
   const loadSelectedUser = useCallback(
     (newSelectedUserId: number) => {
-      setSelectedUserId(newSelectedUserId);
+      try {
+        setSelectedUserId(newSelectedUserId);
+      } catch {
+        setSelectedUserId(0);
+      }
     },
     [selectedUserId],
   );
@@ -65,7 +69,7 @@ const App: React.FC = () => {
         break;
 
       default:
-        throw Error('Something went wrong');
+        setTodos([]);
     }
   };
 
@@ -83,12 +87,13 @@ const App: React.FC = () => {
 
       <div className="App__content">
         <div className="App__content-container">
-          {selectedUserId ? (
-            <CurrentUser
-              userId={selectedUserId}
-              onClearSelectedUser={loadSelectedUser}
-            />
-          ) : 'No user selected'}
+          {selectedUserId > 0
+            ? (
+              <CurrentUser
+                userId={selectedUserId}
+                onClearSelectedUser={loadSelectedUser}
+              />
+            ) : 'No user is selected'}
         </div>
       </div>
     </div>

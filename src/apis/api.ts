@@ -7,8 +7,8 @@ export const getAllTodos = (): Promise<Todo[]> => (
     .then(response => response.json())
 );
 
-export const getUser = async (id: number): Promise<User> => {
-  const userFromServer = await fetch(`${BASE_URL}/users/${id.toString()}`)
+export const getUser = async (id: number): Promise<User | null> => {
+  const userFromServer = await fetch(`${BASE_URL}/users/${id}`)
     .then(response => response.json());
 
   return userFromServer;
