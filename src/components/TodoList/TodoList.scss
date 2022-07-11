@@ -28,4 +28,17 @@
     background-color: #ffe0db;
     color: #ff3626;
   }
+
+  &__search-box,
+  &__filter-box {
+    border-radius: 10px;
+    padding: 20px;
+    border: #e2e2e2;
+    background-color: #ffe0db;
+    font-size: 14px;
+  }
+
+  &__search-box {
+    margin-right: 10px;
+  }
 }

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { Todo } from './react-app-env';
-import { getAllTodos } from './apis/api';
+import { getAllTodos, getUser } from './apis/api';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 
@@ -26,14 +26,18 @@ const App: React.FC = () => {
   );
 
   const loadSelectedUser = useCallback(
-    (newSelectedUserId: number) => {
+    async (newSelectedUserId: number) => {
       try {
-        setSelectedUserId(newSelectedUserId);
+        const checkUser = await getUser(newSelectedUserId);
+
+        if (checkUser?.id) {
+          setSelectedUserId(newSelectedUserId);
+        }
       } catch {
         setSelectedUserId(0);
       }
     },
-    [selectedUserId],
+    [],
   );
 
   const searchTodos = async (criteria: string) => {

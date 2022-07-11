@@ -27,6 +27,8 @@ export const TodoList: React.FC<TodoListProps> = (
       <h2>Todos:</h2>
 
       <input
+        className="TodoList__search-box"
+        placeholder="Type search string"
         value={query}
         type="text"
         data-cy="filterByTitle"
@@ -37,6 +39,7 @@ export const TodoList: React.FC<TodoListProps> = (
       />
 
       <select
+        className="TodoList__filter-box"
         name="criteria"
         id="criteria"
         onChange={(event) => onSelectCriteria(event.target.value)}
