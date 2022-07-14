@@ -3,12 +3,6 @@ import { getUser } from '../../api\'s/api';
 import './CurrentUser.scss';
 
 type HandleSetSelectedUserId = (id: number) => void;
-type User = {
-  email: string;
-  id: number;
-  name: string;
-  phone: string;
-};
 
 interface Props {
   handleSetSelectedUserId: HandleSetSelectedUserId;
@@ -31,7 +25,11 @@ export const CurrentUser: React.FC<Props> = ({
   return (
     <div className="CurrentUser">
       {user?.id
-        ? <h2 className="CurrentUser__title"><span>{`Selected user: ${user?.id}`}</span></h2>
+        ? (
+          <h2 className="CurrentUser__title">
+            <span>{`Selected user: ${user?.id}`}</span>
+          </h2>
+        )
         : <h2>User was not found</h2>}
 
       <h3 className="CurrentUser__name">{user?.name}</h3>

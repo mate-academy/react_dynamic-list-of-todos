@@ -3,13 +3,6 @@ import cn from 'classnames';
 import { getTodos } from '../../api\'s/api';
 import './TodoList.scss';
 
-type Todo = {
-  completed: boolean;
-  id: number;
-  title: string;
-  userId: number;
-};
-
 type HandleSetSelectedUserId = (id: number) => void;
 
 interface Props {
@@ -32,21 +25,24 @@ export const TodoList: React.FC<Props> = ({
       });
   }, []);
 
+  const queryMatched = (title: string) => (
+    title.toLowerCase().includes(query.toLowerCase())
+  );
+
   function prepareTodos() {
     switch (todosCategory) {
       case 'active':
-        return todos.filter(({ title, completed }) => {
-          return title.toLowerCase().includes(query.toLowerCase())
-            && completed === false;
-        });
+        return todos.filter(({ title, completed }) => (
+          queryMatched(title) && completed === false
+        ));
       case 'completed':
-        return todos.filter(({ title, completed }) => {
-          return title.toLowerCase().includes(query.toLowerCase()) && completed;
-        });
+        return todos.filter(({ title, completed }) => (
+          queryMatched(title) && completed
+        ));
       default:
-        return todos.filter(({ title }) => {
-          return title.toLowerCase().includes(query.toLowerCase());
-        });
+        return todos.filter(({ title }) => (
+          queryMatched(title)
+        ));
     }
   }
 
