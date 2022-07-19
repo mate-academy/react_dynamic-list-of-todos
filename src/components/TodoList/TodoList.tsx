@@ -10,44 +10,44 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('all');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodo().then(todo => {
-      setTodos(todo);
-      setVisibleTodos(todo);
-    });
+    const fetchTodos = async () => {
+      const todosFromServer = await getTodo();
+
+      setTodos(todosFromServer);
+      setVisibleTodos(todosFromServer);
+    };
+
+    try {
+      fetchTodos();
+    } catch (error) {
+      throw new Error('Failed to load todos from server');
+    }
   }, []);
 
   const onFilteringByQuery = () => {
-    if (visibleTodos === null) {
-      setTodos(null);
-    } else {
-      setTodos([...visibleTodos].filter(
-        todo => todo.title.toLowerCase().includes(query.toLowerCase()),
-      ));
-    }
+    setVisibleTodos([...visibleTodos].filter(
+      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    ));
   };
 
-  const onFilteringByStatus = () => {
-    if (visibleTodos === null) {
-      setTodos(null);
-    } else {
-      setTodos([...visibleTodos].filter(todo => {
-        switch (filterByStatus) {
-          case 'active':
-            return !todo.completed;
+  const onFilteringByStatus = (sortBy: string) => {
+    switch (sortBy) {
+      case 'active':
+        setVisibleTodos([...todos].filter(todo => !todo.completed));
+        break;
 
-          case 'completed':
-            return todo.completed;
+      case 'completed':
+        setVisibleTodos([...todos].filter(todo => todo.completed));
+        break;
 
-          default:
-            return todo;
-        }
-      }));
+      default:
+        setVisibleTodos([...todos]);
     }
   };
 
@@ -70,21 +70,19 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
   };
 
   const randomize = () => {
-    if (todos !== null) {
-      const randomizedArray = [...todos];
-      let currentIndex = randomizedArray.length;
-      let randomIndex;
+    const randomizedArray = [...visibleTodos];
+    let currentIndex = randomizedArray.length;
+    let randomIndex;
 
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
 
-        [randomizedArray[currentIndex], randomizedArray[randomIndex]]
-          = [randomizedArray[randomIndex], randomizedArray[currentIndex]];
-      }
-
-      setTodos(randomizedArray);
+      [randomizedArray[currentIndex], randomizedArray[randomIndex]]
+        = [randomizedArray[randomIndex], randomizedArray[currentIndex]];
     }
+
+    setVisibleTodos(randomizedArray);
   };
 
   return (
@@ -110,7 +108,7 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
           value={filterByStatus}
           onChange={(event) => {
             handleFilterChange(event);
-            onFilteringByStatus();
+            onFilteringByStatus(event.target.value);
           }}
         >
           <option value="all">All</option>

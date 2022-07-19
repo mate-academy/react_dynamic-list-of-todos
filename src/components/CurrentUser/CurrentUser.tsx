@@ -10,7 +10,8 @@ type Props = {
 };
 
 export const CurrentUser: React.FC<Props> = React.memo(({
-  userId, onUserIdChange,
+  userId,
+  onUserIdChange,
 }) => {
   const [
     selectedUser,
