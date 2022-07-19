@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { getTodo } from '../../api/api';
 import { Todo } from '../../react-app-env';
@@ -9,66 +9,82 @@ type Props = {
   onUserIdChange: (userId: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ onUserIdChange }) => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
+  const [todos, setTodos] = useState<Todo[] | null>(null);
   const [query, setQuery] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('all');
+  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
-    getTodo().then(todo => setTodos(todo));
+    getTodo().then(todo => {
+      setTodos(todo);
+      setVisibleTodos(todo);
+    });
   }, []);
 
-  const handleQueryChange = (
+  const onFilteringByQuery = () => {
+    if (visibleTodos === null) {
+      setTodos(null);
+    } else {
+      setTodos([...visibleTodos].filter(
+        todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+      ));
+    }
+  };
+
+  const onFilteringByStatus = () => {
+    if (visibleTodos === null) {
+      setTodos(null);
+    } else {
+      setTodos([...visibleTodos].filter(todo => {
+        switch (filterByStatus) {
+          case 'active':
+            return !todo.completed;
+
+          case 'completed':
+            return todo.completed;
+
+          default:
+            return todo;
+        }
+      }));
+    }
+  };
+
+  const handleQueryChange = useCallback((
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuery(event.target.value);
-  };
+  }, []);
 
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterChange = useCallback((
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setFilterByStatus(event.target.value);
+  }, []);
+
+  const handleUserIdChange = (todo: Todo) => {
+    if (todo.userId) {
+      onUserIdChange(todo.userId);
+    }
   };
 
-  // const randomize = (array: Todo[]) => {
-  //   const randomizerArray = array;
-  //   let currentIndex = randomizerArray.length;
-  //   let randomIndex;
+  const randomize = () => {
+    if (todos !== null) {
+      const randomizedArray = [...todos];
+      let currentIndex = randomizedArray.length;
+      let randomIndex;
 
-  //   while (currentIndex !== 0) {
-  //     randomIndex = Math.floor(Math.random() * currentIndex);
-  //     currentIndex -= 1;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
 
-  //     [randomizerArray[currentIndex], randomizerArray[randomIndex]]
-  //     = [randomizerArray[randomIndex], randomizerArray[currentIndex]];
-  //   }
-
-  //   return randomizerArray;
-  // };
-
-  let visibleTodos = todos;
-
-  if (query.length) {
-    visibleTodos = visibleTodos.filter(
-      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
-    );
-  }
-
-  if (filterByStatus !== 'all') {
-    visibleTodos = visibleTodos.filter(todo => {
-      switch (filterByStatus) {
-        case 'active':
-          return todo.completed === false;
-
-        case 'completed':
-          return todo.completed === true;
-
-        default:
-          return todo;
+        [randomizedArray[currentIndex], randomizedArray[randomIndex]]
+          = [randomizedArray[randomIndex], randomizedArray[currentIndex]];
       }
-    });
-  }
 
-  const shuffle = () => {
-    visibleTodos = visibleTodos.sort(() => 0.5 - Math.random());
+      setTodos(randomizedArray);
+    }
   };
 
   return (
@@ -82,14 +98,20 @@ export const TodoList: React.FC<Props> = ({ onUserIdChange }) => {
           type="text"
           value={query}
           placeholder="Type search word"
-          onChange={handleQueryChange}
+          onChange={(event) => {
+            handleQueryChange(event);
+            onFilteringByQuery();
+          }}
         />
 
         <select
           className="form-select"
           aria-label="Default select example"
           value={filterByStatus}
-          onChange={handleFilterChange}
+          onChange={(event) => {
+            handleFilterChange(event);
+            onFilteringByStatus();
+          }}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -98,13 +120,14 @@ export const TodoList: React.FC<Props> = ({ onUserIdChange }) => {
 
         <button
           type="button"
-          onClick={shuffle}
+          onClick={randomize}
+          className="btn btn-light"
         >
           Randomize
         </button>
 
         <ul data-cy="listOfTodos" className="TodoList__list">
-          {visibleTodos.map(todo => (
+          {visibleTodos?.map(todo => (
             <li
               key={todo.id}
               className={classNames(
@@ -133,9 +156,7 @@ export const TodoList: React.FC<Props> = ({ onUserIdChange }) => {
                 "
                 type="button"
                 onClick={() => {
-                  if (todo.userId) {
-                    onUserIdChange(todo.userId);
-                  }
+                  handleUserIdChange(todo);
                 }}
               >
                 {`User #${todo.userId}`}
@@ -146,4 +167,4 @@ export const TodoList: React.FC<Props> = ({ onUserIdChange }) => {
       </div>
     </div>
   );
-};
+});

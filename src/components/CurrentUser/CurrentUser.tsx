@@ -9,8 +9,13 @@ type Props = {
   onUserIdChange: (userId: number) => void,
 };
 
-export const CurrentUser: React.FC<Props> = ({ userId, onUserIdChange }) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+export const CurrentUser: React.FC<Props> = React.memo(({
+  userId, onUserIdChange,
+}) => {
+  const [
+    selectedUser,
+    setSelectedUser,
+  ] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(userId).then(user => setSelectedUser(user));
@@ -26,7 +31,9 @@ export const CurrentUser: React.FC<Props> = ({ userId, onUserIdChange }) => {
         data-cy="userName"
         className="CurrentUser__name"
       >
-        {selectedUser?.name}
+        {selectedUser && (
+          selectedUser.name
+        )}
       </h3>
 
       <p className="CurrentUser__email">{selectedUser?.email}</p>
@@ -43,4 +50,4 @@ export const CurrentUser: React.FC<Props> = ({ userId, onUserIdChange }) => {
       </button>
     </div>
   );
-};
+});
