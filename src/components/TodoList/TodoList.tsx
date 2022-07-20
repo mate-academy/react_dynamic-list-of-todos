@@ -40,35 +40,41 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
     return title.toLowerCase().includes(query.toLowerCase());
   };
 
+  useEffect(() => {
+    switch (filterByStatus) {
+      case SortType.ACTIVE:
+        setVisibleTodos(todos.filter(todo => !todo.completed
+          && handleQueryFiltering(todo.title)));
+        break;
+
+      case SortType.COMPLETED:
+        setVisibleTodos(todos.filter(todo => todo.completed
+          && handleQueryFiltering(todo.title)));
+        break;
+
+      default:
+        setVisibleTodos(todos.filter(todo => {
+          return handleQueryFiltering(todo.title);
+        }));
+    }
+  }, [filterByStatus]);
+
+  useEffect(() => {
+    setVisibleTodos(todos.filter(
+      todo => handleQueryFiltering(todo.title),
+    ));
+  }, [query]);
+
   const handleQueryChange = useCallback((
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuery(event.target.value);
-    setVisibleTodos([...todos].filter(
-      todo => handleQueryFiltering(todo.title),
-    ));
   }, [query]);
 
   const handleFilterChange = useCallback((
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setFilterByStatus(event.target.value);
-    switch (filterByStatus) {
-      case SortType.ACTIVE:
-        setVisibleTodos([...todos].filter(todo => !todo.completed
-          && handleQueryFiltering(todo.title)));
-        break;
-
-      case SortType.COMPLETED:
-        setVisibleTodos([...todos].filter(todo => todo.completed
-          && handleQueryFiltering(todo.title)));
-        break;
-
-      default:
-        setVisibleTodos([...todos].filter(todo => {
-          return handleQueryFiltering(todo.title);
-        }));
-    }
   }, [filterByStatus]);
 
   const handleUserIdChange = (todo: Todo) => {
