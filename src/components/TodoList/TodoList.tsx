@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import classNames from 'classnames';
+import { TodoInfo } from '../TodoInfo';
 import { getTodo } from '../../api/api';
 import { Todo } from '../../react-app-env';
 
@@ -8,6 +8,12 @@ import './TodoList.scss';
 type Props = {
   onUserIdChange: (userId: number) => void,
 };
+
+enum SortType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -30,38 +36,40 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
     }
   }, []);
 
-  const onFilteringByQuery = () => {
-    setVisibleTodos([...visibleTodos].filter(
-      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
-    ));
-  };
-
-  const onFilteringByStatus = (sortBy: string) => {
-    switch (sortBy) {
-      case 'active':
-        setVisibleTodos([...todos].filter(todo => !todo.completed));
-        break;
-
-      case 'completed':
-        setVisibleTodos([...todos].filter(todo => todo.completed));
-        break;
-
-      default:
-        setVisibleTodos([...todos]);
-    }
+  const handleQueryFiltering = (title: string) => {
+    return title.toLowerCase().includes(query.toLowerCase());
   };
 
   const handleQueryChange = useCallback((
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuery(event.target.value);
-  }, []);
+    setVisibleTodos([...todos].filter(
+      todo => handleQueryFiltering(todo.title),
+    ));
+  }, [query]);
 
   const handleFilterChange = useCallback((
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setFilterByStatus(event.target.value);
-  }, []);
+    switch (filterByStatus) {
+      case SortType.ACTIVE:
+        setVisibleTodos([...todos].filter(todo => !todo.completed
+          && handleQueryFiltering(todo.title)));
+        break;
+
+      case SortType.COMPLETED:
+        setVisibleTodos([...todos].filter(todo => todo.completed
+          && handleQueryFiltering(todo.title)));
+        break;
+
+      default:
+        setVisibleTodos([...todos].filter(todo => {
+          return handleQueryFiltering(todo.title);
+        }));
+    }
+  }, [filterByStatus]);
 
   const handleUserIdChange = (todo: Todo) => {
     if (todo.userId) {
@@ -98,7 +106,6 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
           placeholder="Type search word"
           onChange={(event) => {
             handleQueryChange(event);
-            onFilteringByQuery();
           }}
         />
 
@@ -108,12 +115,11 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
           value={filterByStatus}
           onChange={(event) => {
             handleFilterChange(event);
-            onFilteringByStatus(event.target.value);
           }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SortType.ALL}>All</option>
+          <option value={SortType.ACTIVE}>Active</option>
+          <option value={SortType.COMPLETED}>Completed</option>
         </select>
 
         <button
@@ -124,44 +130,11 @@ export const TodoList: React.FC<Props> = React.memo(({ onUserIdChange }) => {
           Randomize
         </button>
 
-        <ul data-cy="listOfTodos" className="TodoList__list">
-          {visibleTodos?.map(todo => (
-            <li
-              key={todo.id}
-              className={classNames(
-                'TodoList__item',
-                {
-                  'TodoList__item--checked': todo.completed,
-                  'TodoList__item--unchecked': !todo.completed,
-                },
-              )}
-            >
-              <label>
-                <input
-                  checked={todo.completed}
-                  type="checkbox"
-                  readOnly
-                />
-                <p>{todo.title}</p>
-              </label>
+        <TodoInfo
+          visibleTodos={visibleTodos}
+          handleUserIdChange={handleUserIdChange}
+        />
 
-              <button
-                data-cy="userButton"
-                className="
-                  TodoList__user-button
-                  TodoList__user-button--selected
-                  button
-                "
-                type="button"
-                onClick={() => {
-                  handleUserIdChange(todo);
-                }}
-              >
-                {`User #${todo.userId}`}
-              </button>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
