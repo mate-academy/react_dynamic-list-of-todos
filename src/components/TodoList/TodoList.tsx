@@ -1,44 +1,56 @@
+/* eslint-disable max-len */
 import React from 'react';
-import './TodoList.scss';
 
 export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+  <table
+    data-cy="listOfTodos"
+    className="table is-narrow is-fullwidth is-size-5 has-text-weight-medium"
+  >
+    <tbody>
+      <tr className="has-background-success-light has-text-success">
+        <td className="is-vcentered">
+          <span className="icon">
+            <i className="fas fa-check-square" />
+          </span>
+        </td>
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+        <td className="is-vcentered is-expanded">
+          delectus aut autem
+        </td>
 
+        <td className="has-text-right is-vcentered">
           <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
+            className="button is-warning"
+            disabled
             type="button"
+            data-cy="userButton"
           >
             User&nbsp;#1
           </button>
-        </li>
+        </td>
+      </tr>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+      <tr className="has-background-danger-light has-text-danger">
+        <td className="is-vcentered">
+          <span className="icon">
+            <i className="fas fa-square-xmark" />
+          </span>
+        </td>
 
+        <td className="is-vcentered is-expanded">
+          distinctio vitae autem nihil ut molestias quo
+        </td>
+
+        <td className="has-text-right is-vcentered">
           <button
-            className="TodoList__user-button button"
+            className="button is-warning"
             type="button"
+            data-cy="userButton"
           >
             User&nbsp;#2
           </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 );

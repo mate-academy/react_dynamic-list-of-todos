@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
-import './App.scss';
-import './styles/general.scss';
+/* eslint-disable max-len */
+import React from 'react';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
+import { TodoFilter } from './components/TodosFilter';
 
 const App: React.FC = () => {
-  const [
-    selectedUserId,
-    // setSelectedUserId,
-  ] = useState(0);
-
   return (
-    <div className="App">
-      <div className="App__sidebar">
-        <TodoList />
-      </div>
+    <div className="section">
+      <div className="container">
+        <div className="columns">
+          <div className="column">
+            <div className="box">
+              <h1 className="title">Todos:</h1>
 
-      <div className="App__content">
-        <div className="App__content-container">
-          {selectedUserId ? (
+              <div className="block">
+                <TodoFilter />
+              </div>
+
+              <div className="block">
+                <TodoList />
+              </div>
+            </div>
+          </div>
+
+          <div className="column is-4 is-3-desktop">
+            <div className="box has-background-grey-dark has-text-white has-text-weight-bold">
+              User not selected
+            </div>
             <CurrentUser />
-          ) : 'No user selected'}
+          </div>
         </div>
       </div>
     </div>

@@ -1,12 +1,18 @@
 import React from 'react';
-import './CurrentUser.scss';
 
 export const CurrentUser: React.FC = () => (
-  <div className="CurrentUser">
-    <h2 className="CurrentUser__title"><span>Selected user: 2</span></h2>
+  <article className="message">
+    <div className="message-header">
+      <p>Selected user: 1</p>
+      <button type="button" className="delete" aria-label="delete" />
+    </div>
+    <div className="message-body">
+      <h3 data-cy="userName">
+        Mrs. Dennis Schulist
+      </h3>
 
-    <h3 className="CurrentUser__name">Ervin Howell</h3>
-    <p className="CurrentUser__email">Shanna@melissa.tv</p>
-    <p className="CurrentUser__phone">010-692-6593 x09125</p>
-  </div>
+      <p>Karley_Dach@jasper.info</p>
+      <p>1-477-935-8478 x6430</p>
+    </div>
+  </article>
 );
