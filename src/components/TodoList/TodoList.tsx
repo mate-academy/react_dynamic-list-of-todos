@@ -1,44 +1,130 @@
-import React from 'react';
+import React, {
+  useState, useEffect, useCallback,
+} from 'react';
+import { debounce } from 'lodash';
+import classNames from 'classnames';
+import { TodoListProps } from '../../types';
 import './TodoList.scss';
+import { getTodos } from '../../api';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+export const TodoList: React.FC<TodoListProps> = ({ todos, onUserSelect }) => {
+  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [filterBy, setFilterBy] = useState('all');
+  const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+  const filterTodos = () => {
+    let todosByFilter = todos;
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+    switch (filterBy) {
+      case 'not-completed':
+        todosByFilter = todos?.filter(todo => !todo.completed) || null;
+        break;
+      case 'completed':
+        todosByFilter = todos?.filter(todo => todo.completed) || null;
+        break;
+      default:
+        break;
+    }
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
+    setFilteredTodos(todosByFilter);
+    setVisibleTodos(todosByFilter);
+    setQuery('');
+  };
 
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+  const findTodo = () => {
+    if (!appliedQuery.length) {
+      setVisibleTodos(filteredTodos);
+
+      return;
+    }
+
+    const foundTodos = filteredTodos
+      ?.filter(todo => todo.title.toLowerCase()
+        .includes(appliedQuery.toLowerCase()));
+
+    setVisibleTodos(foundTodos || null);
+  };
+
+  const applyQuery = useCallback(
+    debounce(setAppliedQuery, 500),
+    [],
+  );
+
+  useEffect(() => {
+    findTodo();
+  }, [appliedQuery]);
+
+  useEffect(() => {
+    (async () => {
+      setFilteredTodos(await getTodos());
+      setVisibleTodos(await getTodos());
+    })();
+  }, []);
+
+  useEffect(() => {
+    filterTodos();
+  }, [filterBy]);
+
+  return (
+    <div className="TodoList">
+      <h2>Todos:</h2>
+      <input
+        type="text"
+        placeholder="Search"
+        data-cy="filterByTitle"
+        value={query}
+        onChange={({ target }) => {
+          setQuery(target.value);
+          applyQuery(target.value);
+          findTodo();
+        }}
+      />
+      <select
+        name="status"
+        value={filterBy}
+        onChange={({ target }) => setFilterBy(target.value)}
+      >
+        <option value="all">
+          All
+        </option>
+        <option value="not-completed">
+          Not completed
+        </option>
+        <option value="completed">
+          Completed
+        </option>
+      </select>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list" data-cy="listOfTodos">
+          {visibleTodos && (
+            visibleTodos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames('TodoList__item', {
+                  'TodoList__item--checked': todo.completed,
+                  'TodoList__item--unchecked': !todo.completed,
+                })}
+              >
+                <label>
+                  <input type="checkbox" />
+                  <p>{todo.title}</p>
+                </label>
+                <button
+                  data-cy="userButton"
+                  className="TodoList__user-button button"
+                  type="button"
+                  onClick={() => onUserSelect(todo.userId)}
+                >
+                  User&nbsp;#
+                  {todo.userId}
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
