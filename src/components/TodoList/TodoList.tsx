@@ -35,11 +35,14 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onUserSelect }) => {
 
   const findTodo = () => {
     if (!appliedQuery.length) {
+      setVisibleTodos(filteredTodos);
+
       return;
     }
 
     const foundTodos = filteredTodos
-      ?.filter(todo => todo.title.includes(appliedQuery.toLowerCase()));
+      ?.filter(todo => todo.title.toLowerCase()
+        .includes(appliedQuery.toLowerCase()));
 
     setVisibleTodos(foundTodos || null);
   };
