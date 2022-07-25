@@ -1,2 +1,0 @@
-(this["webpackJsonpreact_dynamic-list-of-todos"]=this["webpackJsonpreact_dynamic-list-of-todos"]||[]).push([[0],{3:function(t,n,e){t.exports=e(9)},8:function(t,n,e){},9:function(t,n,e){"use strict";e.r(n);var o=e(0),c=e.n(o),s=e(2),a=e.n(s),i=(e(8),function(){return c.a.createElement("h1",null,"Dynamic list of TODOs")});a.a.render(c.a.createElement(i,null),document.getElementById("root"))}},[[3,1,2]]]);
-//# sourceMappingURL=main.42018c63.chunk.js.map
