@@ -1,17 +1,24 @@
-// const BASE_URL = 'https://mate.academy/students-api';
+import { Todo } from './types/Todo';
+import { User } from './types/User';
 
-// function wait(delay: number): Promise<void> {
-//   return new Promise(resolve => {
-//     setTimeout(resolve, delay);
-//   });
-// }
+const BASE_URL = 'https://mate.academy/students-api';
 
-// function get<T>(url: string): Promise<T> {
-//   return wait(1000)
-//     .then(() => fetch(BASE_URL + url))
-//     .then(res => res.json());
-// }
+function wait(delay: number): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, delay);
+  });
+}
 
-export const getTodos = () => {};
+function get<T>(url: string): Promise<T> {
+  return wait(1000)
+    .then(() => fetch(BASE_URL + url))
+    .then(res => res.json());
+}
 
-export const getUser = () => {};
+export const getTodos = () => {
+  return get<Todo[]>('/todos');
+};
+
+export const getUser = (id: number | null) => {
+  return get<User>(`/users/${id}`);
+};
