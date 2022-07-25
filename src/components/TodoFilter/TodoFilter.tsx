@@ -5,7 +5,7 @@ export const TodoFilter = () => (
         <select>
           <option value="all">All</option>
           <option value="active">Active</option>
-          <option value="completed">Done</option>
+          <option value="completed">Completed</option>
         </select>
       </span>
     </p>
@@ -15,7 +15,6 @@ export const TodoFilter = () => (
         data-cy="filterByTitle"
         type="text"
         className="input"
-        value="aute"
         placeholder="Search..."
       />
       <span className="icon is-left">
@@ -26,12 +25,6 @@ export const TodoFilter = () => (
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button type="button" className="delete has-text" />
       </span>
-    </p>
-
-    <p className="control">
-      <button type="submit" className="button is-success has-text-weight-bold">
-        Search
-      </button>
     </p>
   </form>
 );
