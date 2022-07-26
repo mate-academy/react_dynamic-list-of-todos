@@ -8,10 +8,6 @@ interface Props {
 
 export const TodoFilter: React.FC<Props> = ({ todos, onSetVisibleTodos }) => {
   const [query, setQuery] = useState('');
-  // const lowerCaseCheck = (objVal: string) => {
-  //   return objVal.toLowerCase().includes(query.toLowerCase());
-  // };
-
   const handleSelectChange = ({
     target,
   }: React.ChangeEvent<HTMLSelectElement>) => {
