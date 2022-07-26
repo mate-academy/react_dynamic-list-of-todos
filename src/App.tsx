@@ -15,7 +15,7 @@ enum SortType {
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<number>(0);
   const [selectedTodo, setSelectedTodo] = useState<number>(0);
   const [filteredBy, setFilteredBy] = useState<string>(SortType.ALL);
