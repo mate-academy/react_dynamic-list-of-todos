@@ -1,13 +1,24 @@
-import React from 'react';
-import { Loader } from '../Loader';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from 'react';
+// import { Loader } from '../Loader';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  user: User | null,
+};
+
+export const TodoModal: React.FC<Props> = ({ user }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // console.log(user);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
-        <Loader />
+      {isLoaded ? (
+        // <Loader />
+        <div>Hello</div>
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
