@@ -10,7 +10,7 @@ type ListOfTodos = {
   currentQuery: string,
 };
 
-const filterTodosByStatus = (
+const filterTodos = (
   todos: Todo[],
   filteringOptions: string,
   query: string,
@@ -39,7 +39,7 @@ export const TodoList: React.FC<ListOfTodos> = ({
   filteringOptions,
   currentQuery,
 }) => {
-  const preparedTodos = filterTodosByStatus(
+  const preparedTodos = filterTodos(
     todoItems,
     filteringOptions,
     currentQuery,

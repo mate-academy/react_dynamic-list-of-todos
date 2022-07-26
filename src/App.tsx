@@ -9,7 +9,6 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
