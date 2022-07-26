@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Modal = {
+  todos: Todo[],
+  selectedUserId: number,
+  selectedTodoId: number,
+  onModalClose(): void,
+};
+
+export const TodoModal: React.FC<Modal> = ({
+  selectedUserId,
+  selectedTodoId,
+  onModalClose,
+  todos,
+}) => {
+  const [userInfo, setUserInfo] = useState<User | null>(() => {
+    return getUser(selectedUserId)
+      .then(response => setUserInfo(response));
+  });
+
+  const [userTodo, setUserTodo] = useState<Todo | null>(() => {
+    return todos.find(todo => todo.id === selectedTodoId) || null;
+  });
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!userInfo?.name ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -23,22 +47,27 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                onModalClose();
+                setUserTodo(null);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {userTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {userTodo?.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`${userInfo.email}`}>
+                {userInfo.name}
               </a>
             </p>
           </div>

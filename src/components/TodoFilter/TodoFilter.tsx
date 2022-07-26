@@ -1,8 +1,23 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+type Filter = {
+  onFilterChange(value: string): void,
+  onInputChange(value: string): void,
+  currentQuery: string,
+};
+
+export const TodoFilter: React.FC<Filter> = ({
+  currentQuery,
+  onFilterChange,
+  onInputChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={({ target }) => onFilterChange(target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -14,7 +29,9 @@ export const TodoFilter = () => (
       <input
         data-cy="searchInput"
         type="text"
+        value={currentQuery}
         className="input"
+        onChange={(event) => onInputChange(event.target.value)}
         placeholder="Search..."
       />
       <span className="icon is-left">
@@ -27,6 +44,7 @@ export const TodoFilter = () => (
           data-cy="clearSearchButton"
           type="button"
           className="delete"
+          onClick={() => onInputChange('')}
         />
       </span>
     </p>
