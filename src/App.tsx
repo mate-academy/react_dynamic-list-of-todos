@@ -6,7 +6,6 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoFilter } from './components/TodoFilter';
 import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
 
 enum SortType {
   ALL = 'all',
