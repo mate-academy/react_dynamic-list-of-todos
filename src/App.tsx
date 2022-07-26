@@ -99,7 +99,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {!!userId && (
+      {userId && (
         <TodoModal
           todo={selectUsersTodo}
           selectUser={selectUser}
