@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import './styles/general.scss';
 import { TodoList } from './components/TodoList';
@@ -9,12 +9,14 @@ const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const handleOnClickButton = (userId: number) => {
-    setSelectedUserId(userId);
-  };
+  const handleOnClickButton = useCallback(
+    (userId: number) => {
+      setSelectedUserId(userId);
+    }, [],
+  );
 
   useEffect(() => {
-    getTodos().then(response => setTodos(response));
+    getTodos().then(todosFromServer => setTodos(todosFromServer));
   }, []);
 
   return (

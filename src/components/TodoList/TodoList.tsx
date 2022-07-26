@@ -11,7 +11,7 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos, onButtonClick }) => {
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [status, setStatus] = useState('');
+  const [todoStatus, setTodoStatus] = useState('');
 
   const applyQuery = useCallback(
     debounce(setAppliedQuery, 1000),
@@ -24,12 +24,12 @@ export const TodoList: React.FC<Props> = ({ todos, onButtonClick }) => {
     return todos.filter(
       todo => todo.title.toLowerCase().includes(lowerQuery)
       && (
-        status
-          ? String(todo.completed) === status
+        todoStatus
+          ? String(todo.completed) === todoStatus
           : true
       ),
     );
-  }, [todos, appliedQuery, status]);
+  }, [todos, appliedQuery, todoStatus]);
 
   return (
     <div className="TodoList">
@@ -49,8 +49,8 @@ export const TodoList: React.FC<Props> = ({ todos, onButtonClick }) => {
       <select
         name="status"
         id="status"
-        value={status}
-        onChange={event => setStatus(event.target.value)}
+        value={todoStatus}
+        onChange={event => setTodoStatus(event.target.value)}
       >
         <option value="">All tasks</option>
         <option value="true">Completed</option>
