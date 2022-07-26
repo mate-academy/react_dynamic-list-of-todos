@@ -1,11 +1,14 @@
 /* eslint-disable max-len */
 import React from 'react';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   return (
     <>
       <div className="section">
@@ -25,11 +28,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {false && (
-        <TodoModal />
-      )}
+      <TodoModal />
     </>
   );
 };
-
-export default App;

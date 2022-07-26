@@ -1,5 +1,7 @@
 # React dynamic list of TODOs
 
+> See [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
+
 You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
 and `Loader` components. Load data from [the API](https://mate-academy.github.io/fe-students-api/) and show it using the given components.
 

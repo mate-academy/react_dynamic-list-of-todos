@@ -1,109 +1,297 @@
 const page = {
-  clickButton(value) {
-    cy.getByDataCy('userButton')
-      .contains(value)
+  getByDataCy: (name) => cy.get(`[data-cy="${name}"]`),
+  mockTodos: () => cy.intercept('**/todos.json', { fixture: 'todos' }),
+  mockUser1: () => cy.intercept('**/users/1.json', { fixture: 'userOne' }),
+  mockUser2: () => cy.intercept('**/users/2.json', { fixture: 'userTwo' }),
+
+  todos: () => page.getByDataCy('todo'),
+  modal: () => page.getByDataCy('modal'),
+  loader: () => page.getByDataCy('loader'),
+  searchInput: () => page.getByDataCy('searchInput'),
+  statusSelect: () => page.getByDataCy('statusSelect'),
+  clearSearchButton: () => page.getByDataCy('clearSearchButton'),
+
+  selectTodo: (index) => {
+    return page.todos()
+      .eq(index)
+      .find(`[data-cy="selectButton"]`)
       .click();
-  }
+  },
 };
 
 describe('Page', () => {
   beforeEach(() => {
-    cy.intercept('**/todos', { fixture: 'todos' });
-
+    page.mockTodos();
     cy.visit('/');
   });
 
-  it.only('tests are disabled for now', () => {
-    expect(true)
-      .to.be.true;
-  });
+  it('should show loader before loading todos', () => {
+    cy.clock();
 
-  it('should update user details after selecting a different user', () => {
-    cy.intercept('**/users/1', { fixture: 'userOne' });
-    cy.intercept('**/users/2', { fixture: 'userTwo' });
+    page.loader()
+      .should('exist');
 
-    cy.visit('/');
-
-    page.clickButton('1');
-
-    cy.getByDataCy('userName')
-      .should('have.text', 'Chelsey Dietrich');
-
-    page.clickButton('2');
-
-    cy.getByDataCy('userName')
-      .should('have.text', 'Mrs. Dennis Schulist');
-  });
-
-  it('should not send request to the server after selecting the same user again', () => {
-    Cypress.on('uncaught:exception', (err) => {
-      if (err.message.includes('Unexpected end of JSON input')) {
-        return false
-      };
-    });
-
-    cy.intercept('**/todos', { fixture: 'todos' });
-    cy.intercept('**/users/*', cy.spy().as('apiCall'));
-
-    cy.visit('/');
-
-    page.clickButton('1');
-
-    page.clickButton('1');
-
-    cy.get('@apiCall')
-      .its('callCount')
-      .should('equal', 1);
-  });
-
-  it('should clear selected user after clicking "Clear" button', () => {
-    cy.intercept('**/users/1', { fixture: 'userOne' });
-
-    cy.visit('/');
-
-    page.clickButton('1');
-
-    cy.getByDataCy('userName')
-      .should('have.text', 'Chelsey Dietrich');
-
-    cy.get('button')
-      .contains(/[A-z]lear/)
-      .click();
-
-    cy.getByDataCy('userName')
+    page.todos()
       .should('not.exist');
   });
 
-  it('should filter todos by title', () => {
-    cy.getByDataCy('filterByTitle')
-      .type('Todo 4');
+  it('should have an empty filter by default', () => {
+    page.searchInput()
+      .should('have.value', '');
 
-    cy.get('li')
-      .should('have.length', 1)
-      .and('contain', 'Todo 4');
+    page.statusSelect()
+      .should('have.value', 'all')
   });
 
-  it('should select all todos using selector', () => {
-    cy.get('select')
-      .select('all');
+  it('should show all the loaded todos', () => {
+    cy.clock();
+    cy.tick(5000);
 
-    cy.get('li')
+    page.loader()
+      .should('not.exist');
+    
+    page.todos()
+      .should('have.length', 5);
+
+    page.todos()
+      .first()
+      .should('contain.text', 'Delectus aut autem')
+      .find('td')
+      .first()
+      .should('have.text', '1');
+
+    page.todos()
+      .last()
+      .should('contain.text', 'Distinctio vitae autem nihil ut molestias quo')
+      .find('td')
+      .first()
+      .should('have.text', '22');
+  });
+
+  it('should show completed icons only for completed todos', () => {
+    page.todos().eq(0).find('[data-cy="iconCompleted"]').should('not.exist');
+    page.todos().eq(1).find('[data-cy="iconCompleted"]').should('not.exist');
+    page.todos().eq(2).find('[data-cy="iconCompleted"]').should('exist');
+    page.todos().eq(3).find('[data-cy="iconCompleted"]').should('not.exist');
+    page.todos().eq(4).find('[data-cy="iconCompleted"]').should('exist');
+  });
+
+  it('should allow to select only active todos', () => {
+    page.statusSelect()
+      .select('active')
+      .should('have.value', 'active');
+
+    page.todos()
+      .should('have.length', 3)
+
+    page.todos().eq(0).should('contain.text', 'Delectus aut autem')
+    page.todos().eq(1).should('contain.text', 'Quis ut nam facilis et officia qui')
+    page.todos().eq(2).should('contain.text', 'Suscipit repellat esse quibusdam vuptatem incidunt')
+  });
+
+  it('should allow to select only completed todos', () => {
+    page.statusSelect()
+      .select('completed')
+      .should('have.value', 'completed');
+
+    page.todos()
+      .should('have.length', 2)
+
+    page.todos().eq(0).should('contain.text', 'Et porro tempora')
+    page.todos().eq(1).should('contain.text', 'Distinctio vitae autem nihil ut molestias quo')
+  });
+
+  it('should allow to reset the status', () => {
+    page.statusSelect()
+      .select('completed')
+      .select('all')
+      .should('have.value', 'all');
+
+    page.todos()
+      .should('have.length', 5);
+  });
+
+  it('should allow to filter todos by query', () => {
+    page.searchInput()
+      .type('tem')
+      .should('have.value', 'tem');
+
+    page.todos()
+      .should('have.length', 4);
+
+    page.todos().eq(0).should('contain.text', 'Delectus aut autem');
+    page.todos().eq(1).should('contain.text', 'Et porro tempora');
+  });
+
+  it('should ignore search case', () => {
+    page.searchInput()
+      .type('TeM')
+
+    page.todos()
+      .should('have.length', 4);
+  });
+
+  it('should ignore todo title case', () => {
+    page.searchInput()
+      .type('d')
+
+    page.todos()
       .should('have.length', 3);
+
+    page.todos().eq(0).should('contain.text', 'Delectus aut autem');
+    page.todos().eq(1).should('contain.text', 'Suscipit repellat esse quibusdam vuptatem incidunt');
+    page.todos().eq(2).should('contain.text', 'Distinctio vitae autem nihil ut molestias quo');
   });
 
-  it('should select only active todos using selector', () => {
-    cy.get('select')
-      .select('completed');
+  it('should show no todos if nothing matches the search query', () => {
+    page.searchInput()
+      .type('xxx')
 
-    cy.get('li')
-      .should('have.length', 1);
+    page.todos()
+      .should('have.length', 0);
   });
 
-  it('should select only completed todos using selector', () => {
-    cy.get('select')
-      .select('active');
+  it('should allow to reset search query', () => {
+    page.searchInput()
+      .type('xxx')
+      .type('{selectAll}{backspace}')
+      .should('have.value', '')
 
-    cy.get('li')
-      .should('have.length', 2);
+    page.todos()
+      .should('have.length', 5);
+  });
+
+  it('should how show clear button by default', () => {
+    page.clearSearchButton()
+      .should('not.exist')
+  });
+
+  it('should show clear button when seach query is not empty', () => {
+    page.searchInput()
+      .type('xxx')
+
+    page.clearSearchButton()
+      .should('exist')
+  });
+
+  it('should hide clear button when seach query becomes empty', () => {
+    page.searchInput()
+      .type('xxx')
+      .type('{selectAll}{backspace}')
+
+    page.clearSearchButton()
+      .should('not.exist')
+  });
+
+  it('should allow to clear search query using clear button', () => {
+    page.searchInput()
+      .type('tem');
+
+    page.clearSearchButton()
+      .click();
+
+    page.searchInput()
+      .should('have.value', '')
+
+    page.todos()
+      .should('have.length', 5);
+  });
+
+  it('should have only show buttons by default', () => {
+    cy.get('.fa-eye')
+      .should('have.length', 5);
+
+    cy.get('.fa-eye-slash')
+      .should('have.length', 0);
+  });
+
+  it('should not show modal by default', () => {
+    page.modal()
+      .should('not.exist');
+  });
+
+  it('should show modal when todo is selected', () => {
+    page.mockUser1();
+    page.selectTodo(1);
+      
+    page.modal()
+      .should('exist');
+  });
+
+  it('should have only a hide button for a selected todo', () => {
+    page.mockUser1();
+    page.selectTodo(1);
+
+    page.todos()
+      .eq(1)
+      .find('.fa-eye')
+      .should('not.exist');
+
+    page.todos()
+      .eq(1)
+      .find('.fa-eye-slash')
+      .should('exist');
+  });
+
+  it('should show loader when loading a user', () => {
+    page.mockUser1();
+    page.selectTodo(1);
+
+    cy.clock();
+
+    page.modal()
+      .find('[data-cy="loader"]')
+      .should('exist');
+  });
+
+  it('should hide loader when user is loaded', () => {
+    page.mockUser1();
+    page.selectTodo(1);
+
+    page.modal()
+      .find('[data-cy="loader"]')
+      .should('not.exist');
+  });
+
+  it('should show correct data for a not completed todo', () => {
+    page.mockUser1();
+    page.selectTodo(0);
+
+    page.getByDataCy('modal-header')
+      .should('have.text', 'Todo #1');
+
+    page.getByDataCy('modal-title')
+      .should('have.text', 'Delectus aut autem');
+
+    page.getByDataCy('modal-user')
+      .should('have.text', 'Planned by Leanne Graham');
+  });
+
+  it('should show correct data for a completed todo', () => {
+    page.mockUser2();
+    page.selectTodo(4);
+
+    page.getByDataCy('modal-header')
+      .should('have.text', 'Todo #22');
+
+    page.getByDataCy('modal-title')
+      .should('have.text', 'Distinctio vitae autem nihil ut molestias quo');
+
+    page.getByDataCy('modal-user')
+      .should('have.text', 'Done by Ervin Howell');
+  });
+
+  it('should close a modal with close button', () => {
+    page.mockUser2();
+    page.selectTodo(4);
+
+    page.getByDataCy('modal-close')
+      .click();
+
+    page.modal()
+      .should('not.exist');
+
+    cy.get('.fa-eye-slash')
+      .should('have.length', 0);
   });
 });
