@@ -62,53 +62,64 @@ export const TodoList: React.FC<ListOfTodos> = ({
       </thead>
 
       <tbody>
-        {preparedTodos.map(todo => (
-          <tr
-            data-cy="todo"
-            className=""
-            key={todo.title}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered" />
-            <td className="is-vcentered is-expanded">
-              <p
-                style={{ color: todo.completed === true ? 'green' : 'red' }}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              {selectedTodoId === todo.id
-                ? (
-                  <button
-                    data-cy="selectButton"
-                    className="button is-link"
-                    type="button"
-                    onClick={() => onSelectTodo(0)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  </button>
-                )
-                : (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => {
-                      onSelectTodo(todo.id);
-                      onUserSelect(todo.userId);
-                    }}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  </button>
+        {preparedTodos.map((todo) => {
+          const completionStatus = todo.completed;
+          const isSelected = selectedTodoId === todo.id;
+
+          return (
+            <tr
+              data-cy="todo"
+              className={`${isSelected ? 'has-background-info-light' : ''}`}
+              key={todo.title}
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
+                {completionStatus && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
                 )}
-            </td>
-          </tr>
-        ))}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p
+                  style={{ color: completionStatus ? 'green' : 'red' }}
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                {selectedTodoId === todo.id
+                  ? (
+                    <button
+                      data-cy="selectButton"
+                      className="button is-link"
+                      type="button"
+                      onClick={() => onSelectTodo(0)}
+                    >
+                      <span className="icon">
+                        <i className="far fa-eye-slash" />
+                      </span>
+                    </button>
+                  )
+                  : (
+                    <button
+                      data-cy="selectButton"
+                      className="button"
+                      type="button"
+                      onClick={() => {
+                        onSelectTodo(todo.id);
+                        onUserSelect(todo.userId);
+                      }}
+                    >
+                      <span className="icon">
+                        <i className="far fa-eye" />
+                      </span>
+                    </button>
+                  )}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
