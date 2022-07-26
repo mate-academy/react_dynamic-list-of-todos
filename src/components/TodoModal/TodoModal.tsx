@@ -7,12 +7,10 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | undefined,
-  selectedTodoIndex: number,
   onSelect: (todoId: number) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodoIndex,
   onSelect,
   todo,
 }) => {
@@ -22,10 +20,12 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userFromServer = await getUser(selectedTodoIndex);
+        if (todo) {
+          const userFromServer = await getUser(todo.userId);
 
-        setUser(userFromServer);
-        setLoading(false);
+          setUser(userFromServer);
+          setLoading(false);
+        }
       } catch (error) {
         setLoading(false);
       }

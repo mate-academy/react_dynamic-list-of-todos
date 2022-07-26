@@ -87,7 +87,6 @@ export const App: React.FC = () => {
       {selectedTodo > 0 && (
         <TodoModal
           todo={visibleTodos.find(todo => todo.id === selectedTodo)}
-          selectedTodoIndex={selectedTodo}
           onSelect={select}
         />
       )}
