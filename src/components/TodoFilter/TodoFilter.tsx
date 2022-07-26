@@ -56,7 +56,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
           type="text"
           className="input"
           value={query}
-          onChange={({ target }) => setQuery(target.value)}
+          onChange={event => setQuery(event.target.value)}
           placeholder="Search..."
         />
         <span className="icon is-left">
@@ -72,6 +72,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
             onClick={() => {
               onSettingTodo(todos);
               setQuery('');
+
             }}
           />
         </span>
