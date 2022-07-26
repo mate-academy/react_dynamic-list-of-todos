@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { shuffle } from 'lodash';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
         todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
     );
-  }, [filter, searchQuery]);
+  }, [filter, searchQuery, initialTodos]);
 
   const handleTodoSelect = (todo: Todo | null) => (
     setSelectedTodo(todo)
@@ -60,9 +61,14 @@ export const App: React.FC = () => {
     setFilter(value);
   };
 
-  const handleQueryChange = (value: string) => {
-    setSearchQuery(value);
-  };
+  const handleQueryChange = useCallback(
+    (value: string) => (setSearchQuery(value)),
+    [],
+  );
+
+  const hanldeShuffle = () => (
+    setInitialTodos(prev => shuffle(prev))
+  );
 
   return (
     <>
@@ -75,8 +81,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 filter={filter}
                 onFilterSelect={handleFilterSelect}
-                searchQuery={searchQuery}
                 onQueryChange={handleQueryChange}
+                onShuffle={hanldeShuffle}
               />
             </div>
 
