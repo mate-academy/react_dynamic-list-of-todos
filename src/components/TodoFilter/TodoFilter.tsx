@@ -39,13 +39,16 @@ export const TodoFilter: React.FC<Filter> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-          onClick={() => onInputChange('')}
-        />
+
+        {currentQuery && (
+          /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onInputChange('')}
+          />
+        )}
       </span>
     </p>
   </form>
