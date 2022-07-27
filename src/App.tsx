@@ -25,13 +25,16 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const getFilteredTodos = (list: string) => {
-    const completed = todos.filter(todo => todo.completed === true);
-    const active = todos.filter(todo => todo.completed === false);
+  const getFilteredTodos = () => {
+    const lowerQuery = query.toLowerCase();
+    const completed = todos
+      .filter(todo => todo.completed === true && todo.title.includes(lowerQuery));
+    const active = todos
+      .filter(todo => todo.completed === false && todo.title.includes(lowerQuery));
+    const all = todos
+      .filter(todo => todo.title.includes(lowerQuery));
 
-    setSelectedValue(list);
-
-    switch (list) {
+    switch (selectedValue) {
       case 'active':
         return setFilterTodos(active);
 
@@ -39,23 +42,13 @@ export const App: React.FC = () => {
         return setFilterTodos(completed);
 
       default:
-        return setFilterTodos(todos);
+        return setFilterTodos(all);
     }
   };
 
-  const visibleTodos = () => {
-    const lowerQuery = query.toLowerCase();
-
-    const filtered = [...todos].filter(todo => {
-      return todo.title.includes(lowerQuery);
-    });
-
-    return setFilterTodos(filtered);
-  };
-
   useEffect(() => {
-    visibleTodos();
-  }, [query]);
+    getFilteredTodos();
+  }, [query, selectedValue]);
 
   return (
     <>
@@ -66,7 +59,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                getFilteredTodos={getFilteredTodos}
+                setSelectedValue={setSelectedValue}
                 setQuery={setQuery}
                 query={query}
                 selectedValue={selectedValue}
