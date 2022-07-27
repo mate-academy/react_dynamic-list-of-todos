@@ -64,7 +64,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     sortTodos();
-  }, [sortType, query]);
+  }, [sortType, query, filteredTodos.length === 0]);
 
   return (
     <>
