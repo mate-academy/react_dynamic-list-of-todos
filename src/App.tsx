@@ -53,14 +53,6 @@ export const App: React.FC = () => {
     );
   }, [filter, searchQuery, initialTodos]);
 
-  const handleTodoSelect = (todo: Todo | null) => (
-    setSelectedTodo(todo)
-  );
-
-  const handleFilterSelect = (value: Filter) => {
-    setFilter(value);
-  };
-
   const handleQueryChange = useCallback(
     (value: string) => (setSearchQuery(value)),
     [],
@@ -80,7 +72,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filter={filter}
-                onFilterSelect={handleFilterSelect}
+                onFilterSelect={setFilter}
                 onQueryChange={handleQueryChange}
                 onShuffle={hanldeShuffle}
               />
@@ -92,7 +84,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={todos}
-                    onTodoSelect={handleTodoSelect}
+                    onTodoSelect={setSelectedTodo}
                     selectedTodoID={selectedTodo?.id || 0}
                   />
                 )}
