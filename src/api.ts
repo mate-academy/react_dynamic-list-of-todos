@@ -1,7 +1,8 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
-const BASE_URL = 'https://mate.academy/students-api';
+// eslint-disable-next-line max-len
+const BASE_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
 function wait(delay: number): Promise<void> {
   return new Promise(resolve => {
@@ -9,17 +10,15 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-async function get<T>(url: string): Promise<T> {
-  await wait(500);
-  const res = await fetch(BASE_URL + url);
+function get<T>(url: string): Promise<T> {
+  // eslint-disable-next-line prefer-template
+  const fullURL = BASE_URL + url + '.json';
 
-  return res.json();
+  return wait(1000)
+    .then(() => fetch(fullURL))
+    .then(res => res.json());
 }
 
-export const getTodos = () => {
-  return get<Todo[]>('/todos');
-};
+export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number | null) => {
-  return get<User>(`/users/${userId}`);
-};
+export const getUser = (userId: number) => get<User>(`/users/${userId}`);

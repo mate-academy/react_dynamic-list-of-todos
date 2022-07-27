@@ -1,65 +1,62 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-
-enum SortType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import React, { useEffect, useState } from 'react';
 
 type Props = {
-  changeFilteredCondition: (filterType: string) => void,
-  changeQuery: (input: string) => void,
-  query: string,
+  filteredTodos: (query: string, condition: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({
-  changeFilteredCondition,
-  changeQuery,
-  query,
-}) => {
-  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeQuery(event.target.value);
-  };
+export const TodoFilter: React.FC<Props> = ({ filteredTodos }) => {
+  const [query, setQuery] = useState('');
+  const [condition, setCondition] = useState('');
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeFilteredCondition(event.target.value);
-  };
+  useEffect(() => {
+    filteredTodos(query, condition);
+  }, [query, condition]);
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            onChange={(event) => handleStatusChange(event)}
+            data-cy="statusSelect"
+            onChange={(event) => setCondition(event.target.value)}
           >
-            <option value={SortType.ALL}>All</option>
-            <option value={SortType.ACTIVE}>Active</option>
-            <option value={SortType.COMPLETED}>Completed</option>
+            <option value="all">
+              All
+            </option>
+            <option value="active">
+              Active
+            </option>
+            <option value="completed">
+              Completed
+            </option>
           </select>
         </span>
       </p>
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
-          data-cy="filterByTitle"
+          data-cy="searchInput"
           type="text"
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleChangeQuery}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            type="button"
-            className="delete has-text"
-            onClick={() => changeQuery('')}
-          />
-        </span>
+        {query.length > 0 && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setQuery('')}
+            />
+          </span>
+        )}
       </p>
     </form>
   );
