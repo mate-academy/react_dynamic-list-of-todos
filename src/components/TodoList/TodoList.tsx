@@ -10,6 +10,10 @@ type ListOfTodos = {
   currentQuery: string,
 };
 
+function searchIncludings(str: string, subStr: string): boolean {
+  return str.toLowerCase().includes(subStr.toLowerCase());
+}
+
 const filterTodos = (
   todos: Todo[],
   filteringOptions: string,
@@ -19,16 +23,16 @@ const filterTodos = (
     case 'completed':
       return todos
         .filter(todo => todo.completed === true)
-        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+        .filter(todo => searchIncludings(todo.title, query));
 
     case 'active':
       return todos
         .filter(todo => todo.completed === false)
-        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+        .filter(todo => searchIncludings(todo.title, query));
 
     default:
       return todos
-        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+        .filter(todo => searchIncludings(todo.title, query));
   }
 };
 
