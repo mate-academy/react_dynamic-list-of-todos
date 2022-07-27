@@ -22,14 +22,16 @@ export const App: React.FC = () => {
       .then(todosFromServer => setTodos([...todosFromServer]));
   }, []);
 
-  const lowCaseQuery = query.toLocaleLowerCase();
-
   const visibleTodos = todos.filter(todo => {
-    if ((filterValue === 'active' && todo.completed)
-    || (filterValue === 'completed' && !todo.completed)) {
-      return false;
+    if (filterValue === 'active') {
+      return !todo.completed;
     }
 
+    if (filterValue === 'completed') {
+      return todo.completed;
+    }
+
+    const lowCaseQuery = query.toLocaleLowerCase();
     const lowCaseTitle = todo.title.toLocaleLowerCase();
 
     return lowCaseTitle.includes(lowCaseQuery);
