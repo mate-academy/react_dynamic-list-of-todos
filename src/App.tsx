@@ -39,25 +39,22 @@ export const App: React.FC = () => {
       setIsFirstRender(false);
     }
 
-    let filteredList;
     let toUpdate;
 
     switch (sortType) {
       case (TodoStatus.ACTIVE):
-        filteredList = todos.filter(todo => !todo.completed);
+        toUpdate = todos.filter(todo => !todo.completed);
         break;
       case (TodoStatus.COMPLETED):
-        filteredList = todos.filter(todo => todo.completed);
+        toUpdate = todos.filter(todo => todo.completed);
         break;
       default:
-        filteredList = todos;
+        toUpdate = todos;
     }
 
     if (query) {
-      toUpdate = filteredList
+      toUpdate = toUpdate
         .filter(todo => todo.title.includes(query.toLowerCase()));
-    } else {
-      toUpdate = filteredList;
     }
 
     setFilteredTodos(toUpdate);
