@@ -15,9 +15,9 @@ export const App: React.FC = () => {
   const [isLoadedTodos, setIsLoadedTodos] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [showTodo, setShowTodo] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isOpenedTodo, setIsOpenedTodo] = useState<boolean>(false);
-  const [filterSelect, setFilterSelect] = useState<string>('all');
+  const [selectFilter, setSelectFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
@@ -36,42 +36,43 @@ export const App: React.FC = () => {
   const findTitle = (title: string) => {
     const params = searchQuery.toLowerCase();
 
-    return title.toLocaleLowerCase().includes(params);
+    return title.toLowerCase().includes(params);
   };
 
   useEffect(() => {
-    switch (filterSelect) {
-      case Filter.ALL:
+    switch (selectFilter) {
+      case Filter.all:
         setVisibleTodos(todos.filter(todo => findTitle(todo.title)));
         break;
 
-      case Filter.ACTIVE:
+      case Filter.active:
         setVisibleTodos(todos.filter(todo => !todo.completed && findTitle(todo.title)));
         break;
 
-      case Filter.COMPLEATED:
+      case Filter.completed:
         setVisibleTodos(todos.filter(todo => todo.completed && findTitle(todo.title)));
         break;
 
       default:
         break;
     }
-  }, [searchQuery, filterSelect]);
+  }, [searchQuery, selectFilter]);
 
-  const openTodo = (todo: Todo) => {
-    setShowTodo(todo);
+  const handleOpenTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
     setIsOpenedTodo(true);
   };
 
-  const checkShowTodo = () => {
+  const handleCloseTodo = () => {
     setIsOpenedTodo(false);
+    setSelectedTodo(null);
   };
 
-  const setOption = (option: string) => {
-    setFilterSelect(option);
+  const handleSaveOption = (option: string) => {
+    setSelectFilter(option);
   };
 
-  const setSearchWord = (searchWord: string) => {
+  const handleSaveQuery = (searchWord: string) => {
     setSearchQuery(searchWord);
   };
 
@@ -83,20 +84,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setOption={setOption} setSearchWord={setSearchWord} />
+              <TodoFilter
+                handleSaveOption={handleSaveOption}
+                handleSaveQuery={handleSaveQuery}
+              />
             </div>
 
             <div className="block">
               {!isLoadedTodos
                 ? <Loader />
-                : <TodoList todos={visibleTodos} openTodo={openTodo} />}
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    handleOpenTodo={handleOpenTodo}
+                    selectedTodoId={selectedTodo?.id}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {isOpenedTodo && showTodo
-        && <TodoModal todo={showTodo} isOpenTodo={checkShowTodo} />}
+      {isOpenedTodo && selectedTodo
+        && <TodoModal todo={selectedTodo} handleCloseTodo={handleCloseTodo} />}
     </>
   );
 };
