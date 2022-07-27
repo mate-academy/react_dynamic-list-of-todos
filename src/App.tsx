@@ -20,15 +20,13 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
-    const todoToLoad = async () => {
+    (async () => {
       await getTodos().then(todos => {
         setTodosFromServer(todos);
         setFilteredTodos(todos);
       });
       setIsLoaded(false);
-    };
-
-    todoToLoad();
+    })();
   }, []);
 
   const todoFilter = (query: string, option: string) => {
