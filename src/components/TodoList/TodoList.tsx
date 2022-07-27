@@ -19,15 +19,16 @@ const filterTodos = (
     case 'completed':
       return todos
         .filter(todo => todo.completed === true)
-        .filter(todo => todo.title.includes(query));
+        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
     case 'active':
       return todos
         .filter(todo => todo.completed === false)
-        .filter(todo => todo.title.includes(query));
+        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
     default:
-      return todos.filter(todo => todo.title.includes(query));
+      return todos
+        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
   }
 };
 
