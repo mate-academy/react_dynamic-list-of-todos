@@ -1,0 +1,13 @@
+.App {
+  margin: 0 auto;
+  max-width: 900px;
+  border: 1px solid black;
+  border-radius: 10px;
+
+  &__title {
+    text-align: center;
+    font-size: 20px;
+
+    text-transform: uppercase;
+  }
+}
