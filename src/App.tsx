@@ -71,26 +71,6 @@ export const App: React.FC = () => {
           cleanSelectedTodo={setSelectedTodo}
         />
       )}
-
-      {/* --------------------------------------------------------------------- */}
-      {/* <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
-
-            <div className="block">
-              <TodoFilter />
-            </div>
-
-            <div className="block">
-              <Loader />
-              <TodoList todos={todos} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <TodoModal /> */}
     </>
   );
 };
