@@ -54,7 +54,8 @@ export const App: React.FC = () => {
     }
 
     if (query) {
-      toUpdate = filteredList.filter(todo => todo.title.includes(query));
+      toUpdate = filteredList
+        .filter(todo => todo.title.includes(query.toLowerCase()));
     } else {
       toUpdate = filteredList;
     }
