@@ -27,6 +27,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
         <>
           <tr
             data-cy="todo"
+            key={todo.id}
             className={
               classNames(
                 { 'has-background-info-light': selectedTodo === todo.id },
