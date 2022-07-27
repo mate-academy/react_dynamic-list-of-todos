@@ -11,18 +11,10 @@ import { getTodos } from './api';
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [checkedTodo, setCheckedTodo] = useState<boolean>(false);
   const [selectFilter, setSelectFilter] = useState<string>('');
   const [appliedQuery, setAppliedQuery] = useState('');
-
-  const applyQuery = useCallback(
-    lodash.debounce(setAppliedQuery, 1000), [],
-  );
-
-  const resetInputValue = () => {
-    setAppliedQuery('');
-  };
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function retrieveTodos() {
@@ -37,17 +29,25 @@ const App: React.FC = () => {
     retrieveTodos();
   }, []);
 
+  const applyQuery = useCallback(
+    lodash.debounce(setAppliedQuery, 1000), [],
+  );
+
+  const resetInputValue = () => {
+    setAppliedQuery('');
+  };
+
   const chooseTodo = (ToDo: Todo) => {
     setTodo(ToDo);
     setCheckedTodo(true);
   };
 
-  const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectFilter(event.target.value);
-  };
-
   const closeModalHandler = () => {
     setCheckedTodo(false);
+  };
+
+  const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectFilter(event.target.value);
   };
 
   const visibleGoods = !loading
@@ -62,10 +62,10 @@ const App: React.FC = () => {
           case 'active':
             return !item.completed;
           default:
-            return item.title.includes(appliedQuery);
+            throw new Error('Something go wrong!');
         }
       })
-      .filter(i => i.title.includes(appliedQuery))
+      .filter(item => item.title.includes(appliedQuery.toLowerCase()))
     : null;
 
   return (
@@ -85,6 +85,7 @@ const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
+
               <TodoList todos={visibleGoods} chooseTodo={chooseTodo} />
             </div>
           </div>
