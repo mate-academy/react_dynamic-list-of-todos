@@ -23,7 +23,8 @@ export const TodoModal: React.FC<Modal> = ({
   });
 
   const [userTodo, setUserTodo] = useState<Todo | null>(() => {
-    return todos.find(todo => todo.id === selectedTodoId) || null;
+    return todos
+      .find(todo => todo.id === selectedTodoId) || null;
   });
 
   return (
