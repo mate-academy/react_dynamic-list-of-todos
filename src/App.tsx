@@ -12,27 +12,23 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState(true);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTotos] = useState<Todo[]>([]);
+  const [isLoading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(0);
 
   useEffect(() => {
-    const loadTodo = async () => {
-      try {
-        const loadingTodo = await getTodos();
+    const loading = async () => {
+      const loadingTodo = await getTodos();
 
-        setTodosFromServer(loadingTodo);
-        setVisibleTodos(loadingTodo);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
+      setTodosFromServer(loadingTodo);
+      setVisibleTotos(loadingTodo);
+      setLoading(true);
     };
 
-    loadTodo();
+    loading();
   }, []);
 
-  const filteredTodos = (query: string, condition: string) => {
+  const filtredTodos = (query: string, condition: string) => {
     const todos = todosFromServer.filter(todo => {
       switch (condition) {
         case 'active':
@@ -46,10 +42,10 @@ export const App: React.FC = () => {
       }
     });
 
-    setTodosFromServer(todos);
+    setVisibleTotos(todos);
   };
 
-  const select = (value: number) => setSelectedTodo(value);
+  const select = (query: number) => setSelectedTodo(query);
 
   return (
     <>
@@ -59,27 +55,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                filteredTodos={filteredTodos}
-              />
+              <TodoFilter filteredTodos={filtredTodos} />
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-
-              {!isLoading && (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  selectTodo={select}
-                />
-              )}
+              {!isLoading
+                ? (
+                  <Loader />
+                ) : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectTodo={select}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-
-      {selectedTodo && (
+      {selectedTodo > 0 && (
         <TodoModal
           todo={visibleTodos.find(todo => todo.id === selectedTodo)}
           selectUser={select}

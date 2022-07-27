@@ -5,36 +5,31 @@ import { Loader } from '../Loader';
 import { getUser } from '../../api';
 
 type Props = {
-  todo: Todo | undefined,
-  selectUser: (id: number, todoId: number) => void,
+  todo?: Todo;
+  selectUser: (value: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loadUser = async () => {
-      if (todo) {
-        const loadingUser = await getUser(todo.userId);
-
-        setUser(loadingUser);
-        setLoading(true);
-      }
-
-      setLoading(false);
-    };
-
-    loadUser();
+    if (todo) {
+      getUser(todo.userId)
+        .then(person => {
+          setUser(person);
+          setLoading(true);
+        });
+    }
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading && <Loader />}
-
-      {!isLoading && user && (
+      {!isLoading ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -49,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectUser(0, 0)}
+              onClick={() => selectUser(0)}
             />
           </header>
 
@@ -59,9 +54,12 @@ export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo?.completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+              {/* <strong className="has-text-success">Done</strong> */}
+              {todo?.completed ? (
+                <strong className="has-text-danger">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
