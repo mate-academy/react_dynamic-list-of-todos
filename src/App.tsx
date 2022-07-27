@@ -9,25 +9,21 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(0);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState(0);
-  const [filterBy, setFilterBy] = useState('all');
-  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const loadTodo = async () => {
       try {
         const loadingTodo = await getTodos();
 
-        setTodos(loadingTodo);
-        setLoading(false);
+        setTodosFromServer(loadingTodo);
         setVisibleTodos(loadingTodo);
+        setLoading(false);
       } catch (error) {
         setLoading(false);
       }
@@ -36,43 +32,24 @@ export const App: React.FC = () => {
     loadTodo();
   }, []);
 
-  const handleFilterBy = (filterType: string) => {
-    setFilterBy(filterType);
+  const filteredTodos = (query: string, condition: string) => {
+    const todos = todosFromServer.filter(todo => {
+      switch (condition) {
+        case 'active':
+          return !todo.completed && todo.title.includes(query);
+
+        case 'completed':
+          return todo.completed && todo.title.includes(query);
+
+        default:
+          return todo.title.includes(query);
+      }
+    });
+
+    setTodosFromServer(todos);
   };
 
-  const handleFilter = (title: string) => {
-    return title.toLowerCase().includes(query.toLowerCase());
-  };
-
-  const handleChangeQuery = (input: string) => {
-    setQuery(input);
-  };
-
-  useEffect(() => {
-    switch (filterBy) {
-      case Filter.ALL:
-        setVisibleTodos(todos.filter(todo => handleFilter(todo.title)));
-        break;
-
-      case Filter.ACTIVE:
-        setVisibleTodos(todos.filter(todo => !todo.completed && handleFilter(todo.title)));
-        break;
-
-      case Filter.COMPLETED:
-        setVisibleTodos(todos.filter(todo => todo.completed && handleFilter(todo.title)));
-        break;
-
-      default:
-        break;
-    }
-  }, [filterBy, query]);
-
-  const selectUser = (id: number, todoId: number) => {
-    setUserId(id);
-    setSelectedTodo(todoId);
-  };
-
-  const selectUsersTodo = todos.find(todo => todo.id === selectedTodo);
+  const select = (value: number) => setSelectedTodo(value);
 
   return (
     <>
@@ -83,26 +60,29 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                chooseFilteredType={handleFilterBy}
-                changeQuery={handleChangeQuery}
+                filteredTodos={filteredTodos}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                selectUser={selectUser}
-              />
+
+              {!isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  selectTodo={select}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {!!userId && (
+      {selectedTodo && (
         <TodoModal
-          todo={selectUsersTodo}
-          selectUser={selectUser}
+          todo={visibleTodos.find(todo => todo.id === selectedTodo)}
+          selectUser={select}
         />
       )}
     </>

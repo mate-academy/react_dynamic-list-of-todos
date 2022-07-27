@@ -5,22 +5,21 @@ import { Loader } from '../Loader';
 import { getUser } from '../../api';
 
 type Props = {
-  todo?: Todo,
+  todo: Todo | undefined,
   selectUser: (id: number, todoId: number) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todo, selectUser,
-}) => {
+export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
       if (todo) {
-        const loadingUser = getUser(todo.userId);
+        const loadingUser = await getUser(todo.userId);
 
-        setUser(await loadingUser);
+        setUser(loadingUser);
+        setLoading(true);
       }
 
       setLoading(false);
@@ -33,9 +32,9 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && <Loader />}
+      {isLoading && <Loader />}
 
-      {!loading && user && (
+      {!isLoading && user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -66,7 +65,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
+              <a href={`mailto:${user?.email}`}>
                 {user?.name}
               </a>
             </p>
