@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [filterTodos, setFilterTodos] = useState<Todo[]>(todos);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
+  const [selectedValue, setSelectedValue] = useState('all');
 
   useEffect(() => {
     getTodos()
@@ -25,8 +26,10 @@ export const App: React.FC = () => {
   }, []);
 
   const getFilteredTodos = (list: string) => {
-    const completed = todos.filter(todo => todo.completed === false);
-    const active = todos.filter(todo => todo.completed === true);
+    const completed = todos.filter(todo => todo.completed === true);
+    const active = todos.filter(todo => todo.completed === false);
+
+    setSelectedValue(list);
 
     switch (list) {
       case 'active':
@@ -40,15 +43,11 @@ export const App: React.FC = () => {
     }
   };
 
-  function includesQuery(value: string) {
-    const uppQuery = query.toUpperCase();
-
-    return value.toUpperCase().includes(uppQuery);
-  }
-
   const visibleTodos = () => {
+    const lowerQuery = query.toLowerCase();
+
     const filtered = [...todos].filter(todo => {
-      return includesQuery(todo.title);
+      return todo.title.includes(lowerQuery);
     });
 
     return setFilterTodos(filtered);
@@ -67,9 +66,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filteredTodos={getFilteredTodos}
+                getFilteredTodos={getFilteredTodos}
                 setQuery={setQuery}
                 query={query}
+                selectedValue={selectedValue}
               />
             </div>
 

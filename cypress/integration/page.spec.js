@@ -49,7 +49,7 @@ describe('Page', () => {
 
     page.loader()
       .should('not.exist');
-    
+
     page.todos()
       .should('have.length', 5);
 
@@ -213,7 +213,7 @@ describe('Page', () => {
   it('should show modal when todo is selected', () => {
     page.mockUser1();
     page.selectTodo(1);
-      
+
     page.modal()
       .should('exist');
   });

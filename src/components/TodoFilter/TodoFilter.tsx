@@ -1,13 +1,15 @@
 type Props = {
-  filteredTodos: (value: string) => void,
+  getFilteredTodos: (value: string) => void,
   setQuery: (value: string) => void,
   query: string,
+  selectedValue: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filteredTodos,
+  getFilteredTodos,
   setQuery,
   query,
+  selectedValue,
 }) => {
   const reset = () => {
     setQuery('');
@@ -19,7 +21,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => filteredTodos(event.target.value)}
+            value={selectedValue}
+            onChange={(event) => getFilteredTodos(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
