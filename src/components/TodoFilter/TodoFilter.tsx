@@ -1,10 +1,14 @@
 import { useState } from 'react';
 
 type Props = {
-  setFilter: React.Dispatch<React.SetStateAction<string>>
+  setFilter: React.Dispatch<React.SetStateAction<string>>,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
 };
 
-export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
+export const TodoFilter: React.FC<Props> = ({
+  setFilter,
+  setQuery,
+}) => {
   const [searchValue, setSearchValue] = useState('');
 
   return (
@@ -46,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
           className="input"
           placeholder="Search..."
           onChange={(event) => {
-            setFilter(event.target.value);
+            setQuery(event.target.value);
             setSearchValue(event.target.value);
           }}
         />
@@ -61,7 +65,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
             type="button"
             className="delete"
             onClick={() => {
-              setFilter('');
+              setQuery('');
               setSearchValue('');
             }}
           />

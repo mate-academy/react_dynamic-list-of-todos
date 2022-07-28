@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('all');
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState<number>(0);
+  const [query, setQuery] = useState('');
 
   const selectedTodo = todos
     .find(todo => todo.id === todoId);
@@ -26,28 +27,28 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleMovies = (visibleTodos: Todo[], filt: string) => {
-    let todoArr;
+    let preparedTodos;
 
     switch (filt) {
       case 'all':
-        todoArr = visibleTodos;
+        preparedTodos = visibleTodos;
         break;
 
       case 'active':
-        todoArr = [...visibleTodos].filter(todo => todo.completed === false);
+        preparedTodos = [...visibleTodos]
+          .filter(todo => todo.completed === false);
         break;
 
       case 'completed':
-        todoArr = [...visibleTodos].filter(todo => todo.completed === true);
+        preparedTodos = [...visibleTodos]
+          .filter(todo => todo.completed === true);
         break;
 
       default:
-        todoArr = [...visibleTodos].filter(todo => todo.title.includes(filt));
-
         break;
     }
 
-    return todoArr;
+    return preparedTodos?.filter(todo => todo.title.includes(query));
   };
 
   return (
@@ -60,6 +61,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setFilter={setFilter}
+                setQuery={setQuery}
               />
             </div>
 
