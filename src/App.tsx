@@ -35,12 +35,12 @@ export const App: React.FC = () => {
         break;
 
       case 'active':
-        preparedTodos = [...visibleTodos]
+        preparedTodos = visibleTodos
           .filter(todo => todo.completed === false);
         break;
 
       case 'completed':
-        preparedTodos = [...visibleTodos]
+        preparedTodos = visibleTodos
           .filter(todo => todo.completed === true);
         break;
 
