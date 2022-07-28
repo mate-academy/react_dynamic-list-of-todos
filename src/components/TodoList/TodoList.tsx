@@ -95,7 +95,7 @@ export const TodoList: React.FC<Props> = ({
         </tbody>
       </table>
 
-      {selectedTodoId !== 0 && (
+      {selectedTodoId && (
         <TodoModal
           todos={todos}
           selectedTodoId={selectedTodoId}
