@@ -1,14 +1,45 @@
-/* eslint-disable max-len */
-import React from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { useEffect, useState } from 'react';
+import { getTodos } from './api';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { Todo } from './types/Todo';
+
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
 export const App: React.FC = () => {
+  const [loadedTodos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const select = (value: number) => setSelectedTodoId(value);
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+    getTodos().then(setVisibleTodos);
+    setIsLoading(true);
+  }, []);
+
+  const filteredTodos = (value: string, filteredBy: string) => {
+    const todos = loadedTodos.filter(todo => {
+      switch (filteredBy) {
+        case 'active':
+          return !todo.completed && todo.title.includes(value);
+        case 'completed':
+          return todo.completed && todo.title.includes(value);
+        default:
+          return todo.title.includes(value);
+      }
+    });
+
+    setVisibleTodos(todos);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +48,32 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter onFilteredTodos={filteredTodos} />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!isLoading
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodoId}
+                    select={select}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {!!selectedTodoId && (
+        <TodoModal
+          currentTodo={visibleTodos.find(todo => todo.id === selectedTodoId)}
+          select={select}
+        />
+      )}
     </>
   );
 };
