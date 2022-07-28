@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
@@ -24,7 +26,13 @@ export const TodoModal: React.FC<Props> = ({
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div
+        className="modal-background"
+        onClick={() => {
+          selectedTodo(null);
+        }}
+
+      />
 
       {!users ? (
         <Loader />
@@ -60,7 +68,7 @@ export const TodoModal: React.FC<Props> = ({
                 : (<strong className="has-text-danger">Planned</strong>)}
               {' by '}
 
-              <a href={users.email}>
+              <a href={`mailto:${users.email}`}>
                 {users?.name}
               </a>
             </p>

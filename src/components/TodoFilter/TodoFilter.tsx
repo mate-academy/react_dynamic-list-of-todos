@@ -1,23 +1,40 @@
+enum Sort {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
+
 type Props = {
   setQuery: (value: string) => void,
   query: string,
-  setStatusFilter:(value: string) => void
+  setStatusFilter:(value: Sort) => void
 };
 
 export const TodoFilter: React.FC<Props> = (
   { setQuery, query, setStatusFilter },
 ) => {
-  const clear = () => {
-    setQuery('');
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setStatusFilter(event.target.value)}
+            onChange={(event) => {
+              let value: Sort;
+
+              switch (event.target.value) {
+                case 'active':
+                  value = Sort.active;
+                  break;
+                case 'completed':
+                  value = Sort.completed;
+                  break;
+                default:
+                  value = Sort.all;
+              }
+
+              setStatusFilter(value);
+            }}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -46,7 +63,7 @@ export const TodoFilter: React.FC<Props> = (
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={clear}
+              onClick={() => setQuery('')}
             />
           </span>
         )}

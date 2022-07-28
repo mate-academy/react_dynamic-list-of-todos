@@ -10,13 +10,19 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+enum Sort {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [userId, setUserId] = useState(0);
   const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState<Sort>(Sort.all);
 
   useEffect(() => {
     getTodos().then(todosFromServer => {
@@ -27,9 +33,9 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (statusFilter) {
-      case 'completed':
+      case Sort.completed:
         return todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
-      case 'active':
+      case Sort.active:
         return !todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
       default:
         return todo.title.toLowerCase().includes(query.toLowerCase());
