@@ -9,12 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-enum Sort {
-  all = 'all',
-  completed = 'completed',
-  active = 'active',
-}
+import { Sort } from './types/Sort';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

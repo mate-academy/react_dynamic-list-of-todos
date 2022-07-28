@@ -1,8 +1,4 @@
-enum Sort {
-  all = 'all',
-  completed = 'completed',
-  active = 'active',
-}
+import { Sort } from '../../types/Sort';
 
 type Props = {
   setQuery: (value: string) => void,
