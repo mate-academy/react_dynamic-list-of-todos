@@ -36,7 +36,10 @@ export const TodoList: React.FC<Props> = ({
         >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
-            <span className="icon" data-cy="iconCompleted">
+            <span
+              className="icon"
+              data-cy={todo.completed && 'iconCompleted'}
+            >
               <i className={classNames(
                 'fa-regular',
                 {
