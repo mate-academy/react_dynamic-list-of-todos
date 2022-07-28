@@ -81,7 +81,6 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              {isLoaded === false && (<Loader />)}
               <TodoFilter
                 reset={reset}
                 query={query}
@@ -92,12 +91,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                todos={visibleTodos}
-                todoSelectedId={todoSelected?.id || 0}
-                onTodoSelect={handleTodoSelect}
-                onMixTodos={mixTodos}
-              />
+              {isLoaded === false && (<Loader />)}
+              {isLoaded && (
+                <TodoList
+                  todos={visibleTodos}
+                  todoSelectedId={todoSelected?.id || 0}
+                  onTodoSelect={handleTodoSelect}
+                  onMixTodos={mixTodos}
+                />
+              )}
             </div>
           </div>
         </div>

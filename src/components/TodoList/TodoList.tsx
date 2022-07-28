@@ -41,7 +41,11 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className=""
+            className={classNames(
+              {
+                'has-background-info-light': todo.id === todoSelectedId,
+              },
+            )}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -62,25 +66,34 @@ export const TodoList: React.FC<Props> = ({
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => {
-                  onTodoSelect(todo);
-                }}
-              >
-                <span className="icon">
-                  <i className={classNames(
-                    'far',
-                    'fa-eye',
-                    {
-                      'fa-eye-slash': todoSelectedId === todo.id,
-                    },
-                  )}
-                  />
-                </span>
-              </button>
+              {todoSelectedId === todo.id ? (
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => {
+                    onTodoSelect(null);
+                  }}
+                >
+                  <span className="icon">
+                    <i className="far fa-eye-slash" />
+                  </span>
+                </button>
+              )
+                : (
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => {
+                      onTodoSelect(todo);
+                    }}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  </button>
+                )}
             </td>
           </tr>
         ))}
