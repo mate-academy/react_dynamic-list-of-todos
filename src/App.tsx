@@ -1,51 +1,46 @@
+/* eslint-disable max-len */
 import { useEffect, useState } from 'react';
-import { getTodos } from './api';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-import { Todo } from './types/Todo';
-
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  const select = (value: number) => setSelectedTodoId(value);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<Status>('all');
 
   useEffect(() => {
-    const loader = async () => {
-      await getTodos().then(todos => {
-        setLoadedTodos(todos);
-        setVisibleTodos(todos);
-      });
-
-      setIsLoaded(true);
-    };
-
-    loader();
+    getTodos()
+      .then(setTodosFromServer)
+      .then(() => setIsLoaded(true));
   }, []);
 
-  const filteredTodos = (value: string, filteredBy: string) => {
-    const todos = loadedTodos.filter(todo => {
-      switch (filteredBy) {
-        case 'active':
-          return !todo.completed && todo.title.includes(value);
-        case 'completed':
-          return todo.completed && todo.title.includes(value);
-        default:
-          return todo.title.includes(value);
-      }
-    });
+  const visibleTodos = todosFromServer.filter(todo => {
+    const preparedQuery = query.toLocaleLowerCase();
+    const preparedTitle = todo.title.toLocaleLowerCase();
 
-    setVisibleTodos(todos);
-  };
+    switch (status) {
+      case 'active':
+        return !todo.completed
+          && preparedTitle
+            .includes(preparedQuery);
+      case 'completed':
+        return todo.completed
+          && preparedTitle
+            .includes(preparedQuery);
+
+      default:
+        return preparedTitle
+          .includes(preparedQuery);
+    }
+  });
 
   return (
     <>
@@ -55,19 +50,21 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilteredTodos={filteredTodos} />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                setStatus={setStatus}
+              />
             </div>
 
             <div className="block">
               {!isLoaded
-                ? (
-                  <Loader />
-                )
+                ? (<Loader />)
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodoId}
-                    select={select}
+                    onSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
                   />
                 )}
             </div>
@@ -75,10 +72,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {!!selectedTodoId && (
+      {selectedTodo && (
         <TodoModal
-          currentTodo={visibleTodos.find(todo => todo.id === selectedTodoId)}
-          select={select}
+          todo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
         />
       )}
     </>

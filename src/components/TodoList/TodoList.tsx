@@ -1,14 +1,16 @@
 import classNames from 'classnames';
 
-import { Todo } from '../../types/Todo';
-
 type Props = {
   todos: Todo[];
-  selectedTodo: number;
-  select: (value: number) => void;
+  onSelectedTodo: (todo: Todo | null) => void;
+  selectedTodo: Todo | null;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectedTodo,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -29,9 +31,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
           key={todo.id}
           data-cy="todo"
           className={classNames(
-            {
-              'has-background-info-light': selectedTodo === todo.id,
-            },
+            { 'has-background-info-light': selectedTodo?.id === todo.id },
           )}
         >
           <td className="is-vcentered">{todo.id}</td>
@@ -50,12 +50,13 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
             </span>
           </td>
           <td className="is-vcentered is-expanded">
-            <p className={classNames(
-              {
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
-              },
-            )}
+            <p
+              className={classNames(
+                {
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                },
+              )}
             >
               {todo.title}
             </p>
@@ -65,10 +66,25 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => select(todo.id)}
+              onClick={
+                () => {
+                  if (selectedTodo?.id === todo.id) {
+                    onSelectedTodo(null);
+                  } else {
+                    onSelectedTodo(todo);
+                  }
+                }
+              }
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={classNames(
+                  'far',
+                  {
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                  },
+                )}
+                />
               </span>
             </button>
           </td>
