@@ -12,17 +12,24 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 export const App: React.FC = () => {
-  const [loadedTodos, setTodos] = useState<Todo[]>([]);
+  const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const select = (value: number) => setSelectedTodoId(value);
 
   useEffect(() => {
-    getTodos().then(setTodos);
-    getTodos().then(setVisibleTodos);
-    setIsLoading(true);
+    const loader = async () => {
+      await getTodos().then(todos => {
+        setLoadedTodos(todos);
+        setVisibleTodos(todos);
+      });
+
+      setIsLoaded(true);
+    };
+
+    loader();
   }, []);
 
   const filteredTodos = (value: string, filteredBy: string) => {
@@ -52,7 +59,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading
+              {!isLoaded
                 ? (
                   <Loader />
                 )
