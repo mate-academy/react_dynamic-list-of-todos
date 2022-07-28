@@ -3,11 +3,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: number;
-  select: (value: number) => void;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodo,
+  setSelectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -30,11 +34,11 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
             key={todo.id}
             className={
               classNames(
-                { 'has-background-info-light': selectedTodo === todo.id },
+                { 'has-background-info-light': selectedTodo?.id === todo.id },
               )
             }
           >
-            <td className="is-vcentered">{todo.userId}</td>
+            <td className="is-vcentered">{todo.id}</td>
             {todo.completed
               ? (
                 <td className="is-vcentered">
@@ -59,11 +63,15 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, select }) => (
                 className="button"
                 type="button"
                 onClick={() => {
-                  select(todo.id);
+                  setSelectedTodo(todo);
                 }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  {selectedTodo?.id === todo.id ? (
+                    <i className="far fa-eye-slash" />
+                  ) : (
+                    <i className="far fa-eye" />
+                  )}
                 </span>
               </button>
             </td>

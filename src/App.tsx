@@ -14,9 +14,7 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [visibleTodos, setVisibleTotos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState(0);
-
-  const select = (value: number) => setSelectedTodo(value);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     const loading = async () => {
@@ -62,17 +60,17 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={selectedTodo}
-                    select={select}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo > 0 && (
+      {selectedTodo && (
         <TodoModal
-          todo={visibleTodos.find(todo => todo.id === selectedTodo)}
-          select={select}
+          todo={visibleTodos.find(todo => todo.id === selectedTodo.id)}
+          onClose={() => setSelectedTodo(null)}
         />
       )}
     </>

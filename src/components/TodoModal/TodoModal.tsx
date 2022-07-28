@@ -6,10 +6,10 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | undefined;
-  select: (value: number) => void;
+  onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, select }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({ todo, select }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => select(0)}
+              onClick={() => onClose()}
             />
           </header>
 
