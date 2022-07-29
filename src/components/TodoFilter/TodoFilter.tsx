@@ -7,30 +7,33 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = (
+
   { setQuery, query, setStatusFilter },
 ) => {
+  const sort = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    let value: Sort;
+
+    switch (event.target.value) {
+      case 'active':
+        value = Sort.active;
+        break;
+      case 'completed':
+        value = Sort.completed;
+        break;
+      default:
+        value = Sort.all;
+    }
+
+    setStatusFilter(value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => {
-              let value: Sort;
-
-              switch (event.target.value) {
-                case 'active':
-                  value = Sort.active;
-                  break;
-                case 'completed':
-                  value = Sort.completed;
-                  break;
-                default:
-                  value = Sort.all;
-              }
-
-              setStatusFilter(value);
-            }}
+            onChange={sort}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
