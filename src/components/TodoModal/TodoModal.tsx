@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo | undefined,
+  todo: Todo | null,
   onClose: () => void,
 };
 
