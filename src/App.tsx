@@ -37,33 +37,33 @@ export const App: React.FC = () => {
   const visibleTodosInput = (query:string) => {
     const lowerQuery = query.toLowerCase();
 
-    const filtredTodos = todos?.filter(todo => (
+    const filteredTodos = todos?.filter(todo => (
       todo.title.toLowerCase().includes(lowerQuery)
     ));
 
-    if (filtredTodos) {
-      setCurrentTodos(filtredTodos);
+    if (filteredTodos) {
+      setCurrentTodos(filteredTodos);
     }
   };
 
   const visibleTodosSelect = (selectOption:string) => {
-    let filtredTodos;
+    let filteredTodos;
 
     switch (selectOption) {
       case 'active':
-        filtredTodos = todos?.filter(todo => todo.completed === false);
+        filteredTodos = todos?.filter(todo => todo.completed === false);
 
-        if (filtredTodos) {
-          setCurrentTodos(filtredTodos);
+        if (filteredTodos) {
+          setCurrentTodos(filteredTodos);
         }
 
         break;
 
       case 'completed':
-        filtredTodos = todos?.filter(todo => todo.completed === true);
+        filteredTodos = todos?.filter(todo => todo.completed === true);
 
-        if (filtredTodos) {
-          setCurrentTodos(filtredTodos);
+        if (filteredTodos) {
+          setCurrentTodos(filteredTodos);
         }
 
         break;
