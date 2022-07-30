@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Modal = {
-  todos: Todo[],
+  selectedUserTodo: Todo | null,
   selectedUserId: number,
-  selectedTodoId: number,
   onModalClose(): void,
 };
 
 export const TodoModal: React.FC<Modal> = ({
   selectedUserId,
-  selectedTodoId,
   onModalClose,
-  todos,
+  selectedUserTodo,
 }) => {
-  const [userInfo, setUserInfo] = useState<User | null>(() => {
-    return getUser(selectedUserId)
-      .then(response => setUserInfo(response));
-  });
+  const [userInfo, setUserInfo] = useState<User | null>(null);
+  const [userTodo, setUserTodo] = useState<Todo | null>(selectedUserTodo)
 
-  const [userTodo, setUserTodo] = useState<Todo | null>(() => {
-    return todos
-      .find(todo => todo.id === selectedTodoId) || null;
-  });
+  useEffect(() => {
+    getUser(selectedUserId)
+      .then(response => setUserInfo(response));
+  }, [selectedUserId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,7 +36,7 @@ export const TodoModal: React.FC<Modal> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo ${selectedTodoId}`}
+              {`Todo ${userTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classnames from 'classnames';
 
 type ListOfTodos = {
   todoItems: Todo[],
@@ -52,7 +53,6 @@ export const TodoList: React.FC<ListOfTodos> = ({
 
   return (
     <table className="table is-narrow is-fullwidth">
-
       <thead>
         <tr>
           <th>#</th>
@@ -69,12 +69,14 @@ export const TodoList: React.FC<ListOfTodos> = ({
       <tbody>
         {preparedTodos.map((todo) => {
           const completionStatus = todo.completed;
-          const isSelected = selectedTodoId === todo.id;
+          const isTodoSelected = selectedTodoId === todo.id;
 
           return (
             <tr
               data-cy="todo"
-              className={`${isSelected ? 'has-background-info-light' : ''}`}
+              className={classnames(
+                { 'has-background-info-light': isTodoSelected }
+              )}
               key={todo.title}
             >
               <td className="is-vcentered">{todo.id}</td>

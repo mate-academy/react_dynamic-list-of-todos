@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,11 +13,9 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    return getTodos()
-      .then(response => setTodos(response));
-  });
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [currentQuery, setCurrentQuery] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
 
   const [filteringOptions, setFilteringOptions] = useState('All');
 
@@ -25,6 +23,16 @@ export const App: React.FC = () => {
     setSelectedTodoId(0);
     setSelectedUserId(0);
   };
+
+  useEffect(() => {
+    getTodos()
+      .then(response => setTodos(response));
+  }, []);
+
+  useEffect(() => {
+   setSelectedTodo (() => todos
+      .find(todo => todo.id === selectedTodoId) || null);
+  }, [selectedTodoId])
 
   return (
     <>
@@ -59,10 +67,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUserId && (
+      {selectedUserId && selectedTodo && (
         <TodoModal
-          todos={todos}
-          selectedTodoId={selectedTodoId}
+          selectedUserTodo={selectedTodo}
           selectedUserId={selectedUserId}
           onModalClose={onModalClose}
         />
