@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Modal> = ({
   useEffect(() => {
     if (userTodo) {
       getUser(userTodo.id)
-      .then(response => setUserInfo(response));
+        .then(response => setUserInfo(response));
     }
   }, [userTodo]);
 
