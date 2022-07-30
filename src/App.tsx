@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentQuery, setCurrentQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filteringOptions, setFilteringOptions] = useState('All');
 
@@ -30,9 +30,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-   setSelectedTodo (() => todos
+    setSelectedTodo(() => todos
       .find(todo => todo.id === selectedTodoId) || null);
-  }, [selectedTodoId])
+  }, [selectedTodoId]);
 
   return (
     <>
@@ -70,7 +70,6 @@ export const App: React.FC = () => {
       {selectedUserId && selectedTodo && (
         <TodoModal
           selectedUserTodo={selectedTodo}
-          selectedUserId={selectedUserId}
           onModalClose={onModalClose}
         />
       )}

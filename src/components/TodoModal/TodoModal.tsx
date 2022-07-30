@@ -6,22 +6,22 @@ import { getUser } from '../../api';
 
 type Modal = {
   selectedUserTodo: Todo | null,
-  selectedUserId: number,
   onModalClose(): void,
 };
 
 export const TodoModal: React.FC<Modal> = ({
-  selectedUserId,
   onModalClose,
   selectedUserTodo,
 }) => {
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [userTodo, setUserTodo] = useState<Todo | null>(selectedUserTodo)
+  const [userTodo, setUserTodo] = useState<Todo | null>(selectedUserTodo);
 
   useEffect(() => {
-    getUser(selectedUserId)
+    if (userTodo) {
+      getUser(userTodo.id)
       .then(response => setUserInfo(response));
-  }, [selectedUserId]);
+    }
+  }, [userTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">

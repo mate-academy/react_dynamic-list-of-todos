@@ -1,6 +1,6 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import classnames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 type ListOfTodos = {
   todoItems: Todo[],
@@ -75,7 +75,7 @@ export const TodoList: React.FC<ListOfTodos> = ({
             <tr
               data-cy="todo"
               className={classnames(
-                { 'has-background-info-light': isTodoSelected }
+                { 'has-background-info-light': isTodoSelected },
               )}
               key={todo.title}
             >
