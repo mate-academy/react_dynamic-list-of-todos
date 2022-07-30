@@ -50,7 +50,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos
                 ? (
                   <TodoList
                     currentQuery={currentQuery}
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUserId && selectedTodo && (
+      {selectedUserId > 0 && selectedTodo && (
         <TodoModal
           selectedUserTodo={selectedTodo}
           onModalClose={onModalClose}
