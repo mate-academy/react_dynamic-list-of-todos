@@ -12,9 +12,8 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [onLoading, setOnLoading] = useState(true);
-  const [sort, setSort] = useState<SortedType>(SortedType.all);
-  let filteredTodos = [...todos];
+  const [isLoading, setOnLoading] = useState(true);
+  const [sortType, setSortType] = useState<SortedType>(SortedType.all);
 
   useEffect(() => {
     getTodos()
@@ -24,13 +23,16 @@ const App: React.FC = () => {
       });
   }, []);
 
-  if (sort !== SortedType.all) {
-    filteredTodos = sort === SortedType.completed
-      ? todos.filter(todo => todo.completed === true)
-      : todos.filter(todo => todo.completed === false);
-  }
-
-  filteredTodos = filteredTodos.filter(todo => todo.title.includes(query));
+  const filteredTodos = todos.filter(todo => {
+    switch (sortType) {
+      case SortedType.completed:
+        return todo.title.includes(query) && todo.completed === true;
+      case SortedType.active:
+        return todo.title.includes(query) && todo.completed === false;
+      default:
+        return todo.title.includes(query);
+    }
+  });
 
   return (
     <>
@@ -41,14 +43,14 @@ const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setSort={setSort}
+                setSort={setSortType}
                 setQuery={setQuery}
                 query={query}
               />
             </div>
 
             <div className="block">
-              {onLoading && (
+              {isLoading && (
                 <Loader />
               )}
               <TodoList
@@ -62,7 +64,7 @@ const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          setSelectedTodo={setSelectedTodo}
+          onClose={setSelectedTodo}
           todo={selectedTodo}
         />
       )}

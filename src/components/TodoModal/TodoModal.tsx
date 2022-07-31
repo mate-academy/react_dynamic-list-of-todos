@@ -5,11 +5,11 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  setSelectedTodo(state: Todo | null): void,
+  onClose(state: Todo | null): void,
   todo: Todo,
 };
 
-export const TodoModal: FC<Props> = ({ setSelectedTodo, todo }) => {
+export const TodoModal: FC<Props> = ({ onClose, todo }) => {
   const [userOfTodo, setUserOfTodo] = useState<User>();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const TodoModal: FC<Props> = ({ setSelectedTodo, todo }) => {
               <a
                 href="#close"
                 className="delete"
-                onClick={() => setSelectedTodo(null)}
+                onClick={() => onClose(null)}
               >
                 Close
               </a>
