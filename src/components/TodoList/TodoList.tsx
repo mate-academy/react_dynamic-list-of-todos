@@ -21,7 +21,6 @@ export const TodoList: React.FC<Props> = (
             </span>
           </th>
           <th>Title</th>
-          <th> </th>
         </tr>
       </thead>
 

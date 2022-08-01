@@ -9,7 +9,7 @@ interface Props {
 enum SortType {
   All = 'all',
   Completed = 'completed',
-  Active = 'active'
+  Active = 'active',
 }
 
 export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
@@ -17,11 +17,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
   const lowerQuery = query.toLowerCase();
 
   const getFilteredTodos = () => {
-      onSettingTodo(todos
-        .filter(todo => todo.title.toLowerCase()
-          .includes(lowerQuery)));
-  }
-  
+    onSettingTodo(todos
+      .filter(todo => todo.title.toLowerCase()
+        .includes(lowerQuery)));
+  };
+
   useEffect(getFilteredTodos, [lowerQuery]);
 
   const handleOnSelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,11 +31,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
         break;
 
       case (SortType.Completed):
-        onSettingTodo(todos.filter(todo => todo.completed === true));
+        onSettingTodo(todos.filter(todo => todo.completed));
         break;
 
       case (SortType.Active):
-        onSettingTodo(todos.filter(todo => todo.completed === false));
+        onSettingTodo(todos.filter(todo => !todo.completed));
         break;
 
       default:
