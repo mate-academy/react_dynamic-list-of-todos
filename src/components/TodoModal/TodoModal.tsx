@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo | null,
+  todo: Todo,
   onClose: () => void,
 };
 
@@ -13,9 +13,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose: visibleModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (todo) {
-      getUser(todo.userId).then(person => setUser(person));
-    }
+    getUser(todo.userId).then(person => setUser(person));
   }, []);
 
   return (
@@ -31,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose: visibleModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo?.id}`}
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -45,12 +43,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose: visibleModal }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {
-                todo?.completed
+                todo.completed
                   ? (
                     <strong className="has-text-success">Done</strong>
                   )

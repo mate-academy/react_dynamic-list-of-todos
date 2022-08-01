@@ -12,13 +12,11 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState<number | null>(null);
   const [isInitialized, setInitialized] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('');
 
-  const findSelectedTodo = (id: number) => todos.find(todo => todo.id === id) || null;
   const filterInput = (todo: Todo) => todo.title.toLowerCase().includes(query.toLowerCase());
   const filterStatus = (todo: Todo, todoStatus: string) => {
     switch (todoStatus) {
@@ -70,11 +68,8 @@ export const App: React.FC = () => {
                     <>
                       <TodoList
                         todos={visibleTodos}
-                        selectedTodoId={todoId}
-                        selectTodo={(id: number) => {
-                          setTodoId(id);
-                          setSelectedTodo(findSelectedTodo(id));
-                        }}
+                        selectedTodo={selectedTodo}
+                        onSelectedTodo={setSelectedTodo}
                       />
                     </>
                   )
@@ -82,11 +77,11 @@ export const App: React.FC = () => {
             </div>
           </div>
         </div>
-        {todoId && (
+        {selectedTodo && (
           <TodoModal
             todo={selectedTodo}
             onClose={() => {
-              setTodoId(null);
+              setSelectedTodo(null);
             }}
           />
         )}
