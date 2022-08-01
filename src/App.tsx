@@ -19,17 +19,15 @@ export const App: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [modal, setModal] = useState(false);
 
-  const showTodos = getTodos();
-
   useEffect(() => {
-    showTodos.then((currentTodos) => {
+    getTodos().then((currentTodos) => {
       setTodos(currentTodos);
       setTodosToShow(currentTodos);
     });
 
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(user => setSelectedUser(user));
+        .then(setSelectedUser);
     }
   }, [selectedTodo]);
 

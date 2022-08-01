@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -7,7 +7,7 @@ type Props = {
   selectedTodo: Todo | null,
   selectedUser: User | null,
   onSelectTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
-  setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>,
+  setSelectedUser: Dispatch<SetStateAction<User | null>>,
   setModal: React.Dispatch<React.SetStateAction<boolean>>,
 };
 

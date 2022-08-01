@@ -32,8 +32,7 @@ export const TodoList: React.FC<Props> = (
             <td className="is-vcentered">
               {todo.completed
                 ? <i className="fas fa-check-square has-text-success" />
-                : <i className="fas fa-exclamation-triangle has-text-danger" />
-              }
+                : <i className="fas fa-exclamation-triangle has-text-danger" />}
             </td>
             <td className="is-vcentered is-expanded">
               <p className="has-text-danger">{todo.title}</p>

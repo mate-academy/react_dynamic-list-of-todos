@@ -6,27 +6,35 @@ interface Props {
   onSettingTodo: React.Dispatch<React.SetStateAction<Todo[]>>,
 }
 
+enum SortType {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active'
+}
+
 export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
   const [query, setQuery] = useState('');
   const lowerQuery = query.toLowerCase();
 
-  useEffect(() => {
-    onSettingTodo(todos
-      .filter(todo => todo.title.toLowerCase()
-        .includes(lowerQuery)));
-  }, [lowerQuery]);
+  const getFilteredTodos = () => {
+      onSettingTodo(todos
+        .filter(todo => todo.title.toLowerCase()
+          .includes(lowerQuery)));
+  }
+  
+  useEffect(getFilteredTodos, [lowerQuery]);
 
   const handleOnSelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (true) {
-      case (target.value === 'all'):
+    switch (target.value) {
+      case (SortType.All):
         onSettingTodo(todos);
         break;
 
-      case (target.value === 'completed'):
+      case (SortType.Completed):
         onSettingTodo(todos.filter(todo => todo.completed === true));
         break;
 
-      case (target.value === 'active'):
+      case (SortType.Active):
         onSettingTodo(todos.filter(todo => todo.completed === false));
         break;
 
@@ -72,7 +80,6 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
             onClick={() => {
               onSettingTodo(todos);
               setQuery('');
-
             }}
           />
         </span>
