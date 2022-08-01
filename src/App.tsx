@@ -17,7 +17,7 @@ enum SortType {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState(0);
@@ -57,11 +57,13 @@ export const App: React.FC = () => {
         break;
 
       case SortType.ACTIVE:
-        setVisibleTodos(todos.filter(todo => !todo.completed));
+        setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
+          .filter(todo => !todo.completed));
         break;
 
       case SortType.COMPLETED:
-        setVisibleTodos(todos.filter(todo => todo.completed));
+        setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
+          .filter(todo => todo.completed));
         break;
 
       default:
