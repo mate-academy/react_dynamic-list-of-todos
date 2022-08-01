@@ -12,8 +12,8 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTotos] = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState(0);
+  const [isLoaded, setLoading] = useState(false);
+  const [selectedTodoId, setselectedTodoId] = useState(0);
 
   useEffect(() => {
     const loading = async () => {
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
     setVisibleTotos(todos);
   };
 
-  const select = (query: number) => setSelectedTodo(query);
+  const selectID = (query: number) => setselectedTodoId(query);
 
   return (
     <>
@@ -59,24 +59,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading
+              {isLoaded === false
                 ? (
                   <Loader />
                 ) : (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodo={select}
-                    selectedTodo={selectedTodo}
+                    onTodoSelected={selectID}
+                    selectedTodoId={selectedTodoId}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo > 0 && (
+      {selectedTodoId > 0 && (
         <TodoModal
-          todo={visibleTodos.find(todo => todo.id === selectedTodo)}
-          selectUser={select}
+          todo={visibleTodos.find(todo => todo.id === selectedTodoId)}
+          onClose={selectID}
         />
       )}
     </>

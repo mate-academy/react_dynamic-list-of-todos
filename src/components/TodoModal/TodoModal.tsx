@@ -10,11 +10,11 @@ import { getUser } from '../../api';
 
 type Props = {
   todo?: Todo;
-  selectUser: (value: number) => void;
+  onClose: (value: number) => void;
 };
-export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoaded, setLoading] = useState(false);
 
   useEffect(() => {
     if (todo) {
@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      {!isLoading ? (
+      {!isLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectUser }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectUser(0)}
+              onClick={() => onClose(0)}
             />
           </header>
           <div className="modal-card-body">
