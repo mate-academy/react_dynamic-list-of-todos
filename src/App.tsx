@@ -13,8 +13,8 @@ import { SortType } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
-  const [filterBy, setFilterBy] = useState<string>(SortType.ALL);
+  const [isLoading, setLoading] = useState(true);
+  const [status, setStatus] = useState<SortType>(SortType.ALL);
   const [query, setQuery] = useState<string>('');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -28,8 +28,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const changeFilterBy = (filterType: string) => {
-    setFilterBy(filterType);
+  const changeFilterBy = (type: SortType) => {
+    setStatus(type);
   };
 
   const handleQuery = (value: string) => {
@@ -41,20 +41,24 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    switch (filterBy) {
-      case SortType.ALL:
-        return setVisibleTodos(todos.filter(todo => handleFilter(todo.title)));
+    const filteredTodos = todos.filter(todo => {
+      switch (status) {
+        case SortType.ALL:
+          return handleFilter(todo.title);
 
-      case SortType.ACTIVE:
-        return setVisibleTodos(todos.filter(todo => !todo.completed && handleFilter(todo.title)));
+        case SortType.ACTIVE:
+          return !todo.completed && handleFilter(todo.title);
 
-      case SortType.COMPLETED:
-        return setVisibleTodos(todos.filter(todo => todo.completed && handleFilter(todo.title)));
+        case SortType.COMPLETED:
+          return todo.completed && handleFilter(todo.title);
 
-      default:
-        return setVisibleTodos(todos);
-    }
-  }, [query, filterBy]);
+        default:
+          return setVisibleTodos(todos);
+      }
+    });
+
+    setVisibleTodos(filteredTodos);
+  }, [query, status]);
 
   const todoToOpen = (todo: Todo | null) => {
     setSelectedTodo(todo);
@@ -69,7 +73,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                changeFilterBy={changeFilterBy}
+                onSelectStatus={changeFilterBy}
                 changeQuery={handleQuery}
                 query={query}
               />
@@ -93,7 +97,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          selectedTodo={setSelectedTodo}
+          onClose={setSelectedTodo}
         />
       )}
     </>

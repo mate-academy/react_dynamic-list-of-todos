@@ -1,18 +1,18 @@
 import { SortType } from '../../types/Filter';
 
 type Props = {
-  changeFilterBy: (filterType: string) => void,
+  onSelectStatus: (filterType: SortType) => void,
   changeQuery: (value: string) => void,
   query: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  changeFilterBy,
+  onSelectStatus,
   changeQuery,
   query,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeFilterBy(event.target.value);
+    onSelectStatus(event.target.value as SortType);
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
