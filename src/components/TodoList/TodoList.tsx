@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -23,7 +24,6 @@ export const TodoList: React.FC<Props> = ({
             </span>
           </th>
           <th>Title</th>
-          <th> </th>
         </tr>
       </thead>
 
@@ -38,9 +38,9 @@ export const TodoList: React.FC<Props> = ({
           >
             <td className="is-vcentered">
               <span className="is-size-5">
-                <i className={todo.completed
+                <i className={classNames(todo.completed
                   ? ('fas fa-check')
-                  : ('fas fa-xmark')}
+                  : ('fas fa-xmark'))}
                 />
               </span>
             </td>

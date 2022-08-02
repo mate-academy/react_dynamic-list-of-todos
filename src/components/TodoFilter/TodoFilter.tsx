@@ -1,24 +1,20 @@
 import React from 'react';
-
-enum SortType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+// eslint-disable-next-line import/no-cycle
+import { SortOption } from '../../App';
 
 type Props = {
   changeFilteredType: (filterType: string) => void,
-  changeQuery: (input: string) => void,
+  handlechangeQuery: (input: string) => void,
   query: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   changeFilteredType,
-  changeQuery,
+  handlechangeQuery,
   query,
 }) => {
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeQuery(event.target.value);
+    handlechangeQuery(event.target.value);
   };
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -33,9 +29,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={(event) => handleStatusChange(event)}
           >
-            <option value={SortType.ALL}>All</option>
-            <option value={SortType.ACTIVE}>Active</option>
-            <option value={SortType.COMPLETED}>Completed</option>
+            <option value={SortOption.ALL}>All</option>
+            <option value={SortOption.ACTIVE}>Active</option>
+            <option value={SortOption.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -59,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => changeQuery('')}
+            onClick={() => handlechangeQuery('')}
           />
         </span>
       </p>

@@ -3,13 +3,14 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
+// eslint-disable-next-line import/no-cycle
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-enum SortType {
+export enum SortOption {
   ALL = 'all',
   ACTIVE = 'active',
   COMPLETED = 'completed',
@@ -18,31 +19,31 @@ enum SortType {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState(todos);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState(0);
   const [selectedUser, setSelectedUser] = useState(false);
   const [query, setQuery] = useState('');
-  const [filteredBy, setFilteredBy] = useState<string>(SortType.ALL);
+  const [filteredBy, setFilteredBy] = useState<string>(SortOption.ALL);
 
   useEffect(() => {
     const loadTodos = async () => {
       const todosFromServer = await getTodos();
 
-      setLoading(true);
+      setLoading(false);
       setTodos(todosFromServer);
       setVisibleTodos(todosFromServer);
     };
 
     loadTodos();
-    setLoading(false);
+    setLoading(true);
   }, []);
 
   const changeFilteredBy = (filterType: string) => {
     setFilteredBy(filterType);
   };
 
-  const changeQuery = (input: string) => {
+  const handleChangeQuery = (input: string) => {
     setQuery(input);
   };
 
@@ -52,16 +53,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     switch (filteredBy) {
-      case SortType.ALL:
+      case SortOption.ALL:
         setVisibleTodos(todos.filter(todo => handleFilter(todo.title)));
         break;
 
-      case SortType.ACTIVE:
+      case SortOption.ACTIVE:
         setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
           .filter(todo => !todo.completed));
         break;
 
-      case SortType.COMPLETED:
+      case SortOption.COMPLETED:
         setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
           .filter(todo => todo.completed));
         break;
@@ -84,27 +85,29 @@ export const App: React.FC = () => {
       <div className="section">
         <div className="container">
           <div className="box">
-            {!loading ? <Loader /> : (
-              <>
-                <h1 className="title">Todos:</h1>
+            {loading
+              ? <Loader />
+              : (
+                <>
+                  <h1 className="title">Todos:</h1>
 
-                <div className="block">
-                  <TodoFilter
-                    changeFilteredType={changeFilteredBy}
-                    changeQuery={changeQuery}
-                    query={query}
-                  />
-                </div>
+                  <div className="block">
+                    <TodoFilter
+                      changeFilteredType={changeFilteredBy}
+                      handlechangeQuery={handleChangeQuery}
+                      query={query}
+                    />
+                  </div>
 
-                <div className="block">
-                  <TodoList
-                    todos={visibleTodos}
-                    selectUser={selectUser}
-                    selectedTodo={selectedTodo}
-                  />
-                </div>
-              </>
-            )}
+                  <div className="block">
+                    <TodoList
+                      todos={visibleTodos}
+                      selectUser={selectUser}
+                      selectedTodo={selectedTodo}
+                    />
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </div>
