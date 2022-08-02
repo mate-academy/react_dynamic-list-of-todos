@@ -1,19 +1,19 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-console */
 type Props = {
-  reset: () => void,
   query: string,
-  applyQuery: (query1: string) => void,
+  onReset: () => void,
+  onApplyQuery: (query1: string) => void,
   onHandleInputQuery: (inputQuery: string) => void,
-  onHandletypeOfSelection: (selectType: string) => void,
+  onHandleFilterType: (selectType: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  reset,
   query,
-  applyQuery,
+  onReset,
+  onApplyQuery,
   onHandleInputQuery,
-  onHandletypeOfSelection,
+  onHandleFilterType,
 }) => {
   return (
     <>
@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
           <span className="select">
             <select
               data-cy="statusSelect"
-              onChange={event => onHandletypeOfSelection(event.target.value)}
+              onChange={event => onHandleFilterType(event.target.value)}
             >
               <option value="all">All</option>
               <option value="active">Active</option>
@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
             value={query}
             onChange={event => {
               onHandleInputQuery(event.target.value);
-              applyQuery(event.target.value);
+              onApplyQuery(event.target.value);
             }}
           />
           <span className="icon is-left">
@@ -55,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 onClick={() => {
-                  reset();
+                  onReset();
                   onHandleInputQuery('');
                 }}
               />

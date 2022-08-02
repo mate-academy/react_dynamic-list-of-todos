@@ -12,34 +12,39 @@ import { Loader } from './components/Loader';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 
+enum FilterType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoSelected, setTodoSelected] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [query, setQuery] = useState<string>('');
-  const [appliedQuery, setAppliedQuery] = useState<string>('');
-  const [typeOfSelection, setTypeOfSelection] = useState('all');
+  const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
+  const [typeOfSelection, setTypeOfSelection] = useState<string>(FilterType.ALL);
 
   useEffect(() => {
-    getTodos().then(currentTodos => {
-      setTodos(currentTodos);
-      setIsLoaded(true);
-    });
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoaded(true));
   }, []);
 
   useEffect(() => {
     switch (typeOfSelection) {
-      case 'all':
+      case FilterType.ALL:
         setVisibleTodos(todos);
         break;
 
-      case 'active':
+      case FilterType.ACTIVE:
         setVisibleTodos(todos
           .filter(todo => todo.completed === false));
         break;
 
-      case 'completed':
+      case FilterType.COMPLETED:
         setVisibleTodos(todos.filter(todo => todo.completed === true));
         break;
 
@@ -47,7 +52,10 @@ export const App: React.FC = () => {
         break;
     }
 
-    setVisibleTodos(currentTodos => currentTodos.filter(todo => todo.title.toLowerCase().includes(appliedQuery.toLowerCase())));
+    const lowQuery = appliedQuery.toLowerCase();
+
+    setVisibleTodos(currentTodos => currentTodos
+      .filter(todo => todo.title.toLowerCase().includes(lowQuery)));
   }, [typeOfSelection, appliedQuery, todos]);
 
   const applyQuery = useCallback(
@@ -59,7 +67,7 @@ export const App: React.FC = () => {
     setQuery(inputQuery);
   };
 
-  const handletypeOfSelection = (selectType: string) => {
+  const handleFilterType = (selectType: string) => {
     setTypeOfSelection(selectType);
   };
 
@@ -82,24 +90,25 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                reset={reset}
                 query={query}
-                applyQuery={applyQuery}
+                onReset={reset}
+                onApplyQuery={applyQuery}
                 onHandleInputQuery={handleInputQuery}
-                onHandletypeOfSelection={handletypeOfSelection}
+                onHandleFilterType={handleFilterType}
               />
             </div>
 
             <div className="block">
-              {isLoaded === false && (<Loader />)}
-              {isLoaded && (
-                <TodoList
-                  todos={visibleTodos}
-                  todoSelectedId={todoSelected?.id || 0}
-                  onTodoSelect={handleTodoSelect}
-                  onMixTodos={mixTodos}
-                />
-              )}
+              {!isLoaded
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    todoSelectedId={todoSelected?.id || 0}
+                    onTodoSelect={handleTodoSelect}
+                    onMixTodos={mixTodos}
+                  />
+                )}
             </div>
           </div>
         </div>
