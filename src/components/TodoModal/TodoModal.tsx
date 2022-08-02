@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     getUser(selectedTodo.userId)
-      .then(curUser => setUser(curUser));
+      .then(setUser);
   }, []);
 
   return (
@@ -62,9 +62,7 @@ export const TodoModal: React.FC<Props> = ({
                   Planned
                 </strong>
               )}
-
               {' by '}
-
               <a href={`mailto:${user.email}`}>
                 {user.name}
               </a>

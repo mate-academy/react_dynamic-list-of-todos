@@ -1,14 +1,22 @@
 import React from 'react';
 
+enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 type Props = {
   query: string;
   onSetQuery: (query: string) => void;
-  onSetFilterValue: (value: string) => void;
+  filterValue: FilterType,
+  onSetFilterValue: (value: FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onSetQuery,
+  filterValue,
   onSetFilterValue,
 }) => (
   <form className="field has-addons">
@@ -16,11 +24,14 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => onSetFilterValue(event.target.value)}
+          value={filterValue}
+          onChange={({ target }) => {
+            onSetFilterValue(target.value as FilterType);
+          }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterType.All}>All</option>
+          <option value={FilterType.Active}>Active</option>
+          <option value={FilterType.Completed}>Completed</option>
         </select>
       </span>
     </p>

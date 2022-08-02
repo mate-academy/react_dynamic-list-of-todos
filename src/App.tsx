@@ -10,32 +10,55 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterValue, setFilterValue] = useState('all');
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [filterValue, setFilterValue] = useState<FilterType>(FilterType.All);
   const [query, setQuery] = useState('');
-
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos([...todosFromServer]));
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setVisibleTodos(todosFromServer);
+      });
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    if (filterValue === 'active') {
-      return !todo.completed;
+  useEffect(() => {
+    switch (filterValue) {
+      case FilterType.All:
+        setVisibleTodos(todos);
+
+        break;
+
+      case FilterType.Active:
+        setVisibleTodos([...todos].filter(todo => !todo.completed));
+
+        break;
+
+      case FilterType.Completed:
+        setVisibleTodos([...todos].filter(todo => todo.completed));
+
+        break;
+
+      default:
+        break;
     }
 
-    if (filterValue === 'completed') {
-      return todo.completed;
-    }
+    setVisibleTodos(prevTodos => prevTodos.filter(todo => {
+      const lowCaseQuery = query.toLocaleLowerCase();
+      const lowCaseTitle = todo.title.toLocaleLowerCase();
 
-    const lowCaseQuery = query.toLocaleLowerCase();
-    const lowCaseTitle = todo.title.toLocaleLowerCase();
-
-    return lowCaseTitle.includes(lowCaseQuery);
-  });
+      return lowCaseTitle.includes(lowCaseQuery);
+    }));
+  }, [filterValue, query]);
 
   return (
     <>
@@ -48,6 +71,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onSetQuery={setQuery}
+                filterValue={filterValue}
                 onSetFilterValue={setFilterValue}
               />
             </div>
