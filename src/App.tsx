@@ -9,6 +9,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Condition } from './types/Condition';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -37,15 +38,14 @@ export const App: React.FC = () => {
 
   const filterTodos = (value: string, condition: string) => {
     const newTodo = todos.filter(todo => {
-      if (condition === 'active') {
-        return todo.title.includes(value) && !todo.completed;
+      switch (condition) {
+        case Condition.active:
+          return todo.title.includes(value) && !todo.completed;
+        case Condition.completed:
+          return todo.title.includes(value) && todo.completed;
+        default:
+          return todo.title.includes(value);
       }
-
-      if (condition === 'completed') {
-        return todo.title.includes(value) && todo.completed;
-      }
-
-      return todo.title.includes(value);
     });
 
     setVisibleTodos(newTodo);
