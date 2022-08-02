@@ -10,7 +10,7 @@ export const TodoFilter: React.FC<Props> = (
 
   { setQuery, query, setStatusFilter },
 ) => {
-  const sort = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     let value: Sort;
 
     switch (event.target.value) {
@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<Props> = (
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={sort}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

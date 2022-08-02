@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -10,11 +9,11 @@ import { Loader } from '../Loader';
 type Props = {
   userId: number;
   todo: Todo,
-  selectedTodo(state: Todo | null): void,
+  onClose(state: Todo | null): void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId, todo, selectedTodo,
+  userId, todo, onClose,
 }) => {
   const [users, setUsers] = useState<User>();
 
@@ -29,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
       <div
         className="modal-background"
         onClick={() => {
-          selectedTodo(null);
+          onClose(null);
         }}
 
       />
@@ -52,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                selectedTodo(null);
+                onClose(null);
               }}
             />
           </header>

@@ -13,7 +13,7 @@ import { Sort } from './types/Sort';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setIsLoaded] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [userId, setUserId] = useState(0);
   const [query, setQuery] = useState('');
@@ -27,13 +27,15 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos.filter(todo => {
+    const includes = todo.title.toLowerCase().includes(query.toLowerCase());
+
     switch (statusFilter) {
       case Sort.completed:
-        return todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        return todo.completed && includes;
       case Sort.active:
-        return !todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        return !todo.completed && includes;
       default:
-        return todo.title.toLowerCase().includes(query.toLowerCase());
+        return includes;
     }
   });
 
@@ -53,15 +55,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded && <Loader />}
-              {!isLoaded && (
-                <TodoList
-                  selectedTodoID={selectedTodo}
-                  todos={filteredTodos}
-                  selectedTodo={todo => setSelectedTodo(todo)}
-                  userId={user => setUserId(user)}
-                />
-              )}
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    selectedTodoID={selectedTodo}
+                    todos={filteredTodos}
+                    selectedTodo={todo => setSelectedTodo(todo)}
+                    userId={user => setUserId(user)}
+                  />
+                )}
             </div>
           </div>
         </div>
@@ -71,7 +74,7 @@ export const App: React.FC = () => {
         <TodoModal
           userId={userId}
           todo={selectedTodo}
-          selectedTodo={setSelectedTodo}
+          onClose={setSelectedTodo}
         />
       )}
     </>
