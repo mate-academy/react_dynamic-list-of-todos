@@ -51,8 +51,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={todosToShow}
-                    setSelectedTodo={setSelectedTodo}
-                    setModal={setModal}
+                    onSetSelectedTodo={setSelectedTodo}
+                    onSettingModal={setModal}
                   />
                 )}
             </div>
@@ -65,8 +65,8 @@ export const App: React.FC = () => {
           selectedTodo={selectedTodo}
           selectedUser={selectedUser}
           onSelectTodo={setSelectedTodo}
-          setSelectedUser={setSelectedUser}
-          setModal={setModal}
+          onSettingSelectedUser={setSelectedUser}
+          onSettingModal={setModal}
         />
       )}
     </>

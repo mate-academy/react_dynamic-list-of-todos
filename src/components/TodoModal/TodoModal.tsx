@@ -7,16 +7,16 @@ type Props = {
   selectedTodo: Todo | null,
   selectedUser: User | null,
   onSelectTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
-  setSelectedUser: Dispatch<SetStateAction<User | null>>,
-  setModal: React.Dispatch<React.SetStateAction<boolean>>,
+  onSettingSelectedUser: Dispatch<SetStateAction<User | null>>,
+  onSettingModal: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   selectedUser,
   onSelectTodo,
-  setSelectedUser,
-  setModal,
+  onSettingSelectedUser,
+  onSettingModal,
 }) => {
   return (
     <div
@@ -45,8 +45,8 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 onSelectTodo(null);
-                setSelectedUser(null);
-                setModal(false);
+                onSettingSelectedUser(null);
+                onSettingModal(false);
               }}
             />
           </header>

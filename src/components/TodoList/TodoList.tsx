@@ -3,12 +3,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
-  setModal: React.Dispatch<React.SetStateAction<boolean>>,
+  onSetSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
+  onSettingModal: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const TodoList: React.FC<Props> = (
-  { todos, setSelectedTodo, setModal },
+  { todos, onSetSelectedTodo, onSettingModal },
 ) => (
   <>
     <table className="table is-narrow is-fullwidth">
@@ -42,8 +42,8 @@ export const TodoList: React.FC<Props> = (
                 className="button"
                 type="button"
                 onClick={() => {
-                  setSelectedTodo(todo);
-                  setModal(true);
+                  onSetSelectedTodo(todo);
+                  onSettingModal(true);
                 }}
               >
                 <span className="icon">

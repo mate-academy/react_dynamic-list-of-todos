@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSettingTodo }) => {
         .includes(lowerQuery)));
   };
 
-  useEffect(getFilteredTodos, [lowerQuery]);
+  useEffect(()=>getFilteredTodos(), [lowerQuery]);
 
   const handleOnSelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     switch (target.value) {
