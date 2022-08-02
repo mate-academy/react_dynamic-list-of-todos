@@ -15,18 +15,20 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
-    (async () => {
-      await getTodos().then(todos => {
+    const fetchTodo = () => {
+      getTodos().then(todos => {
         setTodosFromServer(todos);
         setFilteredTodos(todos);
+        setIsLoaded(true);
       });
-      setIsLoaded(false);
-    })();
+    };
+
+    fetchTodo();
   }, []);
 
   const todoFilter = (query: string, option: string) => {
@@ -42,7 +44,7 @@ export const App: React.FC = () => {
           return todo.completed && todo.title.includes(query);
 
         default:
-          return undefined;
+          return false;
       }
     });
 
@@ -65,8 +67,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoaded
-                ? <Loader />
-                : <TodoList todos={filteredTodos} selectTodo={idSelector} />}
+                ? <TodoList todos={filteredTodos} selectTodo={idSelector} />
+                : <Loader />}
             </div>
           </div>
         </div>

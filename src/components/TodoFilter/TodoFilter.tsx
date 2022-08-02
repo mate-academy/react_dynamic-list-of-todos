@@ -5,12 +5,12 @@ type Props = {
   todoFilter: (query: string, option: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ todoFilter: filteredTodos }) => {
+export const TodoFilter: React.FC<Props> = ({ todoFilter }) => {
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState('all');
+  const [option, setOption] = useState(SelectOptions.ALL);
 
   useEffect(() => {
-    filteredTodos(query, option);
+    todoFilter(query, option);
   }, [query, option]);
 
   return (
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({ todoFilter: filteredTodos }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setOption(event.target.value)}
+            onChange={(event) => setOption(event.target.value as SelectOptions)}
           >
             <option value={SelectOptions.ALL}>All</option>
             <option value={SelectOptions.ACTIVE}>Active</option>
