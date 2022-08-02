@@ -52,24 +52,19 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    switch (filteredBy) {
-      case SortOption.ALL:
-        setVisibleTodos(todos.filter(todo => handleFilter(todo.title)));
-        break;
+    setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
+      .filter(todo => {
+        switch (filteredBy) {
+          case SortOption.ACTIVE:
+            return !todo.completed;
 
-      case SortOption.ACTIVE:
-        setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
-          .filter(todo => !todo.completed));
-        break;
+          case SortOption.COMPLETED:
+            return todo.completed;
 
-      case SortOption.COMPLETED:
-        setVisibleTodos(todos.filter(todo => handleFilter(todo.title))
-          .filter(todo => todo.completed));
-        break;
-
-      default:
-        break;
-    }
+          default:
+            return todo;
+        }
+      }));
   }, [filteredBy, query]);
 
   const selectUser = (id: number, todoId: number) => {
