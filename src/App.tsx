@@ -15,40 +15,42 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
-  const [selectTodo, setSelectTodo] = useState(0);
-  const [isLoad, setIsLoad] = useState(true);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadTodos = async () => {
-      const listTodos = await getTodos();
+      const todosFromServer = await getTodos();
 
-      setTodos(listTodos);
-      setIsLoad(false);
-      setVisibleTodos(listTodos);
+      setTodos(todosFromServer);
+      setIsLoading(false);
+      setVisibleTodos(todosFromServer);
     };
 
     loadTodos();
   }, []);
 
   const todosFilter = (inputType: string, typeSelect: string) => {
-    let visibleMovies = todos.filter(
-      ({ title }) => title.toLowerCase().includes(inputType),
-    );
+    let visibledTodos = [...todos]
+      .filter(({ title }) => title.toLowerCase().includes(inputType));
+
+    const filteringVisibleTodos = (condition: boolean) => {
+      visibledTodos = todos
+        .filter(({ completed, title }) => completed === condition && title.toLowerCase().includes(inputType));
+    };
 
     if (typeSelect === 'active') {
-      visibleMovies = todos
-        .filter(({ completed }) => completed === false);
+      filteringVisibleTodos(false);
     }
 
     if (typeSelect === 'completed') {
-      visibleMovies = todos
-        .filter(({ completed }) => completed === true);
+      filteringVisibleTodos(true);
     }
 
-    setVisibleTodos(visibleMovies);
+    setVisibleTodos(visibledTodos);
   };
 
-  const select = (todoId: number) => setSelectTodo(todoId);
+  const selectTodoId = (todoId: number) => setSelectedTodoId(todoId);
 
   return (
     <>
@@ -64,21 +66,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoad
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    select={select}
-                    selectTodo={selectTodo}
+                    onTodoSelected={selectTodoId}
+                    selectedTodo={selectedTodoId}
                   />
                 ) }
             </div>
 
-            {selectTodo > 0 && (
+            {selectedTodoId > 0 && (
               <TodoModal
-                todo={visibleTodos.find(todo => todo.id === selectTodo)}
-                select={select}
+                todo={visibleTodos.find(todo => todo.id === selectedTodoId)}
+                onTodoSelected={selectTodoId}
               />
             )}
           </div>
