@@ -9,9 +9,9 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedUserId, setSelectedUserId] = useState<number>(-1);
+  const [selectedUserId, setSelectedUserId] = useState<number>(0);
 
-  const handler = (todo: Todo, userId: number) => {
+  const handleSelectingTodo = (todo: Todo, userId: number) => {
     setSelectedTodo(todo);
     setSelectedUserId(userId);
   };
@@ -63,7 +63,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handler(todo, todo.userId)}
+                onClick={() => handleSelectingTodo(todo, todo.userId)}
               >
                 <span className="icon">
                   <i className={classNames(

@@ -1,10 +1,5 @@
 import React from 'react';
-
-enum TodoStatus {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   setSortType: (status: TodoStatus) => void,
@@ -21,22 +16,7 @@ export const TodoFilter: React.FC<Props> = (
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => {
-              let status;
-
-              switch (event.target.value) {
-                case 'active':
-                  status = TodoStatus.ACTIVE;
-                  break;
-                case 'completed':
-                  status = TodoStatus.COMPLETED;
-                  break;
-                default:
-                  status = TodoStatus.ALL;
-              }
-
-              setSortType(status);
-            }}
+            onChange={(event) => setSortType(event.target.value as TodoStatus)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
