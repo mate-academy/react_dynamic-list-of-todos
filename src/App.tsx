@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosToShow, setTodosToShow] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [shownTodoId, setShownTodoId] = useState<null | number>(null);
+  const [shownTodoId, setShownTodoId] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -39,8 +39,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(loading && <Loader />)
-              || <TodoList todos={todosToShow} setShownTodoId={setShownTodoId} />}
+              {loading
+                ? <Loader />
+                : <TodoList todos={todosToShow} setShownTodoId={setShownTodoId} />}
             </div>
           </div>
         </div>

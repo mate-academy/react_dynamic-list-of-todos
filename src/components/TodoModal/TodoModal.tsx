@@ -6,27 +6,24 @@ import { Loader } from '../Loader';
 
 type Props = {
   todoId: number;
-  setShownTodoId: (value: null | number) => void;
+  setShownTodoId: (value: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todoId, setShownTodoId }) => {
   const [loading, setLoading] = useState(true);
-  const [todo, setTodo] = useState<null | Todo>(null);
-  const [user, setUser] = useState<null | User>(null);
+  const [todo, setTodo] = useState<Todo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      setTodo(await getTodo(todoId));
-
-      setUser(await getTodo(todoId)
-        .then(result => {
-          if (result) {
-            return getUser(result.userId);
-          }
-
-          return null;
-        }));
-      setLoading(false);
+    const loadData = () => {
+      getTodo(todoId).then(gottenTodo => {
+        setTodo(gottenTodo);
+        if (gottenTodo) {
+          getUser(gottenTodo.userId)
+            .then(gottenUser => setUser(gottenUser))
+            .then(() => setLoading(false));
+        }
+      });
     };
 
     loadData();
@@ -53,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({ todoId, setShownTodoId }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setShownTodoId(null)}
+              onClick={() => setShownTodoId(0)}
             />
           </header>
 

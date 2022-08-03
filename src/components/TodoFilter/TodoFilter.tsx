@@ -7,12 +7,6 @@ type Props = {
   setTodosToShow: (value: Todo[]) => void;
 };
 
-// enum TodosFilterType {
-//   'active',
-//   'completed',
-//   'all',
-// }
-
 export const TodoFilter: React.FC<Props> = ({ todos, setTodosToShow }) => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,17 +16,18 @@ export const TodoFilter: React.FC<Props> = ({ todos, setTodosToShow }) => {
 
     switch (statusFilter) {
       case ('active'):
-        filteredTodos = todos.filter(todo => !todo.completed);
+        filteredTodos = todos.filter(
+          todo => !todo.completed && todo.title.includes(searchQuery),
+        );
         break;
       case ('completed'):
-        filteredTodos = todos.filter(todo => todo.completed);
+        filteredTodos = todos.filter(
+          todo => todo.completed && todo.title.includes(searchQuery),
+        );
         break;
       default:
         filteredTodos = todos;
     }
-
-    filteredTodos = filteredTodos
-      .filter(todo => todo.title.includes(searchQuery));
 
     setTodosToShow(filteredTodos);
   }, [statusFilter, searchQuery]);
