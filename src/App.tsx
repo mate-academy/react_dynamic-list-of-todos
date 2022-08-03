@@ -26,16 +26,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then((todosFromServer) => {
-        todos = todosFromServer;
-
-        return todos;
+      .then(setFilteredTodo)
+      .then(() => {
+        todos = filteredTodo.map((todo: Todo) => ({ ...todo }));
       })
-      .then(
-        (todosFromServer) => setFilteredTodo(
-          todosFromServer.map((todo: Todo) => ({ ...todo })),
-        ),
-      )
       .then(() => setLoading(false));
   }, []);
 
