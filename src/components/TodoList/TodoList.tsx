@@ -1,44 +1,57 @@
 import React from 'react';
 import './TodoList.scss';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <div className="TodoList">
-    <h2>Todos:</h2>
+interface Props {
+  todos: Todo[],
+  setUser: (arg0: number) => void,
+  selectedUserId: number | null,
+}
 
-    <div className="TodoList__list-container">
-      <ul className="TodoList__list">
-        <li className="TodoList__item TodoList__item--unchecked">
-          <label>
-            <input type="checkbox" readOnly />
-            <p>delectus aut autem</p>
-          </label>
+export const TodoList: React.FC<Props> = React
+  .memo(({ todos, setUser, selectedUserId }) => (
+    <div className="TodoList">
+      <h2>Todos:</h2>
 
-          <button
-            className="
-              TodoList__user-button
-              TodoList__user-button--selected
-              button
-            "
-            type="button"
-          >
-            User&nbsp;#1
-          </button>
-        </li>
+      <div className="TodoList__list-container">
+        <ul className="TodoList__list" data-cy="listOfTodos">
+          {todos.map(item => (
+            <li
+              className={classNames(
+                'TodoList__item',
+                { 'TodoList__item--unchecked': !item.completed },
+                { 'TodoList__item--checked': item.completed },
+              )}
+              key={item.id}
+            >
+              <label>
+                {item.completed
+                  ? <input type="checkbox" checked readOnly />
+                  : <input type="checkbox" readOnly /> }
+                <p>{item.title}</p>
+              </label>
 
-        <li className="TodoList__item TodoList__item--checked">
-          <label>
-            <input type="checkbox" checked readOnly />
-            <p>distinctio vitae autem nihil ut molestias quo</p>
-          </label>
-
-          <button
-            className="TodoList__user-button button"
-            type="button"
-          >
-            User&nbsp;#2
-          </button>
-        </li>
-      </ul>
+              <button
+                className={classNames(
+                  'TodoList__user-button',
+                  'button',
+                  {
+                    'TodoList__user-button--selected':
+                    selectedUserId !== item.userId,
+                  },
+                )}
+                data-cy="userButton"
+                type="button"
+                onClick={() => {
+                  setUser(item.userId);
+                }}
+              >
+                User&nbsp;#
+                {item.userId}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  ));

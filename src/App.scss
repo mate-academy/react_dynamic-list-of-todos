@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
+
+* {
+  font-family: "Varela Round", sans-serif;
+}
+
 body {
   min-height: 100vh;
   background-color: #e9e6f2;
@@ -91,4 +97,8 @@ input[type="checkbox"]:checked + p:before {
     position: sticky;
     top: 20px;
   }
+}
+
+#search-query {
+  width: 35vw;
 }
