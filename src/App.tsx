@@ -12,13 +12,13 @@ import { Todo } from './types/Todo';
 import { Filter } from './Filter';
 
 export const App: React.FC = () => {
-  const [isLoadedTodos, setIsLoadedTodos] = useState<boolean>(false);
+  const [isLoadedTodos, setIsLoadedTodos] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isOpenedTodo, setIsOpenedTodo] = useState<boolean>(false);
-  const [selectFilter, setSelectFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isOpenedTodo, setIsOpenedTodo] = useState(false);
+  const [selectFilter, setSelectFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -39,24 +39,23 @@ export const App: React.FC = () => {
     return title.toLowerCase().includes(params);
   };
 
-  useEffect(() => {
+  const filteredTodos = todos.filter(todo => {
     switch (selectFilter) {
       case Filter.all:
-        setVisibleTodos(todos.filter(todo => findTitle(todo.title)));
-        break;
+        return findTitle(todo.title);
 
       case Filter.active:
-        setVisibleTodos(todos.filter(todo => !todo.completed && findTitle(todo.title)));
-        break;
+        return !todo.completed && findTitle(todo.title);
 
       case Filter.completed:
-        setVisibleTodos(todos.filter(todo => todo.completed && findTitle(todo.title)));
-        break;
+        return todo.completed && findTitle(todo.title);
 
       default:
-        break;
+        return todo;
     }
-  }, [searchQuery, selectFilter]);
+  });
+
+  useEffect(() => setVisibleTodos(filteredTodos), [searchQuery, selectFilter]);
 
   const handleOpenTodo = (todo: Todo) => {
     setSelectedTodo(todo);

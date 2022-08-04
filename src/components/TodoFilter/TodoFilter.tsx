@@ -49,7 +49,10 @@ export const TodoFilter: React.FC<Props> = ({
           <button
             data-cy="clearSearchButton"
             type="button"
-            className={classNames('delete', { 'close-btn': word.length === 0 })}
+            className={classNames('delete',
+              {
+                'close-btn': word.length === 0,
+              })}
             onClick={() => setWord('')}
           />
         </span>

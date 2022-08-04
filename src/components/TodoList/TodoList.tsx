@@ -24,7 +24,6 @@ export const TodoList: React.FC<Props> = ({
             </span>
           </th>
           <th>Title</th>
-          <th> </th>
         </tr>
       </thead>
 
@@ -57,7 +56,10 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleOpenTodo(todo)}
               >
                 <span className="icon">
-                  <i className={selectedTodoId === todo.id ? 'far fa-eye-slash' : 'far fa-eye'} />
+                  <i className={selectedTodoId === todo.id
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
+                  />
                 </span>
               </button>
             </td>
