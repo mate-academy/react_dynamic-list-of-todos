@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  onSetTodos: (todos: Todo[]) => void;
+  onSetVisibleTodos: (todos: Todo[]) => void;
 };
 
 enum Select {
@@ -15,31 +15,34 @@ enum Select {
 
 export const TodoFilter: React.FC<Props> = ({
   todos,
-  onSetTodos,
+  onSetVisibleTodos,
 }) => {
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
   const [query, setQuery] = useState('');
 
+  const inputedTodos = filteredTodos
+    .filter(todo => (
+      todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    ));
+
   useEffect(() => {
-    onSetTodos(todos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase())));
-  }, [query]);
+    onSetVisibleTodos(inputedTodos);
+  }, [query, filteredTodos]);
 
   const handleStatusSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
       case Select.ALL:
-        onSetTodos(todos);
+        setFilteredTodos(todos);
         break;
 
       case Select.ACTIVE:
-        onSetTodos(
-          todos.filter(todo => !todo.completed),
-        );
+        setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
 
       case Select.COMLETED:
-        onSetTodos(
-          todos.filter(todo => todo.completed),
-        );
+        setFilteredTodos(todos.filter(todo => todo.completed));
         break;
 
       default:

@@ -12,18 +12,17 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     getTodos()
       .then(todosData => {
-        setInitialTodos(todosData);
         setTodos(todosData);
       })
-      .then(() => {
+      .finally(() => {
         setIsLoaded(true);
       });
   }, []);
@@ -41,14 +40,14 @@ export const App: React.FC = () => {
               <>
                 <div className="block">
                   <TodoFilter
-                    todos={initialTodos}
-                    onSetTodos={setTodos}
+                    todos={todos}
+                    onSetVisibleTodos={setVisibleTodos}
                   />
                 </div>
 
                 <div className="block">
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodos}
                     selectedTodo={selectedTodo}
                     onTodoSelected={setSelectedTodo}
                   />
