@@ -4,17 +4,17 @@ import classNames from 'classnames';
 import { Filter } from '../../Filter';
 
 type Props = {
-  handleSaveOption: (option: string) => void,
-  handleSaveQuery: (searchWord: string) => void,
+  onSaveOption: (option: string) => void,
+  onSaveQuery: (searchWord: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  handleSaveOption,
-  handleSaveQuery,
+  onSaveOption,
+  onSaveQuery,
 }) => {
   const [word, setWord] = React.useState('');
 
-  React.useEffect(() => handleSaveQuery(word), [word]);
+  React.useEffect(() => onSaveQuery(word), [word]);
 
   return (
     <form className="field has-addons">
@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => handleSaveOption(event.target.value)}
+            onChange={(event) => onSaveOption(event.target.value)}
           >
             <option value={Filter.all}>All</option>
             <option value={Filter.active}>Active</option>

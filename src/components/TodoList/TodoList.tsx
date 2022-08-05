@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  handleOpenTodo: (todo: Todo) => void,
+  onOpenTodo: (todo: Todo) => void,
   selectedTodoId?: number,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  handleOpenTodo,
+  onOpenTodo,
   selectedTodoId,
 }) => {
   return (
@@ -53,7 +53,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleOpenTodo(todo)}
+                onClick={() => onOpenTodo(todo)}
               >
                 <span className="icon">
                   <i className={selectedTodoId === todo.id

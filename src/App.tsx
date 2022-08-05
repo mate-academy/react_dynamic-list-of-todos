@@ -21,16 +21,11 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const loadTodos = async () => {
-      await getTodos().then(todoList => {
-        setTodos(todoList);
-        setVisibleTodos(todoList);
-      });
-
+    getTodos().then(todoList => {
+      setTodos(todoList);
+      setVisibleTodos(todoList);
       setIsLoadedTodos(true);
-    };
-
-    loadTodos();
+    });
   }, []);
 
   const findTitle = (title: string) => {
@@ -84,8 +79,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleSaveOption={handleSaveOption}
-                handleSaveQuery={handleSaveQuery}
+                onSaveOption={handleSaveOption}
+                onSaveQuery={handleSaveQuery}
               />
             </div>
 
@@ -95,7 +90,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    handleOpenTodo={handleOpenTodo}
+                    onOpenTodo={handleOpenTodo}
                     selectedTodoId={selectedTodo?.id}
                   />
                 )}
