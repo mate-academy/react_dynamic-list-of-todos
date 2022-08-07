@@ -2,14 +2,14 @@ import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
 
 type Props = {
-  filterTodos: (param: string) => void,
+  selectValue: string,
+  setSelectValue: (param: string) => void,
   setAppliedQuery: (appliedQuery: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filterTodos, setAppliedQuery,
+  selectValue, setSelectValue, setAppliedQuery,
 }) => {
-  const [value, setValue] = useState('all');
   const [query, setQuery] = useState('');
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
@@ -20,11 +20,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={value}
-            onChange={(event) => {
-              setValue(event.target.value);
-              filterTodos(event.target.value);
-            }}
+            value={selectValue}
+            onChange={(event) => setSelectValue(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

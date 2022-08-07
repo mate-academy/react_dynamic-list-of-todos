@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [shownTodo, setShownTodo] = useState<number>(0);
-  const [filterByStatus, setFilterByStatus] = useState<string>('all');
+  const [selectValue, setSelectValue] = useState<string>('all');
   const [appliedQuery, setAppliedQuery] = useState<string>('');
 
   useEffect(() => {
@@ -31,12 +31,12 @@ export const App: React.FC = () => {
   }, []);
 
   useMemo(() => setVisibleTodos(todos.filter((todo: Todo) => {
-    switch (filterByStatus) {
+    switch (selectValue) {
       case 'completed': return todo.completed;
       case 'active': return !todo.completed;
       default: return todo;
     }
-  })), [filterByStatus, todos]);
+  })), [selectValue, todos]);
 
   useMemo(() => setVisibleTodos(todos.filter((todo: Todo) => {
     return todo.title.toLowerCase().includes(appliedQuery.toLowerCase());
@@ -51,7 +51,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterTodos={(param: string) => setFilterByStatus(param)}
+                selectValue={selectValue}
+                setSelectValue={(param: string) => setSelectValue(param)}
                 setAppliedQuery={setAppliedQuery}
               />
               <button
@@ -78,9 +79,7 @@ export const App: React.FC = () => {
       {shownTodo && (
         <TodoModal
           todo={todos[shownTodo - 1]}
-          unselectTodo={() => {
-            setShownTodo(0);
-          }}
+          unselectTodo={() => setShownTodo(0)}
         />
       )}
 

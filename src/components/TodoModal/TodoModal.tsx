@@ -14,9 +14,7 @@ export const TodoModal: React.FC<Props> = ({ todo, unselectTodo }) => {
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(loadedUser => {
-        setUser(loadedUser);
-      });
+      .then(loadedUser => setUser(loadedUser));
   }, []);
 
   return (
@@ -59,8 +57,8 @@ export const TodoModal: React.FC<Props> = ({ todo, unselectTodo }) => {
 
               {' by '}
 
-              <a href={user?.email}>
-                {user?.name}
+              <a href={user.email}>
+                {user.name}
               </a>
             </p>
           </div>

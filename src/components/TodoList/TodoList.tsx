@@ -32,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => (
           <tr
             data-cy="todo"
+            key={todo.id}
             className={classnames(
               { 'has-background-info-light': selectedTodo === todo.id },
             )}
@@ -58,23 +59,21 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  selectTodo(todo.id);
-                }}
+                onClick={() => selectTodo(todo.id)}
               >
                 <span className="icon">
-                  <i className={classnames(
-                    'far',
-                    { 'fa-eye': selectedTodo !== todo.id },
-                    { 'fa-eye-slash': selectedTodo === todo.id },
-                  )}
+                  <i
+                    className={classnames(
+                      'far',
+                      { 'fa-eye': selectedTodo !== todo.id },
+                      { 'fa-eye-slash': selectedTodo === todo.id },
+                    )}
                   />
                 </span>
               </button>
             </td>
           </tr>
         ))}
-
       </tbody>
     </table>
   );
