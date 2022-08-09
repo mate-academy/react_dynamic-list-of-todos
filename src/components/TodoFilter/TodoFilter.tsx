@@ -6,21 +6,27 @@ interface Props {
   onSetVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
+enum Selector {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({ todos, onSetVisibleTodos }) => {
   const [query, setQuery] = useState('');
   const handleSelectChange = ({
     target,
   }: React.ChangeEvent<HTMLSelectElement>) => {
     switch (target.value) {
-      case 'all':
+      case Selector.all:
         onSetVisibleTodos(todos);
         break;
 
-      case 'active':
+      case Selector.active:
         onSetVisibleTodos(todos.filter(todo => !todo.completed));
         break;
 
-      case 'completed':
+      case Selector.completed:
         onSetVisibleTodos(todos.filter(todo => todo.completed));
         break;
 

@@ -30,6 +30,12 @@ export const App: React.FC = () => {
     }
   }, [selectedTodo]);
 
+  const handleModalClosing = () => {
+    selectTodo(null);
+    setUser(null);
+    setModalVisbility(false);
+  };
+
   if (initialTodos.length === 0) {
     return <Loader />;
   }
@@ -63,9 +69,7 @@ export const App: React.FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           currentUser={user}
-          onResetTodo={selectTodo}
-          onResetUser={setUser}
-          onResetModalVisibility={setModalVisbility}
+          onModalClosing={handleModalClosing}
         />
       )}
     </>

@@ -6,17 +6,13 @@ import { Loader } from '../Loader';
 interface Props {
   selectedTodo: Todo | null
   currentUser: User | null
-  onResetTodo: React.Dispatch<React.SetStateAction<Todo | null>>
-  onResetUser: React.Dispatch<React.SetStateAction<User | null>>
-  onResetModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
+  onModalClosing: () => void
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   currentUser,
-  onResetTodo,
-  onResetUser,
-  onResetModalVisibility,
+  onModalClosing,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,11 +36,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                onResetTodo(null);
-                onResetUser(null);
-                onResetModalVisibility(false);
-              }}
+              onClick={onModalClosing}
             />
           </header>
 
