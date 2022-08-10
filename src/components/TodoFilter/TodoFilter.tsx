@@ -1,44 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { getTodos } from '../../api';
-import { Todo } from '../../types/Todo';
-
-enum FilterType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 
 type Props = {
-  onFilter: (todos: Todo[]) => void,
+  onChange: (value: string) => void,
+  onInput: (value: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+export const TodoFilter: React.FC<Props> = ({ onChange, onInput }) => {
   const [todoFind, setTodoFind] = useState('');
 
   useEffect(() => {
-    getTodos().then(todosFromServer => setTodos(todosFromServer));
-  });
-
-  const findTodos = (todoTitle: string) => {
-    setTodos(todos.filter(todo => todo.title.includes(todoTitle)));
-  };
-
-  function filterTodos(filterType: string) {
-    switch (filterType) {
-      case FilterType.ALL:
-        return onFilter(todos.filter(todo => todo));
-
-      case FilterType.ACTIVE:
-        return onFilter(todos.filter(todo => todo.completed === false));
-
-      case FilterType.COMPLETED:
-        return onFilter(todos.filter(todo => todo.completed === true));
-
-      default:
-        return 0;
-    }
-  }
+    onInput(todoFind);
+  }, [todoFind]);
 
   return (
     <form
@@ -52,7 +24,7 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
           <select
             data-cy="statusSelect"
             onChange={
-              (event) => filterTodos(event.target.value)
+              (event) => onChange(event.target.value)
             }
           >
             <option value="all">
@@ -79,7 +51,6 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
           value={todoFind}
           onChange={(event) => {
             setTodoFind(event.target.value);
-            findTodos(event.target.value);
           }}
         />
         <span className="icon is-left">
@@ -87,15 +58,18 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => {
-              setTodoFind('');
-            }}
-          />
+          {todoFind
+          && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => {
+                setTodoFind('');
+              }}
+            />
+          )}
         </span>
       </p>
     </form>
