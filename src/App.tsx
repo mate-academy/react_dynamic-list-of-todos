@@ -25,16 +25,21 @@ export const App: React.FC = () => {
   };
 
   const filterTodos = (option: React.ChangeEvent<HTMLSelectElement>) => {
-    if (option.target.value === 'active') {
-      setFilterOption(false);
-    }
+    switch (option.target.value) {
+      case 'active':
+        setFilterOption(false);
 
-    if (option.target.value === 'completed') {
-      setFilterOption(true);
-    }
+        break;
 
-    if (option.target.value === 'all') {
-      setFilterOption(null);
+      case 'completed':
+        setFilterOption(true);
+
+        break;
+
+      default:
+        setFilterOption(null);
+
+        break;
     }
   };
 
