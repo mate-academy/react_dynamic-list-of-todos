@@ -12,35 +12,46 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [shownTodo, setShownTodo] = useState<number>(0);
-  const [selectValue, setSelectValue] = useState<string>('all');
+  const [shownTodo, setShownTodo] = useState<number | null>(null);
+  const [selectValue, setSelectValue] = useState<string>(Filter.all);
   const [appliedQuery, setAppliedQuery] = useState<string>('');
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
         setIsLoading(false);
       });
   }, []);
 
-  useMemo(() => setVisibleTodos(todos.filter((todo: Todo) => {
-    switch (selectValue) {
-      case 'completed': return todo.completed;
-      case 'active': return !todo.completed;
-      default: return todo;
-    }
-  })), [selectValue, todos]);
+  const filterBySelect = (todosFromServer: Todo[]) => {
+    return todosFromServer.filter((todo: Todo) => {
+      switch (selectValue) {
+        case Filter.completed: return todo.completed;
+        case Filter.active: return !todo.completed;
+        default: return todo;
+      }
+    });
+  };
 
-  useMemo(() => setVisibleTodos(todos.filter((todo: Todo) => {
-    return todo.title.toLowerCase().includes(appliedQuery.toLowerCase());
-  })), [appliedQuery, todos]);
+  useMemo(async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(filterBySelect(todosFromServer));
+  }, [selectValue]);
+
+  useMemo(async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer.filter((todo: Todo) => {
+      return todo.title.toLowerCase().includes(appliedQuery.toLowerCase());
+    }));
+  }, [appliedQuery]);
 
   return (
     <>
@@ -58,7 +69,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 className="button"
-                onClick={() => setVisibleTodos(shuffle(visibleTodos))}
+                onClick={() => setTodos(shuffle(todos))}
               >
                 Randomize
               </button>
@@ -67,7 +78,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading && <Loader />}
               <TodoList
-                todos={visibleTodos}
+                todos={todos}
                 selectedTodo={shownTodo}
                 selectTodo={(todoId) => setShownTodo(todoId)}
               />
@@ -79,7 +90,7 @@ export const App: React.FC = () => {
       {shownTodo && (
         <TodoModal
           todo={todos[shownTodo - 1]}
-          unselectTodo={() => setShownTodo(0)}
+          unselectTodo={() => setShownTodo(null)}
         />
       )}
 

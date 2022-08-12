@@ -1,5 +1,6 @@
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   selectValue: string,
@@ -23,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectValue}
             onChange={(event) => setSelectValue(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.all}>{Filter.all}</option>
+            <option value={Filter.active}>{Filter.active}</option>
+            <option value={Filter.completed}>{Filter.completed}</option>
           </select>
         </span>
       </p>
