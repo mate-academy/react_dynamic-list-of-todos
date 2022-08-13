@@ -24,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
               setStatus(target.value as Sort);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Sort.ALL}>All</option>
+            <option value={Sort.ACTIVE}>Active</option>
+            <option value={Sort.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
