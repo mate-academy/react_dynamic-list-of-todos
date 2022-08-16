@@ -45,14 +45,14 @@ export const App: React.FC = () => {
 
   const onSelect = (value:string) => {
     if (value === 'active') {
-      const newTodos = todos
+      const newTodos = visibleTodos
         .filter(todo => todo.completed === false);
 
       setVisibleTodos(newTodos);
     }
 
     if (value === 'completed') {
-      const newTodos = todos
+      const newTodos = visibleTodos
         .filter(todo => todo.completed === true);
 
       setVisibleTodos(newTodos);
