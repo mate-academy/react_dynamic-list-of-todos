@@ -1,5 +1,5 @@
-import React from 'react';
 import { Todo } from '../../types/Todo';
+import { List } from '../List/List';
 
 type Props = {
   todoList: Todo[];
@@ -24,7 +24,8 @@ export const TodoList: React.FC<Props> = (
     visibleTodos = todoList.filter(todo => todo.completed === filterOption);
   }
 
-  visibleTodos = visibleTodos.filter(todo => todo.title.includes(filterQuery));
+  visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase()
+    .includes(filterQuery.toLowerCase()));
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -42,55 +43,19 @@ export const TodoList: React.FC<Props> = (
       </thead>
 
       <tbody>
-        {visibleTodos.map(todo => (
+        {visibleTodos.map((todo: Todo) => (
           <tr
             data-cy="todo"
+            key={todo.id}
             className={
               openedTodoId === todo.id ? 'has-background-info-light' : ''
             }
-            key={todo.id}
           >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {
-                todo.completed
-                  ? (
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  )
-                  : ''
-              }
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onClick(todo)}
-              >
-                {openedTodoId === todo.id
-                  ? (
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  )
-                  : (
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  )}
-              </button>
-            </td>
+            <List
+              openedTodoId={openedTodoId}
+              onClick={onClick}
+              todo={todo}
+            />
           </tr>
         ))}
       </tbody>

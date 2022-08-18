@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -8,6 +6,8 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -18,20 +18,25 @@ export const App: React.FC = () => {
   const [filterOption, setFilterOption] = useState<boolean | null>(null);
   const [filterQuery, setFilterQuery] = useState<string>('');
 
+  enum Option {
+    active = 'active',
+    completed = 'completed',
+  }
+
   const loadTodos = async () => {
     const todos = await getTodos();
 
     setTodoList(todos);
   };
 
-  const filterTodos = (option: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (option.target.value) {
-      case 'active':
+  const filterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case Option.active:
         setFilterOption(false);
 
         break;
 
-      case 'completed':
+      case Option.completed:
         setFilterOption(true);
 
         break;
@@ -44,9 +49,9 @@ export const App: React.FC = () => {
   };
 
   const filterQueryTodos
-    = (query: React.ChangeEvent<HTMLInputElement>) => {
-      query.preventDefault();
-      setFilterQuery(query.target.value);
+    = (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      setFilterQuery(event.target.value);
     };
 
   const eraseQuery = () => {
@@ -63,12 +68,7 @@ export const App: React.FC = () => {
     const user = await getUser(todo.userId);
 
     setSelectedUser(user);
-    setTodoInfo({
-      id: todo.id,
-      title: todo.title,
-      completed: todo.completed,
-      userId: todo.userId,
-    });
+    setTodoInfo({ ...todo });
   };
 
   const closeTodo = () => {
@@ -120,7 +120,6 @@ export const App: React.FC = () => {
         <TodoModal
           selectedUser={selectedUser}
           onClick={closeTodo}
-          openTodo={openedTodo}
           todoInfo={todoInfo}
         />
       )}

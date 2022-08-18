@@ -1,5 +1,3 @@
-import React from 'react';
-
 type Props = {
   onChangeSelect: (option: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeInput: (query: React.ChangeEvent<HTMLInputElement>) => void;
