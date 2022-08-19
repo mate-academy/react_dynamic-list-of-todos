@@ -1,10 +1,11 @@
 import { FC } from 'react';
+import { TodoFilterBy } from '../../types/TodoFilterBy';
 
 interface Props {
   query: string;
   changeQuery: (newQuery: string) => void;
   filterBy: string;
-  changeFilter: (newFilterBy: string) => void;
+  changeFilter: (newFilterBy: TodoFilterBy) => void;
 }
 
 export const TodoFilter: FC<Props> = ({
@@ -19,11 +20,11 @@ export const TodoFilter: FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filterBy}
-          onChange={(event) => changeFilter(event.target.value)}
+          onChange={(event) => changeFilter(event.target.value as TodoFilterBy)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={TodoFilterBy.NONE}>All</option>
+          <option value={TodoFilterBy.ACTIVE}>Active</option>
+          <option value={TodoFilterBy.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
