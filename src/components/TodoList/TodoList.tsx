@@ -40,7 +40,9 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedTodo }) => {
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={!todo.completed ? 'has-text-danger' : ''}
+                className={
+                  !todo.completed ? "has-text-danger" : "has-text-success"
+                }
               >
                 {todo.title}
               </p>
