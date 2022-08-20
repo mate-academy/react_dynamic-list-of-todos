@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -28,9 +27,6 @@ export const App: React.FC = () => {
         }
       });
   }, []);
-
-  // connsole.log(todos, 'todos')
-  //   console.log(filtredTodos)
 
   return (
     <>
