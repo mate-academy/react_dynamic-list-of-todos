@@ -7,10 +7,11 @@ import { Loader } from '../Loader';
 interface Props {
   todo:Todo | null;
   setIsActiveModal: (isActiveModal: boolean) => void;
+  setTodo: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = (props) => {
-  const { todo, setIsActiveModal } = props;
+  const { todo, setIsActiveModal, setTodo } = props;
   const [user, setUser] = useState<User | null>(null);
   const [isLoadedUser, setIsLoadedUser] = useState(false);
 
@@ -27,7 +28,10 @@ export const TodoModal: React.FC<Props> = (props) => {
   },
   []);
 
-  const handelCloseModal = () => setIsActiveModal(false);
+  const handelCloseModal = () => {
+    setIsActiveModal(false);
+    setTodo(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">

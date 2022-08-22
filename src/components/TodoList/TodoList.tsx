@@ -5,17 +5,16 @@ import { Todo } from '../../types/Todo';
 interface Props {
   setIsActiveModal:(isActiveModal:boolean) => void;
   setTodo: (todo: Todo) => void;
-  isActiveModal: boolean;
   filtredTodos: Todo[];
-
+  selectTodo: Todo | null;
 }
 
 export const TodoList: React.FC<Props> = (props) => {
   const {
     setIsActiveModal,
-    isActiveModal,
     setTodo,
     filtredTodos,
+    selectTodo,
   } = props;
 
   const handelActivetedModal = (todo: Todo) => {
@@ -72,8 +71,8 @@ export const TodoList: React.FC<Props> = (props) => {
                 <span className="icon">
                   <i className={cn(
                     'far',
-                    { 'fa-eye-slash': isActiveModal },
-                    { 'fa-eye': !isActiveModal },
+                    { 'fa-eye-slash': todo.id === selectTodo?.id },
+                    'fa-eye',
                   )}
                   />
                 </span>

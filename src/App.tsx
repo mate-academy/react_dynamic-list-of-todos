@@ -48,7 +48,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     setIsActiveModal={setIsActiveModal}
-                    isActiveModal={isActiveModal}
+                    selectTodo={todo}
                     setTodo={setTodo}
                     filtredTodos={filtredTodos}
                   />
@@ -63,6 +63,7 @@ export const App: React.FC = () => {
           <TodoModal
             todo={todo}
             setIsActiveModal={setIsActiveModal}
+            setTodo={setTodo}
           />
         )}
     </>
