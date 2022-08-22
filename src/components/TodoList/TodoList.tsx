@@ -4,10 +4,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   selectTodo: (todo: Todo) => void;
+  selectedId: number | undefined;
 }
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { todos, selectTodo } = props;
+  const { todos, selectTodo, selectedId } = props;
+
+  const isSelected = (todoId: number) => todoId === selectedId;
 
   return (
     <>
@@ -30,7 +33,15 @@ export const TodoList: React.FC<Props> = (props) => {
 
             <tbody>
               {todos.map(todo => (
-                <tr data-cy="todo" className="" key={todo.id}>
+                <tr
+                  data-cy="todo"
+                  className={
+                    isSelected(todo.id)
+                      ? 'has-background-info-light'
+                      : ''
+                  }
+                  key={todo.id}
+                >
                   <td className="is-vcentered">{todo.id}</td>
                   <td className="is-vcentered">
                     {todo.completed && (
@@ -50,7 +61,7 @@ export const TodoList: React.FC<Props> = (props) => {
                       onClick={() => selectTodo(todo)}
                     >
                       <span className="icon">
-                        <i className="far fa-eye" />
+                        <i className={`far fa-eye${isSelected(todo.id) ? '-slash' : ''}`} />
                       </span>
                     </button>
                   </td>

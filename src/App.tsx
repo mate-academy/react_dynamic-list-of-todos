@@ -44,7 +44,11 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} selectTodo={selectTodo} />
+                <TodoList
+                  todos={todos}
+                  selectTodo={selectTodo}
+                  selectedId={selectedTodo?.id}
+                />
               )}
             </div>
           </div>
