@@ -7,15 +7,16 @@ import { getUser } from '../../api';
 
 type Props = {
   todo: Todo,
-  closeTodo: CallableFunction,
+  selectedTodo: CallableFunction,
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, closeTodo }) => {
+export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
   const [user, setUser] = useState<User>();
   const [isLoadEnd, setIsLoadEnd] = useState(false);
 
   useEffect(() => {
-    getUser(todo?.userId).then((newUser: User) => setUser(newUser))
+    getUser(todo?.userId)
+      .then(setUser)
       .finally(() => setIsLoadEnd(true));
   }, []);
 
@@ -24,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeTodo }) => {
       <div className="modal-background" />
 
       {!isLoadEnd ? (
-        <Loader isLoadEnd={isLoadEnd} />
+        <Loader />
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -41,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => (closeTodo(null))}
+              onClick={() => (selectedTodo(null))}
             />
           </header>
 

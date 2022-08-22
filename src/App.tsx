@@ -19,35 +19,30 @@ export const App: React.FC = () => {
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    getTodos().then(todo => setTodos(todo))
+    getTodos()
+      .then(todo => setTodos(todo))
       .finally(() => setIsLoadEnd(true));
   }, []);
 
-  const sortedTodo = todos.filter(currTodo => {
+  const sortedTodoByFilter = () => {
     switch (filter) {
       case 'all':
-        if (currTodo.title.includes(searchText)) {
-          return true;
-        }
-
-        break;
+        return todos;
       case 'active':
-        if (currTodo.completed === false
-          && currTodo.title.includes(searchText)) {
-          return true;
-        }
-
-        break;
+        return todos.filter(todo => !todo.completed);
       case 'completed':
       default:
-        if (currTodo.completed === true
-          && currTodo.title.includes(searchText)) {
-          return true;
-        }
+        return todos.filter(todo => todo.completed);
     }
+  };
 
-    return false;
-  });
+  const sortedTodo = () => {
+    const prepSearchText = searchText.toLowerCase();
+
+    return sortedTodoByFilter().filter(todo => (
+      todo.title.toLowerCase().includes(prepSearchText)
+    ));
+  };
 
   return (
     <>
@@ -58,16 +53,16 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={setFilter}
+                setFilter={setFilter}
                 searchText={searchText}
-                setSearchSet={setSearchText}
+                setSearchText={setSearchText}
               />
             </div>
 
             <div className="block">
-              <Loader isLoadEnd={isLoadEnd} />
+              {!isLoadEnd && (<Loader />)}
               <TodoList
-                todos={sortedTodo}
+                todos={sortedTodo()}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
               />
@@ -77,7 +72,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} closeTodo={setSelectedTodo} />
+        <TodoModal todo={selectedTodo} selectedTodo={setSelectedTodo} />
       )}
     </>
   );

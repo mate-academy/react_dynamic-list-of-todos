@@ -1,12 +1,12 @@
 type Props = {
-  filter: CallableFunction,
-  setSearchSet: CallableFunction,
+  setFilter: CallableFunction,
+  setSearchText: CallableFunction,
   searchText: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filter,
-  setSearchSet,
+  setFilter,
+  setSearchText,
   searchText,
 }) => (
   <form className="field has-addons">
@@ -14,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => (filter(event.target.value))}
+          onChange={(event) => (setFilter(event.target.value))}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -30,7 +30,9 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={searchText}
-        onChange={(event) => (setSearchSet(event.target.value))}
+        onChange={(event) => (
+          setSearchText(event.target.value)
+        )}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -42,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => (setSearchSet(''))}
+            onClick={() => (setSearchText(''))}
           />
         </span>
       )}
