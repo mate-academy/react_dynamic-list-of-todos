@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface Props {
-  todo:Todo | null;
+  todo: Todo;
   setIsActiveModal: (isActiveModal: boolean) => void;
   setTodo: (todo: Todo | null) => void;
 }
@@ -47,7 +47,7 @@ export const TodoModal: React.FC<Props> = (props) => {
               data-cy="modal-header"
             >
               Todo #
-              {todo?.id}
+              {todo.id}
             </div>
 
             <button
@@ -61,18 +61,18 @@ export const TodoModal: React.FC<Props> = (props) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo?.completed
+              {todo.completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a href={`mailto:${user && user.email}`}>
+                {user && user.name}
               </a>
             </p>
           </div>

@@ -7,19 +7,19 @@ interface Props {
   setFiltredTodos: (todo:Todo[]) => void,
 }
 
-const filtredByComleted = (nameFilter: string, todosLis: Todo[]): Todo[] => {
+const filtredByComleted = (nameFilter: string, todosList: Todo[]): Todo[] => {
   switch (nameFilter) {
     case 'completed':
-      return todosLis.filter(todo => todo.completed === true);
+      return todosList.filter(todo => todo.completed === true);
 
     case 'active':
-      return todosLis.filter(todo => todo.completed === false);
+      return todosList.filter(todo => todo.completed === false);
 
     case 'all':
-      return todosLis;
+      return todosList;
 
     default:
-      return todosLis;
+      return todosList;
   }
 };
 

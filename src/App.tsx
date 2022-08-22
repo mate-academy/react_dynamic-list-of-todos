@@ -58,7 +58,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isActiveModal
+      {isActiveModal && todo
         && (
           <TodoModal
             todo={todo}
