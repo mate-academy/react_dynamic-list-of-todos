@@ -1,3 +1,5 @@
+import './TodoFilter.scss';
+
 type Props = {
   onChangeSelect: (option: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeInput: (query: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,10 +42,10 @@ export const TodoFilter: React.FC<Props>
           </span>
 
           {filterQuery && (
-            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <span className="icon is-right isClickable">
               <button
                 data-cy="clearSearchButton"
+                aria-label="clearSearchButton"
                 type="button"
                 className="delete"
                 onClick={eraseQuery}

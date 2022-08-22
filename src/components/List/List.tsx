@@ -13,20 +13,21 @@ export const List: React.FC<Props> = ({ openedTodoId, onClick, todo }) => {
       <td className="is-vcentered">{todo.id}</td>
       <td className="is-vcentered">
         {
-          todo.completed
-            ? (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )
-            : ''
+          todo.completed && (
+            <span className="icon" data-cy="iconCompleted">
+              <i className="fas fa-check" />
+            </span>
+          )
         }
       </td>
       <td className="is-vcentered is-expanded">
         <p
-          className={
-            todo.completed ? 'has-text-success' : 'has-text-danger'
-          }
+          className={classNames(
+            {
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed,
+            },
+          )}
         >
           {todo.title}
         </p>

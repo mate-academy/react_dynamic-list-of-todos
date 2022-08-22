@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { List } from '../List/List';
 
@@ -48,7 +49,9 @@ export const TodoList: React.FC<Props> = (
             data-cy="todo"
             key={todo.id}
             className={
-              openedTodoId === todo.id ? 'has-background-info-light' : ''
+              classNames({
+                'has-background-info-light': openedTodoId === todo.id,
+              })
             }
           >
             <List
