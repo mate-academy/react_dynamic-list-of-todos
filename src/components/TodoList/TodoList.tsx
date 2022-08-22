@@ -3,10 +3,11 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  selectTodo: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { todos } = props;
+  const { todos, selectTodo } = props;
 
   return (
     <>
@@ -28,15 +29,26 @@ export const TodoList: React.FC<Props> = (props) => {
             </thead>
 
             <tbody>
-              {todos.map((todo, idx) => (
-                <tr data-cy="todo" className="">
-                  <td className="is-vcentered">{idx + 1}</td>
-                  <td className="is-vcentered" />
+              {todos.map(todo => (
+                <tr data-cy="todo" className="" key={todo.id}>
+                  <td className="is-vcentered">{todo.id}</td>
+                  <td className="is-vcentered">
+                    {todo.completed && (
+                      <span className="icon" data-cy="iconCompleted">
+                        <i className="fas fa-check" />
+                      </span>
+                    )}
+                  </td>
                   <td className="is-vcentered is-expanded">
-                    <p className="has-text-danger">{todo.title}</p>
+                    <p className={`has-text-${todo.completed ? 'success' : 'danger'}`}>{todo.title}</p>
                   </td>
                   <td className="has-text-right is-vcentered">
-                    <button data-cy="selectButton" className="button" type="button">
+                    <button
+                      data-cy="selectButton"
+                      className="button"
+                      type="button"
+                      onClick={() => selectTodo(todo)}
+                    >
                       <span className="icon">
                         <i className="far fa-eye" />
                       </span>
@@ -51,7 +63,11 @@ export const TodoList: React.FC<Props> = (props) => {
                   <p className="has-text-danger">delectus aut autem</p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  <button data-cy="selectButton" className="button" type="button">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
                     <span className="icon">
                       <i className="far fa-eye" />
                     </span>
@@ -67,7 +83,11 @@ export const TodoList: React.FC<Props> = (props) => {
                   </p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  <button data-cy="selectButton" className="button" type="button">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
                     <span className="icon">
                       <i className="far fa-eye-slash" />
                     </span>
@@ -82,7 +102,11 @@ export const TodoList: React.FC<Props> = (props) => {
                   <p className="has-text-danger">delectus aut autem</p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  <button data-cy="selectButton" className="button" type="button">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
                     <span className="icon">
                       <i className="far fa-eye" />
                     </span>
@@ -99,7 +123,11 @@ export const TodoList: React.FC<Props> = (props) => {
                   </p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  <button data-cy="selectButton" className="button" type="button">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
                     <span className="icon">
                       <i className="far fa-eye" />
                     </span>
@@ -115,10 +143,16 @@ export const TodoList: React.FC<Props> = (props) => {
                   </span>
                 </td>
                 <td className="is-vcentered is-expanded">
-                  <p className="has-text-success">quo adipisci enim quam ut ab</p>
+                  <p className="has-text-success">
+                    quo adipisci enim quam ut ab
+                  </p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  <button data-cy="selectButton" className="button" type="button">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
                     <span className="icon">
                       <i className="far fa-eye" />
                     </span>
@@ -129,6 +163,5 @@ export const TodoList: React.FC<Props> = (props) => {
           </table>
         )}
     </>
-
   );
 };

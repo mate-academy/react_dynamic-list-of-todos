@@ -9,10 +9,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Maybe } from './types/Maybe';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Maybe<Todo>>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -22,8 +23,11 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
         setIsLoading(false);
       });
-    setShowModal(false);
   }, []);
+
+  const selectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
 
   return (
     <>
@@ -40,14 +44,14 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} />
+                <TodoList todos={todos} selectTodo={selectTodo} />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {showModal && <TodoModal />}
+      {selectedTodo && <TodoModal onClose={setSelectedTodo} selectedTodo={selectedTodo} />}
     </>
   );
 };
