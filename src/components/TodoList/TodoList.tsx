@@ -1,100 +1,122 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { Todo } from '../../types/Todo';
+import './TodoList.scss';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+function hightlight(filter: string, text: string) {
+  if (!filter) {
+    return text;
+  }
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  const regexp = new RegExp(filter, 'ig');
+  const matchValue = text.match(regexp);
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  if (matchValue) {
+    return text.split(regexp).map((symbol, index, array) => {
+      if (index < array.length - 1) {
+        const matchSymbol = matchValue.shift();
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+        return (
+          <>
+            {symbol}
+            <span className="hightlight">{matchSymbol}</span>
+          </>
+        );
+      }
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+      return symbol;
+    });
+  }
+
+  return text;
+}
+
+type Props = {
+  selectTodo: (todo: Todo) => void;
+  todos: Todo[];
+  selectedTodoId: number | null;
+  filter: string;
+  onLoading: boolean;
+};
+
+export const TodoList: React.FC<Props> = (props) => {
+  const {
+    todos,
+    selectTodo,
+    selectedTodoId,
+    filter,
+    onLoading,
+  } = props;
+
+  const light = useCallback((text: string) => {
+    return hightlight(filter, text);
+  }, [filter]);
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      {onLoading
+        ? <h3 className="Loading">Loading...</h3>
+        : (
+          <thead>
+            {todos.length > 0
+              ? (
+                <tr>
+                  <th>#</th>
+                  <th>
+                    <span className="icon">
+                      <i className="fas fa-check" />
+                    </span>
+                  </th>
+                  <th>Title</th>
+                  <th> </th>
+                </tr>
+              )
+              : <h3 className="Loading">No todos for your search query :( </h3>}
+
+          </thead>
+        )}
+
+      <tbody>
+        {todos.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className=""
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed
+                && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p className={todo.completed
+                ? 'has-text-success'
+                : 'has-text-danger'}
+              >
+                {light(todo.title)}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => selectTodo(todo)}
+              >
+                <span className="icon">
+                  <i className={todo.id === selectedTodoId
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
