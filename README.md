@@ -18,11 +18,6 @@ works as expected;
     - show the `x` button when the `query` is entered;
     - the `x` button should clear the `query` and reset the todos;
 
-## (*) Advanced tasks (optional)
-
-1. Add `debounce` to the search input;
-1. Add `Randomize` button to the `App` to show the `todos` in a random order.
-
 ## Instructions
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
