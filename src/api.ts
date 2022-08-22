@@ -11,11 +11,8 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
-
   return wait(1000)
-    .then(() => fetch(fullURL))
+    .then(() => fetch(`${BASE_URL + url}.json`))
     .then(res => res.json());
 }
 
