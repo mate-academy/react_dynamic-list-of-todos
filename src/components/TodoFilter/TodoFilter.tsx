@@ -1,8 +1,23 @@
-export const TodoFilter = () => (
+interface Props {
+  filter: string,
+  setFilter: (filter: string) => void,
+  query: string,
+  setQuery: (query:string) => void,
+}
+
+export const TodoFilter: React.FC<Props> = (
+  {
+    filter, setFilter, query, setQuery,
+  },
+) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={(event) => setFilter(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,6 +31,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
