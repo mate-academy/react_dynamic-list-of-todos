@@ -1,11 +1,30 @@
-export const TodoFilter = () => (
+import { FC } from 'react';
+import { SelectBy } from '../../Enums/SelectBy';
+
+type Props = {
+  selectBy: number,
+  setSelectBy: CallableFunction,
+  inputSearch: string,
+  setInputSearch: CallableFunction,
+};
+
+export const TodoFilter: FC<Props> = ({
+  selectBy,
+  setSelectBy,
+  inputSearch,
+  setInputSearch,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={selectBy}
+          onChange={event => setSelectBy(+event.target.value)}
+        >
+          <option value={SelectBy.All}>All</option>
+          <option value={SelectBy.Active}>Active</option>
+          <option value={SelectBy.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,19 +35,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={inputSearch}
+        onChange={(event) => setInputSearch(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {inputSearch.length > 0 && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setInputSearch('')}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
