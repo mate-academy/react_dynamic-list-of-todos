@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -24,7 +29,7 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const selectedTodos = () => {
+  const selectedTodos = useCallback(() => {
     switch (selectBy) {
       case SelectBy.All:
         return todos;
@@ -34,10 +39,12 @@ export const App: React.FC = () => {
       default:
         return todos.filter(todo => todo.completed);
     }
-  };
+  }, [selectBy, todos]);
 
-  const filteredTodos = selectedTodos()
-    .filter(todo => todo.title.toLowerCase().includes(inputSearch.toLowerCase()));
+  const filteredTodos = useMemo(() => {
+    return selectedTodos()
+      .filter(todo => todo.title.toLowerCase().includes(inputSearch.toLowerCase()));
+  }, [inputSearch, todos, selectedTodos]);
 
   return (
     <>
@@ -65,6 +72,7 @@ export const App: React.FC = () => {
                     todos={filteredTodos}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
+                    isLoading={isLoading}
                   />
                 )}
             </div>
