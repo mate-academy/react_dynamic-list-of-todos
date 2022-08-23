@@ -58,13 +58,7 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => setSelectedTodo((currentTodo: Todo | null) => {
-                if (currentTodo?.id === todo.id) {
-                  return null;
-                }
-
-                return todo;
-              })}
+              onClick={() => setSelectedTodo(todo)}
             >
               <span className="icon">
                 <i className={`far ${selectedTodo?.id === todo.id
