@@ -3,24 +3,24 @@ import { FC } from 'react';
 interface Props {
   query: string,
   setQuery: (s: string) => void,
-  selectedValue: string,
-  setSelectedValue: (v: string) => void,
+  selectBy: string,
+  setSelectBy: (v: string) => void,
 }
 
 export const TodoFilter: FC<Props> = ({
   query,
   setQuery,
-  selectedValue,
-  setSelectedValue,
+  selectBy,
+  setSelectBy,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
-          value={selectedValue}
+          value={selectBy}
           data-cy="statusSelect"
           onChange={(event) => {
-            setSelectedValue(event.target.value);
+            setSelectBy(event.target.value);
           }}
         >
           <option value="all">All</option>
