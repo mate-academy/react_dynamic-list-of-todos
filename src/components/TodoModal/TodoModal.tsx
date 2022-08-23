@@ -11,13 +11,14 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | undefined>();
   const [isLoadEnd, setIsLoadEnd] = useState(false);
 
   useEffect(() => {
-    getUser(todo?.userId)
+    getUser(todo.userId)
       .then(setUser)
-      .finally(() => setIsLoadEnd(true));
+      .finally(() => setIsLoadEnd(true))
+      .catch(() => setUser(undefined));
   }, []);
 
   return (
@@ -57,9 +58,11 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
                 : <strong className="has-text-danger">Planned</strong>}
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>
