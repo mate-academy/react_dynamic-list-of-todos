@@ -2,7 +2,8 @@ import React from 'react';
 
 type Props = {
   query: string
-  onApplyQuery: React.Dispatch<React.SetStateAction<string>>
+  onApplyQuery: (...args: string[]) => void
+  onSetQuery: React.Dispatch<React.SetStateAction<string>>
   filter: string
   onFilter: (filter: string) => void
 };
@@ -10,6 +11,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   query,
   onApplyQuery,
+  onSetQuery,
   filter,
   onFilter,
 }) => (
@@ -35,7 +37,10 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => onApplyQuery(event.target.value)}
+        onChange={(event) => {
+          onSetQuery(event.target.value);
+          onApplyQuery(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />

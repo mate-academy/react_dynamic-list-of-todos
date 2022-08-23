@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,11 +10,26 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const debounce = (f: React.Dispatch<React.SetStateAction<string>>, delay: number) => {
+  let timerId: number;
+
+  return (...args: string[]) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(f, delay, ...args);
+  };
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState('');
   const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
+  const [applyQuery, setApplyQuuery] = useState('');
+
+  const apliedQuery = useCallback(
+    debounce(setApplyQuuery, 1000),
+    [],
+  );
 
   const onSelectTodo = (selectId: number) => {
     setSelectedTodoId(todos.find(todo => todo.id === selectId)?.id.toString() || '');
@@ -44,7 +59,7 @@ export const App: React.FC = () => {
             return todo;
         }
       })
-      .filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+      .filter(todo => todo.title.toLocaleLowerCase().includes(applyQuery.toLocaleLowerCase()));
   })();
 
   return (
@@ -57,7 +72,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onApplyQuery={setQuery}
+                onApplyQuery={apliedQuery}
+                onSetQuery={setQuery}
                 filter={filterBy}
                 onFilter={setFilterBy}
               />
