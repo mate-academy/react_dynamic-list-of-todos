@@ -13,8 +13,9 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [query, setQuery] = useState('');
-  const [selectBy, setSelectBy] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [completedFilter, setCompletedFilter] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
     getTodos()
@@ -23,9 +24,9 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => (
     todos.filter(todo => {
-      const queryFilter = todo.title.toLowerCase().includes(query.toLowerCase());
+      const queryFilter = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-      switch (selectBy) {
+      switch (completedFilter) {
         case 'active':
           return queryFilter && todo.completed === false;
 
@@ -35,7 +36,7 @@ export const App: React.FC = () => {
         default:
           return queryFilter;
       }
-    })), [todos, query, selectBy]);
+    })), [todos, searchQuery, completedFilter]);
 
   return (
     <>
@@ -45,20 +46,20 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter query={query} setQuery={setQuery} selectBy={selectBy} setSelectBy={setSelectBy} />
+              <TodoFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} completedFilter={completedFilter} setCompletedFilter={setCompletedFilter} />
             </div>
 
             <div className="block">
               {filteredTodos.length === 0
                 ? <Loader />
-                : <TodoList todos={filteredTodos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
+                : <TodoList todos={filteredTodos} selectedTodoId={selectedTodoId} setSelectedTodo={setSelectedTodo} setSelectedTodoId={setSelectedTodoId} />}
             </div>
           </div>
         </div>
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} setSelectedTodoId={setSelectedTodoId} />
       )}
     </>
   );

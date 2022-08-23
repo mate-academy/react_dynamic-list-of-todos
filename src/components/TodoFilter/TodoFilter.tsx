@@ -1,26 +1,26 @@
 import { FC } from 'react';
 
 interface Props {
-  query: string,
-  setQuery: (s: string) => void,
-  selectBy: string,
-  setSelectBy: (v: string) => void,
+  searchQuery: string,
+  setSearchQuery: (s: string) => void,
+  completedFilter: string,
+  setCompletedFilter: (v: string) => void,
 }
 
 export const TodoFilter: FC<Props> = ({
-  query,
-  setQuery,
-  selectBy,
-  setSelectBy,
+  searchQuery,
+  setSearchQuery,
+  completedFilter,
+  setCompletedFilter,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
-          value={selectBy}
+          value={completedFilter}
           data-cy="statusSelect"
           onChange={(event) => {
-            setSelectBy(event.target.value);
+            setCompletedFilter(event.target.value);
           }}
         >
           <option value="all">All</option>
@@ -36,23 +36,23 @@ export const TodoFilter: FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={query}
+        value={searchQuery}
         onChange={(event) => {
-          setQuery(event.target.value);
+          setSearchQuery(event.target.value);
         }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {query && (
+      {searchQuery && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={() => setSearchQuery('')}
           />
         </span>
       )}

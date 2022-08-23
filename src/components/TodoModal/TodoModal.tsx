@@ -7,9 +7,14 @@ import { Loader } from '../Loader';
 interface Props {
   todo: Todo,
   setSelectedTodo: (todo: Todo | null) => void,
+  setSelectedTodoId: (n: number) => void,
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  setSelectedTodo,
+  setSelectedTodoId,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -38,7 +43,10 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => {
+                setSelectedTodo(null);
+                setSelectedTodoId(0);
+              }}
             />
           </header>
 

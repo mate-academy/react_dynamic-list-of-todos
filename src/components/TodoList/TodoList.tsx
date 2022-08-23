@@ -4,11 +4,17 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[],
   setSelectedTodo: (todo: Todo) => void,
-  selectedTodo: Todo | null,
+  selectedTodoId: number,
+  setSelectedTodoId: (n: number) => void,
 }
 
 export const TodoList: React.FC<Props> = React.memo(
-  ({ todos, setSelectedTodo, selectedTodo }) => (
+  ({
+    todos,
+    setSelectedTodo,
+    selectedTodoId,
+    setSelectedTodoId,
+  }) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -46,10 +52,13 @@ export const TodoList: React.FC<Props> = React.memo(
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setSelectedTodo(todo)}
+                onClick={() => {
+                  setSelectedTodo(todo);
+                  setSelectedTodoId(todo.id);
+                }}
               >
                 <span className="icon">
-                  {selectedTodo?.id !== todo.id
+                  {selectedTodoId !== todo.id
                     ? <i className="far fa-eye" />
                     : <i className="far fa-eye-slash" />}
                 </span>
