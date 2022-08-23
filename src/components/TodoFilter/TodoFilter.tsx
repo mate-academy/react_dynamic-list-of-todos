@@ -2,7 +2,7 @@ import { Sort } from '../../types/Sort';
 
 type Props = {
   setQuery: (input: string) => void,
-  setStatus: (input: Sort) => void,
+  setStatus: (input: string) => void,
   query: string,
   status: Sort | string,
 };
@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={status}
             onChange={({ target }) => {
-              setStatus(target.value as Sort);
+              setStatus(target.value);
             }}
           >
             <option value={Sort.ALL}>All</option>
@@ -47,14 +47,16 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable jsx-a11y/control-has-associated-label */}
           {query && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => setQuery('')}
-            />
+            >
+              {' '}
+              Hello
+            </button>
           )}
 
         </span>
