@@ -1,10 +1,11 @@
 import React from 'react';
+import { Maybe } from '../../types/Maybe';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
   selectTodo: (todo: Todo) => void;
-  selectedId: number | undefined;
+  selectedId: Maybe<number>;
 }
 
 export const TodoList: React.FC<Props> = (props) => {

@@ -26,10 +26,6 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const selectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
-
   const filteredTodos = useMemo(() => (
     todos.filter(todo => {
       const filteredByQuery = todo.title.toLowerCase().includes(query.toLocaleLowerCase());
@@ -71,8 +67,8 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  selectTodo={selectTodo}
-                  selectedId={selectedTodo?.id}
+                  selectTodo={setSelectedTodo}
+                  selectedId={selectedTodo?.id || null}
                 />
               )}
             </div>
