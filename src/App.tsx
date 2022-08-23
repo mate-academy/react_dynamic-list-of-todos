@@ -8,33 +8,48 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getTodosActive, getTodosCompleted } from './api';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterSelection, setfilterSelection] = useState('');
   const [todo, setTodo] = useState<Todo | null>(null);
   const [search, setSearch] = useState('');
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
 
   const filteredArraySelection = () => {
     if (filterSelection === 'active') {
-      return getTodosActive();
+      const filterArray = [...todosFromServer].filter(todoElement => todoElement.completed === false);
+
+      return filterArray;
     }
 
     if (filterSelection === 'completed') {
-      return getTodosCompleted();
+      const filterArray = [...todosFromServer].filter(todoElement => todoElement.completed === true);
+
+      return filterArray;
     }
 
-    return getTodos();
+    return todosFromServer;
   };
 
   const onClose = () => {
     setTodo(null);
   };
 
+  const addTodosToState = (array: Todo[]) => {
+    setTodosFromServer(array);
+    setTodos(array);
+  };
+
   useEffect(() => {
-    filteredArraySelection()
-      .then(todosArray => setTodos(todosArray.filter(element => element.title.includes(search))));
+    getTodos().then(result => addTodosToState(result));
+  }, []);
+
+  useEffect(() => {
+    const arr = filteredArraySelection().filter(element => element.title.includes(search));
+
+    setTodos(arr);
   }, [filterSelection, search]);
 
   return (
