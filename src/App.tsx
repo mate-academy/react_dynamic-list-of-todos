@@ -50,7 +50,7 @@ export const App: React.FC = () => {
             <div className="block">
               {todos.length === 0
                 ? <Loader />
-                : <TodoList todos={filteredTodos} setSelectedTodo={setSelectedTodo} />}
+                : <TodoList todos={filteredTodos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
             </div>
           </div>
         </div>
