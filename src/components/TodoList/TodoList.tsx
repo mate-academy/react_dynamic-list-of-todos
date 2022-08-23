@@ -63,9 +63,9 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <span className="icon">
-                  {!isModalVisible
-                    ? (<i className="far fa-eye-slash" />)
-                    : (<i className="far fa-eye" />)}
+                  {(todo === selectedTodo && isModalVisible)
+                    ? (<i className="far fa-eye" />)
+                    : (<i className="far fa-eye-slash" />)}
                 </span>
               </button>
             </td>
