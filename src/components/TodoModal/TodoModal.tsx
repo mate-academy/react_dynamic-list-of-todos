@@ -57,8 +57,8 @@ export const TodoModal: React.FC<Props> = ({ todo, toogleModal }) => {
 
               {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>
-                {selectedUser?.email}
+              <a href={`mailto:${selectedUser !== null ? selectedUser.email : ''}`}>
+                {selectedUser !== null ? selectedUser.email : ''}
               </a>
             </p>
           </div>

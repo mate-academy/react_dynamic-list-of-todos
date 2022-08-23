@@ -22,9 +22,11 @@ export const App: React.FC = () => {
     let todoList = list.filter(todoItem => todoItem.title.includes(quary));
 
     switch (filter) {
-      case 'all': break;
-      case 'completed': todoList = todoList.filter(todoItem => todoItem.completed); break;
-      case 'active': todoList = todoList.filter(todoItem => !todoItem.completed); break;
+      case 'completed':
+        todoList = todoList.filter(todoItem => todoItem.completed); break;
+      case 'active':
+        todoList = todoList.filter(todoItem => !todoItem.completed); break;
+      case 'all':
       default: break;
     }
 

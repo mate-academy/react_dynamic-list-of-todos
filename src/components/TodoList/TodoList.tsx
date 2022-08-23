@@ -33,7 +33,8 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             key={todo.id}
             className={(todo === selectedTodo && isModalVisible)
-              ? 'has-background-info-light' : ''}
+              ? 'has-background-info-light'
+              : ''}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -64,8 +65,8 @@ export const TodoList: React.FC<Props> = ({
               >
                 <span className="icon">
                   {(todo === selectedTodo && isModalVisible)
-                    ? (<i className="far fa-eye" />)
-                    : (<i className="far fa-eye-slash" />)}
+                    ? (<i className="far fa-eye-slash" />)
+                    : (<i className="far fa-eye" />)}
                 </span>
               </button>
             </td>
