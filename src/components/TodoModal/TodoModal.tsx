@@ -6,12 +6,12 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo,
-  setSelectedTodo: CallableFunction,
+  setSelectedTodoId: CallableFunction,
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodo,
+  setSelectedTodoId,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [foundUser, setFoundUser] = useState<User | null>(null);
@@ -44,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => setSelectedTodoId(null)}
             />
           </header>
 

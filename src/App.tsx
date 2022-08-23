@@ -19,9 +19,13 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectBy, setSelectBy] = useState(0);
-  const [inputSearch, setInputSearch] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [completedFilter, setCompletedFilter] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const foundTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [todos, selectedTodoId]);
 
   useEffect(() => {
     getTodos()
@@ -30,7 +34,7 @@ export const App: React.FC = () => {
   }, []);
 
   const selectedTodos = useCallback(() => {
-    switch (selectBy) {
+    switch (completedFilter) {
       case SelectBy.All:
         return todos;
       case SelectBy.Active:
@@ -39,12 +43,12 @@ export const App: React.FC = () => {
       default:
         return todos.filter(todo => todo.completed);
     }
-  }, [selectBy, todos]);
+  }, [completedFilter, todos]);
 
   const filteredTodos = useMemo(() => {
     return selectedTodos()
-      .filter(todo => todo.title.toLowerCase().includes(inputSearch.toLowerCase()));
-  }, [inputSearch, todos, selectedTodos]);
+      .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [searchQuery, todos, selectedTodos]);
 
   return (
     <>
@@ -55,10 +59,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectBy={selectBy}
-                setSelectBy={setSelectBy}
-                inputSearch={inputSearch}
-                setInputSearch={setInputSearch}
+                selectBy={completedFilter}
+                setSelectBy={setCompletedFilter}
+                inputSearch={searchQuery}
+                setInputSearch={setSearchQuery}
               />
             </div>
 
@@ -70,8 +74,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
                     isLoading={isLoading}
                   />
                 )}
@@ -80,10 +84,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId !== 0 && foundTodo && (
         <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          selectedTodo={foundTodo}
+          setSelectedTodoId={setSelectedTodoId}
         />
       )}
     </>

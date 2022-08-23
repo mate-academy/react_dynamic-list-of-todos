@@ -5,15 +5,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  selectedTodo: Todo | null,
-  setSelectedTodo: CallableFunction,
+  selectedTodoId: number,
+  setSelectedTodoId: CallableFunction,
   isLoading: boolean,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodo,
-  setSelectedTodo,
+  selectedTodoId,
+  setSelectedTodoId,
   isLoading,
 }) => (
   <>
@@ -39,7 +39,7 @@ export const TodoList: React.FC<Props> = ({
             <tr
               data-cy="todo"
               className={classNames({
-                'has-background-info-light': selectedTodo?.id === todo.id,
+                'has-background-info-light': selectedTodoId === todo.id,
               })}
               key={todo.id}
             >
@@ -64,10 +64,10 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectedTodo(todo)}
+                  onClick={() => setSelectedTodoId(todo.id)}
                 >
                   <span className="icon">
-                    <i className={`far ${selectedTodo?.id === todo.id
+                    <i className={`far ${selectedTodoId === todo.id
                       ? 'fa-eye-slash'
                       : 'fa-eye'}`}
                     />
