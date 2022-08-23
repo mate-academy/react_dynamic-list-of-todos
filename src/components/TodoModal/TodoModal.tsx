@@ -20,9 +20,11 @@ export const TodoModal: FC<Props> = (props) => {
   const [isLoadedUser, setIsloadedUser] = useState(false);
 
   useEffect(() => {
-    getUser(userId)
-      .then(setUser);
     setIsloadedUser(true);
+
+    getUser(userId)
+      .then(setUser)
+      .finally(() => setIsloadedUser(false));
   }, []);
 
   return (
@@ -62,8 +64,8 @@ export const TodoModal: FC<Props> = (props) => {
 
                 {' by '}
 
-                <a href={`mailto:${user?.email}`}>
-                  {user?.name}
+                <a href={`mailto:${user?.email || '#'}`}>
+                  {user?.name || 'Anonimous'}
                 </a>
               </p>
             </div>

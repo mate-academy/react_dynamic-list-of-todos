@@ -37,13 +37,11 @@ export const App: React.FC = () => {
     }
   };
 
-  let preparedTodos = filterTodosByStatus(todoStatusSelect);
-
-  if (searchQuery !== '') {
-    preparedTodos = preparedTodos.filter(todo => (
+  const preparedTodos = searchQuery !== ''
+    ? todos.filter(todo => (
       todo.title.toLowerCase().includes(searchQuery.toLowerCase())
-    ));
-  }
+    ))
+    : filterTodosByStatus(todoStatusSelect);
 
   return (
     <>
