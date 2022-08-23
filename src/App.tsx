@@ -40,7 +40,7 @@ export const App: React.FC = () => {
 
   const preparedTodos = visibleFilteredTodos(visibleTodos);
 
-  const selectedTodo = todos.find(el => el.id === selectedTodosId);
+  const selectedTodo = todos.find(el => el.id === selectedTodosId) || null;
 
   return (
     <>

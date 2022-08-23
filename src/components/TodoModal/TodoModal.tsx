@@ -6,7 +6,7 @@ import { Loader } from '../Loader';
 
 interface Props {
   setSelectedTodosId: (selectedTodosId: number | null) => void,
-  selectedTodo: Todo,
+  selectedTodo: Todo | null,
 }
 
 export const TodoModal: React.FC<Props> = ({
@@ -16,9 +16,9 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedTodo.userId)
+    getUser(Number(selectedTodo?.userId))
       .then(setUser);
-  }, [selectedTodo.userId]);
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -49,14 +49,14 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed && (
+              {selectedTodo?.completed && (
                 <strong className="has-text-success">Done</strong>
               )}
-              {!selectedTodo.completed && (
+              {!selectedTodo?.completed && (
                 <strong className="has-text-danger">Planned</strong>
               )}
 
