@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -24,17 +24,28 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  let filteredTodos = [...todos];
+  // const visibleTodos = useMemo(() => {
+  //   return filteredTodos.filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  // }, [filteredTodos, query]);
 
-  if (filterBy === 'active') {
-    filteredTodos = [...todos].filter(todo => todo.completed === false);
-  } else if (filterBy === 'completed') {
-    filteredTodos = [...todos].filter(todo => todo.completed === true);
-  }
+  const visibleTodos = (() => {
+    return todos
+      .filter(todo => {
+        switch (filterBy) {
+          case 'active': {
+            return !todo.completed;
+          }
 
-  const visibleTodos = useMemo(() => {
-    return filteredTodos.filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
-  }, [filteredTodos, query]);
+          case 'completed': {
+            return todo.completed;
+          }
+
+          default:
+            return todo;
+        }
+      })
+      .filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  })();
 
   return (
     <>
