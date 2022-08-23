@@ -12,7 +12,9 @@ interface Props {
 }
 
 export const TodoModal: FC<Props> = (props) => {
-  const { selectedTodo, setOpenedTodoModal, loading, setLoading } = props;
+  const {
+    selectedTodo, setOpenedTodoModal, loading, setLoading,
+  } = props;
   const [selectedUser, setSelectedUser] = useState<User>();
 
   useEffect(() => {
