@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type Props = {
   onFilterSelected: (nameFilter: string) => void;
@@ -8,13 +8,11 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   onFilterSelected, textInput,
 }) => {
-  const [statusSelect, setStatusSelect] = useState('');
+  const [statusSelect, setStatusSelect] = useState('all');
   const [input, setInput] = useState('');
 
-  useEffect(() => {
-    onFilterSelected(statusSelect);
-    textInput(input.toLowerCase());
-  }, [input, statusSelect]);
+  onFilterSelected(statusSelect);
+  textInput(input.toLowerCase());
 
   return (
     <form className="field has-addons">

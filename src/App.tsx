@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,43 +12,38 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterSelection, setfilterSelection] = useState('');
-  const [todoSelected, setTodoSelected] = useState<Todo | null>(null);
-  const [search, setSearch] = useState('');
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [completedFilter, setCompletedFilter] = useState('all');
+  const [todoSelectedId, setTodoSelectedId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredArraySelection = () => {
-    if (filterSelection === 'active') {
-      const filterArray = [...todosFromServer].filter(todoElement => todoElement.completed === false);
+  const filteredArraySelection = useMemo(() => {
+    return todos.filter(todo => {
+      const checkQuery = todo.title.toLowerCase().includes(searchQuery);
 
-      return filterArray;
-    }
-
-    if (filterSelection === 'completed') {
-      const filterArray = [...todosFromServer].filter(todoElement => todoElement.completed === true);
-
-      return filterArray;
-    }
-
-    return todosFromServer;
-  };
+      switch (completedFilter) {
+        case 'all':
+          return checkQuery;
+        case 'active':
+          return checkQuery && !todo.completed;
+        case 'completed':
+          return checkQuery && todo.completed;
+        default:
+          return true;
+      }
+    });
+  }, [todos, searchQuery, completedFilter]);
 
   const onClose = () => {
-    setTodoSelected(null);
+    setTodoSelectedId(0);
   };
+
+  const todo = todos.find(element => element.id === todoSelectedId) || null;
 
   useEffect(() => {
     getTodos().then(result => {
-      setTodosFromServer(result);
       setTodos(result);
     });
   }, []);
-
-  useEffect(() => {
-    const searchTodos = filteredArraySelection().filter(element => element.title.includes(search));
-
-    setTodos(searchTodos);
-  }, [filterSelection, search]);
 
   return (
     <>
@@ -59,8 +54,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilterSelected={setfilterSelection}
-                textInput={setSearch}
+                onFilterSelected={setCompletedFilter}
+                textInput={setSearchQuery}
               />
             </div>
 
@@ -68,9 +63,9 @@ export const App: React.FC = () => {
               {todos.length > 0
                 ? (
                   <TodoList
-                    todos={todos}
-                    onTodoSelect={setTodoSelected}
-                    todoSelected={todoSelected}
+                    todos={filteredArraySelection}
+                    onTodoSelect={setTodoSelectedId}
+                    todoSelectedId={todoSelectedId}
                   />
                 )
                 : <Loader />}
@@ -78,7 +73,13 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {todoSelected && <TodoModal todo={todoSelected} onClose={onClose} />}
+      {todoSelectedId !== 0
+        && (
+          <TodoModal
+            todo={todo}
+            onClose={onClose}
+          />
+        )}
     </>
   );
 };
