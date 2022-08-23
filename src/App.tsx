@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteringBy, setFilteringBy] = useState('all');
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoID, setSelectedTodoID] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -38,6 +38,10 @@ export const App: React.FC = () => {
     })
   ), [todos, filteringBy, query]);
 
+  const selectedTodo = useMemo(() => (
+    visibleTodos.find(({ id }) => id === selectedTodoID) || null
+  ), [visibleTodos, selectedTodoID]);
+
   return (
     <>
       <div className="section">
@@ -60,8 +64,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    onSelectedTodo={setSelectedTodo}
+                    selectedTodoID={selectedTodoID}
+                    onSelectedTodoID={setSelectedTodoID}
                   />
                 )}
             </div>
@@ -70,7 +74,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onCloseModal={setSelectedTodo} />
+        <TodoModal selectedTodo={selectedTodo} onCloseModal={setSelectedTodoID} />
       )}
     </>
   );
