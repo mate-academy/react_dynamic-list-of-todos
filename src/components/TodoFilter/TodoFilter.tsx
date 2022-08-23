@@ -13,11 +13,8 @@ export const TodoFilter: React.FC<Props> = ({
 
   useEffect(() => {
     onFilterSelected(statusSelect);
-  }, [statusSelect]);
-
-  useEffect(() => {
     textInput(input.toLowerCase());
-  }, [input]);
+  }, [input, statusSelect]);
 
   return (
     <form className="field has-addons">

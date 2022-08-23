@@ -13,7 +13,7 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterSelection, setfilterSelection] = useState('');
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [todoSelected, setTodoSelected] = useState<Todo | null>(null);
   const [search, setSearch] = useState('');
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
 
@@ -34,22 +34,20 @@ export const App: React.FC = () => {
   };
 
   const onClose = () => {
-    setTodo(null);
-  };
-
-  const addTodosToState = (array: Todo[]) => {
-    setTodosFromServer(array);
-    setTodos(array);
+    setTodoSelected(null);
   };
 
   useEffect(() => {
-    getTodos().then(result => addTodosToState(result));
+    getTodos().then(result => {
+      setTodosFromServer(result);
+      setTodos(result);
+    });
   }, []);
 
   useEffect(() => {
-    const arr = filteredArraySelection().filter(element => element.title.includes(search));
+    const searchTodos = filteredArraySelection().filter(element => element.title.includes(search));
 
-    setTodos(arr);
+    setTodos(searchTodos);
   }, [filterSelection, search]);
 
   return (
@@ -67,14 +65,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos
-                ? <TodoList todos={todos} onTodoSelect={setTodo} />
+              {todos.length > 0
+                ? (
+                  <TodoList
+                    todos={todos}
+                    onTodoSelect={setTodoSelected}
+                    todoSelected={todoSelected}
+                  />
+                )
                 : <Loader />}
             </div>
           </div>
         </div>
       </div>
-      {todo && <TodoModal todo={todo} onClose={onClose} />}
+      {todoSelected && <TodoModal todo={todoSelected} onClose={onClose} />}
     </>
   );
 };
