@@ -3,27 +3,17 @@ import { FC } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todos: Todo[],
-  setSelectedTodo: (arg0: Todo) => void,
-  openedTodoModal: boolean,
-  setOpenedTodoModal: (arg0: boolean) => void,
-  setLoading: (arg0: boolean) => void,
+  filteredTodos: Todo[],
+  selectedTodoId: number | null,
+  setSelectedTodoId: (selectedTodoId: number | null) => void,
 }
 
 export const TodoList: FC<Props> = (props) => {
   const {
-    todos,
-    setSelectedTodo,
-    setOpenedTodoModal,
-    openedTodoModal,
-    setLoading,
+    filteredTodos,
+    selectedTodoId,
+    setSelectedTodoId,
   } = props;
-
-  const handleClick = (todo: Todo) => {
-    setSelectedTodo(todo);
-    setOpenedTodoModal(true);
-    setLoading(true);
-  };
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -41,13 +31,13 @@ export const TodoList: FC<Props> = (props) => {
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {filteredTodos.map(todo => (
           <tr
             key={todo.id}
             data-cy="todo"
-            className={
-              classNames('', { 'has-background-info-light': false })
-            }
+            className={classNames('', {
+              'has-background-info-light': todo.id === selectedTodoId,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -61,7 +51,7 @@ export const TodoList: FC<Props> = (props) => {
             <td className="is-vcentered is-expanded">
               <p className={classNames(
                 { 'has-text-success': todo.completed },
-                { 'has-text-danger': todo.completed === false },
+                { 'has-text-danger': !todo.completed },
               )}
               >
                 {todo.title}
@@ -72,14 +62,13 @@ export const TodoList: FC<Props> = (props) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleClick(todo)}
+                onClick={() => setSelectedTodoId(todo.id)}
               >
                 <span className="icon">
-                  <i className={
-                    classNames(
-                      'far fa-eye', { 'fa-eye-slash': openedTodoModal },
-                    )
-                  }
+                  <i className={classNames('far', {
+                    'fa-eye': todo.id !== selectedTodoId,
+                    'fa-eye-slash': todo.id === selectedTodoId,
+                  })}
                   />
                 </span>
               </button>

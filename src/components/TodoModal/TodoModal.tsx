@@ -1,33 +1,34 @@
 import { FC, useEffect, useState } from 'react';
 import { getUser } from '../../api';
+import { OptionForFilterTodos } from '../../types/OptionForFilterTodos';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface Props {
-  selectedTodo: Todo | null,
-  setOpenedTodoModal: (arg0: boolean) => void,
-  loading: boolean,
-  setLoading: (arg0: boolean) => void,
+  selectedTodo: Todo,
+  setSelectedTodoId: (selectedTodoId: number | null) => void,
+  setOptionForFilter: (optionForFilter: OptionForFilterTodos) => void,
 }
 
 export const TodoModal: FC<Props> = (props) => {
-  const {
-    selectedTodo, setOpenedTodoModal, loading, setLoading,
-  } = props;
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const { selectedTodo, setSelectedTodoId, setOptionForFilter } = props;
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    getUser(Number(selectedTodo?.userId))
-      .then(setSelectedUser);
-    setLoading(false);
+    setIsError(false);
+
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .catch(() => setIsError(true));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading
+      {!selectedUser
         ? <Loader />
         : (
           <div className="modal-card">
@@ -36,7 +37,7 @@ export const TodoModal: FC<Props> = (props) => {
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo?.id}`}
+                {`Todo #${selectedTodo.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -44,7 +45,10 @@ export const TodoModal: FC<Props> = (props) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setOpenedTodoModal(false)}
+                onClick={() => {
+                  setSelectedTodoId(null);
+                  setOptionForFilter(OptionForFilterTodos.All);
+                }}
               />
             </header>
 
@@ -54,15 +58,19 @@ export const TodoModal: FC<Props> = (props) => {
               </p>
 
               <p className="block" data-cy="modal-user">
-                {selectedTodo?.completed
+                {selectedTodo.completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
 
                 {' by '}
 
-                <a href={`mailto:${selectedUser?.email}`}>
-                  {selectedUser?.name}
-                </a>
+                {isError
+                  ? <div>User not found</div>
+                  : (
+                    <a href={`mailto:${selectedUser.email}`}>
+                      {selectedUser.name}
+                    </a>
+                  )}
               </p>
             </div>
           </div>

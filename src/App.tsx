@@ -11,42 +11,48 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { OptionForFilterTodos } from './types/OptionForFilterTodos';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [openedTodoModal, setOpenedTodoModal] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [optionForFilter, setOptionForFilter] = useState('');
-  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [optionForFilter, setOptionForFilter] = useState<OptionForFilterTodos>(OptionForFilterTodos.All);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer));
-    setLoading(false);
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredTodosByQuery = todos.filter(todo => {
-    const prepTitle = todo.title.toLowerCase();
-    const prepQuery = query.toLowerCase();
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId) || null
+  ), [todos, selectedTodoId]);
 
-    return prepTitle.includes(prepQuery);
+  const filteredTodosBySearchQuery = todos.filter(todo => {
+    const prepTitle = todo.title.toLowerCase();
+    const prepSearchQuery = searchQuery.toLowerCase();
+
+    return prepTitle.includes(prepSearchQuery);
   });
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
+    return filteredTodosBySearchQuery.filter(todo => {
       switch (optionForFilter) {
-        case 'all':
-          return filteredTodosByQuery;
-        case 'active':
-          return filteredTodosByQuery && todo.completed === false;
-        case 'completed':
-          return filteredTodosByQuery && todo.completed;
+        case OptionForFilterTodos.All:
+          return true;
+        case OptionForFilterTodos.Active:
+          return !todo.completed;
+        case OptionForFilterTodos.Completed:
+          return todo.completed;
         default:
           return true;
       }
     });
-  }, [optionForFilter, query, todos]);
+  }, [optionForFilter, searchQuery, todos]);
 
   return (
     <>
@@ -59,35 +65,40 @@ export const App: FC = () => {
               <TodoFilter
                 optionForFilter={optionForFilter}
                 setOptionForFilter={setOptionForFilter}
-                setQuery={setQuery}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
               />
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos}
-                    setSelectedTodo={setSelectedTodo}
-                    setOpenedTodoModal={setOpenedTodoModal}
-                    openedTodoModal={openedTodoModal}
-                    setLoading={setLoading}
+                    filteredTodos={filteredTodos}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
                   />
+                )}
+
+              {!isLoading && todos.length === 0
+                ? <h1>No results found</h1>
+                : !isLoading && filteredTodos.length === 0 && (
+                  <h1>{`No results found for "${searchQuery}" and filtered by "${optionForFilter}"`}</h1>
                 )}
             </div>
           </div>
         </div>
       </div>
 
-      {openedTodoModal && (
+      {selectedTodoId && selectedTodo && (
         <TodoModal
-          loading={loading}
           selectedTodo={selectedTodo}
-          setOpenedTodoModal={setOpenedTodoModal}
-          setLoading={setLoading}
+          setSelectedTodoId={setSelectedTodoId}
+          setOptionForFilter={setOptionForFilter}
         />
       )}
+
     </>
   );
 };
