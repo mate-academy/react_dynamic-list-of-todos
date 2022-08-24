@@ -5,11 +5,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   preparedTodos: Todo[],
   setSelectedTodosId: (selectedTodosId: number | null) => void,
+  selectedTodosId: number,
 }
 
 export const TodoList: React.FC<Props> = ({
   preparedTodos,
   setSelectedTodosId,
+  selectedTodosId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     {preparedTodos && (
@@ -64,7 +66,15 @@ export const TodoList: React.FC<Props> = ({
               }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i
+                  className={cn(
+                    {
+                      'far fa-eye': selectedTodosId !== todo.id,
+                      'far fa-eye-slash': selectedTodosId === todo.id,
+                    },
+                  )}
+                />
+                {' '}
               </span>
             </button>
           </td>

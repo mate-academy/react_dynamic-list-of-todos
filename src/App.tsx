@@ -62,6 +62,7 @@ export const App: React.FC = () => {
               <TodoList
                 preparedTodos={preparedTodos}
                 setSelectedTodosId={setSelectedTodosId}
+                selectedTodosId={selectedTodosId}
               />
               {!todos.length && <Loader />}
             </div>
