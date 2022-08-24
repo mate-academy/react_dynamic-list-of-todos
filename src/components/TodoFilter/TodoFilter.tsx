@@ -1,11 +1,35 @@
-export const TodoFilter = () => (
+export enum TodoComplitedFilter {
+  All,
+  Completed,
+  Active,
+}
+
+interface Props {
+  query: string;
+  changeQuery: (newQuery: string) => void;
+  complitedFilter: TodoComplitedFilter;
+  setComplitedFilter: (v: TodoComplitedFilter) => void;
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  changeQuery,
+  complitedFilter,
+  setComplitedFilter,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          onChange={(e) => {
+            setComplitedFilter(+e.target.value);
+          }}
+          value={complitedFilter}
+        >
+          <option value={TodoComplitedFilter.All}>All</option>
+          <option value={TodoComplitedFilter.Active}>Active</option>
+          <option value={TodoComplitedFilter.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,6 +40,10 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(e) => {
+          changeQuery(e.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -27,6 +55,9 @@ export const TodoFilter = () => (
           data-cy="clearSearchButton"
           type="button"
           className="delete"
+          onClick={() => {
+            changeQuery('');
+          }}
         />
       </span>
     </p>
