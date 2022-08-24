@@ -60,11 +60,19 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!todos.length && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                selectedTodoId={selectedTodoId}
-                onSelect={setSelectedTodoId}
-              />
+              {visibleTodos.length
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    onSelect={setSelectedTodoId}
+                  />
+                )
+                : (
+                  <div>
+                    No todos yet
+                  </div>
+                ) }
             </div>
           </div>
         </div>
