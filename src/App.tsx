@@ -52,8 +52,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
-              <TodoList todos={filteredTodos} onSelectedTodo={setSelectedTodo} />
+              {!todos.length
+                ? <Loader />
+                : <TodoList todos={filteredTodos} onSelectedTodo={setSelectedTodo} />}
             </div>
           </div>
         </div>
