@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,24 +26,26 @@ export const App: React.FC = () => {
       .finally(() => setIsTodoLoading(false));
   }, []);
 
-  let visibleTodos = [...todos];
-
-  if (filter === 'active') {
-    visibleTodos = visibleTodos.filter(todo => !todo.completed);
-  }
-
-  if (filter === 'completed') {
-    visibleTodos = visibleTodos.filter(todo => todo.completed);
-  }
-
-  const preparedTodos = visibleTodos
-    .filter(todo => {
-      const { title } = todo;
+  const preparedTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const { title, completed } = todo;
       const preparedTitle = title.toLowerCase();
-      const preparedQuery = query.toLowerCase().trim();
+      const preparedQuery = query.toLowerCase();
+      const filterByTitle = preparedTitle.includes(preparedQuery);
 
-      return preparedTitle.includes(preparedQuery);
+      switch (filter) {
+        case 'active':
+          return filterByTitle && !completed;
+
+        case 'completed':
+          return filterByTitle && completed;
+
+        case 'all':
+        default:
+          return filterByTitle;
+      }
     });
+  }, [query, todos, filter]);
 
   return (
     <>
@@ -80,7 +82,7 @@ export const App: React.FC = () => {
       { selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          deleteSelectedTodo={setSelectedTodo}
+          unselectTodo={setSelectedTodo}
         />
       )}
     </>

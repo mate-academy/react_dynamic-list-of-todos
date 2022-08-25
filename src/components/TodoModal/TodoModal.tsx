@@ -6,11 +6,11 @@ import { Loader } from '../Loader';
 
 type Props = {
   selectedTodo: Todo;
-  deleteSelectedTodo: (todo: null) => void,
+  unselectTodo: (todo: null) => void,
 };
 
 export const TodoModal: React.FC<Props> = (
-  { selectedTodo, deleteSelectedTodo },
+  { selectedTodo, unselectTodo },
 ) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = (
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => deleteSelectedTodo(null)}
+              onClick={() => unselectTodo(null)}
             />
           </header>
 
