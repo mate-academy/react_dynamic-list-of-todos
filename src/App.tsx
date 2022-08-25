@@ -52,9 +52,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filteringBy={filteringBy}
-                ChangeFiltering={setFilteringBy}
+                changeFiltering={setFilteringBy}
                 query={query}
-                ChangeQuery={setQuery}
+                changeQuery={setQuery}
               />
             </div>
 

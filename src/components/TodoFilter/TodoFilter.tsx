@@ -2,16 +2,16 @@ import { FC } from 'react';
 
 interface Props {
   filteringBy: string,
-  ChangeFiltering: (filteringBy: string) => void,
+  changeFiltering: (filteringBy: string) => void,
   query: string,
-  ChangeQuery: (query: string) => void,
+  changeQuery: (query: string) => void,
 }
 
 export const TodoFilter: FC<Props> = ({
   filteringBy,
-  ChangeFiltering,
+  changeFiltering,
   query,
-  ChangeQuery,
+  changeQuery,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -19,7 +19,7 @@ export const TodoFilter: FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filteringBy}
-          onChange={(event) => ChangeFiltering(event.target.value)}
+          onChange={(event) => changeFiltering(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -35,7 +35,7 @@ export const TodoFilter: FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => ChangeQuery(event.target.value)}
+        onChange={(event) => changeQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -48,7 +48,7 @@ export const TodoFilter: FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => ChangeQuery('')}
+            onClick={() => changeQuery('')}
           />
         </span>
       )}
