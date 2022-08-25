@@ -12,6 +12,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { OptionForFilterTodos } from './types/OptionForFilterTodos';
+import './App.css';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -54,6 +55,9 @@ export const App: FC = () => {
     });
   }, [optionForFilter, searchQuery, todos]);
 
+  const errorNoTodosFromServer = !isLoading && todos.length === 0 && !searchQuery;
+  const errorNoSuchTodosBySearchQuery = !isLoading && filteredTodos.length === 0 && searchQuery;
+
   return (
     <>
       <div className="section">
@@ -81,11 +85,13 @@ export const App: FC = () => {
                   />
                 )}
 
-              {!isLoading && todos.length === 0
-                ? <h1>No results found</h1>
-                : !isLoading && filteredTodos.length === 0 && (
-                  <h1>{`No results found for "${searchQuery}" and filtered by "${optionForFilter}"`}</h1>
-                )}
+              {errorNoTodosFromServer && (
+                <h1>No results found</h1>
+              )}
+
+              {errorNoSuchTodosBySearchQuery && (
+                <h1>{`No results found for "${searchQuery}" and filtered by "${optionForFilter}"`}</h1>
+              )}
             </div>
           </div>
         </div>
