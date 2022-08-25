@@ -6,22 +6,22 @@ import { User } from '../../types/User';
 
 interface Props {
   todo: Todo,
-  clear: () => void,
+  onClose: () => void,
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, clear }) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(user => setSelectedUser(user));
+      .then(userFromServer => setUser(userFromServer));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser
+      {!user
         ? (
           <Loader />
         ) : (
@@ -39,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({ todo, clear }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={clear}
+                onClick={onClose}
               />
             </header>
 
@@ -54,8 +54,8 @@ export const TodoModal: React.FC<Props> = ({ todo, clear }) => {
                   : (<strong className="has-text-danger">Planned</strong>)}
                 {' by '}
 
-                <a href={`mailto:${selectedUser.email}`}>
-                  {selectedUser.name}
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
                 </a>
               </p>
             </div>

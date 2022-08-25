@@ -14,30 +14,32 @@ import { Todo, FilterBy } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
-  const [todoId, setTodoId] = useState(0);
-  const [filterBy, setFilterBy] = useState(FilterBy.NONE);
-  const [loader, setLoader] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [completedFilter, setCompletedFilter] = useState(FilterBy.NONE);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoader(true);
+    setIsLoading(true);
 
     getTodos()
       .then(todosFromServer => setTodos(todosFromServer))
-      .finally(() => setLoader(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const clearSelected = useCallback(() => {
-    setTodoId(0);
+  const onCloseSelected = useCallback(() => {
+    setSelectedTodoId(0);
   }, []);
 
-  const getTodoById = todos.find((todo) => todo.id === todoId);
+  const selectedTodo = useMemo(() => (
+    todos.find((todo) => todo.id === selectedTodoId)
+  ), [selectedTodoId]);
 
   const filteredToDo = useMemo(() => (
     todos.filter(todo => {
-      const queryFilter = todo.title.toLowerCase().includes(query.toLowerCase());
+      const queryFilter = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-      switch (filterBy) {
+      switch (completedFilter) {
         case FilterBy.ACTIVE:
           return queryFilter && !todo.completed;
 
@@ -48,7 +50,7 @@ export const App: React.FC = () => {
           return queryFilter;
       }
     })
-  ), [query, todos, filterBy]);
+  ), [searchQuery, todos, completedFilter]);
 
   return (
     <>
@@ -59,22 +61,22 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                setQuery={setQuery}
-                filterBy={filterBy}
-                setFilterBy={setFilterBy}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                completedFilter={completedFilter}
+                setCompletedFilter={setCompletedFilter}
               />
             </div>
 
             <div className="block">
-              {loader
+              {isLoading
                 ? (<Loader />)
                 : (
                   <TodoList
                     todos={filteredToDo}
-                    selected={todoId}
+                    selected={selectedTodoId}
                     selectedTodo={(todo: React.SetStateAction<number>) => {
-                      setTodoId(todo);
+                      setSelectedTodoId(todo);
                     }}
                   />
                 )}
@@ -82,8 +84,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      { getTodoById
-        && <TodoModal todo={(getTodoById)} clear={clearSelected} />}
+      { selectedTodo
+        && <TodoModal todo={(selectedTodo)} onClose={onCloseSelected} />}
     </>
   );
 };
