@@ -17,10 +17,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingTodos, setIsLoadingTodos] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState<Maybe<number>>(null);
-  const selectedTodo = useMemo(() => todos.find(todo => todo.id === selectedTodoId), [selectedTodoId]);
-
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState(FilterTypes.All);
+
+  const selectedTodo = useMemo(() => todos.find(todo => todo.id === selectedTodoId), [selectedTodoId]);
+
   const filteredTodos = useMemo(() => {
     return todos.filter(({ title, completed }) => {
       const filteringByTitle = title.toLowerCase().includes(query.toLowerCase());
@@ -78,7 +79,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== undefined && (
+      {selectedTodo && (
         <TodoModal
           setSelectedTodoId={setSelectedTodoId}
           selectedTodo={selectedTodo}
