@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { getUser } from '../../api';
-import { OptionForFilterTodos } from '../../types/OptionForFilterTodos';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
@@ -8,11 +7,10 @@ import { Loader } from '../Loader';
 interface Props {
   selectedTodo: Todo,
   setSelectedTodoId: (selectedTodoId: number | null) => void,
-  setOptionForFilter: (optionForFilter: OptionForFilterTodos) => void,
 }
 
 export const TodoModal: FC<Props> = (props) => {
-  const { selectedTodo, setSelectedTodoId, setOptionForFilter } = props;
+  const { selectedTodo, setSelectedTodoId } = props;
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isError, setIsError] = useState(false);
 
@@ -47,7 +45,6 @@ export const TodoModal: FC<Props> = (props) => {
                 data-cy="modal-close"
                 onClick={() => {
                   setSelectedTodoId(null);
-                  setOptionForFilter(OptionForFilterTodos.All);
                 }}
               />
             </header>

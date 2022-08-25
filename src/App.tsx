@@ -101,7 +101,6 @@ export const App: FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodoId={setSelectedTodoId}
-          setOptionForFilter={setOptionForFilter}
         />
       )}
 
