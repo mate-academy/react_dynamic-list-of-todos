@@ -1,17 +1,17 @@
 import { FC } from 'react';
-import { OptionForFilterTodos } from '../../types/OptionForFilterTodos';
+import { ComplitedFilter } from '../../types/ComplitedFilter';
 
 interface Props {
-  optionForFilter: OptionForFilterTodos,
-  setOptionForFilter: (optionForFilter: OptionForFilterTodos) => void,
+  complitedFilter: ComplitedFilter,
+  setComplitedFilter: (complitedFilter: ComplitedFilter) => void,
   searchQuery: string,
   setSearchQuery: (query: string) => void,
 }
 
 export const TodoFilter: FC<Props> = (props) => {
   const {
-    optionForFilter,
-    setOptionForFilter,
+    complitedFilter,
+    setComplitedFilter,
     searchQuery,
     setSearchQuery,
   } = props;
@@ -25,14 +25,14 @@ export const TodoFilter: FC<Props> = (props) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={optionForFilter}
-            onChange={((event) => setOptionForFilter(
-              event.target.value as OptionForFilterTodos,
+            value={complitedFilter}
+            onChange={((event) => setComplitedFilter(
+              event.target.value as ComplitedFilter,
             ))}
           >
-            <option value={OptionForFilterTodos.All}>All</option>
-            <option value={OptionForFilterTodos.Active}>Active</option>
-            <option value={OptionForFilterTodos.Completed}>Completed</option>
+            <option value={ComplitedFilter.All}>All</option>
+            <option value={ComplitedFilter.Active}>Active</option>
+            <option value={ComplitedFilter.Completed}>Completed</option>
           </select>
         </span>
       </p>

@@ -11,7 +11,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { OptionForFilterTodos } from './types/OptionForFilterTodos';
+import { ComplitedFilter } from './types/ComplitedFilter';
 import './App.css';
 
 export const App: FC = () => {
@@ -19,7 +19,7 @@ export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [optionForFilter, setOptionForFilter] = useState<OptionForFilterTodos>(OptionForFilterTodos.All);
+  const [complitedFilter, setComplitedFilter] = useState<ComplitedFilter>(ComplitedFilter.All);
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,27 +33,28 @@ export const App: FC = () => {
     todos.find(todo => todo.id === selectedTodoId) || null
   ), [todos, selectedTodoId]);
 
-  const filteredTodosBySearchQuery = todos.filter(todo => {
-    const prepTitle = todo.title.toLowerCase();
-    const prepSearchQuery = searchQuery.toLowerCase();
+  const filteredTodosBySearchQuery = useMemo(() => (
+    todos.filter(todo => {
+      const prepTitle = todo.title.toLowerCase();
+      const prepSearchQuery = searchQuery.toLowerCase();
 
-    return prepTitle.includes(prepSearchQuery);
-  });
+      return prepTitle.includes(prepSearchQuery);
+    })), [todos]);
 
   const filteredTodos = useMemo(() => {
     return filteredTodosBySearchQuery.filter(todo => {
-      switch (optionForFilter) {
-        case OptionForFilterTodos.All:
+      switch (complitedFilter) {
+        case ComplitedFilter.All:
           return true;
-        case OptionForFilterTodos.Active:
+        case ComplitedFilter.Active:
           return !todo.completed;
-        case OptionForFilterTodos.Completed:
+        case ComplitedFilter.Completed:
           return todo.completed;
         default:
           return true;
       }
     });
-  }, [optionForFilter, searchQuery, todos]);
+  }, [complitedFilter, searchQuery, todos]);
 
   const errorNoTodosFromServer = !isLoading && todos.length === 0 && !searchQuery;
   const errorNoSuchTodosBySearchQuery = !isLoading && filteredTodos.length === 0 && searchQuery;
@@ -67,8 +68,8 @@ export const App: FC = () => {
 
             <div className="block">
               <TodoFilter
-                optionForFilter={optionForFilter}
-                setOptionForFilter={setOptionForFilter}
+                complitedFilter={complitedFilter}
+                setComplitedFilter={setComplitedFilter}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
               />
@@ -90,7 +91,7 @@ export const App: FC = () => {
               )}
 
               {errorNoSuchTodosBySearchQuery && (
-                <h1>{`No results found for "${searchQuery}" and filtered by "${optionForFilter}"`}</h1>
+                <h1>{`No results found for "${searchQuery}" and filtered by "${complitedFilter}"`}</h1>
               )}
             </div>
           </div>
