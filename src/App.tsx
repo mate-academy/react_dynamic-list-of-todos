@@ -12,7 +12,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosId, setTodosId] = useState<Todo[]>([]);
   const [isLoadEnd, setIsLoadEnd] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [filter, setFilter] = useState('all');
@@ -20,19 +20,19 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo))
+      .then(todo => setTodosId(todo))
       .finally(() => setIsLoadEnd(true));
   }, []);
 
   const sortedTodousingFilter = () => {
     switch (filter) {
       case 'all':
-        return todos;
+        return todosId;
       case 'active':
-        return todos.filter(todo => !todo.completed);
+        return todosId.filter(todo => !todo.completed);
       case 'completed':
       default:
-        return todos.filter(todo => todo.completed);
+        return todosId.filter(todo => todo.completed);
     }
   };
 
@@ -60,12 +60,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoadEnd && (<Loader />)}
-              <TodoList
-                todos={sortedTodo()}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
+              {!isLoadEnd
+                ? <Loader />
+                : (<TodoList
+                    todos={sortedTodo()}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                />)
+              }
+
             </div>
           </div>
         </div>
