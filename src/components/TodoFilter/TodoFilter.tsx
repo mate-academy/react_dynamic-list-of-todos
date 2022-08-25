@@ -1,8 +1,24 @@
-export const TodoFilter = () => (
+interface Props {
+  filter: string,
+  inputQuery: string,
+  onFilter: (filter: string) => void,
+  onInputQuery: (inputQuery: string) => void,
+}
+
+export const TodoFilter = ({
+  filter,
+  inputQuery,
+  onFilter,
+  onInputQuery,
+}: Props) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={(event) => onFilter(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,19 +32,28 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={inputQuery}
+        onChange={({ target }) => {
+          onInputQuery(target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {inputQuery && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => {
+              onInputQuery('');
+            }}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
