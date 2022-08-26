@@ -1,5 +1,5 @@
 interface Props {
-  filter: string;
+  completedFilter: string;
   searchQuery: string;
   onFilter: (filter: string) => void;
   onSearchQuery: (searchQuery: string) => void;
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const TodoFilter = ({
-  filter,
+  completedFilter,
   searchQuery,
   onFilter,
   onSearchQuery,
@@ -19,7 +19,7 @@ export const TodoFilter = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filter}
+            value={completedFilter}
             onChange={(event) => onFilter(event.target.value)}
           >
             <option value="all">All</option>

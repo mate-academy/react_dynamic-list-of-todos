@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
-import React, {
-  useEffect, useState, useCallback, useMemo,
-} from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { debounce } from 'lodash';
@@ -16,8 +14,8 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [completedFilter, setCompletedFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
@@ -25,11 +23,12 @@ export const App: React.FC = () => {
     getTodos().then((todosFromServer) => setTodos(todosFromServer));
   }, []);
 
-  const applySearchQuery = useCallback(debounce(setDebouncedSearchQuery, 1000), [
-    debouncedSearchQuery,
-  ]);
+  const applySearchQuery = useCallback(
+    debounce(setDebouncedSearchQuery, 1000),
+    [debouncedSearchQuery],
+  );
 
-  const filterTodos = useCallback(
+  const getFilterTodos = useCallback(
     (todoList: Todo[], inputQuery: string) => {
       if (!todoList.length) {
         return null;
@@ -38,11 +37,9 @@ export const App: React.FC = () => {
       const filteredTodos = todoList.filter((todo) => {
         const { title, completed } = todo;
 
-        const isTitle = title
-          .toLowerCase()
-          .includes(inputQuery.toLowerCase());
+        const isTitle = title.toLowerCase().includes(inputQuery.toLowerCase());
 
-        switch (filter) {
+        switch (completedFilter) {
           case 'all':
             return isTitle;
           case 'active':
@@ -56,12 +53,12 @@ export const App: React.FC = () => {
 
       return filteredTodos;
     },
-    [debouncedSearchQuery, filter],
+    [debouncedSearchQuery, completedFilter],
   );
 
-  const getFilteredTodos = useMemo(
-    () => filterTodos(todos, debouncedSearchQuery),
-    [todos, debouncedSearchQuery, filter],
+  const filteredTodos = useMemo(
+    () => getFilterTodos(todos, debouncedSearchQuery),
+    [todos, debouncedSearchQuery, completedFilter],
   );
 
   return (
@@ -73,9 +70,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
+                completedFilter={completedFilter}
                 searchQuery={searchQuery}
-                onFilter={setFilter}
+                onFilter={setCompletedFilter}
                 onSearchQuery={setSearchQuery}
                 onAppliedSearchQuery={applySearchQuery}
               />
@@ -83,11 +80,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todos.length === 0 && <Loader />}
-              {getFilteredTodos && (
+              {filteredTodos && (
                 <TodoList
-                  todos={getFilteredTodos}
-                  selectedTodo={selectedTodo}
-                  onSelectedTodo={setSelectedTodo}
+                  todos={filteredTodos}
+                  selectedTodoId={selectedTodoId}
+                  onSelectedTodoId={setSelectedTodoId}
                 />
               )}
             </div>
@@ -95,10 +92,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId && (
         <TodoModal
-          selectedTodo={selectedTodo}
-          onDeletedSelectedTodo={setSelectedTodo}
+          selectedTodoId={selectedTodoId}
+          todos={todos}
+          onDeletedSelectedTodo={setSelectedTodoId}
         />
       )}
     </>
