@@ -74,7 +74,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredToDo}
-                    selected={selectedTodoId}
+                    selectedTodoID={selectedTodoId}
                     selectedTodo={(todo: React.SetStateAction<number>) => {
                       setSelectedTodoId(todo);
                     }}

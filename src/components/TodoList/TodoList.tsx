@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  selected: number,
+  selectedTodoID: number,
   selectedTodo: (todo:React.SetStateAction<number>) => void,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selected,
+  selectedTodoID,
   selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -60,8 +60,8 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i className={classNames(
                   {
-                    'far fa-eye-slash': selected,
-                    'far fa-eye': !selected,
+                    'far fa-eye-slash': selectedTodoID,
+                    'far fa-eye': !selectedTodoID,
                   },
                 )}
                 />
