@@ -13,15 +13,12 @@ interface Props {
 export const TodoModal: React.FC<Props> = (props) => {
   const { showModal, selectedTodo, selectTodo } = props;
 
-  const [user, setUser] = useState<User>();
-  const [modalAreLoaded, setModalAreLoaded] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(setUser)
-        .finally(() => (setModalAreLoaded(true)
-        ));
+        .then(setUser);
     }
   }, []);
 
@@ -29,7 +26,7 @@ export const TodoModal: React.FC<Props> = (props) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!modalAreLoaded ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -66,8 +63,8 @@ export const TodoModal: React.FC<Props> = (props) => {
 
               {' by '}
 
-              <a href={user?.email}>
-                {user?.name}
+              <a href={user.email}>
+                {user.name}
               </a>
             </p>
           </div>
