@@ -69,7 +69,6 @@ export const App: React.FC = () => {
                     setSelectedTodo={setSelectedTodo}
                   />
                 )}
-
             </div>
           </div>
         </div>
