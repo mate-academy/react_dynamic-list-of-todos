@@ -62,12 +62,13 @@ export const App: React.FC = () => {
             <div className="block">
               {!isLoadEnd
                 ? <Loader />
-                : (<TodoList
+                : (
+                  <TodoList
                     todos={sortedTodo()}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
-                />)
-              }
+                  />
+                )}
 
             </div>
           </div>
