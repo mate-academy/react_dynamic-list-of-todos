@@ -1,13 +1,13 @@
 interface Props {
-  filter: string,
-  setFilter: (filter: string) => void,
-  query: string,
-  setQuery: (query:string) => void,
+  complitedFilter: string,
+  setComplitedFilter: (filter: string) => void,
+  searchQuery: string,
+  setSearchQuery: (query:string) => void,
 }
 
 export const TodoFilter: React.FC<Props> = (
   {
-    filter, setFilter, query, setQuery,
+    complitedFilter, setComplitedFilter, searchQuery, setSearchQuery,
   },
 ) => (
   <form className="field has-addons">
@@ -15,8 +15,8 @@ export const TodoFilter: React.FC<Props> = (
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={filter}
-          onChange={(event) => setFilter(event.target.value)}
+          value={complitedFilter}
+          onChange={(event) => setComplitedFilter(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -31,14 +31,14 @@ export const TodoFilter: React.FC<Props> = (
         type="text"
         className="input"
         placeholder="Search..."
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {query.length > 0 && (
+      {searchQuery.length > 0 && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
@@ -46,7 +46,7 @@ export const TodoFilter: React.FC<Props> = (
             type="button"
             className="delete"
             onClick={() => {
-              setQuery('');
+              setSearchQuery('');
             }}
           />
         </span>

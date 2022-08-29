@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,28 +14,36 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('all');
-  const [query, setQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [complitedFilter, setComplitedFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     getTodos().then(todosFromServer => setTodos(todosFromServer));
   }, []);
 
-  const filterList = (list: Todo[]) => {
-    let todoList = list.filter(todoItem => todoItem.title.includes(query));
+  const filterList = useCallback(
+    (list: Todo[]) => {
+      let todoList = list.filter(todoItem => todoItem.title.includes(searchQuery));
 
-    switch (filter) {
-      case 'all': break;
-      case 'completed': todoList = todoList.filter(todoItem => todoItem.completed); break;
-      case 'active': todoList = todoList.filter(todoItem => !todoItem.completed); break;
-      default: break;
-    }
+      switch (complitedFilter) {
+        case 'all': break;
+        case 'completed': todoList = todoList.filter(todoItem => todoItem.completed); break;
+        case 'active': todoList = todoList.filter(todoItem => !todoItem.completed); break;
+        default: break;
+      }
 
-    return todoList;
-  };
+      return todoList;
+    }, [complitedFilter, searchQuery],
+  );
 
-  const visiableTodos = filterList(todos);
+  const visiableTodos = useMemo(() => (
+    filterList(todos)
+  ), [todos, complitedFilter, searchQuery]);
+
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId) || null
+  ), [selectedTodoId]);
 
   return (
     <>
@@ -44,10 +54,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
-                setFilter={setFilter}
-                query={query}
-                setQuery={setQuery}
+                complitedFilter={complitedFilter}
+                setComplitedFilter={setComplitedFilter}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
               />
             </div>
 
@@ -55,20 +65,15 @@ export const App: React.FC = () => {
               {!todos.length && <Loader />}
               <TodoList
                 todos={visiableTodos}
-                selectedTodo={selectedTodo}
-                onSelectedTodo={setSelectedTodo}
+                selectedTodoId={selectedTodoId}
+                onSelectedTodoId={setSelectedTodoId}
               />
             </div>
           </div>
         </div>
       </div>
 
-      { selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
-      )}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={setSelectedTodoId} />}
     </>
   );
 };
