@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completeTodoFilter, setCompleteTodoFilter] = useState('all');
   const [query, setQuery] = useState('');
-  const [selectedTodosId, setSelectedTodosId] = useState<number | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   const prettyQuery = query.toLowerCase().trim();
 
@@ -26,12 +26,25 @@ export const App: React.FC = () => {
 
   let visibleTodos = [...todos];
 
-  if (completeTodoFilter === 'active') {
-    visibleTodos = [...todos].filter(el => el.completed === false);
-  }
+  // if (completeTodoFilter === 'active') {
+  //   visibleTodos = [...todos].filter(el => el.completed === false);
+  // }
 
-  if (completeTodoFilter === 'completed') {
-    visibleTodos = [...todos].filter(el => el.completed === true);
+  // if (completeTodoFilter === 'completed') {
+  //   visibleTodos = [...todos].filter(el => el.completed === true);
+  // }
+
+  switch (completeTodoFilter) {
+    case 'active':
+      visibleTodos = [...todos].filter(el => el.completed === false);
+      break;
+
+    case 'completed':
+      visibleTodos = [...todos].filter(el => el.completed === true);
+      break;
+
+    default:
+      visibleTodos = [...todos];
   }
 
   const visibleFilteredTodos = (allTodos: Todo[]) => {
@@ -40,7 +53,7 @@ export const App: React.FC = () => {
 
   const preparedTodos = visibleFilteredTodos(visibleTodos);
 
-  const selectedTodo = todos.find(el => el.id === selectedTodosId) || null;
+  const selectedTodo = todos.find(el => el.id === selectedTodoId) || null;
 
   return (
     <>
@@ -59,20 +72,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                preparedTodos={preparedTodos}
-                setSelectedTodosId={setSelectedTodosId}
-                selectedTodosId={selectedTodosId}
-              />
-              {!todos.length && <Loader />}
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    preparedTodos={preparedTodos}
+                    setSelectedTodoId={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      { selectedTodosId && (
+      { selectedTodoId && (
         <TodoModal
-          setSelectedTodosId={setSelectedTodosId}
+          setSelectedTodosId={setSelectedTodoId}
           selectedTodo={selectedTodo}
         />
       )}

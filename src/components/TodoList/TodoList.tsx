@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   preparedTodos: Todo[],
-  setSelectedTodosId: (selectedTodosId: number | null) => void,
-  selectedTodosId: number,
+  setSelectedTodoId: (selectedTodoId: number | null) => void,
+  selectedTodoId: number | null,
 }
 
 export const TodoList: React.FC<Props> = ({
   preparedTodos,
-  setSelectedTodosId,
-  selectedTodosId,
+  setSelectedTodoId,
+  selectedTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     {preparedTodos && (
@@ -34,13 +34,14 @@ export const TodoList: React.FC<Props> = ({
       {preparedTodos.map(todo => (
         <tr data-cy="todo" className="" key={todo.id}>
           <td className="is-vcentered">{todo.id}</td>
-          {todo.completed ? (
-            <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            </td>
-          )
+          {todo.completed
+            ? (
+              <td className="is-vcentered">
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              </td>
+            )
             : <td className="is-vcentered" />}
 
           <td className="is-vcentered is-expanded">
@@ -62,15 +63,15 @@ export const TodoList: React.FC<Props> = ({
               className="button"
               type="button"
               onClick={() => {
-                setSelectedTodosId(todo.id);
+                setSelectedTodoId(todo.id);
               }}
             >
               <span className="icon">
                 <i
                   className={cn(
                     {
-                      'far fa-eye': selectedTodosId !== todo.id,
-                      'far fa-eye-slash': selectedTodosId === todo.id,
+                      'far fa-eye': selectedTodoId !== todo.id,
+                      'far fa-eye-slash': selectedTodoId === todo.id,
                     },
                   )}
                 />
