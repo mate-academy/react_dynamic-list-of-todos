@@ -26,14 +26,6 @@ export const App: React.FC = () => {
 
   let visibleTodos = [...todos];
 
-  // if (completeTodoFilter === 'active') {
-  //   visibleTodos = [...todos].filter(el => el.completed === false);
-  // }
-
-  // if (completeTodoFilter === 'completed') {
-  //   visibleTodos = [...todos].filter(el => el.completed === true);
-  // }
-
   switch (completeTodoFilter) {
     case 'active':
       visibleTodos = [...todos].filter(el => el.completed === false);
