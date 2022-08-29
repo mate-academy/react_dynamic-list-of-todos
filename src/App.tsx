@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { debounce } from 'lodash';
@@ -84,7 +86,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoId}
-                  onSelectedTodoId={setSelectedTodoId}
+                  onSelect={setSelectedTodoId}
                 />
               )}
             </div>

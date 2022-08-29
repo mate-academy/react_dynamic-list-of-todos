@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -22,11 +22,13 @@ export const TodoModal: React.FC<Props> = ({
     [selectedTodoId],
   );
 
+  const todo = useMemo(() => {
+    return getTodoById(selectedTodoId);
+  }, [selectedTodoId]);
+
   useEffect(() => {
     getUser(selectedTodoId).then((user) => setSelectedUser(user));
   }, [selectedTodoId]);
-
-  console.log(getTodoById(selectedTodoId));
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -57,7 +59,7 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {getTodoById(selectedTodoId)?.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
