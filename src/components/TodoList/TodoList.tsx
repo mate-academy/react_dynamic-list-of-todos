@@ -38,9 +38,11 @@ export const TodoList: React.FC<Props> = (props) => {
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              <span className="icon">
-                {todo.completed && <i className="fas fa-check" />}
-              </span>
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames(todo.completed
@@ -57,7 +59,7 @@ export const TodoList: React.FC<Props> = (props) => {
                 type="button"
                 onClick={() => {
                   onSelect(todo.id);
-                  setIsButtonActive(!(isButtonActive));
+                  setIsButtonActive(prev => !prev);
                 }}
               >
                 <span className="icon">

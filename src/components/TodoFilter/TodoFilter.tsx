@@ -3,16 +3,27 @@ import { FC } from 'react';
 interface Props {
   query: string;
   onSearch: (query: string) => void;
+  onFilter: (option: string) => void;
+  filterVariant: string
 }
 
 export const TodoFilter: FC<Props> = (props) => {
-  const { query, onSearch } = props;
+  const {
+    query,
+    onSearch,
+    onFilter,
+    filterVariant,
+  } = props;
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select
+            data-cy="statusSelect"
+            onChange={(event) => onFilter(event.target.value)}
+            value={filterVariant}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
