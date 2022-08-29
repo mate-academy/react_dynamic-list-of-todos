@@ -11,7 +11,9 @@ export const TodoFilter = ({
   onFilter,
   onInputQuery,
 }: Props) => (
-  <form className="field has-addons">
+  <form
+    className="field has-addons"
+  >
     <p className="control">
       <span className="select">
         <select
@@ -46,9 +48,9 @@ export const TodoFilter = ({
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
-            type="button"
+            type="submit"
             className="delete"
-            onClick={() => {
+            onSubmit={() => {
               onInputQuery('');
             }}
           />

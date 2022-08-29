@@ -11,12 +11,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import './styles.scss';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [inputQuery, setInputQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [complitedFilter, setComplitedFilter] = useState('all');
 
   const filterTodos = useCallback((todoList: Todo[], queryInput: string) => {
     if (!todoList.length) {
@@ -27,7 +28,7 @@ export const App: React.FC = () => {
       const includedTitle = todo.title.toLowerCase()
         .includes(queryInput.toLowerCase());
 
-      switch (filter) {
+      switch (complitedFilter) {
         case 'all':
           return includedTitle;
         case 'active':
@@ -38,11 +39,11 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-  }, [filter]);
+  }, [complitedFilter]);
 
   const filteredTodos = useMemo(() => (
-    filterTodos(todos, inputQuery)
-  ), [todos, inputQuery, filter]);
+    filterTodos(todos, searchQuery)
+  ), [todos, searchQuery, complitedFilter]);
 
   useEffect(() => {
     getTodos().then(todosFromServer => setTodos(todosFromServer));
@@ -57,10 +58,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
-                inputQuery={inputQuery}
-                onFilter={setFilter}
-                onInputQuery={setInputQuery}
+                filter={complitedFilter}
+                inputQuery={searchQuery}
+                onFilter={setComplitedFilter}
+                onInputQuery={setSearchQuery}
               />
             </div>
 
