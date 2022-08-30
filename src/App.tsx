@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './App.scss';
@@ -37,31 +39,34 @@ export const App: React.FC = () => {
     debounce(setAppliedQuery, 500), [],
   );
 
-  const filterTodos = (todosList: Todo[] | null, filterQuery: string) => {
-    if (!todosList) {
-      return null;
-    }
-
-    return todosList.filter(todo => {
-      switch (todosFilter) {
-        case 'all':
-          return todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        case 'active':
-          return !todo.completed
-            && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        case 'completed':
-          return todo.completed
-            && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        default:
-          return todo;
+  const filterTodos = useCallback(
+    (todosList: Todo[] | null, filterQuery: string) => {
+      if (!todosList) {
+        return null;
       }
-    });
-  };
 
-  const filteredTodos = useMemo(() => filterTodos(todos, appliedQuery), [todos]);
+      return todosList.filter(todo => {
+        switch (todosFilter) {
+          case 'all':
+            return todo.title.toLowerCase().includes(filterQuery.toLowerCase());
+
+          case 'active':
+            return !todo.completed
+              && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
+
+          case 'completed':
+            return todo.completed
+              && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
+
+          default:
+            return todo;
+        }
+      });
+    },
+    [todos, todosFilter],
+  );
+
+  const filteredTodos = useMemo(() => filterTodos(todos, appliedQuery), [todos, todosFilter]);
 
   return (
     <>
@@ -72,8 +77,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={setTodosFilter}
-                filter={todosFilter}
+                setTodosFilter={setTodosFilter}
+                todosFilter={todosFilter}
                 searchQuery={searchQuery}
                 setQuery={setSearchQuery}
                 applyQuery={applyQuery}

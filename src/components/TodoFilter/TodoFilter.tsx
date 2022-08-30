@@ -1,16 +1,16 @@
 import React from 'react';
 
 type Props = {
-  setFilter: (filter: string) => void,
-  filter: string,
+  setTodosFilter: (filter: string) => void,
+  todosFilter: string,
   searchQuery: string,
   setQuery: (searchQuery: string) => void,
   applyQuery: (searchQuery: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  setFilter,
-  filter,
+  setTodosFilter,
+  todosFilter,
   searchQuery,
   setQuery,
   applyQuery,
@@ -21,8 +21,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filter}
-            onChange={({ target }) => setFilter(target.value)}
+            value={todosFilter}
+            onChange={({ target }) => setTodosFilter(target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
