@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './App.scss';
 
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
     });
   };
 
-  const filteredTodos = filterTodos(todos, appliedQuery);
+  const filteredTodos = useMemo(() => filterTodos(todos, appliedQuery), [todos]);
 
   return (
     <>
