@@ -91,7 +91,7 @@ export const App: React.FC = () => {
               {filteredTodos && (
                 <TodoList
                   todos={filteredTodos}
-                  selectedTodo={selectedTodo}
+                  selectedTodoId={selectedTodo?.id || null}
                   setSelectedTodo={setSelectedTodo}
                 />
               )}

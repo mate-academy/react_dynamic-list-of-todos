@@ -1,16 +1,16 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import classNames from "classnames";
 
 type Props = {
   todos: Todo[],
-  selectedTodo: Todo | null,
+  selectedTodoId: Maybe<number>,
   setSelectedTodo: (todo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodo,
+  selectedTodoId,
   setSelectedTodo,
 }) => {
   return (
@@ -35,9 +35,9 @@ export const TodoList: React.FC<Props> = ({
               data-cy="todo"
               className={classNames(
                 {
-                  'has-background-info-light': selectedTodo?.id === todo.id,
-                  '': selectedTodo?.id !== todo.id,
-                }
+                  'has-background-info-light': selectedTodoId === todo.id,
+                  '': selectedTodoId !== todo.id,
+                },
               )}
               key={todo.id}
             >
@@ -54,7 +54,7 @@ export const TodoList: React.FC<Props> = ({
                   {
                     'has-text-success': todo.completed,
                     'has-text-danger': !todo.completed,
-                  }
+                  },
                 )}
                 >
                   {todo.title}
@@ -72,9 +72,9 @@ export const TodoList: React.FC<Props> = ({
                   <span className="icon">
                     <i className={classNames(
                       {
-                        'far fa-eye-slash': selectedTodo?.id === todo.id,
-                        'far fa-eye': selectedTodo?.id !== todo.id,
-                      }
+                        'far fa-eye-slash': selectedTodoId === todo.id,
+                        'far fa-eye': selectedTodoId !== todo.id,
+                      },
                     )}
                     />
                   </span>
