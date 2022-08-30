@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,67 +8,61 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
-import { SortType } from './types/SortType';
 import { getTodos } from './api';
+
+const getFilteredTodos = (
+  todos: Todo[], filteredBySelect: string, filteredByQuery: string,
+) => {
+  const todosFiltered = todos.filter(
+    todo => todo.title.includes(filteredByQuery.toLowerCase().trim()),
+  );
+
+  switch (filteredBySelect) {
+    case 'active':
+      return todosFiltered.filter(todo => !todo.completed);
+
+    case 'completed':
+      return todosFiltered.filter(todo => todo.completed);
+
+    case 'all':
+    default:
+      return todosFiltered;
+  }
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [filteredBySelect, setFilteredBySelect] = useState(SortType.all);
+  const [filteredBySelect, setFilteredBySelect] = useState('all');
   const [filteredByQuery, setFilteredByQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [showTodoModal, setShowTodoModal] = useState<boolean>(false);
+  const [showTodoModal, setShowTodoModal] = useState(false);
 
   const loadFromServer = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
-    setVisibleTodos(todosFromServer);
   };
 
   useEffect(() => {
     loadFromServer();
   }, []);
 
-  const filteredTodos = () => {
-    const todosFilteredByQuery = todos.filter(
-      todo => todo.title.includes(filteredByQuery.toLowerCase().trim()),
-    );
-
-    switch (filteredBySelect) {
-      case SortType.all:
-        setVisibleTodos(todosFilteredByQuery);
-        break;
-
-      case SortType.active:
-        setVisibleTodos(todosFilteredByQuery.filter(todo => !todo.completed));
-        break;
-
-      case SortType.completed:
-        setVisibleTodos(todosFilteredByQuery.filter(todo => todo.completed));
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    filteredTodos();
-  }, [filteredBySelect, filteredByQuery]);
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(todos, filteredBySelect, filteredByQuery);
+  }, [todos, filteredBySelect, filteredByQuery]);
 
   const handleFilteredData = (select: string) => {
     switch (select) {
       case 'all':
-        setFilteredBySelect(SortType.all);
+        setFilteredBySelect(select);
         break;
 
       case 'active':
-        setFilteredBySelect(SortType.active);
+        setFilteredBySelect(select);
         break;
 
       case 'completed':
-        setFilteredBySelect(SortType.completed);
+        setFilteredBySelect(select);
         break;
 
       default:
@@ -113,7 +107,7 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length && <Loader />}
               <TodoList
-                visibleTodos={visibleTodos}
+                filteredTodos={filteredTodos}
                 selectedTodo={selectedTodo}
                 handleFoundTodo={handleFoundTodo}
               />

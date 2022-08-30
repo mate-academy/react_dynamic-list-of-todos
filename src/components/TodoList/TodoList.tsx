@@ -3,13 +3,13 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  visibleTodos: Todo[];
+  filteredTodos: Todo[];
   selectedTodo: Todo | null,
   handleFoundTodo: (value: Todo | null) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
-  visibleTodos,
+  filteredTodos,
   selectedTodo,
   handleFoundTodo,
 }) => (
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
 
-      {visibleTodos.map(todo => (
+      {filteredTodos.map(todo => (
         <tr
           data-cy="todo"
           className=""
