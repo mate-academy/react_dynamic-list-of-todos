@@ -10,7 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
-const debounce = (f: (query: string) => void, delay: number) => {
+const debounce = (f: (searchQuery: string) => void, delay: number) => {
   let timerId: number;
 
   return (...args: string[]) => {
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState('all');
-  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
   useEffect(() => {
@@ -73,8 +73,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 setFilter={setFilter}
                 filter={filter}
-                query={query}
-                setQuery={setQuery}
+                searchQuery={searchQuery}
+                setQuery={setSearchQuery}
                 applyQuery={applyQuery}
               />
             </div>

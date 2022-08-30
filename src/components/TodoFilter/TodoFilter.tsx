@@ -3,15 +3,15 @@ import React from 'react';
 type Props = {
   setFilter: (filter: string) => void,
   filter: string,
-  query: string,
-  setQuery: (query: string) => void,
-  applyQuery: (query: string) => void,
+  searchQuery: string,
+  setQuery: (searchQuery: string) => void,
+  applyQuery: (searchQuery: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   setFilter,
   filter,
-  query,
+  searchQuery,
   setQuery,
   applyQuery,
 }) => {
@@ -37,7 +37,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={searchQuery}
           onChange={({ target }) => {
             setQuery(target.value);
             applyQuery(target.value);
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {searchQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
