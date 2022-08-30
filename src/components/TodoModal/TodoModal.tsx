@@ -6,11 +6,11 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 interface Props {
-  todo: Todo;
-  selectedUser: (todo: null) => void
+  todo: Todo | null;
+  setSelectedTodoId: (selectedTodoId: number | null) => void,
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, selectedUser }) => {
+export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodoId }) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedUser }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -45,24 +45,24 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedUser }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectedUser(null)}
+              onClick={() => setSelectedTodoId(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames(
-                  { 'has-text-success': todo.completed },
-                  { 'has-text-danger': !todo.completed },
+                  { 'has-text-success': todo?.completed },
+                  { 'has-text-danger': !todo?.completed },
                 )}
               >
-                {todo.completed
+                {todo?.completed
                   ? 'Done'
                   : 'Planned'}
               </strong>

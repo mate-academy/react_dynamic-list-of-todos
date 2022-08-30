@@ -12,12 +12,13 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import './styles.scss';
+import { SelectFilter } from './types/SelectFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [complitedFilter, setComplitedFilter] = useState('all');
+  const [complitedFilter, setComplitedFilter] = useState(SelectFilter.ALL);
 
   const filterTodos = useCallback((todoList: Todo[], queryInput: string) => {
     if (!todoList.length) {
@@ -26,14 +27,14 @@ export const App: React.FC = () => {
 
     return todoList.filter(todo => {
       const includedTitle = todo.title.toLowerCase()
-        .includes(queryInput.toLowerCase());
+        .includes(queryInput.toLowerCase().trim());
 
       switch (complitedFilter) {
-        case 'all':
+        case SelectFilter.ALL:
           return includedTitle;
-        case 'active':
+        case SelectFilter.COMPLETED:
           return !todo.completed && includedTitle;
-        case 'completed':
+        case SelectFilter.ACTIVE:
           return todo.completed && includedTitle;
         default:
           return todo;
@@ -41,13 +42,17 @@ export const App: React.FC = () => {
     });
   }, [complitedFilter]);
 
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId) || null
+  ), [todos, selectedTodoId]);
+
   const filteredTodos = useMemo(() => (
     filterTodos(todos, searchQuery)
   ), [todos, searchQuery, complitedFilter]);
 
   useEffect(() => {
     getTodos().then(todosFromServer => setTodos(todosFromServer));
-  });
+  }, []);
 
   return (
     <>
@@ -60,7 +65,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 filter={complitedFilter}
                 inputQuery={searchQuery}
-                onFilter={setComplitedFilter}
+                setOnFilter={setComplitedFilter}
                 onInputQuery={setSearchQuery}
               />
             </div>
@@ -69,18 +74,18 @@ export const App: React.FC = () => {
             {filteredTodos && (
               <TodoList
                 todos={filteredTodos}
-                selectedTodo={selectedTodo}
-                onSelectedTodo={setSelectedTodo}
+                selectedTodoId={selectedTodoId}
+                onSelectedTodoId={setSelectedTodoId}
               />
             )}
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId && (
         <TodoModal
           todo={selectedTodo}
-          selectedUser={setSelectedTodo}
+          setSelectedTodoId={setSelectedTodoId}
         />
       )}
     </>

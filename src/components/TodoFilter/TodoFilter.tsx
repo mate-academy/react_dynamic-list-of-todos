@@ -1,14 +1,16 @@
+import { SelectFilter } from '../../types/SelectFilter';
+
 interface Props {
   filter: string,
   inputQuery: string,
-  onFilter: (filter: string) => void,
+  setOnFilter: (onFilter: SelectFilter) => void,
   onInputQuery: (inputQuery: string) => void,
 }
 
 export const TodoFilter = ({
   filter,
   inputQuery,
-  onFilter,
+  setOnFilter,
   onInputQuery,
 }: Props) => (
   <form
@@ -19,11 +21,11 @@ export const TodoFilter = ({
         <select
           data-cy="statusSelect"
           value={filter}
-          onChange={(event) => onFilter(event.target.value)}
+          onChange={(event) => setOnFilter(event.target.value as SelectFilter)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SelectFilter.ALL}>All</option>
+          <option value={SelectFilter.ACTIVE}>Active</option>
+          <option value={SelectFilter.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
