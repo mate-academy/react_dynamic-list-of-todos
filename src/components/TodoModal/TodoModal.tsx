@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -15,9 +15,9 @@ export const TodoModal: React.FC<Props> = (props) => {
   const [isModalLoading, setIsModalLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const getSelectedTodo = () => {
+  const getSelectedTodo = useCallback(() => {
     return todos.find(todo => todo.id === selectedTodoId) || todos[0];
-  };
+  }, [todos]);
 
   const todo = getSelectedTodo();
 

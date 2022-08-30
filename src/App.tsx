@@ -52,9 +52,9 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const getFilter = (option: string) => {
+  const getFilter = useCallback((option: string) => {
     return setFilterVariant(option);
-  };
+  }, [setFilterVariant]);
 
   const getQuery = useCallback((newQuery) => {
     setQuery(newQuery);
