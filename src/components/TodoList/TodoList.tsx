@@ -8,7 +8,7 @@ interface Props {
   onSelect: (todo: number) => void;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectedTodoId,
   onSelect,
@@ -69,4 +69,4 @@ export const TodoList: React.FC<Props> = ({
       ))}
     </tbody>
   </table>
-);
+));

@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Props {
   completedFilter: string;
   searchQuery: string;
@@ -6,7 +8,7 @@ interface Props {
   onAppliedSearchQuery: (appliedSearchQuery: string) => void;
 }
 
-export const TodoFilter = ({
+export const TodoFilter = React.memo(({
   completedFilter,
   searchQuery,
   onFilter,
@@ -62,4 +64,4 @@ export const TodoFilter = ({
       </p>
     </form>
   );
-};
+});

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -10,7 +12,7 @@ interface Props {
   onDeletedSelectedTodo: (todo: null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal: React.FC<Props> = React.memo(({
   selectedTodoId,
   todos,
   onDeletedSelectedTodo,
@@ -59,7 +61,7 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {todo?.title && ''}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -79,4 +81,4 @@ export const TodoModal: React.FC<Props> = ({
       )}
     </div>
   );
-};
+});
