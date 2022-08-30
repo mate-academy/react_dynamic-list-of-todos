@@ -68,6 +68,8 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => filterTodos(todos, appliedQuery), [todos, todosFilter]);
 
+  const closeModal = () => setSelectedTodo(null);
+
   return (
     <>
       <div className="section">
@@ -103,7 +105,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={() => setSelectedTodo(null)}
+          setSelectedTodo={closeModal}
         />
       )}
     </>
