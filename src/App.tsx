@@ -23,7 +23,7 @@ const debounce = (f: (searchQuery: string) => void, delay: number) => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('all');
+  const [todosFilter, setTodosFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
@@ -42,7 +42,7 @@ export const App: React.FC = () => {
     }
 
     return todosList.filter(todo => {
-      switch (filter) {
+      switch (todosFilter) {
         case 'all':
           return todo.title.toLowerCase().includes(filterQuery.toLowerCase());
 
@@ -71,8 +71,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={setFilter}
-                filter={filter}
+                setFilter={setTodosFilter}
+                filter={todosFilter}
                 searchQuery={searchQuery}
                 setQuery={setSearchQuery}
                 applyQuery={applyQuery}
