@@ -30,19 +30,19 @@ export const App: React.FC = () => {
     todos.filter(todo => {
       const filteredByQuery = todo.title.toLowerCase().includes(query.toLocaleLowerCase());
 
-      if (filterType === 'all') {
-        return filteredByQuery;
-      }
+      switch (filterType) {
+        case 'all':
+          return filteredByQuery;
 
-      if (filterType === 'active') {
-        return filteredByQuery && !todo.completed;
-      }
+        case 'active':
+          return filteredByQuery && !todo.completed;
 
-      if (filterType === 'completed') {
-        return filteredByQuery && todo.completed;
-      }
+        case 'completed':
+          return filteredByQuery && todo.completed;
 
-      return true;
+        default:
+          return true;
+      }
     })), [todos, query, filterType]);
 
   return (
