@@ -1,21 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  userId: number,
+  setVisibility: (value: boolean) => void,
+  title: string,
+  todoId: number,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  userId,
+  setVisibility,
+  title,
+  todoId,
+}) => {
+  const [user, setUser] = useState<User>();
+  const [loader, setLoader] = useState(true);
+
+  useEffect(() => {
+    getUser(userId).then(res => {
+      setUser(res);
+      setLoader(false);
+    });
+  });
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {true ? (
-        <Loader />
-      ) : (
+      {loader ? <Loader /> : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todoId}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,12 +44,13 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => setVisibility(false)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -37,8 +59,8 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={user?.email}>
+                {user?.name}
               </a>
             </p>
           </div>
