@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React from 'react';
 
-interface Props {
-  todos: Todo[];
-  onFilterTodo: (todos:Todo[]) => void;
-}
+type Props = {
+  setFilter: (filter: string) => void,
+  filter: string,
+  query: string,
+  setQuery: (query: string) => void,
+};
 
-export const TodoFilter: React.FC<Props> = ({ todos, onFilterTodo }) => {
-  const [query, setQuery] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-
-  useEffect(() => {
-    onFilterTodo(filteredTodos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase())));
-  }, [query, filteredTodos]);
-
-  const handleFilter = (value: string) => {
-    switch (value) {
-      case 'all':
-        setFilteredTodos(todos);
-        break;
-
-      case 'active':
-        setFilteredTodos(todos.filter(todo => todo.completed === false));
-        break;
-
-      case 'completed':
-        setFilteredTodos(todos.filter(todo => todo.completed === true));
-        break;
-
-      default:
-        break;
-    }
-  };
+export const TodoFilter: React.FC<Props> = (props) => {
+  // eslint-disable-next-line object-curly-newline
+  const { query, setQuery, filter, setFilter } = props;
 
   return (
     <form className="field has-addons">
@@ -40,9 +17,8 @@ export const TodoFilter: React.FC<Props> = ({ todos, onFilterTodo }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => {
-              handleFilter(e.target.value);
-            }}
+            value={filter}
+            onChange={({ target }) => setFilter(target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

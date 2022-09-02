@@ -11,23 +11,29 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [todoId, setTodoId] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  const selectedTodo = (todos.find(todo => todo.id === todoId));
+  const filteredList = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase())).filter(todo => {
+    switch (filter) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   useEffect(() => {
     getTodos()
-      .then(todosfromServer => {
-        setInitialTodos(todosfromServer);
-        setTodos(todosfromServer);
-        setIsLoaded(true);
-      });
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
-
-  const handleSelectedTodo = (todo: Todo | null) => {
-    setSelectedTodo(todo);
-  };
 
   return (
     <>
@@ -36,40 +42,24 @@ export const App: React.FC = () => {
           <div className="box">
             <h1 className="title">Todos:</h1>
 
-            {!isLoaded
-              ? <Loader />
-              : (
-                <>
-                  <div className="block">
-                    <TodoFilter
-                      todos={initialTodos}
-                      onFilterTodo={setTodos}
-                    />
-                  </div>
+            <div className="block">
+              <TodoFilter
+                setFilter={setFilter}
+                filter={filter}
+                query={query}
+                setQuery={setQuery}
+              />
+            </div>
 
-                  <div className="block">
-                    <TodoList
-                      todos={todos}
-                      selectedTodo={selectedTodo}
-                      onTodoSelect={(todo) => {
-                        handleSelectedTodo(todo);
-                      }}
-                    />
-                  </div>
-                </>
-              )}
+            <div className="block">
+              {loading && <Loader />}
+              <TodoList selectedTodoId={setTodoId} selectedTodo={selectedTodo} filteredList={filteredList} />
+            </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          onClose={() => {
-            setSelectedTodo(null);
-          }}
-        />
-      )}
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} setTodoId={setTodoId} />}
     </>
   );
 };
