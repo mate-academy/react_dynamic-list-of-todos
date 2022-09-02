@@ -9,15 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-const debounce = (f: (query: string) => void, delay: number) => {
-  let timerId: number;
-
-  return (...args: string[]) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(f, delay, ...args);
-  };
-};
+import { debounce, filteringTodos } from './utils/utils';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
@@ -36,31 +28,7 @@ export const App: React.FC = () => {
     [],
   );
 
-  const filteringTodos = (todosList: Todo[] | null, filterQuery: string) => {
-    if (!todosList) {
-      return null;
-    }
-
-    return todosList.filter(todo => {
-      switch (filtering) {
-        case 'all':
-          return todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        case 'active':
-          return !todo.completed
-            && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        case 'completed':
-          return todo.completed
-            && todo.title.toLowerCase().includes(filterQuery.toLowerCase());
-
-        default:
-          return todo;
-      }
-    });
-  };
-
-  const filteredTodos = filteringTodos(todos, appliedQuery);
+  const filteredTodos = filteringTodos(todos, appliedQuery, filtering);
 
   return (
     <>

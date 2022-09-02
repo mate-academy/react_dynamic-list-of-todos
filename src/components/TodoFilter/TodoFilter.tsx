@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Props {
   filtering: string;
-  setFiltering: (filter:string) => void;
+  setFiltering: React.Dispatch<React.SetStateAction<string>>;
   query: string;
   setQuery: (query: string) => void;
   applyQuery: (query: string) => void;
