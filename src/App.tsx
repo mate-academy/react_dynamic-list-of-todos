@@ -12,7 +12,7 @@ import { TodoModal } from './components/TodoModal';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
