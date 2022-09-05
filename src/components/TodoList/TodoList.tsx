@@ -30,8 +30,7 @@ export const TodoList: React.FC<Props> = (props) => {
       <tbody>
         {filteredList.map((todo) => {
           return (
-            // eslint-disable-next-line no-constant-condition
-            false
+            !todo
               ? <Loader />
               : (
                 <tr

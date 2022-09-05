@@ -1,15 +1,17 @@
 import React from 'react';
+import { TodoFilterBy } from '../../types/TodoFilterBy';
 
 type Props = {
-  setFilter: (filter: string) => void,
+  setFilter: (newFilter: TodoFilterBy) => void,
+  setQuery: (query: string) => void,
   filter: string,
   query: string,
-  setQuery: (query: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
-  // eslint-disable-next-line object-curly-newline
-  const { query, setQuery, filter, setFilter } = props;
+  const {
+    query, setQuery, filter, setFilter,
+  } = props;
 
   return (
     <form className="field has-addons">
@@ -18,11 +20,13 @@ export const TodoFilter: React.FC<Props> = (props) => {
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={({ target }) => setFilter(target.value)}
+            onChange={
+              ({ target }) => setFilter(target.value as TodoFilterBy)
+            }
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoFilterBy.NONE}>All</option>
+            <option value={TodoFilterBy.ACTIVE}>Active</option>
+            <option value={TodoFilterBy.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

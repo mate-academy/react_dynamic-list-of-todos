@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,20 +8,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoFilterBy } from './types/TodoFilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(TodoFilterBy.NONE);
 
   const selectedTodo = (todos.find(todo => todo.id === todoId));
-  const filteredList = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase())).filter(todo => {
+  const filteredList = todos.filter(todo => todo.title.toLowerCase()
+    .includes(query.toLowerCase())).filter(todo => {
     switch (filter) {
-      case 'active':
+      case TodoFilterBy.ACTIVE:
         return !todo.completed;
-      case 'completed':
+      case TodoFilterBy.COMPLETED:
         return todo.completed;
       default:
         return todo;
@@ -53,13 +54,18 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              <TodoList selectedTodoId={setTodoId} selectedTodo={selectedTodo} filteredList={filteredList} />
+              <TodoList
+                selectedTodoId={setTodoId}
+                selectedTodo={selectedTodo}
+                filteredList={filteredList}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} setTodoId={setTodoId} />}
+      {selectedTodo
+        && <TodoModal selectedTodo={selectedTodo} setTodoId={setTodoId} />}
     </>
   );
 };
