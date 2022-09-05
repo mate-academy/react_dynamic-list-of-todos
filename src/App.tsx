@@ -12,27 +12,27 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [selectStatus, setSelectStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const [query, setQuery] = useState('');
 
   const filteredTodos = todos.filter(todo => {
-    const inputTitle = todo.title.toLocaleLowerCase()
+    const queryMatchTitle = todo.title.toLocaleLowerCase()
       .includes(query.toLocaleLowerCase());
 
-    switch (selectStatus) {
+    switch (selectedStatus) {
       case 'active':
-        return inputTitle && todo.completed === false;
+        return queryMatchTitle && todo.completed === false;
       case 'completed':
-        return inputTitle && todo.completed === true;
+        return queryMatchTitle && todo.completed === true;
       default:
-        return inputTitle;
+        return queryMatchTitle;
     }
   });
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   useEffect(() => {
-    getTodos().then(todoAll => setTodos(todoAll));
+    getTodos().then(setTodos);
   }, []);
 
   return (
@@ -45,10 +45,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                statusSelect={(status) => {
-                  setSelectStatus(status);
+                onStatusSelect={(status) => {
+                  setSelectedStatus(status);
                 }}
-                inputQuery={(inputValue) => {
+                onQueryChange={(inputValue) => {
                   setQuery(inputValue);
                 }}
               />
