@@ -12,6 +12,7 @@ loaded and show them using `TodoList`;
 works as expected;
 1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
 1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);
+1. Show the Loader while waiting for the user;
 1. `x` button should close the modal;
 1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos;
 1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
