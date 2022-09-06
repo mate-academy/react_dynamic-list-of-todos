@@ -13,6 +13,10 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
 
+const stringIncludes = (full: string, part: string) => (
+  full.toLowerCase().includes(part.toLowerCase())
+);
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -21,6 +25,10 @@ export const App: React.FC = () => {
     filterByStatus,
     setFilterByStatus,
   ] = useState<FilterStatus>(FilterStatus.ALL);
+  const [
+    filterByContent,
+    setFilterByContent,
+  ] = useState('');
 
   useEffect(() => {
     getTodos()
@@ -31,16 +39,27 @@ export const App: React.FC = () => {
   useEffect(() => {
     switch (filterByStatus) {
       case FilterStatus.COMPLETE:
-        setVisibleTodos(todos.filter(todo => todo.completed));
+        setVisibleTodos(
+          todos
+            .filter(todo => todo.completed)
+            .filter(todo => stringIncludes(todo.title, filterByContent)),
+        );
         break;
       case FilterStatus.ACTIVE:
-        setVisibleTodos(todos.filter(todo => !todo.completed));
+        setVisibleTodos(
+          todos
+            .filter(todo => !todo.completed)
+            .filter(todo => stringIncludes(todo.title, filterByContent)),
+        );
         break;
       case FilterStatus.ALL:
       default:
-        setVisibleTodos(todos);
+        setVisibleTodos(
+          todos
+            .filter(todo => stringIncludes(todo.title, filterByContent)),
+        );
     }
-  }, [todos, filterByStatus]);
+  }, [todos, filterByStatus, filterByContent]);
 
   return (
     <>
@@ -53,6 +72,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 filterByStatus={filterByStatus}
                 setFilterByStatus={setFilterByStatus}
+                filterByContent={filterByContent}
+                setFilterByContent={setFilterByContent}
               />
             </div>
 

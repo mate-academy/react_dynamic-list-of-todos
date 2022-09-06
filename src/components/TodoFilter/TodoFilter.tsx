@@ -1,14 +1,20 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import { ChangeEvent } from 'react';
 import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
   filterByStatus: FilterStatus;
   setFilterByStatus: (status: FilterStatus) => void;
+  filterByContent: string;
+  setFilterByContent: (search: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterByStatus,
   setFilterByStatus,
+  filterByContent,
+  setFilterByContent,
 }) => {
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const status = event.target.value;
@@ -48,18 +54,24 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
+          value={filterByContent}
+          onChange={event => (
+            setFilterByContent(event.target.value)
+          )}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {filterByContent && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setFilterByContent('')}
+            />
+          )}
         </span>
       </p>
     </form>
