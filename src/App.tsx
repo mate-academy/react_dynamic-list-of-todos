@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+
+import { StateContext } from './providers/StateProvider';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -18,6 +20,8 @@ const stringIncludes = (full: string, part: string) => (
 );
 
 export const App: React.FC = () => {
+  const { selectedTodo } = useContext(StateContext);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [initialized, setInitialized] = useState(false);
@@ -88,7 +92,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {false && <TodoModal />}
+      {selectedTodo && (
+        <TodoModal />
+      )}
     </>
   );
 };
