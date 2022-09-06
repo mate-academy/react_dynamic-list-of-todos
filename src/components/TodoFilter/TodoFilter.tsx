@@ -26,10 +26,10 @@ export const TodoFilter: React.FC<Props> = ({
         setfiltered(todos);
         break;
       case 'active':
-        setfiltered(todos.filter(todo => todo.completed === false));
+        setfiltered(todos.filter(todo => !todo.completed));
         break;
       case 'completed':
-        setfiltered(todos.filter(todo => todo.completed === true));
+        setfiltered(todos.filter(todo => todo.completed));
         break;
 
       default:
