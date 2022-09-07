@@ -1,5 +1,5 @@
 // /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,20 +14,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isSelected, setIsSelected] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState({} as Todo);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [complitedSelect, setComplitedSelect] = useState('all');
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     (getTodos()
-      // .then(res => res.map((todo): Todo => ({
-      //   ...todo,
-      //   user: getUser(todo.userId).then(responce => responce.id),
-      // })))
-      .then(setTodos));
+      .then(setTodos))
+      .finally(() => setIsLoaded(false));
   }, []);
 
-  const filteredTdos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => todos.filter(todo => {
     let result: boolean;
 
     if (complitedSelect === 'active') {
@@ -46,7 +43,7 @@ export const App: React.FC = () => {
       }
 
       return todo.title.startsWith(inputValue);
-    });
+    }), [todos, complitedSelect, inputValue]);
 
   return (
     <>
@@ -65,10 +62,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {isLoaded
                 ? <Loader />
-                // eslint-disable-next-line max-len
-                : <TodoList todos={filteredTdos} setIsSelected={setIsSelected} setIsLoaded={setIsLoaded} setSelectedTodo={setSelectedTodo} />}
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    setIsSelected={setIsSelected}
+                    setIsLoaded={setIsLoaded}
+                    setSelectedTodoId={setSelectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
@@ -79,7 +82,8 @@ export const App: React.FC = () => {
         isLoaded={isLoaded}
         setIsLoaded={setIsLoaded}
         setIsSelected={setIsSelected}
-        selectedTodo={selectedTodo}
+        selectedTodoId={selectedTodoId}
+        todos={todos}
       />
     </>
   );
