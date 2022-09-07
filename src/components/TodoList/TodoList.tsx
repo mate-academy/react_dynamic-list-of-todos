@@ -1,33 +1,20 @@
-import classNames from 'classnames';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { List } from '../List/List';
 
 type Props = {
-  todoList: Todo[];
+  visibleTodos: Todo[];
   openedTodoId: number | null;
-  filterOption: boolean | null;
-  filterQuery: string;
   onClick: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = (
   {
-    todoList,
+    visibleTodos,
     openedTodoId,
-    filterOption,
-    filterQuery,
     onClick,
   },
 ) => {
-  let visibleTodos = [...todoList];
-
-  if (filterOption !== null) {
-    visibleTodos = todoList.filter(todo => todo.completed === filterOption);
-  }
-
-  visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase()
-    .includes(filterQuery.toLowerCase()));
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -49,9 +36,7 @@ export const TodoList: React.FC<Props> = (
             data-cy="todo"
             key={todo.id}
             className={
-              classNames({
-                'has-background-info-light': openedTodoId === todo.id,
-              })
+              openedTodoId === todo.id ? 'has-background-info-light' : ''
             }
           >
             <List

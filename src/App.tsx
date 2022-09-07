@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -6,43 +6,49 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { FilterOption } from './types/FilterOption';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [openedTodo, setOpenedTodo] = useState<boolean>(false);
   const [todoInfo, setTodoInfo] = useState<Todo | null>(null);
   const [openedTodoId, setOpenedTodoId] = useState<number | null>(null);
-  const [filterOption, setFilterOption] = useState<boolean | null>(null);
   const [filterQuery, setFilterQuery] = useState<string>('');
 
-  enum Option {
-    active = 'active',
-    completed = 'completed',
-  }
+  useEffect(() => {
+    const loadTodos = async () => {
+      const todos = await getTodos();
 
-  const loadTodos = async () => {
-    const todos = await getTodos();
+      setTodoList(todos);
+      setFilteredTodos(todos);
+    };
 
-    setTodoList(todos);
-  };
+    loadTodos();
+  }, []);
 
   const filterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
-      case Option.active:
-        setFilterOption(false);
+      case FilterOption.active:
+        setFilteredTodos(todoList.filter(todo => todo.completed === false));
 
         break;
 
-      case Option.completed:
-        setFilterOption(true);
+      case FilterOption.completed:
+        setFilteredTodos(todoList.filter(todo => todo.completed === true));
+
+        break;
+
+      case FilterOption.all:
+        setFilteredTodos(todoList);
 
         break;
 
       default:
-        setFilterOption(null);
+        setFilteredTodos(todoList);
 
         break;
     }
@@ -78,7 +84,8 @@ export const App: React.FC = () => {
     setOpenedTodoId(null);
   };
 
-  loadTodos();
+  const visibleTodos = filteredTodos.filter(todo => todo.title.toLowerCase()
+    .includes(filterQuery.toLowerCase()));
 
   return (
     <>
@@ -102,10 +109,8 @@ export const App: React.FC = () => {
                 todoList.length > 0
                   ? (
                     <TodoList
-                      todoList={todoList}
+                      visibleTodos={visibleTodos}
                       openedTodoId={openedTodoId}
-                      filterOption={filterOption}
-                      filterQuery={filterQuery}
                       onClick={clickOnEye}
                     />
                   )
