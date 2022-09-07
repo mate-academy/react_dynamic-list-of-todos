@@ -31,7 +31,7 @@ export const App: FC = () => {
 
   const selectedTodo = useMemo(() => (
     todos.find(todo => todo.id === selectedTodoId) || null
-  ), [todos, selectedTodoId]);
+  ), [selectedTodoId, todos]);
 
   const filteredTodosBySearchQuery = useMemo(() => (
     todos.filter(todo => {
@@ -39,7 +39,7 @@ export const App: FC = () => {
       const prepSearchQuery = searchQuery.toLowerCase();
 
       return prepTitle.includes(prepSearchQuery);
-    })), [todos]);
+    })), [searchQuery, todos]);
 
   const filteredTodos = useMemo(() => {
     return filteredTodosBySearchQuery.filter(todo => {
@@ -54,7 +54,7 @@ export const App: FC = () => {
           return true;
       }
     });
-  }, [complitedFilter, searchQuery, todos]);
+  }, [complitedFilter, filteredTodosBySearchQuery]);
 
   const errorNoTodosFromServer = !isLoading && todos.length === 0 && !searchQuery;
   const errorNoSuchTodosBySearchQuery = !isLoading && filteredTodos.length === 0 && searchQuery;
