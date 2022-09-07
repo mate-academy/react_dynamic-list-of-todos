@@ -45,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
       }}
     >
       <p className="control">
-        <div className="select">
+        <span className="select">
           <select
             data-cy="statusSelect"
             onChange={(event) => {
@@ -56,7 +56,7 @@ export const TodoFilter: React.FC<Props> = ({
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
-        </div>
+        </span>
       </p>
 
       <p className="control is-expanded has-icons-left has-icons-right">
@@ -77,7 +77,6 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           <div
             className="icon is-right"
-            style={{ pointerEvents: 'all' }}
           >
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
