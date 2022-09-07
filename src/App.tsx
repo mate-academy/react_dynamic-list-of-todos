@@ -1,14 +1,33 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { TodoList } from './components/TodoList';
 import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    getTodos()
+      .then(todosFromServer => {
+        setIsLoading(true);
+        setTodos(todosFromServer);
+        setInitialTodos(todosFromServer);
+      });
+  }, []);
+
+  const handleSelected = (todo: Todo | null) => {
+    setSelectedTodo(todo);
+  };
+
   return (
     <>
       <div className="section">
@@ -16,19 +35,39 @@ export const App: React.FC = () => {
           <div className="box">
             <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter />
-            </div>
-
-            <div className="block">
-              <Loader />
-              <TodoList />
-            </div>
+            {!isLoading
+              ? <Loader />
+              : (
+                <>
+                  <div className="block">
+                    <TodoFilter
+                      todos={initialTodos}
+                      onFilterTodo={setTodos}
+                    />
+                  </div>
+                  <div className="block">
+                    <TodoList
+                      todos={todos}
+                      selectedTodo={selectedTodo}
+                      onTodoSelect={(todo) => {
+                        handleSelected(todo);
+                      }}
+                    />
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={() => {
+            setSelectedTodo(null);
+          }}
+        />
+      )}
     </>
   );
 };
