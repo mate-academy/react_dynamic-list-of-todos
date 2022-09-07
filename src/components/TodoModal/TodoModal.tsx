@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import { useContext, useEffect, useState } from 'react';
 
 import { Loader } from '../Loader';
@@ -46,6 +44,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="Select todo"
               onClick={() => dispatch({
                 type: ActionTypes.SELECT_TODO,
                 selectedTodo: null,

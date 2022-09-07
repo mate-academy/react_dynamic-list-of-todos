@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import { ChangeEvent } from 'react';
 import { FilterStatus } from '../../types/FilterStatus';
 
@@ -69,6 +67,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="Clear search query"
               onClick={() => setFilterByContent('')}
             />
           )}
