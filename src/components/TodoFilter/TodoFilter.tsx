@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface Props {
   value: string;
@@ -9,8 +9,6 @@ interface Props {
 export const TodoFilter: React.FC<Props> = (
   { value, onQuery, onFilter },
 ) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -53,17 +51,14 @@ export const TodoFilter: React.FC<Props> = (
           className="input"
           placeholder="Search..."
           value={value}
-          onChange={(e) => {
-            onQuery(e.target.value);
-            setSearchQuery(e.target.value);
-          }}
+          onChange={(e) => onQuery(e.target.value)}
         />
 
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {searchQuery && (
+        {value && (
           <span
             className="icon is-right"
             style={{ pointerEvents: 'all' }}
@@ -73,10 +68,7 @@ export const TodoFilter: React.FC<Props> = (
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                onQuery('');
-                setSearchQuery('');
-              }}
+              onClick={() => onQuery('')}
             />
           </span>
         )}
