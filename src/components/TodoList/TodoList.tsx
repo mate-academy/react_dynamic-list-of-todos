@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  clickedTodo: Todo | null;
-  onClickTodo: (todo: Todo) => void;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<Props> = (
-  { todos, clickedTodo, onClickTodo },
+  { todos, selectedTodo, setSelectedTodo },
 ) => (
   <table
     className="
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = (
       {todos.map(todo => (
         <tr
           className={className(
-            clickedTodo?.id === todo.id
+            selectedTodo?.id === todo.id
               ? 'has-background-info-light'
               : '',
           )}
@@ -72,10 +72,10 @@ export const TodoList: React.FC<Props> = (
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => onClickTodo(todo)}
+              onClick={() => setSelectedTodo(todo)}
             >
               <span className="icon">
-                {clickedTodo?.id === todo.id
+                {selectedTodo?.id === todo.id
                   ? <i className="far fa-eye-slash" />
                   : <i className="far fa-eye" />}
               </span>
