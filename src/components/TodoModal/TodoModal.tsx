@@ -5,15 +5,17 @@ import { Loader } from '../Loader';
 import { getUser } from '../../api';
 
 interface Props {
-  clickedTodo: Todo;
-  onClickTodo: (todo: null) => void;
+  selectedTodo: Todo;
+  setSelectedTodo: (todo: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ clickedTodo, onClickTodo }) => {
+export const TodoModal: React.FC<Props> = (
+  { selectedTodo, setSelectedTodo },
+) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(clickedTodo.userId)
+    getUser(selectedTodo.userId)
       .then(currentUser => setUser(currentUser));
   }, []);
 
@@ -32,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({ clickedTodo, onClickTodo }) => {
                 has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${clickedTodo?.id}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -40,17 +42,17 @@ export const TodoModal: React.FC<Props> = ({ clickedTodo, onClickTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClickTodo(null)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {clickedTodo?.title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {clickedTodo?.completed
+              {selectedTodo?.completed
                 ? (
                   <strong className="has-text-success">
                     Done
