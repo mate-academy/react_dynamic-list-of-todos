@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useCallback, useMemo, ChangeEvent,
+  useState, useEffect, useMemo, ChangeEvent,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -13,12 +13,11 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [clickedTodo, setClickedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [sortType, setSortType] = useState('all');
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const getTodoList = async (todosFromServer: Promise<Todo[]>) => {
     setLoading(true);
@@ -28,7 +27,6 @@ export const App: React.FC = () => {
       const todoList = await todosFromServer;
 
       setTodos(todoList);
-      setIsInitialized(true);
       setLoading(false);
     } catch {
       setHasError(true);
@@ -40,7 +38,7 @@ export const App: React.FC = () => {
     getTodoList(getTodos());
   }, []);
 
-  const getFilteredTodos = useCallback((todosList: Todo[]) => {
+  const getFilteredTodos = (todosList: Todo[]) => {
     if (!todosList.length) {
       return [];
     }
@@ -62,7 +60,7 @@ export const App: React.FC = () => {
           return todo && currentQuery;
       }
     });
-  }, [sortType, query]);
+  };
 
   const groupByStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortType(e.target.value);
@@ -95,11 +93,11 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {isInitialized && (
+              {!loading && !hasError && (
                 <TodoList
                   todos={filteredTodos}
-                  clickedTodo={clickedTodo}
-                  onClickTodo={setClickedTodo}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -107,10 +105,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {clickedTodo && (
+      {selectedTodo && (
         <TodoModal
-          clickedTodo={clickedTodo}
-          onClickTodo={setClickedTodo}
+          clickedTodo={selectedTodo}
+          onClickTodo={setSelectedTodo}
         />
       )}
 
