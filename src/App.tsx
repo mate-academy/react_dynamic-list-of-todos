@@ -54,7 +54,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? <Loader /> : (
+              {!todos.length ? <Loader /> : (
                 <TodoList
                   activeTodo={activeTodo}
                   todos={visibleTodo}

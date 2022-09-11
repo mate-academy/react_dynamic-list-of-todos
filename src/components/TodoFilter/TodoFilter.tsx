@@ -13,8 +13,12 @@ export const TodoFilter: React.FC<Props> = ({
   text,
   setText,
 }) => {
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+  };
+
   return (
-    <form className="field has-addons">
+    <form className="field has-addons" onSubmit={onSubmit}>
       <p className="control">
         <span className="select">
           <select
