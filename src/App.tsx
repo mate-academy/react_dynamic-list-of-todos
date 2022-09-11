@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos} from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 
