@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -12,47 +12,48 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [openedTodo, setOpenedTodo] = useState<boolean>(false);
+  const [isTodoOpened, setIsTodoOpened] = useState<boolean>(false);
   const [todoInfo, setTodoInfo] = useState<Todo | null>(null);
   const [openedTodoId, setOpenedTodoId] = useState<number | null>(null);
   const [filterQuery, setFilterQuery] = useState<string>('');
+  const [filterOptionSelect, setFilterOptionSelect]
+    = useState<FilterOption>(FilterOption.all);
 
   useEffect(() => {
     const loadTodos = async () => {
       const todos = await getTodos();
 
       setTodoList(todos);
-      setFilteredTodos(todos);
     };
 
     loadTodos();
   }, []);
 
-  const filterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (event.target.value) {
+  const filterTodos = () => {
+    switch (filterOptionSelect) {
       case FilterOption.active:
-        setFilteredTodos(todoList.filter(todo => todo.completed === false));
-
-        break;
+        return todoList.filter(todo => !todo.completed
+          && todo.title.toLowerCase()
+            .includes(filterQuery.toLowerCase()));
 
       case FilterOption.completed:
-        setFilteredTodos(todoList.filter(todo => todo.completed === true));
-
-        break;
+        return todoList.filter(todo => todo.completed
+          && todo.title.toLowerCase()
+            .includes(filterQuery.toLowerCase()));
 
       case FilterOption.all:
-        setFilteredTodos(todoList);
-
-        break;
+        return todoList.filter(todo => todo.title.toLowerCase()
+          .includes(filterQuery.toLowerCase()));
 
       default:
-        setFilteredTodos(todoList);
-
-        break;
+        return todoList.filter(todo => todo.title.toLowerCase()
+          .includes(filterQuery.toLowerCase()));
     }
   };
+
+  const filteredTodos
+  = useMemo(filterTodos, [filterOptionSelect, todoList, filterQuery]);
 
   const filterQueryTodos
     = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +70,7 @@ export const App: React.FC = () => {
   };
 
   const clickOnEye = async (todo: Todo) => {
-    setOpenedTodo(true);
+    setIsTodoOpened(true);
     setOpenedTodoId(todo.id);
     const user = await getUser(todo.userId);
 
@@ -78,14 +79,11 @@ export const App: React.FC = () => {
   };
 
   const closeTodo = () => {
-    setOpenedTodo(false);
+    setIsTodoOpened(false);
     setSelectedUser(null);
     setTodoInfo(null);
     setOpenedTodoId(null);
   };
-
-  const visibleTodos = filteredTodos.filter(todo => todo.title.toLowerCase()
-    .includes(filterQuery.toLowerCase()));
 
   return (
     <>
@@ -96,7 +94,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeSelect={filterTodos}
+                onChangeSelect={
+                  event => {
+                    setFilterOptionSelect(event.target.value as FilterOption);
+                  }
+                }
                 onChangeInput={filterQueryTodos}
                 eraseQuery={eraseQuery}
                 filterQuery={filterQuery}
@@ -109,7 +111,7 @@ export const App: React.FC = () => {
                 todoList.length > 0
                   ? (
                     <TodoList
-                      visibleTodos={visibleTodos}
+                      visibleTodos={filteredTodos}
                       openedTodoId={openedTodoId}
                       onClick={clickOnEye}
                     />
@@ -121,7 +123,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {openedTodo && (
+      {isTodoOpened && (
         <TodoModal
           selectedUser={selectedUser}
           onClick={closeTodo}
