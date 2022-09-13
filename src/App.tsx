@@ -1,14 +1,76 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { getTodos } from './api';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [activeUserId, setActiveUserId] = useState(0);
+  const [activeTodo, setActiveTodo] = useState<Todo>();
+
+  const openModal = (userId:number, todoId:number) => {
+    setIsModalOpened(true);
+    setActiveUserId(userId);
+
+    const selectedTodo = todos.find(todo => todo.id === todoId);
+
+    setActiveTodo(selectedTodo);
+  };
+
+  const closeModal = () => {
+    setIsModalOpened(false);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    getTodos().then(response => {
+      setTodos(response);
+      setVisibleTodos(response);
+      setIsLoading(false);
+      setIsLoaded(true);
+    });
+  }, []);
+
+  const onSelect = (value:string) => {
+    if (value === 'active') {
+      const newTodos = visibleTodos
+        .filter(todo => todo.completed === false);
+
+      setVisibleTodos(newTodos);
+    }
+
+    if (value === 'completed') {
+      const newTodos = visibleTodos
+        .filter(todo => todo.completed === true);
+
+      setVisibleTodos(newTodos);
+    }
+
+    if (value === 'all') {
+      setVisibleTodos(todos);
+    }
+  };
+
+  const onInput = (value:string) => {
+    const newTodos = todos.filter(todo => {
+      return todo.title.toLowerCase().includes(value.toLowerCase());
+    });
+
+    setVisibleTodos(newTodos);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +79,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                handleSelect={onSelect}
+                handleInpput={onInput}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading
+                && <Loader />}
+
+              {isLoaded
+                && <TodoList todos={visibleTodos} handleClick={openModal} />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isModalOpened && activeTodo
+        && <TodoModal handleClose={closeModal} userId={activeUserId} todo={activeTodo} />}
     </>
   );
 };
