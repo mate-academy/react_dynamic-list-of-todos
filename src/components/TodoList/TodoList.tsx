@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId?: number;
-  setSelectedTodo: (todo: Todo) => void;
+  setSelectedTodo: React.Dispatch<SetStateAction<Todo | null>>;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props>
-= ({ todos, selectedTodoId, setSelectedTodo }) => (
+= ({ todos, setSelectedTodo, selectedTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props>
           key={todo.id}
           className={classNames(
             {
-              'has-background-info-light': selectedTodoId === todo.id,
+              'has-background-info-light': selectedTodo?.id === todo.id,
             },
           )}
         >
@@ -64,7 +64,7 @@ export const TodoList: React.FC<Props>
               }}
             >
               <span className="icon">
-                {selectedTodoId === todo.id
+                {selectedTodo?.id === todo.id
                   ? (
                     <i className="far fa-eye-slash" />
                   ) : (

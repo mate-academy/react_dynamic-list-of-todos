@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SetStateAction } from 'react';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
@@ -6,10 +6,10 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  unSelectTodo: () => void;
+  setSelectedTodo: React.Dispatch<SetStateAction<Todo | null>>
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, unSelectTodo }) => {
+export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({ todo, unSelectTodo }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                unSelectTodo();
+                setSelectedTodo(null);
               }}
             />
           </header>

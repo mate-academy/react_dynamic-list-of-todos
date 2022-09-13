@@ -13,7 +13,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState(TodoFiltered.NONE);
+  const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={filteredList}
-                    selectedTodoId={selectedTodo?.id}
+                    selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
                 ) : (
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
       </div>
       {selectedTodo && (
         <TodoModal
-          unSelectTodo={() => setSelectedTodo(null)}
+          setSelectedTodo={setSelectedTodo}
           todo={selectedTodo}
         />
       )}
