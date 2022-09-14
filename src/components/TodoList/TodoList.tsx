@@ -6,13 +6,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[]
   selectedTodoId: number
-  setTodoId: (id: number) => void
+  setSelectedTodoId: (id: number) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodoId,
-  setTodoId,
+  setSelectedTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -54,7 +54,7 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    setTodoId(0);
+                    setSelectedTodoId(0);
                   }}
                 >
                   <span className="icon">
@@ -68,7 +68,7 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    setTodoId(todo.id);
+                    setSelectedTodoId(todo.id);
                   }}
                 >
                   <span className="icon">

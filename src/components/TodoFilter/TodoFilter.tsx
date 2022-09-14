@@ -1,31 +1,39 @@
-import React, { Dispatch, useEffect, useState } from 'react';
+import React, {
+  Dispatch, SetStateAction, useEffect, useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  setTodos: Dispatch<Todo[]>
+  setTodos: Dispatch<SetStateAction<Todo[]>>
 };
+
+enum FilterType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 export const TodoFilter: React.FC<Props> = ({
   todos,
   setTodos,
 }) => {
   const [query, setQuery] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState<string>(FilterType.ALL);
 
   useEffect(() => {
     setTodos(todos.filter(todo => (
       todo.title.toLowerCase().includes(query.trim().toLowerCase())
     )).filter(todo => {
       switch (filterType) {
-        case 'all':
+        case FilterType.ALL:
           return true;
-        case 'active':
+        case FilterType.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case FilterType.COMPLETED:
           return todo.completed;
         default:
-          return 'Hello World';
+          throw new Error('Hello World');
       }
     }));
   }, [query, filterType]);

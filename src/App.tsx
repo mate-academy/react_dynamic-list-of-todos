@@ -14,13 +14,13 @@ import { TodoModal } from './components/TodoModal';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState(todos);
-  const [todoId, setTodoId] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setError] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      setLoading(true);
+      setIsLoading(true);
       setError(false);
 
       try {
@@ -28,17 +28,17 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
         setVisibleTodos(todosFromServer);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         setError(true);
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchTodos();
   }, []);
 
-  const selectedTodo = todos.find(todo => todo.id === todoId);
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   return (
     <>
@@ -52,13 +52,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodoId={todoId}
-                    setTodoId={(id) => setTodoId(id)}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={(id) => setSelectedTodoId(id)}
                   />
                 )}
               {hasError && <h1 className="has-text-danger">Something went wrong</h1> }
@@ -67,11 +67,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0
+      {selectedTodoId !== 0
         && (
           <TodoModal
             selectedTodo={selectedTodo}
-            setTodoId={setTodoId}
+            setSelectedTodoId={setSelectedTodoId}
           />
         )}
     </>
