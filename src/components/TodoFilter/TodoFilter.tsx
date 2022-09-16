@@ -2,14 +2,14 @@ import React from 'react';
 
 type Props = {
   query: string,
-  filteredData: (value: string) => void,
-  foundData: (value: string) => void,
+  handleFilteredData: (value: string) => void,
+  handleFoundData: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  filteredData,
-  foundData,
+  handleFilteredData,
+  handleFoundData,
 }) => {
   return (
     <form className="field has-addons">
@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => filteredData(event.target.value)}
+            onChange={(event) => handleFilteredData(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => foundData(event.target.value)}
+          onChange={(event) => handleFoundData(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
