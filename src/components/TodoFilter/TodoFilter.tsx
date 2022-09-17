@@ -1,15 +1,17 @@
 import React from 'react';
 
 type Props = {
-  query: string,
-  handleFilteredData: (value: string) => void,
+  filteredByQuery: string,
   handleFoundData: (value: string) => void,
+  handleFilteredData: (value: string) => void,
+  handleClearedQuery: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  query,
-  handleFilteredData,
+  filteredByQuery,
   handleFoundData,
+  handleFilteredData,
+  handleClearedQuery,
 }) => {
   return (
     <form className="field has-addons">
@@ -32,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={filteredByQuery}
           onChange={(event) => handleFoundData(event.target.value)}
         />
         <span className="icon is-left">
@@ -45,6 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={handleClearedQuery}
           />
         </span>
       </p>

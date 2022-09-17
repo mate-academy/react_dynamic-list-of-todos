@@ -1,23 +1,23 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
-import { getTodos } from './api';
-
 import { SortType } from './types/SortType';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filteredBySelect, setFilteredBySelect] = useState(SortType.all);
   const [filteredByQuery, setFilteredByQuery] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [showTodoModal, setShowTodoModal] = useState<boolean>(false);
 
   const loadFromServer = async () => {
     const todosFromServer = await getTodos();
@@ -27,13 +27,13 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // console.log(todos);
-    // console.log(visibleTodos);
     loadFromServer();
   }, []);
 
   const filteredTodos = () => {
-    const todosFilteredByQuery = todos.filter(todo => todo.title.includes(filteredByQuery));
+    const todosFilteredByQuery = todos.filter(
+      todo => todo.title.includes(filteredByQuery.toLowerCase().trim()),
+    );
 
     switch (filteredBySelect) {
       case SortType.all:
@@ -55,8 +55,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     filteredTodos();
-    // console.log(filteredBySelect);
-    // console.log(filteredByQuery);
   }, [filteredBySelect, filteredByQuery]);
 
   const handleFilteredData = (select: string) => {
@@ -82,6 +80,20 @@ export const App: React.FC = () => {
     setFilteredByQuery(query);
   };
 
+  const handleFoundTodo = (todo: Todo | null) => {
+    setSelectedTodo(todo);
+    setShowTodoModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowTodoModal(false);
+    setSelectedTodo(null);
+  };
+
+  const handleClearedQuery = () => (
+    filteredByQuery && setFilteredByQuery('')
+  );
+
   return (
     <>
       <div className="section">
@@ -91,21 +103,32 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={filteredByQuery}
+                filteredByQuery={filteredByQuery}
                 handleFoundData={handleFoundData}
                 handleFilteredData={handleFilteredData}
+                handleClearedQuery={handleClearedQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
-              <TodoList todos={visibleTodos} />
+              {!todos.length && <Loader />}
+              <TodoList
+                visibleTodos={visibleTodos}
+                selectedTodo={selectedTodo}
+                handleFoundTodo={handleFoundTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal users={users} /> */}
+      {showTodoModal && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handleCloseModal={handleCloseModal}
+
+        />
+      )}
     </>
   );
 };
