@@ -33,9 +33,6 @@ export class CurrentUser extends React.Component<Props> {
     try {
       const user = await getUser(`${this.props.userId}`);
 
-      // eslint-disable-next-line no-console
-      console.log('user = ', user);
-
       this.setState({
         user,
         showCurrentUser: true,

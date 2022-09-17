@@ -25,18 +25,12 @@ export class TodoList extends React.Component<Props, State> {
     try {
       const todos: Todo[] = await getTodos();
 
-      // eslint-disable-next-line no-console
-      console.log(todos);
-
       this.setState({
         todos,
       });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
-    } finally {
-      // eslint-disable-next-line no-console
-      console.log('finally');
     }
   }
 
@@ -70,9 +64,6 @@ export class TodoList extends React.Component<Props, State> {
 
   userHandler = (userId: number) => {
     if (this.props.currentUserId !== userId) {
-      // eslint-disable-next-line no-console
-      console.log('userId = ', userId);
-
       this.props.selectUserId(userId);
     }
   };
