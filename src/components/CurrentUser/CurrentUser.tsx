@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCurrentUser } from '../../api/todos';
+import { getUser } from '../../api/user';
 import './CurrentUser.scss';
 
 type Props = {
@@ -31,7 +31,10 @@ export class CurrentUser extends React.Component<Props> {
 
   async loadCurrentUser() {
     try {
-      const user = await getCurrentUser(this.props.userId);
+      const user = await getUser(`${this.props.userId}`);
+
+      // eslint-disable-next-line no-console
+      console.log('user = ', user);
 
       this.setState({
         user,
@@ -72,7 +75,7 @@ export class CurrentUser extends React.Component<Props> {
             <button
               type="button"
               onClick={() => this.props.clearHandler()}
-              className="button"
+              className="button CurrentUser__button"
             >
               Clear
             </button>

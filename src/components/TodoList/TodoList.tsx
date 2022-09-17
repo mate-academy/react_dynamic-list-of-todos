@@ -11,50 +11,70 @@ type Props = {
 type State = {
   todos: Todo[],
   query: string,
-  selectedBy: string,
+  statusTodo: string,
 };
 
 export class TodoList extends React.Component<Props, State> {
   state: State = {
     todos: [],
     query: '',
-    selectedBy: 'all',
+    statusTodo: 'all',
   };
 
   async componentDidMount() {
-    const todos = await getTodos('/todos');
+    try {
+      const todos: Todo[] = await getTodos();
 
-    this.setState({
-      todos,
-    });
+      // eslint-disable-next-line no-console
+      console.log(todos);
+
+      this.setState({
+        todos,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    } finally {
+      // eslint-disable-next-line no-console
+      console.log('finally');
+    }
   }
 
-  changeInput = (query: string) => {
+  inputHandler = (query: string) => {
     this.setState({ query });
   };
 
-  selectHandler = async (selectBy: string) => {
+  selectStatusTodoHandler = async (statusTodo: string) => {
     let addUrl = '';
 
-    switch (selectBy) {
+    switch (statusTodo) {
       case 'active':
-        addUrl = '/todos?completed=false';
+        addUrl = '?completed=false';
         break;
 
       case 'completed':
-        addUrl = '/todos?completed=true';
+        addUrl = '?completed=true';
         break;
 
       default:
-        addUrl = '/todos';
+        addUrl = '';
     }
 
     const todos = await getTodos(addUrl);
 
     this.setState({
       todos,
-      selectedBy: selectBy,
+      statusTodo,
     });
+  };
+
+  userHandler = (userId: number) => {
+    if (this.props.currentUserId !== userId) {
+      // eslint-disable-next-line no-console
+      console.log('userId = ', userId);
+
+      this.props.selectUserId(userId);
+    }
   };
 
   filterTodos = () => {
@@ -69,10 +89,30 @@ export class TodoList extends React.Component<Props, State> {
     return todos.filter(todo => todo.title.toLocaleLowerCase().includes(queryToLowerCase));
   };
 
+  randomize = (array: Todo[]) => {
+    const randomArray = array;
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < randomArray.length; i++) {
+      const random = Math.floor(Math.random() * randomArray.length);
+
+      // eslint-disable-next-line no-param-reassign
+      [randomArray[i], randomArray[random]] = [randomArray[random], randomArray[i]];
+    }
+
+    this.setState({
+      todos: randomArray,
+    });
+  };
+
   changeStatusTodo = (todoId: string) => {
     const todosChanged = this.state.todos.map(todo => {
       if (todo.id === todoId) {
-        const currentData = Date();
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const currentData = `${day}/${month}/${year}`;
 
         return {
           ...todo,
@@ -102,14 +142,9 @@ export class TodoList extends React.Component<Props, State> {
 
   render() {
     const {
-      selectUserId,
-      currentUserId,
-    } = this.props;
-
-    const {
       todos,
       query,
-      selectedBy,
+      statusTodo,
     } = this.state;
 
     const filteredTodos = this.filterTodos();
@@ -118,7 +153,7 @@ export class TodoList extends React.Component<Props, State> {
       <div className="TodoList">
         <h2>Todos:</h2>
 
-        <div>
+        <div className="TodoList__header">
           <label htmlFor="search-query" className="TodoList__search-label">
             <input
               type="text"
@@ -129,18 +164,16 @@ export class TodoList extends React.Component<Props, State> {
               )}
               placeholder="Search todo"
               value={query}
-              onChange={event => this.changeInput(event.target.value)}
+              onChange={event => this.inputHandler(event.target.value)}
             />
           </label>
 
           <select
-            className={classNames(
-              'TodoList__select',
-            )}
+            className="TodoList__select"
             name="select"
             id="select"
-            value={selectedBy}
-            onChange={(event) => this.selectHandler(event.target.value)}
+            value={statusTodo}
+            onChange={(event) => this.selectStatusTodoHandler(event.target.value)}
           >
             <option value="all">all</option>
             <option value="active">active</option>
@@ -149,7 +182,8 @@ export class TodoList extends React.Component<Props, State> {
 
           <button
             type="button"
-            className="button"
+            className="button TodoList__button"
+            onClick={() => this.randomize(this.state.todos)}
           >
             ramdomise
           </button>
@@ -158,67 +192,36 @@ export class TodoList extends React.Component<Props, State> {
         <div className="TodoList__list-container">
           <ul className="TodoList__list">
             {filteredTodos.map(todo => (
-              !todo.completed ? (
-                <li
-                  key={`${todo.id}--unchecked`}
-                  className="TodoList__item TodoList__item--unchecked"
-                >
-                  <label htmlFor={`${todo.id}`}>
-                    <input
-                      id={todo.id}
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => this.changeStatusTodo(todo.id)}
-                    />
-                    <p>{todo.title}</p>
-                    <p>
-                      Create:&nbsp;
-                      {todo.createdAt}
-                    </p>
-                    <p>{`Status: ${todo.completed} not`}</p>
-                  </label>
+              <li
+                key={`${todo.id}--unchecked`}
+                className={classNames('TodoList__item',
+                  { 'TodoList__item--unchecked': !todo.completed },
+                  { 'TodoList__item--checked': todo.completed })}
+              >
+                <label htmlFor={`${todo.id}`}>
+                  <input
+                    id={todo.id}
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => this.changeStatusTodo(todo.id)}
+                  />
+                  <p>{todo.title}</p>
+                  <p>
+                    Create:&nbsp;
+                    {todo.createdAt}
+                  </p>
+                  <p>{`Status: ${todo.completed} not`}</p>
+                </label>
 
-                  <button
-                    className={this.buttonStyle(todo.userId)}
-                    type="button"
-                    onClick={() => currentUserId !== todo.userId && selectUserId(todo.userId)}
-                  >
-                    User&nbsp;
-                    {todo.userId}
-                  </button>
-                </li>
-              ) : (
-                <li
-                  key={`${todo.id}--checked`}
-                  className="TodoList__item TodoList__item--checked"
+                <button
+                  className={this.buttonStyle(todo.userId)}
+                  type="button"
+                  onClick={() => this.userHandler(todo.userId)}
                 >
-                  <label htmlFor={`${todo.id}`}>
-                    <input
-                      id={todo.id}
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => this.changeStatusTodo(todo.id)}
-                    />
-                    <p>{todo.title}</p>
-                    <p>{todo.createdAt}</p>
-                    <p>
-                      Done:&nbsp;
-                      {todo.updatedAt}
-                    </p>
-                    <p>{`Status: ${todo.completed} completed`}</p>
-                    <p>{currentUserId}</p>
-                  </label>
-
-                  <button
-                    className={this.buttonStyle(todo.userId)}
-                    type="button"
-                    onClick={() => currentUserId !== todo.userId && selectUserId(todo.userId)}
-                  >
-                    User&nbsp;
-                    {todo.userId}
-                  </button>
-                </li>
-              )
+                  UserID&nbsp;
+                  {todo.userId}
+                </button>
+              </li>
             ))}
           </ul>
         </div>
