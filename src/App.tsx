@@ -13,18 +13,18 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState(false);
-  const [todo, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState(0);
   const [statusFilter, setStatusFilter] = useState('all');
   const [textFilter, setTextFilter] = useState('');
 
-  const loadTodos = async () => {
+  const uploadTodos = async () => {
     const uploadedTodos = await getTodos();
 
     setTodos(uploadedTodos);
     setLoader(true);
   };
 
-  loadTodos();
+  uploadTodos();
 
   const filtered = todos.filter(todoo => {
     switch (statusFilter) {
@@ -39,7 +39,7 @@ export const App: React.FC = () => {
     }
   });
 
-  const visibleTodo = filtered.filter(todoo => {
+  const visibleTodos = filtered.filter(todoo => {
     return todoo.title.toLowerCase().includes(textFilter.toLowerCase());
   });
 
@@ -65,21 +65,21 @@ export const App: React.FC = () => {
                 ? (<Loader />)
                 : (
                   <TodoList
-                    todos={visibleTodo}
-                    selectedTodoId={todo}
-                    selectTodo={(todoId) => setTodoId(todoId)}
+                    todos={visibleTodos}
+                    selectedTodoId={todoId}
+                    selectTodo={(todo) => setTodoId(todo)}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {todo !== 0
+      {todoId !== 0
         && (
           <TodoModal
-            todoId={todo}
-            todos={visibleTodo}
-            selectTodo={(todoId) => setTodoId(todoId)}
+            todoId={todoId}
+            todos={visibleTodos}
+            selectTodo={(todo) => setTodoId(todo)}
           />
         )}
     </>

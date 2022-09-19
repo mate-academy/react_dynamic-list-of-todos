@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -14,6 +15,14 @@ export const TodoFilter: React.FC<Props> = ({
   text,
   setText,
 }) => {
+  const handleChangeValue = (event: ChangeEvent<HTMLSelectElement>) => {
+    setValue(event.currentTarget.value);
+  };
+
+  const handleChangeText = (event: ChangeEvent<HTMLInputElement>) => {
+    setText(event.currentTarget.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,7 +30,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={value}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            onChange={handleChangeValue}
           >
             <option value="all"> All </option>
             <option value="active"> Active </option>
@@ -37,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={text}
-          onChange={(event) => setText(event.currentTarget.value)}
+          onChange={handleChangeText}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
