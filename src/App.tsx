@@ -14,6 +14,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState(false);
   const [todo, setTodoId] = useState(0);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [textFilter, setTextFilter] = useState('');
 
   const loadTodos = async () => {
     const uploadedTodos = await getTodos();
@@ -24,6 +26,23 @@ export const App: React.FC = () => {
 
   loadTodos();
 
+  const filtered = todos.filter(todoo => {
+    switch (statusFilter) {
+      case 'active':
+        return !todoo.completed;
+
+      case 'completed':
+        return todoo.completed;
+
+      default:
+        return true;
+    }
+  });
+
+  const visibleTodo = filtered.filter(todoo => {
+    return todoo.title.toLowerCase().includes(textFilter.toLowerCase());
+  });
+
   return (
     <>
       <div className="section">
@@ -32,7 +51,13 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                todos={todos}
+                value={statusFilter}
+                setValue={setStatusFilter}
+                text={textFilter}
+                setText={setTextFilter}
+              />
             </div>
 
             <div className="block">
@@ -40,7 +65,7 @@ export const App: React.FC = () => {
                 ? (<Loader />)
                 : (
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodo}
                     selectedTodoId={todo}
                     selectTodo={(todoId) => setTodoId(todoId)}
                   />
@@ -53,7 +78,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             todoId={todo}
-            todos={todos}
+            todos={visibleTodo}
             selectTodo={(todoId) => setTodoId(todoId)}
           />
         )}
