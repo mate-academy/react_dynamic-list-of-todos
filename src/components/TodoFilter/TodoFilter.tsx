@@ -1,14 +1,13 @@
+import React, { useState } from 'react';
+
 type Props = {
-  setSearch: (value: string) => void,
-  search: string,
-  filter: (value: string) => void,
+  handleSelect: (value: string) => void,
+  handleInpput: (value: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({
-  setSearch,
-  search,
-  filter: setFilter,
-}) => {
+export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -16,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             onChange={(e) => {
-              setFilter(e.target.value);
+              handleSelect(e.currentTarget.value);
             }}
           >
             <option value="all">All</option>
@@ -32,27 +31,32 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.currentTarget.value);
+            handleInpput(e.currentTarget.value);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {
-          search && (
-            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {inputValue !== ''
+            && (
+              // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
                 onClick={() => {
-                  setSearch('');
+                  setInputValue('');
+                  handleInpput('');
                 }}
               />
-            </span>
-          )
-        }
+            )}
+
+        </span>
       </p>
     </form>
   );
