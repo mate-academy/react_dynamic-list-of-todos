@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 // import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,8 +33,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              <TodoList todos={todos} />
+              {!todos.length ? (
+                <Loader />
+              ) : (
+                <TodoList todos={todos} />
+              )}
             </div>
           </div>
         </div>
