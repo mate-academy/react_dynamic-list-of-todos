@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,19 +7,18 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const allTodos = async (callback: () => Promise<Todo[]>) => {
-    const handleTodos = await callback();
+  const [todo, setTodo] = useState<Todo | null>(null);
 
-    return setTodos(handleTodos);
-  };
-
-  allTodos(getTodos);
+  useEffect(() => {
+    getTodos()
+      .then(setTodos);
+  }, []);
 
   return (
     <>
@@ -36,14 +35,17 @@ export const App: React.FC = () => {
               {!todos.length ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} />
+                <TodoList
+                  todos={todos}
+                  callbackTodo={setTodo}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      <TodoModal todo={todo} callbackTodo={setTodo} />
     </>
   );
 };
