@@ -5,9 +5,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   callbackTodo: Dispatch<SetStateAction<Todo | null>>;
+  selectedTodo: Todo | null;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, callbackTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  callbackTodo,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -24,7 +29,13 @@ export const TodoList: React.FC<Props> = ({ todos, callbackTodo }) => (
 
     <tbody>
       {todos.map((todo) => (
-        <tr data-cy="todo" key={todo.id}>
+        <tr
+          data-cy="todo"
+          className={classNames(
+            { 'has-background-info-light': selectedTodo?.id === todo.id },
+          )}
+          key={todo.id}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             <span className="icon" data-cy="iconCompleted">
@@ -52,7 +63,12 @@ export const TodoList: React.FC<Props> = ({ todos, callbackTodo }) => (
               onClick={() => callbackTodo(todo)}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={classNames(
+                  'far',
+                  { 'fa-eye': todo !== selectedTodo },
+                  { 'fa-eye-slash': todo === selectedTodo },
+                )}
+                />
               </span>
             </button>
           </td>

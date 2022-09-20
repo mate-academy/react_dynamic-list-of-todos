@@ -27,6 +27,11 @@ export const TodoModal: React.FC<Props> = ({ todo, callbackTodo }) => {
       .then(setUser);
   }, [todo]);
 
+  const handleClick = () => {
+    callbackTodo(null);
+    setUser(null);
+  };
+
   return todo && (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -48,10 +53,7 @@ export const TodoModal: React.FC<Props> = ({ todo, callbackTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                callbackTodo(null);
-                setUser(null);
-              }}
+              onClick={handleClick}
             />
           </header>
 

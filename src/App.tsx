@@ -75,6 +75,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   callbackTodo={setTodo}
+                  selectedTodo={todo}
                 />
               )}
             </div>
