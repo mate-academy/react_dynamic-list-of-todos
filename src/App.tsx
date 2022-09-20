@@ -18,9 +18,10 @@ enum SortType {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredBy, setFilteredBy] = useState<string>(SortType.ALL);
-  const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<string>(SortType.ALL);
 
   useEffect(() => {
     getTodos()
@@ -28,8 +29,8 @@ export const App: React.FC = () => {
   }, []);
 
   const displayedTodos = todos.filter(todo => {
-    if ((filteredBy === SortType.ACTIVE && todo.completed)
-    || (filteredBy === SortType.COMPLETED && !todo.completed)) {
+    if ((status === SortType.ACTIVE && todo.completed)
+    || (status === SortType.COMPLETED && !todo.completed)) {
       return false;
     }
 
@@ -46,7 +47,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onFilterType={setFilteredBy}
+                onStatus={setStatus}
                 onQuery={setQuery}
               />
             </div>
@@ -56,8 +57,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={displayedTodos}
-                    selectedTodoId={selectedTodo?.id}
-                    selectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                    onSelectedTodo={setSelectedTodo}
                   />
                 ) : (
                   <Loader />
