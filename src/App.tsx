@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -43,6 +42,8 @@ export const App: React.FC = () => {
       return todo.title.toLowerCase().includes(input.toLowerCase());
     });
 
+  const setId = (todo: number) => setTodoId(todo);
+
   return (
     <>
       <div className="section">
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodo={todo => setTodoId(todo)}
+                    selectTodo={setId}
                     selectedTodoId={todoId}
                   />
                 )}
@@ -79,7 +80,7 @@ export const App: React.FC = () => {
           <TodoModal
             selectedTodoId={todoId}
             todos={visibleTodos}
-            selectTodo={todo => setTodoId(todo)}
+            selectTodo={setId}
           />
         )}
     </>

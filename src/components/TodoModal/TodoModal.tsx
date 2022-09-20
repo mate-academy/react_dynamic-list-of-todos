@@ -15,7 +15,6 @@ export const TodoModal: React.FC<Props> = ({
   selectTodo,
   selectedTodoId,
 }) => {
-  const [isCardOpen, setIsCardOpen] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   const foundTodo = todos.find(todo => todo.id === selectedTodoId);
@@ -27,9 +26,9 @@ export const TodoModal: React.FC<Props> = ({
     }
   }, []);
 
-  if (!isCardOpen) {
-    return null;
-  }
+  const handleSelect = () => {
+    selectTodo(0);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -52,10 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setIsCardOpen(false);
-                selectTodo(0);
-              }}
+              onClick={handleSelect}
             />
           </header>
 
@@ -65,14 +61,9 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong
-                className={foundTodo?.completed
-                  ? 'has-text-success'
-                  : 'has-text-danger'}
-              >
-                {foundTodo?.completed ? 'Done' : 'Planned'}
-              </strong>
+              {foundTodo?.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
