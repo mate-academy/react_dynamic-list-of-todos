@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 type Props = {
   todoId: number;
   todos: Todo[];
-  selectTodo: (argument: number) => number | void;
+  selectTodo: (value: number) => number | void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todoId ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -75,13 +75,9 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              {!user ? (
-                <Loader />
-              ) : (
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
-                </a>
-              ) }
+              <a href={`mailto:${user.email}`}>
+                {user.name}
+              </a>
             </p>
           </div>
         </div>
