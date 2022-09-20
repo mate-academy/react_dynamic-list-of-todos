@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,14 +17,13 @@ export const App: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [textFilter, setTextFilter] = useState('');
 
-  const uploadTodos = async () => {
-    const uploadedTodos = await getTodos();
-
-    setTodos(uploadedTodos);
-    setLoader(true);
-  };
-
-  uploadTodos();
+  useEffect(() => {
+    getTodos()
+      .then(response => {
+        setTodos(response);
+        setLoader(true);
+      });
+  }, []);
 
   const filtered = todos.filter(todoo => {
     switch (statusFilter) {
