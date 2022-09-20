@@ -1,84 +1,80 @@
-import classNames from 'classnames';
 import React from 'react';
-
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[]
-  selectedTodoId: number
-  setSelectedTodoId: (id: number) => void
+  todos: Todo[],
+  selectedTodo: Todo | null,
+  setSelectedTodo: (todo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
-  setSelectedTodoId,
-}) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {todos.map(todo => (
-        <tr key={todo.id} data-cy="todo" className="">
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={classNames('has-text-success',
-              { 'has-text-danger': !todo.completed })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            {selectedTodoId === todo.id
-              ? (
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => {
-                    setSelectedTodoId(0);
-                  }}
-                >
-                  <span className="icon">
-                    <i className="far fa-eye-slash" />
-                  </span>
-                </button>
-              )
-              : (
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => {
-                    setSelectedTodoId(todo.id);
-                  }}
-                >
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                </button>
-              )}
-          </td>
+  selectedTodo,
+  setSelectedTodo,
+}) => {
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-);
+      </thead>
+      <tbody>
+        {todos.map(todo => {
+          return (
+            <tr
+              data-cy="todo"
+              className={selectedTodo?.id === todo.id
+                ? 'has-background-info-light'
+                : ''}
+              key={todo.id}
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p className={todo.completed
+                  ? 'has-text-success'
+                  : 'has-text-danger'}
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => {
+                    setSelectedTodo(todo);
+                  }}
+                >
+                  <span className="icon">
+                    <i className={
+                      selectedTodo?.id === todo.id
+                        ? 'far fa-eye-slash'
+                        : 'far fa-eye'
+                    }
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
