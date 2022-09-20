@@ -24,7 +24,7 @@ export const TodoList: React.FC<Props> = ({ todos, callbackTodo }) => (
 
     <tbody>
       {todos.map((todo) => (
-        <tr data-cy="todo" className="">
+        <tr data-cy="todo" key={todo.id}>
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             <span className="icon" data-cy="iconCompleted">
