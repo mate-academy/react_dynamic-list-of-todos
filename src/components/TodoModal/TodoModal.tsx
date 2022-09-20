@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -17,15 +17,14 @@ export const TodoModal: React.FC<Props> = ({ todoId, todos, selectTodo }) => {
     (todo: Todo) => todo.id === todoId,
   );
 
-  const uploadUser = async () => {
+  useEffect(() => {
     if (currentTodo) {
-      const currentUser = await getUser(currentTodo.userId);
-
-      setUser(currentUser);
+      getUser(currentTodo.userId)
+        .then(response => {
+          setUser(response);
+        });
     }
-  };
-
-  uploadUser();
+  }, []);
 
   if (cardOpen === false) {
     return null;
