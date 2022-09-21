@@ -34,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({ todoId, todos, selectTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todoId ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -73,14 +73,10 @@ export const TodoModal: React.FC<Props> = ({ todoId, todos, selectTodo }) => {
 
               {' by '}
 
-              {!user ? (
-                <Loader />
-              )
-                : (
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
-                  </a>
-                )}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
+              </a>
+
             </p>
           </div>
         </div>
