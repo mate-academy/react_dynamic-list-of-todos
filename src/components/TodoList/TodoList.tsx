@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import React, { useMemo, useState } from 'react';
+import classNames from 'classnames';
+import React, { useMemo, useState, useEffect } from 'react';
 import './TodoList.scss';
 
 type Props = {
@@ -16,10 +17,15 @@ export const TodoList: React.FC<Props> = ({
   const [query, setQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [random, setRandom] = useState<boolean>(false);
+  const [queryLLC, setQueryLLC] = useState<string>('');
+
+  useEffect(() => {
+    setQueryLLC(query.toLocaleLowerCase());
+  }, [query]);
 
   const visibleTodos = useMemo(() => (
     todos
-      .filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+      .filter(todo => todo.title.toLocaleLowerCase().includes(queryLLC))
       .filter(todo => {
         switch (statusFilter) {
           case 'all':
@@ -40,7 +46,7 @@ export const TodoList: React.FC<Props> = ({
           ? Math.random() - 0.5
           : t1.id - t2.id
       ))
-  ), [query, statusFilter, random]);
+  ), [queryLLC, statusFilter, random]);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -81,11 +87,9 @@ export const TodoList: React.FC<Props> = ({
             <option value="completed">Completed</option>
           </select>
           <button
-            className={
-              random
-                ? 'button button-active TodoList__item-filters--random'
-                : 'button TodoList__item-filters--random'
-            }
+            className={classNames('button TodoList__item-filters--random', {
+              'button-active': random,
+            })}
             type="button"
             onClick={randomize}
           >
@@ -97,11 +101,10 @@ export const TodoList: React.FC<Props> = ({
           {visibleTodos.map((todo) => (
             <li
               key={todo.id}
-              className={
-                todo.completed
-                  ? 'TodoList__item TodoList__item--checked'
-                  : 'TodoList__item TodoList__item--unchecked'
-              }
+              className={classNames('TodoList__item', {
+                'TodoList__item--checked': todo.completed,
+                'TodoList__item--unchecked': !todo.completed,
+              })}
             >
               <label>
                 <input type="checkbox" checked={todo.completed} readOnly />
@@ -109,17 +112,14 @@ export const TodoList: React.FC<Props> = ({
               </label>
 
               <button
-                className={
-                  selectedUserId === todo.userId
-                    ? 'TodoList__user-button button TodoList__user-button--selected'
-                    : 'TodoList__user-button button'
-                }
+                className={classNames('TodoList__user-button button', {
+                  'TodoList__user-button--selected': selectedUserId === todo.userId,
+                })}
                 type="button"
                 onClick={() => selectUser(todo.userId)}
                 data-cy="userButton"
               >
-                User&nbsp;#
-                {todo.userId}
+                {`User #${todo.userId}`}
               </button>
             </li>
           ))}
