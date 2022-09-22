@@ -59,6 +59,7 @@ export const App: React.FC = () => {
                 filteredTodos={filteredTodos}
                 selectedTodoId={setTodoId}
                 selectedTodo={selectedTodo}
+                loading={loading}
               />
               {loading && <Loader />}
             </div>

@@ -7,10 +7,13 @@ type Props = {
   selectedTodoId: (v: number) => void,
   selectedTodo: Todo | undefined,
   filteredTodos: Todo[]
+  loading: boolean
 };
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { filteredTodos, selectedTodo, selectedTodoId } = props;
+  const {
+    filteredTodos, selectedTodo, selectedTodoId, loading,
+  } = props;
 
   return (
 
@@ -31,7 +34,7 @@ export const TodoList: React.FC<Props> = (props) => {
       <tbody>
         {filteredTodos.map((todo) => {
           return (
-            false
+            loading
               ? <Loader />
               : (
                 <tr
