@@ -43,15 +43,14 @@ export const TodoModal: React.FC<Props> = ({ todoId, todos, selectTodo }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #
-              {todoId}
+              {`Todo #${todoId}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="Select todo"
               onClick={() => {
                 setCardClose(false);
                 selectTodo(0);
@@ -65,8 +64,6 @@ export const TodoModal: React.FC<Props> = ({ todoId, todos, selectTodo }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-
               {!currentTodo?.completed
                 ? (<strong className="has-text-danger">Planned</strong>)
                 : (<strong className="has-text-success">Done</strong>)}
