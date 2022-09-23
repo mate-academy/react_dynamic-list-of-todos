@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
@@ -11,14 +12,14 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
-  const [todoId, setTodoId] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [selectedTodoId, setSelecetedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const selectedTodo = todosFromServer.find(todo => todo.id === todoId);
-  const filteredTodos = todosFromServer.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()))
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()))
     .filter(todo => {
       switch (filter) {
         case 'active':
@@ -34,9 +35,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((todos: Todo[]) => setTodosFromServer(todos))
-      .finally(() => setLoading(false));
-  });
+      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+      .finally(() => setIsLoading(false));
+  }, [todos]);
 
   return (
     <>
@@ -57,11 +58,11 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoList
                 filteredTodos={filteredTodos}
-                selectedTodoId={setTodoId}
+                selectedTodoId={setSelecetedTodoId}
                 selectedTodo={selectedTodo}
-                loading={loading}
+                loading={isLoading}
               />
-              {loading && <Loader />}
+              {isLoading && <Loader />}
             </div>
           </div>
         </div>
@@ -70,7 +71,7 @@ export const App: React.FC = () => {
       { selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setTodoId={setTodoId}
+          setTodoId={setSelecetedTodoId}
         />
       )}
 

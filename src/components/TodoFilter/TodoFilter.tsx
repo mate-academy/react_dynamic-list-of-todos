@@ -1,8 +1,8 @@
 type Props = {
-  setFilter: (v: string) => void,
+  setFilter: React.Dispatch<React.SetStateAction<string>>,
   filter: string,
   query: string,
-  setQuery: (v: string) => void
+  setQuery: React.Dispatch<React.SetStateAction<string>>
 };
 
 export const TodoFilter: React.FC<Props> = ({

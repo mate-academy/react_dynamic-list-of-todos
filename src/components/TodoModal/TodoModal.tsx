@@ -7,7 +7,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo,
-  setTodoId: (v: number) => void
+  setTodoId: React.Dispatch<React.SetStateAction<number>>
 };
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, setTodoId }) => {
@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, setTodoId }) => {
   useEffect(() => {
     if (selectedTodo !== undefined) {
       getUser(selectedTodo.userId)
-        .then((userItem) => setUser(userItem));
+        .then(setUser);
     }
   }, []);
 

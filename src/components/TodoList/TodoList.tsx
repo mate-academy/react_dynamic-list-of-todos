@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
 type Props = {
-  selectedTodoId: (v: number) => void,
+  selectedTodoId: React.Dispatch<React.SetStateAction<number>>,
   selectedTodo: Todo | undefined,
   filteredTodos: Todo[]
   loading: boolean
