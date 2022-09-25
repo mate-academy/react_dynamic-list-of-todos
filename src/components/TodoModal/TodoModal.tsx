@@ -22,7 +22,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   useEffect(() => {
     if (selectedTodo?.userId) {
-      getUser(selectedTodo.userId).then(targetUser => setUserInfo(targetUser));
+      getUser(selectedTodo.userId).then(setUserInfo);
     }
   }, []);
 

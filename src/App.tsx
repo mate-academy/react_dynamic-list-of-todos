@@ -11,17 +11,17 @@ import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todos, setTodosList] = useState<Todo[] | []>([]);
-  // const [selectedUserId, setSelectedUser] = useState(0);
+  const [todos, setTodos] = useState<Todo[] | []>([]);
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.all);
   const [selectedQuery, setSelectedQuery] = useState('');
 
   useEffect(() => {
-    getTodos().then(allTodos => setTodosList(allTodos));
+    getTodos().then(setTodos);
   }, []);
 
   return (
