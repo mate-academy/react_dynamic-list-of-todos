@@ -6,35 +6,40 @@ type Props = {
   filter: (value : Todo[]) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
-  const [status, setStatus] = useState('all');
-  const [quote, setQuote] = useState('');
+enum Status {
+  all,
+  active,
+  complete,
+}
 
-  // console.log(todos);
+export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
+  const [status, setStatus] = useState(Status.all);
+  const [quote, setQuote] = useState('');
 
   const handleFilter = (event: ChangeEvent<HTMLSelectElement>
   | ChangeEvent<HTMLInputElement>) => {
-    if (event.target.className === 'option') {
-      setStatus(event.target.value);
-    }
+    const { value } = event.target;
 
-    if (event.target.className === 'input') {
-      setQuote(event.target.value);
-    }
-    // console.log(event.target.className);
+    setQuote(value);
+  };
+
+  const handleStatus = (value: Status) => {
+    setStatus(value);
   };
 
   useEffect(() => {
     let filtred = [...todos];
 
-    if (status !== 'all') {
+    if (status !== Status.all) {
       filtred = filtred
         .filter(todo => {
+          const { completed } = todo;
+
           switch (status) {
-            case 'active':
-              return !todo.completed;
-            case 'completed':
-              return todo.completed;
+            case Status.active:
+              return !completed;
+            case Status.complete:
+              return completed;
             default:
               return false;
           }
@@ -48,8 +53,6 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
         return todo.title.includes(lowerQuote);
       });
     }
-
-    // console.log(filtred);
 
     filter(filtred);
   }, [status, quote]);
@@ -65,11 +68,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
             data-cy="statusSelect"
             className="option"
             value={status}
-            onChange={handleFilter}
+            onChange={(event) => handleStatus(+event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.all}>All</option>
+            <option value={Status.active}>Active</option>
+            <option value={Status.complete}>Completed</option>
           </select>
         </span>
       </p>

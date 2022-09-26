@@ -8,29 +8,19 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-// import { User } from './types/User';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filtredTodos, setFiltredTodos] = useState<Todo[]>([]);
-  // const [users, setUsers] = useState<User[]>([]);
-  const [modal, setModal] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(response => {
       setTodos(response);
       setFiltredTodos(response);
-      // const todoWithUsers = response.map(todo => ({
-      //   ...todo,
-      //   user: getUser(todo.userId),
-      // }));
-
-      // console.log(todoWithUsers);
     });
   }, []);
-
-  // console.log('DONT', modal);
 
   return (
     <>
@@ -44,13 +34,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(todos.length === 0 ? <Loader /> : <TodoList todos={filtredTodos} setModal={setModal} modalId={modal?.id} />)}
+              {(todos.length === 0
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filtredTodos}
+                    setSelectedTodo={setSelectedTodo}
+                    selectedTodoId={selectedTodo?.id}
+                  />
+                ))}
             </div>
           </div>
         </div>
       </div>
 
-      {modal && (<TodoModal modal={modal} setModal={setModal} />)}
+      {selectedTodo && (<TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />)}
     </>
   );
 };
