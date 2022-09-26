@@ -42,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {inputValue !== ''
+          {!inputValue
             && (
               // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button

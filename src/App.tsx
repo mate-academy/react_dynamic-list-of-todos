@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [activeUserId, setActiveUserId] = useState(0);
   const [activeTodo, setActiveTodo] = useState<Todo>();
 
-  const openModal = (userId:number, todoId:number) => {
+  const openModal = (userId: number, todoId: number) => {
     setIsModalOpened(true);
     setActiveUserId(userId);
 
@@ -43,27 +43,27 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const onSelect = (value:string) => {
-    if (value === 'active') {
-      const newTodos = visibleTodos
-        .filter(todo => todo.completed === false);
+  const onSelect = (value: string) => {
+    switch (value) {
+      case 'active':
+        setVisibleTodos(todos
+          .filter(todo => todo.completed === false));
+        break;
 
-      setVisibleTodos(newTodos);
-    }
+      case 'completed':
+        setVisibleTodos(todos
+          .filter(todo => todo.completed === true));
+        break;
 
-    if (value === 'completed') {
-      const newTodos = visibleTodos
-        .filter(todo => todo.completed === true);
+      case 'all':
+        setVisibleTodos(todos);
+        break;
 
-      setVisibleTodos(newTodos);
-    }
-
-    if (value === 'all') {
-      setVisibleTodos(todos);
+      default: break;
     }
   };
 
-  const onInput = (value:string) => {
+  const onInput = (value: string) => {
     const newTodos = todos.filter(todo => {
       return todo.title.toLowerCase().includes(value.toLowerCase());
     });
