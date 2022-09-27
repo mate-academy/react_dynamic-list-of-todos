@@ -12,22 +12,28 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loader, setLoader] = useState(true);
-  const [select, setSelector] = useState('All');
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectType, setSelectType] = useState('All');
   const [input, setInput] = useState('');
   const [todoId, setTodoId] = useState(0);
 
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTodos(response);
-        setLoader(false);
-      });
+    const fetchData = async () => {
+      const data = await getTodos()
+        .then(response => {
+          setTodos(response);
+          setIsLoading(false);
+        });
+
+      return data;
+    };
+
+    fetchData();
   }, []);
 
   const visibleTodos = todos
     .filter(todo => {
-      switch (select) {
+      switch (selectType) {
         case 'active':
           return !todo.completed;
 
@@ -42,8 +48,6 @@ export const App: React.FC = () => {
       return todo.title.toLowerCase().includes(input.toLowerCase());
     });
 
-  const setId = (todo: number) => setTodoId(todo);
-
   return (
     <>
       <div className="section">
@@ -53,20 +57,20 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelect={setSelector}
-                selectValue={select}
+                onSelect={setSelectType}
+                selectValue={selectType}
                 onInput={setInput}
                 inputValue={input}
               />
             </div>
 
             <div className="block">
-              {loader
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodo={setId}
+                    selectTodo={setTodoId}
                     selectedTodoId={todoId}
                   />
                 )}
@@ -75,12 +79,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0
+      {todoId
         && (
           <TodoModal
             selectedTodoId={todoId}
             todos={visibleTodos}
-            selectTodo={setId}
+            selectTodo={setTodoId}
           />
         )}
     </>
