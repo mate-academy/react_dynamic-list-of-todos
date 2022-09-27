@@ -1,4 +1,5 @@
 import React from 'react';
+import { Filter } from '../../types/Filter';
 
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
@@ -20,15 +21,15 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const filterList = (filterProp: string, todosList: Todo[]) => {
     switch (filterProp) {
-      case 'all':
+      case Filter.all:
         return todosList.filter(todo => (todo.completed || !todo.completed)
           && todo.title.includes(selectedQuery.toLowerCase()));
 
-      case 'completed':
+      case Filter.completed:
         return todosList.filter(todo => todo.completed
           && todo.title.includes(selectedQuery.toLowerCase()));
 
-      case 'active':
+      case Filter.active:
         return todosList.filter(todo => !todo.completed
           && todo.title.includes(selectedQuery.toLowerCase()));
 
