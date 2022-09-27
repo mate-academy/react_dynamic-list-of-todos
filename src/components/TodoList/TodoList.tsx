@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TodoList.scss';
 
 type Props = {
@@ -18,6 +18,12 @@ export const TodoList: React.FC<Props> = ({
   onSetTodos,
   onSelectTodos,
 }) => {
+  const [status, setStatus] = useState('all');
+  const filterByStatus = (statusFromSelect: string) => {
+    setStatus(statusFromSelect);
+    onSelectTodos(statusFromSelect);
+  };
+
   return (
     <div className="TodoList">
       <h2>Todos:</h2>
@@ -34,9 +40,9 @@ export const TodoList: React.FC<Props> = ({
 
         <select
           name="todo-status"
-          value="all"
+          value={status}
           onChange={(event) => {
-            onSelectTodos(event.target.value);
+            filterByStatus(event.target.value);
           }}
         >
           <option value="all">All</option>
