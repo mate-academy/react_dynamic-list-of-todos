@@ -1,12 +1,18 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
   handleOnSelectedTodo: (todo: Todo) => void,
+  currentTodo: Todo | null
 };
 
-export const TodoList: React.FC<Props> = ({ todos, handleOnSelectedTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  handleOnSelectedTodo,
+  currentTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -52,7 +58,12 @@ export const TodoList: React.FC<Props> = ({ todos, handleOnSelectedTodo }) => (
               type="button"
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={classNames(
+                  'far',
+                  'fa-eye',
+                  { 'fa-eye-slash': todo.id === currentTodo?.id },
+                )}
+                />
               </span>
             </button>
           </td>

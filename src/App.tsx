@@ -64,12 +64,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter handleQueryFilter={handleQueryFilter} handleFilterTodos={handleFilterTodos} />
+              <TodoFilter
+                handleQueryFilter={handleQueryFilter}
+                handleFilterTodos={handleFilterTodos}
+              />
             </div>
 
             <div className="block">
               {todos.length === 0 && <Loader />}
-              <TodoList handleOnSelectedTodo={handleOnSelectedTodo} todos={filterTodos} />
+              <TodoList
+                handleOnSelectedTodo={handleOnSelectedTodo}
+                todos={filterTodos}
+                currentTodo={selectedTodo}
+              />
             </div>
           </div>
         </div>
