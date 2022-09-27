@@ -1,100 +1,67 @@
 import React from 'react';
+import { Filter } from '../../types/Filter';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+type Props = {
+  todos: Todo[];
+  setSelectedTodo: React.Dispatch<React.SetStateAction<null | Todo>>;
+  selectedFilter: string;
+  selectedQuery: string;
+  selectedTodo: Todo | null;
+};
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedTodo,
+  selectedFilter,
+  selectedQuery,
+  selectedTodo,
+}) => {
+  const filterList = (filterProp: string, todosList: Todo[]) => {
+    switch (filterProp) {
+      case Filter.all:
+        return todosList.filter(todo => (todo.completed || !todo.completed)
+          && todo.title.includes(selectedQuery.toLowerCase()));
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+      case Filter.completed:
+        return todosList.filter(todo => todo.completed
+          && todo.title.includes(selectedQuery.toLowerCase()));
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
+      case Filter.active:
+        return todosList.filter(todo => !todo.completed
+          && todo.title.includes(selectedQuery.toLowerCase()));
+
+      default:
+        return todosList;
+    }
+  };
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
             <span className="icon">
-              <i className="far fa-eye" />
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {filterList(selectedFilter, todos).map(todo => (
+          <TodoItem
+            todo={todo}
+            selectedTodo={selectedTodo}
+            setSelectedTodo={setSelectedTodo}
+          />
+        ))}
+      </tbody>
+    </table>
+  );
+};
