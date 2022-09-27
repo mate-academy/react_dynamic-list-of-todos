@@ -20,18 +20,6 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User>();
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const todosFromServer = await getTodos();
-  //     const userFromServer = await getUser(userId);
-
-  //     setUser(userFromServer);
-  //     setTodos(todosFromServer);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       const todosFromServer = await getTodos();
@@ -45,6 +33,10 @@ export const TodoModal: React.FC<Props> = ({
   }, [selectedTodoId]);
 
   const selectedTodos = todos.filter(todo => todo.id === selectedTodoId);
+  const hadlerClick = () => {
+    selectedTodo(0);
+    selectedUserId(0);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -54,14 +46,14 @@ export const TodoModal: React.FC<Props> = ({
         <Loader />
       ) : (
         <div className="modal-card">
-          {selectedTodos.map(todo => (
+          {selectedTodos.map(({ id, title, completed }) => (
             <>
               <header className="modal-card-head">
                 <div
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
                 >
-                  {`Todo #${todo.id}`}
+                  {`Todo #${id}`}
                 </div>
 
                 {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -69,19 +61,16 @@ export const TodoModal: React.FC<Props> = ({
                   type="button"
                   className="delete"
                   data-cy="modal-close"
-                  onClick={() => {
-                    selectedTodo(0);
-                    selectedUserId(0);
-                  }}
+                  onClick={hadlerClick}
                 />
               </header>
               <div className="modal-card-body">
                 <p className="block" data-cy="modal-title">
-                  {todo.title}
+                  {title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
-                  {todo.completed === true
+                  {completed === true
                     ? (<strong className="has-text-success">Done</strong>)
                     : (<strong className="has-text-danger">Planned</strong>)}
 
