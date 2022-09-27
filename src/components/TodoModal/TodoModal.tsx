@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+const defaultTodo = {
+  id: 0,
+  title: 'no title',
+  completed: false,
+  userId: 0,
+};
+
+type Props = {
+  todo: Todo;
+  onSelect: (todo: Todo) => void;
+};
+
+export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
+  const [user, setUser] = useState<User>();
+  const [isLoader, setIsLoader] = useState(true);
+
+  useEffect(() => {
+    const getUserAsync = async () => {
+      const receivedUser = await getUser(todo.userId);
+
+      setUser(receivedUser);
+      setIsLoader(false);
+    };
+
+    getUserAsync();
+  }, [todo.id]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoader ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +45,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +53,34 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onSelect(defaultTodo)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={classNames(
+                  { 'has-text-danger': !todo.completed },
+                  { 'has-text-success': todo.completed },
+                )}
+              >
+                {
+                  todo.completed
+                    ? 'Done'
+                    : 'Planned'
+                }
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
