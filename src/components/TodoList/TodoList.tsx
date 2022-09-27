@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -51,21 +50,28 @@ export const TodoList: React.FC<Props> = ({
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              onClick={() => handleOnSelectedTodo(todo)}
-              type="button"
-            >
-              <span className="icon">
-                <i className={classNames(
-                  'far',
-                  'fa-eye',
-                  { 'fa-eye-slash': todo.id === currentTodo?.id },
-                )}
-                />
-              </span>
-            </button>
+            {currentTodo?.id === todo.id ? (
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+              >
+                <span className="icon">
+                  <i className="far fa-eye-slash" />
+                </span>
+              </button>
+            ) : (
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => handleOnSelectedTodo(todo)}
+              >
+                <span className="icon">
+                  <i className="far fa-eye" />
+                </span>
+              </button>
+            )}
           </td>
         </tr>
       ))}
