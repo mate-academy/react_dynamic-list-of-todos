@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -23,22 +23,20 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (status) {
-      case 'active':
-        return !todo.completed;
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (status) {
+        case 'active':
+          return !todo.completed;
 
-      case 'completed':
-        return todo.completed;
+        case 'completed':
+          return todo.completed;
 
-      default:
-        return todo;
-    }
-  }).filter(todo => todo.title.includes(input.toLowerCase()));
-
-  const handleTodoId = (todoId: number) => {
-    setTodoId(todoId);
-  };
+        default:
+          return todo;
+      }
+    }).filter(todo => todo.title.includes(input.toLowerCase()));
+  }, [todos, status, input]);
 
   return (
     <>
@@ -63,7 +61,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={todoId}
-                  selectTodo={handleTodoId}
+                  selectTodo={setTodoId}
                 />
               )}
             </div>
@@ -76,7 +74,7 @@ export const App: React.FC = () => {
           <TodoModal
             todos={visibleTodos}
             selectedTodoId={todoId}
-            selectTodo={handleTodoId}
+            selectTodo={setTodoId}
           />
         )}
     </>
