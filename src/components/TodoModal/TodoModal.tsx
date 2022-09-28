@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 // import { Loader } from '../Loader';
 
 interface Props {
@@ -15,8 +17,18 @@ export const TodoModal: React.FC<Props> = ({
     id,
     title,
     completed,
-    // userId,
+    userId,
   } = selectedTodo;
+
+  const [user, setUser] = useState<User>();
+
+  const addData = async (callback: () => Promise<User>) => {
+    return setUser(await callback());
+  };
+
+  useEffect(() => {
+    addData(() => getUser(userId));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -59,8 +71,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={user?.email}>
+                {user?.name}
               </a>
             </p>
           </div>
