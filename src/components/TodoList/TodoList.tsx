@@ -79,13 +79,18 @@ export const TodoList: React.FC<Props> = ({
                   ? handlerClickReset
                   : () => handlerClickSelect(id, userId)}
               >
-                <span className="icon">
-                  <i className={classNames('far fa-eye',
-                    {
-                      'far fa-eye-slash': selectedTodoId === id,
-                    })}
-                  />
-                </span>
+                {selectedTodoId === id
+                  ? (
+                    <span className="icon">
+                      <i className="far fa-eye-slash" />
+                    </span>
+                  )
+                  : (
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+
+                  )}
               </button>
             </td>
           </tr>
