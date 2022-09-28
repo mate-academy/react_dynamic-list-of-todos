@@ -18,16 +18,17 @@ enum GroupBy {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [visibleTodos, setVisibleTodos] = useState(todos);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(todos[0]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos().then(response => {
       setTodos(response);
       setVisibleTodos(response);
-      setIsLoaded(true);
-    });
+    }).finally(() => setIsLoading(false));
   }, []);
 
   const filterTodos = (groupBy: string, query: string) => {
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded ? (
+              {!isLoading ? (
                 <TodoList
                   todos={visibleTodos}
                   setTodo={setTodo}
