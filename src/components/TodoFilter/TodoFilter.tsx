@@ -1,9 +1,8 @@
-
 type Props = {
   filterType: string;
-  setFilterType: (str: string) => void
+  setFilterType: (str: string) => void;
   query: string;
-  setQuery: (str: string) => void
+  setQuery: (str: string) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
 }) => (
   <form
     className="field has-addons"
-    onSubmit={(event)=> event.preventDefault()}>
+  >
     <p className="control">
       <span className="select">
         <select

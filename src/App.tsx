@@ -9,13 +9,15 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { getUser } from './api';
+//import { getUser } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState('');
+  const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
+  const [todoId, setTodoId] = useState(0);
+  const [todo, setTodo] = useState<Todo | null>(null);
 
 
   useEffect(() => {
@@ -30,13 +32,16 @@ export const App: React.FC = () => {
     str.toLowerCase().includes(query.toLowerCase())
   );
 
-  const getFilterTodos = todos.filter((todo) => {
-    if (filterType === 'active')
-        {return !todo.completed}
-      if (filterType === 'completed')
-        {return todo.completed};
-      if (filterType === 'all')
-      {return todo}})
+  const filterTodos = todos
+  .filter((todo) => {
+    if (filterType === 'active') {
+      return !todo.completed
+    }
+    if (filterType === 'completed') {
+      return todo.completed
+    }
+    return todo;
+  })
     .filter((todo) => includeCheck(todo.title));
 
 
@@ -57,15 +62,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              <TodoList todos={getFilterTodos}
+              {!filterTodos && <Loader />}
+
+              <TodoList
+                todos={filterTodos}
+                selectedTodoId={todoId}
+                selectTodo={(todoId) => setTodoId(todoId)}
               />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
+      
+      {todo?.userId && (
+      <TodoModal
+      todo={todo}
+      setTodo={setTodo}
+      />)}
     </>
   );
 };
