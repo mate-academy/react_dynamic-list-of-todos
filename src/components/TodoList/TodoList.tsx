@@ -62,41 +62,31 @@ export const TodoList: React.FC<Props> = ({
                 'is-expanded': completed === false,
               })}
             >
-              <p className={
-                completed === false
-                  ? 'has-text-danger'
-                  : 'has-text-success'
-              }
+              <p className={classNames('has-text-success',
+                {
+                  'has-text-danger': completed === false,
+                })}
               >
                 {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              {selectedTodoId === id
-                ? (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={handlerClickReset}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  </button>
-                )
-                : (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => handlerClickSelect(id, userId)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  </button>
-                )}
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={selectedTodoId === id
+                  ? handlerClickReset
+                  : () => handlerClickSelect(id, userId)}
+              >
+                <span className="icon">
+                  <i className={classNames('far fa-eye',
+                    {
+                      'far fa-eye-slash': selectedTodoId === id,
+                    })}
+                  />
+                </span>
+              </button>
             </td>
           </tr>
         ))}
