@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     getTodos()
       .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
       .finally(() => setIsLoading(false));
-  }, [todos]);
+  }, [setIsLoading, setTodos]);
 
   return (
     <>
