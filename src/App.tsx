@@ -63,9 +63,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setFilteredBy={setFilteredBy}
-                setQuery={(queryFromInput) => {
-                  setQuery(queryFromInput);
-                }}
+                setQuery={setQuery}
                 filteredBy={filteredBy}
                 query={query}
               />
@@ -79,12 +77,8 @@ export const App: React.FC = () => {
                   <TodoList
                     todo={filteredTodos}
                     selectedTodoId={selectedTodo}
-                    selectedTodo={(id) => {
-                      setSelectedTodo(id);
-                    }}
-                    selectedUserId={(userId) => {
-                      setSelectedUserId(userId);
-                    }}
+                    selectedTodo={setSelectedTodo}
+                    selectedUserId={setSelectedUserId}
                   />
                 )}
             </div>
@@ -96,12 +90,8 @@ export const App: React.FC = () => {
           <TodoModal
             userId={selectedUserId}
             selectedTodoId={selectedTodo}
-            selectedTodo={(id) => {
-              setSelectedTodo(id);
-            }}
-            selectedUserId={(userId) => {
-              setSelectedUserId(userId);
-            }}
+            selectedTodo={setSelectedTodo}
+            selectedUserId={setSelectedUserId}
           />
         )}
     </>
