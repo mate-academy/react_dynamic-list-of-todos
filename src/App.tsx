@@ -23,11 +23,8 @@ export function getFilteredTodo(
       case 'completed':
         return todo.completed === true;
 
-      case 'all':
-        return todo;
-
       default:
-        return 0;
+        return todo;
     }
   });
 
