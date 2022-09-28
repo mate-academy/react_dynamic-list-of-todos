@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
 import { useEffect } from 'react';
+import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-//import { getUser } from './api';
+// import { getUser } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
@@ -18,13 +18,13 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todoId, setTodoId] = useState(0);
   const [todo, setTodo] = useState<Todo | null>(null);
-
+  const [isLoading, setIsLoaded] = useState(false);
 
   useEffect(() => {
     getTodos()
       .then(result => {
         setTodos(result);
-        //setIsLoaded(true);
+        setIsLoaded(true);
       });
   }, []);
 
@@ -33,17 +33,18 @@ export const App: React.FC = () => {
   );
 
   const filterTodos = todos
-  .filter((todo) => {
-    if (filterType === 'active') {
-      return !todo.completed
-    }
-    if (filterType === 'completed') {
-      return todo.completed
-    }
-    return todo;
-  })
-    .filter((todo) => includeCheck(todo.title));
+    .filter((todo) => {
+      if (filterType === 'active') {
+        return !todo.completed;
+      }
 
+      if (filterType === 'completed') {
+        return todo.completed;
+      }
+
+      return todo;
+    })
+    .filter((todo) => includeCheck(todo.title));
 
   return (
     <>
@@ -54,31 +55,34 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-              filterType={filterType}
-              setFilterType={setFilterType}
-              query={query}
-              setQuery={setQuery}
+                filterType={filterType}
+                setFilterType={setFilterType}
+                query={query}
+                setQuery={setQuery}
               />
             </div>
 
             <div className="block">
-              {!filterTodos && <Loader />}
+              {!isLoading
+              && <Loader />}
 
               <TodoList
                 todos={filterTodos}
                 selectedTodoId={todoId}
                 selectTodo={(todoId) => setTodoId(todoId)}
+                setSelectTodo={setTodo}
               />
             </div>
           </div>
         </div>
       </div>
-      
+
       {todo?.userId && (
-      <TodoModal
-      todo={todo}
-      setTodo={setTodo}
-      />)}
+        <TodoModal
+          todo={todo}
+          setTodo={setTodo}
+        />
+      )}
     </>
   );
 };

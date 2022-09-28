@@ -4,14 +4,19 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectTodo: (userId: number) => void;
   selectedTodoId: number;
-}
+  // selectedTodo: Todo | null;
+  selectTodo: (userId: number) => void;
+  setSelectTodo: (todo: Todo | null) => void
+
+};
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectTodo,
   selectedTodoId,
+  // selectedTodo,
+  selectTodo,
+  setSelectTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -28,55 +33,71 @@ export const TodoList: React.FC<Props> = ({
         </tr>
       </thead>
       <tbody>
-        {todos.map(todo =>(
+        {todos.map(todo => (
           <tr
-          data-cy="todo"
-          className=""
-          key={todo.id}>
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-              <i className="fas fa-check" />
-            </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p
-            className={classNames('has-text-success', {
-              'has-text-danger': !todo.completed})}
-            >{todo.title}</p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            {selectedTodoId === todo.id
-            ? (
-              <button
+            data-cy="todo"
+            className=""
+            key={todo.id}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                className={classNames('has-text-success', { 'has-text-danger': !todo.completed })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              {selectedTodoId === todo.id
+                ? (
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => selectTodo(0)}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye-slash" />
+                    </span>
+                  </button>
+                )
+                : (
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => setSelectTodo(todo)}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  </button>
+                )}
+              {/* <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={()=>selectTodo(0)}
+                onClick={()=>setSelectTodo(todo)}
               >
               <span className="icon">
-                <i className="far fa-eye-slash" />
+              <i className={classNames(
+                    'far fa-eye',
+                    { 'far fa-eye-slash': selectedTodo?.id === todo.id },
+                  )}
+                  />
               </span>
-            </button>
-            )
-            : (
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={()=>selectTodo(todo.id)}
-              >
-              <span className="icon">
-                <i className="far fa-eye" />
-              </span>
-            </button>
-            )}
-          </td>
-        </tr>
+            </button> */}
+            </td>
+          </tr>
         ))}
       </tbody>
     </table>
   );
-}
+};

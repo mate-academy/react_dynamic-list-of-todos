@@ -7,23 +7,22 @@ import { Loader } from '../Loader';
 type Props = {
   todo: Todo | null;
   setTodo: (todo: Todo | null) => void
-}
+};
 
 export const TodoModal: React.FC<Props> = ({
   todo,
   setTodo,
 }) => {
-  const[selectedUser, setSelectedUser] = useState<User | null>(null);
-
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (!todo) {
       return;
     }
-  getUser(todo.userId)
-  .then(setSelectedUser);
-}, [todo]);
 
+    getUser(todo.userId)
+      .then(setSelectedUser);
+  }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -48,7 +47,8 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 setTodo(null);
-                setSelectedUser(null)}}
+                setSelectedUser(null);
+              }}
             />
           </header>
 
@@ -60,13 +60,20 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               {todo?.completed
-              ? (<strong
-                className="has-text-success"
-                >Done</strong>)
-              : (<strong
-                className="has-text-danger"
-                >Planned</strong>)
-            }
+                ? (
+                  <strong
+                    className="has-text-success"
+                  >
+                    Done
+                  </strong>
+                )
+                : (
+                  <strong
+                    className="has-text-danger"
+                  >
+                    Planned
+                  </strong>
+                )}
 
               {' by '}
 

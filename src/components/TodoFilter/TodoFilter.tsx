@@ -3,7 +3,7 @@ type Props = {
   setFilterType: (str: string) => void;
   query: string;
   setQuery: (str: string) => void;
-}
+};
 
 export const TodoFilter: React.FC<Props> = ({
   filterType,
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filterType}
-          onChange={event =>(setFilterType(event.target.value))}
+          onChange={event => (setFilterType(event.target.value))}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -35,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event)=>setQuery(event.target.value)}
+        onChange={(event) => setQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -43,12 +43,12 @@ export const TodoFilter: React.FC<Props> = ({
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {query.length !== 0 && (
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-          onClick={() => setQuery('')}
-        />
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setQuery('')}
+          />
         )}
 
       </span>
