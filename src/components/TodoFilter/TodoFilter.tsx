@@ -1,8 +1,6 @@
 import { FC } from 'react';
-// import { Todo } from '../../types/Todo';
 
 type Props = {
-  // todos: Todo[];
   completeStatus: string;
   setCompleteStatus: (status: string) => void;
   filterText: string;

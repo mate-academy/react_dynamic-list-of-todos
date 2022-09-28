@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { FC, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -53,7 +52,6 @@ export const App: FC = () => {
 
             <div className="block">
               <TodoFilter
-                // todos={todos}
                 completeStatus={completeStatus}
                 setCompleteStatus={setCompleteStatus}
                 filterText={query}
@@ -76,7 +74,14 @@ export const App: FC = () => {
         </div>
       </div>
 
-      <TodoModal />
+      {todoId !== 0 && (
+        <TodoModal
+          todos={visibleTodos}
+          todoId={todoId}
+          selectTodo={setTodoId}
+        />
+
+      )}
     </>
   );
 };
