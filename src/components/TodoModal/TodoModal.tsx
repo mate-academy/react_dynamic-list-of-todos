@@ -7,7 +7,8 @@ export const TodoModal: React.FC = () => {
       <div className="modal-background" />
 
       {true ? (
-        <Loader />
+        console.log('jj')
+        // <Loader />
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
