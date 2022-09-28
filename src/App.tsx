@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -21,7 +20,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoader, setIsLoader] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo>(defaultTodo);
-  const [selectValue, setSelectValue] = useState('');
+  const [selectValue, setSelectValue] = useState('all');
   const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
@@ -49,10 +48,21 @@ export const App: React.FC = () => {
 
   const todosForRender
     = todos
-      .filter(({ completed }) => (
-        selectValue ? String(completed) === selectValue : String(completed) !== selectValue
-      ))
-      .filter(({ title }) => title.includes(filterValue));
+      .filter(({ completed }) => {
+        switch (selectValue) {
+          case 'active':
+            return !completed;
+
+          case 'completed':
+            return completed;
+
+          default:
+            return true;
+        }
+      })
+      .filter(({ title }) => (
+        title.toLowerCase().includes(filterValue.toLowerCase())
+      ));
 
   return (
     <>

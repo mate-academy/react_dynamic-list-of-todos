@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 type Props = {
@@ -22,9 +21,9 @@ export const TodoFilter: React.FC<Props> = ({
           value={selectValue}
           onChange={(event) => hundleSelect(event.target.value)}
         >
-          <option value="">All</option>
-          <option value="false">Active</option>
-          <option value="true">Completed</option>
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
         </select>
       </span>
     </p>
@@ -45,6 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {filterValue && (
           <button
+            aria-label="close"
             data-cy="clearSearchButton"
             type="button"
             className="delete"
