@@ -83,7 +83,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {todoId && (
+
+      {todoId !== 0 && (
         <TodoModal
           todoId={todoId}
           todos={filteredTodos}
