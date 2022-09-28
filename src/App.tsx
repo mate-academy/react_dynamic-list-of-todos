@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,41 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [queryFilter, setQueryFilter] = useState('');
+  const [selectStatus, setSelectStatus] = useState('all');
+  const [todoId, setTodoId] = useState(0);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      });
+  }, []);
+
+  const filterBy = todos.filter((todo) => {
+    switch (selectStatus) {
+      case 'active':
+        return todo.completed === false;
+
+      case 'completed':
+        return todo.completed === true;
+
+      default:
+        return true;
+    }
+  });
+
+  filterBy.filter(({ title }) => (
+    title.toLocaleLowerCase().includes(queryFilter.toLocaleLowerCase())
+  ));
+
   return (
     <>
       <div className="section">
@@ -17,18 +50,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                todos={todos}
+                selectStatus={selectStatus}
+                setSelectStatus={setSelectStatus}
+                query={queryFilter}
+                setQuery={setQueryFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filterBy}
+                    selectedTodoId={todoId}
+                    selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {todoId && (
+        <TodoModal
+          todoId={todoId}
+          todos={filterBy}
+          selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
+        />
+      )}
     </>
   );
 };
