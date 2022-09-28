@@ -33,13 +33,13 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos
-    .filter(todo => {
+    .filter(({ completed }) => {
       switch (filterBy) {
         case 'active':
-          return !todo.completed;
+          return !completed;
 
         case 'completed':
-          return todo.completed;
+          return completed;
 
         default:
           return true;
