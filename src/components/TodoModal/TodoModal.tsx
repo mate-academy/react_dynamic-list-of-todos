@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-// import { Loader } from '../Loader';
+import { Loader } from '../Loader';
 
 interface Props {
   selectedTodo: Todo;
@@ -21,20 +21,24 @@ export const TodoModal: React.FC<Props> = ({
   } = selectedTodo;
 
   const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addData = async (callback: () => Promise<User>) => {
-    return setUser(await callback());
+  const addUser = async () => {
+    setUser(await getUser(userId));
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    addData(() => getUser(userId));
+    addUser();
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {
+      {isLoading ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -77,7 +81,7 @@ export const TodoModal: React.FC<Props> = ({
             </p>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 };
