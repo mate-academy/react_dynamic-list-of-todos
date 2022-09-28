@@ -1,14 +1,37 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const addData = async (callback: () => Promise<Todo[]>) => {
+    setIsLoading(true);
+
+    return setTodos(await callback());
+  };
+
+  useEffect(() => {
+    try {
+      addData(getTodos);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  console.log(todos);
+
   return (
     <>
       <div className="section">
@@ -21,14 +44,26 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              <TodoList
+                todos={todos}
+                selectedTodoId={selectedTodoId}
+                setSelectedTodoId={setSelectedTodoId}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {/* {selectedTodoId !== 0
+      && (
+        <TodoModal
+          todos={todos}
+          selectedTodoId={selectedTodoId}
+          setSelectedTodoId={setSelectedTodoId}
+        />
+      )} */}
+
     </>
   );
 };

@@ -1,21 +1,30 @@
 import React from 'react';
-import { Loader } from '../Loader';
+// import { Todo } from '../../types/Todo';
+// import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  // todos: Todo[];
+  selectedTodoId: number;
+  setSelectedTodoId: (id: number) => void
+}
+
+export const TodoModal: React.FC<Props> = ({
+  // todos,
+  selectedTodoId,
+  setSelectedTodoId,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
-        <Loader />
-      ) : (
+      {
         <div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodoId}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,6 +32,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => setSelectedTodoId(0)}
             />
           </header>
 
@@ -43,7 +53,7 @@ export const TodoModal: React.FC = () => {
             </p>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 };
