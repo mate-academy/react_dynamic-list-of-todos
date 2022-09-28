@@ -74,7 +74,7 @@ export const TodoModal: React.FC<Props> = ({
               <strong className={classNames(
                 'has-text-success',
                 {
-                  'has-text-danger': selectedTodo?.completed,
+                  'has-text-danger': !selectedTodo?.completed,
                 },
               )}
               >
