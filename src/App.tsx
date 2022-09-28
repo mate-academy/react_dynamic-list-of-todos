@@ -37,17 +37,19 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filteredBy, setFilteredBy] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setIsLoading(true);
-    getTodos()
-      .then(todo => {
-        setIsLoading(false);
-        setTodos(todo);
-      });
+    const getTodosFromServer = async () => {
+      const receivedTodos = await getTodos();
+
+      setTodos(receivedTodos);
+      setIsLoading(false);
+    };
+
+    getTodosFromServer();
   }, []);
 
   const filteredTodos = getFilteredTodo(todos, filteredBy, query);
