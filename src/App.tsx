@@ -17,17 +17,14 @@ export function getFilteredTodo(
 ) {
   const filterBy = todos.filter((todo) => {
     switch (filterType) {
-      case 'all':
-        return todo;
-
       case 'completed':
-        return todo.completed === true;
+        return todo.completed;
 
       case 'active':
-        return todo.completed === false;
+        return !todo.completed;
 
       default:
-        return 0;
+        return todo;
     }
   });
 
@@ -47,8 +44,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then(todo => setTodos(todo))
-      .finally(() => setIsLoading(false));
+      .then(todo => {
+        setIsLoading(false);
+        setTodos(todo);
+      });
   }, []);
 
   const filteredTodos = getFilteredTodo(todos, filteredBy, query);
@@ -85,7 +84,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo !== 0
+      {selectedTodo
         && (
           <TodoModal
             userId={selectedUserId}
