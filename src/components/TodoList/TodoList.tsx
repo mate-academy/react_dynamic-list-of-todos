@@ -3,14 +3,14 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  selectedTodoId: Todo | null;
-  setSelectedTodoId: (todo: Todo) => void
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo) => void
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
-  setSelectedTodoId,
+  selectedTodo,
+  setSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
           (
             <tr
               data-cy="todo"
-              className={(selectedTodoId === todo)
+              className={(selectedTodo === todo)
                 ? 'has-background-info-light'
                 : ''}
             >
@@ -64,11 +64,11 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectedTodoId(todo)}
+                  onClick={() => setSelectedTodo(todo)}
                 >
                   <span className="icon">
                     <i className={
-                      selectedTodoId === todo
+                      selectedTodo === todo
                         ? 'far fa-eye-slash'
                         : 'far fa-eye'
                     }

@@ -1,18 +1,23 @@
 import React from 'react';
-// import { Todo } from '../../types/Todo';
+import { Todo } from '../../types/Todo';
 // import { Loader } from '../Loader';
 
 interface Props {
-  // todos: Todo[];
-  selectedTodoId: number;
-  setSelectedTodoId: (id: number) => void
+  selectedTodo: Todo;
+  setSelectedTodo: (val: null) => void
 }
 
 export const TodoModal: React.FC<Props> = ({
-  // todos,
-  selectedTodoId,
-  setSelectedTodoId,
+  selectedTodo,
+  setSelectedTodo,
 }) => {
+  const {
+    id,
+    title,
+    completed,
+    // userId,
+  } = selectedTodo;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -24,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodoId}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -32,18 +37,25 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodoId(0)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={completed
+                  ? 'has-text-success'
+                  : 'has-text-danger'}
+              >
+                {completed
+                  ? 'Done'
+                  : 'Planned'}
+              </strong>
 
               {' by '}
 

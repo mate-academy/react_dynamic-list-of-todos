@@ -6,14 +6,14 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const addData = async (callback: () => Promise<Todo[]>) => {
@@ -47,22 +47,21 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               <TodoList
                 todos={todos}
-                selectedTodoId={selectedTodoId}
-                setSelectedTodoId={setSelectedTodoId}
+                selectedTodo={selectedTodo}
+                setSelectedTodo={setSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* {selectedTodoId !== 0
+      {selectedTodo
       && (
         <TodoModal
-          todos={todos}
-          selectedTodoId={selectedTodoId}
-          setSelectedTodoId={setSelectedTodoId}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
-      )} */}
+      )}
 
     </>
   );
