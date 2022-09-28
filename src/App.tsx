@@ -14,28 +14,33 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState<number | null>(null);
   const [status, setStatus] = useState('');
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(setTodos);
+    const fetchTodos = async () => {
+      setTodos(await getTodos());
+    };
+
+    fetchTodos();
   }, []);
 
+  const compareInput = (title: string, input: string) => title.includes(input.toLowerCase());
+
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
+    return todos.filter(({ completed, title }) => {
       switch (status) {
         case 'active':
-          return !todo.completed;
+          return !completed && compareInput(title, input);
 
         case 'completed':
-          return todo.completed;
+          return completed && compareInput(title, input);
 
         default:
-          return todo;
+          return compareInput(title, input);
       }
-    }).filter(todo => todo.title.includes(input.toLowerCase()));
+    });
   }, [todos, status, input]);
 
   return (
@@ -69,7 +74,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0
+      {todoId
         && (
           <TodoModal
             todos={visibleTodos}

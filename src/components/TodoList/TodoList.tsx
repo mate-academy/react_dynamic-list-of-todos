@@ -4,8 +4,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  selectTodo: (todo: number) => void,
-  selectedTodoId: number,
+  selectTodo: (todo: number | null) => void,
+  selectedTodoId: number | null,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -62,9 +62,6 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  selectTodo(0);
-                }}
               >
                 <span className="icon">
                   <i className="far fa-eye-slash" />

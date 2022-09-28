@@ -6,8 +6,8 @@ import { Loader } from '../Loader';
 
 type Props = {
   todos: Todo[],
-  selectTodo: (todo: number) => void,
-  selectedTodoId: number,
+  selectTodo: (todo: null) => void,
+  selectedTodoId: number | null,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -20,8 +20,11 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId)
-        .then(response => setUser(response));
+      const fetchUser = async () => {
+        setUser(await getUser(selectedTodo.userId));
+      };
+
+      fetchUser();
     }
   }, []);
 
@@ -46,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectTodo(0)}
+              onClick={() => selectTodo(null)}
             />
           </header>
 
