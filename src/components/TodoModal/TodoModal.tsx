@@ -1,41 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { getTodos, getUser } from '../../api';
+import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 interface Props {
-  userId: number;
   selectedTodoId: number;
-  selectedTodo: (value: number) => void,
-  selectedUserId: (value: number) => void,
+  setselectedTodoId: (value: number) => void,
+  todos: Todo[]
 }
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
   selectedTodoId,
-  selectedTodo,
-  selectedUserId,
+  setselectedTodoId,
+  todos,
 }) => {
   const [user, setUser] = useState<User>();
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const selectedTodo = todos.find(({ id }) => id === selectedTodoId);
 
   useEffect(() => {
     const fetchData = async () => {
-      const todosFromServer = await getTodos();
-      const userFromServer = await getUser(userId);
+      if (selectedTodo) {
+        const userFromServer = await getUser(selectedTodo.userId);
 
-      setUser(userFromServer);
-      setTodos(todosFromServer);
+        setUser(userFromServer);
+      }
     };
 
     fetchData();
   }, [selectedTodoId]);
 
-  const selectedTodos = todos.filter(todo => todo.id === selectedTodoId);
+  const selectedTodoIds = todos.filter(todo => todo.id === selectedTodoId);
   const hadlerClick = () => {
-    selectedTodo(0);
-    selectedUserId(0);
+    setselectedTodoId(0);
   };
 
   return (
@@ -46,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({
         <Loader />
       ) : (
         <div className="modal-card">
-          {selectedTodos.map(({ id, title, completed }) => (
+          {selectedTodoIds.map(({ id, title, completed }) => (
             <>
               <header className="modal-card-head">
                 <div
@@ -55,10 +52,9 @@ export const TodoModal: React.FC<Props> = ({
                 >
                   {`Todo #${id}`}
                 </div>
-
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                 <button
                   type="button"
+                  aria-label="delete"
                   className="delete"
                   data-cy="modal-close"
                   onClick={hadlerClick}

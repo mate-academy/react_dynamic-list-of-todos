@@ -9,35 +9,33 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/Filter';
 
 export function getFilteredTodo(
   todos: Todo[],
-  filterType: string,
+  filterType: FilterType,
   query: string,
 ) {
-  const filterByType = todos.filter((todo) => {
+  return todos.filter((todo) => {
     switch (filterType) {
       case 'active':
-        return todo.completed === false;
+        return !todo.completed;
 
       case 'completed':
-        return todo.completed === true;
+        return todo.completed;
 
       default:
         return todo;
     }
-  });
-
-  return filterByType.filter(({ title }) => (
+  }).filter(({ title }) => (
     title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
   ));
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodo] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState(0);
-  const [filterBy, setFilterBy] = useState('all');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setselectedTodoId] = useState(0);
+  const [filterBy, setFilterBy] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
   const [isLoading, setLoading] = useState(true);
 
@@ -47,7 +45,7 @@ export const App: React.FC = () => {
 
       setLoading(false);
 
-      setTodo(todosFromServer);
+      setTodos(todosFromServer);
     };
 
     fetchData();
@@ -79,12 +77,9 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    selectedTodoId={selectedTodo}
-                    selectedTodo={(id) => {
-                      setSelectedTodo(id);
-                    }}
-                    selectedUserId={(userId) => {
-                      setSelectedUserId(userId);
+                    selectedTodoIdId={selectedTodoId}
+                    setselectedTodoId={(id) => {
+                      setselectedTodoId(id);
                     }}
                   />
                 )}
@@ -93,16 +88,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== 0
+      {selectedTodoId
         && (
           <TodoModal
-            userId={selectedUserId}
-            selectedTodoId={selectedTodo}
-            selectedTodo={(id) => {
-              setSelectedTodo(id);
-            }}
-            selectedUserId={(userId) => {
-              setSelectedUserId(userId);
+            todos={todos}
+            selectedTodoId={selectedTodoId}
+            setselectedTodoId={(id) => {
+              setselectedTodoId(id);
             }}
           />
         )}

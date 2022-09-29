@@ -4,25 +4,21 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  selectedTodoId: number,
-  selectedTodo: (value: number) => void,
-  selectedUserId: (value: number) => void,
+  selectedTodoIdId: number,
+  setselectedTodoId: (value: number) => void,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
-  selectedTodo,
-  selectedUserId,
+  selectedTodoIdId,
+  setselectedTodoId,
 }) => {
   const handlerClickReset = () => {
-    selectedTodo(0);
-    selectedUserId(0);
+    setselectedTodoId(0);
   };
 
-  const handlerClickSelect = (id: number, userId: number) => {
-    selectedTodo(id);
-    selectedUserId(userId);
+  const handlerClickSelect = (id: number) => {
+    setselectedTodoId(id);
   };
 
   return (
@@ -42,7 +38,7 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(({
-          id, userId, completed, title,
+          id, completed, title,
         }) => (
           <tr
             data-cy="todo"
@@ -59,12 +55,12 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className={classNames('is-vcentered',
               {
-                'is-expanded': completed === false,
+                'is-expanded': !completed,
               })}
             >
               <p className={classNames('has-text-success',
                 {
-                  'has-text-danger': completed === false,
+                  'has-text-danger': !completed,
                 })}
               >
                 {title}
@@ -75,11 +71,11 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={selectedTodoId === id
+                onClick={selectedTodoIdId === id
                   ? handlerClickReset
-                  : () => handlerClickSelect(id, userId)}
+                  : () => handlerClickSelect(id)}
               >
-                {selectedTodoId === id
+                {selectedTodoIdId === id
                   ? (
                     <span className="icon">
                       <i className="far fa-eye-slash" />
