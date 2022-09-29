@@ -7,16 +7,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   selectedTodoId: number,
   selectedUserId: number,
-  setSelectedTodoId: (id: number) => void,
-  setSelectedUserId: (id: number) => void,
+  onReset: () => void,
   todos: Todo[],
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodoId,
   selectedUserId,
-  setSelectedTodoId,
-  setSelectedUserId,
+  onReset,
   todos,
 }) => {
   const [user, setUser] = useState<User>();
@@ -29,11 +27,6 @@ export const TodoModal: React.FC<Props> = ({
   }, []);
 
   const findTodo = todos.filter(({ id }) => selectedTodoId === id);
-
-  const handleReset = () => {
-    setSelectedTodoId(0);
-    setSelectedUserId(0);
-  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -58,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
                   type="button"
                   className="delete"
                   data-cy="modal-close"
-                  onClick={handleReset}
+                  onClick={onReset}
                 />
               </header>
 

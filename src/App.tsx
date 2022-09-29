@@ -40,6 +40,11 @@ export const App: React.FC = () => {
     title.toLowerCase().includes(query.toLowerCase())
   ));
 
+  const handleReset = () => {
+    setSelectedTodoId(0);
+    setSelectedUserId(0);
+  };
+
   return (
     <>
       <div className="section">
@@ -67,6 +72,7 @@ export const App: React.FC = () => {
                     selectedTodoId={selectedTodoId}
                     setSelectedTodoId={setSelectedTodoId}
                     setSelectedUserId={setSelectedUserId}
+                    onReset={handleReset}
                   />
                 )}
             </div>
@@ -78,9 +84,8 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             selectedTodoId={selectedTodoId}
-            setSelectedTodoId={setSelectedTodoId}
             selectedUserId={selectedUserId}
-            setSelectedUserId={setSelectedUserId}
+            onReset={handleReset}
             todos={todos}
           />
         )}

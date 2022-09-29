@@ -6,6 +6,7 @@ type Props = {
   setSelectedUserId: (value: number) => void,
   selectedTodoId: number,
   setSelectedTodoId: (value: number) => void,
+  onReset: () => void,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -13,15 +14,11 @@ export const TodoList: React.FC<Props> = ({
   selectedTodoId,
   setSelectedUserId,
   setSelectedTodoId,
+  onReset,
 }) => {
   const handleSelect = (id: number, userId: number) => {
     setSelectedTodoId(id);
     setSelectedUserId(userId);
-  };
-
-  const handleReset = () => {
-    setSelectedTodoId(0);
-    setSelectedUserId(0);
   };
 
   return (
@@ -81,7 +78,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={selectedTodoId === id
-                  ? handleReset
+                  ? onReset
                   : () => handleSelect(id, userId)}
               >
                 {selectedTodoId === id
