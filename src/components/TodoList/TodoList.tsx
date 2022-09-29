@@ -32,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
         id, title, completed,
       }) => (
         <tr
+          key={id}
           data-cy="todo"
           className={classNames(
             { 'has-background-info-light': selectedTodoId === id },
@@ -72,9 +73,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  selectTodo(id);
-                }}
+                onClick={() => selectTodo(id)}
               >
                 <span className="icon">
                   <i className="far fa-eye" />

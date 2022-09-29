@@ -7,7 +7,7 @@ import { Loader } from '../Loader';
 type Props = {
   todos: Todo[],
   selectTodo: (todo: null) => void,
-  selectedTodoId: number | null,
+  selectedTodoId: number,
 };
 
 export const TodoModal: React.FC<Props> = ({
