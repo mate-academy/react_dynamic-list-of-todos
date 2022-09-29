@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo | null;
+  todo: Todo;
   setTodo: (obj: Todo | null) => void
 };
 
@@ -16,13 +16,14 @@ export const TodoModal: React.FC<Props> = ({
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (!todo) {
-      return;
-    }
-
     getUser(todo.userId)
       .then(setSelectedUser);
   }, [todo]);
+
+  const handleClick = () => {
+    setTodo(null);
+    setSelectedUser(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,15 +41,12 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${todo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setTodo(null);
-                setSelectedUser(null);
-              }}
+              onClick={handleClick}
+              aria-label="delete"
             />
           </header>
 

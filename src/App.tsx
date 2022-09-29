@@ -17,12 +17,15 @@ export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoaded] = useState(false);
 
+  const getTodosList = async () => {
+    const todosFromServer = await getTodos();
+
+    setIsLoaded(true);
+    setTodos(todosFromServer);
+  };
+
   useEffect(() => {
-    getTodos()
-      .then(result => {
-        setTodos(result);
-        setIsLoaded(true);
-      });
+    getTodosList();
   }, []);
 
   const includeCheck = (inp: string) => (
@@ -30,18 +33,17 @@ export const App: React.FC = () => {
   );
 
   const filterTodos = todos
-    .filter(todoItem => {
+    .filter(({ completed, title }) => {
       if (filterType === 'active') {
-        return !todoItem.completed;
+        return !completed && includeCheck(title);
       }
 
       if (filterType === 'completed') {
-        return todoItem.completed;
+        return completed && includeCheck(title);
       }
 
-      return todoItem;
-    })
-    .filter(todoItem => (includeCheck(todoItem.title)));
+      return includeCheck(title);
+    });
 
   return (
     <>
@@ -61,13 +63,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!isLoading
-                && <Loader />}
-
-              <TodoList
-                todos={filterTodos}
-                selectedTodo={todo}
-                setSelectTodo={setTodo}
-              />
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filterTodos}
+                    selectedTodo={todo}
+                    setSelectTodo={setTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
