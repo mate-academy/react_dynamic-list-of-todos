@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -28,7 +33,10 @@ export const App: FC = () => {
       });
   }, []);
 
-  const filtredTodos = todos.filter(todo => {
+  //
+  const filtredTodos = useMemo(() => (todos.filter(todo => {
+    // console.log ('filtred');
+
     switch (completeStatus) {
       case 'active':
         return !todo.completed;
@@ -37,11 +45,14 @@ export const App: FC = () => {
       default:
         return true;
     }
-  });
+  })), [todos, completeStatus]);
 
-  const visibleTodos = filtredTodos.filter(todo => {
-    return todo.title.toLowerCase().includes(query.toLowerCase());
-  });
+  //
+  const visibleTodos = useMemo(() => (
+    filtredTodos.filter(todo => {
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    })
+  ), [filtredTodos, query]);
 
   return (
     <>
