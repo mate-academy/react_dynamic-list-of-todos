@@ -87,7 +87,6 @@ export const App: FC = () => {
           todoId={todoId}
           selectTodo={setTodoId}
         />
-
       )}
     </>
   );
