@@ -10,8 +10,6 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-let todosFromServer: Todo[] = [];
-
 function getFilteredTodos(
   todos: Todo[],
   searchValue: string,
@@ -35,7 +33,8 @@ function getFilteredTodos(
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todoListLoaded, setTodolistLoaded] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [selectValue, setSelectValue] = useState('all');
@@ -54,17 +53,16 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setTodos(getFilteredTodos(todosFromServer, searchValue, selectValue));
-  }, [searchValue, selectValue]);
+    getTodos()
+      .then(todos => {
+        setTodosFromServer(todos);
+        setTodolistLoaded(true);
+      });
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      todosFromServer = await getTodos();
-
-      setTodos(getFilteredTodos(todosFromServer, searchValue, selectValue));
-      setTodolistLoaded(true);
-    })();
-  }, []);
+    setVisibleTodos(getFilteredTodos(todosFromServer, searchValue, selectValue));
+  }, [searchValue, selectValue, todosFromServer]);
 
   return (
     <>
@@ -87,7 +85,7 @@ export const App: React.FC = () => {
               {todoListLoaded
                 ? (
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodos}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
