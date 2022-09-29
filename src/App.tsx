@@ -33,10 +33,7 @@ export const App: FC = () => {
       });
   }, []);
 
-  //
   const filtredTodos = useMemo(() => (todos.filter(todo => {
-    // console.log ('filtred');
-
     switch (completeStatus) {
       case 'active':
         return !todo.completed;
@@ -47,7 +44,6 @@ export const App: FC = () => {
     }
   })), [todos, completeStatus]);
 
-  //
   const visibleTodos = useMemo(() => (
     filtredTodos.filter(todo => {
       return todo.title.toLowerCase().includes(query.toLowerCase());
