@@ -22,6 +22,10 @@ export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
     });
   }, [todo]);
 
+  const resetTodo = () => {
+    setTodo(null);
+  };
+
   return (
     <>
       <div className="modal is-active" data-cy="modal">
@@ -39,14 +43,12 @@ export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
                 {todo?.id}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
+                aria-label="modal-close"
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => {
-                  setTodo(null);
-                }}
+                onClick={resetTodo}
               />
             </header>
 

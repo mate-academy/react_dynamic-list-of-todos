@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { GroupBy } from '../../types/GroupBy';
 
 type Props = {
   filterTodos: (query: string, groupBy: string) => void;
@@ -40,9 +41,9 @@ export const TodoFilter: React.FC<Props> = ({ filterTodos }) => {
             onChange={handleChange}
             value={groupBy}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={GroupBy.All}>All</option>
+            <option value={GroupBy.Active}>Active</option>
+            <option value={GroupBy.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -62,8 +63,8 @@ export const TodoFilter: React.FC<Props> = ({ filterTodos }) => {
 
         {query.trim().length > 0 ? (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="query-delete"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

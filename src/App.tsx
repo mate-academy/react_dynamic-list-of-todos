@@ -9,12 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-enum GroupBy {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { GroupBy } from './types/GroupBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -35,12 +30,11 @@ export const App: React.FC = () => {
     setVisibleTodos(
       todos.filter(todo => {
         switch (groupBy) {
-          case GroupBy.All:
-            return true;
           case GroupBy.Active:
-            return todo.completed === false;
+            return !todo.completed;
           case GroupBy.Completed:
-            return todo.completed === true;
+            return todo.completed;
+
           default:
             return true;
         }
@@ -48,10 +42,6 @@ export const App: React.FC = () => {
         todo.title.toLowerCase().includes(query.toLocaleLowerCase())
       )),
     );
-  };
-
-  const setTodo = (todo: Todo | null) => {
-    setSelectedTodo(todo);
   };
 
   return (
@@ -69,7 +59,7 @@ export const App: React.FC = () => {
               {!isLoading ? (
                 <TodoList
                   todos={visibleTodos}
-                  setTodo={setTodo}
+                  setTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
               ) : (
@@ -81,7 +71,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal todo={selectedTodo} setTodo={setTodo} />}
+      {selectedTodo && <TodoModal todo={selectedTodo} setTodo={setSelectedTodo} />}
     </>
   );
 };
