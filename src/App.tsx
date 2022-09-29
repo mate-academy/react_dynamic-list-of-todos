@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,36 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterBy, setFilterBy] = useState<string>('All');
+  const [query, setQuery] = useState<string>('');
+  // const [loader, setLoader] = useState<boolean>(true);
+  const [todoId, setTodoId] = useState<number>(0);
+
+  useEffect(() => {
+    getTodos()
+      .then(response => {
+        setTodos(response);
+      });
+  }, []);
+
+  const visibleTodos = todos.filter(todo => {
+    switch (filterBy) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return todo;
+    }
+  }).filter(todo => {
+    return todo.title.toLowerCase().includes(query.toLowerCase());
+  });
+
   return (
     <>
       <div className="section">
@@ -17,18 +45,38 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                todos.length < 1 ? (
+                  <Loader />
+                ) : (
+                  <TodoList
+                    todos={visibleTodos}
+                    todoId={todoId}
+                    setTodoId={setTodoId}
+                  />
+                )
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todoId && (
+        <TodoModal
+          todos={visibleTodos}
+          todoId={todoId}
+          setTodoId={(todo) => setTodoId(todo)}
+        />
+      )}
     </>
   );
 };
