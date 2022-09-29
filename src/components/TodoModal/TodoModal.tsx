@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -19,12 +19,15 @@ export const TodoModal: React.FC<Props> = ({
 
   const foundTodo = todos.find(todo => todo.id === selectedTodoId);
 
-  useEffect(() => {
+  const fetchData = async () => {
     if (foundTodo) {
-      getUser(foundTodo.userId)
-        .then(response => setUser(response));
+      const data = await (getUser(foundTodo.userId));
+
+      setUser(data);
     }
-  }, []);
+  };
+
+  fetchData();
 
   const handleSelect = () => {
     selectTodo(0);

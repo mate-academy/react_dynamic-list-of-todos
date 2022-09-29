@@ -15,37 +15,35 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectType, setSelectType] = useState('All');
   const [input, setInput] = useState('');
-  const [todoId, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTodos()
-        .then(response => {
-          setTodos(response);
-          setIsLoading(false);
-        });
+      const data = await getTodos();
 
-      return data;
+      setTodos(data);
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
 
+  const checkContainsQueryInTitle = (todo: Todo) => (
+    todo.title.toLowerCase().includes(input.toLowerCase())
+  );
+
   const visibleTodos = todos
     .filter(todo => {
       switch (selectType) {
         case 'active':
-          return !todo.completed;
+          return !todo.completed && checkContainsQueryInTitle(todo);
 
         case 'completed':
-          return todo.completed;
+          return todo.completed && checkContainsQueryInTitle(todo);
 
         default:
-          return true;
+          return checkContainsQueryInTitle(todo);
       }
-    })
-    .filter(todo => {
-      return todo.title.toLowerCase().includes(input.toLowerCase());
     });
 
   return (
