@@ -18,29 +18,29 @@ export const App: React.FC = () => {
   const [todoId, setTodoId] = useState(0);
 
   useEffect(() => {
-    setIsLoading(true);
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+        setIsLoading(false);
       });
   }, []);
 
   const filterBy = todos.filter((todo) => {
     switch (selectStatus) {
       case 'active':
-        return todo.completed === false;
+        return !todo.completed;
 
       case 'completed':
-        return todo.completed === true;
+        return todo.completed;
 
       default:
         return true;
     }
   });
 
-  filterBy.filter(({ title }) => (
-    title.toLocaleLowerCase().includes(queryFilter.toLocaleLowerCase())
-  ));
+  const visibleTodos = filterBy.filter(todoItem => {
+    return todoItem.title.toLocaleLowerCase().includes(queryFilter.toLocaleLowerCase());
+  });
 
   return (
     <>
@@ -60,15 +60,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={filterBy}
-                    selectedTodoId={todoId}
-                    selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
-                  />
-                )}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={todoId}
+                  selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
       {todoId && (
         <TodoModal
           todoId={todoId}
-          todos={filterBy}
+          todos={visibleTodos}
           selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
         />
       )}
