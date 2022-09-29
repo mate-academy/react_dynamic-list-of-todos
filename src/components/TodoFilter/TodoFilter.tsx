@@ -51,7 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query.length > 0 && (
+          {query && (
             <button
               data-cy="clearSearchButton"
               type="button"
