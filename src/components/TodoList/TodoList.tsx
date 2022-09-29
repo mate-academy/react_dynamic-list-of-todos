@@ -4,14 +4,20 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   visibelTodos:Todo[];
-  handleActiveTodo: (todo:Todo) => void;
+  setActiveTodo: (todo:Todo) => void;
+  activeTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
   visibelTodos,
-
-  handleActiveTodo,
+  activeTodo,
+  setActiveTodo,
 }) => {
+  const handleActiveTodo = (todo:Todo) => (
+    activeTodo !== todo
+    && setActiveTodo(todo)
+  );
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -57,7 +63,11 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleActiveTodo(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames({
+                    'far fa-eye-slash': (!!activeTodo),
+                    'far fa-eye': (activeTodo === null),
+                  })}
+                  />
                 </span>
               </button>
             </td>

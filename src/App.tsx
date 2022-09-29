@@ -47,10 +47,7 @@ export const App: React.FC = () => {
   const [sortFilter, setSortFilter] = useState('all');
   const [sortText, setSortText] = useState('');
 
-  const handleActiveTodo = (todo:Todo) => (
-    activeTodo !== todo
-    && setActiveTodo(todo)
-  );
+
 
   useEffect(() => {
     getTodos()
@@ -94,7 +91,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     visibelTodos={visibelTodos}
-                    handleActiveTodo={handleActiveTodo}
+                    activeTodo={activeTodo}
+                    setActiveTodo={setActiveTodo}
                   />
                 )
                 : (<Loader />)}
