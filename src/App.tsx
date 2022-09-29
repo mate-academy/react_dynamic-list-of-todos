@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { getTodos } from './api';
+
+import { Todo } from './types/Todo';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -9,6 +13,36 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoId, setTodoId] = useState<number | null>(null);
+  const [status, setStatus] = useState('');
+  const [input, setInput] = useState('');
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setTodos(await getTodos());
+    };
+
+    fetchTodos();
+  }, []);
+
+  const compareInput = (title: string, input: string) => title.includes(input.toLowerCase());
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(({ completed, title }) => {
+      switch (status) {
+        case 'active':
+          return !completed && compareInput(title, input);
+
+        case 'completed':
+          return completed && compareInput(title, input);
+
+        default:
+          return compareInput(title, input);
+      }
+    });
+  }, [todos, status, input]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +51,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                setStatus={setStatus}
+                input={input}
+                setInput={setInput}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!todos.length ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={todoId}
+                  selectTodo={setTodoId}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todoId
+        && (
+          <TodoModal
+            todos={visibleTodos}
+            selectedTodoId={todoId}
+            selectTodo={setTodoId}
+          />
+        )}
     </>
   );
 };
