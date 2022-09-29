@@ -11,6 +11,10 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/Filter';
 
+export function checkQueryInTitle(title: string, query: string) {
+  return title.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+}
+
 export function getFilteredTodo(
   todos: Todo[],
   filterType: FilterType,
@@ -19,17 +23,15 @@ export function getFilteredTodo(
   return todos.filter((todo) => {
     switch (filterType) {
       case 'active':
-        return !todo.completed;
+        return !todo.completed && checkQueryInTitle(todo.title, query);
 
       case 'completed':
-        return todo.completed;
+        return todo.completed && checkQueryInTitle(todo.title, query);
 
       default:
-        return todo;
+        return todo && checkQueryInTitle(todo.title, query);
     }
-  }).filter(({ title }) => (
-    title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-  ));
+  });
 }
 
 export const App: React.FC = () => {
