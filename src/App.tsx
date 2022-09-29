@@ -26,15 +26,14 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos.filter(todoItem => {
-    if (filter === 'completed') {
-      return todoItem.completed;
+    switch (filter) {
+      case 'active':
+        return !todoItem.completed;
+      case 'completed':
+        return todoItem.completed;
+      default:
+        return true;
     }
-
-    if (filter === 'active') {
-      return !todoItem.completed;
-    }
-
-    return true;
   });
 
   const visibleTodos = filteredTodos.filter(todoItem => {
