@@ -27,21 +27,23 @@ export const TodoFilter: React.FC<Props> = ({
     setSearchText(event.target.value);
   };
 
+  const isMatchSearchText = (title: string) => {
+    return title.toLowerCase().includes(searchText.toLowerCase());
+  };
+
   useEffect(() => {
-    setVisibleTodos(todos.filter(({ completed }) => {
+    setVisibleTodos(todos.filter(({ completed, title }) => {
       switch (filterBy) {
         case 'active':
-          return !completed;
+          return !completed && isMatchSearchText(title);
 
         case 'completed':
-          return completed;
+          return completed && isMatchSearchText(title);
 
         default:
-          return true;
+          return isMatchSearchText(title);
       }
-    }).filter(({ title }) => (
-      title.toLowerCase().includes(searchText.toLowerCase())
-    )));
+    }));
   }, [filterBy, searchText]);
 
   return (
