@@ -1,22 +1,19 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-// import { getUser } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
-  const [todoId, setTodoId] = useState(0);
   const [todo, setTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoaded] = useState(false);
 
@@ -28,23 +25,23 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const includeCheck = (str: string) => (
-    str.toLowerCase().includes(query.toLowerCase())
+  const includeCheck = (inp: string) => (
+    inp.toLowerCase().includes(query.toLowerCase())
   );
 
   const filterTodos = todos
-    .filter((todo) => {
+    .filter(todoItem => {
       if (filterType === 'active') {
-        return !todo.completed;
+        return !todoItem.completed;
       }
 
       if (filterType === 'completed') {
-        return todo.completed;
+        return todoItem.completed;
       }
 
-      return todo;
+      return todoItem;
     })
-    .filter((todo) => includeCheck(todo.title));
+    .filter(todoItem => (includeCheck(todoItem.title)));
 
   return (
     <>
@@ -64,12 +61,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!isLoading
-              && <Loader />}
+                && <Loader />}
 
               <TodoList
                 todos={filterTodos}
-                selectedTodoId={todoId}
-                selectTodo={(todoId) => setTodoId(todoId)}
+                selectedTodo={todo}
                 setSelectTodo={setTodo}
               />
             </div>
