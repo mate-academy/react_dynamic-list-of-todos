@@ -7,7 +7,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { Todo } from './types/Todo';
+import { Todo, SortType } from './types/Todo';
 
 export function checkQuery(query:string, content:string) {
   return (content.toLowerCase())
@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState(SortType.ALL);
   const [query, setQuery] = useState('');
 
   const loadTodos = async () => {
@@ -33,20 +33,17 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos
-    .filter(({ completed }) => {
+    .filter(({ completed, title }) => {
       switch (filterBy) {
-        case 'active':
-          return !completed;
+        case SortType.ACTIVE:
+          return !completed && checkQuery(query, title);
 
-        case 'completed':
-          return completed;
+        case SortType.COMPLETED:
+          return completed && checkQuery(query, title);
 
         default:
-          return true;
+          return checkQuery(query, title);
       }
-    })
-    .filter(({ title }) => {
-      return checkQuery(query, title);
     });
 
   return (
@@ -73,9 +70,7 @@ export const App: React.FC = () => {
                     <TodoList
                       todos={filteredTodos}
                       selectedTodoId={todoId}
-                      selectTodo={(todosId) => {
-                        setTodoId(todosId);
-                      }}
+                      selectTodo={setTodoId}
                     />
                   )
               }
@@ -84,7 +79,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0 && (
+      {!!todoId && (
         <TodoModal
           todoId={todoId}
           todos={filteredTodos}

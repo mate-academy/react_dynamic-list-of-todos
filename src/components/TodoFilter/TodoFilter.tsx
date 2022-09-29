@@ -1,6 +1,8 @@
+import { SortType } from '../../types/Todo';
+
 type Props = {
   filterBy: string,
-  setFilterBy: (value: string) => void;
+  setFilterBy: (value: SortType) => void;
   query: string;
   setQuery: (value: string) => void;
 };
@@ -12,7 +14,9 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
 }) => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterBy(event.target.value);
+    const newSortType = event.target.value as SortType;
+
+    setFilterBy(newSortType);
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,9 +34,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterBy}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortType.ALL}>All</option>
+            <option value={SortType.ACTIVE}>Active</option>
+            <option value={SortType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -56,8 +60,8 @@ export const TodoFilter: React.FC<Props> = ({
         >
           {query && (
             <>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
+                aria-label="reset"
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
