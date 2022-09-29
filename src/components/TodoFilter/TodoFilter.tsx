@@ -13,17 +13,9 @@ export const TodoFilter: React.FC<Props> = ({
   query,
 }) => {
   const handlerChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === 'all') {
-      setFilterBy(FilterType.ALL);
-    }
+    const newSortType = event.target.value as FilterType;
 
-    if (event.target.value === 'active') {
-      setFilterBy(FilterType.ACTIVE);
-    }
-
-    if (event.target.value === 'completed') {
-      setFilterBy(FilterType.COMPLETED);
-    }
+    setFilterBy(newSortType);
   };
 
   const handlerChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => (

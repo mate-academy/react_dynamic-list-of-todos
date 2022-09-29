@@ -20,16 +20,16 @@ export function getFilteredTodo(
   filterType: FilterType,
   query: string,
 ) {
-  return todos.filter((todo) => {
+  return todos.filter(({title, completed}) => {
     switch (filterType) {
       case 'active':
-        return !todo.completed && checkQueryInTitle(todo.title, query);
+        return !completed && checkQueryInTitle(title, query);
 
       case 'completed':
-        return todo.completed && checkQueryInTitle(todo.title, query);
+        return completed && checkQueryInTitle(title, query);
 
       default:
-        return todo && checkQueryInTitle(todo.title, query);
+        return checkQueryInTitle(title, query);
     }
   });
 }
@@ -66,9 +66,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 setFilterBy={setFilterBy}
                 filterBy={filterBy}
-                setQuery={(queryFromInput) => {
-                  setQuery(queryFromInput);
-                }}
+                setQuery={setQuery}
                 query={query}
               />
             </div>
@@ -80,9 +78,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     selectedTodoIdId={selectedTodoId}
-                    setselectedTodoId={(id) => {
-                      setselectedTodoId(id);
-                    }}
+                    setselectedTodoId={setselectedTodoId}
                   />
                 )}
             </div>
@@ -95,9 +91,7 @@ export const App: React.FC = () => {
           <TodoModal
             todos={todos}
             selectedTodoId={selectedTodoId}
-            setselectedTodoId={(id) => {
-              setselectedTodoId(id);
-            }}
+            setselectedTodoId={setselectedTodoId}
           />
         )}
     </>
