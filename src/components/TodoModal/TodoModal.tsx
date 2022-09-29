@@ -27,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
           setUser(response);
         });
     }
-  }, [currentTodo]);
+  }, []);
 
   if (todoOpen === false) {
     return null;

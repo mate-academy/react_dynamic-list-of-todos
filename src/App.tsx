@@ -14,7 +14,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<string>('All');
   const [query, setQuery] = useState<string>('');
-  // const [loader, setLoader] = useState<boolean>(true);
   const [todoId, setTodoId] = useState<number>(0);
 
   useEffect(() => {
