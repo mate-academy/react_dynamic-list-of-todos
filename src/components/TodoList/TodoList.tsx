@@ -27,7 +27,7 @@ export const TodoList: React.FC<Props> = ({
 
       case 'all':
       default:
-        return todos;
+        return true;
     }
   });
 

@@ -63,7 +63,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {todoId !== 0 && (
+      {todoId && (
         <TodoModal
           selectedTodoId={todoId}
           todos={todos}

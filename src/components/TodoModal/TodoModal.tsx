@@ -18,21 +18,16 @@ export const TodoModal: React.FC<Props> = ({
     todos.find((todo) => todo.id === selectedTodoId),
   );
   const [user, setUser] = useState<User>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [visible, setVisible] = useState('flex');
+  // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-
     getUser(someTodo?.userId || 0)
       .then((userFromList) => {
         setUser(userFromList);
-      })
-      .finally(() => setIsLoading(false));
+      });
   }, []);
 
   const handleWindowClose = () => {
-    setVisible('none');
     selectTodo(0);
   };
 
@@ -40,12 +35,10 @@ export const TodoModal: React.FC<Props> = ({
     <div
       className="modal is-active"
       data-cy="modal"
-      style={{ display: visible }}
-
     >
       <div className="modal-background" />
 
-      {isLoading ? (
+      {!user ? (
         <Loader />
       ) : (
         <div
