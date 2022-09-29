@@ -45,6 +45,10 @@ export const App: React.FC = () => {
     todo.title.toLowerCase().includes(query.toLowerCase())
   ));
 
+  const selectTodo = (todo: number) => {
+    setTodoId(todo);
+  };
+
   return (
     <>
       <div className="section">
@@ -68,7 +72,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     selectedTodoId={todoId}
-                    selectTodo={(todo) => setTodoId(todo)}
+                    selectTodo={selectTodo}
                   />
                 )}
             </div>
@@ -80,7 +84,7 @@ export const App: React.FC = () => {
         <TodoModal
           todos={todos}
           selectedTodoId={todoId}
-          selectTodo={(todo) => setTodoId(todo)}
+          selectTodo={selectTodo}
         />
       )}
     </>

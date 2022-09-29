@@ -13,6 +13,14 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
+  const resetInput = () => {
+    setQuery('');
+  };
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <form
       className="field has-addons"
@@ -40,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={handleChangeInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={resetInput}
             />
           </span>
         )}
