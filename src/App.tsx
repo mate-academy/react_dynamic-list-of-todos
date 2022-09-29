@@ -15,7 +15,6 @@ import { TodoFilterValues } from './types/filterEnum';
 export const App: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [choosedUserId, setChoosedUserId] = useState<number | null>(null);
   const [choosedTodo, setChoosedTodo] = useState<Todo | null>(null);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [
@@ -33,14 +32,6 @@ export const App: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, []);
-
-  const chooseUserId = (id: number) => {
-    setChoosedUserId(id);
-  };
-
-  const clearUserId = () => {
-    setChoosedUserId(null);
-  };
 
   const chooseTodo = (todo: Todo) => {
     setChoosedTodo(todo);
@@ -105,7 +96,6 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     visibleTodos={visibleTodos}
-                    chooseUserId={chooseUserId}
                     chooseTodo={chooseTodo}
                     choosedTodoId={choosedTodo?.id}
                   />
@@ -115,11 +105,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {choosedUserId
+      {choosedTodo
       && (
         <TodoModal
-          userId={choosedUserId}
-          clearUserId={clearUserId}
           choosedTodo={choosedTodo}
           clearChoosedTodo={clearChoosedTodo}
         />

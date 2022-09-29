@@ -5,14 +5,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   visibleTodos: Todo[];
-  chooseUserId: (id: number) => void;
   chooseTodo: (todo: Todo) => void;
   choosedTodoId: number | undefined;
 };
 
 export const TodoList: React.FC<Props> = ({
   visibleTodos,
-  chooseUserId,
   chooseTodo,
   choosedTodoId,
 }) => {
@@ -37,7 +35,6 @@ export const TodoList: React.FC<Props> = ({
             id,
             title,
             completed,
-            userId,
           } = todo;
 
           return (
@@ -68,7 +65,6 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    chooseUserId(userId);
                     chooseTodo(todo);
                   }}
                 >

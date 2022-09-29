@@ -6,22 +6,18 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  userId: number;
-  clearUserId: () => void;
   choosedTodo: Todo | null;
   clearChoosedTodo: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
-  clearUserId,
   choosedTodo,
   clearChoosedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(Number(userId))
+    getUser(Number(choosedTodo?.userId))
       .then((userFromServer) => setUser(userFromServer));
   }, []);
 
@@ -49,7 +45,6 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 clearChoosedTodo();
-                clearUserId();
               }}
             />
           </header>
