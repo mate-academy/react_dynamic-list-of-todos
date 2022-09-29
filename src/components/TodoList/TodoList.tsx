@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  setSelectedTodo: (todo: Todo) => void;
-  selectedTodo: Todo | null;
+  onSetSelectedTodo: (todo: Todo) => void;
+  selectedTodoId: number | null;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { todos, setSelectedTodo, selectedTodo } = props;
+  const { todos, onSetSelectedTodo, selectedTodoId } = props;
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -31,8 +31,8 @@ export const TodoList: React.FC<Props> = (props) => {
           const { id, title, completed } = todo;
           let isSelected = false;
 
-          if (selectedTodo) {
-            isSelected = selectedTodo.id === id;
+          if (selectedTodoId) {
+            isSelected = selectedTodoId === id;
           }
 
           return (
@@ -67,7 +67,7 @@ export const TodoList: React.FC<Props> = (props) => {
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectedTodo(todo)}
+                  onClick={() => onSetSelectedTodo(todo)}
                 >
                   <span className="icon">
                     <i className={classNames(

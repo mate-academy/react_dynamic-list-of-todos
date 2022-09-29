@@ -19,17 +19,29 @@ function getFilteredTodos(
 
   switch (selectValue) {
     case 'completed':
-      newTodos = newTodos.filter(todo => todo.completed);
+      newTodos = newTodos.filter(todo => (
+        todo.completed
+        && todo.title.toLowerCase().includes(searchValue.toLowerCase())
+      ));
       break;
 
     case 'active':
-      newTodos = newTodos.filter(todo => !todo.completed);
+      newTodos = newTodos.filter(todo => (
+        !todo.completed
+        && todo.title.toLowerCase().includes(searchValue.toLowerCase())
+      ));
       break;
-    default:
+
+    case 'all':
+      newTodos = newTodos.filter(todo => (
+        todo.title.toLowerCase().includes(searchValue.toLowerCase())
+      ));
       break;
+
+    default: throw new Error('Error: Invalid selectValue');
   }
 
-  return newTodos.filter(todo => todo.title.toLowerCase().includes(searchValue.toLowerCase()));
+  return newTodos;
 }
 
 export const App: React.FC = () => {
@@ -44,7 +56,7 @@ export const App: React.FC = () => {
     setSearchValue(event.target.value);
   };
 
-  const clearSearchInput = () => {
+  const handleClearSearchInput = () => {
     setSearchValue('');
   };
 
@@ -77,7 +89,7 @@ export const App: React.FC = () => {
                 selectValue={selectValue}
                 onSearchInput={handleSearchInput}
                 onSelectInput={handleSelectInput}
-                clearSearch={clearSearchInput}
+                onClearSearch={handleClearSearchInput}
               />
             </div>
 
@@ -86,8 +98,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
+                    selectedTodoId={selectedTodo ? selectedTodo.id : null}
+                    onSetSelectedTodo={setSelectedTodo}
                   />
                 )
                 : <Loader />}
@@ -96,7 +108,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {!!selectedTodo
+      {selectedTodo
       && <TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
     </>
   );

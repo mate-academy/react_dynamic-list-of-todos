@@ -5,7 +5,7 @@ type Props = {
   selectValue: string;
   onSearchInput: (event: ChangeEvent<HTMLInputElement>) => void;
   onSelectInput: (event: ChangeEvent<HTMLSelectElement>) => void;
-  clearSearch: () => void;
+  onClearSearch: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
@@ -14,7 +14,7 @@ export const TodoFilter: React.FC<Props> = (props) => {
     selectValue,
     onSearchInput,
     onSelectInput,
-    clearSearch,
+    onClearSearch: clearSearch,
   } = props;
 
   return (
