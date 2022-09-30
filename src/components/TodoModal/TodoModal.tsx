@@ -9,10 +9,11 @@ type Props = {
   setSelectedTodo: (clearTodo: null) => void;
 };
 
-export const TodoModal: React.FC<Props> = (props) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   const [user, setUser] = useState<User | null>(null);
-
-  const { selectedTodo, setSelectedTodo } = props;
 
   const {
     id,
