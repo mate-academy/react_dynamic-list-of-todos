@@ -1,47 +1,93 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { getTodos, getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  userId: number | null;
+  selectedTodoId: number | null;
+  selectedTodo: (todo: number | null) => void,
+  selectedUserId: (id: number | null) => void,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  userId,
+  selectedTodoId,
+  selectedTodo,
+  selectedUserId,
+}) => {
+  const [user, setUser] = useState<User>();
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const loadedData = async () => {
+      const [userFromServer, todosFromServer] = await Promise.all([
+        getUser(userId), getTodos()]);
+
+      setUser(userFromServer);
+      setTodos(todosFromServer);
+    };
+
+    loadedData();
+  }, [selectedTodoId]);
+
+  const selectedTodos = todos.filter(({ id }) => id === selectedTodoId);
+
+  const handleModalClose = () => {
+    selectedTodo(null);
+    selectedUserId(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+          {selectedTodos.map(({ id, title, completed }) => (
+            <>
+              <header className="modal-card-head">
+                <div
+                  className="modal-card-title has-text-weight-medium"
+                  data-cy="modal-header"
+                  key={id}
+                >
+                  {`Todo #${id}`}
+                </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
-          </header>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <button
+                  type="button"
+                  className="delete"
+                  data-cy="modal-close"
+                  onClick={handleModalClose}
+                />
+              </header>
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+                <p className="block" data-cy="modal-user">
+                  {completed
+                    ? (<strong className="has-text-success">Done</strong>)
+                    : (<strong className="has-text-danger">Planned</strong>)}
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+                  {' by '}
 
-              {' by '}
+                  <a href="mailto:Sincere@april.biz">
+                    {user.name}
+                  </a>
+                </p>
+              </div>
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
-          </div>
+            </>
+
+          ))}
+
         </div>
       )}
     </div>
