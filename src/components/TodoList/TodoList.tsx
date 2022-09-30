@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedId: number;
+  selectedId?: number;
   onSelectTodo: (id: number) => void
 };
 

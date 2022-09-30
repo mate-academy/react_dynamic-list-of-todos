@@ -16,15 +16,15 @@ function isIncludesQuery(todoTitle: string, query: string) {
 }
 
 export const App: React.FC = () => {
-  const [initialTodos, setInitialTodos] = useState<Todo[] | null>(null);
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectStatus, setSelectStatus] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
 
   const handleSelectTodo = (todoId: number | null) => (
     todoId
-      ? (setSelectedTodo(todos?.find(todo => todo.id === todoId) || null))
+      ? (setSelectedTodo(todos.find(todo => todo.id === todoId) || null))
       : setSelectedTodo(null)
   );
 
@@ -37,36 +37,36 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setInitialTodos(todosFromServer);
-      });
+    const gettodosFromServer = async () => {
+      const data = await getTodos();
+
+      setInitialTodos(data);
+    };
+
+    gettodosFromServer();
   }, []);
 
   useEffect(() => {
     switch (selectStatus) {
       case 'all':
         setTodos(
-          initialTodos?.filter(({ title }) => isIncludesQuery(title, query))
-          || null,
+          initialTodos.filter(({ title }) => isIncludesQuery(title, query)),
         );
         break;
 
       case 'active':
         setTodos(
-          initialTodos?.filter(({ title, completed }) => (
-            completed === false && isIncludesQuery(title, query)
-          ))
-          || null,
+          initialTodos.filter(({ title, completed }) => (
+            !completed && isIncludesQuery(title, query)
+          )),
         );
         break;
 
       case 'completed':
         setTodos(
-          initialTodos?.filter(({ title, completed }) => (
-            completed === true && isIncludesQuery(title, query)
-          ))
-          || null,
+          initialTodos.filter(({ title, completed }) => (
+            completed && isIncludesQuery(title, query)
+          )),
         );
         break;
 
@@ -91,12 +91,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos ? (
+              {!todos.length && !query ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={todos}
-                  selectedId={selectedTodo?.id || 0}
+                  selectedId={selectedTodo?.id}
                   onSelectTodo={handleSelectTodo}
                 />
               )}
