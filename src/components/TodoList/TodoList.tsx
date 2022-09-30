@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onSetSelectedTodo: (todo: Todo) => void;
-  selectedTodoId: number | null;
+  selectedTodoId?: number;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
@@ -29,11 +29,7 @@ export const TodoList: React.FC<Props> = (props) => {
       <tbody>
         {todos.map((todo) => {
           const { id, title, completed } = todo;
-          let isSelected = false;
-
-          if (selectedTodoId) {
-            isSelected = selectedTodoId === id;
-          }
+          const isSelected = selectedTodoId === id;
 
           return (
             <tr
@@ -55,9 +51,10 @@ export const TodoList: React.FC<Props> = (props) => {
                 : <td className="is-vcentered" />}
 
               <td className="is-vcentered is-expanded">
-                <p className={
-                  completed ? 'has-text-success' : 'has-text-danger'
-                }
+                <p className={classNames(
+                  { 'has-text-success': completed },
+                  { 'has-text-danger': !completed },
+                )}
                 >
                   {title}
                 </p>

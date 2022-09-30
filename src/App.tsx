@@ -9,40 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-function getFilteredTodos(
-  todos: Todo[],
-  searchValue: string,
-  selectValue: string,
-): Todo[] {
-  let newTodos = [...todos];
-
-  switch (selectValue) {
-    case 'completed':
-      newTodos = newTodos.filter(todo => (
-        todo.completed
-        && todo.title.toLowerCase().includes(searchValue.toLowerCase())
-      ));
-      break;
-
-    case 'active':
-      newTodos = newTodos.filter(todo => (
-        !todo.completed
-        && todo.title.toLowerCase().includes(searchValue.toLowerCase())
-      ));
-      break;
-
-    case 'all':
-      newTodos = newTodos.filter(todo => (
-        todo.title.toLowerCase().includes(searchValue.toLowerCase())
-      ));
-      break;
-
-    default: throw new Error('Error: Invalid selectValue');
-  }
-
-  return newTodos;
-}
+import { getFilteredTodos } from './components/helpers/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -65,11 +32,10 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos()
-      .then(todos => {
-        setTodosFromServer(todos);
-        setTodolistLoaded(true);
-      });
+    (async () => {
+      setTodosFromServer(await getTodos());
+      setTodolistLoaded(true);
+    })();
   }, []);
 
   useEffect(() => {
@@ -98,7 +64,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodoId={selectedTodo ? selectedTodo.id : null}
+                    selectedTodoId={selectedTodo?.id}
                     onSetSelectedTodo={setSelectedTodo}
                   />
                 )
