@@ -1,10 +1,11 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId: number;
-  selectTodo: (value: number) => number | void;
+  selectedTodoId: number | null;
+  selectTodo: (value: number | null) => number | void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -43,7 +44,11 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={completed ? 'has-text-success' : 'has-text-danger'}
+                  className={classNames(
+                    'has-text-success', {
+                      'has-text-danger': !completed,
+                    },
+                  )}
                 >
                   {title}
                 </p>
@@ -53,11 +58,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => {
-                    return selectedTodoId !== id
-                      ? selectTodo(id)
-                      : selectTodo(0);
-                  }}
+                  onClick={() => selectTodo(id || null)}
                 >
                   <span className="icon">
                     {selectedTodoId === id ? (

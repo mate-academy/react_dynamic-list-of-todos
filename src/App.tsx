@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,33 +12,38 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoId, setTodoId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [todoId, setTodoId] = useState(0);
   const [filter, setFilter] = useState('all');
   const [responseFilter, setResponseFilter] = useState('');
 
+  const addData = async () => {
+    const get = await getTodos();
+
+    setTodos(get);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    getTodos()
-      .then((response) => {
-        setTodos(response);
-        setLoading(false);
-      });
+    addData();
   }, []);
 
-  const filteredTodos = todos.filter(todoItem => {
+  const caseSensitive = (title: string, input: string) => {
+    return title.toLowerCase().includes(input.toLowerCase());
+  };
+
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case 'active':
-        return !todoItem.completed;
+        return (todos.filter(todo => !todo.completed)
+          .filter(({ title }) => caseSensitive(title, responseFilter)));
       case 'completed':
-        return todoItem.completed;
+        return (todos.filter(todo => todo.completed)
+          .filter(({ title }) => caseSensitive(title, responseFilter)));
       default:
-        return true;
+        return (todos.filter(({ title }) => caseSensitive(title, responseFilter)));
     }
-  });
-
-  const visibleTodos = filteredTodos.filter(todoItem => {
-    return todoItem.title.toLowerCase().includes(responseFilter.toLowerCase());
-  });
+  }, [filter, todos, responseFilter]);
 
   return (
     <>
@@ -62,9 +67,9 @@ export const App: React.FC = () => {
                   <Loader />
                 ) : (
                   <TodoList
-                    todos={visibleTodos}
+                    todos={filteredTodos}
                     selectedTodoId={todoId}
-                    selectTodo={(todo) => setTodoId(todo)}
+                    selectTodo={setTodoId}
                   />
                 )
               }
@@ -74,9 +79,9 @@ export const App: React.FC = () => {
       </div>
       {todoId && (
         <TodoModal
-          userId={todoId}
-          selectedTodoId={visibleTodos}
-          selectedTodo={(todo) => setTodoId(todo)}
+          todoId={todoId}
+          selectedTodos={todos}
+          selectedUser={setTodoId}
         />
       )}
     </>

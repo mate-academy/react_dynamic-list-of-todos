@@ -5,35 +5,34 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  userId: number;
-  selectedTodoId: Todo[];
-  selectedTodo: (value: number) => void,
+  todoId: number;
+  selectedTodos: Todo[];
+  selectedUser: (value: number | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
-  selectedTodoId,
-  selectedTodo,
+  todoId,
+  selectedTodos,
+  selectedUser,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [todoCard, setTodoCard] = useState(false);
 
-  const relevantTodo = selectedTodoId.find(todo => todo.id === userId);
+  const relevantTodo = selectedTodos.find(todo => todo.id === todoId);
+
+  const addData = async () => {
+    if (relevantTodo) {
+      const get = await getUser(relevantTodo.userId);
+
+      setUser(get);
+    }
+  };
 
   useEffect(() => {
-    if (relevantTodo) {
-      getUser(relevantTodo.userId)
-        .then((response) => setUser(response));
-    }
+    addData();
   }, []);
 
-  if (todoCard) {
-    return null;
-  }
-
   const handleReset = (): void => {
-    setTodoCard(false);
-    selectedTodo(0);
+    selectedUser(null);
   };
 
   return (
@@ -49,7 +48,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${userId}`}
+              {`Todo #${todoId}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
