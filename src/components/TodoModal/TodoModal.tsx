@@ -17,7 +17,6 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const curentTodo = todos.find(todo => todo.id === selectedUserId);
   const [user, setUsers] = useState<User | null>(null);
-  const [cardOpen, setCardClose] = useState(true);
 
   useEffect(() => {
     if (curentTodo) {
@@ -27,10 +26,6 @@ export const TodoModal: React.FC<Props> = ({
         });
     }
   }, []);
-
-  if (cardOpen === false) {
-    return null;
-  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -55,7 +50,6 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 selectUser(0);
-                setCardClose(false);
               }}
             />
           </header>
