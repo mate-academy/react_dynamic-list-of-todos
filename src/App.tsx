@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [todoId, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState<number | null>(null);
   const [status, setStatus] = useState('All');
 
   const [query, setQuery] = useState('');
@@ -21,10 +21,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getTodos()
-      .then((todoList) => {
-        setTodos(todoList);
-      })
+    const loadTodos = async () => {
+      const loadedTodos = await getTodos();
+
+      setTodos(loadedTodos);
+    };
+
+    loadTodos()
       .finally(() => {
         setIsLoading(false);
       });
@@ -63,7 +66,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {todoId && (
+      {!!todoId && (
         <TodoModal
           selectedTodoId={todoId}
           todos={todos}

@@ -4,8 +4,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectTodo: (id: number) => void;
-  selectedTodoId: number;
+  selectTodo: (id: number | null) => void;
+  selectedTodoId: number | null;
   selectedStatus: string;
   selectedQuery: string;
 };
@@ -13,21 +13,24 @@ type Props = {
 export const TodoList: React.FC<Props> = ({
   todos, selectTodo, selectedTodoId, selectedStatus, selectedQuery,
 }) => {
-  const searchedTodos = todos.filter(
-    (todo) => todo.title.toLowerCase().includes(selectedQuery.toLowerCase()),
-  );
+  const handleQueryInclude = (text: string, searchQuery: string) => {
+    return text.toLowerCase().includes(searchQuery.toLowerCase());
+  };
 
-  const filteredTodos = searchedTodos.filter((todo) => {
+  const filteredTodos = todos.filter(({ completed, title }) => {
     switch (selectedStatus) {
       case 'active':
-        return todo.completed === false;
+        return !completed
+        && handleQueryInclude(title, selectedQuery);
 
       case 'completed':
-        return todo.completed === true;
+        return completed === true
+        && handleQueryInclude(title, selectedQuery);
 
       case 'all':
       default:
-        return true;
+        return true
+        && handleQueryInclude(title, selectedQuery);
     }
   });
 
@@ -48,12 +51,12 @@ export const TodoList: React.FC<Props> = ({
         </thead>
 
         <tbody>
-          {filteredTodos.map((todo) => (
+          {filteredTodos.map(({ id, completed, title }) => (
             <>
-              <tr data-cy="todo" className="" key={todo.id}>
-                <td className="is-vcentered">{todo.id}</td>
+              <tr data-cy="todo" className="" key={id}>
+                <td className="is-vcentered">{id}</td>
                 <td className="is-vcentered">
-                  {todo.completed && (
+                  {completed && (
                     <span className="icon" data-cy="iconCompleted">
                       <i className="fas fa-check" />
                     </span>
@@ -62,20 +65,20 @@ export const TodoList: React.FC<Props> = ({
                 <td className="is-vcentered is-expanded">
                   <p className={classNames(
                     'has-text-success',
-                    { 'has-text-danger': !todo.completed },
+                    { 'has-text-danger': !completed },
                   )}
                   >
-                    {todo.title}
+                    {title}
                   </p>
                 </td>
                 <td className="has-text-right is-vcentered">
-                  {selectedTodoId === todo.id
+                  {selectedTodoId === id
                     ? (
                       <button
                         data-cy="selectButton"
                         className="button is-link"
                         type="button"
-                        onClick={() => selectTodo(0)}
+                        onClick={() => selectTodo(null)}
                       >
                         <span className="icon">
                           <i className="far fa-eye-slash" />
@@ -87,7 +90,7 @@ export const TodoList: React.FC<Props> = ({
                         data-cy="selectButton"
                         className="button"
                         type="button"
-                        onClick={() => selectTodo(todo.id)}
+                        onClick={() => selectTodo(id)}
                       >
                         <span className="icon">
                           <i className="far fa-eye" />

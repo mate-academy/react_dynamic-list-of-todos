@@ -8,7 +8,7 @@ import { Loader } from '../Loader';
 type Props = {
   selectedTodoId: number;
   todos: Todo[];
-  selectTodo: (id: number) => void;
+  selectTodo: (id: number | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -18,7 +18,6 @@ export const TodoModal: React.FC<Props> = ({
     todos.find((todo) => todo.id === selectedTodoId),
   );
   const [user, setUser] = useState<User>();
-  // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getUser(someTodo?.userId || 0)
@@ -28,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
   }, []);
 
   const handleWindowClose = () => {
-    selectTodo(0);
+    selectTodo(null);
   };
 
   return (
