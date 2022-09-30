@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[],
   setSelectedUserId: (value: number) => void,
-  selectedTodoId: number,
+  selectedTodoId: number | null,
   setSelectedTodoId: (value: number) => void,
   onReset: () => void,
 };
@@ -42,7 +42,6 @@ export const TodoList: React.FC<Props> = ({
         }) => (
           <tr
             data-cy="todo"
-            className=""
             key={id}
           >
             <td className="is-vcentered">

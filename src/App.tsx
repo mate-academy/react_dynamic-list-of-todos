@@ -14,15 +14,18 @@ export const App: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
   const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setLoading(false);
-        setTodos(todosFromServer);
-      });
+    const TodosFromServer = async () => {
+      const receivedTodos = await getTodos();
+
+      setTodos(receivedTodos);
+      setLoading(false);
+    };
+
+    TodosFromServer();
   }, []);
 
   const selectrdTodos = todos.filter((todo) => {
@@ -34,9 +37,7 @@ export const App: React.FC = () => {
       default:
         return todo;
     }
-  });
-
-  const filteredTodos = selectrdTodos.filter(({ title }) => (
+  }).filter(({ title }) => (
     title.toLowerCase().includes(query.toLowerCase())
   ));
 
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos}
+                    todos={selectrdTodos}
                     selectedTodoId={selectedTodoId}
                     setSelectedTodoId={setSelectedTodoId}
                     setSelectedUserId={setSelectedUserId}

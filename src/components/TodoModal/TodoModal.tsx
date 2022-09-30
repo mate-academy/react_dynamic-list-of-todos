@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   selectedTodoId: number,
-  selectedUserId: number,
+  selectedUserId: number | null,
   onReset: () => void,
   todos: Todo[],
 };
@@ -20,10 +20,13 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getUser(selectedUserId)
-      .then(userFromServer => {
-        setUser(userFromServer);
-      });
+    const userFromServer = async () => {
+      const receivedUser = await getUser(selectedUserId);
+
+      setUser(receivedUser);
+    };
+
+    userFromServer();
   }, []);
 
   const findTodo = todos.filter(({ id }) => selectedTodoId === id);
