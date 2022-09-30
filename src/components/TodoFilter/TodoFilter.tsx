@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 export const TodoFilter = () => (
   <form className="field has-addons">
     <p className="control">
@@ -22,7 +24,6 @@ export const TodoFilter = () => (
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           data-cy="clearSearchButton"
           type="button"
