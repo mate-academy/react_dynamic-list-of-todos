@@ -10,7 +10,11 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-function preperTodos(todos:Todo[], sortText: string, sortFilter:string) {
+function prepareTodos(
+  todos:Todo[],
+  sortText: string,
+  sortFilter:string,
+) {
   return todos.filter(todo => todo.title.toLowerCase().includes(sortText.toLowerCase()))
     .filter(todo => {
       switch (sortFilter) {
@@ -25,20 +29,6 @@ function preperTodos(todos:Todo[], sortText: string, sortFilter:string) {
       }
     });
 }
-// const visibelTodosText:Todo[] = todos.filter(todo => todo.title.toLowerCase().includes(sortText.toLowerCase()));
-
-//   const visibelTodos = visibelTodosText.filter(todo => {
-//     switch (sortFilter) {
-//       case 'Active':
-//         return !todo.completed;
-
-//       case 'Completed':
-//         return todo.completed;
-
-//       default:
-//         return true;
-//     }
-//   });
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -46,8 +36,6 @@ export const App: React.FC = () => {
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [sortFilter, setSortFilter] = useState('all');
   const [sortText, setSortText] = useState('');
-
-
 
   useEffect(() => {
     getTodos()
@@ -59,11 +47,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log(todos);
-
   const visibelTodos:Todo[] = useMemo(() => (
-    preperTodos(
+    prepareTodos(
       todos,
       sortText,
       sortFilter,
