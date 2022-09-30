@@ -4,9 +4,9 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo[],
-  selectedTodoId: number,
-  selectedTodo: (value: number) => void,
-  selectedUserId: (value: number) => void,
+  selectedTodoId: number | null,
+  selectedTodo: (value: number | null) => void,
+  selectedUserId: (value: number | null) => void,
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -36,7 +36,6 @@ export const TodoList: React.FC<Props> = ({
         }) => (
           <tr
             data-cy="todo"
-            className=""
             key={id}
           >
             <td className="is-vcentered">{id}</td>

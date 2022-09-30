@@ -5,10 +5,10 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 type Props = {
-  userId: number;
-  selectedTodoId: number;
-  selectedTodo: (todo: number) => void,
-  selectedUserId: (id: number) => void,
+  userId: number | null;
+  selectedTodoId: number | null;
+  selectedTodo: (todo: number | null) => void,
+  selectedUserId: (id: number | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -35,8 +35,8 @@ export const TodoModal: React.FC<Props> = ({
   const selectedTodos = todos.filter(({ id }) => id === selectedTodoId);
 
   const handleModalClose = () => {
-    selectedTodo(0);
-    selectedUserId(0);
+    selectedTodo(null);
+    selectedUserId(null);
   };
 
   return (
@@ -53,6 +53,7 @@ export const TodoModal: React.FC<Props> = ({
                 <div
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
+                  key={id}
                 >
                   {`Todo #${id}`}
                 </div>
@@ -71,7 +72,7 @@ export const TodoModal: React.FC<Props> = ({
                 </p>
 
                 <p className="block" data-cy="modal-user">
-                  {completed === true
+                  {completed
                     ? (<strong className="has-text-success">Done</strong>)
                     : (<strong className="has-text-danger">Planned</strong>)}
 

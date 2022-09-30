@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,48 +10,48 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-export function getFilteredTodo(
-  todos: Todo[],
-  filterTypeTodo: string,
-  query: string,
-) {
-  const filterTodoBy = todos.filter((todo) => {
-    switch (filterTypeTodo) {
-      case 'all':
-        return todo;
-
-      case 'completed':
-        return todo.completed === true;
-
-      case 'active':
-        return todo.completed === false;
-
-      default:
-        return 0;
-    }
-  });
-
-  return filterTodoBy.filter(({ title }) => (
-    title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-  ));
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [filteredBy, setFilteredBy] = useState('all');
   const [query, setQuery] = useState('');
 
-  useEffect(() => {
-    setIsLoading(true);
-    getTodos()
-      .then(todo => setTodos(todo))
-      .finally(() => setIsLoading(false));
-  }, []);
+  function toLowerCase(str: string, inputQuery: string): boolean {
+    return str
+      .toLowerCase()
+      .includes(inputQuery.toLowerCase());
+  }
 
-  const filteredTodos = getFilteredTodo(todos, filteredBy, query);
+  const visibleTodos = useMemo(() => {
+    switch (filteredBy) {
+      case 'all':
+        return (todos.filter(({ title }) => toLowerCase(title, query)));
+      case 'active':
+        return (todos.filter(todo => todo.completed === false)
+          .filter(({ title }) => toLowerCase(title, query)));
+      case 'completed':
+        return (todos.filter(todo => todo.completed === true)
+          .filter(({ title }) => toLowerCase(title, query)));
+      default:
+        return [];
+    }
+  }, [filteredBy, todos, query]);
+
+  useEffect(() => {
+    const downloadData = async () => {
+      const data = await getTodos()
+        .then(todo => {
+          setTodos(todo);
+          setIsLoading(false);
+        });
+
+      return data;
+    };
+
+    downloadData();
+  }, []);
 
   return (
     <>
@@ -63,9 +63,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setFilteredBy={setFilteredBy}
-                setQuery={(queryInput) => {
-                  setQuery(queryInput);
-                }}
+                setQuery={setQuery}
                 filteredBy={filteredBy}
                 query={query}
               />
@@ -77,14 +75,10 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todo={filteredTodos}
+                    todo={visibleTodos}
                     selectedTodoId={selectedTodo}
-                    selectedTodo={(id) => {
-                      setSelectedTodo(id);
-                    }}
-                    selectedUserId={(userId) => {
-                      setSelectedUserId(userId);
-                    }}
+                    selectedTodo={setSelectedTodo}
+                    selectedUserId={setSelectedUserId}
                   />
                 )}
             </div>
@@ -96,12 +90,8 @@ export const App: React.FC = () => {
           <TodoModal
             userId={selectedUserId}
             selectedTodoId={selectedTodo}
-            selectedTodo={(id) => {
-              setSelectedTodo(id);
-            }}
-            selectedUserId={(userId) => {
-              setSelectedUserId(userId);
-            }}
+            selectedTodo={setSelectedTodo}
+            selectedUserId={setSelectedUserId}
           />
         )}
     </>
