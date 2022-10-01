@@ -1,10 +1,9 @@
 import { ChangeEvent } from 'react';
-import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/Filter';
 
 type Props = {
-  todos: Todo[];
-  value: string;
-  setValue: (argument: string) => void;
+  value: FilterType;
+  setValue: (argument: FilterType) => void;
   text: string;
   setText: (argument: string) => void;
 };
@@ -16,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   setText,
 }) => {
   const handleChangeValue = (event: ChangeEvent<HTMLSelectElement>) => {
-    setValue(event.currentTarget.value);
+    setValue(event.currentTarget.value as FilterType);
   };
 
   const handleChangeText = (event:
@@ -33,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={value}
             onChange={handleChangeValue}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>

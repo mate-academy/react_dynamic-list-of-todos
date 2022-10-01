@@ -9,35 +9,41 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/Filter';
+
+export const checkTitle = (title: string, filterByText: string) => {
+  return title.toLowerCase().includes(filterByText.toLowerCase());
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState<number>(0);
-  const [loader, setLoader] = useState<boolean>(false);
-  const [filterByValue, setFilterByValue] = useState<string>('all');
-  const [filterByText, setFilterByText] = useState<string>('');
+  const [todoId, setTodoId] = useState(0);
+  const [loader, setLoader] = useState(true);
+  const [filterByValue, setFilterByValue] = useState(FilterType.All);
+  const [filterByText, setFilterByText] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTodos(response);
-        setLoader(true);
-      });
+    const fetchTodos = async () => {
+      const response = await getTodos();
+
+      setLoader(false);
+      setTodos(response);
+    };
+
+    fetchTodos();
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(({ title, completed }) => {
     switch (filterByValue) {
-      case 'active':
-        return !todo.completed;
+      case FilterType.Active:
+        return !completed && checkTitle(title, filterByText);
 
-      case 'completed':
-        return todo.completed;
+      case FilterType.Completed:
+        return completed && checkTitle(title, filterByText);
 
       default:
-        return todo;
+        return checkTitle(title, filterByText);
     }
-  }).filter(todo => {
-    return todo.title.toLowerCase().includes(filterByText.toLowerCase());
   });
 
   return (
@@ -49,7 +55,6 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
                 value={filterByValue}
                 text={filterByText}
                 setValue={setFilterByValue}
@@ -58,7 +63,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              { !loader ? (
+              { loader ? (
                 <Loader />
               ) : (
                 <TodoList

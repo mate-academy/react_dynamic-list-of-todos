@@ -13,6 +13,14 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   selectedTodoId,
 }) => {
+  const handleSelect = (id: number) => {
+    selectedTodo(id);
+  };
+
+  const handleReset = () => {
+    selectedTodo(0);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -29,64 +37,58 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(({ id, title, completed }) => {
-          const handleSelect = () => {
-            return selectedTodoId === id
-              ? selectedTodo(0)
-              : selectedTodo(id);
-          };
-
-          return (
-            <tr
-              data-cy="todo"
-              key={id}
-              className=""
+        {todos.map(({ id, title, completed }) => (
+          <tr
+            data-cy="todo"
+            key={id}
+            className=""
+          >
+            <td className="is-vcentered">{id}</td>
+            <td className="is-vcentered">
+              {completed && (
+                <span
+                  className="icon"
+                  data-cy="iconCompleted"
+                >
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td
+              className="is-vcentered is=expanded"
             >
-              <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered">
-                {completed && (
-                  <span
-                    className="icon"
-                    data-cy="iconCompleted"
-                  >
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td
-                className="is-vcentered is=expanded"
+              <p
+                className={classNames({
+                  'has-text-danger': !completed,
+                  'has-text-success': completed,
+                })}
               >
-                <p
-                  className={classNames({
-                    'has-text-danger': completed,
-                    'has-text-success': !completed,
-                  })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td
-                className="has-text-right is-vcentered"
+                {title}
+              </p>
+            </td>
+            <td
+              className="has-text-right is-vcentered"
+            >
+              <button
+                type="button"
+                className="button"
+                data-cy="selectButton"
+                onClick={selectedTodoId === id
+                  ? handleReset
+                  : () => handleSelect(id)}
               >
-                <button
-                  type="button"
-                  className="button"
-                  data-cy="selectButton"
-                  onClick={handleSelect}
-                >
-                  <span className="icon">
-                    <i
-                      className={classNames({
-                        'far fa-eye-slash': selectedTodoId === id,
-                        'far fa-eye': selectedTodoId !== id,
-                      })}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+                <span className="icon">
+                  <i
+                    className={classNames({
+                      'far fa-eye-slash': selectedTodoId === id,
+                      'far fa-eye': selectedTodoId !== id,
+                    })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
