@@ -9,41 +9,43 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [todoId, setTodoId] = useState(0);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState(Status.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then((response) => {
-        setTodos(response);
-        setIsLoading(false);
-      });
+    const getData = async () => {
+      const todosFromServer = await getTodos();
+
+      setIsLoading(false);
+      setTodos(todosFromServer);
+    };
+
+    getData();
   }, []);
 
-  const handleStatus = (value: string) => {
+  const handleStatus = (value: Status) => {
     setFilterBy(value);
   };
 
   const filteredTodos = todos.filter(todo => {
     switch (filterBy) {
-      case 'active':
-        return !todo.completed;
+      case Status.ACTIVE:
+        return !todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
 
-      case 'completed': {
-        return todo.completed;
+      case Status.COMPLETED: {
+        return todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
       }
 
       default:
-        return todo;
+        return todo.title.toLowerCase().includes(query.toLowerCase());
     }
-  }).filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase())
-  ));
+  });
 
   const selectTodo = (todo: number) => {
     setTodoId(todo);

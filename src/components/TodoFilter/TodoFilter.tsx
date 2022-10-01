@@ -1,8 +1,9 @@
 import React from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
   filterBy: string,
-  handleStatus: (str: string) => void,
+  handleStatus: (value: Status) => void,
   query: string,
   setQuery: (str: string) => void,
 };
@@ -21,10 +22,14 @@ export const TodoFilter: React.FC<Props> = ({
     setQuery(event.target.value);
   };
 
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+  };
+
   return (
     <form
       className="field has-addons"
-      onSubmit={(event) => event.preventDefault()}
+      onSubmit={handleSubmit}
     >
       <p className="control">
         <span className="select">
@@ -32,11 +37,11 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             className="option"
             value={filterBy}
-            onChange={(event) => handleStatus(event.target.value)}
+            onChange={(event) => handleStatus(event.target.value as Status)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -56,11 +61,11 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="delete"
               onClick={resetInput}
             />
           </span>

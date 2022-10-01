@@ -20,13 +20,16 @@ export const TodoModal: React.FC<Props> = ({
   const currentTodo = todos.find(todo => todo.id === selectedTodoId);
 
   useEffect(() => {
-    if (currentTodo) {
-      getUser(currentTodo.userId)
-        .then((response) => {
-          setUser(response);
-        });
-    }
-  }, []);
+    const getData = async () => {
+      if (currentTodo) {
+        const UserFromServer = await getUser(currentTodo.userId);
+
+        setUser(UserFromServer);
+      }
+    };
+
+    getData();
+  }, [selectedTodoId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
