@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({
     }
   }, []);
 
-  if (todoOpen === false) {
+  if (!todoOpen) {
     return null;
   }
 
@@ -49,11 +49,11 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${todoId}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="close modal card"
               onClick={() => {
                 setTodoOpen(false);
                 setTodoId(0);

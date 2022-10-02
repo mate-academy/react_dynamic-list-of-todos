@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,11 +10,15 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+function isIncludesTitle(title: string, query: string) {
+  return title.toLowerCase().includes(query.toLowerCase());
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState<string>('All');
-  const [query, setQuery] = useState<string>('');
-  const [todoId, setTodoId] = useState<number>(0);
+  const [filterBy, setFilterBy] = useState('All');
+  const [query, setQuery] = useState('');
+  const [todoId, setTodoId] = useState(0);
 
   useEffect(() => {
     getTodos()
@@ -23,18 +27,16 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
+  const visibleTodos = useMemo(() => {
     switch (filterBy) {
       case 'active':
-        return !todo.completed;
+        return (todos.filter(todo => !todo.completed).filter(({ title }) => isIncludesTitle(title, query)));
       case 'completed':
-        return todo.completed;
+        return (todos.filter(todo => todo.completed).filter(({ title }) => isIncludesTitle(title, query)));
       default:
-        return todo;
+        return (todos.filter(({ title }) => isIncludesTitle(title, query)));
     }
-  }).filter(todo => {
-    return todo.title.toLowerCase().includes(query.toLowerCase());
-  });
+  }, [filterBy, todos, query]);
 
   return (
     <>
