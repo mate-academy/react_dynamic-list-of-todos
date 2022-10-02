@@ -41,7 +41,6 @@ export const TodoList: React.FC<Props> = ({
           <tr
             data-cy="todo"
             key={id}
-            className=""
           >
             <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">

@@ -7,13 +7,13 @@ import { User } from '../../types/User';
 type Props = {
   todoId: number;
   todos: Todo[];
-  selectedTodo: (argument: number) => number | void;
+  selectTodo: (argument: number) => number | void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todoId,
   todos,
-  selectedTodo,
+  selectTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [todoOpen, setTodoOpen] = useState(true);
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({
               aria-label="close"
               onClick={() => {
                 setTodoOpen(false);
-                selectedTodo(0);
+                selectTodo(0);
               }}
             />
           </header>

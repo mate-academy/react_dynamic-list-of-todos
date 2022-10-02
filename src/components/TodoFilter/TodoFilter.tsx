@@ -18,8 +18,9 @@ export const TodoFilter: React.FC<Props> = ({
     setValue(event.currentTarget.value as FilterType);
   };
 
-  const handleChangeText = (event:
-  ChangeEvent<HTMLInputElement>) => {
+  const handleChangeText = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     setText(event.currentTarget.value);
   };
 
@@ -55,15 +56,13 @@ export const TodoFilter: React.FC<Props> = ({
           style={{ pointerEvents: 'all' }}
         >
           {text !== '' && (
-            <>
-              <button
-                type="button"
-                data-cy="clearSearchButton"
-                className="delete"
-                onClick={() => setText('')}
-                aria-label="Clear search query"
-              />
-            </>
+            <button
+              type="button"
+              data-cy="clearSearchButton"
+              className="delete"
+              onClick={() => setText('')}
+              aria-label="Clear search query"
+            />
           )}
         </span>
       </p>

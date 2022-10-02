@@ -80,7 +80,7 @@ export const App: React.FC = () => {
         <TodoModal
           todoId={todoId}
           todos={todos}
-          selectedTodo={(todo) => setTodoId(todo)}
+          selectTodo={(todo) => setTodoId(todo)}
         />
       )}
     </>
