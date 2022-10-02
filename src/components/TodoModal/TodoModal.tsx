@@ -38,7 +38,6 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
               {`Todo #${todo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -47,7 +46,9 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
                 selectedTodo(null);
                 setSelectedUser(null);
               }}
-            />
+            >
+              <></>
+            </button>
           </header>
 
           <div className="modal-card-body">

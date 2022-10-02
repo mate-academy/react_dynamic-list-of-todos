@@ -27,16 +27,19 @@ export const App: React.FC = () => {
 
   const filterTodos = todos
     .filter((todoItem) => {
-      if (filterTodoBy === 'active') {
-        return !todoItem.completed;
-      }
+      switch (filterTodoBy) {
+        case 'active':
+          return !todoItem.completed;
 
-      if (filterTodoBy === 'completed') {
-        return todoItem.completed;
-      }
+        case 'completed':
+          return todoItem.completed;
 
-      return todoItem;
-    })
+        default:
+          return true;
+      }
+    });
+
+  const visibleTodos = filterTodos
     .filter((todoItem) => (
       todoItem.title.toLowerCase().includes(query.toLowerCase())
     ));
@@ -63,7 +66,7 @@ export const App: React.FC = () => {
                   ? <Loader />
                   : (
                     <TodoList
-                      todos={filterTodos}
+                      todos={visibleTodos}
                       selectTodo={todo}
                       setSelectedTodo={setTodo}
                     />

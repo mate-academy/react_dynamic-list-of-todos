@@ -13,6 +13,14 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   filterTodoBy,
 }) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterTodoBy(event.target.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,9 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             name="typeSort"
             value={filterTodoBy}
-            onChange={(event) => {
-              setFilterTodoBy(event.target.value);
-            }}
+            onChange={handleFilter}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -39,9 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-          }}
+          onChange={handleSearch}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -50,13 +54,14 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query.length > 0
             && (
-            /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
                 onClick={() => (setQuery(''))}
-              />
+              >
+                <></>
+              </button>
             )}
 
         </span>
