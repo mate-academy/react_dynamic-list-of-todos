@@ -9,35 +9,41 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/Filter';
+
+export const checkTitle = (title: string, filterText: string) => {
+  return title.toLowerCase().includes(filterText.toLowerCase());
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectTodoId, setSelectedTodoId] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [filterValue, setFilterValue] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [filterValue, setFilterValue] = useState(FilterType.All);
   const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then((response) => {
-        setTodos(response);
-        setLoading(true);
-      });
+    const loadTodos = async () => {
+      const response = await getTodos();
+
+      setLoading(false);
+      setTodos(response);
+    };
+
+    loadTodos();
   }, []);
 
-  const filterTodos = todos.filter((todo) => {
+  const filterTodos = todos.filter(({ title, completed }) => {
     switch (filterValue) {
-      case 'active':
-        return !todo.completed;
+      case FilterType.Active:
+        return !completed && checkTitle(title, filterText);
 
-      case 'completed':
-        return todo.completed;
+      case FilterType.Completed:
+        return completed && checkTitle(title, filterText);
 
       default:
-        return todo;
+        return checkTitle(title, filterText);
     }
-  }).filter((todo) => {
-    return todo.title.toLowerCase().includes(filterText.toLowerCase());
   });
 
   return (
@@ -49,7 +55,6 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
                 value={filterValue}
                 text={filterText}
                 setFilterValue={setFilterValue}
@@ -58,13 +63,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!loading ? (
+              {loading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filterTodos}
-                  selectedTodo={setSelectedTodoId}
-                  selectTodoId={selectTodoId}
+                  selectTodo={(todo) => setSelectedTodoId(todo)}
+                  selectedTodoId={selectedTodoId}
                 />
               )}
             </div>
@@ -72,11 +77,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodoId !== 0 && (
+      {selectedTodoId !== 0 && (
         <TodoModal
-          todoId={selectTodoId}
+          todoId={selectedTodoId}
           todos={todos}
-          selectedTodo={setSelectedTodoId}
+          selectTodo={setSelectedTodoId}
         />
       )}
     </>

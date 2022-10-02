@@ -1,10 +1,9 @@
 import { ChangeEvent } from 'react';
-import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/Filter';
 
 type Props = {
-  todos: Todo[];
-  value: string;
-  setFilterValue: (arg: string) => void;
+  value: FilterType;
+  setFilterValue: (arg: FilterType) => void;
   text: string;
   setFilterText: (arg: string) => void;
 };
@@ -16,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterText,
 }) => {
   const handleValueChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilterValue(event.currentTarget.value);
+    setFilterValue(event.currentTarget.value as FilterType);
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,9 +31,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={value}
             onChange={handleValueChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -54,15 +53,13 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {text !== '' && (
-            <>
-              <button
-                data-cy="clearSearchButton"
-                type="button"
-                className="delete"
-                onClick={() => setFilterText('')}
-                aria-label="Clear search"
-              />
-            </>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setFilterText('')}
+              aria-label="Clear search"
+            />
           )}
         </span>
       </p>

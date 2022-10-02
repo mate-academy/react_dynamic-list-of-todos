@@ -7,28 +7,33 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todoId: number;
   todos: Todo[];
-  selectedTodo: (arg: number) => number | void;
+  selectTodo: (arg: number) => number | void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todoId,
   todos,
-  selectedTodo,
+  selectTodo,
 }) => {
   const currentTodo = todos.find((todo) => todo.id === todoId);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [todoOpen, setTodoOpen] = useState(true);
 
   useEffect(() => {
-    if (currentTodo) {
-      getUser(currentTodo.userId)
-        .then((response) => setUser(response));
-    }
+    const loadUser = async () => {
+      if (currentTodo) {
+        const response = await getUser(currentTodo.userId);
+
+        setUser(response);
+      }
+    };
+
+    loadUser();
   }, []);
 
-  if (loading === false) {
-    return null;
-  }
+  const hadlerClick = () => {
+    selectTodo(0);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -51,10 +56,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               aria-label="close"
-              onClick={() => {
-                selectedTodo(0);
-                setLoading(false);
-              }}
+              onClick={hadlerClick}
             />
           </header>
 
