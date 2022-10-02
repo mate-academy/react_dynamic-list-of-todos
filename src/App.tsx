@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -25,25 +30,27 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const lowerCompare = (str: string) => (
+  const lowerCompare = useCallback((str: string) => (
     str.toLowerCase().includes(query.toLowerCase())
-  );
+  ), [query]);
 
-  const filterTodos = todos
-    .filter(todoItem => {
-      if (filterBy === 'active') {
-        return !todoItem.completed;
-      }
+  const filterTodos = useMemo(() => (
+    todos
+      .filter(todoItem => {
+        if (filterBy === 'active') {
+          return !todoItem.completed;
+        }
 
-      if (filterBy === 'completed') {
-        return todoItem.completed;
-      }
+        if (filterBy === 'completed') {
+          return todoItem.completed;
+        }
 
-      return todoItem;
-    })
-    .filter(todoItem => (
-      lowerCompare(todoItem.title)
-    ));
+        return todoItem;
+      })
+      .filter(todoItem => (
+        lowerCompare(todoItem.title)
+      ))
+  ), [todos, filterBy, lowerCompare]);
 
   return (
     <>
