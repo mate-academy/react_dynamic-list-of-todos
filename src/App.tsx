@@ -8,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
+import { FilterTypes } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo | null>(null);
@@ -16,28 +17,33 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [load, setLoad] = useState<Todo[]>(todos);
 
-  const lowerCompare = (str: string) => (
-    str.toLowerCase().includes(query.toLowerCase())
+  const compareLower = (title: string) => (
+    title.toLowerCase().includes(query.toLowerCase())
   );
 
   useEffect(() => {
-    getTodos()
-      .then(setTodos);
+    const fetchTodos = async () => {
+      const response = await getTodos();
+
+      setTodos(response);
+    };
+
+    fetchTodos();
   }, []);
 
   useEffect((() => {
     switch (filterBy) {
-      case 'all':
-        setLoad(todos.filter(({ title }) => lowerCompare(title)));
+      case FilterTypes.all:
+        setLoad(todos.filter(({ title }) => compareLower(title)));
         break;
-      case 'active':
+      case FilterTypes.active:
         setLoad(todos
-          .filter(({ completed, title }) => !completed && lowerCompare(title)));
+          .filter(({ completed, title }) => !completed && compareLower(title)));
         break;
-      case 'completed':
+      case FilterTypes.completed:
         setLoad(todos
           .filter(({ completed }) => completed)
-          .filter(({ title }) => lowerCompare(title)));
+          .filter(({ title }) => compareLower(title)));
         break;
       default:
         throw new Error('Warning!');

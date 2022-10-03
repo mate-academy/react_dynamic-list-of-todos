@@ -1,4 +1,5 @@
 import React from 'react';
+import { FilterTypes } from '../../types/FilterTypes';
 
 type Props = {
   filterBy: string,
@@ -21,6 +22,8 @@ export const TodoFilter: React.FC<Props> = ({
     setQuery(event.target.value);
   };
 
+  const clearSearch = () => setQuery('');
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -30,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterBy}
             onChange={handleStatus}
           >
-            <option value="all">All</option>
+            <option value={FilterTypes.all}>All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
@@ -55,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={clearSearch}
             aria-label="Some text"
           />
         </span>
