@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -20,19 +19,24 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todoId, setTodoId] = useState(0);
 
+  const downloadData = async () => {
+    const get = await getTodos();
+
+    setTodos(get);
+  };
+
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTodos(response);
-      });
+    downloadData();
   }, []);
 
   const visibleTodos = useMemo(() => {
     switch (filterBy) {
       case 'active':
-        return (todos.filter(todo => !todo.completed).filter(({ title }) => isIncludesTitle(title, query)));
+        return (todos.filter(({ title, completed }) => (
+          !completed && isIncludesTitle(title, query))));
       case 'completed':
-        return (todos.filter(todo => todo.completed).filter(({ title }) => isIncludesTitle(title, query)));
+        return (todos.filter(({ title, completed }) => (
+          completed && isIncludesTitle(title, query))));
       default:
         return (todos.filter(({ title }) => isIncludesTitle(title, query)));
     }
@@ -56,7 +60,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                todos.length < 1 ? (
+                !todos.length ? (
                   <Loader />
                 ) : (
                   <TodoList
@@ -75,7 +79,7 @@ export const App: React.FC = () => {
         <TodoModal
           todos={visibleTodos}
           todoId={todoId}
-          setTodoId={(todo) => setTodoId(todo)}
+          setTodoId={setTodoId}
         />
       )}
     </>
