@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -6,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
-// import { User } from './types/User';
 
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
@@ -17,6 +15,7 @@ export const App: React.FC = () => {
   const [selectedTodo, selectTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
+  const [isLoading, setLoading] = useState(true);
 
   function toLowerCompare(str: string, part: string): boolean {
     return str
@@ -27,21 +26,30 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     switch (filterBy) {
       case 'all':
-        return (allTodos.filter(({ title }) => toLowerCompare(title, query)));
+        return allTodos;
+
       case 'active':
-        return (allTodos.filter(todo => todo.completed === false)
-          .filter(({ title }) => toLowerCompare(title, query)));
+        return allTodos
+          .filter(todo => !todo.completed && toLowerCompare(todo.title, query));
+
       case 'completed':
-        return (allTodos.filter(todo => todo.completed === true)
-          .filter(({ title }) => toLowerCompare(title, query)));
+        return allTodos
+          .filter(todo => todo.completed && toLowerCompare(todo.title, query));
+
       default:
         return [];
     }
   }, [filterBy, allTodos, query]);
 
   useEffect(() => {
-    getTodos()
-      .then(setTodos);
+    async function getData() {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setLoading(false);
+    }
+
+    getData();
   }, []);
 
   return (
@@ -61,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              { !allTodos.length
+              { isLoading
                 ? (<Loader />)
                 : (
                   <TodoList

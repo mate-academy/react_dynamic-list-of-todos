@@ -14,7 +14,7 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ selectedTodo, callback }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const handler = () => {
+  const handleDeletButton = () => {
     callback(null);
     setUser(null);
   };
@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, callback }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={handler}
+                onClick={handleDeletButton}
               />
             </header>
 
