@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,36 +13,37 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterTodoBy, setFilterTodoBy] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then((todosFromServer) => {
-        setTodos(todosFromServer);
-        setIsLoading(true);
-      });
+    const fetchTodos = async () => {
+      const todosFromServer = await getTodos();
+
+      setIsLoading(false);
+      setTodos(todosFromServer);
+    };
+
+    fetchTodos();
   }, []);
 
-  const filterTodos = todos
-    .filter((todoItem) => {
+  const visibleTodos = useMemo(() => todos
+    .filter(({ completed, title }) => {
+      const compareTitle = title.toLowerCase()
+        .includes(query.toLowerCase());
+
       switch (filterTodoBy) {
         case 'active':
-          return !todoItem.completed;
+          return !completed && compareTitle;
 
         case 'completed':
-          return todoItem.completed;
+          return completed && compareTitle;
 
         default:
-          return true;
+          return compareTitle;
       }
-    });
-
-  const visibleTodos = filterTodos
-    .filter((todoItem) => (
-      todoItem.title.toLowerCase().includes(query.toLowerCase())
-    ));
+    }), [todos, filterTodoBy, query]);
 
   return (
     <>
@@ -62,7 +63,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                !isLoading
+                isLoading
                   ? <Loader />
                   : (
                     <TodoList

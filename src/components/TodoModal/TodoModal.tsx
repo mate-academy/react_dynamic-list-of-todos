@@ -42,13 +42,12 @@ export const TodoModal: React.FC<Props> = ({ todo, selectedTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="delete"
               onClick={() => {
                 selectedTodo(null);
                 setSelectedUser(null);
               }}
-            >
-              <></>
-            </button>
+            />
           </header>
 
           <div className="modal-card-body">
