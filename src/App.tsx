@@ -28,15 +28,14 @@ export const App: React.FC = () => {
 
   const filterTodos = todos
     .filter((todoItem) => {
-      if (filterBy === 'active') {
-        return !todoItem.completed;
+      switch (filterBy) {
+        case 'active':
+          return !todoItem.completed;
+        case 'completed':
+          return todoItem.completed;
+        default:
+          return todoItem;
       }
-
-      if (filterBy === 'completed') {
-        return todoItem.completed;
-      }
-
-      return todoItem;
     })
     .filter((todoItem) => lowerText(todoItem.title));
 
