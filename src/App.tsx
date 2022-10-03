@@ -68,7 +68,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filterTodos}
-                  selectTodo={(todo) => setSelectedTodoId(todo)}
+                  selectTodo={setSelectedTodoId}
                   selectedTodoId={selectedTodoId}
                 />
               )}

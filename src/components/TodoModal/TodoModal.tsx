@@ -17,7 +17,6 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const currentTodo = todos.find((todo) => todo.id === todoId);
   const [user, setUser] = useState<User | null>(null);
-  // const [todoOpen, setTodoOpen] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
