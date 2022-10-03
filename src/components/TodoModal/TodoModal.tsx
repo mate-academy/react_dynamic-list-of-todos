@@ -5,32 +5,34 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-const defaultTodo = {
-  id: 0,
-  title: 'no title',
-  completed: false,
-  userId: 0,
-};
-
 type Props = {
-  todo: Todo;
-  onSelect: (todo: Todo) => void;
+  selectedTodo: Todo;
+  setSelectedTodo: (todo: null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo, setSelectedTodo,
+}) => {
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = selectedTodo;
+
   const [user, setUser] = useState<User>();
   const [isLoader, setIsLoader] = useState(true);
 
   useEffect(() => {
     const getUserAsync = async () => {
-      const receivedUser = await getUser(todo.userId);
+      const receivedUser = await getUser(userId);
 
       setUser(receivedUser);
       setIsLoader(false);
     };
 
     getUserAsync();
-  }, [todo.id]);
+  }, [id]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -45,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
             <button
@@ -53,25 +55,25 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
               className="delete"
               data-cy="modal-close"
               aria-label="close"
-              onClick={() => onSelect(defaultTodo)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames(
-                  { 'has-text-danger': !todo.completed },
-                  { 'has-text-success': todo.completed },
+                  { 'has-text-danger': !completed },
+                  { 'has-text-success': completed },
                 )}
               >
                 {
-                  todo.completed
+                  completed
                     ? 'Done'
                     : 'Planned'
                 }

@@ -10,17 +10,10 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-const defaultTodo = {
-  id: 0,
-  title: 'no title',
-  completed: false,
-  userId: 0,
-};
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoader, setIsLoader] = useState(true);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>(defaultTodo);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectValue, setSelectValue] = useState('all');
   const [filterValue, setFilterValue] = useState('');
 
@@ -35,35 +28,20 @@ export const App: React.FC = () => {
     getTodosAsync();
   }, []);
 
-  const handleTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
-
-  const handleSelect = (value: string) => {
-    setSelectValue(value);
-  };
-
-  const handleChange = (value: string) => {
-    setFilterValue(value);
-  };
-
   const todosForRender
     = todos
-      .filter(({ completed }) => {
+      .filter(({ title, completed }) => {
         switch (selectValue) {
           case 'active':
-            return !completed;
+            return !completed && title.toLowerCase().includes(filterValue.toLowerCase());
 
           case 'completed':
-            return completed;
+            return completed && title.toLowerCase().includes(filterValue.toLowerCase());
 
           default:
-            return true;
+            return true && title.toLowerCase().includes(filterValue.toLowerCase());
         }
-      })
-      .filter(({ title }) => (
-        title.toLowerCase().includes(filterValue.toLowerCase())
-      ));
+      });
 
   return (
     <>
@@ -76,8 +54,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 selectValue={selectValue}
                 filterValue={filterValue}
-                handleSelect={handleSelect}
-                handleChange={handleChange}
+                handleSelect={setSelectValue}
+                handleChange={setFilterValue}
               />
             </div>
 
@@ -87,8 +65,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={todosForRender}
-                    selectedTodoId={selectedTodo.id}
-                    onSelect={handleTodo}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
@@ -96,11 +74,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo.id
+      {selectedTodo
       && (
         <TodoModal
-          todo={selectedTodo}
-          onSelect={handleTodo}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
