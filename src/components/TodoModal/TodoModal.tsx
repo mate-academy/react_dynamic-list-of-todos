@@ -32,6 +32,11 @@ export const TodoModal: FC<Props> = ({
     return null;
   }
 
+  const handleDeletingTodo = () => {
+    setModal(false);
+    selectTodo(0);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -53,10 +58,7 @@ export const TodoModal: FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => {
-                  setModal(false);
-                  selectTodo(0);
-                }}
+                onClick={handleDeletingTodo}
               />
             </header>
 

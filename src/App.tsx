@@ -17,38 +17,39 @@ import { getTodos } from './api';
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [todoId, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState<number | null>(null);
   const [completeStatus, setCompleteStatus] = useState('all');
   const [query, setQuery] = useState('');
 
-  useEffect(() => {
+  async function loadTodos() {
     setIsLoading(true);
 
-    getTodos()
-      .then((response) => {
-        setTodos(response);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await getTodos();
+
+      setTodos(response);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadTodos();
   }, []);
 
-  const filtredTodos = useMemo(() => (todos.filter(todo => {
+  const visibleTodos = useMemo(() => (todos.filter(todo => {
+    const compareTitle = todo.title.toLowerCase()
+      .includes(query.toLowerCase());
+
     switch (completeStatus) {
       case 'active':
-        return !todo.completed;
+        return !todo.completed && compareTitle;
       case 'completed':
-        return todo.completed;
+        return todo.completed && compareTitle;
       default:
-        return true;
+        return compareTitle;
     }
-  })), [todos, completeStatus]);
-
-  const visibleTodos = useMemo(() => (
-    filtredTodos.filter(todo => {
-      return todo.title.toLowerCase().includes(query.toLowerCase());
-    })
-  ), [filtredTodos, query]);
+  })), [todos, completeStatus, query]);
 
   return (
     <>
@@ -81,7 +82,7 @@ export const App: FC = () => {
         </div>
       </div>
 
-      {todoId !== 0 && (
+      {todoId && (
         <TodoModal
           todos={visibleTodos}
           todoId={todoId}

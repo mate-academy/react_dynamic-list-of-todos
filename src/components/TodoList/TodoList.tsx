@@ -4,8 +4,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId: number;
-  selectTodo: (id: number) => void;
+  selectedTodoId: number | null;
+  selectTodo: (id: number | null) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -32,13 +32,12 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => {
           const { id, title, completed } = todo;
           const handleSelectTodo = () => (selectedTodoId === id
-            ? selectTodo(0)
+            ? selectTodo(null)
             : selectTodo(id));
 
           return (
             <tr
               data-cy="todo"
-              className=""
               key={id}
             >
               <td className="is-vcentered">{id}</td>
