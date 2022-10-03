@@ -1,21 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todos: Todo[],
+  todoId: number,
+  userId: number
+  selectTodoId: (newValue: number) => void,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  todos,
+  todoId,
+  userId,
+  selectTodoId,
+}) => {
+  const [userInfo, setUserInfo] = useState<User>();
+  const findTodo = todos.find(user => user.id === todoId);
+
+  useEffect(() => {
+    const loadUserTodo = async () => {
+      setUserInfo(await getUser(userId));
+    };
+
+    loadUserTodo();
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {userInfo === undefined ? (
         <Loader />
       ) : (
+
         <div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #
+              {todoId}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,24 +51,36 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => selectTodoId(0)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {findTodo?.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {findTodo?.completed ? (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-success">Done</strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                <a href={`mailto:${userInfo.email}`}>
+                  {userInfo.name}
+                </a>
+              </p>
+            ) : (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-danger">Planned</strong>
+
+                {' by '}
+
+                <a href="mailto:Sincere@april.biz">
+                  {userInfo.name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
