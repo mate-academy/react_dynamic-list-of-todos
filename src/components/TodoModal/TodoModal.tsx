@@ -10,7 +10,6 @@ type Props = {
   selectedTodo: (value: number) => number | void;
 };
 
-// eslint-disable-next-line max-len
 export const TodoModal: React.FC<Props> = ({
   todoId,
   todos,
@@ -22,11 +21,16 @@ export const TodoModal: React.FC<Props> = ({
   const currentTodo = todos.find(({ id }) => id === todoId);
 
   useEffect(() => {
-    if (currentTodo) {
-      getUser(currentTodo.userId)
-        .then(userFromServer => setUser(userFromServer));
-    }
-  }, []);
+    const fetchData = async () => {
+      if (currentTodo) {
+        const userFromServer = await getUser(currentTodo.userId);
+
+        setUser(userFromServer);
+      }
+    };
+
+    fetchData();
+  }, [selectedTodo]);
 
   if (!isValidCard) {
     return null;
@@ -48,8 +52,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${todoId}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="delete"
               type="button"
               className="delete"
               data-cy="modal-close"

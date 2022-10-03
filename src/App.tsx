@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,37 +8,37 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [queryFilter, setQueryFilter] = useState('');
-  const [selectStatus, setSelectStatus] = useState('all');
+  const [filterBy, setSelectStatus] = useState(FilterType.All);
   const [todoId, setTodoId] = useState(0);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setIsLoading(false);
-      });
+    const fetchData = async () => {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, []);
 
-  const filterBy = todos.filter((todo) => {
-    switch (selectStatus) {
-      case 'active':
+  const filteredTodos = todos.filter((todo) => {
+    switch (filterBy) {
+      case FilterType.Active:
         return !todo.completed;
 
-      case 'completed':
+      case FilterType.Completed:
         return todo.completed;
 
       default:
         return true;
     }
-  });
-
-  const visibleTodos = filterBy.filter(todoItem => {
-    return todoItem.title.toLocaleLowerCase().includes(queryFilter.toLocaleLowerCase());
   });
 
   return (
@@ -51,10 +50,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                selectStatus={selectStatus}
-                setSelectStatus={setSelectStatus}
+                selectStatus={filterBy}
                 query={queryFilter}
+                setSelectStatus={setSelectStatus}
                 setQuery={setQueryFilter}
               />
             </div>
@@ -64,9 +62,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={visibleTodos}
+                  todos={filteredTodos}
                   selectedTodoId={todoId}
-                  selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
+                  selectedTodo={setTodoId}
                 />
               )}
             </div>
@@ -76,8 +74,8 @@ export const App: React.FC = () => {
       {todoId && (
         <TodoModal
           todoId={todoId}
-          todos={visibleTodos}
-          selectedTodo={(todo: React.SetStateAction<number>) => setTodoId(todo)}
+          todos={filteredTodos}
+          selectedTodo={setTodoId}
         />
       )}
     </>

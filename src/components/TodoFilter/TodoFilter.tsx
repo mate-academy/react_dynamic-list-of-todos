@@ -1,12 +1,11 @@
 import { ChangeEvent } from 'react';
-import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  todos: Todo[],
-  selectStatus: string,
+  selectStatus: FilterType,
   query: string,
-  setSelectStatus: (arg: string) => (string) | void;
-  setQuery: (value: string) => (string) | void;
+  setSelectStatus: (value: FilterType) => void;
+  setQuery: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,7 +19,9 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleSelectStatus = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectStatus(event.currentTarget.value);
+    const newFilterType = event.currentTarget.value as FilterType;
+
+    setSelectStatus(newFilterType);
   };
 
   return (
@@ -32,9 +33,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectStatus}
             onChange={handleSelectStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -54,8 +55,8 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
+              aria-label="All"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
