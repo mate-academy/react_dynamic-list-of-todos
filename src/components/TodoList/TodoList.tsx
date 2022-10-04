@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable no-console */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -7,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | null;
-  setSelectedTodo: (obj: Todo) => void;
+  setSelectedTodo: (state: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({

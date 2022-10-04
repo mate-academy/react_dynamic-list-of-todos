@@ -14,10 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
 }) => {
   return (
-    <form
-      className="field has-addons"
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select

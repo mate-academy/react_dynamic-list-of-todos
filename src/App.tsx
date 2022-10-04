@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -24,7 +23,8 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const lowerText = (str: string) => str.toLowerCase().includes(query.toLowerCase());
+  const queryCheck = (str: string) => (
+    str.toLowerCase().includes(query.toLowerCase()));
 
   const filterTodos = todos
     .filter((todoItem) => {
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
           return todoItem;
       }
     })
-    .filter((todoItem) => lowerText(todoItem.title));
+    .filter((todoItem) => queryCheck(todoItem.title));
 
   return (
     <>
@@ -65,7 +65,7 @@ export const App: React.FC = () => {
                   />
                 ) : (
                   <Loader />
-              )}
+                )}
             </div>
           </div>
         </div>
