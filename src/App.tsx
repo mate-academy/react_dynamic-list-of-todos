@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,39 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todo, setTodo] = useState<Todo | null>(null);
+  const [filterBy, setFilterBy] = useState('all');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    getTodos().then((result) => {
+      setTodos(result);
+      setIsLoaded(true);
+    });
+  }, []);
+
+  const queryCheck = (str: string) => (
+    str.toLowerCase().includes(query.toLowerCase()));
+
+  const filterTodos = todos
+    .filter((todoItem) => {
+      switch (filterBy) {
+        case 'active':
+          return !todoItem.completed;
+        case 'completed':
+          return todoItem.completed;
+        default:
+          return todoItem;
+      }
+    })
+    .filter((todoItem) => queryCheck(todoItem.title));
+
   return (
     <>
       <div className="section">
@@ -17,18 +47,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoaded
+                ? (
+                  <TodoList
+                    todos={filterTodos}
+                    selectedTodo={todo}
+                    setSelectedTodo={setTodo}
+                  />
+                ) : (
+                  <Loader />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todo?.userId && <TodoModal todo={todo} setTodo={setTodo} />}
     </>
   );
 };
