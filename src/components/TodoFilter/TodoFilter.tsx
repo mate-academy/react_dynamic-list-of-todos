@@ -16,8 +16,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
   const [status, setStatus] = useState(Status.all);
   const [quote, setQuote] = useState('');
 
-  const handleFilter = (event: ChangeEvent<HTMLSelectElement>
-  | ChangeEvent<HTMLInputElement>) => {
+  const handleFilter = (
+    event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>,
+  ) => {
     const { value } = event.target;
 
     setQuote(value);
@@ -30,6 +31,8 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
   useEffect(() => {
     let filtred = [...todos];
 
+    const lowerQuote = quote.toLowerCase();
+
     if (status !== Status.all) {
       filtred = filtred
         .filter(todo => {
@@ -37,18 +40,24 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
 
           switch (status) {
             case Status.active:
+              if (quote) {
+                return !completed && todo.title.includes(lowerQuote);
+              }
+
               return !completed;
             case Status.complete:
+              if (quote) {
+                return completed && todo.title.includes(lowerQuote);
+              }
+
               return completed;
             default:
-              return false;
+              throw new Error('Invalid status filter');
           }
         });
     }
 
-    const lowerQuote = quote.toLowerCase();
-
-    if (quote) {
+    if (quote && Status.all === status) {
       filtred = filtred.filter(todo => {
         return todo.title.includes(lowerQuote);
       });
@@ -93,12 +102,13 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
         {quote
         && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => setQuote('')}
+              aria-label="Clear"
             />
           </span>
         )}

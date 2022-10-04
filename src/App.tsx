@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -16,10 +15,14 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(response => {
+    const getTodosFromApi = async () => {
+      const response = await getTodos();
+
       setTodos(response);
       setFiltredTodos(response);
-    });
+    };
+
+    getTodosFromApi();
   }, []);
 
   return (
@@ -34,7 +37,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(todos.length === 0
+              {(!todos.length
                 ? <Loader />
                 : (
                   <TodoList
@@ -48,7 +51,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (<TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />)}
+      {selectedTodo
+      && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
