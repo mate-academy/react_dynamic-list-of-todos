@@ -16,10 +16,8 @@ export const TodoUsers: React.FC<Props> = ({ userId }) => {
   }, []);
 
   return (
-    <>
-      <a href={`mailto:${user?.email}`}>
-        {user?.name}
-      </a>
-    </>
+    <a href={`mailto:${user?.email}`}>
+      {user?.name}
+    </a>
   );
 };

@@ -6,33 +6,9 @@ import { TodoModal } from '../TodoModal';
 
 import { Todo } from '../../types/Todo';
 
-enum SortType {
-  All = 'all',
-  Completed = 'completed',
-  Active = 'active',
-}
+import { SortType } from '../../types/SortType';
 
-function getReorderedTodos(
-  todos: Todo[],
-  sortType: SortType,
-): Todo[] {
-  const visibleTodos = [...todos];
-
-  switch (sortType) {
-    case SortType.Active:
-      return visibleTodos.filter(todo => {
-        return todo.completed === false;
-      });
-
-    case SortType.Completed:
-      return visibleTodos.filter(todo => {
-        return todo.completed === true;
-      });
-
-    default:
-      return visibleTodos;
-  }
-}
+import { getReorderedTodos } from '../Helper';
 
 type Props = {
   todos: Todo[];
@@ -54,6 +30,18 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
     return todo.title.includes(fixedQuery);
   });
 
+  const selectSortType = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    if (event.target.value === 'all') {
+      setSortType(SortType.All);
+    } else if (event.target.value === 'active') {
+      setSortType(SortType.Active);
+    } else {
+      setSortType(SortType.Completed);
+    }
+  };
+
   return (
     <>
       <form className="field has-addons">
@@ -62,14 +50,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             <select
               data-cy="statusSelect"
               value={sortType}
-              onChange={({ target }) => {
-                // eslint-disable-next-line no-nested-ternary
-                return target.value === 'all'
-                  ? setSortType(SortType.All)
-                  : target.value === 'active'
-                    ? setSortType(SortType.Active)
-                    : setSortType(SortType.Completed);
-              }}
+              onChange={(event) => selectSortType(event)}
             >
               <option
                 value="all"
@@ -97,9 +78,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={(event) => {
-              return setQuery(event.target.value);
-            }}
+            onChange={(event) => setQuery(event.target.value)}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />
