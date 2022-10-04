@@ -26,18 +26,21 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     switch (filterBy) {
       case 'all':
-        return allTodos;
+        return (allTodos
+          .filter(({ title }) => toLowerCompare(title, query)));
 
       case 'active':
         return allTodos
-          .filter(todo => !todo.completed && toLowerCompare(todo.title, query));
+          .filter(({ title, completed }) => !completed
+          && toLowerCompare(title, query));
 
       case 'completed':
         return allTodos
-          .filter(todo => todo.completed && toLowerCompare(todo.title, query));
+          .filter(({ completed, title }) => completed
+          && toLowerCompare(title, query));
 
       default:
-        return [];
+        return allTodos;
     }
   }, [filterBy, allTodos, query]);
 
@@ -83,10 +86,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal
-        selectedTodo={selectedTodo}
-        callback={selectTodo}
-      />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          callback={selectTodo}
+        />
+      )}
     </>
   );
 };
