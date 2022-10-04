@@ -10,6 +10,10 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterType } from './types/FilterType';
 
+export const titleCheck = (title: string, queryFilter: string) => {
+  return title.toLocaleLowerCase().includes(queryFilter.toLocaleLowerCase());
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +32,13 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = todos.filter(({ title, completed }) => {
     switch (filterBy) {
       case FilterType.Active:
-        return !todo.completed;
+        return !completed && titleCheck(title, queryFilter);
 
       case FilterType.Completed:
-        return todo.completed;
+        return completed && titleCheck(title, queryFilter);
 
       default:
         return true;
