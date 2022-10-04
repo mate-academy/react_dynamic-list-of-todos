@@ -1,12 +1,23 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todoLoading: boolean
+  selectedTodo: Todo | null
+  closeSelectedTodo: () => void
+}
+
+export const TodoModal: React.FC<Props> = ({
+  todoLoading,
+  selectedTodo,
+  closeSelectedTodo,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {todoLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +26,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,12 +34,13 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={closeSelectedTodo}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -37,8 +49,8 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={selectedTodo?.user?.email}>
+                {selectedTodo?.user?.name}
               </a>
             </p>
           </div>

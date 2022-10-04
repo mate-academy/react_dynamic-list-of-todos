@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,82 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos, getUser } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]); // start todos
+  const [filteredTodosFromServer, setFilteredTodosFromServer] = useState<Todo[]>([]); // filtered select todos
+  const [loadingFromServer, setLoadingFromServer] = useState(true); // start loading screen
+
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [todoLoading, setTodoLoading] = useState(false);
+
+  const [selectFiltration, setSelectFiltration] = useState('');
+  const [inputFiltration, setInputFiltration] = useState('');
+
+  const filtrationHandler = (select: string, input: string) => {
+    let todos = todosFromServer;
+
+    if (select === 'active') {
+      todos = todos.filter(todo => !todo.completed);
+    } else if (select === 'completed') {
+      todos = todos.filter(todo => todo.completed);
+    } else if (select === 'all') {
+      todos = todosFromServer;
+    }
+
+    setFilteredTodosFromServer(todos.filter(todo => todo.title.includes(input)));
+  };
+
+  const searchHandlerReset = () => {
+    setInputFiltration('');
+  };
+
+  const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputFiltration(event.target.value);
+  };
+
+  const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectFiltration(event.target.value);
+  };
+
+  const startTodoLoading = () => {
+    setTodoLoading(true);
+  };
+
+  const closeSelectedTodo = () => {
+    setSelectedTodo(null);
+  };
+
+  const getSelectedUser = async (selectedTodoInfo:Todo) => {
+    const uploadedUser = await getUser(selectedTodoInfo.userId);
+    const newTodo = {
+      ...selectedTodoInfo,
+      user: uploadedUser,
+    };
+
+    setSelectedTodo(newTodo);
+    setTodoLoading(false);
+  };
+
+  async function getTodosFromServer() {
+    const promise = await getTodos();
+
+    setTodosFromServer(promise);
+    setFilteredTodosFromServer(promise);
+    setLoadingFromServer(false);
+  }
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  useEffect(() => {
+    filtrationHandler(selectFiltration, inputFiltration);
+  }, [selectFiltration, inputFiltration]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +91,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                selectHandler={selectHandler}
+                searchHandler={searchHandler}
+                searchHandlerReset={searchHandlerReset}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loadingFromServer && (
+                <Loader />
+              )}
+              {todosFromServer.length > 0 && (
+                <TodoList
+                  todos={filteredTodosFromServer}
+                  getUser={getSelectedUser}
+                  startTodoLoading={startTodoLoading}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {(selectedTodo !== null || todoLoading) && (
+        <TodoModal
+          todoLoading={todoLoading}
+          selectedTodo={selectedTodo}
+          closeSelectedTodo={closeSelectedTodo}
+        />
+      )}
     </>
   );
 };
