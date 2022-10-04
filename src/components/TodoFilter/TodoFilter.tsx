@@ -1,8 +1,10 @@
+import { FilterBy } from '../../types/FilterBy';
+
 type Props = {
   query: string,
   setQuery: (value: string) => void,
-  filterBy: string;
-  setFilterBy: (value: string) => void
+  filterBy: FilterBy | string;
+  setFilterBy: (value: FilterBy | string) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -22,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
           onChange={event => setFilterBy(event.target.value)}
           value={filterBy}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterBy.All}>All</option>
+          <option value={FilterBy.Active}>Active</option>
+          <option value={FilterBy.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -44,8 +46,8 @@ export const TodoFilter: React.FC<Props> = ({
 
       {!!query.length && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
+            aria-label="delete"
             data-cy="clearSearchButton"
             type="button"
             className="delete"

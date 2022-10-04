@@ -9,22 +9,28 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectTodoId, setSelectTodoId] = useState<number>(0);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [selectTodoId, setSelectTodoId] = useState(0);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState<FilterBy | string>(FilterBy.All);
 
-  // const filterTodos = (todosFromServer: Todo[]) => {
-  //   const filteredTodos = todosFromServer.filter(todo => todo.title.includes(query));
+  const uploadTodo = async () => {
+    try {
+      const todosFromServer = getTodos();
 
-  //   return filteredTodos;
-  // };
+      setTodos(await todosFromServer);
+      setVisibleTodos(await todosFromServer);
+    } catch {
+      throw new Error('Todos not fond');
+    }
+  };
 
   useEffect(() => {
-    getTodos()
-      .then(result => setTodos(result));
+    uploadTodo();
   }, []);
 
   const viewModule = (id: number) => {
@@ -35,27 +41,30 @@ export const App: React.FC = () => {
 
   const selectTodo = () => todos.find(todo => todo.id === selectTodoId);
 
-  const onSetFilterBy = (value: string) => {
+  const onSetFilterBy = (value: FilterBy | string) => {
     setFilterBy(value);
   };
 
-  const filterTodos = todos
-    .filter(({ completed }) => {
-      switch (filterBy) {
-        case 'active':
-          return !completed;
+  useEffect(() => {
+    const filteredTodos = todos
+      .filter(({ completed, title }) => {
+        switch (filterBy) {
+          case FilterBy.Active:
+            return !completed && title.toLowerCase()
+              .includes(query.toLowerCase());
 
-        case 'completed':
-          return completed;
+          case FilterBy.Completed:
+            return completed && title.toLowerCase()
+              .includes(query.toLowerCase());
 
-        default:
-          return true;
-      }
-    })
-    .filter(({ title }) => (
-      title.toLowerCase()
-        .includes(query.toLowerCase())
-    ));
+          default:
+            return title.toLowerCase()
+              .includes(query.toLowerCase());
+        }
+      });
+
+    setVisibleTodos(filteredTodos);
+  }, [query, filterBy]);
 
   return (
     <>
@@ -76,7 +85,7 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length
                 ? <Loader />
-                : <TodoList todos={filterTodos} viewModule={viewModule} />}
+                : <TodoList todos={visibleTodos} viewModule={viewModule} />}
             </div>
           </div>
         </div>

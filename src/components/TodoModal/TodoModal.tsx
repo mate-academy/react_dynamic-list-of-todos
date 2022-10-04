@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({ selectTodo, viewModule }) => {
 
   const selectedTodo = selectTodo();
 
-  if (selectedTodo === undefined) {
+  if (!selectedTodo) {
     return null;
   }
 

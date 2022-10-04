@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -41,9 +42,12 @@ export const TodoList: React.FC<Props> = ({ todos, viewModule }) => {
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={completed
-                  ? 'has-text-success'
-                  : 'has-text-danger'}
+                <p className={classNames(
+                  {
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  },
+                )}
                 >
                   {title}
                 </p>
