@@ -41,7 +41,7 @@ export const App: React.FC = () => {
         return completed && titleCheck(title, queryFilter);
 
       default:
-        return true;
+        return titleCheck(title, queryFilter);
     }
   });
 
