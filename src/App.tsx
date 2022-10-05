@@ -15,8 +15,10 @@ export const App: React.FC = () => {
   const [selectTodoId, setSelectTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadTodo = async () => {
+    setIsLoading(true);
     try {
       const todosFromServer = getTodos();
 
@@ -24,6 +26,8 @@ export const App: React.FC = () => {
       setVisibleTodos(await todosFromServer);
     } catch {
       throw new Error('Todos not fond');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +81,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
