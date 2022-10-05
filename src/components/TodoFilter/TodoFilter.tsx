@@ -3,7 +3,7 @@ import { FilterTypes } from '../../types/FilterTypes';
 
 type Props = {
   filterBy: string,
-  setFilterBy: (str: string) => void,
+  setFilterBy: (str: FilterTypes.all) => void,
   query: string,
   setQuery: (str: string) => void,
 };
@@ -34,8 +34,8 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleStatus}
           >
             <option value={FilterTypes.all}>All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="FilterTypes.active">Active</option>
+            <option value="FilterTypes.completed">Completed</option>
           </select>
         </span>
       </p>
