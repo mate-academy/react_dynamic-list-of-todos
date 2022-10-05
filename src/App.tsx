@@ -13,13 +13,16 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filtredTodos, setFiltredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getTodosFromApi = async () => {
+      setIsLoading(true);
       const response = await getTodos();
 
       setTodos(response);
       setFiltredTodos(response);
+      setIsLoading(false);
     };
 
     getTodosFromApi();
@@ -37,7 +40,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(!todos.length
+              {(isLoading
                 ? <Loader />
                 : (
                   <TodoList
@@ -51,8 +54,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-      && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}

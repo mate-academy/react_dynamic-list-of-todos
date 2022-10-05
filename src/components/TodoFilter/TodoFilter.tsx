@@ -29,39 +29,29 @@ export const TodoFilter: React.FC<Props> = ({ todos, filter }) => {
   };
 
   useEffect(() => {
-    let filtred = [...todos];
-
     const lowerQuote = quote.toLowerCase();
 
-    if (status !== Status.all) {
-      filtred = filtred
-        .filter(todo => {
-          const { completed } = todo;
+    const filtred = todos
+      .filter(todo => {
+        const { completed } = todo;
 
-          switch (status) {
-            case Status.active:
-              if (quote) {
-                return !completed && todo.title.includes(lowerQuote);
-              }
+        switch (status) {
+          case Status.active:
+            if (quote) {
+              return !completed && todo.title.includes(lowerQuote);
+            }
 
-              return !completed;
-            case Status.complete:
-              if (quote) {
-                return completed && todo.title.includes(lowerQuote);
-              }
+            return !completed;
+          case Status.complete:
+            if (quote) {
+              return completed && todo.title.includes(lowerQuote);
+            }
 
-              return completed;
-            default:
-              throw new Error('Invalid status filter');
-          }
-        });
-    }
-
-    if (quote && Status.all === status) {
-      filtred = filtred.filter(todo => {
-        return todo.title.includes(lowerQuote);
+            return completed;
+          default:
+            return todo.title.includes(lowerQuote);
+        }
       });
-    }
 
     filter(filtred);
   }, [status, quote]);
