@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -17,12 +16,6 @@ export const App: React.FC = () => {
   const [setTodoId, setTodoList] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // const stringContainsCaseInsensitive = (name: string) => {
-  //   return (
-  //     name.toLowerCase().includes(query.toLowerCase())
-  //   );
-  // };
-
   const getVisibleTodos = todos.filter(todo => {
     const getVisible = todo.title.toLowerCase().includes(query.toLowerCase());
 
@@ -36,8 +29,6 @@ export const App: React.FC = () => {
 
     return getVisible;
   });
-
-  // const selectedTodo = todos.find(todo => todo.id === setTodoId);
 
   getTodos().then(tod => {
     setTodos(tod);
