@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   onReset,
   todos,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const userFromServer = async () => {
@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({
     userFromServer();
   }, []);
 
-  const findTodo = todos.filter(({ id }) => selectedTodoId === id);
+  const findedTodo = todos.find(({ id }) => selectedTodoId === id);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,44 +39,40 @@ export const TodoModal: React.FC<Props> = ({
         <Loader />
       ) : (
         <div className="modal-card">
-          {findTodo.map(({ id, title, completed }) => (
-            <React.Fragment key={id}>
-              <header className="modal-card-head">
-                <div
-                  className="modal-card-title has-text-weight-medium"
-                  data-cy="modal-header"
-                >
-                  {`Todo #${id}`}
-                </div>
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              {`Todo #${findedTodo?.id}`}
+            </div>
 
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                <button
-                  type="button"
-                  className="delete"
-                  data-cy="modal-close"
-                  onClick={onReset}
-                />
-              </header>
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onReset}
+              aria-label="button"
+            />
+          </header>
 
-              <div className="modal-card-body">
-                <p className="block" data-cy="modal-title">
-                  {title}
-                </p>
+          <div className="modal-card-body">
+            <p className="block" data-cy="modal-title">
+              {findedTodo?.title}
+            </p>
 
-                <p className="block" data-cy="modal-user">
-                  {completed
-                    ? (<strong className="has-text-success">Done</strong>)
-                    : (<strong className="has-text-danger">Planned</strong>)}
+            <p className="block" data-cy="modal-user">
+              {findedTodo?.completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
 
-                  {' by '}
+              {' by '}
 
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
-                  </a>
-                </p>
-              </div>
-            </React.Fragment>
-          ))}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
+              </a>
+            </p>
+          </div>
         </div>
       )}
     </div>

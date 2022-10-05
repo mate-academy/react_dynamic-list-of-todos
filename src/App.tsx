@@ -58,9 +58,7 @@ export const App: React.FC = () => {
                 filterBy={filterBy}
                 setFilterBy={setFilterBy}
                 query={query}
-                setQuery={(prevQuery) => {
-                  setQuery(prevQuery);
-                }}
+                setQuery={setQuery}
               />
             </div>
 
