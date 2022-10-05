@@ -85,12 +85,10 @@ export const TodoList: React.FC<Props> = ({
                     <span className="icon">
                       <i className="far fa-eye-slash" />
                     </span>
-                  )
-                  : (
+                  ) : (
                     <span className="icon">
                       <i className="far fa-eye" />
                     </span>
-
                   )}
               </button>
             </td>
