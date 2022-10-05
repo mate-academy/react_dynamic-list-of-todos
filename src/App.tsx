@@ -1,8 +1,6 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -16,7 +14,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectTodoId, setSelectTodoId] = useState(0);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState<FilterBy | string>(FilterBy.All);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
   const uploadTodo = async () => {
     try {
@@ -33,33 +31,29 @@ export const App: React.FC = () => {
     uploadTodo();
   }, []);
 
-  const viewModule = (id: number) => {
-    setSelectTodoId(id);
-  };
-
   const onSetQuery = (value: string) => setQuery(value);
 
-  const selectTodo = () => todos.find(todo => todo.id === selectTodoId);
+  const findSelectedTodo = () => todos.find(todo => todo.id === selectTodoId);
 
-  const onSetFilterBy = (value: FilterBy | string) => {
+  const onSetFilterBy = (value: FilterBy) => {
     setFilterBy(value);
   };
+
+  const checkTitle = (title: string) => title.toLowerCase()
+    .includes(query.toLowerCase());
 
   useEffect(() => {
     const filteredTodos = todos
       .filter(({ completed, title }) => {
         switch (filterBy) {
           case FilterBy.Active:
-            return !completed && title.toLowerCase()
-              .includes(query.toLowerCase());
+            return !completed && checkTitle(title);
 
           case FilterBy.Completed:
-            return completed && title.toLowerCase()
-              .includes(query.toLowerCase());
+            return completed && checkTitle(title);
 
           default:
-            return title.toLowerCase()
-              .includes(query.toLowerCase());
+            return checkTitle(title);
         }
       });
 
@@ -85,12 +79,22 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length
                 ? <Loader />
-                : <TodoList todos={visibleTodos} viewModule={viewModule} />}
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    viewModule={setSelectTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-      {selectTodoId && (<TodoModal selectTodo={selectTodo} viewModule={viewModule} />)}
+      {!!selectTodoId && (
+        <TodoModal
+          selectedTodo={findSelectedTodo()}
+          viewModule={setSelectTodoId}
+        />
+      )}
     </>
   );
 };

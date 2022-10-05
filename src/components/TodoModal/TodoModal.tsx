@@ -5,31 +5,27 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  selectTodo: () => Todo | undefined;
+  selectedTodo: Todo | undefined;
   viewModule: (id :number) => void
 };
 
-export const TodoModal: React.FC<Props> = ({ selectTodo, viewModule }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, viewModule }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const selectedTodo = selectTodo();
+  useEffect(() => {
+    getUser(selectedTodo?.userId)
+      .then(result => setSelectedUser(result));
+  }, []);
 
   if (!selectedTodo) {
     return null;
   }
 
   const {
-    userId,
     id,
     title,
     completed,
   } = selectedTodo;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    getUser(userId)
-      .then(result => setSelectedUser(result));
-  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -47,8 +43,8 @@ export const TodoModal: React.FC<Props> = ({ selectTodo, viewModule }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="delete"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -62,7 +58,6 @@ export const TodoModal: React.FC<Props> = ({ selectTodo, viewModule }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
