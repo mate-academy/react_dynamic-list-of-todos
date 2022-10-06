@@ -31,11 +31,11 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter(todoItem => {
-      if (filterBy === 'completed') {
+      if (filterBy === 'active') {
         return !todoItem.completed;
       }
 
-      if (filterBy === 'active') {
+      if (filterBy === 'completed') {
         return todoItem.completed;
       }
 
@@ -63,17 +63,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                !isLoaded
-                  ? <Loader />
-                  : (
-                    <TodoList
-                      todos={visibleTodos}
-                      selectedTodo={todo}
-                      setSelectedTodo={setTodo}
-                    />
-                  )
-              }
+              {!isLoaded
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={todo}
+                    setSelectedTodo={setTodo}
+                  />
+                )}
             </div>
           </div>
         </div>

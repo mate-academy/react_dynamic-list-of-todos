@@ -16,7 +16,9 @@ export const TodoFilter: React.FC<Props> = ({
 }) => (
   <form
     className="field has-addons"
-    onSubmit={event => event.preventDefault()}
+    onSubmit={event => (
+      event.preventDefault()
+    )}
   >
     <p className="control">
       <span className="select">
