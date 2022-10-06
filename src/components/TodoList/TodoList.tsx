@@ -1,9 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-// import { getTodos } from '../../api';
 
-// console.log(getTodods);
 type Todos = {
   todoList: Todo[],
   setSelectedTodo: (userId: number) => void,

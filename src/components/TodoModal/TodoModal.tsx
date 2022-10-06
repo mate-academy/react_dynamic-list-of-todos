@@ -14,7 +14,7 @@ type Props = {
   selectedTodoId: number,
   setSelectedTodoId: (param: number) => void,
 };
-
+  
 export const TodoModal: React.FC<Props> = (
   {
     selectedUser, isModalLoaded, setSelectedTodo,
