@@ -15,19 +15,9 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
 }) => {
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const status = event.target.value;
+    const status = event.target.value as FilterTypes;
 
-    switch (status) {
-      case 'active':
-        setFilterBy(FilterTypes.Active);
-        break;
-      case 'completed':
-        setFilterBy(FilterTypes.Completed);
-        break;
-      case 'all':
-      default:
-        setFilterBy(FilterTypes.All);
-    }
+    setFilterBy(status);
   };
 
   return (
@@ -39,9 +29,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterBy}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterTypes.All}>All</option>
+            <option value={FilterTypes.Active}>Active</option>
+            <option value={FilterTypes.Completed}>Completed</option>
           </select>
         </span>
       </p>

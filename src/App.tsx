@@ -19,11 +19,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const downloadData = async () => {
-      const data = await getTodos()
-        .then(todo => {
-          setTodos(todo);
-          setIsLoading(false);
-        });
+      const data = await getTodos();
+
+      setTodos(data);
+      setIsLoading(false);
 
       return data;
     };
@@ -31,24 +30,27 @@ export const App: React.FC = () => {
     downloadData();
   }, []);
 
-  let filterTodos = todos
+  const checkContainsQueryInTitle = (str: string): boolean => (
+    str.toLowerCase()
+      .includes(query.toLowerCase())
+  );
+
+  const filterTodos = todos
     .filter(todoItem => {
       switch (filterBy) {
         case FilterTypes.Active:
-          return !todoItem.completed;
+          return !todoItem.completed
+            && checkContainsQueryInTitle(todoItem.title);
 
         case FilterTypes.Completed:
-          return todoItem.completed;
+          return todoItem.completed
+            && checkContainsQueryInTitle(todoItem.title);
 
         default:
-          return todoItem;
+          return todoItem
+          && checkContainsQueryInTitle(todoItem.title);
       }
     });
-
-  if (query) {
-    filterTodos = filterTodos.filter(todoItem => (
-      todoItem.title.toLowerCase().includes(query.toLowerCase())));
-  }
 
   return (
     <>
