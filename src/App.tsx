@@ -36,11 +36,9 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     switch (filterBy) {
       case 'active':
-        return (todos.filter(todo => !todo.completed)
-          .filter(({ title }) => filterParams(title, responseFilter)));
+        return (todos.filter(({ title, completed }) => !completed && filterParams(title, responseFilter)));
       case 'completed':
-        return (todos.filter(todo => todo.completed)
-          .filter(({ title }) => filterParams(title, responseFilter)));
+        return (todos.filter(({ title, completed }) => completed && filterParams(title, responseFilter)));
       default:
         return (todos.filter(({ title }) => filterParams(title, responseFilter)));
     }
