@@ -11,9 +11,9 @@ import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]); // start todos
-  const [filteredTodosFromServer, setFilteredTodosFromServer] = useState<Todo[]>([]); // filtered select todos
-  const [loadingFromServer, setLoadingFromServer] = useState(true); // start loading screen
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [filteredTodosFromServer, setFilteredTodosFromServer] = useState<Todo[]>([]);
+  const [loadingFromServer, setLoadingFromServer] = useState(true);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -25,12 +25,16 @@ export const App: React.FC = () => {
   const filtrationHandler = (select: string, input: string) => {
     let todos = todosFromServer;
 
-    if (select === 'active') {
-      todos = todos.filter(todo => !todo.completed);
-    } else if (select === 'completed') {
-      todos = todos.filter(todo => todo.completed);
-    } else if (select === 'all') {
-      todos = todosFromServer;
+    switch (select) {
+      case 'active':
+        todos = todos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        todos = todos.filter(todo => todo.completed);
+        break;
+      default:
+        todos = todosFromServer;
+        break;
     }
 
     setFilteredTodosFromServer(todos.filter(todo => todo.title.includes(input)));

@@ -1,7 +1,5 @@
-// import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-// import { Loader } from './components/Loader';
 
 interface Props {
   todos: Todo[]
@@ -14,7 +12,10 @@ export const TodoList: React.FC<Props> = ({
   getUser,
   startTodoLoading,
 }) => {
-  // const [loader, setLoader] = useState(false);
+  const buttonHandler = (todo: Todo) => {
+    startTodoLoading();
+    getUser(todo);
+  };
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -39,6 +40,7 @@ export const TodoList: React.FC<Props> = ({
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
+
             <td className="is-vcentered">
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -46,6 +48,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p className={classNames(
                 { 'has-text-success': todo.completed },
@@ -55,14 +58,14 @@ export const TodoList: React.FC<Props> = ({
                 {todo.title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={() => {
-                  startTodoLoading();
-                  getUser(todo);
+                  buttonHandler(todo);
                 }}
               >
                 <span className="icon">
@@ -70,6 +73,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               </button>
             </td>
+
           </tr>
         ))}
       </tbody>
