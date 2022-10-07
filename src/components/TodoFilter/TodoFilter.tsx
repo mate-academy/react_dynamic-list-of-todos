@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 type Props = {
   filterBy: string
   setFilterBy: (str: string) => void,
   query: string
   setQuery: (str: string) => void,
+  setResponseFilter: (value: string) => void
+  responseFilter: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,7 +15,13 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
   query,
   setQuery,
+  setResponseFilter,
+  responseFilter,
 }) => {
+  const handleResponsefilterParams = (event: ChangeEvent<HTMLInputElement>) => {
+    setResponseFilter(event.target.value);
+  };
+
   return (
     <form
       className="field has-addons"
@@ -41,10 +49,8 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
-          onChange={event => (
-            setQuery(event.target.value)
-          )}
+          value={responseFilter}
+          onChange={handleResponsefilterParams}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

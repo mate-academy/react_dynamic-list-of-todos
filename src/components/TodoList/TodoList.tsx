@@ -4,8 +4,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  selectedTodo: Todo | undefined,
-  setSelectedTodo: (obj: Todo) => void,
+  selectedTodo: Todo | null,
+  setSelectedTodo: (mewTodo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({

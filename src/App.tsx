@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,34 +12,39 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<Todo | undefined>(undefined);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState('all');
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
+  const [responseFilter, setResponseFilter] = useState('');
+
+  const addData = async () => {
+    const getTodosFromServer = await getTodos();
+
+    setTodos(getTodosFromServer);
+    setIsLoaded(true);
+  };
 
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTodos(response);
-        setIsLoaded(true);
-      });
+    addData();
   }, []);
 
-  const filteredTodos = todos
-    .filter(todoItem => {
-      if (filterBy === 'active') {
-        return !todoItem.completed;
-      }
+  const filterParams = (title: string, input: string) => {
+    return title.toLowerCase().includes(input.toLowerCase());
+  };
 
-      if (filterBy === 'completed') {
-        return todoItem.completed;
-      }
-
-      return todoItem;
-    })
-    .filter(todoItem => (
-      todoItem.title.toLowerCase().includes(query.toLowerCase())
-    ));
+  const filteredTodos = useMemo(() => {
+    switch (filterBy) {
+      case 'active':
+        return (todos.filter(todo => !todo.completed)
+          .filter(({ title }) => filterParams(title, responseFilter)));
+      case 'completed':
+        return (todos.filter(todo => todo.completed)
+          .filter(({ title }) => filterParams(title, responseFilter)));
+      default:
+        return (todos.filter(({ title }) => filterParams(title, responseFilter)));
+    }
+  }, [filterBy, todos, responseFilter]);
 
   return (
     <>
@@ -54,6 +59,8 @@ export const App: React.FC = () => {
                 setFilterBy={setFilterBy}
                 query={query}
                 setQuery={setQuery}
+                responseFilter={responseFilter}
+                setResponseFilter={setResponseFilter}
               />
             </div>
 
@@ -64,8 +71,8 @@ export const App: React.FC = () => {
                   : (
                     <TodoList
                       todos={filteredTodos}
-                      selectedTodo={todo}
-                      setSelectedTodo={setTodo}
+                      selectedTodo={selectedTodo}
+                      setSelectedTodo={setSelectedTodo}
                     />
                   )
               }
@@ -74,10 +81,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todo?.userId && (
+      {selectedTodo?.userId && (
         <TodoModal
-          todo={todo}
-          setTodo={setTodo}
+          todo={selectedTodo}
+          setTodo={setSelectedTodo}
         />
       )}
     </>
