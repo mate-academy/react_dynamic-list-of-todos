@@ -4,15 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  setTodoList: (todo: Todo)=> void,
-  setTodoId: Todo | null,
+  setSelectedTodo(todo: Todo): void,
+  selectedTodo: Todo | null,
 
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setTodoList,
-  setTodoId,
+  setSelectedTodo,
+  selectedTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             key={todo.id}
             className={classNames({
-              'has-background-info-light': setTodoId?.id === todo.id,
+              'has-background-info-light': selectedTodo?.id === todo.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -55,7 +55,7 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="has-text-right is-vcentered">
               <button
-                onClick={() => setTodoList(todo)}
+                onClick={() => setSelectedTodo(todo)}
                 data-cy="selectButton"
                 className="button"
                 type="button"
@@ -64,8 +64,8 @@ export const TodoList: React.FC<Props> = ({
                   <i
                     className={classNames(
                       'far',
-                      { 'fa-eye-slash': setTodoId?.id === todo.id },
-                      { 'fa-eye': setTodoId?.id !== todo.id },
+                      { 'fa-eye-slash': selectedTodo?.id === todo.id },
+                      { 'fa-eye': selectedTodo?.id !== todo.id },
                     )}
                   />
                 </span>

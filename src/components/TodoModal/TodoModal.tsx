@@ -1,5 +1,4 @@
-/* eslint-disable no-constant-condition */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -7,15 +6,17 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo,
-  setTodoList: (n: Todo | null) => void;
+  setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  todo, setTodoList,
+  todo, setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
 
-  getUser(todo.userId).then(setUser);
+  useEffect(() => {
+    getUser(todo.userId).then(setUser);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setTodoList(null);
+                setSelectedTodo(null);
               }}
 
             />

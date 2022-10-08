@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,28 +12,30 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [setTodo, setAll] = useState('all');
-  const [setTodoId, setTodoList] = useState<Todo | null>(null);
+  const [status, setStatus] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const getVisibleTodos = todos.filter(todo => {
-    const getVisible = todo.title.toLowerCase().includes(query.toLowerCase());
+  const isVisible = todos.filter(todo => {
+    const isMatched = todo.title.toLowerCase().includes(query.toLowerCase());
 
-    if (setTodo === 'active') {
-      return getVisible && todo.completed === false;
+    if (status === 'active') {
+      return isMatched && todo.completed === false;
     }
 
-    if (setTodo === 'completed') {
-      return getVisible && todo.completed === true;
+    if (status === 'completed') {
+      return isMatched && todo.completed === true;
     }
 
-    return getVisible;
+    return isMatched;
   });
 
-  getTodos().then(tod => {
-    setTodos(tod);
-    setIsLoaded(true);
-  });
+  useEffect(() => {
+    getTodos().then(tod => {
+      setTodos(tod);
+      setIsLoaded(true);
+    });
+  }, []);
 
   return (
     <>
@@ -46,9 +48,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                setAll={setAll}
-                setTodo={setTodo}
-
+                setAll={setStatus}
+                setTodo={status}
               />
             </div>
 
@@ -57,9 +58,9 @@ export const App: React.FC = () => {
               {isLoaded
                 ? (
                   <TodoList
-                    todos={getVisibleTodos}
-                    setTodoList={setTodoList}
-                    setTodoId={setTodoId}
+                    todos={isVisible}
+                    setSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
                   />
                 ) : (
                   <Loader />
@@ -69,13 +70,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {setTodoId && (
+      {selectedTodo && (
         <TodoModal
-          todo={setTodoId}
-          setTodoList={setTodoList}
+          todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       ) }
-
     </>
   );
 };
