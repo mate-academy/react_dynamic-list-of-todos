@@ -18,6 +18,7 @@ export const TodoModal: React.FC<Props> = ({ userId, handleClose, todo }) => {
     setIsLoading(true);
     getUser(userId).then(response => {
       setActiveUser(response);
+    }).finally(() => {
       setIsLoading(false);
     });
   }, []);

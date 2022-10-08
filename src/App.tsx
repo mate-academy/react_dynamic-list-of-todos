@@ -14,7 +14,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [activeUserId, setActiveUserId] = useState(0);
   const [activeTodo, setActiveTodo] = useState<Todo>();
@@ -38,8 +37,8 @@ export const App: React.FC = () => {
     getTodos().then(response => {
       setTodos(response);
       setVisibleTodos(response);
+    }).finally(() => {
       setIsLoading(false);
-      setIsLoaded(true);
     });
   }, []);
 
@@ -47,12 +46,12 @@ export const App: React.FC = () => {
     switch (value) {
       case 'active':
         setVisibleTodos(todos
-          .filter(todo => todo.completed === false));
+          .filter(todo => !todo.completed));
         break;
 
       case 'completed':
         setVisibleTodos(todos
-          .filter(todo => todo.completed === true));
+          .filter(todo => !!todo.completed));
         break;
 
       case 'all':
@@ -77,25 +76,21 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-
             <div className="block">
               <TodoFilter
                 handleSelect={onSelect}
-                handleInpput={onInput}
+                handleInput={onInput}
               />
             </div>
-
             <div className="block">
-              {isLoading
+              {!!isLoading
                 && <Loader />}
-
-              {isLoaded
+              {!isLoading
                 && <TodoList todos={visibleTodos} handleClick={openModal} />}
             </div>
           </div>
         </div>
       </div>
-
       {isModalOpened && activeTodo
         && <TodoModal handleClose={closeModal} userId={activeUserId} todo={activeTodo} />}
     </>

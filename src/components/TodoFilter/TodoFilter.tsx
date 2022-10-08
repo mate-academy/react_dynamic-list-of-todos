@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 
 type Props = {
   handleSelect: (value: string) => void,
-  handleInpput: (value: string) => void,
+  handleInput: (value: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
+export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInput }) => {
   const [inputValue, setInputValue] = useState('');
+
+  const handleButton = () => {
+    setInputValue('');
+    handleInput('');
+  };
 
   return (
     <form className="field has-addons">
@@ -24,7 +29,6 @@ export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
           </select>
         </span>
       </p>
-
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
           data-cy="searchInput"
@@ -34,13 +38,12 @@ export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.currentTarget.value);
-            handleInpput(e.currentTarget.value);
+            handleInput(e.currentTarget.value);
           }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {!inputValue
             && (
@@ -49,13 +52,9 @@ export const TodoFilter: React.FC<Props> = ({ handleSelect, handleInpput }) => {
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={() => {
-                  setInputValue('');
-                  handleInpput('');
-                }}
+                onClick={handleButton}
               />
             )}
-
         </span>
       </p>
     </form>
