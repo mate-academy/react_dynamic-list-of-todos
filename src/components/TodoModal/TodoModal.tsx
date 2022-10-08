@@ -23,10 +23,15 @@ export const TodoModal: React.FC<Props> = ({
     phone: 'no phone',
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     getUser(currentTodo.userId)
       .then(json => {
         setCurrentUser(json);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -37,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({
     >
       <div className="modal-background" />
 
-      {currentUser.id === 0 ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

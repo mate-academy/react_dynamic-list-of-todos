@@ -12,6 +12,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   const [currentTodo, setCurrentTodo] = useState<Todo>(todos[0]);
   const [slachEye, setSlashEye] = useState(false);
 
+  const modalHandler = (todo: Todo) => {
+    setModalOn(true);
+    setCurrentTodo(todo);
+    setSlashEye(!slachEye);
+  };
+
   return (
     <>
       {modalOn
@@ -70,11 +76,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => {
-                    setModalOn(true);
-                    setCurrentTodo(todo);
-                    setSlashEye(!slachEye);
-                  }}
+                  onClick={() => modalHandler(todo)}
                 >
                   <span className="icon">
                     <i

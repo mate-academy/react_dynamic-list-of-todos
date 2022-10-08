@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -14,13 +13,19 @@ export const App: React.FC = () => {
   const [sortedTodos, setSortedTodos] = useState<Todo[]>(todos);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  async function takeUsers() {
+    const users = await getTodos();
+
+    try {
+      setTodos(users);
+      setSortedTodos(users);
+    } finally {
+      setIsLoaded(true);
+    }
+  }
+
   useEffect(() => {
-    getTodos()
-      .then(json => {
-        setTodos(json);
-        setSortedTodos(json);
-        setIsLoaded(true);
-      });
+    takeUsers();
   }, []);
 
   return (

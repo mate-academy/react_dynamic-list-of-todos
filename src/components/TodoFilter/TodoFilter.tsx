@@ -13,18 +13,22 @@ export const TodoFilter: FC<Props> = ({
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('all');
 
+  const isIncludes = (title: string) => {
+    return title.toLowerCase().includes(search);
+  };
+
   const filter = () => {
     switch (sortBy) {
       case 'active':
-        setSortedTodos([...todos].filter(todo => !todo.completed
-          && todo.title.includes(search)));
+        setSortedTodos(todos.filter(todo => !todo.completed
+          && isIncludes(todo.title)));
         break;
       case 'completed':
-        setSortedTodos([...todos].filter(todo => todo.completed
-          && todo.title.includes(search)));
+        setSortedTodos(todos.filter(todo => todo.completed
+          && isIncludes(todo.title)));
         break;
-      default: setSortedTodos([...todos]
-        .filter(todo => todo.title.includes(search)));
+      default: setSortedTodos(todos
+        .filter(todo => isIncludes(todo.title)));
     }
   };
 
@@ -57,7 +61,7 @@ export const TodoFilter: FC<Props> = ({
           placeholder="Search..."
           value={search}
           onChange={event => {
-            setSearch(event.target.value);
+            setSearch(event.target.value.toLowerCase());
           }}
         />
         <span className="icon is-left">
