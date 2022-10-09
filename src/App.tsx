@@ -23,15 +23,14 @@ export const App: React.FC = () => {
   };
 
   const filterList = todos.filter(todo => {
-    if (valueOption === 'active') {
-      return !todo.completed;
+    switch (valueOption) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return todo;
     }
-
-    if (valueOption === 'completed') {
-      return todo.completed;
-    }
-
-    return todo;
   }).filter(todo => todo.title.includes(inputValue.toLowerCase()));
 
   useEffect(() => {
@@ -54,15 +53,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? <Loader />
+              {!todos.length ? <Loader />
                 : (
                   <TodoList
                     todos={filterList}
                     todoId={todoId}
-                    selectId={setTodoId}
-                    selectUserId={setUserId}
-                    clickedButton={setClickedButtonUserInfo}
-                    selectClickedButton={clickedButtonUserInfo}
+                    setTodoId={setTodoId}
+                    setUserId={setUserId}
+                    setClickedButtonUserInfo={setClickedButtonUserInfo}
+                    clickedButtonUserInfo={clickedButtonUserInfo}
                   />
                 )}
             </div>

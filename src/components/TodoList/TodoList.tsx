@@ -5,21 +5,27 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[],
   todoId: number,
-  selectId: (value: number) => void,
-  selectUserId: (value: number) => void,
-  clickedButton: (value: boolean) => void,
-  selectClickedButton: boolean,
+  setTodoId: (value: number) => void,
+  setUserId: (value: number) => void,
+  setClickedButtonUserInfo: (value: boolean) => void,
+  clickedButtonUserInfo: boolean,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   todoId,
-  selectId,
-  selectUserId,
-  clickedButton,
-  selectClickedButton,
+  setTodoId,
+  setUserId,
+  setClickedButtonUserInfo,
+  clickedButtonUserInfo,
 
 }) => {
+  const handleClick = (id: number, userId: number) => {
+    setTodoId(id);
+    setUserId(userId);
+    setClickedButtonUserInfo(true);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -36,17 +42,22 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {todos.map(({
+          id,
+          completed,
+          title,
+          userId,
+        }) => (
           <>
             <tr data-cy="todo" className="has-background-info-light">
               <td
                 className="is-vcentered"
-                key={todo.id}
+                key={id}
               >
-                {todo.id}
+                {id}
               </td>
               <td className="is-vcentered">
-                {todo.completed && (
+                {completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
@@ -55,9 +66,9 @@ export const TodoList: React.FC<Props> = ({
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames('has-text-success',
-                    { 'has-text-danger': todo.completed === false })}
+                    { 'has-text-danger': !completed })}
                 >
-                  {todo.title}
+                  {title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
@@ -66,12 +77,10 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    selectId(todo.id);
-                    selectUserId(todo.userId);
-                    clickedButton(true);
+                    handleClick(id, userId);
                   }}
                 >
-                  {selectClickedButton && todo.id === todoId ? (
+                  {clickedButtonUserInfo && id === todoId ? (
                     <span className="icon">
                       <i className="far fa-eye-slash" />
                     </span>

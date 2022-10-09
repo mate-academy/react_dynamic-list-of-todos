@@ -19,6 +19,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [userInfo, setUserInfo] = useState<User>();
   const findTodo = todos.find(user => user.id === todoId);
+  // const { title, completed } = findTodo;
 
   useEffect(() => {
     const loadUserTodo = async () => {
