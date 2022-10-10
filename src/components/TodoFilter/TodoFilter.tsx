@@ -1,10 +1,11 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
-  value: string,
+  value: FilterStatus,
   response: string
-  setValue: (value: string) => string | void,
-  setResponse: (value: string) => string | void,
+  setValue: (status: FilterStatus) => void,
+  setResponse: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,12 +14,23 @@ export const TodoFilter: React.FC<Props> = ({
   setValue,
   setResponse,
 }) => {
-  const handleNewValue = (event: ChangeEvent<HTMLSelectElement>) => {
-    setValue(event.target.value);
-  };
+  // const handleNewValue = (event: ChangeEvent<HTMLSelectElement>) => {
+  //   const status = event.target.value;
 
-  const handleNewResponse = (event: ChangeEvent<HTMLInputElement>) => {
-    setResponse(event.target.value);
+  //   switch (status) {
+  //     case 'active':
+  //       setValue(FilterStatus.ACTIVE);
+  //       break;
+  //     case 'completed':
+  //       setValue(FilterStatus.COMPLETED);
+  //       break;
+  //     case 'all':
+  //     default:
+  //       setValue(FilterStatus.ALL);
+  //   }
+
+  const handleNewResponse = (search: ChangeEvent<HTMLInputElement>) => {
+    setResponse(search.target.value);
   };
 
   return (
@@ -28,11 +40,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={value}
-            onChange={handleNewValue}
+            onChange={() => setValue(value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterStatus.ALL}>All</option>
+            <option value={FilterStatus.ACTIVE}>Active</option>
+            <option value={FilterStatus.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
