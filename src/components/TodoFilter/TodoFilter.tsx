@@ -1,6 +1,6 @@
 type Props = {
   filter: { status: string, query: string },
-  onFilterChange: (filter: { status: string, query: string }) => void,
+  onFilterChange(filter: { status: string, query: string }): void,
 };
 
 export const TodoFilter = ({ filter, onFilterChange }: Props) => {

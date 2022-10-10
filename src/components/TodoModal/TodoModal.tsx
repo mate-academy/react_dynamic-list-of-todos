@@ -6,12 +6,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  onModalChange: (todo: Todo) => void,
+  onModalChange: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onModalChange }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [user, setUser] = useState({} as User);
+  const [user, setUser] = useState<User | null>(null);
 
   const loadUser = async () => {
     try {
@@ -49,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalChange }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onModalChange({} as Todo)}
+              onClick={() => onModalChange(null)}
             />
           </header>
 
@@ -66,8 +66,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalChange }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

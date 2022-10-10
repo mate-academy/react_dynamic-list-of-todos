@@ -15,10 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState([] as Todo[]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState({ status: '', query: '' });
-  const [modalTodo, setModalTodo] = useState({} as Todo);
-
-  // eslint-disable-next-line no-console
-  console.log(modalTodo);
+  const [modalTodo, setModalTodo] = useState<Todo | null>(null);
 
   const loadTodos = async () => {
     try {
@@ -80,7 +77,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {Object.keys(modalTodo).length > 0 && <TodoModal todo={modalTodo} onModalChange={setModalTodo} />}
+      {modalTodo && <TodoModal todo={modalTodo} onModalChange={setModalTodo} />}
     </>
   );
 };
