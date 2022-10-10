@@ -10,20 +10,17 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const defaultTodo: Todo = {
+  id: 0,
+  title: '',
+  completed: false,
+  userId: 0,
+};
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState([{
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  }]);
+  const [todos, setTodos] = useState<Todo[]>([defaultTodo]);
   const [loading, setLoading] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState({
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  });
+  const [selectedTodo, setSelectedTodo] = useState(defaultTodo);
   const [todoSelected, setTodoSelected] = useState(false);
   const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
@@ -42,12 +39,7 @@ export const App: React.FC = () => {
 
   const unsetSelectedTodo = () => {
     setTodoSelected(false);
-    setSelectedTodo({
-      id: 0,
-      title: '',
-      completed: false,
-      userId: 0,
-    });
+    setSelectedTodo(defaultTodo);
   };
 
   const setFilter = (filter: string) => {

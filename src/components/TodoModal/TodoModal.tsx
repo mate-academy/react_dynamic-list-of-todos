@@ -8,13 +8,15 @@ interface Props {
   unsetSelectedTodo: () => void,
 }
 
+const defaultUser = {
+  id: 0,
+  name: '',
+  email: '',
+  phone: '',
+};
+
 export const TodoModal: React.FC<Props> = ({ todo, unsetSelectedTodo }) => {
-  const [user, setUser] = useState({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
+  const [user, setUser] = useState(defaultUser);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
