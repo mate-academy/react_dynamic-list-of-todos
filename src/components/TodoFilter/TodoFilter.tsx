@@ -14,23 +14,14 @@ export const TodoFilter: React.FC<Props> = ({
   setValue,
   setResponse,
 }) => {
-  // const handleNewValue = (event: ChangeEvent<HTMLSelectElement>) => {
-  //   const status = event.target.value;
-
-  //   switch (status) {
-  //     case 'active':
-  //       setValue(FilterStatus.ACTIVE);
-  //       break;
-  //     case 'completed':
-  //       setValue(FilterStatus.COMPLETED);
-  //       break;
-  //     case 'all':
-  //     default:
-  //       setValue(FilterStatus.ALL);
-  //   }
-
   const handleNewResponse = (search: ChangeEvent<HTMLInputElement>) => {
     setResponse(search.target.value);
+  };
+
+  const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newSortType = event.target.value as FilterStatus;
+
+    setValue(newSortType);
   };
 
   return (
@@ -40,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={value}
-            onChange={() => setValue(value)}
+            onChange={handleSelect}
           >
             <option value={FilterStatus.ALL}>All</option>
             <option value={FilterStatus.ACTIVE}>Active</option>
