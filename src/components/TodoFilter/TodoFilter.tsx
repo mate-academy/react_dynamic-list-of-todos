@@ -1,5 +1,5 @@
 type Props = {
-  setQuery: (query: string) => void,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
   setAll: (query: string) => void,
   setTodo: string
   query: string,

@@ -16,18 +16,17 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const isVisible = todos.filter(todo => {
+  const visibleTodos = todos.filter(todo => {
     const isMatched = todo.title.toLowerCase().includes(query.toLowerCase());
 
-    if (status === 'active') {
-      return isMatched && todo.completed === false;
+    switch (status) {
+      case 'active':
+        return isMatched && todo.completed === false;
+      case 'completed':
+        return isMatched && todo.completed === true;
+      default:
+        return isMatched;
     }
-
-    if (status === 'completed') {
-      return isMatched && todo.completed === true;
-    }
-
-    return isMatched;
   });
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export const App: React.FC = () => {
               {isLoaded
                 ? (
                   <TodoList
-                    todos={isVisible}
+                    todos={visibleTodos}
                     setSelectedTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
