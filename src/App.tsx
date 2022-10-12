@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -18,7 +16,6 @@ export const App: React.FC = () => {
   const [isListLoaded, setIsListLoaded] = useState(false);
   const [filterBy, setFilterBy] = useState('all');
   const [inputFilter, setInputFilter] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState(0);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [selectedUser, setSelectedUser] = useState<User>({
     id: 0,
@@ -29,18 +26,17 @@ export const App: React.FC = () => {
   const [isModalLoaded, setIsModalLoaded] = useState(false);
 
   useEffect(() => {
-    if (selectedTodo !== 0) {
-      getUser(selectedTodo)
+    if (selectedTodoId !== 0) {
+      getUser(selectedTodoId)
         .then(user => {
           setSelectedUser(user);
           setIsModalLoaded(true);
         });
     }
-  }, [selectedTodo]);
+  }, [selectedTodoId]);
 
   useEffect(() => {
     getTodos()
-      // eslint-disable-next-line consistent-return
       .then((todos: Todo[]) => {
         setTodoList(todos);
         setIsListLoaded(true);
@@ -94,11 +90,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!isListLoaded && <Loader />}
-              {isListLoaded
-              && (
+              {isListLoaded && (
                 <TodoList
                   todoList={isListLoaded && filteredTodos}
-                  setSelectedTodo={setSelectedTodo}
                   setSelectedTodoId={setSelectedTodoId}
                   selectedTodoId={selectedTodoId}
                 />
@@ -109,19 +103,17 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo > 0
-        && (
-          <TodoModal
-            selectedUser={selectedUser}
-            isModalLoaded={isModalLoaded}
-            setSelectedTodo={setSelectedTodo}
-            setSelectedUser={setSelectedUser}
-            setIsModalLoaded={setIsModalLoaded}
-            todoList={todoList}
-            selectedTodoId={selectedTodoId}
-            setSelectedTodoId={setSelectedTodoId}
-          />
-        ) }
+      {selectedTodoId > 0 && (
+        <TodoModal
+          selectedUser={selectedUser}
+          isModalLoaded={isModalLoaded}
+          setSelectedUser={setSelectedUser}
+          setIsModalLoaded={setIsModalLoaded}
+          todoList={todoList}
+          selectedTodoId={selectedTodoId}
+          setSelectedTodoId={setSelectedTodoId}
+        />
+      ) }
     </>
   );
 };

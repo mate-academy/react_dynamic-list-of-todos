@@ -7,19 +7,22 @@ import { Todo } from '../../types/Todo';
 type Props = {
   selectedUser: User,
   isModalLoaded: boolean,
-  setSelectedTodo: (param: number) => void,
   setSelectedUser: (param: User) => void,
   setIsModalLoaded: (param: boolean) => void,
   todoList: Todo[],
   selectedTodoId: number,
   setSelectedTodoId: (param: number) => void,
 };
-  
+
 export const TodoModal: React.FC<Props> = (
   {
-    selectedUser, isModalLoaded, setSelectedTodo,
-    setSelectedUser, setIsModalLoaded, todoList,
-    selectedTodoId, setSelectedTodoId,
+    selectedUser,
+    isModalLoaded,
+    setSelectedUser,
+    setIsModalLoaded,
+    todoList,
+    selectedTodoId,
+    setSelectedTodoId,
   },
 ) => {
   const currentTodo = todoList.find(todo => todo.id === selectedTodoId);
@@ -44,7 +47,6 @@ export const TodoModal: React.FC<Props> = (
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setSelectedTodo(0);
                 setSelectedTodoId(0);
                 setSelectedUser({
                   id: 0,

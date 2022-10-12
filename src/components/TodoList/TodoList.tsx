@@ -4,14 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Todos = {
   todoList: Todo[],
-  setSelectedTodo: (userId: number) => void,
   setSelectedTodoId: (userId: number) => void,
   selectedTodoId: number,
 };
 
 export const TodoList: React.FC<Todos> = (
   {
-    todoList, setSelectedTodo, setSelectedTodoId, selectedTodoId,
+    todoList, setSelectedTodoId, selectedTodoId,
   },
 ) => (
   <table className="table is-narrow is-fullwidth">
@@ -51,7 +50,6 @@ export const TodoList: React.FC<Todos> = (
               className="button"
               type="button"
               onClick={() => {
-                setSelectedTodo(todo.userId);
                 setSelectedTodoId(todo.id);
               }}
             >
@@ -67,20 +65,6 @@ export const TodoList: React.FC<Todos> = (
           </td>
         </tr>
       ))}
-      {/* <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr> */}
     </tbody>
   </table>
 );

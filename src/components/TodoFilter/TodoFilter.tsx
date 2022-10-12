@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   filterBy: string,
   setFilterBy: (a: string) => void,
@@ -40,9 +41,7 @@ export const TodoFilter: React.FC<Props> = (
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {inputFilter && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
