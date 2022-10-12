@@ -1,12 +1,27 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  activeTodo?: Todo,
+  setActiveTodo: (value: undefined) => void,
+  userInfo?: User,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  activeTodo,
+  setActiveTodo,
+  userInfo,
+}) => {
+  const { id, title, completed } = { ...activeTodo };
+  const { name, email } = { ...userInfo };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!userInfo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +30,8 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #
+              {id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,24 +39,38 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                setActiveTodo(undefined);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {completed ? (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-success">Done</strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                <a href={`mailto:${email}`}>
+                  {name}
+                </a>
+              </p>
+            ) : (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-danger">Planned</strong>
+
+                {' by '}
+
+                <a href="mailto:Sincere@april.biz">
+                  {name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
