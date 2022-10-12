@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 const defaultTodo: Todo = {
   id: 0,
@@ -22,7 +23,7 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(defaultTodo);
   const [todoSelected, setTodoSelected] = useState(false);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export const App: React.FC = () => {
     setSelectedTodo(defaultTodo);
   };
 
-  const setFilter = (filter: string) => {
+  const setFilter = (filter: Filter) => {
     setFilterBy(filter);
   };
 
@@ -52,9 +53,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter((todo) => {
     switch (filterBy) {
-      case 'active':
+      case Filter.Active:
         return !todo.completed;
-      case 'completed':
+      case Filter.Completed:
         return todo.completed;
       default:
         return true;
@@ -71,11 +72,16 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setFilter={setFilter} setQuery={setQueryFilter} query={query} />
+              <TodoFilter
+                onFilterSelect={setFilter}
+                setQuery={setQueryFilter}
+                query={query}
+              />
             </div>
 
             <div className="block">
-              { loading ? <Loader />
+              { loading
+                ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
@@ -89,7 +95,8 @@ export const App: React.FC = () => {
       </div>
 
       {todoSelected && (
-        <TodoModal todo={selectedTodo} unsetSelectedTodo={unsetSelectedTodo} />)}
+        <TodoModal todo={selectedTodo} unsetSelectedTodo={unsetSelectedTodo} />
+      )}
     </>
   );
 };

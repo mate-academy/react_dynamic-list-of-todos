@@ -31,24 +31,29 @@ export const TodoList: React.FC<Props> = ({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={
-            selectedTodo === todo ? 'has-background-info-light' : ''
-          }
+          className={classNames(
+            { 'has-background-info-light': selectedTodo === todo },
+          )}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
-          {todo.completed ? (
-            <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            </td>
-          )
+          {todo.completed
+            ? (
+              <td className="is-vcentered">
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              </td>
+            )
             : <td className="is-vcentered" />}
           <td className="is-vcentered is-expanded">
             <p
-              className={todo.completed
-                ? 'has-text-success' : 'has-text-danger'}
+              className={classNames(
+                {
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                },
+              )}
             >
               {todo.title}
             </p>
@@ -63,8 +68,10 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i className={classNames(
                   'far',
-                  { 'fa-eye': selectedTodo !== todo },
-                  { 'fa-eye-slash': selectedTodo === todo },
+                  {
+                    'fa-eye': selectedTodo !== todo,
+                    'fa-eye-slash': selectedTodo === todo,
+                  },
                 )}
                 />
               </span>

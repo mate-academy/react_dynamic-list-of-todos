@@ -1,18 +1,34 @@
 import React from 'react';
+import { Filter } from '../../types/Filter';
 
 interface Props {
   query: string;
-  setFilter: (filter: string) => void;
+  onFilterSelect: (filter: Filter) => void;
   setQuery: (value: string) => void;
 }
 
-export const TodoFilter: React.FC<Props> = ({ query, setFilter, setQuery }) => (
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onFilterSelect,
+  setQuery,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => setFilter(event.target.value)}
+          onChange={(event) => {
+            switch (event.target.value) {
+              case 'all':
+                return onFilterSelect(Filter.All);
+              case 'active':
+                return onFilterSelect(Filter.Active);
+              case 'completed':
+                return onFilterSelect(Filter.Completed);
+              default:
+                return onFilterSelect(Filter.All);
+            }
+          }}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({ query, setFilter, setQuery }) => (
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      { query !== '' && (
+      { query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
