@@ -9,14 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState(0);
-  const [userId, setUserId] = useState(0);
   const [valueOption, setValueOption] = useState('all');
   const [inputValue, setInputValue] = useState('');
-  const [clickedButtonUserInfo, setClickedButtonUserInfo] = useState(false);
+  const [activeTodo, setActiveTodo] = useState<Todo | undefined>();
+  const [userInfo, setUserInfo] = useState<User>();
 
   const loadData = async () => {
     setTodos(await getTodos());
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onValueOption={setValueOption}
                 onSetInputValue={setInputValue}
-                onInputValue={inputValue}
+                inputValue={inputValue}
               />
             </div>
 
@@ -57,11 +57,9 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filterList}
-                    todoId={todoId}
-                    setTodoId={setTodoId}
-                    setUserId={setUserId}
-                    setClickedButtonUserInfo={setClickedButtonUserInfo}
-                    clickedButtonUserInfo={clickedButtonUserInfo}
+                    setActiveTodo={setActiveTodo}
+                    activeTodo={activeTodo}
+                    setUserInfo={setUserInfo}
                   />
                 )}
             </div>
@@ -69,12 +67,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0 && (
+      {activeTodo?.id && (
         <TodoModal
-          todos={todos}
-          todoId={todoId}
-          userId={userId}
-          selectTodoId={(todoID) => setTodoId(todoID)}
+          activeTodo={activeTodo}
+          setActiveTodo={setActiveTodo}
+          userInfo={userInfo}
         />
       )}
     </>

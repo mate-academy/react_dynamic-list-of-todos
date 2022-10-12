@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Loader } from '../Loader';
-import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
-  todoId: number,
-  userId: number
-  selectTodoId: (newValue: number) => void,
+  activeTodo?: Todo,
+  setActiveTodo: (value: undefined) => void,
+  userInfo?: User,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  todos,
-  todoId,
-  userId,
-  selectTodoId,
+  activeTodo,
+  setActiveTodo,
+  userInfo,
 }) => {
-  const [userInfo, setUserInfo] = useState<User>();
-  const findTodo = todos.find(user => user.id === todoId);
-  // const { title, completed } = findTodo;
-
-  useEffect(() => {
-    const loadUserTodo = async () => {
-      setUserInfo(await getUser(userId));
-    };
-
-    loadUserTodo();
-  }, []);
+  const { id, title, completed } = { ...activeTodo };
+  const { name, email } = { ...userInfo };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {userInfo === undefined ? (
+      {!userInfo ? (
         <Loader />
       ) : (
-
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -44,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-header"
             >
               Todo #
-              {todoId}
+              {id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -52,23 +39,25 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectTodoId(0)}
+              onClick={() => {
+                setActiveTodo(undefined);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {findTodo?.title}
+              {title}
             </p>
 
-            {findTodo?.completed ? (
+            {completed ? (
               <p className="block" data-cy="modal-user">
                 <strong className="has-text-success">Done</strong>
 
                 {' by '}
 
-                <a href={`mailto:${userInfo.email}`}>
-                  {userInfo.name}
+                <a href={`mailto:${email}`}>
+                  {name}
                 </a>
               </p>
             ) : (
@@ -78,7 +67,7 @@ export const TodoModal: React.FC<Props> = ({
                 {' by '}
 
                 <a href="mailto:Sincere@april.biz">
-                  {userInfo.name}
+                  {name}
                 </a>
               </p>
             )}

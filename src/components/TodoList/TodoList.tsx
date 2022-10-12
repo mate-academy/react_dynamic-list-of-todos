@@ -1,29 +1,39 @@
 import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   todos: Todo[],
-  todoId: number,
-  setTodoId: (value: number) => void,
-  setUserId: (value: number) => void,
-  setClickedButtonUserInfo: (value: boolean) => void,
-  clickedButtonUserInfo: boolean,
+  setActiveTodo: (todo: Todo) => void,
+  activeTodo?: Todo,
+  setUserInfo: (value: User) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  todoId,
-  setTodoId,
-  setUserId,
-  setClickedButtonUserInfo,
-  clickedButtonUserInfo,
-
+  setActiveTodo,
+  activeTodo,
+  setUserInfo,
 }) => {
-  const handleClick = (id: number, userId: number) => {
-    setTodoId(id);
-    setUserId(userId);
-    setClickedButtonUserInfo(true);
+  const loadUserTodo = async () => {
+    setUserInfo(await getUser(activeTodo?.userId));
+  };
+
+  if (activeTodo) {
+    loadUserTodo();
+  }
+
+  const handleClick = (
+    id: number,
+    userId: number,
+    title: string,
+    completed: boolean,
+  ) => {
+    setActiveTodo({
+      id, userId, title, completed,
+    });
   };
 
   return (
@@ -77,10 +87,10 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    handleClick(id, userId);
+                    handleClick(id, userId, title, completed);
                   }}
                 >
-                  {clickedButtonUserInfo && id === todoId ? (
+                  {activeTodo && id === activeTodo?.id ? (
                     <span className="icon">
                       <i className="far fa-eye-slash" />
                     </span>

@@ -1,13 +1,13 @@
 type Props = {
   onValueOption: (value: string) => void,
   onSetInputValue: (value: string) => void,
-  onInputValue: string,
+  inputValue: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onValueOption,
   onSetInputValue,
-  onInputValue,
+  inputValue,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -33,14 +33,14 @@ export const TodoFilter: React.FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={onInputValue}
+        value={inputValue}
         onChange={(event) => onSetInputValue(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {onInputValue.length > 0 && (
+      {inputValue.length > 0 && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
