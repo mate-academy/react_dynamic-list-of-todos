@@ -17,18 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => {
-            switch (event.target.value) {
-              case 'all':
-                return onFilterSelect(Filter.All);
-              case 'active':
-                return onFilterSelect(Filter.Active);
-              case 'completed':
-                return onFilterSelect(Filter.Completed);
-              default:
-                return onFilterSelect(Filter.All);
-            }
-          }}
+          onChange={(event) => onFilterSelect(event.target.value as Filter)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
