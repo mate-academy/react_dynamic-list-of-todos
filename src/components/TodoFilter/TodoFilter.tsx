@@ -1,8 +1,27 @@
-export const TodoFilter = () => (
+type Props = {
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  setAll: (query: string) => void,
+  setTodo: string
+  query: string,
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  setAll,
+  query,
+  setQuery,
+  setTodo,
+}) => (
+
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={setTodo}
+          onChange={(event) => {
+            setAll(event.target.value);
+          }}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,19 +35,26 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => {
+          setQuery(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setQuery('')}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
