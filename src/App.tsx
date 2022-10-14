@@ -53,7 +53,6 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
                 selectStatus={selectStatus}
                 setSelectStatus={setSelectStatus}
                 query={queryFilter}

@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { ChangeEvent } from 'react';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
   selectStatus: string,
   query: string,
   setSelectStatus: (arg: string) => (string) | void;

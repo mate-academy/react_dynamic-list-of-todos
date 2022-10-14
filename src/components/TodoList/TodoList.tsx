@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -47,9 +48,12 @@ export const TodoList: React.FC<Props> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={completed
-                ? 'has-text-success'
-                : 'has-text-danger'}
+              <p className={classNames(
+                {
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                },
+              )}
               >
                 {title}
               </p>
@@ -66,12 +70,12 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <span className="icon">
-                  {selectedTodoId === id
-                    ? (
-                      <i className="far fa-eye-slash" />
-                    ) : (
-                      <i className="far fa-eye" />
-                    )}
+                  <i className={classNames(
+                    'far',
+                    { 'fa-eye-slash': selectedTodoId === id },
+                    { 'fa-eye': selectedTodoId !== id },
+                  )}
+                  />
                 </span>
               </button>
             </td>
