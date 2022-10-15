@@ -8,15 +8,25 @@ export const TodoFilter: React.FC<Todos> = ({ filterTodos }) => {
   const [inputValue, setInputValue] = useState('');
   const [selectValue, setSelectValue] = useState('all');
 
-  const handleSearch = (value: string, name: string) => {
-    if (name === 'search') {
-      setInputValue(value);
-      filterTodos(selectValue, value);
-    }
+  const handlerFilter = (
+    e: React.ChangeEvent<HTMLSelectElement>
+    | React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { value, nodeName } = e.target;
 
-    if (name === 'select') {
-      setSelectValue(value);
-      filterTodos(value, inputValue);
+    switch (nodeName) {
+      case 'INPUT':
+        setInputValue(value);
+        filterTodos(selectValue, value);
+        break;
+
+      case 'SELECT':
+        setSelectValue(value);
+        filterTodos(value, inputValue);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -26,15 +36,16 @@ export const TodoFilter: React.FC<Todos> = ({ filterTodos }) => {
   };
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
             name="select"
-            onChange={(e) => {
-              handleSearch(e.target.value, e.target.name);
-            }}
+            onChange={handlerFilter}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -51,9 +62,7 @@ export const TodoFilter: React.FC<Todos> = ({ filterTodos }) => {
           placeholder="Search..."
           name="search"
           value={inputValue}
-          onChange={(e) => {
-            handleSearch(e.target.value, e.target.name);
-          }}
+          onChange={handlerFilter}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -61,7 +70,6 @@ export const TodoFilter: React.FC<Todos> = ({ filterTodos }) => {
 
         {inputValue && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
@@ -69,7 +77,9 @@ export const TodoFilter: React.FC<Todos> = ({ filterTodos }) => {
               onClick={() => {
                 clearState();
               }}
-            />
+            >
+              &nbsp
+            </button>
           </span>
         )}
       </p>

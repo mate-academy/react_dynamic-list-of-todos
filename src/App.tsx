@@ -42,17 +42,17 @@ export const App: React.FC = () => {
       case 'active':
         filterValues = filterValues.filter(toDo => !toDo.completed);
         break;
+
       case 'completed':
         filterValues = filterValues.filter(toDo => toDo.completed);
         break;
+
       default:
         break;
     }
 
-    filterValues = filterValues
-      .filter(toDo => toDo
-        .title.toLowerCase()
-        .includes(inputValue.toLowerCase()));
+    filterValues = filterValues.filter(toDo => (
+      toDo.title.toLowerCase().includes(inputValue.toLowerCase())));
 
     setVisibleTodos(filterValues);
   };
@@ -82,8 +82,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal
-        && <TodoModal todo={todo} closeModal={closeModal} />}
+      {showModal && (
+        <TodoModal todo={todo} closeModal={closeModal} />
+      )}
     </>
   );
 };

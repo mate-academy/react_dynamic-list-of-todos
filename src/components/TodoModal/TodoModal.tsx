@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -18,12 +18,17 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   } = todo;
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    (async function loadUser() {
+  const loadUser = useCallback(
+    async () => {
       const userData = await getUser(userId);
 
       setUser(userData);
-    }());
+    },
+    [todo],
+  );
+
+  useEffect(() => {
+    loadUser();
   }, []);
 
   return (
@@ -42,7 +47,6 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -50,7 +54,9 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               onClick={() => {
                 closeModal();
               }}
-            />
+            >
+              &nbsp
+            </button>
           </header>
 
           <div className="modal-card-body">
