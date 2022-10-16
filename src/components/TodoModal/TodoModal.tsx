@@ -14,17 +14,15 @@ type Props = {
   setSelectedTodoId: (param: number) => void,
 };
 
-export const TodoModal: React.FC<Props> = (
-  {
-    selectedUser,
-    isModalLoaded,
-    setSelectedUser,
-    setIsModalLoaded,
-    todoList,
-    selectedTodoId,
-    setSelectedTodoId,
-  },
-) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedUser,
+  isModalLoaded,
+  setSelectedUser,
+  setIsModalLoaded,
+  todoList,
+  selectedTodoId,
+  setSelectedTodoId,
+}) => {
   const currentTodo = todoList.find(todo => todo.id === selectedTodoId);
 
   return (
@@ -65,11 +63,17 @@ export const TodoModal: React.FC<Props> = (
             </p>
 
             <p className="block" data-cy="modal-user">
-              {currentTodo?.completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+              {currentTodo?.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
-              <a href={selectedUser.email}>
+              <a
+                href={`mailto:${selectedUser.email}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {selectedUser.name}
               </a>
             </p>

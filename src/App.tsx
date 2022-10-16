@@ -1,4 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+/* eslint-disable import/no-cycle */
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,10 +14,16 @@ import { Todo } from './types/Todo';
 
 import { User } from './types/User';
 
+export enum FilterBy {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [isListLoaded, setIsListLoaded] = useState(false);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [inputFilter, setInputFilter] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [selectedUser, setSelectedUser] = useState<User>({
@@ -25,37 +34,43 @@ export const App: React.FC = () => {
   });
   const [isModalLoaded, setIsModalLoaded] = useState(false);
 
-  useEffect(() => {
+  const fetchUserHandler = useCallback(async () => {
     if (selectedTodoId !== 0) {
-      getUser(selectedTodoId)
-        .then(user => {
-          setSelectedUser(user);
-          setIsModalLoaded(true);
-        });
+      const user = await getUser(selectedTodoId);
+
+      setIsModalLoaded(true);
+      setSelectedUser(user);
     }
   }, [selectedTodoId]);
 
+  const fetchTodosHandler = useCallback(async () => {
+    const todos = await getTodos();
+
+    setIsListLoaded(true);
+    setTodoList(todos);
+  }, []);
+
   useEffect(() => {
-    getTodos()
-      .then((todos: Todo[]) => {
-        setTodoList(todos);
-        setIsListLoaded(true);
-      });
+    fetchUserHandler();
+  }, [selectedTodoId]);
+
+  useEffect(() => {
+    fetchTodosHandler();
   }, []);
 
   const filteredTodos: Todo[] = useMemo(() => {
     let resultArr = [...todoList];
 
     switch (filterBy) {
-      case 'all':
+      case FilterBy.All:
         resultArr = todoList;
         break;
 
-      case 'active':
+      case FilterBy.Active:
         resultArr = todoList.filter((todo: Todo) => !todo.completed);
         break;
 
-      case 'completed':
+      case FilterBy.Completed:
         resultArr = todoList.filter((todo: Todo) => todo.completed);
         break;
 
@@ -64,7 +79,7 @@ export const App: React.FC = () => {
     }
 
     if (inputFilter) {
-      resultArr = resultArr.filter(todo => {
+      resultArr = resultArr.filter((todo) => {
         return todo.title.toLowerCase().includes(inputFilter.toLowerCase());
       });
     }
@@ -90,6 +105,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!isListLoaded && <Loader />}
+
               {isListLoaded && (
                 <TodoList
                   todoList={isListLoaded && filteredTodos}
@@ -97,7 +113,6 @@ export const App: React.FC = () => {
                   selectedTodoId={selectedTodoId}
                 />
               )}
-
             </div>
           </div>
         </div>
@@ -113,7 +128,7 @@ export const App: React.FC = () => {
           selectedTodoId={selectedTodoId}
           setSelectedTodoId={setSelectedTodoId}
         />
-      ) }
+      )}
     </>
   );
 };

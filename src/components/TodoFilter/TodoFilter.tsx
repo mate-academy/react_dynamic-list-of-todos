@@ -1,16 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+// eslint-disable-next-line import/no-cycle
+import { FilterBy } from '../../App';
+
 type Props = {
   filterBy: string,
-  setFilterBy: (a: string) => void,
+  setFilterBy: (param: FilterBy) => void,
   inputFilter: string,
-  setInputFilter: (a: string) => void,
+  setInputFilter: (param: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = (
-  {
-    filterBy, setFilterBy, inputFilter, setInputFilter,
-  },
-) => {
+export const TodoFilter: React.FC<Props> = ({
+  filterBy,
+  setFilterBy,
+  inputFilter,
+  setInputFilter,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -18,7 +22,7 @@ export const TodoFilter: React.FC<Props> = (
           <select
             data-cy="statusSelect"
             value={filterBy}
-            onChange={(event) => setFilterBy(event.target.value)}
+            onChange={(event) => setFilterBy(event.target.value as FilterBy)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

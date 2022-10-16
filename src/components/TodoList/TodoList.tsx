@@ -8,11 +8,11 @@ type Todos = {
   selectedTodoId: number,
 };
 
-export const TodoList: React.FC<Todos> = (
-  {
-    todoList, setSelectedTodoId, selectedTodoId,
-  },
-) => (
+export const TodoList: React.FC<Todos> = ({
+  todoList,
+  setSelectedTodoId,
+  selectedTodoId,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
