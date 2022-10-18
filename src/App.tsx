@@ -8,18 +8,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
-  const defaultTodo = {
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
+  const getDefaultTodo = () => {
+    return ({
+      id: 0,
+      title: '',
+      completed: false,
+      userId: 0,
+    });
   };
+
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState(defaultTodo);
+  const [selectedTodo, setSelectedTodo] = useState(getDefaultTodo());
   const [query, setQuery] = useState('');
-  const [sortType, setSortType] = useState('all');
+  const [sortType, setSortType] = useState(SortType.ALL);
 
   const normalizedQuery = query.toLowerCase();
 
@@ -31,17 +35,15 @@ export const App: React.FC = () => {
     let filteredTodos = [...todos];
 
     switch (sortType) {
-      case 'active':
-        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+      case SortType.ACTIVE:
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
+      case SortType.COMPLETED:
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
 
       default:
-        filteredTodos = filteredTodos.map(todo => todo);
-        break;
     }
 
     if (query) {
@@ -91,6 +93,7 @@ export const App: React.FC = () => {
           selectTodo={(todo) => {
             setSelectedTodo(todo);
           }}
+          getDefaultTodo={getDefaultTodo}
         />
       )}
     </>

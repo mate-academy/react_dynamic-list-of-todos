@@ -7,9 +7,14 @@ import { Loader } from '../Loader';
 type Props = {
   selectedTodo: Todo;
   selectTodo: (todo:Todo) => void;
+  getDefaultTodo(): Todo;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  selectTodo,
+  getDefaultTodo,
+}) => {
   const {
     id,
     title,
@@ -44,12 +49,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                selectTodo({
-                  id: 0,
-                  title: '',
-                  completed: false,
-                  userId: 0,
-                });
+                selectTodo(getDefaultTodo());
               }}
             />
           </header>
