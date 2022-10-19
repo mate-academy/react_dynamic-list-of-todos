@@ -6,17 +6,20 @@ import { Loader } from '../Loader';
 
 interface Props {
   todo: Todo;
-  closeModal: () => void;
+  onClose: (v: number | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
-  const [user, setUser] = useState<User>();
+export const TodoModal: React.FC<Props> = (props) => {
+  const { todo, onClose } = props;
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // eslint-disable-next-line max-len
+    setIsLoading(true);
     getUser(todo.userId)
-      .then(userFromServer => setUser(userFromServer));
-  }, []);
+      .then(setUser);
+    setIsLoading(false);
+  }, [todo.userId, isLoading]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={closeModal}
+              onClick={() => onClose(null)}
             />
           </header>
 
