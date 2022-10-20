@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,18 +11,24 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
+  const Values = {
+    All: 'all',
+    Active: 'active',
+    Completed: 'completed',
+  };
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedValue, setSelect] = useState('all');
+  const [selectedValue, setSelect] = useState(Values.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     (async () => {
       const todosLoaded = await getTodos();
 
-      setTodos(todosLoaded);
       setLoading(false);
+      setTodos(todosLoaded);
     })();
   }, []);
 
@@ -30,16 +36,23 @@ export const App: React.FC = () => {
     return text.toLowerCase().includes(query.toLowerCase());
   };
 
-  const visibleTodos = [...todos].filter((todo) => {
-    switch (selectedValue) {
-      case 'completed':
-        return todo.completed && includesQuery(todo.title);
-      case 'active':
-        return !todo.completed && includesQuery(todo.title);
-      default:
-        return includesQuery(todo.title);
-    }
-  });
+  const getVisibleTodos = () => {
+    return [...todos].filter((todo) => {
+      switch (selectedValue) {
+        case Values.Completed:
+          return todo.completed && includesQuery(todo.title);
+        case Values.Active:
+          return !todo.completed && includesQuery(todo.title);
+        default:
+          return includesQuery(todo.title);
+      }
+    });
+  };
+
+  const visibleTodos = useMemo(
+    getVisibleTodos,
+    [query, selectedValue],
+  );
 
   return (
     <>
