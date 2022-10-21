@@ -9,14 +9,9 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { Values } from './types/Values';
 
 export const App: React.FC = () => {
-  const Values = {
-    All: 'all',
-    Active: 'active',
-    Completed: 'completed',
-  };
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -51,7 +46,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(
     getVisibleTodos,
-    [query, selectedValue],
+    [query, selectedValue, todos],
   );
 
   return (
@@ -64,25 +59,32 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectedValue={selectedValue}
-                onSelection={(option:string) => setSelect(option)}
+                onSelection={(option: Values) => setSelect(option)}
                 query={query}
-                onQuery={(text:string) => setQuery(text)}
+                onQuery={(text: string) => setQuery(text)}
               />
             </div>
 
-            <div className="block">
-              {loading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                selectedTodo={selectedTodo}
-                selectTodo={(todo:Todo | null) => setSelectedTodo(todo)}
-              />
-            </div>
+            <React.StrictMode>
+              <div className="block">
+                {loading && <Loader />}
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  selectTodo={(todo: Todo | null) => setSelectedTodo(todo)}
+                />
+              </div>
+            </React.StrictMode>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onCloseModal={(todo:Todo | null) => setSelectedTodo(todo)} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onCloseModal={(todo: Todo | null) => setSelectedTodo(todo)}
+        />
+      )}
     </>
   );
 };

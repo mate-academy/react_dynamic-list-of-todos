@@ -1,6 +1,8 @@
+import { Values } from '../../types/Values';
+
 interface Props {
   selectedValue: string;
-  onSelection: (option:string) => void;
+  onSelection: (option:Values) => void;
   query:string;
   onQuery: (text:string) => void;
 }
@@ -16,7 +18,11 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           value={selectedValue}
-          onChange={(event) => onSelection(event.target.value)}
+          onChange={(event) => {
+            const values = event.target.value;
+
+            onSelection(values as Values);
+          }}
           data-cy="statusSelect"
         >
           <option value="all">All</option>
