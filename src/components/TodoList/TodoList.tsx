@@ -29,14 +29,13 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
-            <TodoItem
-              todo={todo}
-              selectTodo={selectTodo}
-              selectedTodo={selectedTodo}
-            />
-          </tr>
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            selectTodo={selectTodo}
+            selectedTodo={selectedTodo}
+          />
         ))}
       </tbody>
     </table>

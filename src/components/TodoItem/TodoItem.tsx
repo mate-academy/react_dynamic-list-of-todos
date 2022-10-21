@@ -15,7 +15,7 @@ export const TodoItem: React.FC<Props> = ({
   const { id, completed, title } = todo;
 
   return (
-    <>
+    <tr data-cy="todo" className="" >
       <td className="is-vcentered">{id}</td>
       <td className="is-vcentered">
         {completed && (
@@ -59,6 +59,6 @@ export const TodoItem: React.FC<Props> = ({
           </span>
         </button>
       </td>
-    </>
+    </tr>
   );
 };
