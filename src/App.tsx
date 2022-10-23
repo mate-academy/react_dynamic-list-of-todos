@@ -1,14 +1,47 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoComplitedFilter, TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [query, setQuery] = useState('');
+  const [complitedFilter, setComplitedFilter] = useState<TodoComplitedFilter>(TodoComplitedFilter.All);
+
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId) || null
+  ), [selectedTodoId]);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos);
+  }, []);
+
+  const visibleTodos = useMemo(() => (
+    todos.filter(todo => {
+      const inputFilter = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+
+      switch (complitedFilter) {
+        case TodoComplitedFilter.Active:
+          return inputFilter && todo.completed === false;
+
+        case TodoComplitedFilter.Completed:
+          return inputFilter && todo.completed === true;
+
+        default:
+          return inputFilter;
+      }
+    })
+  ), [query, todos, complitedFilter]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +50,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                changeQuery={setQuery}
+                complitedFilter={complitedFilter}
+                setComplitedFilter={setComplitedFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!todos.length && <Loader />}
+              {visibleTodos.length
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    onSelect={setSelectedTodoId}
+                  />
+                )
+                : (
+                  <div>
+                    No todos yet
+                  </div>
+                ) }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={setSelectedTodoId} />}
     </>
   );
 };
