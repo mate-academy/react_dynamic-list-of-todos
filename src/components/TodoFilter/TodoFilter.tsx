@@ -12,42 +12,30 @@ export const TodoFilter: React.FC<Props> = ({
   onVisible,
 }) => {
   const [sortBy, setSortBy] = useState('all');
-  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
 
-  // console.log(todos);
-  // console.log(sortedTodos);
-
   useEffect(() => {
-    // let sortedTodos;
+    let sortedTodos;
 
     switch (sortBy) {
       case 'active':
-        setSortedTodos(todos.filter(todo => todo.completed === false));
+        sortedTodos = todos.filter(todo => todo.completed === false);
 
         break;
       case 'completed':
-        setSortedTodos(todos.filter(todo => todo.completed === true));
+        sortedTodos = todos.filter(todo => todo.completed === true);
 
         break;
       default:
-        setSortedTodos([...todos]);
+        sortedTodos = [...todos];
     }
 
-    // sortedTodos = sortedTodos.filter(todo => {
-    //   return todo.title.includes(query.toLowerCase());
-    // });
-
-    onVisible(sortedTodos);
-  }, [sortBy]);
-
-  useEffect(() => {
-    setSortedTodos(sortedTodos.filter(todo => {
+    sortedTodos = sortedTodos.filter(todo => {
       return todo.title.includes(query.toLowerCase());
-    }));
+    });
 
     onVisible(sortedTodos);
-  }, [query]);
+  }, [sortBy, query]);
 
   return (
     <form className="field has-addons">
@@ -78,18 +66,20 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => {
-              setSortBy('all');
-              setQuery('');
-            }}
-          />
-        </span>
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => {
+                setSortBy('all');
+                setQuery('');
+              }}
+            />
+          </span>
+        )}
       </p>
     </form>
   );
