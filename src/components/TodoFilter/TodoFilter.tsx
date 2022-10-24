@@ -38,7 +38,10 @@ export const TodoFilter: React.FC<Props> = ({
   }, [sortBy, query]);
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={(event) => event.preventDefault()}
+    >
       <p className="control">
         <span className="select">
           <select
@@ -60,7 +63,9 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
