@@ -19,6 +19,14 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = () => {
+  const result = get<Todo[]>('/todos').then(resp => ({
+    allTodos: resp,
+    activeTodos: resp.filter((todo) => !todo.completed),
+    completedTodos: resp.filter((todo) => todo.completed),
+  }));
+
+  return result;
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
