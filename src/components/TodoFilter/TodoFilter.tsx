@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { Todo } from '../../types/Todo';
 
+enum Sorted {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 type Props = {
   todos: Todo[],
   onVisible: (visible: Todo[]) => void,
@@ -11,18 +17,18 @@ export const TodoFilter: React.FC<Props> = ({
   todos,
   onVisible,
 }) => {
-  const [sortBy, setSortBy] = useState('all');
-  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<string>(Sorted.All);
+  const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
     let sortedTodos;
 
     switch (sortBy) {
-      case 'active':
+      case Sorted.Active:
         sortedTodos = todos.filter(todo => todo.completed === false);
 
         break;
-      case 'completed':
+      case Sorted.Completed:
         sortedTodos = todos.filter(todo => todo.completed === true);
 
         break;
@@ -49,9 +55,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Sorted.All}>All</option>
+            <option value={Sorted.Active}>Active</option>
+            <option value={Sorted.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -79,7 +85,7 @@ export const TodoFilter: React.FC<Props> = ({
               type="button"
               className="delete"
               onClick={() => {
-                setSortBy('all');
+                setSortBy(Sorted.All);
                 setQuery('');
               }}
             />

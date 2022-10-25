@@ -39,6 +39,7 @@ export const TodoList: React.FC<Props> = ({
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
+
             <td className="is-vcentered">
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -46,6 +47,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p
                 className={`has-text-${todo.completed ? 'success' : 'danger'}`}
@@ -53,6 +55,7 @@ export const TodoList: React.FC<Props> = ({
                 {todo.title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"

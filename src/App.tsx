@@ -60,7 +60,8 @@ export const App: React.FC = () => {
                     selectedId={selectedTodoId}
                     onSelect={handleSelectTodo}
                   />
-                ) : <Loader />}
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
