@@ -1,5 +1,11 @@
 import { ChangeEvent, FC } from 'react';
 
+export enum TodoSelect {
+  allTodos = 'allTodos',
+  activeTodos = 'activeTodos',
+  completedTodos = 'completedTodos',
+}
+
 interface Props {
   handleSelect: (e: ChangeEvent<HTMLSelectElement>) => void;
   handleQuery: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -14,9 +20,9 @@ export const TodoFilter: FC<Props> = ({
     <p className="control">
       <span className="select">
         <select data-cy="statusSelect" onChange={handleSelect}>
-          <option value="allTodos">All</option>
-          <option value="activeTodos">Active</option>
-          <option value="completedTodos">Completed</option>
+          <option value={TodoSelect.allTodos}>All</option>
+          <option value={TodoSelect.activeTodos}>Active</option>
+          <option value={TodoSelect.completedTodos}>Completed</option>
         </select>
       </span>
     </p>

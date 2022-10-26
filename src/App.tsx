@@ -5,26 +5,41 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { useQuery } from '@tanstack/react-query';
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter, TodoSelect } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
 
 export const App: FC = () => {
   const { data: todos, isLoading, isError } = useQuery(['todos'], getTodos);
-  const [selector, setSelector] = useState('allTodos');
+  const [selector, setSelector] = useState<TodoSelect>(TodoSelect.allTodos);
   const [query, setQuery] = useState('');
 
+  const filteredTodos = (someQuery: string, someSelector: TodoSelect) => {
+    if (todos) {
+      if (!someQuery) {
+        return todos[someSelector as keyof typeof todos];
+      }
+
+      return todos[someSelector as keyof typeof todos]
+        .filter((todo) => todo.title.toLowerCase().includes(someQuery));
+    }
+
+    return [];
+  };
+
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelector(event.target.value);
+    setSelector(event.target.value as TodoSelect);
   };
 
   const handleQuery = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setQuery(event.target.value.toLowerCase());
   };
 
   const clearQuery = () => {
     setQuery('');
   };
+
+  const todosToRender = filteredTodos(query, selector);
 
   return (
     <>
@@ -45,14 +60,7 @@ export const App: FC = () => {
             <div className="block">
               {isLoading && <Loader />}
               {isError && <div>Error</div>}
-              {todos && !query && <TodoList todos={todos[selector as keyof typeof todos]} />}
-              {todos
-                && query
-                && (
-                  <TodoList
-                    todos={todos[selector as keyof typeof todos].filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()))}
-                  />
-                )}
+              {todos && <TodoList todos={todosToRender} />}
             </div>
           </div>
         </div>

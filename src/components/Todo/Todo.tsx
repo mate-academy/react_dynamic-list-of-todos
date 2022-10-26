@@ -14,7 +14,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     completed,
   } = todo;
 
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => setIsClicked(!isClicked);
 
