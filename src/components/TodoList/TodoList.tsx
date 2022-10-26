@@ -6,9 +6,11 @@ import cs from 'classnames';
 
 interface Props {
   todos: Todo[];
+  isModalOpen: Boolean;
+  openModal: (todo: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({ todos, isModalOpen, openModal }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -51,10 +53,19 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
-                <span className="icon">
-                  <i className="far fa-eye" />
-                </span>
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => openModal(todo)}
+              >
+                {isModalOpen
+                  ? (<span className="icon">
+                    <i className="far fa-eye-slash" />
+                  </span>)
+                  : (<span className="icon">
+                    <i className="far fa-eye" />
+                  </span>)}
               </button>
             </td>
           </tr>

@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -16,6 +16,17 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState('all');
   const [query, setQuery] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState(todos[0]);
+
+  const openModal = (todo: Todo) => {
+    setCurrentTodo(todo);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const loadTodos = async () => {
     setIsLoading(true);
@@ -53,7 +64,7 @@ export const App: React.FC = () => {
     }
 
     if (query !== '') {
-      filteredTodos = filteredTodos.filter((todo) => todo.title.includes(query));
+      filteredTodos = filteredTodos.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
     }
 
     return filteredTodos;
@@ -83,6 +94,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
+                    openModal={openModal}
+                    isModalOpen={isModalOpen}
                   />
                 )}
             </div>
@@ -90,7 +103,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {isModalOpen
+      && (
+        <TodoModal
+          closeModal={closeModal}
+          currentTodo={currentTodo}
+        />
+      )}
     </>
   );
 };
