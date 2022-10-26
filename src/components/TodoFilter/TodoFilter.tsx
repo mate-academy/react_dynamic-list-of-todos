@@ -41,7 +41,6 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {inputValue.length !== 0 && (
             <button
               aria-label="button"
