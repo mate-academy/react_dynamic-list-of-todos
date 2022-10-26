@@ -6,11 +6,11 @@ import cs from 'classnames';
 
 interface Props {
   todos: Todo[];
-  isModalOpen: Boolean;
-  openModal: (todo: Todo) => void;
+  currentTodoId?: number;
+  selectTodo: (todo: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, isModalOpen, openModal }) => {
+export const TodoList: React.FC<Props> = ({ todos, currentTodoId, selectTodo }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -57,9 +57,9 @@ export const TodoList: React.FC<Props> = ({ todos, isModalOpen, openModal }) => 
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => openModal(todo)}
+                onClick={() => selectTodo(todo)}
               >
-                {isModalOpen
+                {todo.id === currentTodoId
                   ? (<span className="icon">
                     <i className="far fa-eye-slash" />
                   </span>)

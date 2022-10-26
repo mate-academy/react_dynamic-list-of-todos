@@ -16,16 +16,14 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState('all');
   const [query, setQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentTodo, setCurrentTodo] = useState(todos[0]);
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
-  const openModal = (todo: Todo) => {
+  const selectTodo = (todo: Todo) => {
     setCurrentTodo(todo);
-    setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const deSelectTodo = () => {
+    setCurrentTodo(null);
   };
 
   const loadTodos = async () => {
@@ -94,8 +92,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    openModal={openModal}
-                    isModalOpen={isModalOpen}
+                    selectTodo={selectTodo}
+                    currentTodoId={currentTodo?.id}
                   />
                 )}
             </div>
@@ -103,10 +101,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen
+      {currentTodo?.id
       && (
         <TodoModal
-          closeModal={closeModal}
+          deSelectTodo={deSelectTodo}
           currentTodo={currentTodo}
         />
       )}
