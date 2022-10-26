@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 /* eslint-disable max-len */
 import classNames from 'classnames';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './TodoList.scss';
 
 type Props = {
@@ -23,8 +27,20 @@ export const TodoList: React.FC<Props> = ({
     setQueryLLC(query.toLocaleLowerCase());
   }, [query]);
 
-  const visibleTodos = useMemo(() => (
-    todos
+  const shuffle = (arr: Todo[]): Todo[] => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = arr[i];
+
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    return arr;
+  };
+
+  const visibleTodos: Todo[] = useMemo(() => {
+    const newTodos = todos
       .filter(todo => todo.title.toLocaleLowerCase().includes(queryLLC))
       .filter(todo => {
         switch (statusFilter) {
@@ -35,18 +51,20 @@ export const TodoList: React.FC<Props> = ({
             return todo.completed === false;
 
           case 'completed':
-            return todo.completed;
+            return todo.completed === true;
 
           default:
             return 0;
         }
       })
-      .sort((t1, t2) => (
-        random
-          ? Math.random() - 0.5
-          : t1.id - t2.id
-      ))
-  ), [queryLLC, statusFilter, random]);
+      .sort((t1, t2) => t1.id - t2.id);
+
+    if (random) {
+      return shuffle(newTodos);
+    }
+
+    return newTodos;
+  }, [queryLLC, statusFilter, random]);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -98,7 +116,7 @@ export const TodoList: React.FC<Props> = ({
         </div>
 
         <ul className="TodoList__list" data-cy="listOfTodos">
-          {visibleTodos.map((todo) => (
+          {visibleTodos.map((todo: Todo) => (
             <li
               key={todo.id}
               className={classNames('TodoList__item', {
@@ -113,7 +131,8 @@ export const TodoList: React.FC<Props> = ({
 
               <button
                 className={classNames('TodoList__user-button button', {
-                  'TodoList__user-button--selected': selectedUserId === todo.userId,
+                  'TodoList__user-button--selected':
+                    selectedUserId === todo.userId,
                 })}
                 type="button"
                 onClick={() => selectUser(todo.userId)}

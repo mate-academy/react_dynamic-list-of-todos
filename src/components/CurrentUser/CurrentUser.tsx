@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './CurrentUser.scss';
 import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 type Props = {
   userId: number;
   clearUser: () => void;
 };
 
-type User = {
-  id: number;
-  name: string;
-  username?: string;
-  email: string;
-  phone: string;
-  website?: string;
-} | null;
-
 export const CurrentUser: React.FC<Props> = ({ userId, clearUser }) => {
-  const [user, setUser] = useState<User>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [errorMess, setErrorMess] = useState<string>('');
 
   useEffect(() => {

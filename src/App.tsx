@@ -4,15 +4,7 @@ import './styles/general.scss';
 import { TodoList } from './components/TodoList';
 import { CurrentUser } from './components/CurrentUser';
 import { getTodos } from './api';
-
-export type Todo = {
-  id: number;
-  createdAt?: string,
-  updatedAt?: string,
-  userId: number;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from './types/Todo';
 
 const App: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
