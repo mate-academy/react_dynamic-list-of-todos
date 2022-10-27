@@ -38,7 +38,7 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered">
               {completed && (
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className="fas fa-check" />
                 </span>
               )}
             </td>
