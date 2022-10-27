@@ -9,20 +9,30 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Category } from './types/Category';
 
 export const App: React.FC = () => {
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [isLoadingTodo, setIsLoadingTodo] = useState(true);
   const [isOpenTodo, setIsOpenTodo] = useState(0);
   const [qwery, setQwery] = useState('');
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState<Category>(Category.ALL);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos().then((loadedTodos) => {
-      setTodos(loadedTodos);
+    const loadTodosFromApi = async () => {
+      try {
+        const response = await getTodos();
+
+        setTodos(response);
+      } catch (e) {
+        throw new Error('Error on loading todos');
+      }
+
       setIsLoadingTodo(false);
-    });
+    };
+
+    loadTodosFromApi();
   }, []);
 
   const onOpenTodo = (todoId: number) => {
@@ -37,11 +47,11 @@ export const App: React.FC = () => {
       return title.match(qwery.toLowerCase());
     });
 
-    if (category === 'completed') {
+    if (category === Category.COMPLETED) {
       return byQwery.filter(todo => (todo.completed));
     }
 
-    if (category === 'active') {
+    if (category === Category.ACTIVE) {
       return byQwery.filter(todo => (!todo.completed));
     }
 

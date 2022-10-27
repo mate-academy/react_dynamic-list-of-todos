@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
   isLoading: boolean,
@@ -16,17 +17,21 @@ export const TodoModal: React.FC<Props> = ({
   onClose,
   currentTodo,
 }) => {
-  const userInitial = {
-    name: '',
-    email: '',
-  };
-  const [user, setUser] = useState(userInitial);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(currentTodo.userId).then((currentUser) => {
-      setUser(currentUser);
-      setIsLoadingUser(false);
-    });
+    const getUserFromApi = async () => {
+      try {
+        const response = await getUser(currentTodo.userId);
+
+        setUser(response);
+        setIsLoadingUser(false);
+      } catch (e) {
+        throw new Error('Error on loading user');
+      }
+    };
+
+    getUserFromApi();
   }, []);
 
   return (
@@ -70,8 +75,8 @@ export const TodoModal: React.FC<Props> = ({
               )}
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
