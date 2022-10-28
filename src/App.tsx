@@ -12,13 +12,9 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[] | null>(null);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
   const [userId, setUserId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
-
-  const selectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
 
   const getTodosFromApi = async () => {
     const todos = await getTodos().then(todosApi => todosApi);
@@ -37,40 +33,32 @@ export const App: React.FC = () => {
     getTodosFromApi();
   }, []);
 
-  const search = (value: string) => {
-    if (visibleTodos) {
-      setVisibleTodos(() => {
-        const filtered = [...visibleTodos].filter(todo => todo.title.toLowerCase().includes(value.toLowerCase()));
-
-        return filtered;
-      });
+  const filterQeury = (query: string) => {
+    if (todosList) {
+      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
     }
+
+    return null;
   };
 
-  const selectCompleted = () => {
-    setVisibleTodos(() => {
-      if (todosList) {
-        const filtered = [...todosList]
-          .filter(todo => !todo.completed);
+  const filtered = todosList;
 
-        return filtered;
-      }
+  const search = (query: string, select: string) => {
+    const filter = filterQeury(query);
 
-      return null;
-    });
-  };
+    if (select === 'completed' && filter) {
+      return filter.filter(todo => todo.completed);
+    }
 
-  const selectActive = () => {
-    setVisibleTodos(() => {
-      if (todosList) {
-        const filtered = [...todosList]
-          .filter(todo => todo.completed);
+    if (select === 'active' && filter) {
+      return filter.filter(todo => !todo.completed);
+    }
 
-        return filtered;
-      }
+    if (select === 'all') {
+      return filter;
+    }
 
-      return null;
-    });
+    return null;
   };
 
   return (
@@ -79,22 +67,21 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-
             <div className="block">
               <TodoFilter
                 search={search}
-                selectCompleted={selectCompleted}
-                selectActive={selectActive}
+                setVisibleTodos={setVisibleTodos}
               />
             </div>
 
             <div className="block">
-              {(visibleTodos
+              {(filtered
                 && (
                   <TodoList
                     todos={visibleTodos}
                     setUserId={setUserId}
-                    selectTodo={selectTodo}
+                    selectTodo={setSelectedTodo}
+                    selected={selectedTodo}
                   />
                 ))
                 || <Loader />}
@@ -110,6 +97,7 @@ export const App: React.FC = () => {
             userId={userId}
             setUserId={setUserId}
             selectedTodo={selectedTodo}
+            setSelectedTodo={setSelectedTodo}
           />
         )}
     </>

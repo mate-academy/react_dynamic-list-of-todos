@@ -1,18 +1,15 @@
 import { FC, useState } from 'react';
 
+import { Todo } from '../../types/Todo';
+
 type Props = {
-  search: (value: string) => void;
-  selectCompleted: () => void;
-  selectActive: () => void;
+  search: (value: string, select: string) => Todo[] | null;
+  setVisibleTodos: (val: Todo[] | null) => void;
 };
 
-export const TodoFilter:FC<Props> = ({ search, selectCompleted, selectActive }) => {
+export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
   const [text, setText] = useState('');
-  const [select, setSelect] = useState('all');
-
-  const resetSearch = () => {
-    search('');
-  };
+  const [selected, setSelected] = useState('all');
 
   return (
     <form className="field has-addons">
@@ -20,23 +17,12 @@ export const TodoFilter:FC<Props> = ({ search, selectCompleted, selectActive }) 
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={select}
+            value={selected}
             onChange={(event) => {
-              setSelect(() => {
-                return event.target.value;
-              });
+              setSelected(event.target.value);
+              const todos = search(text, event.target.value);
 
-              if (event.target.value === 'all') {
-                resetSearch();
-              }
-
-              if (event.target.value === 'active') {
-                selectActive();
-              }
-
-              if (event.target.value === 'completed') {
-                selectCompleted();
-              }
+              setVisibleTodos(todos);
             }}
           >
             <option value="all">All</option>
@@ -55,7 +41,9 @@ export const TodoFilter:FC<Props> = ({ search, selectCompleted, selectActive }) 
           value={text}
           onChange={(event) => {
             setText(event.target.value);
-            search(event.target.value);
+            const todos = search(event.target.value, selected);
+
+            setVisibleTodos(todos);
           }}
         />
 
@@ -72,7 +60,7 @@ export const TodoFilter:FC<Props> = ({ search, selectCompleted, selectActive }) 
               className="delete"
               onClick={() => {
                 setText('');
-                resetSearch();
+                search('', 'all');
               }}
             />
           </span>

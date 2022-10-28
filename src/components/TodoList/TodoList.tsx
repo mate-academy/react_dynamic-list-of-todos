@@ -3,15 +3,17 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  todos: Todo[] | null;
   setUserId: (id: number) => void;
   selectTodo: (todo: Todo) => void;
+  selected: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setUserId,
   selectTodo,
+  selected,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -26,15 +28,18 @@ export const TodoList: React.FC<Props> = ({
         <th> </th>
       </tr>
     </thead>
+    <tbody>
+      {todos && todos.map((todo) => {
+        const {
+          id, title, userId, completed,
+        } = todo;
 
-    {todos.map((todo) => {
-      const {
-        id, title, userId, completed,
-      } = todo;
-
-      return (
-        <tbody key={id}>
-          <tr data-cy="todo" className="">
+        return (
+          <tr
+            data-cy="todo"
+            className={cn({ 'has-background-info-light': selected?.id === id })}
+            key={id}
+          >
             <td className="is-vcentered">{id}</td>
             {completed
               ? (
@@ -67,13 +72,17 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={cn('far', {
+                    'fa-eye': selected?.id !== id,
+                    'fa-eye-slash': selected?.id === id,
+                  })}
+                  />
                 </span>
               </button>
             </td>
           </tr>
-        </tbody>
-      );
-    })}
+        );
+      })}
+    </tbody>
   </table>
 );
