@@ -1,5 +1,11 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -28,29 +34,36 @@ export const App: React.FC = () => {
     setTodoId(0);
   };
 
-  const onQueryChange = (changedQuery: string) => {
+  const onQueryChange = useCallback((changedQuery: string) => {
     setQuery(changedQuery);
-  };
+  }, []);
 
-  const onSelectChange = (changedSelect: string) => {
+  const onSelectChange = useCallback((changedSelect: string) => {
     setSelect(changedSelect);
+  }, []);
+
+  const getVisibleTodos = () => {
+    const slectedByStatus = todos.filter(todo => {
+      switch (select) {
+        case 'active':
+          return todo.completed === false;
+        case 'completed':
+          return todo.completed === true;
+        default:
+          return todo;
+      }
+    });
+
+    return slectedByStatus.filter(todo => (
+      todo.title.toLowerCase()
+        .includes(query.toLowerCase())
+    ));
   };
 
-  const slectedByStatus = todos.filter(todo => {
-    switch (select) {
-      case 'active':
-        return todo.completed === false;
-      case 'completed':
-        return todo.completed === true;
-      default:
-        return todo;
-    }
-  });
-
-  const visibleTodos = slectedByStatus.filter(todo => (
-    todo.title.toLowerCase()
-      .includes(query.toLowerCase())
-  ));
+  const visibleTodos = useMemo(
+    getVisibleTodos,
+    [todos, query, select],
+  );
 
   return (
     <>

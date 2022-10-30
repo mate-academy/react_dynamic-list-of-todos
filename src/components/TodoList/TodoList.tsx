@@ -8,7 +8,7 @@ type Props = {
   selectTodo: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectedTodoId,
   selectTodo,
@@ -42,4 +42,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-};
+});
