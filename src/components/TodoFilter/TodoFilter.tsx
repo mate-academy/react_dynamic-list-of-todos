@@ -7,8 +7,9 @@ type Props = {
   setFilterType: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ query, setQuery, filterType, setFilterType }) => {
-
+export const TodoFilter: React.FC<Props> = ({
+  query, setQuery, filterType, setFilterType,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
