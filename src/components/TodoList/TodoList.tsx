@@ -28,61 +28,63 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(({
-        id,
-        title,
-        completed,
-        userId,
-      }) => (
-        <tr
-          data-cy="todo"
-          className={cn({
-            'has-background-info-light': id === selectedTodo?.id,
-          })}
-          key={id}
-        >
-          <td className="is-vcentered">{id}</td>
-          <td className="is-vcentered">
-            {completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p
-              className={cn({
-                'has-text-success': completed,
-                'has-text-danger': !completed,
-              })}
-            >
-              {title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => onSelect({
-                id,
-                title,
-                completed,
-                userId,
-              })}
-            >
-              <span className="icon">
-                <span
-                  className={cn('far', {
-                    'fa-eye-slash': id === selectedTodo?.id,
-                    'fa-eye': id !== selectedTodo?.id,
-                  })}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
-      ))}
+      {todos.length
+        ? todos.map(({
+          id,
+          title,
+          completed,
+          userId,
+        }) => (
+          <tr
+            data-cy="todo"
+            className={cn({
+              'has-background-info-light': id === selectedTodo?.id,
+            })}
+            key={id}
+          >
+            <td className="is-vcentered">{id}</td>
+            <td className="is-vcentered">
+              {completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+              >
+                {title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => onSelect({
+                  id,
+                  title,
+                  completed,
+                  userId,
+                })}
+              >
+                <span className="icon">
+                  <span
+                    className={cn('far', {
+                      'fa-eye-slash': id === selectedTodo?.id,
+                      'fa-eye': id !== selectedTodo?.id,
+                    })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))
+        : <tr><td>Nothing&#39;s match request</td></tr>}
     </tbody>
   </table>
 );
