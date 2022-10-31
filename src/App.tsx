@@ -46,10 +46,14 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setIsTodosLoaded(true);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setIsTodosLoaded(true);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   }, []);
 
   return (

@@ -24,10 +24,14 @@ export const TodoModal: React.FC<Props> = ({
   } = todo;
 
   useEffect(() => {
-    getUser(userId).then((userFromServer) => {
-      setUser(userFromServer);
-      setIsUserInfoLoaded(true);
-    });
+    getUser(userId)
+      .then((userFromServer) => {
+        setUser(userFromServer);
+        setIsUserInfoLoaded(true);
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   }, []);
 
   return (
