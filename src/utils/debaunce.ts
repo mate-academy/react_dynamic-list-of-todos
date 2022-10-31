@@ -5,6 +5,6 @@ export function debaunce(f: Callback, delay: number) {
 
   return (...args: []) => {
     clearTimeout(timerId);
-    window.setTimeout(f, delay, ...args);
+    timerId = window.setTimeout(f, delay, ...args);
   };
 }
