@@ -1,6 +1,17 @@
+import classNames from 'classnames';
 import React from 'react';
+// import { FullTodo } from '../../types/FullTodo';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
+type Props = {
+  todos: Todo[];
+  setSelectedTodo: (id: number) => void;
+  selectedTodo: Todo | null;
+};
+
+export const TodoList: React.FC<Props> = ({
+  todos, setSelectedTodo, selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,7 +27,77 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
+      {
+        todos.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': selectedTodo?.id === todo.id,
+            })}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {
+                todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )
+              }
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => {
+                  setSelectedTodo(todo.id);
+                }}
+              >
+                <span className="icon">
+                  <i className={classNames('far',
+                    {
+                      'fa-eye': todo.id !== selectedTodo?.id,
+                      'fa-eye-slash': todo.id === selectedTodo?.id,
+                    })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))
+      }
+
+      {/* <tr data-cy="todo" className="">
+        <td className="is-vcentered">8</td>
+        <td className="is-vcentered">
+          <span className="icon" data-cy="iconCompleted">
+            <i className="fas fa-check" />
+          </span>
+        </td>
+        <td className="is-vcentered is-expanded">
+          <p className="has-text-success">quo adipisci enim quam ut ab</p>
+        </td>
+        <td className="has-text-right is-vcentered">
+          <button data-cy="selectButton" className="button" type="button">
+            <span className="icon">
+              <i className="far fa-eye" />
+            </span>
+          </button>
+        </td>
+      </tr> */}
+
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -29,8 +110,8 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
+      </tr> */}
+      {/* <tr data-cy="todo" className="has-background-info-light">
         <td className="is-vcentered">2</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -75,9 +156,9 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
 
-      <tr data-cy="todo" className="">
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">8</td>
         <td className="is-vcentered">
           <span className="icon" data-cy="iconCompleted">
@@ -94,7 +175,7 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
     </tbody>
   </table>
 );
