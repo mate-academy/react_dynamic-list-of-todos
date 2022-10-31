@@ -92,7 +92,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isOpenTodo && (
+      {isOpenTodo !== 0 && (
         <TodoModal
           isLoading={isLoadingUser}
           setIsLoadingUser={setIsLoadingUser}
@@ -100,7 +100,6 @@ export const App: React.FC = () => {
           currentTodo={getTodo(isOpenTodo)}
         />
       )}
-
     </>
   );
 };

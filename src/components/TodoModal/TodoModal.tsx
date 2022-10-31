@@ -18,11 +18,14 @@ export const TodoModal: React.FC<Props> = ({
   currentTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const {
+    id, title, completed, userId,
+  } = currentTodo;
 
   useEffect(() => {
     const getUserFromApi = async () => {
       try {
-        const response = await getUser(currentTodo.userId);
+        const response = await getUser(userId);
 
         setUser(response);
         setIsLoadingUser(false);
@@ -48,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-header"
             >
               Todo #
-              {currentTodo.id}
+              {id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -64,11 +67,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {currentTodo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {currentTodo.completed ? (
+              {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
