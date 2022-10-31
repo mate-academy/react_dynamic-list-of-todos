@@ -15,12 +15,19 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { debaunce } from './utils/debaunce';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
   const [select, setSelect] = useState('all');
+
+  const applyQuery = useCallback(
+    debaunce(setAppliedQuery, 500),
+    [],
+  );
 
   useEffect(() => {
     getTodos().then(shownTodos => setTodos(shownTodos));
@@ -56,13 +63,13 @@ export const App: React.FC = () => {
 
     return slectedByStatus.filter(todo => (
       todo.title.toLowerCase()
-        .includes(query.toLowerCase())
+        .includes(appliedQuery.toLowerCase())
     ));
   };
 
   const visibleTodos = useMemo(
     getVisibleTodos,
-    [todos, query, select],
+    [todos, appliedQuery, select],
   );
 
   return (
@@ -75,6 +82,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onQueryChange={onQueryChange}
+                onApplyQuery={applyQuery}
                 onSelectChange={onSelectChange}
                 query={query}
                 select={select}
