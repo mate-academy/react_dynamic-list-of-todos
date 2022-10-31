@@ -6,19 +6,22 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface Props {
-  userId: number;
   todo: Todo;
   onClose: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
   onClose,
   todo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false);
-  const { id, completed, title } = todo;
+  const {
+    id,
+    completed,
+    title,
+    userId,
+  } = todo;
 
   useEffect(() => {
     getUser(userId).then((userFromServer) => {

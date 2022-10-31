@@ -1,27 +1,51 @@
-import React, { useState } from 'react';
-// import { Todo } from '../../types/Todo';
+import React from 'react';
+import { TodosCategory } from '../../types/TodosCategory';
 
-export const TodoFilter: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [selectedValue, setSelectedValue] = useState('');
+interface Props {
+  selectValue: string;
+  setSelectValue: React.Dispatch<React.SetStateAction<TodosCategory>>
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>
+}
 
+export const TodoFilter: React.FC<Props> = ({
+  selectValue,
+  setSelectValue,
+  query,
+  setQuery,
+}) => {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
   const handleSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedValue(e.target.value);
+    switch (e.target.value) {
+      case TodosCategory.Active:
+        setSelectValue(TodosCategory.Active);
+        break;
+
+      case TodosCategory.Completed:
+        setSelectValue(TodosCategory.Completed);
+        break;
+
+      default:
+        setSelectValue(TodosCategory.All);
+        break;
+    }
   };
 
   const clearInput = () => setQuery('');
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
-    <form className="field has-addons">
+    <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedValue}
+            value={selectValue}
             onChange={handleSelection}
           >
             <option value="all">All</option>
@@ -45,13 +69,15 @@ export const TodoFilter: React.FC = () => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            aria-label="clear input"
-            onClick={clearInput}
-          />
+          {query && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="clear input"
+              onClick={clearInput}
+            />
+          )}
         </span>
       </p>
     </form>

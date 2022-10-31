@@ -4,11 +4,15 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  selectedId: number;
+  selectedTodo: Todo | null;
   onSelect: (todo: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, selectedId, onSelect }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodo,
+  onSelect,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -33,7 +37,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectedId, onSelect }) => (
         <tr
           data-cy="todo"
           className={cn({
-            'has-background-info-light': id === selectedId,
+            'has-background-info-light': id === selectedTodo?.id,
           })}
           key={id}
         >
@@ -69,8 +73,9 @@ export const TodoList: React.FC<Props> = ({ todos, selectedId, onSelect }) => (
             >
               <span className="icon">
                 <span
-                  className={cn('far fa-eye', {
-                    'fa-eye-slash': id === selectedId,
+                  className={cn('far', {
+                    'fa-eye-slash': id === selectedTodo?.id,
+                    'fa-eye': id !== selectedTodo?.id,
                   })}
                 />
               </span>
