@@ -1,17 +1,18 @@
 import React from 'react';
+import { SortTypes } from '../../types/SortTypes';
 
 type Props = {
-  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  handleQuery: (value: string) => void,
   query: string,
-  sortBy: string
-  setSortBy: React.Dispatch<React.SetStateAction<string>>,
+  sortBy: SortTypes,
+  handleSortType: (event: any) => void,
 };
 
 export const TodoFilter:React.FC<Props> = ({
-  setQuery,
+  handleQuery,
   query,
   sortBy,
-  setSortBy,
+  handleSortType,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -19,11 +20,11 @@ export const TodoFilter:React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortBy}
-          onChange={event => setSortBy(event.target.value)}
+          onChange={handleSortType}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SortTypes.All}>All</option>
+          <option value={SortTypes.Active}>Active</option>
+          <option value={SortTypes.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -35,7 +36,7 @@ export const TodoFilter:React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => setQuery(event.target.value)}
+        onChange={event => handleQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -48,7 +49,7 @@ export const TodoFilter:React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={() => handleQuery('')}
           />
         </span>
       )}

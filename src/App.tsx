@@ -9,11 +9,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { SortTypes } from './types/SortTypes';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('all');
+  const [sortBy, setSortBy] = useState(SortTypes.All);
   const [selectTodo, setSelectTodo] = useState<Todo>();
 
   useEffect(() => {
@@ -21,20 +22,32 @@ export const App: React.FC = () => {
   }, []);
 
   const searchFilter = () => {
-    return todoList.filter(todo => todo.title.includes(query));
+    return todoList.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
   };
 
   const selectFilter = () => {
     const list = searchFilter();
 
     switch (sortBy) {
-      case 'active':
+      case SortTypes.Active:
         return list.filter(todo => !todo.completed);
-      case 'completed':
+      case SortTypes.Completed:
         return list.filter(todo => todo.completed);
       default:
         return list;
     }
+  };
+
+  const handleQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const handleSortType = (event:any) => {
+    setSortBy(event.target.value);
+  };
+
+  const handleSelectTodo = (value: Todo | undefined) => {
+    setSelectTodo(value);
   };
 
   return (
@@ -46,23 +59,29 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setQuery={setQuery}
+                handleQuery={handleQuery}
                 query={query}
                 sortBy={sortBy}
-                setSortBy={setSortBy}
+                handleSortType={handleSortType}
               />
             </div>
 
             <div className="block">
               {todoList.length < 1
                 ? <Loader />
-                : <TodoList todoList={selectFilter} setSelectTodo={setSelectTodo} selectTodo={selectTodo} />}
+                : (
+                  <TodoList
+                    todoList={selectFilter}
+                    handleSelectTodo={handleSelectTodo}
+                    selectTodo={selectTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
       {selectTodo && (
-        <TodoModal setSelectTodo={setSelectTodo} selectTodo={selectTodo} />
+        <TodoModal setSelectTodo={handleSelectTodo} selectTodo={selectTodo} />
       )}
     </>
   );

@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  setSelectTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>,
+  setSelectTodo: (value: Todo | undefined) => void,
   selectTodo: Todo,
 };
 

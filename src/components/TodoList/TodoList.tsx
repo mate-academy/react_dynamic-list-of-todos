@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Pops = {
   todoList: () => Todo[],
-  setSelectTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>
+  handleSelectTodo: (value: Todo | undefined) => void,
   selectTodo: Todo | undefined,
 };
 
 export const TodoList: React.FC<Pops> = ({
   todoList,
-  setSelectTodo,
+  handleSelectTodo,
   selectTodo,
 }) => {
   const list = todoList();
@@ -56,7 +56,7 @@ export const TodoList: React.FC<Pops> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectTodo(todo)}
+                  onClick={() => handleSelectTodo(todo)}
                 >
                   <span className="icon">
                     <i className={classNames('far fa-eye', {
