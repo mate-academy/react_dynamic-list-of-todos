@@ -9,19 +9,15 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
-enum FilterType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
   const [query, setQuery] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState<FilterType | string>(FilterType.ALL);
 
   const filterTodos = () => {
     const filteredTodos = todos.filter(todo => {

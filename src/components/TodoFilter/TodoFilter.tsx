@@ -1,9 +1,10 @@
 import React from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string;
   setQuery: (inputValue: string) => void;
-  filterType: string;
+  filterType: FilterType | string;
   setFilterType: (value: string) => void;
 };
 
