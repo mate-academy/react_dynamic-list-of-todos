@@ -65,33 +65,35 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const selectTodo = (todo: Todo | null) => {
+  const selectTodo = useCallback((todo: Todo | null) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const resetSelectedTodo = () => {
+  const resetSelectedTodo = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const selectFilterType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectFilterType = useCallback((
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setFilterBy(event.target.value as FilterBy);
-  };
+  }, []);
 
   const applyQuery = useCallback(
     debounce(setAppliedQuery, 1000),
     [],
   );
 
-  const setVisibleAndAppliedQuery = (
+  const setVisibleAndAppliedQuery = useCallback((
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuery(event.target.value);
     applyQuery(event.target.value);
-  };
+  }, []);
 
-  const resetQuery = () => {
+  const resetQuery = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
   const visibleTodos = useMemo(() => {
     return getFilteredTodos(todos, filerBy, appliedqQuery);
