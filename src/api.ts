@@ -22,3 +22,7 @@ function get<T>(url: string): Promise<T> {
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+
+export function isContains(string: string, substring: string): boolean {
+  return string.toLocaleLowerCase().includes(substring.toLocaleLowerCase());
+}
