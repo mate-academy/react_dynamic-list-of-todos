@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -19,24 +20,28 @@ export const TodoModal: React.FC<Props> = ({
     userId,
     completed,
   } = todo;
-
   const [user, setUser] = useState<User | null>(null);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
-      const userFromApi = await getUser(userId);
+      try {
+        const userFromApi = await getUser(userId);
 
-      setUser(userFromApi);
+        setUser(userFromApi);
+      } catch (error) {
+        setHasLoadingError(true);
+      }
     };
 
     loadUser();
-  });
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!user && !hasLoadingError ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -48,10 +53,10 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
+              aria-label="clear input"
               data-cy="modal-close"
               onClick={onClick}
             />
@@ -63,14 +68,23 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">
+              <strong className={cn(
+                'has-text-danger',
+                { 'has-text-success': completed },
+              )}
+              >
                 {completed
                   ? 'Done'
                   : 'Planned'}
               </strong>
 
               {' by '}
+
+              {hasLoadingError && (
+                <span style={{ color: 'red' }}>
+                  User not found
+                </span>
+              )}
 
               <a href={`mailto:${user?.email}`}>
                 {user?.name}

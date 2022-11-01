@@ -3,14 +3,16 @@ import React from 'react';
 type Props = {
   query: string;
   selectFilterType: (filter: React.ChangeEvent<HTMLSelectElement>) => void;
-  onQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setVisibleAndAppliedQuery: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void;
   resetQuery: () => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   query,
   selectFilterType,
-  onQuery,
+  setVisibleAndAppliedQuery,
   resetQuery,
 }) => (
   <form className="field has-addons">
@@ -34,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={onQuery}
+        onChange={setVisibleAndAppliedQuery}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -42,10 +44,10 @@ export const TodoFilter: React.FC<Props> = ({
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
+            aria-label="clear input"
             className="delete"
             onClick={resetQuery}
           />
@@ -53,4 +55,4 @@ export const TodoFilter: React.FC<Props> = ({
       )}
     </p>
   </form>
-);
+));

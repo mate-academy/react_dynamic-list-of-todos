@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { debounce } from 'lodash';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
@@ -40,14 +46,20 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
+  const [appliedqQuery, setAppliedQuery] = useState('');
   const [filerBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
     const loadTodos = async () => {
-      const todosFromApi = await getTodos();
+      try {
+        const todosFromApi = await getTodos();
 
-      setTodos(todosFromApi);
-      setIsLoaded(true);
+        setTodos(todosFromApi);
+        setIsLoaded(true);
+      } catch (error) {
+        setHasLoadingError(true);
+      }
     };
 
     loadTodos();
@@ -65,15 +77,25 @@ export const App: React.FC = () => {
     setFilterBy(event.target.value as FilterBy);
   };
 
-  const onQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const applyQuery = useCallback(
+    debounce(setAppliedQuery, 1000),
+    [],
+  );
+
+  const setVisibleAndAppliedQuery = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setQuery(event.target.value);
+    applyQuery(event.target.value);
   };
 
   const resetQuery = () => {
     setQuery('');
   };
 
-  const visibleTodos = getFilteredTodos(todos, filerBy, query);
+  const visibleTodos = useMemo(() => {
+    return getFilteredTodos(todos, filerBy, appliedqQuery);
+  }, [todos, filerBy, appliedqQuery]);
 
   return (
     <>
@@ -86,20 +108,29 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 selectFilterType={selectFilterType}
-                onQuery={onQuery}
+                setVisibleAndAppliedQuery={setVisibleAndAppliedQuery}
                 resetQuery={resetQuery}
 
               />
             </div>
 
             <div className="block">
-              {isLoaded ? (
-                <TodoList
-                  todos={visibleTodos}
-                  onClick={selectTodo}
-                  selectedTodo={selectedTodo}
-                />
-              ) : <Loader />}
+              {!hasLoadingError && (
+                isLoaded ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    onClick={selectTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                ) : <Loader />
+              )}
+
+              {hasLoadingError && (
+                <span style={{ color: 'red' }}>
+                  Todos not found
+                </span>
+              )}
+
             </div>
           </div>
         </div>
