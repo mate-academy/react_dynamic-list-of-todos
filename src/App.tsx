@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +7,66 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { getTodos } from './api';
+
+import { Todo } from './types/Todo';
+import { Status } from './types/Status';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [status, setStatus] = useState<Status>(Status.ALL);
+  const [query, setQuery] = useState('');
+
+  const getTodosFromServer = async () => {
+    setTodos(await getTodos());
+    setIsLoaded(true);
+  };
+
+  const selectTodo = (todo: Todo | null) => {
+    setSelectedTodo(todo);
+  };
+
+  const selectStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(event.target.value as Status);
+  };
+
+  const getQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const resetQuery = () => {
+    setQuery('');
+  };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const getFilteredTodos = () => {
+    const filteredTodos = todos.filter(todo => {
+      const lowerTitle = todo.title.toLowerCase();
+      const lowerQuery = query.toLowerCase();
+
+      return lowerTitle.includes(lowerQuery);
+    });
+
+    switch (status) {
+      case Status.ALL:
+        return filteredTodos.filter(todo => todo);
+
+      case Status.ACTIVE:
+        return filteredTodos.filter(todo => !todo.completed);
+
+      case Status.COMPLETED:
+        return filteredTodos.filter(todo => todo.completed);
+
+      default:
+        return filteredTodos.filter(todo => todo);
+    }
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +75,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                selectStatus={selectStatus}
+                query={query}
+                getQuery={getQuery}
+                resetQuery={resetQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!isLoaded
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={getFilteredTodos()}
+                    selectTodo={selectTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo
+        && (
+          <TodoModal
+            selectedTodo={selectedTodo}
+            selectTodo={selectTodo}
+          />
+        )}
     </>
   );
 };
