@@ -11,8 +11,7 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+  const fullURL = `${BASE_URL + url}.json`;
 
   return wait(300)
     .then(() => fetch(fullURL))
@@ -26,3 +25,10 @@ export const getUser = (userId: number) => get<User>(`/users/${userId}`);
 export function isContains(string: string, substring: string): boolean {
   return string.toLocaleLowerCase().includes(substring.toLocaleLowerCase());
 }
+
+export const emptyTodo = {
+  id: -1,
+  title: '',
+  completed: false,
+  userId: -1,
+};

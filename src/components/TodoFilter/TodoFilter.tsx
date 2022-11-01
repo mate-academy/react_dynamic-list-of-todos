@@ -9,7 +9,10 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = React.memo(
   ({
-    query, setQuery, selectValue, setSelectValue,
+    query,
+    setQuery,
+    selectValue,
+    setSelectValue,
   }) => (
     <form className="field has-addons">
       <p className="control">
@@ -43,8 +46,8 @@ export const TodoFilter: React.FC<Props> = React.memo(
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="clearSearchButton"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

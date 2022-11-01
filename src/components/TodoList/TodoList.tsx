@@ -4,13 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  handleShowTodoModal: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  onHandleShowTodoModal: (todoId: string | undefined) => void,
   selectedTodoId: number,
 };
 
 export const TodoList: React.FC<Props> = React.memo(
   ({
-    todos, handleShowTodoModal, selectedTodoId,
+    todos,
+    onHandleShowTodoModal,
+    selectedTodoId,
   }) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -55,7 +57,9 @@ export const TodoList: React.FC<Props> = React.memo(
                   className="button"
                   type="button"
                   data-todoid={todo.id}
-                  onClick={handleShowTodoModal}
+                  onClick={(event) => {
+                    onHandleShowTodoModal(event.currentTarget.dataset.todoid);
+                  }}
                 >
                   <span className="icon">
                     <i className={classnames('far',

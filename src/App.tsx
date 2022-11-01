@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -6,13 +11,18 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, isContains } from './api';
+import { getTodos, isContains, emptyTodo } from './api';
 import { Todo } from './types/Todo';
+
+enum SelectValue {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>(emptyTodo);
   const [showTodoModal, setShowTodoModal] = useState(false);
   const [query, setQuery] = useState('');
   const [selectValue, setSelectValue] = useState('all');
@@ -27,37 +37,54 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  let visibleTodos = query ? (
-    todos.filter(todo => isContains(todo.title, query))
-  ) : (
-    todos
+  const getVisibleTodos = () => {
+    let visibleTodos = todos.filter(todo => isContains(todo.title, query));
+
+    switch (selectValue) {
+      case SelectValue.Active:
+        visibleTodos = visibleTodos.filter(todo => (
+          todo.completed === false
+        ));
+        break;
+
+      case SelectValue.Completed:
+        visibleTodos = visibleTodos.filter(todo => (
+          todo.completed === true
+        ));
+        break;
+
+      default:
+        break;
+    }
+
+    return visibleTodos;
+  };
+
+  const visibleTodos = useMemo(
+    getVisibleTodos,
+    [query, selectValue, todos],
   );
 
-  switch (selectValue) {
-    case 'active':
-      visibleTodos = visibleTodos.filter(todo => (
-        todo.completed === false
-      ));
-      break;
+  const handleShowTodoModal = (todoId: string | undefined) => {
+    const selectedTodoId = Number(todoId);
+    const selectTodo = todos.find(todo => todo.id === selectedTodoId) as Todo;
 
-    case 'completed':
-      visibleTodos = visibleTodos.filter(todo => (
-        todo.completed === true
-      ));
-      break;
-
-    default:
-      break;
-  }
-
-  const handleShowTodoModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const todoId = Number(event.currentTarget.dataset.todoid);
-    const todo = todos.find(todoa => todoa.id === todoId) as Todo;
-
-    setSelectedTodo(todo);
-    setSelectedTodoId(todoId);
+    setSelectedTodo(selectTodo);
     setShowTodoModal(true);
   };
+
+  const closeTodoModal = useCallback(() => {
+    setShowTodoModal(false);
+    setSelectedTodo(emptyTodo);
+  }, []);
+
+  const handleQuery = useCallback((value) => {
+    setQuery(value);
+  }, []);
+
+  const handleSelectValue = useCallback((value) => {
+    setSelectValue(value);
+  }, []);
 
   return (
     <>
@@ -69,9 +96,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                setQuery={handleQuery}
                 selectValue={selectValue}
-                setSelectValue={setSelectValue}
+                setSelectValue={handleSelectValue}
               />
             </div>
 
@@ -81,8 +108,8 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  handleShowTodoModal={handleShowTodoModal}
-                  selectedTodoId={selectedTodoId}
+                  onHandleShowTodoModal={handleShowTodoModal}
+                  selectedTodoId={selectedTodo.id}
                 />
               )}
             </div>
@@ -90,15 +117,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showTodoModal
-        && (
-          <TodoModal
-            todo={selectedTodo}
-            todoId={selectedTodoId}
-            showTodoModal={setShowTodoModal}
-            resetTodoId={setSelectedTodoId}
-          />
-        )}
+      {showTodoModal && (
+        <TodoModal
+          todo={selectedTodo}
+          onCloseTodoModal={closeTodoModal}
+        />
+      )}
     </>
   );
 };
