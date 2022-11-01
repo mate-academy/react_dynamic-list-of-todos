@@ -11,7 +11,6 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
