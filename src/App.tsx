@@ -13,6 +13,8 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterSelection, setFilterSelection] = useState('all');
+  const [query, setQuery] = useState('');
   // const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -22,6 +24,30 @@ export const App: React.FC = () => {
       ));
   }, []);
 
+  const onModalClose = () => setSelectedTodo(null);
+
+  const filterTodos = () => {
+    const queriedTodos = todos.filter(({ title }) => {
+      const loweredTitle = title.toLowerCase();
+      const loweredQuery = query.toLowerCase();
+
+      return loweredTitle.includes(loweredQuery);
+    });
+
+    return queriedTodos.filter(todo => {
+      switch (filterSelection) {
+        case 'active':
+          return !todo.completed;
+
+        case 'completed':
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  };
+
   return (
     <>
       <div className="section">
@@ -30,13 +56,18 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} setTodo={setTodos} />
+              <TodoFilter
+                filterSelection={filterSelection}
+                setFilterSelection={setFilterSelection}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
               {todos.length === 0 && <Loader />}
               <TodoList
-                todos={todos}
+                todos={filterTodos()}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
               />
@@ -45,7 +76,10 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo && (
-        <TodoModal />
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onModalClose={onModalClose}
+        />
       )}
     </>
   );
