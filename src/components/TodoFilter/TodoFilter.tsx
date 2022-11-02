@@ -13,11 +13,11 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   select,
 }) => {
-  const onSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onSelectChange(e.target.value);
   };
 
-  const onQueryHandler = (enteredText: string) => {
+  const handleQuery = (enteredText: string) => {
     onApplyQuery(enteredText);
     onQueryChange(enteredText);
   };
@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={select}
-            onChange={(e) => onSelectHandler(e)}
+            onChange={(e) => handleSelect(e)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -45,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(e) => onQueryHandler(e.target.value)}
+          onChange={(e) => handleQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -59,7 +59,7 @@ export const TodoFilter: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 aria-label="removeButton"
-                onClick={() => onQueryHandler('')}
+                onClick={() => handleQuery('')}
               />
             </span>
           )
