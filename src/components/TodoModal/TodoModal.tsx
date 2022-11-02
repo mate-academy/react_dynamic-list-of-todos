@@ -1,12 +1,47 @@
-import React from 'react';
-import { Loader } from '../Loader';
+import React, { useState, useEffect } from 'react';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { Loader } from '../Loader/Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todos: Todo[];
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOnSelect: React.Dispatch<React.SetStateAction<number>>;
+  onSelect: number;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  todos,
+  setOpen,
+  setOnSelect,
+  onSelect,
+}) => {
+  const select = todos.find((todo) => todo.id === onSelect);
+  const [user, setUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false);
+
+  useEffect(() => {
+    getUser(select?.userId)
+      .then((userFromServer) => {
+        setUser(userFromServer);
+        setIsUserInfoLoaded(true);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!isUserInfoLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +50,8 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #
+              {onSelect}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,23 +59,33 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                setOpen(false);
+                setOnSelect(-1);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {select?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={
+                  select?.completed === true
+                    ? 'has-text-success'
+                    : 'has-text-danger'
+                }
+              >
+                {select?.completed === true ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              <a href="mailto:Sincere@april.biz">{user.name}</a>
             </p>
           </div>
         </div>
