@@ -8,14 +8,14 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ todos }) => {
   const [query, setQuery] = useState('');
-  const [filtered, setFilter] = useState('');
+  const [filter, setFilter] = useState('');
 
   let filteredTodos = todos.filter((todo: { title: string }) => todo
     .title.toLowerCase().includes(query.toLowerCase()));
 
-  if (filtered === 'active') {
+  if (filter === 'active') {
     filteredTodos = filteredTodos.filter((todo) => !todo.completed);
-  } else if (filtered === 'completed') {
+  } else if (filter === 'completed') {
     filteredTodos = filteredTodos.filter((todo) => todo.completed);
   }
 
@@ -51,15 +51,17 @@ export const TodoFilter: React.FC<Props> = ({ todos }) => {
             <i className="fas fa-magnifying-glass" />
           </span>
 
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={() => setQuery('')}
-            />
-          </span>
+          {query && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={() => setQuery('')}
+              />
+            </span>
+          )}
         </p>
       </form>
 

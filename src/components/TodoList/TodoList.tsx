@@ -8,8 +8,8 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const [onSelect, setOnSelect] = useState(-1);
-  const [open, setOpen] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(-1);
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               <tr
                 data-cy="todo"
                 className={classnames({
-                  'has-background-info-light': onSelect === id,
+                  'has-background-info-light': selectedTodoId === id,
                 })}
                 key={id}
               >
@@ -57,15 +57,15 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                     type="button"
                     key={id}
                     onClick={() => {
-                      setOpen(true);
-                      setOnSelect(id);
+                      setOpened(true);
+                      setSelectedTodoId(id);
                     }}
                   >
                     <i
                       className={classnames(
                         'far',
-                        { 'fa-eye-slash': onSelect === id },
-                        { 'fa-eye': onSelect !== id },
+                        { 'fa-eye-slash': selectedTodoId === id },
+                        { 'fa-eye': selectedTodoId !== id },
                       )}
                     />
                   </button>
@@ -76,12 +76,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         </tbody>
       </table>
 
-      {open && (
+      {opened && (
         <TodoModal
           todos={todos}
-          setOpen={setOpen}
-          onSelect={onSelect}
-          setOnSelect={setOnSelect}
+          setOpen={setOpened}
+          onSelect={selectedTodoId}
+          setOnSelect={setSelectedTodoId}
         />
       )}
     </>
