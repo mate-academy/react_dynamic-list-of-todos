@@ -1,4 +1,12 @@
-export const TodoFilter = () => (
+import React from 'react';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[];
+  setTodo: (todos:Todo[]) => void;
+};
+
+export const TodoFilter: React.FC<Props> = () => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
