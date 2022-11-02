@@ -10,13 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
-import { Status } from './types/Status';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState<Status>(Status.ALL);
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.ALL);
   const [query, setQuery] = useState('');
 
   const getTodosFromServer = async () => {
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
   };
 
   const selectStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(event.target.value as Status);
+    setStatus(event.target.value as TodoStatus);
   };
 
   const getQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,13 +53,13 @@ export const App: React.FC = () => {
     });
 
     switch (status) {
-      case Status.ALL:
+      case TodoStatus.ALL:
         return filteredTodos.filter(todo => todo);
 
-      case Status.ACTIVE:
+      case TodoStatus.ACTIVE:
         return filteredTodos.filter(todo => !todo.completed);
 
-      case Status.COMPLETED:
+      case TodoStatus.COMPLETED:
         return filteredTodos.filter(todo => todo.completed);
 
       default:

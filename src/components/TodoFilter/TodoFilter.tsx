@@ -1,7 +1,7 @@
-import { Status } from '../../types/Status';
+import { TodoStatus } from '../../types/TodoStatus';
 
 interface Props {
-  status: Status;
+  status: TodoStatus;
   selectStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   query: string;
   getQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
