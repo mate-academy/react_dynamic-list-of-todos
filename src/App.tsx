@@ -10,7 +10,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-type Props = () => Promise<void>;
+type GetTodos = () => Promise<void>;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
-  const getTodosFromServer: Props = async () => {
+  const getTodosFromServer: GetTodos = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
@@ -81,12 +81,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todosAreLoading
-              && <Loader />}
-              <TodoList
-                todos={visiableTodos}
-                onTodoSelected={onTodoSelected}
-                selectedTodo={selectedTodo}
-              />
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visiableTodos}
+                    onTodoSelected={onTodoSelected}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>

@@ -5,10 +5,10 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   onResetSelectedTodo: () => void;
 };
-  type Propspromise = (userId: number | undefined) => Promise<void>;
+  type GetUsers = (userId: number | undefined) => Promise<void>;
 
 export const TodoModal: React.FC<Props> = (
   {
@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = (
   const [user, setUser] = useState<User | null>(null);
   const [userIsLoading, setUserIsLoading] = useState(true);
 
-  const getUsersFromServer: Propspromise = async (userId) => {
+  const getUsersFromServer: GetUsers = async (userId) => {
     const usersFromServer = await getUser(userId);
 
     setUser(usersFromServer);
