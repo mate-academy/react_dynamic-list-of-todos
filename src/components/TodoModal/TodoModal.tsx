@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = ({
     userId,
   } = currentTodo;
 
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(userId).then(currentUser => setUser(currentUser));
@@ -30,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user?.name ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -42,11 +42,11 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="modalClose"
               onClick={onClose}
             />
           </header>
