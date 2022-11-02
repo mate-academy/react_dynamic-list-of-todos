@@ -62,10 +62,10 @@ export const App: React.FC = () => {
     }
 
     if (query) {
-      const lowerQuery = query.toLowerCase();
+      const preparedQuery = query.toLowerCase().trim();
 
       filteredTodos = filteredTodos.filter(
-        todo => todo.title.toLowerCase().includes(lowerQuery),
+        todo => todo.title.toLowerCase().includes(preparedQuery),
       );
     }
 
