@@ -52,10 +52,12 @@ export const App: React.FC = () => {
 
     switch (status) {
       case Status.Active:
-        filteredTodos = todos.filter(todo => !todo.completed);
-        break;
       case Status.Completed:
-        filteredTodos = todos.filter(todo => todo.completed);
+        filteredTodos = todos.filter(
+          todo => (status === Status.Active
+            ? !todo.completed
+            : todo.completed),
+        );
         break;
       default:
         filteredTodos = todos;

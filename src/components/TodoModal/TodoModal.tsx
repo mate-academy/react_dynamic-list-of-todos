@@ -21,15 +21,22 @@ export const TodoModal: React.FC<Props> = ({
   ] = useState<User | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
-  const getUserForSelectedTodo = useCallback(async (userId) => {
-    const userById = await getUser(userId);
+  const {
+    userId,
+    id,
+    title,
+    completed,
+  } = selectedTodo;
+
+  const getUserForSelectedTodo = useCallback(async (idForUser) => {
+    const userById = await getUser(idForUser);
 
     setUserForSelectedTodo(userById);
     setIsUserLoaded(true);
   }, []);
 
   useEffect(() => {
-    getUserForSelectedTodo(selectedTodo.userId);
+    getUserForSelectedTodo(userId);
   }, []);
 
   return (
@@ -45,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo.id}`}
+                {`Todo #${id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -59,11 +66,11 @@ export const TodoModal: React.FC<Props> = ({
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {selectedTodo.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                {selectedTodo.completed
+                {completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
 
