@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
@@ -45,7 +45,7 @@ export const UserProvider: React.FC = ({ children }) => {
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  const contextValue = useMemo(() => ({
+  const contextValue = {
     todos,
     setTodos,
     selectedUser,
@@ -60,14 +60,7 @@ export const UserProvider: React.FC = ({ children }) => {
     setQuery,
     appliedQuery,
     setAppliedQuery,
-  }), [
-    todos,
-    selectedUser,
-    userInfo,
-    selectedTodoId,
-    sortType,
-    query,
-    appliedQuery]);
+  };
 
   return (
     <UserContext.Provider value={contextValue}>
