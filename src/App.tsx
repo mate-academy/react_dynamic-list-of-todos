@@ -13,7 +13,7 @@ import { SortType } from './utils/enums';
 
 export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
-  const [isClicked, setIsClicked] = useState(false);
+  const [isShowClicked, setIsShowClicked] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [sortType, setSortType] = useState(SortType.all);
   const [query, setQuery] = useState('');
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
   }, [sortType, query]);
 
   const onShowClicked = (id: number) => {
-    setIsClicked(true);
+    setIsShowClicked(true);
     setSelectedUserId(id);
   };
 
@@ -75,9 +75,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isClicked && (
+      {isShowClicked && (
         <TodoModal
-          setIsClicked={setIsClicked}
+          setIsClicked={setIsShowClicked}
           selectedTodo={selectedTodo}
           setSelectedId={setSelectedUserId}
         />
