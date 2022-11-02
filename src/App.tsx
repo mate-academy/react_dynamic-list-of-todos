@@ -10,20 +10,21 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+import { Status } from './types/types';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [actualTodos, setActualTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [statusSelect, setStatusSelect] = useState('all');
 
-  const onSelectedTodo = (todoId: number) => {
+  const onTodoSelection = (todoId: number) => {
     setSelectedTodo(todos.find(todo => todo.id === todoId) || null);
   };
 
-  const setClose = (item: null) => {
-    setSelectedTodo(item);
+  const handleModalClose = () => {
+    setSelectedTodo(null);
   };
 
   const searchByInput = (todoTitle: string, searchInput: string) => {
@@ -33,30 +34,25 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos().then(todo => {
       setTodos(todo);
-      setActualTodos(todo);
       setIsLoading(false);
     });
   }, []);
 
-  useEffect(() => {
-    setTodos(
-      actualTodos.filter(({ title, completed }) => {
-        switch (statusSelect) {
-          case 'all':
-            return searchByInput(title, query);
+  const filteredTodos = todos.filter(({ title, completed }) => {
+    switch (statusSelect) {
+      case Status.ALL:
+        return searchByInput(title, query);
 
-          case 'active':
-            return !completed && searchByInput(title, query);
+      case Status.ACTIVE:
+        return !completed && searchByInput(title, query);
 
-          case 'completed':
-            return completed && searchByInput(title, query);
+      case Status.COMPLETED:
+        return completed && searchByInput(title, query);
 
-          default:
-            throw new Error('Oops! Something went wrong!');
-        }
-      }),
-    );
-  }, [actualTodos, query, statusSelect]);
+      default:
+        throw new Error('Oops! Something went wrong!');
+    }
+  });
 
   return (
     <>
@@ -78,8 +74,8 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
-                  onSelectedTodo={onSelectedTodo}
+                  todos={filteredTodos}
+                  onSelectedTodo={onTodoSelection}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -89,7 +85,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} setClose={setClose} />
+        <TodoModal selectedTodo={selectedTodo} setClose={handleModalClose} />
       )}
     </>
   );

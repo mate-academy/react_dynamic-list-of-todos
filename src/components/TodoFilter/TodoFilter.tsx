@@ -1,4 +1,5 @@
 import React from 'react';
+import { Status } from '../../types/types';
 
 type Props = {
   setStatusSelect: (item: string) => void;
@@ -31,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleStatusSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -51,11 +52,11 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right">
           {query && (
-          /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button
               data-cy="clearSearchButton"
+              aria-label="Clear search input"
               type="button"
               className="delete"
               onClick={clearInput}
