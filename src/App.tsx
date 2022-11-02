@@ -12,8 +12,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
 
-type SelectHandler = (todoId: number) => void;
-type CloseHanlder = () => void;
+type TodoSelectHandler = (todoId: number) => void;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,22 +20,18 @@ export const App: React.FC = () => {
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
   const [query, setQuery] = useState('');
 
-  const loadData = async () => {
+  const loadTodos = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
   };
 
   useEffect(() => {
-    loadData();
+    loadTodos();
   }, []);
 
-  const handleTodoSelect: SelectHandler = (todoId) => {
+  const handleTodoSelect: TodoSelectHandler = (todoId) => {
     setSelectedTodoId(todoId);
-  };
-
-  const handleModalClose: CloseHanlder = () => {
-    setSelectedTodoId(0);
   };
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId) || null;
@@ -98,7 +93,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodoId !== 0 && (
-        <TodoModal todo={selectedTodo} closeModal={handleModalClose} />
+        <TodoModal todo={selectedTodo} selectTodo={handleTodoSelect} />
       )}
     </>
   );

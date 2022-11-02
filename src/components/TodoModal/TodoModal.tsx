@@ -6,13 +6,13 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo | null;
-  closeModal: () => void
+  selectTodo: (todoId: number) => void
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
+export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const loadData = async (userId: number) => {
+  const loadUser = async (userId: number) => {
     const userFromServer = await getUser(userId);
 
     if (userFromServer) {
@@ -22,7 +22,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
   useEffect(() => {
     if (todo) {
-      loadData(todo.userId);
+      loadUser(todo.userId);
     }
   }, []);
 
@@ -47,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={closeModal}
+              onClick={() => selectTodo(0)}
             />
           </header>
 
