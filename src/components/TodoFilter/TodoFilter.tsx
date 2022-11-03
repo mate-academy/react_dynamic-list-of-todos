@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   const [appliedQuery, setAppliedQuery] = useState('');
 
   const setQueryDebounce = useCallback(
-    debounce(setQuery, 1000),
+    debounce(setQuery, 800),
     [],
   );
 
@@ -26,6 +26,11 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleSelectValue = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectValue(event.target.value as TodoStatus);
+  };
+
+  const handleClearQuery = () => {
+    setQuery('');
+    setAppliedQuery('');
   };
 
   return (
@@ -63,7 +68,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={handleClearQuery}
             />
           </span>
         )}
