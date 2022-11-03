@@ -9,11 +9,32 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TodoStatus } from './types/TodoStatus';
+
+const filterTodos = (todoStatus: string, queryToFilter: string, todos: Todo[]) => {
+  const filteredByStatus = todos.filter(todo => {
+    switch (todoStatus) {
+      case TodoStatus.ACTIVE:
+        return !todo.completed;
+
+      case TodoStatus.COMPLETED:
+        return todo.completed;
+
+      default:
+        return todo;
+    }
+  });
+
+  return filteredByStatus
+    .filter(todo => todo.title.toLowerCase().includes(queryToFilter.toLowerCase()));
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodosLoading, setIsTodosLoading] = useState(false);
   const [todoId, setTodoId] = useState(0);
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [selectValue, setSelectValue] = useState<TodoStatus>(TodoStatus.ALL);
 
   const loadTodos = async () => {
     setIsTodosLoading(true);
@@ -41,6 +62,8 @@ export const App: React.FC = () => {
 
   const closeModal = () => setTodoId(0);
 
+  const visibleTodos = filterTodos(selectValue, query, todos);
+
   return (
     <>
       <div className="section">
@@ -49,7 +72,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                setSelectValue={setSelectValue}
+              />
             </div>
 
             <div className="block">
@@ -57,7 +84,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={visibleTodos}
                   selectedTodoId={todoId}
                   selectTodo={handleTodoId}
                 />
