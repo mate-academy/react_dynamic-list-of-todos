@@ -15,7 +15,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [field, setField] = useState('all');
   const [query, setQuery] = useState('');
 
@@ -23,7 +22,6 @@ export const App: React.FC = () => {
     const todosFromAPI = await getTodos();
 
     setTodos(todosFromAPI);
-    setVisibleTodos(todosFromAPI);
   }
 
   useEffect(() => {
@@ -50,65 +48,22 @@ export const App: React.FC = () => {
     setSelectedUser(null);
   };
 
-  // const filterTodosByState = async (fieldForSorting: string) => {
-  //   let filteredTodos: Todo[];
+  const filteredTodos = todos
+    .filter(todo => {
+      switch (field) {
+        case 'active':
+          return !todo.completed;
 
-  //   switch (fieldForSorting) {
-  //     case 'all':
-  //       filteredTodos = visibleTodos;
-  //       break;
+        case 'completed':
+          return todo.completed;
+          break;
 
-  //     case 'active':
-  //       filteredTodos = visibleTodos.filter(todo => !todo.completed);
-  //       break;
-
-  //     case 'completed':
-  //       filteredTodos = visibleTodos.filter(todo => todo.completed);
-  //       break;
-
-  //     default:
-  //       return;
-  //   }
-
-  //   setVisibleTodos(filteredTodos);
-  // };
-
-  // const filterTodosByInput = (queryForSorting: string) => {
-  //   const filteredTodos = visibleTodos
-  //     .filter(todo => todo.title.toLowerCase()
-  //       .includes(queryForSorting.toLowerCase()));
-
-  //   setVisibleTodos(filteredTodos);
-  // };
-
-  const filterTodos = () => {
-    const filteredTodos = todos
-      .filter(todo => {
-        switch (field) {
-          case 'active':
-            return !todo.completed;
-
-          case 'completed':
-            return todo.completed;
-            break;
-
-          default:
-            return true;
-        }
-      })
-      .filter(todo => todo.title.toLowerCase()
-        .includes(query.toLowerCase()));
-
-    setVisibleTodos(filteredTodos);
-  };
-
-  useEffect(() => {
-    filterTodos();
-    // filterTodosByState(field);
-    // filterTodosByInput(query);
-    // eslint-disable-next-line
-    // console.log(field, query)
-  }, [field, query]);
+        default:
+          return true;
+      }
+    })
+    .filter(todo => todo.title.toLowerCase()
+      .includes(query.toLowerCase()));
 
   const resetSearch = () => {
     setQuery('');
@@ -133,7 +88,7 @@ export const App: React.FC = () => {
             <div className="block">
               {todos.length === 0 && <Loader />}
               <TodoList
-                todos={visibleTodos}
+                todos={filteredTodos}
                 selectTodo={selectTodo}
                 selectedTodo={selectedTodo}
               />

@@ -16,7 +16,6 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          value="all"
           onChange={event => {
             setField(event.target.value);
           }}
