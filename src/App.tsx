@@ -50,47 +50,68 @@ export const App: React.FC = () => {
     setSelectedUser(null);
   };
 
-  const filterTodosByState = async (fieldForSorting: string) => {
-    let filteredTodos: Todo[];
+  // const filterTodosByState = async (fieldForSorting: string) => {
+  //   let filteredTodos: Todo[];
 
-    switch (fieldForSorting) {
-      case 'all':
-        filteredTodos = visibleTodos;
-        break;
+  //   switch (fieldForSorting) {
+  //     case 'all':
+  //       filteredTodos = visibleTodos;
+  //       break;
 
-      case 'active':
-        filteredTodos = visibleTodos.filter(todo => !todo.completed);
-        break;
+  //     case 'active':
+  //       filteredTodos = visibleTodos.filter(todo => !todo.completed);
+  //       break;
 
-      case 'completed':
-        filteredTodos = visibleTodos.filter(todo => todo.completed);
-        break;
+  //     case 'completed':
+  //       filteredTodos = visibleTodos.filter(todo => todo.completed);
+  //       break;
 
-      default:
-        return;
-    }
+  //     default:
+  //       return;
+  //   }
 
-    setVisibleTodos(filteredTodos);
-  };
+  //   setVisibleTodos(filteredTodos);
+  // };
 
-  const filterTodosByInput = (queryForSorting: string) => {
-    const filteredTodos = visibleTodos
+  // const filterTodosByInput = (queryForSorting: string) => {
+  //   const filteredTodos = visibleTodos
+  //     .filter(todo => todo.title.toLowerCase()
+  //       .includes(queryForSorting.toLowerCase()));
+
+  //   setVisibleTodos(filteredTodos);
+  // };
+
+  const filterTodos = () => {
+    const filteredTodos = todos
+      .filter(todo => {
+        switch (field) {
+          case 'active':
+            return !todo.completed;
+
+          case 'completed':
+            return todo.completed;
+            break;
+
+          default:
+            return true;
+        }
+      })
       .filter(todo => todo.title.toLowerCase()
-        .includes(queryForSorting.toLowerCase()));
+        .includes(query.toLowerCase()));
 
     setVisibleTodos(filteredTodos);
   };
 
   useEffect(() => {
-    filterTodosByState(field);
-    filterTodosByInput(query);
+    filterTodos();
+    // filterTodosByState(field);
+    // filterTodosByInput(query);
     // eslint-disable-next-line
-    console.log(field, query)
+    // console.log(field, query)
   }, [field, query]);
 
   const resetSearch = () => {
     setQuery('');
-    filterTodosByState(field);
   };
 
   return (
