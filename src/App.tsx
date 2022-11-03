@@ -15,11 +15,13 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const getTodosFromServer = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
+    setIsDataLoaded(true);
   };
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
+              {!isDataLoaded && <Loader />}
               <TodoList
                 todos={filteredTodos}
                 setSelectedTodoId={setSelectedTodoId}

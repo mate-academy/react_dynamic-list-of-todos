@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodoId,
   todos,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
