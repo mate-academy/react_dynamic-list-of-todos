@@ -7,13 +7,15 @@ import { Loader } from '../Loader';
 interface Prop {
   currentTodo: Todo;
   isUserLoaded: boolean;
-  setisUserLoaded: (value: boolean) => void;
+  setIsUserLoaded: (value: boolean) => void;
+  setTodoId: (value: number) => void;
 }
 
 export const TodoModal: FC<Prop> = ({
   currentTodo,
   isUserLoaded,
-  setisUserLoaded,
+  setIsUserLoaded,
+  setTodoId: handleCloseModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -28,11 +30,11 @@ export const TodoModal: FC<Prop> = ({
 
       setUser(foundUser);
 
-      setisUserLoaded(false);
+      setIsUserLoaded(false);
     };
 
-    getUserFromServer(currentTodo.id);
-  }, []);
+    getUserFromServer(currentTodo.userId);
+  }, [currentTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -56,6 +58,11 @@ export const TodoModal: FC<Prop> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                handleCloseModal(0);
+
+                setIsUserLoaded(true);
+              }}
             />
           </header>
 

@@ -12,30 +12,55 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [todoWithUser, setTodoWithUser] = useState<Todo | null>(null);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [isTodosLoaded, setIsTodosLoaded] = useState(true);
-  const [isUserLoaded, setisUserLoaded] = useState(true);
+  const [isUserLoaded, setIsUserLoaded] = useState(true);
   const [todoId, setTodoId] = useState(0);
   const [searchField, setSearchField] = useState('');
-
-  const getTodosFromServer = async () => {
-    const response = await getTodos();
-
-    setTodos(response);
-    setIsTodosLoaded(false);
-  };
+  const [filteringMethod, setFilteringMethod] = useState('all');
 
   useEffect(() => {
+    const getTodosFromServer = async () => {
+      const response = await getTodos();
+
+      setTodos(response);
+      setIsTodosLoaded(false);
+    };
+
     getTodosFromServer();
   }, []);
-
-  const visibleTodos = todos.filter(todo => {
-    return todo.title.toLowerCase().includes(searchField.toLowerCase());
-  });
 
   const findTodo = (id: number) => {
     return todos.find(todo => todo.id === id) || todos[0];
   };
+
+  useEffect(() => {
+    switch (filteringMethod) {
+      case 'all':
+        setVisibleTodos(todos.filter(todo => {
+          return todo.title.toLowerCase().includes(searchField.toLowerCase());
+        }));
+
+        break;
+
+      case 'completed':
+        setVisibleTodos(todos.filter(todo => {
+          return todo.completed;
+        }));
+
+        break;
+
+      case 'active':
+        setVisibleTodos(todos.filter(todo => {
+          return !todo.completed;
+        }));
+
+        break;
+
+      default:
+        break;
+    }
+  }, [filteringMethod, todos]);
 
   return (
     <>
@@ -45,7 +70,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter searchField={searchField} setSearchField={setSearchField} />
+              <TodoFilter
+                searchField={searchField}
+                setSearchField={setSearchField}
+                setFilteringMethod={setFilteringMethod}
+              />
             </div>
 
             <div className="block">
@@ -67,7 +96,8 @@ export const App: React.FC = () => {
         <TodoModal
           currentTodo={findTodo(todoId)}
           isUserLoaded={isUserLoaded}
-          setisUserLoaded={setisUserLoaded}
+          setIsUserLoaded={setIsUserLoaded}
+          setTodoId={setTodoId}
         />
       )}
     </>

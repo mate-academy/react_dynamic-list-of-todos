@@ -3,9 +3,14 @@ import { FC } from 'react';
 interface Prop {
   searchField: string;
   setSearchField: (searchField : string) => void;
+  setFilteringMethod: (value: string) => void;
 }
 
-export const TodoFilter: FC<Prop> = ({ searchField, setSearchField }) => {
+export const TodoFilter: FC<Prop> = ({
+  searchField,
+  setSearchField,
+  setFilteringMethod,
+}) => {
   const resetSearchField = () => {
     setSearchField('');
   };
@@ -14,7 +19,10 @@ export const TodoFilter: FC<Prop> = ({ searchField, setSearchField }) => {
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select
+            data-cy="statusSelect"
+            onChange={(e) => setFilteringMethod(e.target.value)}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>

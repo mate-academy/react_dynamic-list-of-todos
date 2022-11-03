@@ -37,9 +37,6 @@ export const TodoList: FC<Prop> = ({
           <tr
             data-cy="todo"
             key={id}
-            // className={classNames({
-            //   'has-background-info-light': true,
-            // })}
           >
             <td className="is-vcentered">{index + 1}</td>
             <td className="is-vcentered">
