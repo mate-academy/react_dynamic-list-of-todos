@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
   const [isShowClicked, setIsShowClicked] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [sortType, setSortType] = useState(SortType.all);
+  const [sortType, setSortType] = useState(SortType.All);
   const [query, setQuery] = useState('');
 
   const selectedTodo = loadedTodos.find(todo => todo.id === selectedUserId) || null;
@@ -30,10 +30,10 @@ export const App: React.FC = () => {
         };
 
         switch (sortType) {
-          case SortType.completed:
+          case SortType.Completed:
             return completed === true && doesQueryMatch(title);
 
-          case SortType.active:
+          case SortType.Active:
             return completed === false && doesQueryMatch(title);
 
           default:
