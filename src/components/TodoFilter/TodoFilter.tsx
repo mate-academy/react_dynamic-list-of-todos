@@ -1,8 +1,27 @@
-export const TodoFilter = () => (
+import React from 'react';
+import { SortType } from '../../utils/enums';
+
+type Props = {
+  onSelect: (sortType: SortType) => void;
+  sortType: SortType;
+  onInput: (query: string) => void;
+  query: string;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  onSelect,
+  sortType,
+  onInput,
+  query,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          value={sortType}
+          onChange={(event) => onSelect(event.target.value as SortType)}
+          data-cy="statusSelect"
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,18 +35,23 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => onInput(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
+        {query.length > 0 && (
+          // eslint-disable-next-line jsx-a11y/control-has-associated-label
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onInput('')}
+          />
+        )}
       </span>
     </p>
   </form>
