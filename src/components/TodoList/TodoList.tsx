@@ -1,15 +1,16 @@
 import { FC } from 'react';
-// import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Prop {
   todos: Todo[];
   setTodoId: (id : number) => void
+  todoId: number;
 }
 
 export const TodoList: FC<Prop> = ({
   todos,
   setTodoId,
+  todoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -26,7 +27,7 @@ export const TodoList: FC<Prop> = ({
     </thead>
 
     <tbody>
-      {todos.map((todo, index) => {
+      {todos.map((todo) => {
         const {
           id,
           title,
@@ -38,7 +39,7 @@ export const TodoList: FC<Prop> = ({
             data-cy="todo"
             key={id}
           >
-            <td className="is-vcentered">{index + 1}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
               {completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -63,7 +64,7 @@ export const TodoList: FC<Prop> = ({
                 onClick={() => setTodoId(id)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={`far ${todoId === id ? 'fa-eye-slash' : 'fa-eye'}`} />
                 </span>
               </button>
             </td>

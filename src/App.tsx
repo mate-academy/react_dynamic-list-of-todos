@@ -35,32 +35,28 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    switch (filteringMethod) {
-      case 'all':
-        setVisibleTodos(todos.filter(todo => {
-          return todo.title.toLowerCase().includes(searchField.toLowerCase());
-        }));
+    let todosCopy = [...todos];
 
-        break;
-
-      case 'completed':
-        setVisibleTodos(todos.filter(todo => {
-          return todo.completed;
-        }));
-
-        break;
-
-      case 'active':
-        setVisibleTodos(todos.filter(todo => {
-          return !todo.completed;
-        }));
-
-        break;
-
-      default:
-        break;
+    if (filteringMethod === 'completed') {
+      todosCopy = todosCopy.filter(todo => {
+        return todo.completed;
+      });
     }
-  }, [filteringMethod, todos]);
+
+    if (filteringMethod === 'active') {
+      todosCopy = todosCopy.filter(todo => {
+        return !todo.completed;
+      });
+    }
+
+    if (searchField) {
+      todosCopy = todosCopy.filter(todo => {
+        return todo.title.toLowerCase().includes(searchField.toLowerCase());
+      });
+    }
+
+    setVisibleTodos(todosCopy);
+  }, [filteringMethod, todos, searchField]);
 
   return (
     <>
@@ -84,6 +80,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     setTodoId={setTodoId}
+                    todoId={todoId}
                   />
                 )}
             </div>
