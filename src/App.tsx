@@ -14,7 +14,7 @@ import { TodosCategory } from './types/TodosCategory';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState<TodosCategory | string>(TodosCategory.All);
 

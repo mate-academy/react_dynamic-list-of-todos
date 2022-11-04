@@ -6,7 +6,7 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
-  setSelectedTodo: (value: undefined) => void;
+  setSelectedTodo: (value: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
     id, title, userId, completed,
   } = todo;
 
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const getUserFromApi = async () => {
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user === undefined ? (
+      {user === null ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(undefined)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
@@ -79,9 +79,11 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>

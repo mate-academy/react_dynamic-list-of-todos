@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: Todo | undefined;
+  selectedTodo: Todo | null;
   selectTodo: (todo: Todo) => void;
 };
 
@@ -64,7 +64,7 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i className={cn('far',
                     { 'fa-eye-slash': selectedTodo?.id === todo.id },
-                    { 'fa-eye': selectedTodo === undefined })}
+                    { 'fa-eye': selectedTodo?.id !== todo.id })}
                   />
                 </span>
               </button>
