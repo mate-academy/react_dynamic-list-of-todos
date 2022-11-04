@@ -15,7 +15,6 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const handleFilterSelection
     = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      event.preventDefault();
       setFilterSelection(event.target.value);
     };
 

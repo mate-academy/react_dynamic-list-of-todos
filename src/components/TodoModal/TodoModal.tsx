@@ -22,10 +22,6 @@ export const TodoModal: React.FC<Props> = ({
     completed,
     userId,
   } = selectedTodo;
-  // const {
-  //   name
-  //   email
-  // } = user
 
   useEffect(() => {
     getUser(userId)
