@@ -25,7 +25,19 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleSelectValue = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectValue(event.target.value as TodoStatus);
+    switch (event.target.value) {
+      case TodoStatus.ACTIVE:
+        setSelectValue(TodoStatus.ACTIVE);
+        break;
+
+      case TodoStatus.COMPLETED:
+        setSelectValue(TodoStatus.COMPLETED);
+        break;
+
+      default:
+        setSelectValue(TodoStatus.ALL);
+        break;
+    }
   };
 
   const handleClearQuery = () => {
@@ -63,8 +75,8 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Delete"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

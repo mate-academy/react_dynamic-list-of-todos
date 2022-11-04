@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
+
 import { getUser } from '../../api';
 
 import { Todo } from '../../types/Todo';
@@ -13,14 +15,18 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const loadUser = async (id: number) => {
-    const userFromServer = await getUser(id);
+  const {
+    userId, id, title, completed,
+  } = todo;
+
+  const loadUser = async (idOfUser: number) => {
+    const userFromServer = await getUser(idOfUser);
 
     setUser(userFromServer);
   };
 
   useEffect(() => {
-    loadUser(todo.userId);
+    loadUser(userId);
   }, []);
 
   return (
@@ -36,11 +42,11 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Close"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -50,15 +56,17 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong className={cn({
+                'has-text-success': completed,
+                'has-text-danger': !completed,
+              })}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -11,7 +10,9 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoStatus } from './types/TodoStatus';
 
-const filterTodos = (todoStatus: string, queryToFilter: string, todos: Todo[]) => {
+const filterTodos = (
+  todoStatus: string, queryToFilter: string, todos: Todo[],
+) => {
   const filteredByStatus = todos.filter(todo => {
     switch (todoStatus) {
       case TodoStatus.ACTIVE:
@@ -25,8 +26,9 @@ const filterTodos = (todoStatus: string, queryToFilter: string, todos: Todo[]) =
     }
   });
 
-  return filteredByStatus
-    .filter(todo => todo.title.toLowerCase().includes(queryToFilter.toLowerCase()));
+  return filteredByStatus.filter(
+    todo => todo.title.toLowerCase().includes(queryToFilter.toLowerCase()),
+  );
 };
 
 export const App: React.FC = () => {
@@ -43,10 +45,10 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
-      setIsTodosLoading(false);
     } catch (error) {
-      setIsTodosLoading(false);
       throw new Error(`something went wrong ${error}`);
+    } finally {
+      setIsTodosLoading(false);
     }
   };
 
