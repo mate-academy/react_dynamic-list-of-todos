@@ -11,12 +11,14 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userIsLoaded, setUserIsLoaded] = useState(false);
 
   const loadUser = async (userId: number) => {
     const userFromServer = await getUser(userId);
 
     if (userFromServer) {
       setUser(userFromServer);
+      setUserIsLoaded(true);
     }
   };
 
@@ -30,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todo || !user ? (
+      {!userIsLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -39,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -53,11 +55,11 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed
+              {todo?.completed
                 ? (
                   <strong className="has-text-success">Done</strong>
                 )

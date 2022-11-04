@@ -16,6 +16,7 @@ type TodoSelectHandler = (todoId: number) => void;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
   const [query, setQuery] = useState('');
@@ -24,6 +25,7 @@ export const App: React.FC = () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
+    setDataIsLoaded(true);
   };
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {!todos.length
+            {!dataIsLoaded
               ? (
                 <div className="block">
                   <Loader />
