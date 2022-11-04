@@ -10,7 +10,7 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 
-import { Todo } from './types/Todo';
+import { Todo, FilterType } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,8 +24,8 @@ export const App: React.FC = () => {
     setSelectedTodo(todos.find(todo => todo.id === todoId) || null);
   };
 
-  const setClose = (item: null) => {
-    setSelectedTodo(item);
+  const setClose = () => {
+    setSelectedTodo(null);
   };
 
   const searchByInput = (todoTitle: string, searchInput: string) => {
@@ -44,13 +44,13 @@ export const App: React.FC = () => {
     setTodos(
       initialTodos.filter(({ title, completed }) => {
         switch (filterSelect) {
-          case 'all':
+          case FilterType.ALL:
             return searchByInput(title, query);
 
-          case 'active':
+          case FilterType.ACTIVE:
             return !completed && searchByInput(title, query);
 
-          case 'completed':
+          case FilterType.COMPLETED:
             return completed && searchByInput(title, query);
 
           default:
@@ -90,8 +90,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-      && <TodoModal selectedTodo={selectedTodo} setClose={setClose} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setClose={setClose}
+        />
+      )}
     </>
   );
 };

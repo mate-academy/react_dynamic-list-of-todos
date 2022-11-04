@@ -8,7 +8,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setClose: (item: null) => void;
+  setClose: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -51,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setClose(null)}
+              onClick={() => setClose()}
             />
           </header>
 
