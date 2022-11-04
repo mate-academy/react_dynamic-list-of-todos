@@ -25,20 +25,16 @@ const getFilteredTodos = (todos: Todo[], filerBy: FilterBy, query: string) => {
     title.toLowerCase().includes(query.toLowerCase())
   ));
 
-  if (filerBy !== FilterBy.ALL) {
-    switch (filerBy) {
-      case FilterBy.ACTIVE:
-        return filteredTodos.filter(({ completed }) => !completed);
+  switch (filerBy) {
+    case FilterBy.ACTIVE:
+      return filteredTodos.filter(({ completed }) => !completed);
 
-      case FilterBy.COMPLETED:
-        return filteredTodos.filter(({ completed }) => completed);
+    case FilterBy.COMPLETED:
+      return filteredTodos.filter(({ completed }) => completed);
 
-      default:
-        break;
-    }
+    default:
+      return filteredTodos;
   }
-
-  return filteredTodos;
 };
 
 export const App: React.FC = () => {
