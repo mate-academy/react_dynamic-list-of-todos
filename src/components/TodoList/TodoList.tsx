@@ -64,8 +64,9 @@ export const TodoList: React.FC<Pops> = ({
                   onClick={() => handleSelectTodo(todo)}
                 >
                   <span className="icon">
-                    <i className={classNames('far fa-eye', {
+                    <i className={classNames({
                       'far fa-eye-slash': selectTodo?.id === todo.id,
+                      'far fa-eye': selectTodo?.id !== todo.id,
                     })}
                     />
                   </span>
