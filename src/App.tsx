@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 type GetTodos = () => Promise<void>;
 
@@ -17,7 +18,7 @@ export const App: React.FC = () => {
   const [todosAreLoading, setTodosAreLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState('');
   const getTodosFromServer: GetTodos = async () => {
     const todosFromServer = await getTodos();
 
@@ -50,13 +51,13 @@ export const App: React.FC = () => {
 
   const doesStatusMatch = (todo: Todo) => {
     switch (status) {
-      case 'completed':
+      case Status.Completed:
         return todo.completed === true;
-      case 'active':
+      case Status.Active:
         return todo.completed === false;
 
       default:
-        return 'all';
+        return Status.All;
     }
   };
 
