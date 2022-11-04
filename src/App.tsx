@@ -50,21 +50,23 @@ export const App: React.FC = () => {
       const lowerQuery = query.toLowerCase();
 
       return lowerTitle.includes(lowerQuery);
+    }).filter(todo => {
+      switch (status) {
+        case TodoStatus.ALL:
+          return todo;
+
+        case TodoStatus.ACTIVE:
+          return !todo.completed;
+
+        case TodoStatus.COMPLETED:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
     });
 
-    switch (status) {
-      case TodoStatus.ALL:
-        return filteredTodos.filter(todo => todo);
-
-      case TodoStatus.ACTIVE:
-        return filteredTodos.filter(todo => !todo.completed);
-
-      case TodoStatus.COMPLETED:
-        return filteredTodos.filter(todo => todo.completed);
-
-      default:
-        return filteredTodos.filter(todo => todo);
-    }
+    return filteredTodos;
   };
 
   return (
