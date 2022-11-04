@@ -33,7 +33,12 @@ export const TodoList: React.FC<Pops> = ({
       <tbody>
         {
           list.map(todo => (
-            <tr data-cy="todo" className="has-background-info-light">
+            <tr
+              data-cy="todo"
+              className={classNames({
+                'has-background-info-light': selectTodo?.id === todo.id,
+              })}
+            >
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
