@@ -2,11 +2,13 @@ import React from 'react';
 import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
+  const valid = true;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {valid ? (
         <Loader />
       ) : (
         <div className="modal-card">
