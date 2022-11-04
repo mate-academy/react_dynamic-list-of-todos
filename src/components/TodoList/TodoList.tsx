@@ -70,9 +70,10 @@ export const TodoList: React.FC<Props> = ({
               >
                 <span className="icon">
                   <i className={cn(
-                    'far fa-eye',
+                    'far',
                     {
                       'fa-eye-slash': isActive,
+                      'fa-eye': !isActive,
                     },
                   )}
                   />
