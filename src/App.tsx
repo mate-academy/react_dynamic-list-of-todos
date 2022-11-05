@@ -23,9 +23,10 @@ export const App: React.FC = () => {
       const userFromServer = await getTodos();
 
       setTodos(userFromServer);
-      setIsLoaded(true);
     } catch (error) {
       throw new Error('Error. Can`t upload user');
+    } finally {
+      setIsLoaded(true);
     }
   };
 
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
     getUserFromServer();
   }, []);
 
-  const filterTodos = () => {
+  const getFilterTodos = () => {
     const sortedTodos = todos.filter(todo => {
       switch (sortType) {
         case SortType.ACTIVE:
@@ -70,7 +71,7 @@ export const App: React.FC = () => {
               {isLoaded
                 ? (
                   <TodoList
-                    todos={filterTodos()}
+                    todos={getFilterTodos()}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
