@@ -14,8 +14,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
 
   const {
     selectedTodoId,
-    setSelectedUser,
-    setSelectedTodoId,
+    selectCurrentTodo,
   } = useContext(UserContext);
   const isSelected = selectedTodoId === id;
 
@@ -48,10 +47,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => {
-            setSelectedUser(userId);
-            setSelectedTodoId(id);
-          }}
+          onClick={() => selectCurrentTodo(id, userId)}
         >
           <span className="icon">
             <i className={classNames(

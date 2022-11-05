@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { SortTypes } from '../../types/SortTypes';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 import { UserContext } from '../UserContext';
@@ -22,13 +23,13 @@ export const TodoList: React.FC = () => {
 
   const getVisibleTodos = (currentTodos: Todo[]) => {
     switch (sortType) {
-      case 'all':
+      case SortTypes.ALL:
         return currentTodos;
 
-      case 'active':
+      case SortTypes.ACTIVE:
         return filterTodosByComplete(false);
 
-      case 'completed':
+      case SortTypes.COMPLETED:
         return filterTodosByComplete(true);
       default:
         return currentTodos;

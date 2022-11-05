@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import classNames from 'classnames';
-import { getUser } from '../../api';
 import { Loader } from '../Loader';
 import { UserContext } from '../UserContext';
 import { Todo } from '../../types/Todo';
@@ -8,19 +7,11 @@ import { Todo } from '../../types/Todo';
 export const TodoModal: React.FC = () => {
   const {
     todos,
-    selectedUser,
     selectedTodoId,
-    setUserInfo,
     userInfo,
-    setSelectedUser,
-    setSelectedTodoId,
+    getUserFromServer,
+    handleClose,
   } = useContext(UserContext);
-
-  const getUserFromServer = async () => {
-    const user = await getUser(selectedUser);
-
-    setUserInfo(user);
-  };
 
   useEffect(() => {
     getUserFromServer();
@@ -28,12 +19,6 @@ export const TodoModal: React.FC = () => {
 
   const currentTodo: Todo | undefined = todos
     .find(todo => todo.id === selectedTodoId);
-
-  const handleClose = () => {
-    setUserInfo(null);
-    setSelectedUser(0);
-    setSelectedTodoId(0);
-  };
 
   return (
     <div className="modal is-active" data-cy="modal">

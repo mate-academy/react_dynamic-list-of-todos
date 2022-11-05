@@ -1,39 +1,14 @@
-import { FC, useContext, useCallback } from 'react';
+import { FC, useContext } from 'react';
+import { SortTypes } from '../../types/SortTypes';
 import { UserContext } from '../UserContext';
-
-function debounce(f:(finalQuery: string) => void, delay: number) {
-  let timerId: NodeJS.Timeout;
-
-  return (arg: string) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(f, delay, arg);
-  };
-}
 
 export const TodoFilter: FC = () => {
   const {
-    setSortType,
     query,
-    setQuery,
-    setAppliedQuery,
+    changeSortType,
+    handleSearch,
+    clearSearchBar,
   } = useContext(UserContext);
-  const changeSortType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-
-    setSortType(value);
-  };
-
-  const applyQuery = useCallback(debounce(setAppliedQuery, 1000),
-    []);
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-    applyQuery(event.target.value);
-  };
-
-  const clearSearchBar = () => {
-    setQuery('');
-    setAppliedQuery('');
-  };
 
   return (
     <form className="field has-addons">
@@ -43,9 +18,9 @@ export const TodoFilter: FC = () => {
             data-cy="statusSelect"
             onChange={changeSortType}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortTypes.ALL}>All</option>
+            <option value={SortTypes.ACTIVE}>Active</option>
+            <option value={SortTypes.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

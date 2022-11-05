@@ -7,25 +7,23 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
 import { UserContext } from './components/UserContext';
 
 export const App: React.FC = () => {
   const {
-    todos,
-    setTodos,
     selectedTodoId,
+    isLoaded,
+    isError,
+    getTodosFromServer,
   } = useContext(UserContext);
-
-  const getTodosFromServer = async () => {
-    const newTodos = await getTodos();
-
-    setTodos(newTodos);
-  };
 
   useEffect(() => {
     getTodosFromServer();
   }, []);
+
+  const isTodoDownload = isError
+    ? <p>something went wrong</p>
+    : <TodoList />;
 
   return (
     <>
@@ -39,9 +37,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {isLoaded
                 ? <Loader />
-                : <TodoList />}
+                : isTodoDownload}
             </div>
           </div>
         </div>
