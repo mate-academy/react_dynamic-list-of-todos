@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,50 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { SortType } from './types/sortType';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [query, setQuery] = useState('');
+  const [sortType, setSortType] = useState<SortType | string>(SortType.ALL);
+
+  const getUserFromServer = async () => {
+    try {
+      const userFromServer = await getTodos();
+
+      setTodos(userFromServer);
+    } catch (error) {
+      throw new Error('Error. Can`t upload user');
+    } finally {
+      setIsLoaded(true);
+    }
+  };
+
+  useEffect(() => {
+    getUserFromServer();
+  }, []);
+
+  const getFilterTodos = () => {
+    const sortedTodos = todos.filter(todo => {
+      switch (sortType) {
+        case SortType.ACTIVE:
+          return !todo.completed;
+        case SortType.COMPLETED:
+          return todo.completed;
+        default:
+          return todo;
+      }
+    });
+
+    return sortedTodos.filter(todo => (
+      todo.title.toLowerCase().includes(query.toLowerCase())
+    ));
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                sortType={sortType}
+                setSortType={setSortType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoaded
+                ? (
+                  <TodoList
+                    todos={getFilterTodos()}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
