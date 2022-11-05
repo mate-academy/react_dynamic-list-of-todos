@@ -8,14 +8,18 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { UserContext } from './components/UserContext';
+import { TodoContext } from './components/TodoContext';
 
 export const App: React.FC = () => {
   const {
     selectedTodoId,
+  } = useContext(UserContext);
+
+  const {
     isLoaded,
     isError,
     getTodosFromServer,
-  } = useContext(UserContext);
+  } = useContext(TodoContext);
 
   useEffect(() => {
     getTodosFromServer();

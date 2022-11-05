@@ -3,22 +3,24 @@ import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { UserContext } from '../UserContext';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../TodoContext';
 
 export const TodoModal: React.FC = () => {
   const {
-    todos,
     selectedTodoId,
     userInfo,
     getUserFromServer,
     handleClose,
   } = useContext(UserContext);
 
+  const { todos } = useContext(TodoContext);
+
   useEffect(() => {
     getUserFromServer();
   }, []);
 
-  const currentTodo: Todo | undefined = todos
-    .find(todo => todo.id === selectedTodoId);
+  const currentTodo: Todo | null = todos
+    .find(todo => todo.id === selectedTodoId) || null;
 
   return (
     <div className="modal is-active" data-cy="modal">

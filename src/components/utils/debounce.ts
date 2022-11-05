@@ -1,8 +1,8 @@
-export function debounce(f:(finalQuery: string) => void, delay: number) {
+export function debounce<F extends (...args: any) => any>(f: F, delay: number) {
   let timerId: NodeJS.Timeout;
 
-  return (arg: string) => {
+  return (...args: any) => {
     clearTimeout(timerId);
-    timerId = setTimeout(f, delay, arg);
+    timerId = setTimeout(f, delay, ...args);
   };
 }

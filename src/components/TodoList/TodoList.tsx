@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
 import { SortTypes } from '../../types/SortTypes';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../TodoContext';
 import { TodoItem } from '../TodoItem';
-import { UserContext } from '../UserContext';
 
 export const TodoList: React.FC = () => {
-  const {
-    todos,
-    sortType,
-    appliedQuery,
-  } = useContext(UserContext);
+  const { todos, sortType, appliedQuery } = useContext(TodoContext);
+
   const filterTodosByComplete = (completed: boolean) => {
     return todos.filter(todo => todo.completed === completed);
   };

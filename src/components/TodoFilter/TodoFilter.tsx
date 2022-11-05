@@ -1,14 +1,15 @@
 import { FC, useContext } from 'react';
 import { SortTypes } from '../../types/SortTypes';
-import { UserContext } from '../UserContext';
+import { TodoContext } from '../TodoContext';
 
 export const TodoFilter: FC = () => {
   const {
     query,
-    changeSortType,
     handleSearch,
     clearSearchBar,
-  } = useContext(UserContext);
+  } = useContext(TodoContext);
+
+  const { changeSortType } = useContext(TodoContext);
 
   return (
     <form className="field has-addons">
