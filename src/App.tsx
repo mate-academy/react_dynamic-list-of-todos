@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -22,7 +21,9 @@ export const App: React.FC = () => {
   }, []);
 
   const searchFilter = () => {
-    return todoList.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    return todoList.filter(
+      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
   };
 
   const selectFilter = () => {
