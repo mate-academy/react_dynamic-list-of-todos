@@ -3,17 +3,17 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Pops = {
-  todoList: () => Todo[],
-  handleSelectTodo: (value: Todo | undefined) => void,
-  selectTodo: Todo | undefined,
+  getVisibleTodos: () => Todo[],
+  onSelectTodo: (value: Todo | null) => void,
+  selectTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Pops> = ({
-  todoList,
-  handleSelectTodo,
+  getVisibleTodos,
+  onSelectTodo,
   selectTodo,
 }) => {
-  const list = todoList();
+  const list = getVisibleTodos();
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -61,13 +61,15 @@ export const TodoList: React.FC<Pops> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => handleSelectTodo(todo)}
+                  onClick={() => onSelectTodo(todo)}
                 >
                   <span className="icon">
-                    <i className={classNames({
-                      'far fa-eye-slash': selectTodo?.id === todo.id,
-                      'far fa-eye': selectTodo?.id !== todo.id,
-                    })}
+                    <i className={classNames(
+                      'far', {
+                        'fa-eye-slash': selectTodo?.id === todo.id,
+                        'fa-eye': selectTodo?.id !== todo.id,
+                      },
+                    )}
                     />
                   </span>
                 </button>

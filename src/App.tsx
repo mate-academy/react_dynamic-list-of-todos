@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState(SortTypes.All);
-  const [selectTodo, setSelectTodo] = useState<Todo>();
+  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(response => setTodoList(response));
@@ -42,11 +42,11 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleSortType = (event:any) => {
-    setSortBy(event.target.value);
+  const handleSortType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(event.target.value as SortTypes);
   };
 
-  const handleSelectTodo = (value: Todo | undefined) => {
+  const handleSelectTodo = (value: Todo | null) => {
     setSelectTodo(value);
   };
 
@@ -59,20 +59,20 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleQuery={handleQuery}
+                onQuery={handleQuery}
                 query={query}
                 sortBy={sortBy}
-                handleSortType={handleSortType}
+                onSortType={handleSortType}
               />
             </div>
 
             <div className="block">
-              {todoList.length < 1
+              {todoList.length === 0
                 ? <Loader />
                 : (
                   <TodoList
-                    todoList={selectFilter}
-                    handleSelectTodo={handleSelectTodo}
+                    getVisibleTodos={selectFilter}
+                    onSelectTodo={handleSelectTodo}
                     selectTodo={selectTodo}
                   />
                 )}
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectTodo && (
-        <TodoModal setSelectTodo={handleSelectTodo} selectTodo={selectTodo} />
+        <TodoModal onSelectTodo={handleSelectTodo} selectTodo={selectTodo} />
       )}
     </>
   );

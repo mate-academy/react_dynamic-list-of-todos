@@ -2,17 +2,17 @@ import React from 'react';
 import { SortTypes } from '../../types/SortTypes';
 
 type Props = {
-  handleQuery: (value: string) => void,
+  onQuery: (value: string) => void,
   query: string,
   sortBy: SortTypes,
-  handleSortType: (event: any) => void,
+  onSortType: (type: React.ChangeEvent<HTMLSelectElement>) => void,
 };
 
 export const TodoFilter:React.FC<Props> = ({
-  handleQuery,
+  onQuery,
   query,
   sortBy,
-  handleSortType,
+  onSortType,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -20,7 +20,7 @@ export const TodoFilter:React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortBy}
-          onChange={handleSortType}
+          onChange={event => onSortType(event)}
         >
           <option value={SortTypes.All}>All</option>
           <option value={SortTypes.Active}>Active</option>
@@ -36,7 +36,7 @@ export const TodoFilter:React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => handleQuery(event.target.value)}
+        onChange={event => onQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -44,12 +44,12 @@ export const TodoFilter:React.FC<Props> = ({
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => handleQuery('')}
+            aria-label="delete-button"
+            onClick={() => onQuery('')}
           />
         </span>
       )}
