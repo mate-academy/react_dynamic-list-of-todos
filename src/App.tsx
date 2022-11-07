@@ -13,16 +13,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-export enum FilterBy {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { FilterBy } from './types/FilterBy';
 
 const getFilteredTodos = (todos: Todo[], filerBy: FilterBy, query: string) => {
   const filteredTodos = todos.filter(({ title }) => (
-    title.toLowerCase().includes(query.toLowerCase())
+    title.toLowerCase().includes(query)
   ));
 
   switch (filerBy) {
@@ -48,14 +43,18 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const loadTodos = async () => {
-      try {
-        const todosFromApi = await getTodos();
+      let todosFromApi;
 
-        setTodos(todosFromApi);
-        setIsLoaded(true);
+      try {
+        todosFromApi = await getTodos();
       } catch (error) {
         setHasLoadingError(true);
+
+        return;
       }
+
+      setTodos(todosFromApi);
+      setIsLoaded(true);
     };
 
     loadTodos();
@@ -84,7 +83,7 @@ export const App: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuery(event.target.value);
-    applyQuery(event.target.value);
+    applyQuery(event.target.value.toLowerCase());
   }, []);
 
   const resetQuery = useCallback(() => {

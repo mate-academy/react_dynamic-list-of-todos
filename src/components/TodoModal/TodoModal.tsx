@@ -25,13 +25,17 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     const loadUser = async () => {
-      try {
-        const userFromApi = await getUser(userId);
+      let userFromApi;
 
-        setUser(userFromApi);
+      try {
+        userFromApi = await getUser(userId);
       } catch (error) {
         setHasLoadingError(true);
+
+        return;
       }
+
+      setUser(userFromApi);
     };
 
     loadUser();
