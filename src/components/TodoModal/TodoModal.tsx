@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
 
 import { getUser } from '../../api';
@@ -8,17 +9,17 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 interface Props {
-  isSelectedTodo: Todo,
-  setIsSelectedTodoId: (todoId: number) => void;
-  isLoadedUser: boolean;
-  setIsLoadedUser: (status: boolean) => void;
+  selectedTodo: Todo,
+  setSelectedTodoId: (todoId: number) => void;
+  isUserLoading: boolean;
+  setIsUserLoading: (status: boolean) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  isSelectedTodo,
-  setIsSelectedTodoId,
-  isLoadedUser,
-  setIsLoadedUser,
+  selectedTodo,
+  setSelectedTodoId,
+  isUserLoading,
+  setIsUserLoading,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const {
@@ -26,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
     title,
     completed,
     userId,
-  } = isSelectedTodo;
+  } = selectedTodo;
 
   useEffect(() => {
     const getUserFromServer = async () => {
@@ -34,9 +35,9 @@ export const TodoModal: React.FC<Props> = ({
         const userFromServer = await getUser(userId);
 
         setUser(userFromServer);
-        setIsLoadedUser(true);
+        setIsUserLoading(true);
       } catch (error) {
-        throw new Error('Failed on loading user from server');
+        alert('Failed on loading user from server');
       }
     };
 
@@ -44,14 +45,14 @@ export const TodoModal: React.FC<Props> = ({
   }, []);
 
   const onCloseTodo = () => {
-    setIsSelectedTodoId(0);
+    setSelectedTodoId(0);
   };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoadedUser
+      {isUserLoading
         ? (
           <div className="modal-card">
             <header className="modal-card-head">
