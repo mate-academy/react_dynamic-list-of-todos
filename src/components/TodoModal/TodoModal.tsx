@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 
 type Props = {
   todo: Todo | null,
-  selectedTodo: React.Dispatch<React.SetStateAction<number>>
+  selectedTodo: (id: number) => void
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -18,17 +18,21 @@ export const TodoModal: React.FC<Props> = ({
   const [userIsLoaded, setUserIsLoaded] = useState(false);
 
   useEffect(() => {
-    const loadUser = async (userId: number) => {
-      const userFromServer = await getUser(userId);
-  
-      if (userFromServer) {
-        setUser(userFromServer);
-        setUserIsLoaded(true);
-      }
-    };
+    try {
+      const loadUser = async (userId: number) => {
+        const userFromServer = await getUser(userId);
 
-    if (todo) {
-      loadUser(todo.userId)
+        if (userFromServer) {
+          setUser(userFromServer);
+          setUserIsLoaded(true);
+        }
+      };
+
+      if (todo) {
+        loadUser(todo.userId);
+      }
+    } catch (error) {
+      throw new Error();
     }
   }, []);
 

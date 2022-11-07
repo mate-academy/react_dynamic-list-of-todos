@@ -13,19 +13,24 @@ import { TodosStatus } from './types/TodosStatus';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [filteredSelect, setFilteredSelect] = useState(TodosStatus.All);
+  const [filteredSelect, setFilteredSelect] = useState<TodosStatus>(TodosStatus.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState(0);
-  const [dataIsLoaded, setDataIsLoaded] = useState(false)
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
   useEffect(() => {
     const loadTodos = async () => {
-      const todosFromServer = await getTodos();
-  
-      setVisibleTodos(todosFromServer);
-      setDataIsLoaded(true);
+      try {
+        const todosFromServer = await getTodos();
+
+        setVisibleTodos(todosFromServer);
+        setDataIsLoaded(true);
+      } catch (error) {
+        throw new Error();
+      }
     };
-    loadTodos()
+
+    loadTodos();
   }, []);
 
   const filteredTodos = visibleTodos.filter(todo => {
@@ -51,6 +56,18 @@ export const App: React.FC = () => {
     return visibleTodos.find(todo => todo.id === todoId) || null;
   };
 
+  const setFilterStatus = (status:TodosStatus) => {
+    setFilteredSelect(status);
+  };
+
+  const setQueryValue = (value:string) => {
+    setQuery(value);
+  };
+
+  const setSelectedTodoId = (id: number) => {
+    setSelectedTodo(id);
+  };
+
   return (
     <>
       <div className="section">
@@ -60,9 +77,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilteredSelect={setFilteredSelect}
+                setFilteredSelect={setFilterStatus}
                 query={query}
-                setQuery={setQuery}
+                setQuery={setQueryValue}
               />
             </div>
 
@@ -73,7 +90,7 @@ export const App: React.FC = () => {
                 <TodoList
                   searchedTodos={searchedTodos}
                   selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  setSelectedTodo={setSelectedTodoId}
                 />
               )}
             </div>
@@ -83,7 +100,7 @@ export const App: React.FC = () => {
       {selectedTodo !== 0 && (
         <TodoModal
           todo={selectTodo(selectedTodo)}
-          selectedTodo={setSelectedTodo}
+          selectedTodo={setSelectedTodoId}
         />
       )}
     </>
