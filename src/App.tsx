@@ -48,14 +48,19 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
+    const getTodosFromServer = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
         setTodos(todosFromServer);
         setIsLoaded(true);
-      })
-      .catch(error => {
-        throw new Error(error);
-      });
+      } catch (error) {
+        // eslint-disable-next-line no-alert
+        alert('Error: todos could not be loaded');
+      }
+    };
+
+    getTodosFromServer();
   }, []);
 
   return (

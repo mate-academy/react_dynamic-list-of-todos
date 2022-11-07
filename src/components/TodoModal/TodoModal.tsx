@@ -25,14 +25,19 @@ export const TodoModal: React.FC<Props> = ({
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
   useEffect(() => {
-    getUser(userId)
-      .then((userFromServer) => {
+    const getUserFromServer = async () => {
+      try {
+        const userFromServer = await getUser(userId);
+
         setUser(userFromServer);
         setIsUserLoaded(true);
-      })
-      .catch(error => {
-        throw new Error(error);
-      });
+      } catch (error) {
+        // eslint-disable-next-line no-alert
+        alert('Error: user could not be loaded');
+      }
+    };
+
+    getUserFromServer();
   }, []);
 
   return (
