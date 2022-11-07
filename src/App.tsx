@@ -15,13 +15,17 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterSelection, setFilterSelection] = useState('all');
   const [query, setQuery] = useState('');
-  // const [loaded, setLoaded] = useState(false);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => (
-        setTodos(todosFromServer)
-      ));
+    const getTodosFormServer = async () => {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setIsTodosLoaded(true);
+    };
+
+    getTodosFormServer();
   }, []);
 
   const onModalClose = () => setSelectedTodo(null);
@@ -65,12 +69,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
-              <TodoList
-                todos={filterTodos()}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
+              {!isTodosLoaded
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filterTodos()}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )
+              }
             </div>
           </div>
         </div>
