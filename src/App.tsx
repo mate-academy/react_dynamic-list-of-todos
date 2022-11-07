@@ -36,26 +36,27 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const filterTodos = (option: string, queryString: string) => {
-    switch (true) {
-      case option === FilterOptions.active:
+  const filterTodos = (option: string, queryStr: string) => {
+    switch (option) {
+      case FilterOptions.active:
         return todos.filter(todo => (
           !todo.completed
-          && todo.title.toLowerCase().includes(queryString.toLowerCase())
+          && todo.title.toLowerCase().includes(queryStr.toLowerCase())
         ));
 
-      case option === FilterOptions.completed:
+      case FilterOptions.completed:
         return todos.filter(todo => (
           todo.completed
-          && todo.title.toLowerCase().includes(queryString.toLowerCase())
+          && todo.title.toLowerCase().includes(queryStr.toLowerCase())
         ));
 
-      case queryString.length > 0:
-        return todos.filter(
-          todo => todo.title.toLowerCase().includes(queryString.toLowerCase()),
-        );
-
       default:
+        if (queryStr.length > 0) {
+          return todos.filter(
+            todo => todo.title.toLowerCase().includes(queryStr.toLowerCase()),
+          );
+        }
+
         return todos;
     }
   };
