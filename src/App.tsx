@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
@@ -30,8 +31,8 @@ export const getFilteredTodos = (todos: Todo[], query: string, filterType: Filte
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isSelectedTodoId, setIsSelectedTodoId] = useState(0);
-  const [isLoadedTodos, setIsLoadedTodos] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [areTodosLoading, setAreTodosLoading] = useState(false);
   const [isLoadedUser, setIsLoadedUser] = useState(false);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [query, setQuery] = useState('');
@@ -42,9 +43,9 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos();
 
         setTodos(todosFromServer);
-        setIsLoadedTodos(true);
+        setAreTodosLoading(true);
       } catch (error) {
-        throw new Error('Failed on loading todos from server');
+        alert('Failed on loading todos from server');
       }
     };
 
@@ -74,12 +75,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadedTodos
+              {areTodosLoading
                 ? (
                   <TodoList
                     todos={filteredTodos}
-                    isSelectedTodoId={isSelectedTodoId}
-                    setIsSelectedTodoId={setIsSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
                     setIsLoadedUser={setIsLoadedUser}
                   />
                 )
@@ -89,10 +90,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isSelectedTodoId !== 0 && (
+      {selectedTodoId !== 0 && (
         <TodoModal
-          isSelectedTodo={getTodoById(isSelectedTodoId)}
-          setIsSelectedTodoId={setIsSelectedTodoId}
+          selectedTodo={getTodoById(selectedTodoId)}
+          setSelectedTodoId={setSelectedTodoId}
           isLoadedUser={isLoadedUser}
           setIsLoadedUser={setIsLoadedUser}
         />
