@@ -5,8 +5,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todoList: Todo[]
-  setSelectedTodo: (x: Todo) => void
-  selectedTodo: Todo
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>
+  selectedTodo: Todo | null
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -63,7 +63,8 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i className={className(
                     'far',
-                    selectedTodo.id !== todo.id ? 'fa-eye' : 'fa-eye-slash',
+                    selectedTodo
+                    && selectedTodo.id !== todo.id ? 'fa-eye' : 'fa-eye-slash',
                   )}
                   />
                 </span>

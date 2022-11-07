@@ -13,8 +13,8 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todoListFromServer, setTodoListFromServer] = useState<Todo[]>([]);
-  const [visibleTodoList, setVisibleTodoList] = useState<Todo[]>(todoListFromServer);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodoList, setVisibleTodoList] = useState<Todo[]>(todos);
   const [selectedTodo, setSelectedTodo] = useState({
     id: 0,
     title: '',
@@ -23,9 +23,9 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    getTodos().then(todos => {
-      setTodoListFromServer(todos);
-      setVisibleTodoList(todos);
+    getTodos().then(todosList => {
+      setTodos(todosList);
+      setVisibleTodoList(todosList);
     });
   }, []);
 
@@ -39,12 +39,12 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setVisibleTodoList={setVisibleTodoList}
-                todoListFromServer={todoListFromServer}
+                todoListFromServer={todos}
               />
             </div>
 
             <div className="block">
-              {todoListFromServer.length > 0
+              {todos.length > 0
                 ? (
                   <TodoList
                     todoList={visibleTodoList}
