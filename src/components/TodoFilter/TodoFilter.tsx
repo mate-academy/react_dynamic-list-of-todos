@@ -1,10 +1,11 @@
 import React from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string;
   setQuery: (val: string) => void;
   filterType: string;
-  setFilterType: (val: string) => void;
+  setFilterType: (val: FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,9 +14,20 @@ export const TodoFilter: React.FC<Props> = ({
   filterType,
   setFilterType,
 }) => {
-  const handleFilterType = (event: React.ChangeEvent<HTMLSelectElement>) => (
-    setFilterType(event.target.value)
-  );
+  const handleFilterType = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    switch (event.target.value) {
+      case FilterType.ACTIVE:
+        return setFilterType(FilterType.ACTIVE);
+
+      case FilterType.COMPLETED:
+        return setFilterType(FilterType.COMPLETED);
+
+      default:
+        return setFilterType(FilterType.ALL);
+    }
+  };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => (
     setQuery(event.target.value)

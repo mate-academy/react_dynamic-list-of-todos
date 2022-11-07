@@ -13,7 +13,7 @@ import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState<FilterType | string>(FilterType.ALL);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -27,8 +27,10 @@ export const App: React.FC = () => {
       switch (filterType) {
         case FilterType.ACTIVE:
           return !todo.completed && doesIncludeQuery;
+
         case FilterType.COMPLETED:
           return todo.completed && doesIncludeQuery;
+
         default:
           return doesIncludeQuery;
       }
@@ -38,10 +40,14 @@ export const App: React.FC = () => {
   };
 
   const getTodosFromServer = async () => {
-    const todosFromServer = await getTodos();
+    try {
+      const todosFromServer = await getTodos();
 
-    setTodos(todosFromServer);
-    setIsLoaded(true);
+      setTodos(todosFromServer);
+      setIsLoaded(true);
+    } catch {
+      throw new Error('Todos are not found');
+    }
   };
 
   useEffect(() => {
