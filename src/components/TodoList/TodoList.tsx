@@ -5,20 +5,20 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  isSelectedTodoId: number,
-  setIsSelectedTodoId: (todoId: number) => void;
-  setIsLoadedUser: (status: boolean) => void;
+  selectedTodoId: number,
+  setSelectedTodoId: (todoId: number) => void;
+  setIsUserLoading: (status: boolean) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  isSelectedTodoId,
-  setIsSelectedTodoId,
-  setIsLoadedUser,
+  selectedTodoId,
+  setSelectedTodoId,
+  setIsUserLoading,
 }) => {
   const onSelectTodo = (todoId: number) => {
-    setIsSelectedTodoId(todoId);
-    setIsLoadedUser(false);
+    setSelectedTodoId(todoId);
+    setIsUserLoading(false);
   };
 
   return (
@@ -47,7 +47,9 @@ export const TodoList: React.FC<Props> = ({
           return (
             <tr
               data-cy="todo"
-              className=""
+              className={classNames({
+                'has-background-info-light': selectedTodoId === id,
+              })}
               key={id}
             >
               <td className="is-vcentered">{id}</td>
@@ -79,8 +81,8 @@ export const TodoList: React.FC<Props> = ({
                 >
                   <span className="icon">
                     <i className={classNames('far',
-                      { 'fa-eye-slash': isSelectedTodoId === id },
-                      { 'fa-eye': isSelectedTodoId !== id })}
+                      { 'fa-eye-slash': selectedTodoId === id },
+                      { 'fa-eye': selectedTodoId !== id })}
                     />
                   </span>
                 </button>
