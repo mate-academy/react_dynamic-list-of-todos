@@ -60,8 +60,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const changeQuery = (str: string) => {
-    setQuery(str);
+  const changeQuery = (queryStr: string) => {
+    setQuery(queryStr);
   };
 
   const clearQuery = () => {
