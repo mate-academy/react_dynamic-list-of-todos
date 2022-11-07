@@ -15,7 +15,7 @@ export const TodoModal: FC<Prop> = ({
   currentTodo,
   isUserLoaded,
   setIsUserLoaded,
-  setTodoId: handleCloseModal,
+  setTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -36,6 +36,12 @@ export const TodoModal: FC<Prop> = ({
 
     getUserFromServer(currentTodo.userId);
   }, [currentTodo]);
+
+  const handleCloseModal = () => {
+    setTodoId(0);
+
+    setIsUserLoaded(true);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -59,11 +65,7 @@ export const TodoModal: FC<Prop> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                handleCloseModal(0);
-
-                setIsUserLoaded(true);
-              }}
+              onClick={handleCloseModal}
             />
           </header>
 
@@ -73,7 +75,8 @@ export const TodoModal: FC<Prop> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {completed ? <strong className="has-text-success">Done</strong>
+              {completed
+                ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}

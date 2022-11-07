@@ -37,16 +37,21 @@ export const App: React.FC = () => {
   useEffect(() => {
     let todosCopy = [...todos];
 
-    if (filteringMethod === 'completed') {
-      todosCopy = todosCopy.filter(todo => {
-        return todo.completed;
-      });
-    }
+    switch (filteringMethod) {
+      case 'completed':
+        todosCopy = todosCopy.filter(todo => {
+          return todo.completed;
+        });
+        break;
 
-    if (filteringMethod === 'active') {
-      todosCopy = todosCopy.filter(todo => {
-        return !todo.completed;
-      });
+      case 'active':
+        todosCopy = todosCopy.filter(todo => {
+          return !todo.completed;
+        });
+        break;
+
+      default:
+        break;
     }
 
     if (searchField) {
