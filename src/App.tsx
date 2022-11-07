@@ -20,9 +20,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('');
   const getTodosFromServer: GetTodos = async () => {
-    const todosFromServer = await getTodos();
+    try {
+      const todosFromServer = await getTodos();
 
-    setTodos(todosFromServer);
+      setTodos(todosFromServer);
+    } catch (e) {
+      throw new Error('Can not load todos');
+    }
+
     setTodosAreLoading(false);
   };
 
