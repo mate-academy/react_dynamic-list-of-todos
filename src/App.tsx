@@ -9,28 +9,32 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodosStatus } from './types/TodosStatus';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [filteredSelect, setFilteredSelect] = useState('all');
+  const [filteredSelect, setFilteredSelect] = useState(TodosStatus.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState(0);
+  const [dataIsLoaded, setDataIsLoaded] = useState(false)
 
   useEffect(() => {
-    getTodos()
-      .then(todos => {
-        setVisibleTodos(todos);
-      });
+    const loadTodos = async () => {
+      const todosFromServer = await getTodos();
+  
+      setVisibleTodos(todosFromServer);
+      setDataIsLoaded(true);
+    };
+    loadTodos()
   }, []);
 
   const filteredTodos = visibleTodos.filter(todo => {
     switch (filteredSelect) {
-      case 'active':
+      case TodosStatus.Active:
         return !todo.completed;
-      case 'completed':
+      case TodosStatus.Completed:
         return todo.completed;
-      case 'all':
-        return todo;
+      case TodosStatus.All:
       default:
         return todo;
     }
@@ -43,8 +47,8 @@ export const App: React.FC = () => {
     return titleToLowerCase.includes(queryToLowerCase);
   });
 
-  const todosId = (todoId: number) => {
-    return visibleTodos.find(todo => todo.id === todoId);
+  const selectTodo = (todoId: number) => {
+    return visibleTodos.find(todo => todo.id === todoId) || null;
   };
 
   return (
@@ -63,7 +67,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length === 0 && <Loader />}
+              {!dataIsLoaded && <Loader />}
 
               {visibleTodos.length > 0 && (
                 <TodoList
@@ -78,7 +82,7 @@ export const App: React.FC = () => {
       </div>
       {selectedTodo !== 0 && (
         <TodoModal
-          todo={todosId(selectedTodo) || null}
+          todo={selectTodo(selectedTodo)}
           selectedTodo={setSelectedTodo}
         />
       )}

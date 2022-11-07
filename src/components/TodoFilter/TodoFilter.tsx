@@ -1,7 +1,8 @@
 import React from 'react';
+import { TodosStatus } from '../../types/TodosStatus';
 
 type Props = {
-  setFilteredSelect: React.Dispatch<string>,
+  setFilteredSelect: (status: TodosStatus) => void
   query: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
 };
@@ -15,13 +16,28 @@ export const TodoFilter: React.FC<Props> = ({
     setQuery('');
   };
 
+  const handleStatusSelect = 
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      switch (event.target.value) {
+        case TodosStatus.Completed:
+          setFilteredSelect(TodosStatus.Completed);
+          break;
+  
+        case TodosStatus.Active:
+          setFilteredSelect(TodosStatus.Active);
+          break;
+        default:
+          setFilteredSelect(TodosStatus.All)
+      }
+  }
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setFilteredSelect(event.target.value)}
+            onChange={handleStatusSelect}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

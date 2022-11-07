@@ -15,11 +15,20 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
+  const [userIsLoaded, setUserIsLoaded] = useState(false);
 
   useEffect(() => {
+    const loadUser = async (userId: number) => {
+      const userFromServer = await getUser(userId);
+  
+      if (userFromServer) {
+        setUser(userFromServer);
+        setUserIsLoaded(true);
+      }
+    };
+
     if (todo) {
-      getUser(todo.userId)
-        .then(findedUser => setUser(findedUser));
+      loadUser(todo.userId)
     }
   }, []);
 
@@ -27,7 +36,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(!user || !todo) ? (
+      {!userIsLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -36,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -50,26 +59,26 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
+                  'has-text-success': todo?.completed,
+                  'has-text-danger': !todo?.completed,
                 })}
               >
-                {todo.completed
+                {todo?.completed
                   ? 'Done'
                   : 'Planned'}
               </strong>
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
