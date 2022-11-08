@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  setSelectedTodo: (x: Todo) => void
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>
   selectedTodo: Todo
 };
 
@@ -49,12 +49,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setSelectedTodo({
-                  id: 0,
-                  title: '',
-                  completed: false,
-                  userId: 0,
-                });
+                setSelectedTodo(null);
               }}
             />
           </header>

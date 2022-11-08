@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  setVisibleTodoList: (x: Todo[]) => void
+  setVisibleTodoList: React.Dispatch<React.SetStateAction<Todo[]>>
   todoListFromServer: Todo[]
 };
 

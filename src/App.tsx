@@ -15,12 +15,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodoList, setVisibleTodoList] = useState<Todo[]>(todos);
-  const [selectedTodo, setSelectedTodo] = useState({
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  });
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(todosList => {
@@ -58,7 +53,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo.id && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
