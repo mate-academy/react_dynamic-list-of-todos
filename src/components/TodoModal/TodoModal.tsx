@@ -23,12 +23,19 @@ export const TodoModal: React.FC<Props> = ({
     userId,
   } = selectedTodo;
 
+  const getUserFromServer = async () => {
+    try {
+      const userFromServer = await getUser(userId);
+
+      setUser(userFromServer);
+      setIsUserLoaded(true);
+    } catch (error) {
+      throw new Error('User couldn`t be loaded');
+    }
+  };
+
   useEffect(() => {
-    getUser(userId)
-      .then(userFromServer => {
-        setUser(userFromServer);
-        setIsUserLoaded(true);
-      });
+    getUserFromServer();
   }, []);
 
   return (

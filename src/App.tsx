@@ -9,23 +9,28 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterSelector } from './types/FilterSelector';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterSelection, setFilterSelection] = useState('all');
+  const [filterSelection, setFilterSelection] = useState<FilterSelector>(FilterSelector.All);
   const [query, setQuery] = useState('');
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
 
-  useEffect(() => {
-    const getTodosFormServer = async () => {
+  const getAllTodos = async () => {
+    try {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
       setIsTodosLoaded(true);
-    };
+    } catch (error) {
+      throw new Error('Todos are not available');
+    }
+  };
 
-    getTodosFormServer();
+  useEffect(() => {
+    getAllTodos();
   }, []);
 
   const onModalClose = () => setSelectedTodo(null);
@@ -40,10 +45,10 @@ export const App: React.FC = () => {
 
     return queriedTodos.filter(todo => {
       switch (filterSelection) {
-        case 'active':
+        case FilterSelector.Active:
           return !todo.completed;
 
-        case 'completed':
+        case FilterSelector.Completed:
           return todo.completed;
 
         default:
@@ -77,8 +82,7 @@ export const App: React.FC = () => {
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
-                )
-              }
+                )}
             </div>
           </div>
         </div>

@@ -1,8 +1,9 @@
 import React from 'react';
+import { FilterSelector } from '../../types/FilterSelector';
 
 type Props = {
   filterSelection: string;
-  setFilterSelection: (selection: string) => void;
+  setFilterSelection: React.Dispatch<React.SetStateAction<FilterSelector>>
   query: string;
   setQuery: (query: string) => void;
 };
@@ -15,7 +16,18 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const handleFilterSelection
     = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setFilterSelection(event.target.value);
+      switch (event.target.value) {
+        case FilterSelector.Active:
+          setFilterSelection(FilterSelector.Active);
+          break;
+
+        case FilterSelector.Completed:
+          setFilterSelection(FilterSelector.Completed);
+          break;
+
+        default:
+          setFilterSelection(FilterSelector.All);
+      }
     };
 
   const handleQueryInput = (event: React.ChangeEvent<HTMLInputElement>) => {
