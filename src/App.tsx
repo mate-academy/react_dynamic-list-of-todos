@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,60 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+
+export enum SortType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [query, setQuery] = useState('');
+  const [filterBy, setFilterBy] = useState('all');
+
+  useEffect(() => {
+    getTodos().then(response => {
+      setTodos(response);
+      setIsLoaded(true);
+    });
+  }, []);
+
+  const onClose = () => {
+    setSelectedTodo(null);
+  };
+
+  const selectTodo = (id: number | null) => {
+    if (typeof id === 'number') {
+      setSelectedTodo(todos[id - 1]);
+    }
+  };
+
+  const visibleMovies = () => {
+    let res = todos;
+
+    switch (filterBy) {
+      case SortType.ACTIVE:
+        res = res.filter(todo => !todo.completed);
+        break;
+
+      case SortType.COMPLETED:
+        res = res.filter(todo => todo.completed);
+        break;
+
+      default:
+        break;
+    }
+
+    return res.filter(
+      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +69,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                applyQuery={setQuery}
+                setFilterBy={setFilterBy}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                !isLoaded
+                  ? (<Loader />)
+                  : (isLoaded && (
+                    <TodoList
+                      todos={visibleMovies()}
+                      setSelectedTodo={selectTodo}
+                      selectedTodo={selectedTodo}
+                    />
+                  ))
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={onClose}
+        />
+      )}
     </>
   );
 };
