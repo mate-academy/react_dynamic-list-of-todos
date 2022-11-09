@@ -1,14 +1,15 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Values } from './types/Enum';
+import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[] | null>(null);
@@ -16,46 +17,36 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
 
-  const getTodosFromApi = async () => {
+  const getTodosFromApi = useCallback(async () => {
     const todos = await getTodos().then(todosApi => todosApi);
 
     if (todos !== undefined) {
-      setTodosList(() => {
-        return todos;
-      });
+      setTodosList(todos);
       setVisibleTodos(() => {
         return todos;
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     getTodosFromApi();
   }, []);
 
-  const filterQeury = (query: string) => {
-    if (todosList) {
-      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-    }
-
-    return null;
-  };
-
   const filtered = todosList;
 
-  const search = (query: string, select: string) => {
-    const filter = filterQeury(query);
-
-    if (select === 'completed' && filter) {
-      return filter.filter(todo => todo.completed);
+  const search = (query: string, select: Values) => {
+    if (select === Values.COMPLETED && todosList) {
+      return [...todosList].filter(todo => {
+        return todo.title.toLowerCase().includes(query.toLowerCase()) && todo.completed;
+      });
     }
 
-    if (select === 'active' && filter) {
-      return filter.filter(todo => !todo.completed);
+    if (select === Values.ACTIVE && todosList) {
+      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()) && !todo.completed);
     }
 
-    if (select === 'all') {
-      return filter;
+    if (select === Values.ALL && todosList) {
+      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
     }
 
     return null;
@@ -75,23 +66,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(filtered
-                && (
+              {filtered
+                ? (
                   <TodoList
                     todos={visibleTodos}
                     setUserId={setUserId}
                     selectTodo={setSelectedTodo}
                     selected={selectedTodo}
                   />
-                ))
-                || <Loader />}
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {userId !== 0
-        && selectedTodo
+      {userId && selectedTodo
         && (
           <TodoModal
             userId={userId}

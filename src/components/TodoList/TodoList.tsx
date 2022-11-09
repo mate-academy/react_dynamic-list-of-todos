@@ -49,9 +49,7 @@ export const TodoList: React.FC<Props> = ({
                   </span>
                 </td>
               )
-              : (
-                <td className="is-vcentered" />
-              )}
+              : <td className="is-vcentered" />}
             <td className="is-vcentered is-expanded">
               <p className={cn({
                 'has-text-danger': !completed,

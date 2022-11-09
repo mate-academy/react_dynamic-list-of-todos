@@ -1,15 +1,16 @@
 import { FC, useState } from 'react';
 
 import { Todo } from '../../types/Todo';
+import { Values } from '../../types/Enum';
 
 type Props = {
-  search: (value: string, select: string) => Todo[] | null;
+  search: (value: string, select: Values) => Todo[] | null;
   setVisibleTodos: (val: Todo[] | null) => void;
 };
 
 export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
   const [text, setText] = useState('');
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState(Values.ALL);
 
   return (
     <form className="field has-addons">
@@ -19,15 +20,14 @@ export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
             data-cy="statusSelect"
             value={selected}
             onChange={(event) => {
-              setSelected(event.target.value);
-              const todos = search(text, event.target.value);
+              setSelected(event.target.value as Values);
 
-              setVisibleTodos(todos);
+              setVisibleTodos(search(text, event.target.value as Values));
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Values.ALL}>All</option>
+            <option value={Values.ACTIVE}>Active</option>
+            <option value={Values.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -41,9 +41,8 @@ export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
           value={text}
           onChange={(event) => {
             setText(event.target.value);
-            const todos = search(event.target.value, selected);
 
-            setVisibleTodos(todos);
+            setVisibleTodos(search(event.target.value, selected));
           }}
         />
 
@@ -60,7 +59,8 @@ export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
               className="delete"
               onClick={() => {
                 setText('');
-                search('', 'all');
+
+                setVisibleTodos(search('', Values.ALL));
               }}
             />
           </span>
