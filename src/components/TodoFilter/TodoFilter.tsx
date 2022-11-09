@@ -1,13 +1,16 @@
 import React from 'react';
+// eslint-disable-next-line import/no-cycle
 
 type Props = {
   query: string;
-  applyQuery: (s: string) => void;
-  setFilterBy: (p: any) => void;
+  applyQuery: (query: string) => void;
+  setFilterBy: (filter: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  query, applyQuery, setFilterBy,
+  query,
+  applyQuery,
+  setFilterBy,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -40,21 +43,19 @@ export const TodoFilter: React.FC<Props> = ({
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {
-        query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={() => {
-                applyQuery('');
-              }}
-            />
-          </span>
-        )
-      }
+      { query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => {
+              applyQuery('');
+            }}
+          />
+        </span>
+      )}
     </p>
   </form>
 );

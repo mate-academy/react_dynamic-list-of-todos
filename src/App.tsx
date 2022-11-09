@@ -21,17 +21,13 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState(SortType.ALL);
+  const [filterBy, setFilterBy] = useState('all');
 
   useEffect(() => {
-    const loadTodos = async () => {
-      const allTodos = await getTodos();
-
-      setTodos(allTodos);
+    getTodos().then(response => {
+      setTodos(response);
       setIsLoaded(true);
-    };
-
-    loadTodos();
+    });
   }, []);
 
   const onClose = () => {
@@ -47,12 +43,17 @@ export const App: React.FC = () => {
   const visibleMovies = () => {
     let res = todos;
 
-    if (filterBy === SortType.ACTIVE) {
-      res = res.filter(todo => !todo.completed);
-    }
+    switch (filterBy) {
+      case SortType.ACTIVE:
+        res = res.filter(todo => !todo.completed);
+        break;
 
-    if (filterBy === SortType.COMPLETED) {
-      res = res.filter(todo => todo.completed);
+      case SortType.COMPLETED:
+        res = res.filter(todo => todo.completed);
+        break;
+
+      default:
+        break;
     }
 
     return res.filter(
@@ -76,27 +77,28 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoaded && (<Loader />)}
-              {isLoaded && (
-                <TodoList
-                  todos={visibleMovies()}
-                  setSelectedTodo={selectTodo}
-                  selectedTodo={selectedTodo}
-                />
-              )}
+              {
+                !isLoaded
+                  ? (<Loader />)
+                  : (isLoaded && (
+                    <TodoList
+                      todos={visibleMovies()}
+                      setSelectedTodo={selectTodo}
+                      selectedTodo={selectedTodo}
+                    />
+                  ))
+              }
             </div>
           </div>
         </div>
       </div>
 
-      {
-        selectedTodo && (
-          <TodoModal
-            selectedTodo={selectedTodo}
-            onClose={onClose}
-          />
-        )
-      }
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={onClose}
+        />
+      )}
     </>
   );
 };
