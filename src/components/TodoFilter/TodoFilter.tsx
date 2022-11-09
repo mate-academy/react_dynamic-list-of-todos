@@ -2,8 +2,6 @@ import {
   FC,
   useState,
   ChangeEvent,
-  SetStateAction,
-  Dispatch,
   useCallback,
   memo,
 } from 'react';
@@ -13,8 +11,8 @@ import { debounce } from '../../utils/debounce';
 type Props = {
   query: string;
   selectedOption: SelectOptions;
-  setSelectedOption: Dispatch<SetStateAction<SelectOptions>>;
-  setQuery: (arg: string) => void;
+  setSelectedOption: (options: SelectOptions) => void;
+  setQuery: (query: string) => void;
 };
 
 export const TodoFilter: FC<Props> = memo(({

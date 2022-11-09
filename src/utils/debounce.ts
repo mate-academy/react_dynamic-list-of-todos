@@ -1,11 +1,11 @@
-type SetQuery = (str: string) => void;
+type Callback = (str: string) => void;
 
-export const debounce = (f: SetQuery, delay: number) => {
+export const debounce = (f: Callback, delay: number) => {
   let timerId: NodeJS.Timeout;
 
-  return (currQuery: string) => {
+  return (str: string) => {
     clearTimeout(timerId);
 
-    timerId = setTimeout(f, delay, currQuery);
+    timerId = setTimeout(f, delay, str);
   };
 };

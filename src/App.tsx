@@ -32,24 +32,26 @@ export const App: FC = () => {
     setSelectedTodoId(0);
   }, []);
 
+  const getTodosFromServer = async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
+    setIsTodosLoaded(true);
+  };
+
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setIsTodosLoaded(true);
-    });
+    getTodosFromServer();
   }, []);
 
-  const todosMatchedQuery = useMemo(() => {
-    return todos.filter(({ title }) => {
+  const visibleTodos = useMemo(() => {
+    const todosMatchedQuery = todos.filter(({ title }) => {
       const normalizedQuery = query.toLowerCase();
       const normalizedTitle = title.toLowerCase();
       const includedInTitle = normalizedTitle.includes(normalizedQuery);
 
       return includedInTitle;
     });
-  }, [query, todos]);
 
-  const visibleTodos = useMemo(() => {
     return todosMatchedQuery.filter((todo => {
       switch (selectedOption) {
         case SelectOptions.Active:
@@ -60,7 +62,7 @@ export const App: FC = () => {
           return todo;
       }
     }));
-  }, [selectedOption, todosMatchedQuery]);
+  }, [selectedOption, query, todos]);
 
   const selectedTodo = todos.find(({ id }) => id === selectedTodoId);
 
@@ -81,15 +83,17 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {!isTodosLoaded ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodoId={selectedTodoId}
-                  handleSelectTodo={handleSelectTodo}
-                />
-              )}
+              {!isTodosLoaded
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    handleSelectTodo={handleSelectTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
