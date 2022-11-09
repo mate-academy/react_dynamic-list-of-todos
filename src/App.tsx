@@ -9,6 +9,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { FilteringMethod } from './types/FilteringMethod';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,13 +18,19 @@ export const App: React.FC = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(true);
   const [todoId, setTodoId] = useState(0);
   const [searchField, setSearchField] = useState('');
-  const [filteringMethod, setFilteringMethod] = useState('all');
+  const [filteringMethod, setFilteringMethod]
+    = useState<FilteringMethod>(FilteringMethod.All);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
-      const response = await getTodos();
+      try {
+        const response = await getTodos();
 
-      setTodos(response);
+        setTodos(response);
+      } catch (error) {
+        throw new Error('Loading error!');
+      }
+
       setIsTodosLoaded(false);
     };
 
@@ -38,13 +45,13 @@ export const App: React.FC = () => {
     let todosCopy = [...todos];
 
     switch (filteringMethod) {
-      case 'completed':
+      case FilteringMethod.Completed:
         todosCopy = todosCopy.filter(todo => {
           return todo.completed;
         });
         break;
 
-      case 'active':
+      case FilteringMethod.Active:
         todosCopy = todosCopy.filter(todo => {
           return !todo.completed;
         });
@@ -55,8 +62,10 @@ export const App: React.FC = () => {
     }
 
     if (searchField) {
+      const validSearchField = searchField.toLowerCase();
+
       todosCopy = todosCopy.filter(todo => {
-        return todo.title.toLowerCase().includes(searchField.toLowerCase());
+        return todo.title.toLowerCase().includes(validSearchField);
       });
     }
 

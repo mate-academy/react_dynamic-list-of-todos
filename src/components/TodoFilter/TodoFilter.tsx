@@ -1,9 +1,10 @@
 import { FC } from 'react';
+import { FilteringMethod } from '../../types/FilteringMethod';
 
 interface Prop {
   searchField: string;
   setSearchField: (searchField : string) => void;
-  setFilteringMethod: (value: string) => void;
+  setFilteringMethod: (value: FilteringMethod) => void;
 }
 
 export const TodoFilter: FC<Prop> = ({
@@ -11,6 +12,24 @@ export const TodoFilter: FC<Prop> = ({
   setSearchField,
   setFilteringMethod,
 }) => {
+  const handleFilteringSelection = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    switch (event.target.value) {
+      case FilteringMethod.Completed:
+        setFilteringMethod(FilteringMethod.Completed);
+        break;
+
+      case FilteringMethod.Active:
+        setFilteringMethod(FilteringMethod.Active);
+        break;
+
+      default:
+        setFilteringMethod(FilteringMethod.All);
+        break;
+    }
+  };
+
   const resetSearchField = () => {
     setSearchField('');
   };
@@ -21,7 +40,7 @@ export const TodoFilter: FC<Prop> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => setFilteringMethod(e.target.value)}
+            onChange={handleFilteringSelection}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

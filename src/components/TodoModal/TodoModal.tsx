@@ -27,9 +27,13 @@ export const TodoModal: FC<Prop> = ({
 
   useEffect(() => {
     const getUserFromServer = async (userId: number) => {
-      const foundUser = await getUser(userId);
+      try {
+        const foundUser = await getUser(userId);
 
-      setUser(foundUser);
+        setUser(foundUser);
+      } catch (error) {
+        throw new Error('Loading error!');
+      }
 
       setIsUserLoaded(false);
     };
