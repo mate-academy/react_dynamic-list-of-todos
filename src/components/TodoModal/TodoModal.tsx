@@ -7,21 +7,25 @@ import { getUser } from '../../api';
 
 type Props = {
   onSelectTodo: (value: Todo | null) => void,
-  selectTodo: Todo,
+  selectedTodo: Todo,
 };
 
-export const TodoModal: React.FC<Props> = ({ onSelectTodo, selectTodo }) => {
-  const [selectUser, setSelectUser] = useState<User>();
+export const TodoModal: React.FC<Props> = ({ onSelectTodo, selectedTodo }) => {
+  const [selectedUser, setSelectedUser] = useState<User>();
 
   useEffect(() => {
-    getUser(selectTodo.userId).then(response => setSelectUser(response));
+    const selectUser = async () => {
+      setSelectedUser(await getUser(selectedTodo.userId));
+    };
+
+    selectUser();
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectUser ? (
+      {!selectedUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -30,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({ onSelectTodo, selectTodo }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectTodo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             <button
@@ -44,23 +48,25 @@ export const TodoModal: React.FC<Props> = ({ onSelectTodo, selectTodo }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectTodo.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
                 className={classNames({
-                  'has-text-success': selectTodo.completed,
-                  'has-text-danger': !selectTodo.completed,
+                  'has-text-success': selectedTodo.completed,
+                  'has-text-danger': !selectedTodo.completed,
                 })}
               >
-                {selectTodo.completed ? 'Done' : 'Planned'}
+                {selectedTodo.completed
+                  ? 'Done'
+                  : 'Planned'}
               </strong>
 
               {' by '}
 
-              <a href={`mailto:${selectUser.email}`}>
-                {selectUser.name}
+              <a href={`mailto:${selectedUser.email}`}>
+                {selectedUser.name}
               </a>
             </p>
           </div>

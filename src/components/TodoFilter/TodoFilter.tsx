@@ -5,14 +5,14 @@ type Props = {
   onQuery: (value: string) => void,
   query: string,
   sortBy: SortTypes,
-  onSortType: (type: React.ChangeEvent<HTMLSelectElement>) => void,
+  onChangeSortType: (event: React.ChangeEvent<HTMLSelectElement>) => void,
 };
 
 export const TodoFilter:React.FC<Props> = ({
   onQuery,
   query,
   sortBy,
-  onSortType,
+  onChangeSortType,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -20,7 +20,7 @@ export const TodoFilter:React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortBy}
-          onChange={event => onSortType(event)}
+          onChange={onChangeSortType}
         >
           <option value={SortTypes.All}>All</option>
           <option value={SortTypes.Active}>Active</option>

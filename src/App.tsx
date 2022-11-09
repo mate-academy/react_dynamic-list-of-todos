@@ -14,15 +14,17 @@ export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState(SortTypes.All);
-  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(response => setTodoList(response));
   }, []);
 
   const searchFilter = () => {
+    const queryInLowerCase = query.toLowerCase();
+
     return todoList.filter(
-      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+      todo => todo.title.toLowerCase().includes(queryInLowerCase),
     );
   };
 
@@ -43,12 +45,14 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleSortType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeSortType = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setSortBy(event.target.value as SortTypes);
   };
 
   const handleSelectTodo = (value: Todo | null) => {
-    setSelectTodo(value);
+    setSelectedTodo(value);
   };
 
   return (
@@ -63,26 +67,29 @@ export const App: React.FC = () => {
                 onQuery={handleQuery}
                 query={query}
                 sortBy={sortBy}
-                onSortType={handleSortType}
+                onChangeSortType={handleChangeSortType}
               />
             </div>
 
             <div className="block">
-              {todoList.length === 0
+              {!todoList.length
                 ? <Loader />
                 : (
                   <TodoList
                     getVisibleTodos={selectFilter}
                     onSelectTodo={handleSelectTodo}
-                    selectTodo={selectTodo}
+                    selectedTodo={selectedTodo}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {selectTodo && (
-        <TodoModal onSelectTodo={handleSelectTodo} selectTodo={selectTodo} />
+      {selectedTodo && (
+        <TodoModal
+          onSelectTodo={handleSelectTodo}
+          selectedTodo={selectedTodo}
+        />
       )}
     </>
   );
