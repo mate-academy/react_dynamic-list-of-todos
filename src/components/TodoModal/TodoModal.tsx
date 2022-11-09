@@ -9,7 +9,7 @@ type Props = {
   todoTitle: string,
   completed: boolean,
   setUserId: React.Dispatch<React.SetStateAction<number>>,
-  setTodoId: React.Dispatch<React.SetStateAction<number>>
+  setTodoId: React.Dispatch<React.SetStateAction<number>>,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -30,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({
       setUser(selectedUser);
       setIsLoaded(true);
     })();
-  });
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

@@ -43,7 +43,7 @@ export const App: React.FC = () => {
       setTodos(todosFromAPI);
       setLoading(false);
     })();
-  });
+  }, []);
 
   return (
     <>
