@@ -53,6 +53,8 @@ export const App: React.FC = () => {
     return filteredTodos;
   }, [todos, filterType, query]);
 
+  const setClearQuery = () => setSelectedTodo(null);
+
   return (
     <>
       <div className="section">
@@ -87,7 +89,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setNullInsteadTodo={() => setSelectedTodo(null)}
+          setNullInsteadTodo={setClearQuery}
         />
       )}
     </>

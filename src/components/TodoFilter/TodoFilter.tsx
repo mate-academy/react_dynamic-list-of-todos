@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useMemo } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -11,21 +11,25 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   query, setQuery, filterType, setFilterType,
 }) => {
-  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
+  const handleChangeInput = useMemo(
+    () => (event: ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    }, [query],
+  );
 
-  const handleChangeFilterType = (event: ChangeEvent<HTMLSelectElement>) => {
-    switch (event.target.value) {
-      case FilterType.ACTIVE:
-        return setFilterType(FilterType.ACTIVE);
-      case FilterType.COMPLETED:
-        return setFilterType(FilterType.COMPLETED);
+  const handleChangeFilterType = useMemo(
+    () => (event: ChangeEvent<HTMLSelectElement>) => {
+      switch (event.target.value) {
+        case FilterType.ACTIVE:
+          return setFilterType(FilterType.ACTIVE);
+        case FilterType.COMPLETED:
+          return setFilterType(FilterType.COMPLETED);
 
-      default:
-        return setFilterType(FilterType.ALL);
-    }
-  };
+        default:
+          return setFilterType(FilterType.ALL);
+      }
+    }, [filterType],
+  );
 
   const clearQuery = () => setQuery('');
 
