@@ -6,11 +6,11 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setSelectedTodo: (arg: null) => void;
+  setNullInsteadTodo: void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodo, setSelectedTodo,
+  selectedTodo, setNullInsteadTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const {
@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!(user !== null) ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,9 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => (
-                setSelectedTodo(null)
-              )}
+              onClick={() => setNullInsteadTodo}
             />
           </header>
 

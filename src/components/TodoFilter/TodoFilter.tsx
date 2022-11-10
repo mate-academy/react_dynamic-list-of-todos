@@ -1,11 +1,11 @@
 import React, { ChangeEvent } from 'react';
-import { TypeOfTodos } from '../../types/TypeOfTodos';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string;
   setQuery: (arg: string) => void;
   filterType: string;
-  setFilterType: (arg: TypeOfTodos) => void;
+  setFilterType: (arg: FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -17,15 +17,17 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleChangeFilterType = (event: ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
-      case TypeOfTodos.ACTIVE:
-        return setFilterType(TypeOfTodos.ACTIVE);
-      case TypeOfTodos.COMPLETED:
-        return setFilterType(TypeOfTodos.COMPLETED);
+      case FilterType.ACTIVE:
+        return setFilterType(FilterType.ACTIVE);
+      case FilterType.COMPLETED:
+        return setFilterType(FilterType.COMPLETED);
 
       default:
-        return setFilterType(TypeOfTodos.ALL);
+        return setFilterType(FilterType.ALL);
     }
   };
+
+  const clearQuery = () => setQuery('');
 
   return (
     <form className="field has-addons">
@@ -63,7 +65,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={clearQuery}
             />
           )}
         </span>

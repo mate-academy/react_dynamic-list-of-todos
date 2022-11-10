@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -9,21 +9,21 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { TypeOfTodos } from './types/TypeOfTodos';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [typeOfTodos, setTypeOfTodos] = useState<TypeOfTodos>(TypeOfTodos.ALL);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
 
   useEffect(() => {
     try {
       getTodos()
         .then(todosFromServer => {
           setTodos(todosFromServer);
-          setIsLoaded(true);
+          setIsLoading(true);
         });
     } catch {
       throw new Error('There are not todos');
@@ -34,15 +34,15 @@ export const App: React.FC = () => {
     value.toLowerCase().includes(query.toLowerCase())
   );
 
-  const visibleTodos = () => {
+  const visibleTodos = useMemo(() => {
     const filteredTodos = todos.filter(todo => {
       handleValue(todo.title);
 
-      switch (typeOfTodos) {
-        case TypeOfTodos.ACTIVE:
+      switch (filterType) {
+        case FilterType.ACTIVE:
           return !todo.completed && handleValue(todo.title);
 
-        case TypeOfTodos.COMPLETED:
+        case FilterType.COMPLETED:
           return todo.completed && handleValue(todo.title);
 
         default:
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
     });
 
     return filteredTodos;
-  };
+  }, [todos, query]);
 
   return (
     <>
@@ -64,15 +64,15 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                filterType={typeOfTodos}
-                setFilterType={setTypeOfTodos}
+                filterType={filterType}
+                setFilterType={setFilterType}
               />
             </div>
 
             <div className="block">
-              {isLoaded ? (
+              {isLoading ? (
                 <TodoList
-                  todos={visibleTodos()}
+                  todos={visibleTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          setNullInsteadTodo={setSelectedTodo(null)}
         />
       )}
     </>
