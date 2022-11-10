@@ -61,19 +61,18 @@ export const App: React.FC = () => {
 
   const getVisibleTodos = () => {
     const selectedBy = todos.filter(todo => {
+      const includesQuery = todo.title.toLowerCase()
+        .includes(query.toLowerCase());
+
       switch (select) {
         case 'active':
-          return todo.completed === false;
+          return !todo.completed && includesQuery;
         case 'completed':
-          return todo.completed === true;
+          return todo.completed && includesQuery;
         default:
-          return todo;
+          return includesQuery;
       }
-    })
-      .filter(todo => (
-        todo.title.toLowerCase()
-          .includes(appliedQuery.toLowerCase())
-      ));
+    });
 
     return selectedBy;
   };
