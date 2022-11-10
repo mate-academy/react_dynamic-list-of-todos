@@ -7,13 +7,15 @@ import { User } from '../../types/User';
 type Props = {
   cancelSelectedTodo: () => void,
   todo: Todo,
-}
+};
 
 export const TodoModal: React.FC<Props> = ({ cancelSelectedTodo, todo }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+
   useEffect(() => {
     getUser(todo.userId).then(setCurrentUser);
-  })
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -36,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({ cancelSelectedTodo, todo }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                cancelSelectedTodo()
+                cancelSelectedTodo();
               }}
             />
           </header>
@@ -48,13 +50,11 @@ export const TodoModal: React.FC<Props> = ({ cancelSelectedTodo, todo }) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              {todo.completed? (
+              {todo.completed ? (
                 <strong className="has-text-danger">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
-              )
-            }
-
+              )}
 
               {' by '}
 

@@ -1,13 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Todo } from './types/Todo';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
   selectTodo: (todo: Todo) => void,
   selectedTodoId?: number,
-}
-export const TodoList: React.FC<Props> = ({ todos, selectTodo, selectedTodoId }) => (
+};
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectTodo,
+  selectedTodoId,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -26,8 +30,11 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo, selectedTodoId })
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={classNames({'has-background-info-light': selectedTodoId === todo.id}
-          )}>
+          key={todo.id}
+          className={classNames({
+            'has-background-info-light': selectedTodoId === todo.id,
+          })}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (

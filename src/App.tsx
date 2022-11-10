@@ -14,7 +14,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null) ;
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [status, setStatus] = useState('all');
 
   useEffect(() => {
@@ -47,13 +47,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todos.length > 0 ? (
-                <Loader />
-              ) : (
                 <TodoList
-                  todos={preparedTodos}
-                  selectTodo={setSelectedTodo}
-                  selectedTodoId={selectedTodo?.id}
-                />
+                todos={preparedTodos}
+                selectTodo={setSelectedTodo}
+                selectedTodoId={selectedTodo?.id}
+              />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
