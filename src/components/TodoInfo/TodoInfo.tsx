@@ -49,9 +49,11 @@ export const TodoInfo: React.FC<Props> = ({
           onClick={() => onSelectTodo(id)}
         >
           <span className="icon">
-            {selectedTodoId === id
-              ? <i className="far fa-eye-slash" />
-              : <i className="far fa-eye" />}
+            <i className={classNames({
+              'far fa-eye-slash': selectedTodoId === id,
+              'far fa-eye': selectedTodoId !== id,
+            })}
+            />
           </span>
         </button>
       </td>

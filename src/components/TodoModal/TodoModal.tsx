@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = ({
     userId,
   } = currentTodo;
 
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(userId).then(currentUser => setUser(currentUser));
@@ -42,8 +42,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="clear input"
               type="button"
               className="delete"
               data-cy="modal-close"

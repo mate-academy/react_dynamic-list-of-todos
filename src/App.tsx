@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useState,
   useEffect,
@@ -15,24 +14,25 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 
 type Callback = (newQuery: string) => void;
+
+function debaunce(f: Callback, delay: number) {
+  let timerId: number;
+
+  return (...args: []) => {
+    clearTimeout(timerId);
+    timerId = window.setTimeout(f, delay, ...args);
+  };
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoid] = useState(0);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [select, setSelect] = useState('all');
-
-  function debaunce(f: Callback, delay: number) {
-    let timerId: number;
-
-    return (...args: []) => {
-      clearTimeout(timerId);
-      timerId = window.setTimeout(f, delay, ...args);
-    };
-  }
+  const [select, setSelect] = useState<TodoStatus>(TodoStatus.ALL);
 
   const applyQuery = useCallback(
     debaunce(setAppliedQuery, 500), [],
@@ -42,7 +42,9 @@ export const App: React.FC = () => {
     getTodos().then(todoList => setTodos(todoList));
   }, []);
 
-  const currentTodo = todos.find(todo => (todo.id === todoId));
+  const currentTodo = useMemo(() => {
+    return todos.find(todo => (todo.id === todoId));
+  }, [todoId, query]);
 
   const closeModal = () => {
     setTodoid(0);
@@ -52,26 +54,30 @@ export const App: React.FC = () => {
     setQuery(changedQuery);
   }, []);
 
-  const onSelectChange = useCallback((changedSelect: string) => {
+  const onSelectChange = useCallback((changedSelect) => {
     setSelect(changedSelect);
   }, []);
 
   const getVisibleTodos = () => {
-    const selectedBy = todos.filter(todo => {
+    const selectedBy = todos.filter(({ title }) => {
+      const titleToLowerCase = title.toLowerCase();
+      const queryToLowerCase = query.toLowerCase();
+
+      return titleToLowerCase.includes(queryToLowerCase);
+    });
+
+    return selectedBy.filter(todo => {
       switch (select) {
-        case 'active':
-          return todo.completed === false;
-        case 'completed':
-          return todo.completed === true;
+        case TodoStatus.ACTIVE:
+          return !todo.completed;
+
+        case TodoStatus.COMPLETED:
+          return todo.completed;
+
         default:
           return todo;
       }
     });
-
-    return selectedBy.filter(todo => (
-      todo.title.toLowerCase()
-        .includes(appliedQuery.toLowerCase())
-    ));
   };
 
   const visibleTodos = useMemo(
@@ -97,7 +103,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList
