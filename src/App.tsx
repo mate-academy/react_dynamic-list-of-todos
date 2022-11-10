@@ -51,7 +51,7 @@ export const App: React.FC = () => {
     });
 
     return filteredTodos;
-  }, [todos, query]);
+  }, [todos, filterType, query]);
 
   return (
     <>
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setNullInsteadTodo={setSelectedTodo(null)}
+          setNullInsteadTodo={() => setSelectedTodo(null)}
         />
       )}
     </>

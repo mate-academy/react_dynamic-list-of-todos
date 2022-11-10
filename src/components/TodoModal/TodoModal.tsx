@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setNullInsteadTodo: void;
+  setNullInsteadTodo: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setNullInsteadTodo}
+              onClick={setNullInsteadTodo}
             />
           </header>
 
