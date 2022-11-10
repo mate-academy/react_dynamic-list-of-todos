@@ -23,7 +23,7 @@ function debaunce(f: Callback, delay: number) {
 
   return (...args: []) => {
     clearTimeout(timerId);
-    timerId = window.setTimeout(f, delay, ...args);
+    timerId = setTimeout(f, delay, ...args);
   };
 }
 
@@ -35,7 +35,8 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState<TodoStatus>(TodoStatus.ALL);
 
   const applyQuery = useCallback(
-    debaunce(setAppliedQuery, 500), [],
+    debaunce(setAppliedQuery, 500),
+    [],
   );
 
   useEffect(() => {
@@ -59,25 +60,22 @@ export const App: React.FC = () => {
   }, []);
 
   const getVisibleTodos = () => {
-    const selectedBy = todos.filter(({ title }) => {
-      const titleToLowerCase = title.toLowerCase();
-      const queryToLowerCase = query.toLowerCase();
-
-      return titleToLowerCase.includes(queryToLowerCase);
-    });
-
-    return selectedBy.filter(todo => {
+    const selectedBy = todos.filter(todo => {
       switch (select) {
-        case TodoStatus.ACTIVE:
-          return !todo.completed;
-
-        case TodoStatus.COMPLETED:
-          return todo.completed;
-
+        case 'active':
+          return todo.completed === false;
+        case 'completed':
+          return todo.completed === true;
         default:
           return todo;
       }
-    });
+    })
+      .filter(todo => (
+        todo.title.toLowerCase()
+          .includes(appliedQuery.toLowerCase())
+      ));
+
+    return selectedBy;
   };
 
   const visibleTodos = useMemo(
