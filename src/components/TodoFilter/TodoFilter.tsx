@@ -17,6 +17,15 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   const [filter, setFilter] = useState(searchFilter);
   const applyQuery = useCallback(debounce(onSearchFilter, 500), []);
 
+  const selectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelectFilter(e.target.value);
+  };
+
+  const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.currentTarget.value);
+    applyQuery(e.currentTarget.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -24,9 +33,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           <select
             data-cy="statusSelect"
             value={selectFilter}
-            onChange={(e) => {
-              onSelectFilter(e.target.value);
-            }}
+            onChange={(e) => selectHandler(e)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -42,10 +49,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           className="input"
           placeholder="Search..."
           value={filter}
-          onChange={(e) => {
-            setFilter(e.currentTarget.value);
-            applyQuery(e.currentTarget.value);
-          }}
+          onChange={(e) => searchHandler(e)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
