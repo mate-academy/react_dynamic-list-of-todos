@@ -9,26 +9,33 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState<FilterBy>(FilterBy.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isTodoSelected, setIsTodoSelected] = useState(false);
 
   const getTodosFromServer = async () => {
-    let allTodos = await getTodos();
+    let allTodos;
+
+    try {
+      allTodos = await getTodos();
+    } catch (error) {
+      throw new Error('Data loading error');
+    }
 
     switch (selectedOption) {
-      case 'all':
+      case FilterBy.ALL:
         break;
 
-      case 'active':
+      case FilterBy.ACTIVE:
         allTodos = allTodos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
+      case FilterBy.COMPLETED:
         allTodos = allTodos.filter(todo => todo.completed);
         break;
 
@@ -36,7 +43,9 @@ export const App: React.FC = () => {
         break;
     }
 
-    allTodos = allTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    const lowerQuery = query.toLowerCase();
+
+    allTodos = allTodos.filter(todo => todo.title.toLowerCase().includes(lowerQuery));
 
     setTodos(allTodos);
   };

@@ -1,8 +1,9 @@
 import React from 'react';
+import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
-  selectedOption: string,
-  onSelectOption: (newSelectedOption: string) => void,
+  selectedOption: FilterBy,
+  onSelectOption: (newSelectedOption: FilterBy) => void,
   query: string,
   onInputQuery: (newQuery: string) => void,
 };
@@ -20,11 +21,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedOption}
-            onChange={(event) => onSelectOption(event.target.value)}
+            onChange={(event) => onSelectOption(event.target.value as FilterBy)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterBy.ALL}>All</option>
+            <option value={FilterBy.ACTIVE}>Active</option>
+            <option value={FilterBy.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

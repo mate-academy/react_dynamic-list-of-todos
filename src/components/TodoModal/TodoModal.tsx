@@ -21,12 +21,16 @@ export const TodoModal: React.FC<Props> = ({
       return;
     }
 
-    setUser(await getUser(selectedTodo?.userId));
+    try {
+      setUser(await getUser(selectedTodo?.userId));
+    } catch (error) {
+      throw new Error('User loading error');
+    }
   };
 
   useEffect(() => {
     getUserFromServer();
-  });
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
