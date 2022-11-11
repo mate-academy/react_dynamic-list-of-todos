@@ -12,40 +12,29 @@ import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState(FilterType.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const getTodosFromServer = async () => {
-    const todosFromServer = await getTodos();
-
-    setTodos(todosFromServer);
-    setIsTodosLoaded(true);
-  };
-
   useEffect(() => {
-    getTodosFromServer();
+    getTodos().then(response => setTodos(response));
   }, []);
 
   const filterTodos = () => {
-    const todosMatchedQuery = todos.filter(({ title }) => {
-      const titleToLowerCase = title.toLowerCase();
-      const queryToLowerCase = query.toLowerCase();
+    const searchByInput = (todoTitle: string, searchInput: string) => {
+      return todoTitle.toLowerCase().includes(searchInput.toLowerCase());
+    };
 
-      return titleToLowerCase.includes(queryToLowerCase);
-    });
-
-    return todosMatchedQuery.filter(todo => {
+    return todos.filter(todo => {
       switch (filterType) {
         case FilterType.Active:
-          return !todo.completed;
+          return !todo.completed && searchByInput(todo.title, query);
 
         case FilterType.Completed:
-          return todo.completed;
+          return todo.completed && searchByInput(todo.title, query);
 
         default:
-          return todo;
+          return searchByInput(todo.title, query);
       }
     });
   };
@@ -67,15 +56,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodosLoaded ? (
-                <TodoList
-                  todos={filterTodos()}
-                  onSelect={setSelectedTodo}
-                  selectedTodo={selectedTodo}
-                />
-              ) : (
-                <Loader />
-              )}
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filterTodos()}
+                    onSelect={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>

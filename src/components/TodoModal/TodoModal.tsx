@@ -22,14 +22,12 @@ export const TodoModal: React.FC<Props> = ({
     userId,
   } = todo;
 
-  const loadUsers = async () => {
-    const userFromServer = await getUser(userId);
-
-    setUser(userFromServer);
-  };
-
   useEffect(() => {
-    loadUsers();
+    const selectUser = async () => {
+      setUser(await getUser(userId));
+    };
+
+    selectUser();
   }, []);
 
   return (
@@ -52,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
+              onClick={() => onClose()}
             />
           </header>
 
