@@ -1,16 +1,16 @@
 import { FC, useState } from 'react';
 
 import { Todo } from '../../types/Todo';
-import { Values } from '../../types/Enum';
+import { SelectTypes } from '../../types/Enum';
 
 type Props = {
-  search: (value: string, select: Values) => Todo[] | null;
+  search: (value: string, select: SelectTypes) => Todo[] | null;
   setVisibleTodos: (val: Todo[] | null) => void;
 };
 
 export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
   const [text, setText] = useState('');
-  const [selected, setSelected] = useState(Values.ALL);
+  const [selected, setSelected] = useState(SelectTypes.ALL);
 
   return (
     <form className="field has-addons">
@@ -20,14 +20,14 @@ export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
             data-cy="statusSelect"
             value={selected}
             onChange={(event) => {
-              setSelected(event.target.value as Values);
+              setSelected(event.target.value as SelectTypes);
 
-              setVisibleTodos(search(text, event.target.value as Values));
+              setVisibleTodos(search(text, event.target.value as SelectTypes));
             }}
           >
-            <option value={Values.ALL}>All</option>
-            <option value={Values.ACTIVE}>Active</option>
-            <option value={Values.COMPLETED}>Completed</option>
+            <option value={SelectTypes.ALL}>All</option>
+            <option value={SelectTypes.ACTIVE}>Active</option>
+            <option value={SelectTypes.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -60,7 +60,7 @@ export const TodoFilter:FC<Props> = ({ search, setVisibleTodos }) => {
               onClick={() => {
                 setText('');
 
-                setVisibleTodos(search('', Values.ALL));
+                setVisibleTodos(search('', SelectTypes.ALL));
               }}
             />
           </span>

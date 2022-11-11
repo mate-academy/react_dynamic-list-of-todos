@@ -8,7 +8,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Values } from './types/Enum';
+import { SelectTypes } from './types/Enum';
 import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
@@ -34,19 +34,21 @@ export const App: React.FC = () => {
 
   const filtered = todosList;
 
-  const search = (query: string, select: Values) => {
-    if (select === Values.COMPLETED && todosList) {
-      return [...todosList].filter(todo => {
-        return todo.title.toLowerCase().includes(query.toLowerCase()) && todo.completed;
+  const search = (query: string, select: SelectTypes) => {
+    const lowercasedQuery = query.toLowerCase();
+
+    if (select === SelectTypes.COMPLETED && todosList) {
+      return todosList.filter(todo => {
+        return todo.title.toLowerCase().includes(lowercasedQuery) && todo.completed;
       });
     }
 
-    if (select === Values.ACTIVE && todosList) {
-      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()) && !todo.completed);
+    if (select === SelectTypes.ACTIVE && todosList) {
+      return todosList.filter(todo => todo.title.toLowerCase().includes(lowercasedQuery) && !todo.completed);
     }
 
-    if (select === Values.ALL && todosList) {
-      return [...todosList].filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    if (select === SelectTypes.ALL && todosList) {
+      return todosList.filter(todo => todo.title.toLowerCase().includes(lowercasedQuery));
     }
 
     return null;
