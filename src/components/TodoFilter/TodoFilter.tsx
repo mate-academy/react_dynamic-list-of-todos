@@ -5,13 +5,13 @@ import {
   useCallback,
   memo,
 } from 'react';
+import { debounce } from 'lodash';
 import { SelectOptions } from '../../types/SelectOptions';
-import { debounce } from '../../utils/debounce';
 
 type Props = {
   query: string;
   selectedOption: SelectOptions;
-  setSelectedOption: (options: SelectOptions) => void;
+  setSelectedOption: (option: SelectOptions) => void;
   setQuery: (query: string) => void;
 };
 

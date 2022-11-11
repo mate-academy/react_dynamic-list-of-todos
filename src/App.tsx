@@ -3,7 +3,6 @@ import {
   useCallback,
   useEffect,
   useState,
-  useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -22,7 +21,8 @@ export const App: FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedOption, setSelectedOption]
-    = useState<SelectOptions>(SelectOptions.All);
+    = useState(SelectOptions.All);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   const handleSelectTodo = useCallback((id: number) => {
     setSelectedTodoId(id);
@@ -32,36 +32,35 @@ export const App: FC = () => {
     setSelectedTodoId(0);
   }, []);
 
-  const getTodosFromServer = async () => {
+  const getTodosFromServer = useCallback(async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
     setIsTodosLoaded(true);
-  };
+  }, []);
 
   useEffect(() => {
     getTodosFromServer();
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    const todosMatchedQuery = todos.filter(({ title }) => {
+  useEffect(() => {
+    setVisibleTodos(todos.filter(({ title }) => {
       const normalizedQuery = query.toLowerCase();
       const normalizedTitle = title.toLowerCase();
       const includedInTitle = normalizedTitle.includes(normalizedQuery);
 
       return includedInTitle;
-    });
-
-    return todosMatchedQuery.filter((todo => {
-      switch (selectedOption) {
-        case SelectOptions.Active:
-          return !todo.completed;
-        case SelectOptions.Completed:
-          return todo.completed;
-        default:
-          return todo;
-      }
-    }));
+    })
+      .filter((todo => {
+        switch (selectedOption) {
+          case SelectOptions.Active:
+            return !todo.completed;
+          case SelectOptions.Completed:
+            return todo.completed;
+          default:
+            return todo;
+        }
+      })));
   }, [selectedOption, query, todos]);
 
   const selectedTodo = todos.find(({ id }) => id === selectedTodoId);
@@ -84,9 +83,7 @@ export const App: FC = () => {
 
             <div className="block">
               {!isTodosLoaded
-                ? (
-                  <Loader />
-                )
+                ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
