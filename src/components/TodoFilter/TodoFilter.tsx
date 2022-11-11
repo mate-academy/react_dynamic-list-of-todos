@@ -9,7 +9,10 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  query, setQuery, sortType, setSortType,
+  query,
+  setQuery,
+  sortType,
+  setSortType,
 }) => (
   <form className="field has-addons">
     <p className="control">

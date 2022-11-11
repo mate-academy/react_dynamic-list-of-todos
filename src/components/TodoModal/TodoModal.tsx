@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -12,7 +12,7 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const loadedUserFromServer = async () => {
+  const loadedUserFromServer = useCallback(async () => {
     try {
       const UserFromServer = await getUser(todo.userId);
 
@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
     } catch (error) {
       throw new Error('Error. Can`t upload user');
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadedUserFromServer();

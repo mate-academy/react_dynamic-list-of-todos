@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [sortType, setSortType] = useState<SortType | string>(SortType.ALL);
 
-  const loadedUserFromServer = async () => {
+  const loadedUserFromServer = useCallback(async () => {
     try {
       const UserFromServer = await getTodos();
 
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     } catch (error) {
       throw new Error('Error. Can`t upload todos');
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadedUserFromServer();
