@@ -37,7 +37,6 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, setTodoId }) => {
             >
               {`Todo #${selectedTodo.id}`}
             </div>
-
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
