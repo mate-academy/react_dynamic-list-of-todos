@@ -16,11 +16,15 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [userIsLoaded, setUserIsLoaded] = useState(false);
 
   const loadUser = async (userId: number) => {
-    const userFromServer = await getUser(userId);
+    try {
+      const userFromServer = await getUser(userId);
 
-    if (userFromServer) {
-      setUser(userFromServer);
-      setUserIsLoaded(true);
+      if (userFromServer) {
+        setUser(userFromServer);
+        setUserIsLoaded(true);
+      }
+    } catch (error) {
+      throw new Error('User loading failed');
     }
   };
 

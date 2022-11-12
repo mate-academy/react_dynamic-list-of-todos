@@ -19,10 +19,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const getAllTodos = async () => {
-    const todosLoaded = await getTodos();
+    try {
+      const todosLoaded = await getTodos();
 
-    setTodos(todosLoaded);
-    setIsLoaded(true);
+      setTodos(todosLoaded);
+      setIsLoaded(true);
+    } catch (error) {
+      throw new Error('Todo loading failed');
+    }
   };
 
   useEffect(() => {
@@ -35,13 +39,15 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find(todo => todo.id === selectedId) || null;
 
-  const getFilteredTodos = () => (
-    todos.filter(todo => {
+  const getFilteredTodos = () => {
+    const todosFilteredByQuery = todos.filter(todo => {
       const titleNormalized = todo.title.toLowerCase();
       const queryNormalized = query.toLowerCase();
 
       return titleNormalized.includes(queryNormalized);
-    }).filter(todo => {
+    });
+
+    const todosFilteredByStatus = todosFilteredByQuery.filter(todo => {
       switch (status) {
         case Status.Completed:
           return todo.completed;
@@ -53,8 +59,10 @@ export const App: React.FC = () => {
         default:
           return todo;
       }
-    })
-  );
+    });
+
+    return todosFilteredByStatus;
+  };
 
   return (
     <>
