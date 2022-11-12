@@ -18,12 +18,14 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
 
   useEffect(() => {
-    getTodos().then(result => setTodos(result));
+    getTodos().then(todosFromServer => setTodos(todosFromServer));
   }, []);
 
   const preparedTodos = todos.filter(todo => {
-    if ((status === 'active' && todo.completed)
-     || (status === 'completed' && !todo.completed)) {
+    const active = status === 'active' && todo.completed;
+    const completed = status === 'completed' && !todo.completed;
+    if ((active)
+     || (completed)) {
       return false;
     }
 
@@ -46,12 +48,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+
+              {!todos.length &&
+                <p>No toods found
+                </p>
+              }
+
               {todos.length > 0 ? (
                 <TodoList
-                todos={preparedTodos}
-                selectTodo={setSelectedTodo}
-                selectedTodoId={selectedTodo?.id}
-              />
+                  todos={preparedTodos}
+                  selectTodo={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
               ) : (
                 <Loader />
               )}
