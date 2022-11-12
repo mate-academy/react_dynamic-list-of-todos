@@ -10,24 +10,31 @@ export const TodoFilter: React.FC<Props> = ({ todos }) => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
 
-  let filteredTodos = todos.filter((todo: { title: string }) => todo
-    .title.toLowerCase().includes(query.toLowerCase()));
+  let filteredTodos = todos.filter((todo: { title: string }) => todo.title
+    .toLowerCase().includes(query.toLowerCase()));
 
-  if (filter === 'active') {
-    filteredTodos = filteredTodos.filter((todo) => !todo.completed);
-  } else if (filter === 'completed') {
-    filteredTodos = filteredTodos.filter((todo) => todo.completed);
-  }
+  filteredTodos = filteredTodos.filter((todo) => {
+    if (filter === 'active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'completed') {
+      return todo.completed;
+    }
+
+    return 1;
+  });
+
+  const makeFiltered = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => setFilter(event.target.value);
 
   return (
     <>
       <form className="field has-addons">
         <p className="control">
           <span className="select">
-            <select
-              data-cy="statusSelect"
-              onChange={(event) => setFilter(event.target.value)}
-            >
+            <select data-cy="statusSelect" onChange={makeFiltered}>
               <option value="all">All</option>
               <option value="active">Active</option>
               <option value="completed">Completed</option>

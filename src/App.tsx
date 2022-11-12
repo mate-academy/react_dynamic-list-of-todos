@@ -13,10 +13,15 @@ export const App: React.FC = () => {
   const visibleTodos = [...todos];
 
   useEffect(() => {
-    getTodos().then((todosFromServer) => {
-      setIsLoading(false);
-      setTodos(todosFromServer);
-    });
+    getTodos()
+      .then((todosFromServer) => {
+        try {
+          setIsLoading(false);
+          setTodos(todosFromServer);
+        } catch (error: any) {
+          Error(error);
+        }
+      });
   }, []);
 
   return (
@@ -27,7 +32,9 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              {isLoading ? <Loader /> : <TodoFilter todos={visibleTodos} />}
+              {isLoading
+                ? <Loader />
+                : <TodoFilter todos={visibleTodos} />}
             </div>
           </div>
         </div>
