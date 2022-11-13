@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
@@ -15,13 +15,18 @@ export const App: React.FC = () => {
   const [field, setField] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  // const [seletedUser, setSelectedUser] = useState<User | null>(null);
 
-  async function getTodoses() {
+  const getTodoses = useCallback(async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
-  }
+  }, []);
+
+  // async function getTodoses() {
+  //   const todosFromServer = await getTodos();
+
+  //   setTodos(todosFromServer);
+  // }
 
   useEffect(() => {
     getTodoses();
