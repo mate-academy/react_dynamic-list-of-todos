@@ -17,20 +17,21 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [sortType, setSortType] = useState<SortType | string>(SortType.ALL);
+  const [catchErrors, setCatchErorrs] = useState(false);
 
-  const loadedUserFromServer = useCallback(async () => {
+  const loadedTodosFromServer = useCallback(async () => {
     try {
-      const UserFromServer = await getTodos();
+      const todosFromServer = await getTodos();
 
-      setTodos(UserFromServer);
+      setTodos(todosFromServer);
       setIsLoaded(true);
     } catch (error) {
-      throw new Error('Error. Can`t upload todos');
+      setCatchErorrs(true);
     }
   }, []);
 
   useEffect(() => {
-    loadedUserFromServer();
+    loadedTodosFromServer();
   }, []);
 
   const filterTodos = () => {
@@ -45,8 +46,10 @@ export const App: React.FC = () => {
       }
     });
 
+    const trimQuery = query.toLowerCase().trim();
+
     return sortedTodos.filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
+      todo.title.toLowerCase().includes(trimQuery)
     ));
   };
 
@@ -67,21 +70,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded
-                ? (
-                  <TodoList
-                    todos={filterTodos()}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-                  />
-                )
-                : <Loader />}
+              {!catchErrors && (
+                isLoaded
+                  ? (
+                    <TodoList
+                      todos={filterTodos()}
+                      selectedTodo={selectedTodo}
+                      setSelectedTodo={setSelectedTodo}
+                    />
+                  )
+                  : <Loader />)}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      { catchErrors && selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
