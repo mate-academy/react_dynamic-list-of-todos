@@ -16,7 +16,7 @@ export const TodoFilter = React.memo<Props>(
       setComplitedStatus(status);
 
       const filteredByTitle = [...todos]
-        .filter(todo => todo.title.includes(title));
+        .filter(todo => todo.title.toLowerCase().includes(title.toLowerCase()));
 
       const filteredByComplite = filteredByTitle.filter(todo => {
         switch (status) {
@@ -63,13 +63,15 @@ export const TodoFilter = React.memo<Props>(
           </span>
 
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              aria-label="label"
-              onClick={() => query && filtrationTodos('', complitedStatus)}
-            />
+            {query && (
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                aria-label="label"
+                onClick={() => filtrationTodos('', complitedStatus)}
+              />
+            )}
           </span>
         </p>
       </form>
