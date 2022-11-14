@@ -85,7 +85,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      { catchErrors && selectedTodo && (
+      {!catchErrors && selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           setSelectedTodo={setSelectedTodo}

@@ -11,7 +11,6 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [catchErrors, setCatchErorrs] = useState(false);
 
   const loadUserFromServer = useCallback(async () => {
     try {
@@ -19,7 +18,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
 
       setUser(userFromServer);
     } catch (error) {
-      setCatchErorrs(true);
+      throw new Error('Error. Can`t upload user');
     }
   }, []);
 
@@ -31,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user && !catchErrors ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -71,8 +70,8 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
                 )}
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
