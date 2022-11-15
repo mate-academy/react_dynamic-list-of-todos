@@ -10,20 +10,22 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodosStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<TodosStatus>(TodosStatus.All);
 
   useEffect(() => {
     getTodos().then(todosFromServer => setTodos(todosFromServer));
   }, []);
 
-  const preparedTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     const active = status === 'active' && todo.completed;
     const completed = status === 'completed' && !todo.completed;
+
     if ((active)
      || (completed)) {
       return false;
@@ -49,14 +51,11 @@ export const App: React.FC = () => {
 
             <div className="block">
 
-              {!todos.length &&
-                <p>No toods found
-                </p>
-              }
+              {!todos.length && <p>No toods found</p>}
 
-              {todos.length > 0 ? (
+              {filteredTodos.length > 0 ? (
                 <TodoList
-                  todos={preparedTodos}
+                  todos={filteredTodos}
                   selectTodo={setSelectedTodo}
                   selectedTodoId={selectedTodo?.id}
                 />
