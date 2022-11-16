@@ -23,8 +23,8 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos.filter(todo => {
-    const active = status === 'active' && todo.completed;
-    const completed = status === 'completed' && !todo.completed;
+    const active = (status === 'active') && (todo.completed);
+    const completed = (status === 'completed') && (!todo.completed);
 
     if ((active)
      || (completed)) {
