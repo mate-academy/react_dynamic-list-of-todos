@@ -18,7 +18,7 @@ import { TodoStatus } from './types/TodoStatus';
 
 type Callback = (newQuery: string) => void;
 
-function debaunce(f: Callback, delay: number) {
+function debounce(f: Callback, delay: number) {
   let timerId: number;
 
   return (...args: []) => {
@@ -29,13 +29,13 @@ function debaunce(f: Callback, delay: number) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoid] = useState(0);
+  const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [select, setSelect] = useState<TodoStatus>(TodoStatus.ALL);
+  const [selectedTodo, setSelectedTodo] = useState<TodoStatus>(TodoStatus.ALL);
 
   const applyQuery = useCallback(
-    debaunce(setAppliedQuery, 500),
+    debounce(setAppliedQuery, 500),
     [],
   );
 
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
   }, [todoId, query]);
 
   const closeModal = () => {
-    setTodoid(0);
+    setTodoId(0);
   };
 
   const onQueryChange = useCallback((changedQuery: string) => {
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   }, []);
 
   const onSelectChange = useCallback((changedSelect) => {
-    setSelect(changedSelect);
+    setSelectedTodo(changedSelect);
   }, []);
 
   const getVisibleTodos = () => {
@@ -64,10 +64,10 @@ export const App: React.FC = () => {
       const includesQuery = todo.title.toLowerCase()
         .includes(query.toLowerCase());
 
-      switch (select) {
-        case 'active':
+      switch (selectedTodo) {
+        case TodoStatus.ACTIVE:
           return !todo.completed && includesQuery;
-        case 'completed':
+        case TodoStatus.COMPLETED:
           return todo.completed && includesQuery;
         default:
           return includesQuery;
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(
     getVisibleTodos,
-    [todos, appliedQuery, select],
+    [todos, appliedQuery, selectedTodo],
   );
 
   return (
@@ -95,7 +95,7 @@ export const App: React.FC = () => {
                 onSelectChange={onSelectChange}
                 onApplyQuery={applyQuery}
                 query={query}
-                select={select}
+                select={selectedTodo}
               />
             </div>
 
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectedTodoId={todoId}
-                    selectTodo={(id:number) => setTodoid(id)}
+                    selectTodo={(id:number) => setTodoId(id)}
                   />
                 )}
             </div>

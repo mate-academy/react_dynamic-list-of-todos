@@ -29,14 +29,20 @@ export const TodoList: React.FC<Props> = React.memo(({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <TodoInfo
-            key={todo.id}
-            todo={todo}
-            onSelectTodo={selectTodo}
-            selectedTodoId={selectedTodoId}
-          />
-        ))}
+        {todos.map(todo => {
+          const isSelected = (selectedTodoId)
+            ? todo.id === selectedTodoId
+            : false;
+
+          return (
+            <TodoInfo
+              isSelected={isSelected}
+              key={todo.id}
+              todo={todo}
+              onSelectTodo={selectTodo}
+            />
+          );
+        })}
       </tbody>
     </table>
   );

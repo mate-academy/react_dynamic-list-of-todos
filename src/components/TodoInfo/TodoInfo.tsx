@@ -3,14 +3,14 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
+  isSelected: boolean;
   todo: Todo;
-  selectedTodoId: number;
   onSelectTodo: (id: number) => void;
 };
 
 export const TodoInfo: React.FC<Props> = ({
+  isSelected,
   todo,
-  selectedTodoId,
   onSelectTodo,
 }) => {
   const {
@@ -49,9 +49,9 @@ export const TodoInfo: React.FC<Props> = ({
           onClick={() => onSelectTodo(id)}
         >
           <span className="icon">
-            <i className={classNames({
-              'far fa-eye-slash': selectedTodoId === id,
-              'far fa-eye': selectedTodoId !== id,
+            <i className={classNames('far', {
+              'fa-eye-slash': isSelected,
+              'fa-eye': !isSelected,
             })}
             />
           </span>
