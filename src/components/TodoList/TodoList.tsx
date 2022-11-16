@@ -39,7 +39,6 @@ export const TodoList: FC<Props> = memo(({
           <tr
             key={id}
             data-cy="todo"
-            className=""
           >
             <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
