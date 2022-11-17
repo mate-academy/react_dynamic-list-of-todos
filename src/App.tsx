@@ -45,7 +45,11 @@ export const App: React.FC = () => {
 
     const lowerQuery = query.toLowerCase();
 
-    allTodos = allTodos.filter(todo => todo.title.toLowerCase().includes(lowerQuery));
+    allTodos = allTodos.filter(todo => {
+      const lowerTitle = todo.title.toLowerCase();
+
+      return lowerTitle.includes(lowerQuery);
+    });
 
     setTodos(allTodos);
   };
