@@ -8,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Categories } from './types/Categories';
 
 export const App: FC = () => {
   // Category block
@@ -46,9 +47,9 @@ export const App: FC = () => {
     const isTitleIncludeQuery = titleLowerCase.includes(queryLowerCase);
 
     switch (category) {
-      case 'completed':
+      case Categories.COMPLETED:
         return todo.completed && isTitleIncludeQuery;
-      case 'active':
+      case Categories.ACTIVE:
         return !todo.completed && isTitleIncludeQuery;
       default:
         return isTitleIncludeQuery;

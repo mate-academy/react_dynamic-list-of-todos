@@ -35,6 +35,12 @@ export const TodoList: React.FC<Props> = ({
           completed,
         } = todo;
 
+        const isTextSuccessStyle = completed
+          ? 'has-text-success'
+          : 'has-text-danger';
+
+        const isTodoSelectedStyle = selectedTodo?.id === id;
+
         return (
           <tr
             data-cy="todo"
@@ -52,11 +58,7 @@ export const TodoList: React.FC<Props> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={cn({
-                'has-text-success': completed,
-                'has-text-danger': !completed,
-              })}
-              >
+              <p className={isTextSuccessStyle}>
                 {title}
               </p>
             </td>
@@ -72,8 +74,8 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <i className={cn('far', {
-                  'fa-eye': selectedTodo?.id !== todo.id,
-                  'fa-eye-slash': selectedTodo?.id === todo.id,
+                  'fa-eye': !isTodoSelectedStyle,
+                  'fa-eye-slash': isTodoSelectedStyle,
                 })}
                 />
               </button>
