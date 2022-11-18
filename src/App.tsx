@@ -6,6 +6,8 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+import { FilterType } from './types/FilterType';
+
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { TodoFilter } from './components/TodoFilter';
@@ -14,31 +16,31 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectStatus, setSelectStatus] = useState('all');
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [filterType, setFilterType] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todoId, setTodoId] = useState(0);
-  const [load, setLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  async function loadingTodosFromServer() {
+  async function loadTodosFromServer() {
     const getTodosFromServer = await getTodos();
 
     setTodos(getTodosFromServer);
-    setLoad(false);
+    setIsLoading(false);
   }
 
   useEffect(() => {
-    loadingTodosFromServer();
+    loadTodosFromServer();
   }, []);
 
-  const filtredTodos = () => {
+  const getFilteredTodos = () => {
     const toFilter = todos.filter((item) => {
       const queryToLowerCase = query.toLowerCase();
       const filterInput = item.title.toLowerCase().includes(queryToLowerCase);
 
-      switch (selectStatus) {
-        case 'active':
+      switch (filterType) {
+        case FilterType.Active:
           return !item.completed && filterInput;
-        case 'completed':
+        case FilterType.Completed:
           return item.completed && filterInput;
         default:
           return filterInput;
@@ -59,16 +61,16 @@ export const App: React.FC = () => {
               <TodoFilter
                 setQuery={setQuery}
                 query={query}
-                setSelectStatus={setSelectStatus}
+                setFilterType={setFilterType}
               />
             </div>
 
             <div className="block">
-              {load && (
+              {isLoading && (
                 <Loader />
               )}
               <TodoList
-                todos={filtredTodos()}
+                todos={getFilteredTodos()}
                 setSelectedTodo={setSelectedTodo}
                 setSelectedTodoId={setTodoId}
                 selectedTodoId={todoId}

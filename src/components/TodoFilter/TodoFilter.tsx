@@ -1,14 +1,14 @@
 type Props = {
   setQuery: (value: string) => void,
   query: string,
-  setSelectStatus: (value: string) => void,
+  setFilterType: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = (
   {
     setQuery,
     query,
-    setSelectStatus,
+    setFilterType,
   },
 ) => {
   return (
@@ -18,7 +18,7 @@ export const TodoFilter: React.FC<Props> = (
           <select
             data-cy="statusSelect"
             onChange={(event) => {
-              setSelectStatus(event.target.value);
+              setFilterType(event.target.value);
             }}
           >
             <option value="all">All</option>
