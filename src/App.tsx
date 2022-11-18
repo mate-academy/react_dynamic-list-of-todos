@@ -14,13 +14,24 @@ export const App: React.FC = () => {
   const [todosFiltered, setTodosFiltered] = useState<Todo[]>(todos);
   const [modalUserId, setModalUserId] = useState<number>(0);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+
+  const loadTodos = async () => {
+    setIsLoad(true);
+
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+    } catch (error) {
+      throw new Error(`There is an ${error}`);
+    } finally {
+      setIsLoad(false);
+    }
+  };
 
   useEffect(() => {
-    getTodos()
-      .then(response => {
-        setTodos(response);
-        setTodosFiltered(response);
-      });
+    loadTodos();
   }, []);
 
   const handleChoosenTodo = (todoId: number, userId: number) => {
@@ -39,22 +50,22 @@ export const App: React.FC = () => {
               <TodoFilter setTodosFiltered={setTodosFiltered} todos={todos} />
             </div>
 
-            <div className="block">
-              {(todos.length === 0) ? (
-                <Loader />
-              ) : (
+            {isLoad ? (
+              <Loader />
+            ) : (
+              <div className="block">
                 <TodoList
                   todos={todosFiltered}
                   handleChoosenTodo={handleChoosenTodo}
                   selectedTodoId={selectedTodoId}
                 />
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {modalUserId !== 0 && (
+      {modalUserId && (
         <TodoModal
           userId={modalUserId}
           handleChoosenTodo={handleChoosenTodo}

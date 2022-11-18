@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { ComplitedStatus } from '../../types/СomplitedStatus';
 
 type Props = {
   setTodosFiltered: (todos: Todo[]) => void;
@@ -11,25 +12,28 @@ export const TodoFilter = React.memo<Props>(
     const [query, setQuery] = useState('');
     const [complitedStatus, setComplitedStatus] = useState('all');
 
-    const filtrationTodos = (title = query, status = complitedStatus) => {
-      setQuery(title);
-      setComplitedStatus(status);
-
+    const filtrationTodos = () => {
       const filteredByTitle = [...todos]
-        .filter(todo => todo.title.toLowerCase().includes(title.toLowerCase()));
+        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
       const filteredByComplite = filteredByTitle.filter(todo => {
-        switch (status) {
-          case 'active':
+        switch (complitedStatus) {
+          case ComplitedStatus.ACTIVE:
             return !todo.completed;
-          case 'completed':
+          case ComplitedStatus.COMPLETED:
             return todo.completed;
           default:
             return todo;
         }
       });
 
-      setTodosFiltered(filteredByComplite);
+      return filteredByComplite;
+    };
+
+    setTodosFiltered(filtrationTodos());
+
+    const resetForm = () => {
+      setQuery('');
     };
 
     return (
@@ -38,11 +42,12 @@ export const TodoFilter = React.memo<Props>(
           <span className="select">
             <select
               data-cy="statusSelect"
-              onChange={(event) => filtrationTodos(query, event.target.value)}
+              value={complitedStatus}
+              onChange={(event) => setComplitedStatus(event.target.value)}
             >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
+              <option value={ComplitedStatus.ALL}>All</option>
+              <option value={ComplitedStatus.ACTIVE}>Active</option>
+              <option value={ComplitedStatus.COMPLETED}>Completed</option>
             </select>
           </span>
         </p>
@@ -54,25 +59,23 @@ export const TodoFilter = React.memo<Props>(
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={(event) => filtrationTodos(
-              event.target.value, complitedStatus,
-            )}
+            onChange={(event) => setQuery(event.target.value)}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />
           </span>
 
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {query && (
+          {query && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
                 aria-label="label"
-                onClick={() => filtrationTodos('', complitedStatus)}
+                onClick={resetForm}
               />
-            )}
-          </span>
+            </span>
+          )}
         </p>
       </form>
     );

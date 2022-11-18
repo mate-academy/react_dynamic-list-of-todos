@@ -20,7 +20,11 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userId).then(setUser);
+    getUser(userId)
+      .then(setUser)
+      .catch(error => {
+        throw new Error(`User wasn't found ${error}`);
+      });
   }, []);
 
   const choosenTodo = todos.find(todo => todo.id === selectedTodoId);
