@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectTodo(): void;
+  selectTodo: any;
   // handleClick():any;
   // getTodos():any;
 };

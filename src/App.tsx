@@ -13,6 +13,7 @@ export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState([]);
   // const [allUsers, setAllUsers] = useState([]);
   const [userId, setUserId] = useState(0);
+  const [isLoader, setIsLoader] = useState(false);
   // const [user, setUser] = useState(null);
 
   const BASE_URL = 'https://mate-academy.github.io'
@@ -37,6 +38,7 @@ export const App: React.FC = () => {
 
   const handleclick = (id: any) => {
     setUserId(id);
+    setIsLoader(true);
   };
 
   return (
@@ -51,7 +53,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+              {isLoader && (
+                <Loader />
+              )}
+
               <TodoList
                 todos={allTodos}
                 selectTodo={handleclick}
@@ -62,8 +67,10 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+      {userId && (
+        <TodoModal isLoader={isLoader} />
+      )}
 
-      <TodoModal />
     </>
   );
 };
