@@ -31,7 +31,11 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
                 <td className="is-vcentered">{todo.id}</td>
                 <td className="is-vcentered" />
                 <td className="is-vcentered is-expanded">
-                  <p className="has-text-danger">{todo.title}</p>
+                  {todo.completed ? (
+                    <p className="has-text-success">{todo.title}</p>
+                  ) : (
+                    <p className="has-text-danger">{todo.title}</p>
+                  )}
                 </td>
                 <td className="has-text-right is-vcentered">
                   <button

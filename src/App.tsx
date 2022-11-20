@@ -7,14 +7,13 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // const [loaderState, setLoaderState] = useState(false);
   const [allTodos, setAllTodos] = useState([]);
-  // const [allUsers, setAllUsers] = useState([]);
-  const [userId, setUserId] = useState(0);
-  const [isLoader, setIsLoader] = useState(false);
-  // const [user, setUser] = useState(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const selectedTodo: Todo | null = allTodos.find((el: Todo) => el.id === selectedTodoId) || null;
 
   const BASE_URL = 'https://mate-academy.github.io'
   + '/react_dynamic-list-of-todos/api';
@@ -30,15 +29,18 @@ export const App: React.FC = () => {
   const getTodos = () => request('/todos.json');
 
   useEffect(() => {
+    setIsLoaded(true);
     getTodos()
       .then(todos => {
         setAllTodos(todos);
+      })
+      .finally(() => {
+        setIsLoaded(false);
       });
   }, []);
 
   const handleclick = (id: any) => {
-    setUserId(id);
-    setIsLoader(true);
+    setSelectedTodoId(id);
   };
 
   return (
@@ -53,57 +55,25 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoader && (
+              {isLoaded && (
                 <Loader />
               )}
 
               <TodoList
                 todos={allTodos}
                 selectTodo={handleclick}
-                // handleClick={handleClick}
-                // getTodos={getTodos}
               />
             </div>
           </div>
         </div>
       </div>
-      {userId && (
-        <TodoModal isLoader={isLoader} />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodoId={setSelectedTodoId}
+        />
       )}
 
     </>
   );
 };
-
-// const getTodos = (id) => request(`/todos.json/${id}`);
-// const getUsers = () => request('/users/1.json');
-// function componentDidMount() {
-//   throw new Error('Function not implemented.');
-// }
-// getUsers()
-//   .then(user => {
-//     console.log(user);
-//   });
-
-// const handleClick = () => {
-//   getTodos()
-//     .then(todos => {
-//       return todos;
-//     });
-// };
-
-// getUsers()
-//   .then(user => {
-//     console.log(user);
-//   });
-
-// const handleClick = () => {
-//   getUsers()
-//     .then(todos => {
-//       return todos;
-//     });
-// };
-
-// if(!user) {
-
-// }
