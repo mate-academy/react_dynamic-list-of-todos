@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  // const [query, setQuery] = useState('');
   const [allTodos, setAllTodos] = useState([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -51,7 +52,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter allTodos={allTodos} />
+              <TodoFilter
+                allTodos={allTodos}
+                setAllTodos={setAllTodos}
+              />
             </div>
 
             <div className="block">

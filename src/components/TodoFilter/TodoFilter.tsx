@@ -4,21 +4,37 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   allTodos:Todo[];
+  setAllTodos: any;
 };
 
-export const TodoFilter: React.FC<Props> = ({ allTodos }) => {
+export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
   const [query, setQuery] = useState('');
-  const [visibleTodos, setVisibleTodos] = useState(allTodos);
 
   const searchTitle = (input: string) => {
     const inputToLowercase = input.toLocaleLowerCase();
 
-    const todos = visibleTodos.filter((todo: Todo) => (
+    const todos = allTodos.filter((todo: Todo) => (
       todo.title.toLocaleLowerCase().includes(inputToLowercase)
     ));
 
-    setVisibleTodos(todos);
+    setAllTodos(todos);
   };
+
+  const handleClick = () => {
+    setQuery(''),
+    setAllTodos([]),
+  }
+
+// 1. find all completed
+// 2. find all not completed
+
+//   if (value === all) {
+//     return setAllTodos([])
+//   } else if (value === active) {
+//     return 1
+//   } else {
+//     return 2
+//   }
 
   return (
     <form className="field has-addons">
@@ -54,6 +70,7 @@ export const TodoFilter: React.FC<Props> = ({ allTodos }) => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={handleClick}
           />
         </span>
       </p>
