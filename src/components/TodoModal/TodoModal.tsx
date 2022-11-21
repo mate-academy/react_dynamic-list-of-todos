@@ -10,17 +10,17 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
-  const [user, setUser] = useState<User>();
+  const [activeUser, setActiveUser] = useState<User>();
 
   useEffect(() => {
-    getUser(todo.userId).then(users => setUser(users));
+    getUser(todo.userId).then(user => setActiveUser(user));
   }, [todo.id]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!activeUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -61,8 +61,8 @@ export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${activeUser.email}`}>
+                {activeUser.name}
               </a>
             </p>
           </div>
