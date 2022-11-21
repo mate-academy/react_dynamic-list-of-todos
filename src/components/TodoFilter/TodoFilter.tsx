@@ -10,10 +10,8 @@ export const TodoFilter: React.FC<Props> = ({ todos }) => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
 
-  let filteredTodos = todos.filter((todo: { title: string }) => todo.title
-    .toLowerCase().includes(query.toLowerCase()));
-
-  filteredTodos = filteredTodos.filter((todo) => {
+  const filteredTodos = todos.filter((todo) => todo.title
+    .toLowerCase().includes(query.toLowerCase())).filter((todo) => {
     if (filter === 'active') {
       return !todo.completed;
     }

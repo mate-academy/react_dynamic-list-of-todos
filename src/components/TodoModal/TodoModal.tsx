@@ -27,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false);
 
   useEffect(() => {
-    getUser(select?.userId)
+    getUser(select?.userId || 0)
       .then((userFromServer) => {
         setUser(userFromServer);
         setIsUserInfoLoaded(true);
@@ -75,7 +75,7 @@ export const TodoModal: React.FC<Props> = ({
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={
-                  select?.completed === true
+                  select?.completed
                     ? 'has-text-success'
                     : 'has-text-danger'
                 }
