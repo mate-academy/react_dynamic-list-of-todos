@@ -21,20 +21,9 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
   };
 
   const handleClick = () => {
-    setQuery(''),
-    setAllTodos([]),
-  }
-
-// 1. find all completed
-// 2. find all not completed
-
-//   if (value === all) {
-//     return setAllTodos([])
-//   } else if (value === active) {
-//     return 1
-//   } else {
-//     return 2
-//   }
+    setQuery('');
+    // setAllTodos(allTodos);
+  };
 
   return (
     <form className="field has-addons">
@@ -77,3 +66,14 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
     </form>
   );
 };
+
+// 1. find all completed
+// 2. find all not completed
+
+//   if (value === all) {
+//     return setAllTodos([])
+//   } else if (value === active) {
+//     return 1
+//   } else {
+//     return 2
+//   }
