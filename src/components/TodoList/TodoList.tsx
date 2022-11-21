@@ -9,6 +9,14 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
+  // const completedTodo = todos.filter((el: Todo) => el.completed);
+  // const completedTodo = todos.filter((el: Todo) => el.completed === true);
+  // const notCompletedTodo = todos.filter((el: Todo) => !el.completed);
+  // const notCompletedTodo = todos.filter((el: Todo) => el.completed === false);
+
+  // console.log(completedTodo)
+  // console.log(notCompletedTodo)
+
   return (
     <>
       <table className="table is-narrow is-fullwidth">
@@ -29,7 +37,13 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
             todo => (
               <tr data-cy="todo" className="">
                 <td className="is-vcentered">{todo.id}</td>
-                <td className="is-vcentered" />
+                <td className="is-vcentered">
+                  {todo.completed && (
+                    <span className="icon">
+                      <i className="fas fa-check" />
+                    </span>
+                  )}
+                </td>
                 <td className="is-vcentered is-expanded">
                   {todo.completed ? (
                     <p className="has-text-success">{todo.title}</p>

@@ -25,6 +25,20 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
     // setAllTodos(allTodos);
   };
 
+  // switch (key) {
+  //   case value === all:
+  //     return setAllTodos(allTodos);
+
+  //   case value === active:
+  //     return setAllTodos(allTodos.completed !== true);
+
+  //   case value === completed:
+  //     return setAllTodos(allTodos.completed === true );
+
+  //   default:
+  //     break;
+  // }
+
   return (
     <form className="field has-addons">
       <p className="control">
