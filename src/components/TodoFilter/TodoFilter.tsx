@@ -8,7 +8,14 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
+  const [option, setOption] = useState('All');
   const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(allTodos);
+
+  // const [filter, setFilter] = useState(allTodos);
+  // const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
+  // const [filterNotCompletedTodos, setFilterNotCompletedTodos]
+  // = useState(allTodos);
 
   const searchTitle = (input: string) => {
     const inputToLowercase = input.toLocaleLowerCase();
@@ -25,25 +32,46 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
     // setAllTodos(allTodos);
   };
 
-  // switch (key) {
-  //   case value === all:
-  //     return setAllTodos(allTodos);
+  const completedTodo = filter
+    .filter(el => el.completed === true);
+  const notCompletedTodo = filter
+    .filter(el => el.completed === false);
 
-  //   case value === active:
-  //     return setAllTodos(allTodos.completed !== true);
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setOption(event.target.value);
 
-  //   case value === completed:
-  //     return setAllTodos(allTodos.completed === true );
+    if (option === 'all') {
+      setFilter(filter);
+    } else if (option === 'active') {
+      setFilter(notCompletedTodo);
+    } else {
+      setFilter(completedTodo);
+    }
 
-  //   default:
-  //     break;
-  // }
+    //   switch () {
+    //     case option === 'all':
+    //       return setAllTodos(allTodos);
+
+    //     case option === 'active':
+    //       return setAllTodos(notCompletedTodo);
+
+    //     case option === 'completed':
+    //       return setAllTodos(completedTodo);
+
+    //     default:
+    //       break;
+    //   }
+  };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select
+            data-cy="statusSelect"
+            value={option}
+            onChange={handleChange}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -91,3 +119,17 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
 //   } else {
 //     return 2
 //   }
+
+// switch (key) {
+//   case value === all:
+//     return setAllTodos(allTodos);
+
+//   case value === active:
+//     return setAllTodos(allTodos.completed !== true);
+
+//   case value === completed:
+//     return setAllTodos(allTodos.completed === true );
+
+//   default:
+//     break;
+// }

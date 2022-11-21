@@ -3,7 +3,7 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { UserInfo } from '../UserInfo';
-
+//
 type Props = {
   selectedTodo: Todo;
   setSelectedTodoId: any;
