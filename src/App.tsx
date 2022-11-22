@@ -13,15 +13,18 @@ export const App: React.FC = () => {
   const visibleTodos = [...todos];
 
   useEffect(() => {
-    getTodos()
-      .then((todosFromServer) => {
-        try {
-          setIsLoading(false);
-          setTodos(todosFromServer);
-        } catch (error: any) {
-          Error(error);
-        }
-      });
+    const fetchTodos = async () => {
+      try {
+        const dataTodos = await getTodos();
+
+        setIsLoading(false);
+        setTodos(dataTodos);
+      } catch (error: any) {
+        Error(error);
+      }
+    };
+
+    fetchTodos();
   }, []);
 
   return (

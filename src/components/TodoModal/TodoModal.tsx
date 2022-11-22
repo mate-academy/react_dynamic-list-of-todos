@@ -33,7 +33,8 @@ export const TodoModal: React.FC<Props> = ({
         setIsUserInfoLoaded(true);
       })
       .catch((error) => {
-        throw new Error(error);
+        // eslint-disable-next-line no-alert
+        alert(error.message);
       });
   }, []);
 

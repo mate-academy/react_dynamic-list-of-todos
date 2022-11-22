@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList';
 
@@ -6,26 +6,44 @@ type Props = {
   todos: Todo[];
 };
 
+enum FilterStatus {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({ todos }) => {
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.ALL);
+
+  const lowQuery = query.toLowerCase();
 
   const filteredTodos = todos.filter((todo) => todo.title
-    .toLowerCase().includes(query.toLowerCase())).filter((todo) => {
-    if (filter === 'active') {
+    .toLowerCase().includes(lowQuery)).filter((todo) => {
+    if (filter === FilterStatus.ACTIVE) {
       return !todo.completed;
     }
 
-    if (filter === 'completed') {
+    if (filter === FilterStatus.COMPLETED) {
       return todo.completed;
     }
 
     return 1;
   });
 
-  const makeFiltered = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => setFilter(event.target.value);
+  const makeFiltered = (event: ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case FilterStatus.ACTIVE:
+        setFilter(FilterStatus.ACTIVE);
+        break;
+      case FilterStatus.COMPLETED:
+        setFilter(FilterStatus.COMPLETED);
+        break;
+      default:
+        setFilter(FilterStatus.ALL);
+        break;
+    }
+  };
 
   return (
     <>
@@ -46,7 +64,6 @@ export const TodoFilter: React.FC<Props> = ({ todos }) => {
             type="text"
             className="input"
             placeholder="Search..."
-            defaultValue=""
             value={query}
             onChange={(event) => {
               setQuery(event?.target.value);
