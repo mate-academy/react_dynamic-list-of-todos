@@ -11,9 +11,9 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
   const [option, setOption] = useState('All');
   const [query, setQuery] = useState('');
 
-  const [todosToFilter, setTodosToFilter] = useState(allTodos);
   const [filteredTodos, setFilteredTodos] = useState(allTodos);
-
+  
+  // const [todosToFilter, setTodosToFilter] = useState(allTodos);
   // const [filter, setFilter] = useState(allTodos);
   // const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
   // const [filterNotCompletedTodos, setFilterNotCompletedTodos]
@@ -34,20 +34,20 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
     // setAllTodos(allTodos);
   };
 
-  const completedTodo = todosToFilter
+  const completedTodo = allTodos
     .filter(el => el.completed === true);
-  const notCompletedTodo = todosToFilter
+  const notCompletedTodo = allTodos
     .filter(el => el.completed === false);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setOption(event.target.value);
 
-    if (option === 'all') {
-      setTodosToFilter(todosToFilter);
-    } else if (option === 'active') {
+    if (option === 'active') {
       setFilteredTodos(notCompletedTodo);
-    } else {
+    } else if (option === 'completed') {
       setFilteredTodos(completedTodo);
+    } else {
+      setAllTodos(allTodos);
     }
 
     //   switch () {
