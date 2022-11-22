@@ -12,7 +12,7 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
   const [query, setQuery] = useState('');
 
   const [filteredTodos, setFilteredTodos] = useState(allTodos);
-  
+
   // const [todosToFilter, setTodosToFilter] = useState(allTodos);
   // const [filter, setFilter] = useState(allTodos);
   // const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
@@ -34,35 +34,36 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
     // setAllTodos(allTodos);
   };
 
-  const completedTodo = allTodos
-    .filter(el => el.completed === true);
-  const notCompletedTodo = allTodos
-    .filter(el => el.completed === false);
-
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setOption(event.target.value);
 
     if (option === 'active') {
-      setFilteredTodos(notCompletedTodo);
+      setFilteredTodos(allTodos.filter(el => el.completed));
     } else if (option === 'completed') {
-      setFilteredTodos(completedTodo);
+      setFilteredTodos(allTodos.filter(el => !el.completed));
     } else {
-      setAllTodos(allTodos);
+      setFilteredTodos(allTodos);
     }
 
-    //   switch () {
-    //     case option === 'all':
-    //       return setAllTodos(allTodos);
+    // if (option === 'active') {
+    //   return setFilteredTodos(allTodos.filter(el => el.completed));
+    // }
 
-    //     case option === 'active':
-    //       return setAllTodos(notCompletedTodo);
+    // switch (option) {
+    //   case 'all':
+    //     return setFilteredTodos(allTodos);
 
-    //     case option === 'completed':
-    //       return setAllTodos(completedTodo);
+    //   case 'active':
+    //     return setFilteredTodos(allTodos.filter(el => el.completed));
 
-    //     default:
-    //       break;
-    //   }
+    //   case 'completed':
+    //     return setFilteredTodos(allTodos.filter(el => !el.completed));
+
+    //   default:
+    //     break;
+    // }
+
+    // return filteredTodos;
   };
 
   return (
