@@ -10,18 +10,22 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const ALL = 'all';
+const ACTIVE = 'active';
+const COMPLETED = 'completed';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('All');
+  const [status, setStatus] = useState(ALL);
   const [query, setQuery] = useState('');
 
   const filteredTodos = todos.filter((todo) => {
-    if (status === 'Active' && todo.completed) {
+    if (status === ACTIVE && todo.completed) {
       return false;
     }
 
-    if (status === 'Completed' && !todo.completed) {
+    if (status === COMPLETED && !todo.completed) {
       return false;
     }
 
@@ -49,7 +53,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeQuery={setQuery}
                 onChangeStatus={setStatus}
-                statusOptions={['all', 'active', 'completed']}
+                statusOptions={[ALL, ACTIVE, COMPLETED]}
                 query={query}
               />
             </div>
