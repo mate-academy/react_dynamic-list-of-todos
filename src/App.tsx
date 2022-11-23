@@ -49,7 +49,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeQuery={setQuery}
                 onChangeStatus={setStatus}
-                statusOptions={['All', 'Active', 'Completed']}
+                statusOptions={['all', 'active', 'completed']}
                 query={query}
               />
             </div>

@@ -11,7 +11,6 @@ export const TodoFilter: React.FC<Props> = ({
   statusOptions,
   query,
 }) => (
-
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -21,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
         >
           {statusOptions.map(status => (
             <option value={status}>
-              {status}
+              {status.charAt(0).toUpperCase() + status.slice(1)}
             </option>
           ))}
         </select>
