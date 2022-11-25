@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   const [userTodos, setUserTodos] = useState<Todo[]>([]);
   const [filterSelection, setFilterSelection] = useState('all');
   const [query, setQuery] = useState('');
-  const [information, setInformation] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [selectTodo, setSelectTodo] = useState<Todo>();
   const [activeTodoID, setActiveTodoID] = useState(0);
 
@@ -47,8 +47,14 @@ export const App: React.FC = () => {
     return userTodos.filter(todo => (todo.title).toLowerCase().includes(query));
   }, [userTodos, query]);
 
+  const handleClick = (todo: Todo) => {
+    setIsActive(true);
+    setSelectTodo(todo);
+    setActiveTodoID(todo.id);
+  };
+
   const closeWindow = useCallback(() => {
-    setInformation(false);
+    setIsActive(false);
     setActiveTodoID(0);
   }, []);
 
@@ -75,14 +81,12 @@ export const App: React.FC = () => {
 
             <div className="block">
               {userTodos.length === 0
-                ? (<Loader />
-                ) : (
+                ? (<Loader />)
+                : (
                   <TodoList
                     todos={visibleTodos}
-                    seeInformation={setInformation}
-                    selectedTodo={setSelectTodo}
+                    handleClick={handleClick}
                     activeID={activeTodoID}
-                    selectedTodoID={setActiveTodoID}
                   />
                 )}
             </div>
@@ -90,7 +94,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {information && selectTodo && (
+      {isActive && selectTodo && (
         <TodoModal
           todo={selectTodo}
           reset={closeWindow}

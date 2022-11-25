@@ -4,18 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  seeInformation: (value: boolean) => void;
-  selectedTodo: (value: Todo) => void;
+  handleClick: (value: Todo) => void;
   activeID: number
-  selectedTodoID: (value: number) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  seeInformation,
-  selectedTodo,
+  handleClick,
   activeID,
-  selectedTodoID,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -48,13 +44,14 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
-              ) : (
-                ''
-              )}
+              )
+              : ('')}
           </td>
           <td className="is-vcentered is-expanded">
-            {/* eslint-disable-next-line max-len */}
-            <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
+            <p className={todo.completed
+              ? 'has-text-success'
+              : 'has-text-danger'}
+            >
               {todo.title}
             </p>
           </td>
@@ -63,18 +60,14 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => {
-                seeInformation(true);
-                selectedTodo(todo);
-                selectedTodoID(todo.id);
-              }}
+              onClick={() => handleClick(todo)}
             >
               <span className="icon">
-                {activeID !== todo.id ? (
-                  <i className="far fa-eye" />
-                ) : (
-                  <i className="far fa-eye-slash" />
-                )}
+                {
+                  activeID !== todo.id
+                    ? (<i className="far fa-eye" />)
+                    : (<i className="far fa-eye-slash" />)
+                }
               </span>
             </button>
           </td>
