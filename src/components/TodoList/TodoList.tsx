@@ -23,8 +23,7 @@ export const TodoList: React.FC<Props> = ({
           </span>
         </th>
         <th>Title</th>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <th />
+        <th aria-label="gap" />
       </tr>
     </thead>
 
@@ -51,9 +50,10 @@ export const TodoList: React.FC<Props> = ({
                 : ('')}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={todo.completed
-                ? 'has-text-success'
-                : 'has-text-danger'}
+              <p className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
               >
                 {todo.title}
               </p>
@@ -66,11 +66,8 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  {
-                    !isActive
-                      ? (<i className="far fa-eye" />)
-                      : (<i className="far fa-eye-slash" />)
-                  }
+                  {!isActive && (<i className="far fa-eye" />)}
+                  {isActive && (<i className="far fa-eye-slash" />)}
                 </span>
               </button>
             </td>
