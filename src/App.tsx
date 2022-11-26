@@ -72,8 +72,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {selectedTodo.id !== 0
+      {selectedTodo.id
         && <TodoModal todo={selectedTodo} closeModal={closeModal} />}
     </>
   );

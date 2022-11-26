@@ -17,26 +17,34 @@ export const TodoFilter: React.FC<Props> = ({
     setSearchValue(value);
   };
 
+  enum TodoStatus {
+    All = 'all',
+    Active = 'active',
+    Completed = 'completed',
+  }
+
+  const onSortTodos = (event: string) => {
+    switch (event) {
+      case TodoStatus.Active:
+        return handleChangeTodos(getActiveTodos());
+      case TodoStatus.Completed:
+        return handleChangeTodos(getCompletedTodos());
+      default:
+        return handleChangeTodos(getTodos());
+    }
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => {
-              switch (event.target.value) {
-                case 'active':
-                  return handleChangeTodos(getActiveTodos());
-                case 'completed':
-                  return handleChangeTodos(getCompletedTodos());
-                default:
-                  return handleChangeTodos(getTodos());
-              }
-            }}
+            onChange={(event) => onSortTodos(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.All}>{TodoStatus.All}</option>
+            <option value={TodoStatus.Active}>{TodoStatus.Active}</option>
+            <option value={TodoStatus.Completed}>{TodoStatus.Completed}</option>
           </select>
         </span>
       </p>
@@ -56,10 +64,10 @@ export const TodoFilter: React.FC<Props> = ({
 
         {searchValue.length > 0 && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
+              aria-label="delete"
               className="delete"
               onClick={() => changeSearchValue('')}
             />
