@@ -81,8 +81,8 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         <TodoModal
           todos={todos}
           setOpen={setOpened}
-          onSelect={selectedTodoId}
-          setOnSelect={setSelectedTodoId}
+          isSelect={selectedTodoId}
+          setIsSelect={setSelectedTodoId}
         />
       )}
     </>

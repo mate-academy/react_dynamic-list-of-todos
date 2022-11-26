@@ -7,23 +7,18 @@ import { Loader } from '../Loader/Loader';
 type Props = {
   todos: Todo[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOnSelect: React.Dispatch<React.SetStateAction<number>>;
-  onSelect: number;
+  setIsSelect: React.Dispatch<React.SetStateAction<number>>;
+  isSelect: number;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todos,
   setOpen,
-  setOnSelect,
-  onSelect,
+  setIsSelect,
+  isSelect,
 }) => {
-  const select = todos.find((todo) => todo.id === onSelect);
-  const [user, setUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
+  const select = todos.find((todo) => todo.id === isSelect);
+  const [user, setUser] = useState<User>();
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false);
 
   useEffect(() => {
@@ -51,8 +46,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #
-              {onSelect}
+              {`Todo #${isSelect}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -62,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 setOpen(false);
-                setOnSelect(-1);
+                setIsSelect(-1);
               }}
             />
           </header>
@@ -86,7 +80,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

@@ -18,17 +18,16 @@ export const TodoFilter: React.FC<Props> = ({ todos }) => {
 
   const lowQuery = query.toLowerCase();
 
-  const filteredTodos = todos.filter((todo) => todo.title
-    .toLowerCase().includes(lowQuery)).filter((todo) => {
+  const filteredTodos = todos.filter((todo) => {
     if (filter === FilterStatus.ACTIVE) {
-      return !todo.completed;
+      return !todo.completed && todo.title.toLowerCase().includes(lowQuery);
     }
 
     if (filter === FilterStatus.COMPLETED) {
-      return todo.completed;
+      return todo.completed && todo.title.toLowerCase().includes(lowQuery);
     }
 
-    return 1;
+    return todo.title.toLowerCase().includes(lowQuery);
   });
 
   const makeFiltered = (event: ChangeEvent<HTMLSelectElement>) => {
