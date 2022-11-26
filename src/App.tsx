@@ -49,11 +49,11 @@ export const App: React.FC = () => {
     .filter(todo => todoCheck(todo))
     .filter(todo => {
       switch (status) {
-        case 'all':
+        case TodoStatus.ALL:
           return todo;
-        case 'active':
+        case TodoStatus.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case TodoStatus.COMPLETED:
           return todo.completed;
         default:
           return todo;

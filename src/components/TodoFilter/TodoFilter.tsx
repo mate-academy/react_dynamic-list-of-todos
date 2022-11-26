@@ -1,4 +1,5 @@
 import React from 'react';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   handleStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void,
@@ -9,7 +10,11 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  handleStatus, handleQuery, resetQuery, query, status,
+  handleStatus,
+  handleQuery,
+  resetQuery,
+  query,
+  status,
 }) => {
   return (
     <form
@@ -25,9 +30,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={status}
             onChange={handleStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.ALL}>All</option>
+            <option value={TodoStatus.ACTIVE}>Active</option>
+            <option value={TodoStatus.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

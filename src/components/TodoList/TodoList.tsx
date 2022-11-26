@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
         const currentSelectedTodo = todo === selectedTodo;
 
         return (
-          <tr data-cy="todo" key={todo.id} className="">
+          <tr data-cy="todo" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
