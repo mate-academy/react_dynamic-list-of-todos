@@ -4,19 +4,9 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   selectTodo: any;
-  // handleClick():any;
-  // getTodos():any;
 };
 
 export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
-  // const completedTodo = todos.filter((el: Todo) => el.completed);
-  // const completedTodo = todos.filter((el: Todo) => el.completed === true);
-  // const notCompletedTodo = todos.filter((el: Todo) => !el.completed);
-  // const notCompletedTodo = todos.filter((el: Todo) => el.completed === false);
-
-  // console.log(completedTodo)
-  // console.log(notCompletedTodo)
-
   return (
     <>
       <table className="table is-narrow is-fullwidth">
@@ -35,7 +25,11 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
         <tbody>
           {todos.map(
             todo => (
-              <tr data-cy="todo" className="">
+              <tr
+                data-cy="todo"
+                className=""
+                key={todo.id}
+              >
                 <td className="is-vcentered">{todo.id}</td>
                 <td className="is-vcentered">
                   {todo.completed && (
@@ -56,7 +50,6 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    // onClick={() => handleClick()}
                     onClick={() => {
                       selectTodo(todo.id);
                     }}
@@ -74,13 +67,3 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo }) => {
     </>
   );
 };
-
-// const [loaderState, setLoaderState] = useState(false);
-// const handleClick = () => {
-//   getTodos()
-//     .then(todos => {
-//       return todos;
-//     });
-
-//   setLoaderState(true);
-// };

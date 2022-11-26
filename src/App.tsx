@@ -10,8 +10,8 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // const [query, setQuery] = useState('');
   const [allTodos, setAllTodos] = useState([]);
+  const [filterTodos, setFilterTodos] = useState(allTodos);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const selectedTodo: Todo | null = allTodos.find((el: Todo) => el.id === selectedTodoId) || null;
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleclick = (id: any) => {
+  const handleclick = (id: number) => {
     setSelectedTodoId(id);
   };
 
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 allTodos={allTodos}
-                setAllTodos={setAllTodos}
+                setFilterTodos={setFilterTodos}
               />
             </div>
 
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
               )}
 
               <TodoList
-                todos={allTodos}
+                todos={filterTodos}
                 selectTodo={handleclick}
               />
             </div>

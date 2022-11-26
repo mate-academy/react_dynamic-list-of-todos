@@ -4,20 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   allTodos:Todo[];
-  setAllTodos: any;
+  setFilterTodos: any;
 };
 
-export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
-  const [option, setOption] = useState('All');
+export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
+  const [selection, setSelection] = useState('');
   const [query, setQuery] = useState('');
-
-  const [filteredTodos, setFilteredTodos] = useState(allTodos);
-
-  // const [todosToFilter, setTodosToFilter] = useState(allTodos);
-  // const [filter, setFilter] = useState(allTodos);
-  // const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
-  // const [filterNotCompletedTodos, setFilterNotCompletedTodos]
-  // = useState(allTodos);
+  // const [filteredTodos, setFilteredTodos] = useState(allTodos);
 
   const searchTitle = (input: string) => {
     const inputToLowercase = input.toLocaleLowerCase();
@@ -26,28 +19,28 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
       todo.title.toLocaleLowerCase().includes(inputToLowercase)
     ));
 
-    setAllTodos(todos);
+    setFilterTodos(todos);
   };
 
   const handleClick = () => {
     setQuery('');
-    // setAllTodos(allTodos);
+    setFilterTodos(allTodos);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOption(event.target.value);
+    setSelection(event.target.value);
 
-    if (option === 'active') {
-      setFilteredTodos(allTodos.filter(el => el.completed));
-    } else if (option === 'completed') {
-      setFilteredTodos(allTodos.filter(el => !el.completed));
+    let result = allTodos;
+
+    if (event.target.value === 'all') {
+      result = allTodos;
+    } else if (event.target.value === 'active') {
+      result = allTodos.filter(todo => !todo.completed);
     } else {
-      setFilteredTodos(allTodos);
+      result = allTodos.filter(todo => todo.completed);
     }
 
-    // if (option === 'active') {
-    //   return setFilteredTodos(allTodos.filter(el => el.completed));
-    // }
+    setFilterTodos(result);
 
     // switch (option) {
     //   case 'all':
@@ -72,7 +65,7 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={option}
+            value={selection}
             onChange={handleChange}
           >
             <option value="all">All</option>
@@ -136,3 +129,9 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setAllTodos }) => {
 //   default:
 //     break;
 // }
+
+// const [todosToFilter, setTodosToFilter] = useState(allTodos);
+// const [filter, setFilter] = useState(allTodos);
+// const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
+// const [filterNotCompletedTodos, setFilterNotCompletedTodos]
+// = useState(allTodos);
