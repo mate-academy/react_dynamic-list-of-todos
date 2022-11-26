@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getActiveTodos, getCompletedTodos, getTodos } from '../../api';
-import { Todo } from '../../types/Todo';
+import { Todo, TodoStatus } from '../../types/Todo';
 
 type Props = {
   changeQuery: (value: string) => void,
@@ -17,14 +17,8 @@ export const TodoFilter: React.FC<Props> = ({
     setSearchValue(value);
   };
 
-  enum TodoStatus {
-    All = 'all',
-    Active = 'active',
-    Completed = 'completed',
-  }
-
-  const onSortTodos = (event: string) => {
-    switch (event) {
+  const onSortTodos = (event: React.FormEvent<HTMLSelectElement>) => {
+    switch (event.currentTarget.value) {
       case TodoStatus.Active:
         return handleChangeTodos(getActiveTodos());
       case TodoStatus.Completed:
@@ -40,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => onSortTodos(event.target.value)}
+            onChange={onSortTodos}
           >
             <option value={TodoStatus.All}>{TodoStatus.All}</option>
             <option value={TodoStatus.Active}>{TodoStatus.Active}</option>
