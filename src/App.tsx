@@ -11,55 +11,56 @@ import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
 
-const TODOS_DEFAULT: Todo[] = [];
-
-const TODO_DEFAULT: Todo = {
-  id: 0,
-  title: '',
-  completed: false,
-  userId: 0,
-};
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState(TODOS_DEFAULT);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const TODO_DEFAULT: Todo = {
+    id: 0,
+    title: '',
+    completed: false,
+    userId: 0,
+  };
+
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
-  const [todo, setTodo] = useState(TODO_DEFAULT);
+  const [selectedTodo, setSelectedTodo] = useState(TODO_DEFAULT);
   const [statusFilter, setStatusFilter] = useState('all');
   const [titleFilter, setTitleFilter] = useState('');
 
-  useEffect(() => {
+  const loadData = () => {
     getTodos().then(result => {
-      setTodos(result);
+      setTodosFromServer(result);
       setVisibleTodos(result);
+      setIsTodosLoaded(true);
     });
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   useEffect(() => {
-    const selectedTodo = todos.find(elem => elem.id === todoId);
+    const todo = todosFromServer.find(elem => elem.id === todoId);
 
-    if (selectedTodo !== undefined) {
-      setTodo(selectedTodo);
+    if (todo !== undefined) {
+      setSelectedTodo(todo);
     }
   }, [todoId]);
 
   useEffect(() => {
-    let filteredTodos = [...todos].filter(todoItem => {
-      switch (statusFilter) {
-        case 'active':
-          return todoItem.completed === false;
-        case 'completed':
-          return todoItem.completed === true;
-        default:
-          return todoItem;
-      }
-    });
+    const query = titleFilter.toLowerCase();
 
-    filteredTodos = filteredTodos.filter(todoItem => {
-      const query = titleFilter.toLowerCase();
+    const filteredTodos = [...todosFromServer].filter(todoItem => {
       const title = todoItem.title.toLowerCase();
 
-      return title.includes(query);
+      switch (statusFilter) {
+        case 'active':
+          return todoItem.completed === false && title.includes(query);
+        case 'completed':
+          return todoItem.completed === true && title.includes(query);
+        default:
+          return title.includes(query);
+      }
     });
 
     setVisibleTodos(filteredTodos);
@@ -73,18 +74,28 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setStatusFilter={setStatusFilter} statusFilter={statusFilter} setTitleFilter={setTitleFilter} titleFilter={titleFilter} />
+              <TodoFilter
+                setStatusFilter={setStatusFilter}
+                statusFilter={statusFilter}
+                setTitleFilter={setTitleFilter}
+                titleFilter={titleFilter}
+              />
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
-              <TodoList todos={visibleTodos} todoId={todoId} setTodoId={setTodoId} />
+              {!isTodosLoaded && <Loader />}
+              {(isTodosLoaded && todosFromServer.length === 0) && (
+                <p>No todos yet!</p>
+              )}
+              {(isTodosLoaded && todosFromServer.length !== 0) && (
+                <TodoList todos={visibleTodos} todoId={todoId} setTodoId={setTodoId} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {todoId !== 0 && <TodoModal todo={todo} onModalClose={setTodoId} /> }
+      {todoId !== 0 && <TodoModal todo={selectedTodo} onModalClose={setTodoId} /> }
     </>
   );
 };

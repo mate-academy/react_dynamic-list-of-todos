@@ -28,9 +28,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user === USER_DEFAULT ? (
-        <Loader />
-      ) : (
+      {user !== USER_DEFAULT ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -69,6 +67,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
             </p>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );
