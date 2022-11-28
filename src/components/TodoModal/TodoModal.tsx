@@ -32,6 +32,10 @@ export const TodoModal: React.FC<Props> = memo(({
     loadUser();
   }, []);
 
+  const text = useCallback(() => {
+    return todo?.completed ? 'Done' : 'Planned';
+  }, [todo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -64,7 +68,7 @@ export const TodoModal: React.FC<Props> = memo(({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className="has-text-danger">{text()}</strong>
 
               {' by '}
 
