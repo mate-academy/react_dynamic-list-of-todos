@@ -13,18 +13,14 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
   const loadTodos = useCallback(async () => {
-    setIsLoadingTodos(true);
     const data = await getTodos();
 
     if (data.length !== 0) {
       setTodos(data);
-      setIsLoadingTodos(false);
     }
   }, []);
 
@@ -38,12 +34,9 @@ export const App: React.FC = () => {
     if (selected) {
       setSelectedTodo(selected);
     }
-
-    setIsModalOpen(true);
   };
 
   const handleClose = () => {
-    setIsModalOpen(false);
     setSelectedTodo(null);
   };
 
@@ -63,8 +56,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleSearchFilter = (filteredTodos: Todo[], query: string) => {
-    return filteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  const handleSearchFilter = (optionFilteredTodos: Todo[], query: string) => {
+    return optionFilteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
   };
 
   const filteredOptionTodos = handleOptionFilter(selectedOption);
@@ -87,7 +80,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadingTodos ? (
+              {!todos ? (
                 <Loader />
               ) : (
                 <TodoList
@@ -101,7 +94,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen && (
+      {selectedTodo && (
         <TodoModal
           onClose={handleClose}
           todo={selectedTodo}
