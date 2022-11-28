@@ -2,30 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  userId: number,
-  todoId: number,
-  todoTitle: string,
-  completed: boolean,
-  setUserId: React.Dispatch<React.SetStateAction<number>>,
-  setTodoId: React.Dispatch<React.SetStateAction<number>>,
+  selectedTodo: Todo,
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo>>,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
-  todoId,
-  todoTitle,
-  completed,
-  setUserId,
-  setTodoId,
+  selectedTodo,
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const selectedUser = await getUser(userId);
+      const selectedUser = await getUser(selectedTodo.userId);
 
       setUser(selectedUser);
       setIsLoaded(true);
@@ -45,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todoId}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -54,19 +47,23 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setUserId(0);
-                setTodoId(0);
+                setSelectedTodo({
+                  id: 0,
+                  title: '',
+                  completed: false,
+                  userId: 0,
+                });
               }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todoTitle}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {completed ? (
+              {selectedTodo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

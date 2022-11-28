@@ -1,22 +1,17 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setTodoId: React.Dispatch<React.SetStateAction<number>>,
-  setTodoTitle: React.Dispatch<React.SetStateAction<string>>,
-  setCompleted: React.Dispatch<React.SetStateAction<boolean>>,
-  setUserId: React.Dispatch<React.SetStateAction<number>>,
-  selectedTodo: number,
+  selectedTodo: Todo,
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo>>,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setTodoId,
-  setTodoTitle,
-  setCompleted,
-  setUserId,
   selectedTodo,
+  setSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -48,21 +43,27 @@ export const TodoList: React.FC<Props> = ({
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p className={todo.completed
-              ? 'has-text-success'
-              : 'has-text-danger'}
+            <p className={classNames({
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed,
+            })}
             >
               {todo.title}
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            {selectedTodo === todo.id ? (
+            {selectedTodo.id === todo.id ? (
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={() => {
-                  setTodoId(0);
+                  setSelectedTodo({
+                    id: 0,
+                    title: '',
+                    completed: false,
+                    userId: 0,
+                  });
                 }}
               >
                 <span className="icon">
@@ -75,10 +76,12 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  setTodoId(todo.id);
-                  setTodoTitle(todo.title);
-                  setCompleted(todo.completed);
-                  setUserId(todo.userId);
+                  setSelectedTodo({
+                    id: todo.id,
+                    title: todo.title,
+                    completed: todo.completed,
+                    userId: todo.userId,
+                  });
                 }}
               >
                 <span className="icon">

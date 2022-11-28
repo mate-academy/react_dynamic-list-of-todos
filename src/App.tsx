@@ -9,23 +9,32 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
+enum Selected {
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState('all');
   const [query, setQuery] = useState('');
-  const [todoId, setTodoId] = useState(0);
-  const [userId, setUserId] = useState(0);
-  const [todoTitle, setTodoTitle] = useState('');
-  const [completed, setCompleted] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>({
+    id: 0,
+    title: '',
+    completed: false,
+    userId: 0,
+  });
+
+  const queryInLowerCase = query.toLowerCase();
 
   const filteredTodos = () => {
     const selectedTodos = todos.filter(todo => {
       switch (selected) {
-        case 'active':
+        case Selected.Active:
           return !todo.completed;
 
-        case 'completed':
+        case Selected.Completed:
           return todo.completed;
 
         default:
@@ -33,7 +42,7 @@ export const App: React.FC = () => {
       }
     });
 
-    return selectedTodos.filter(todo => todo.title.toLowerCase().match(query.toLowerCase()));
+    return selectedTodos.filter(todo => todo.title.toLowerCase().match(queryInLowerCase));
   };
 
   useEffect(() => {
@@ -68,11 +77,8 @@ export const App: React.FC = () => {
                 ) : (
                   <TodoList
                     todos={filteredTodos()}
-                    setTodoId={setTodoId}
-                    selectedTodo={todoId}
-                    setTodoTitle={setTodoTitle}
-                    setCompleted={setCompleted}
-                    setUserId={setUserId}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
@@ -80,14 +86,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {userId !== 0 && (
+      {selectedTodo.userId !== 0 && (
         <TodoModal
-          userId={userId}
-          todoId={todoId}
-          todoTitle={todoTitle}
-          completed={completed}
-          setUserId={setUserId}
-          setTodoId={setTodoId}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
