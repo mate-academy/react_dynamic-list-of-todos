@@ -80,7 +80,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos ? (
+              {todos.length === 0 ? (
                 <Loader />
               ) : (
                 <TodoList
