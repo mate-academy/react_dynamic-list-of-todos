@@ -23,10 +23,12 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setIsTodoLoaded(true);
       })
       .catch(error => {
         throw new Error(error);
+      })
+      .finally(() => {
+        setIsTodoLoaded(true);
       });
   }, []);
 
