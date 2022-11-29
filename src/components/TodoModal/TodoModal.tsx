@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -15,11 +15,11 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     const loadedUser = await getUser(todo.userId);
 
     setUser(loadedUser);
-  };
+  }, [todo]);
 
   useEffect(() => {
     loadUser();

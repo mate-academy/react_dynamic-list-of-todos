@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,33 +12,37 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-const ALL = 'all';
-const ACTIVE = 'active';
-const COMPLETED = 'completed';
+enum TodoStatus {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState(ALL);
+  const [status, setStatus] = useState<string>(TodoStatus.ALL);
   const [query, setQuery] = useState('');
 
-  const filteredTodos = todos.filter((todo) => {
-    if (status === ACTIVE && todo.completed) {
-      return false;
-    }
+  const filteredTodos = useMemo(() => (
+    todos.filter((todo) => {
+      if (status === TodoStatus.ACTIVE && todo.completed) {
+        return false;
+      }
 
-    if (status === COMPLETED && !todo.completed) {
-      return false;
-    }
+      if (status === TodoStatus.COMPLETED && !todo.completed) {
+        return false;
+      }
 
-    return todo.title.toLowerCase().includes(query.toLowerCase());
-  });
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    })
+  ), [todos, status]);
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     const loadedtodos = await getTodos();
 
     setTodos(loadedtodos);
-  };
+  }, []);
 
   useEffect(() => {
     loadTodos();
@@ -53,7 +59,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeQuery={setQuery}
                 onChangeStatus={setStatus}
-                statusOptions={[ALL, ACTIVE, COMPLETED]}
+                statusOptions={[TodoStatus.ALL, TodoStatus.ACTIVE, TodoStatus.COMPLETED]}
                 query={query}
               />
             </div>
