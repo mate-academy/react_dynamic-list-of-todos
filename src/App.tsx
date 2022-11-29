@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -30,20 +30,28 @@ export const App: React.FC = () => {
     loadTodosFromServer();
   }, []);
 
-  const chooseTodo = (todo: Todo | null) => {
-    setSelectedTodo(todo);
-  };
+  const chooseTodo = useCallback(
+    (todo: Todo | null) => {
+      setSelectedTodo(todo);
+    },
+    [selectedTodo],
+  );
 
-  const closeModal = () => {
-    setSelectedTodo(null);
-  };
+  const closeModal = useCallback(
+    () => {
+      setSelectedTodo(null);
+    }, [],
+  );
 
   const lowercaseSearchReasult = searchResult.toLowerCase();
 
-  const searchedTodos = todos.filter(({ title }) => title.toLowerCase().includes(lowercaseSearchReasult));
+  const searchedTodos = useMemo(
+    () => todos.filter(({ title }) => title.toLowerCase().includes(lowercaseSearchReasult)),
+    [todos, lowercaseSearchReasult],
+  );
 
-  const filteredSearchedTodos = () => {
-    const result = searchedTodos.filter(({ completed }) => {
+  const filteredSearchedTodos = useMemo(
+    () => searchedTodos.filter(({ completed }) => {
       switch (valueSelection) {
         case Completion.Active:
           return !completed;
@@ -54,10 +62,8 @@ export const App: React.FC = () => {
         default:
           return searchedTodos;
       }
-    });
-
-    return result;
-  };
+    }), [searchedTodos, valueSelection],
+  );
 
   return (
     <>
@@ -80,7 +86,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredSearchedTodos()}
+                    todos={filteredSearchedTodos}
                     chooseTodoHandler={chooseTodo}
                     selectedTodo={selectedTodo}
                   />
