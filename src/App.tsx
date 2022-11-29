@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -16,15 +16,13 @@ export const App: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const loadTodos = useCallback(async () => {
-    const data = await getTodos();
-
-    if (data.length !== 0) {
-      setTodos(data);
-    }
-  }, []);
-
   useEffect(() => {
+    const loadTodos = async () => {
+      const data = await getTodos();
+
+      setTodos(data);
+    };
+
     loadTodos();
   }, []);
 
@@ -40,28 +38,25 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const handleOptionFilter = (option: string): Todo[] => {
-    switch (option) {
-      case 'All':
-        return todos;
+  const visibleTodos = useMemo(() => {
+    return (todos.filter(todo => {
+      const query = searchQuery.toLowerCase();
 
-      case 'active':
-        return todos.filter(todo => !todo.completed);
+      switch (selectedOption) {
+        case 'All':
+          return todo.title.toLowerCase().includes(query);
 
-      case 'completed':
-        return todos.filter(todo => todo.completed);
+        case 'active':
+          return !todo.completed && todo.title.toLowerCase().includes(query);
 
-      default:
-        return todos;
-    }
-  };
+        case 'completed':
+          return todo.completed && todo.title.toLowerCase().includes(query);
 
-  const handleSearchFilter = (optionFilteredTodos: Todo[], query: string) => {
-    return optionFilteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  };
-
-  const filteredOptionTodos = handleOptionFilter(selectedOption);
-  const visibleTodos = handleSearchFilter(filteredOptionTodos, searchQuery);
+        default:
+          return todo.title.toLowerCase().includes(query);
+      }
+    }));
+  }, [selectedOption, searchQuery, todos]);
 
   return (
     <>
