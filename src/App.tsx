@@ -11,25 +11,31 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+enum SelectedStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 function isIncludesQuery(todoTitle: string, query: string) {
-  return todoTitle.toLowerCase().includes(query.toLocaleLowerCase());
+  return todoTitle.toLowerCase().includes(query.toLowerCase());
 }
 
 export const App: React.FC = () => {
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
-  const [selectStatus, setSelectStatus] = useState<string>('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoStatus, setSelectedTodoStatus] = useState<string>('all');
 
   const handleSelectTodo = (todoId: number | null) => (
     todoId
-      ? (setSelectTodo(todos.find(todo => todo.id === todoId) || null))
-      : setSelectTodo(null)
+      ? (setSelectedTodo(todos.find(todo => todo.id === todoId) || null))
+      : setSelectedTodo(null)
   );
 
   const handleSelectStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectStatus(event.target.value);
+    setSelectedTodoStatus(event.target.value);
   };
 
   const handleQueryChange = (value: string) => {
@@ -47,14 +53,14 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    switch (selectStatus) {
-      case 'all':
+    switch (selectedTodoStatus) {
+      case SelectedStatus.All:
         setTodos(
           initialTodos.filter(({ title }) => isIncludesQuery(title, query)),
         );
         break;
 
-      case 'active':
+      case SelectedStatus.Active:
         setTodos(
           initialTodos.filter(({ title, completed }) => (
             !completed && isIncludesQuery(title, query)
@@ -62,7 +68,7 @@ export const App: React.FC = () => {
         );
         break;
 
-      case 'completed':
+      case SelectedStatus.Completed:
         setTodos(
           initialTodos.filter(({ title, completed }) => (
             completed && isIncludesQuery(title, query)
@@ -73,7 +79,7 @@ export const App: React.FC = () => {
       default:
         break;
     }
-  }, [initialTodos, query, selectStatus]);
+  }, [initialTodos, query, selectedTodoStatus]);
 
   return (
     <>
@@ -84,7 +90,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectStatus={selectStatus}
+                selectStatus={selectedTodoStatus}
                 query={query}
                 onSelectStatus={handleSelectStatus}
                 onQueryChange={handleQueryChange}
@@ -98,7 +104,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={todos}
                   onSelectTodo={handleSelectTodo}
-                  selectedId={selectTodo?.id}
+                  selectedId={selectedTodo?.id}
                 />
               )}
             </div>
@@ -106,9 +112,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          selectedTodo={selectTodo}
+          selectedTodo={selectedTodo}
           onClose={handleSelectTodo}
         />
       )}
