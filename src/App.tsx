@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -16,20 +21,20 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
 
-  const LoadTodos = async () => {
+  const LoadTodos = useCallback(async () => {
     const loadedTodos = await getTodos();
 
     setTodos(loadedTodos);
-  };
+  }, []);
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => todos.filter(todo => {
     if ((status === 'active' && todo.completed)
     || (status === 'completed' && !todo.completed)) {
       return false;
     }
 
     return todo.title.toLowerCase().includes(query.toLowerCase());
-  });
+  }), [todos, status]);
 
   useEffect(() => {
     LoadTodos();
@@ -45,6 +50,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
+                status={status}
                 statusHandler={setStatus}
                 queryHandler={setQuery}
               />

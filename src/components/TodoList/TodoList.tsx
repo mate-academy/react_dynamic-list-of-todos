@@ -65,9 +65,15 @@ export const TodoList: React.FC<Props> = ({
               onClick={() => todoSelector(todo)}
             >
               <span className="icon">
-                {selectedTodoId === todo.id
-                  ? (<i className="far fa-eye-slash" />)
-                  : (<i className="far fa-eye" />)}
+                <i
+                  className={classNames(
+                    'far',
+                    {
+                      'fa-eye': selectedTodoId !== todo.id,
+                      'fa-eye-slash': selectedTodoId === todo.id,
+                    },
+                  )}
+                />
               </span>
             </button>
           </td>
