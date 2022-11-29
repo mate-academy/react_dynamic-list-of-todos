@@ -54,12 +54,15 @@ export const TodoFilter: React.FC<Props> = (props) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
-            <button
+            <i
+              aria-label="text"
+              role="button"
+              tabIndex={0}
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={reset}
+              onKeyDown={reset}
             />
           )}
         </span>

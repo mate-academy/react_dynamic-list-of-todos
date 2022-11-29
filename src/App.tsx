@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -42,43 +41,38 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
+  const todosFromServer = async () => {
+    const data = await getTodos();
+
+    setInitialTodos(data);
+  };
+
   useEffect(() => {
-    const todosFromServer = async () => {
-      const data = await getTodos();
-
-      setInitialTodos(data);
-    };
-
     todosFromServer();
   }, []);
 
+  const getFiltredTodos = () => {
+    return initialTodos.filter(todo => {
+      switch (selectedTodoStatus) {
+        case SelectedStatus.All:
+          return isIncludesQuery(todo.title, query);
+
+        case SelectedStatus.Active:
+          return !todo.completed && isIncludesQuery(todo.title, query);
+          break;
+
+        case SelectedStatus.Completed:
+          return todo.completed && isIncludesQuery(todo.title, query);
+          break;
+
+        default:
+          return todo.title;
+      }
+    });
+  };
+
   useEffect(() => {
-    switch (selectedTodoStatus) {
-      case SelectedStatus.All:
-        setTodos(
-          initialTodos.filter(({ title }) => isIncludesQuery(title, query)),
-        );
-        break;
-
-      case SelectedStatus.Active:
-        setTodos(
-          initialTodos.filter(({ title, completed }) => (
-            !completed && isIncludesQuery(title, query)
-          )),
-        );
-        break;
-
-      case SelectedStatus.Completed:
-        setTodos(
-          initialTodos.filter(({ title, completed }) => (
-            completed && isIncludesQuery(title, query)
-          )),
-        );
-        break;
-
-      default:
-        break;
-    }
+    setTodos(getFiltredTodos);
   }, [initialTodos, query, selectedTodoStatus]);
 
   return (
