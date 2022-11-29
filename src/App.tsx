@@ -13,7 +13,7 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
+  const [areTodosLoaded, setAreTodosLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [selectValue, setSelectValue] = useState<TodosCategory>(
     TodosCategory.All,
@@ -49,12 +49,14 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setIsTodosLoaded(true);
+        setAreTodosLoaded(true);
       })
       .catch(error => {
         throw new Error(error);
       });
   }, []);
+
+  const filterTodoFunction = filterTodos();
 
   return (
     <>
@@ -73,10 +75,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodosLoaded
+              {areTodosLoaded
                 ? (
                   <TodoList
-                    todos={filterTodos()}
+                    todos={filterTodoFunction}
                     selectedTodo={selectedTodo}
                     onSelect={chooseUser}
                   />

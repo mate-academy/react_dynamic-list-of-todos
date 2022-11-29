@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TodosCategory } from '../../types/TodosCategory';
 
 interface Props {
@@ -14,30 +14,36 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
-  const handleSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (e.target.value) {
-      case TodosCategory.Active:
-        setSelectValue(TodosCategory.Active);
-        break;
+  const handleSelection = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      switch (e.target.value) {
+        case TodosCategory.Active:
+          setSelectValue(TodosCategory.Active);
+          break;
 
-      case TodosCategory.Completed:
-        setSelectValue(TodosCategory.Completed);
-        break;
+        case TodosCategory.Completed:
+          setSelectValue(TodosCategory.Completed);
+          break;
 
-      default:
-        setSelectValue(TodosCategory.All);
-        break;
-    }
-  };
+        default:
+          setSelectValue(TodosCategory.All);
+          break;
+      }
+    },
+    [selectValue],
+  );
 
   const clearInput = () => setQuery('');
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+    },
+    [setSelectValue],
+  );
 
   return (
     <form className="field has-addons" onSubmit={handleSubmit}>
@@ -61,7 +67,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           value={query}
-          onChange={handleInput}
+          onChange={handleInputChange}
           placeholder="Search..."
         />
         <span className="icon is-left">
