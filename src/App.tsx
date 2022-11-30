@@ -15,14 +15,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<TodoStatus>(TodoStatus.ALL);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const loadTodosFromServer = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
-    setIsLoaded(true);
+    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -45,20 +45,21 @@ export const App: React.FC = () => {
     return todoTitleCheck || todoIdCheck;
   };
 
+  const checkStatus = (todo: Todo) => {
+    switch (status) {
+      case TodoStatus.ALL:
+        return todo;
+      case TodoStatus.ACTIVE:
+        return !todo.completed;
+      case TodoStatus.COMPLETED:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  };
+
   const visibleTodos = todos
-    .filter(todo => todoCheck(todo))
-    .filter(todo => {
-      switch (status) {
-        case TodoStatus.ALL:
-          return todo;
-        case TodoStatus.ACTIVE:
-          return !todo.completed;
-        case TodoStatus.COMPLETED:
-          return todo.completed;
-        default:
-          return todo;
-      }
-    });
+    .filter(todo => todoCheck(todo) && checkStatus(todo));
 
   const queryHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -82,7 +83,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded
+              {isLoading
                 ? (
                   <TodoList
                     todos={visibleTodos}
