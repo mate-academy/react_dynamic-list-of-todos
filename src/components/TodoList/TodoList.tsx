@@ -38,7 +38,7 @@ export const TodoList: React.FC<Props> = (props) => {
             <td className="is-vcentered">{id}</td>
             {completed ? (
               <td className="is-vcentered">
-                <span className="icon" data-cy="iconCompleted">
+                <span className="icon">
                   <i className="fas fa-check" />
                 </span>
               </td>
@@ -57,14 +57,13 @@ export const TodoList: React.FC<Props> = (props) => {
             </td>
             <td className="has-text-right is-vcentered">
               <i
-                aria-label="text"
                 role="button"
                 tabIndex={0}
+                onKeyDown={() => onSelectTodo(id)}
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={() => onSelectTodo(id)}
-                onKeyDown={() => onSelectTodo(id)}
               >
                 <span className="icon">
                   <i className={classNames(

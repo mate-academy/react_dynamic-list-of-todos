@@ -58,11 +58,11 @@ export const TodoFilter: React.FC<Props> = (props) => {
               aria-label="text"
               role="button"
               tabIndex={0}
+              onKeyDown={reset}
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={reset}
-              onKeyDown={reset}
             />
           )}
         </span>

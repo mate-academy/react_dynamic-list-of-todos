@@ -48,11 +48,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
               aria-label="text"
               role="button"
               tabIndex={0}
+              onKeyDown={toClose}
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={toClose}
-              onKeyUp={toClose}
             />
           </header>
 
