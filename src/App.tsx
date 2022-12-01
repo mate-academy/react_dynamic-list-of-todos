@@ -15,14 +15,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<TodoStatus>(TodoStatus.ALL);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const loadTodosFromServer = async () => {
     const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
-    setIsLoading(true);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -85,13 +85,15 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading
                 ? (
+                  <Loader />
+                )
+                : (
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
-                )
-                : (<Loader />)}
+                )}
             </div>
           </div>
         </div>
