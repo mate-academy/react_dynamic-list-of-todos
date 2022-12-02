@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,25 +21,24 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todosItems => {
-        setTodos(todosItems);
-        setIsLoading(false);
-      })
+      .then(todosItems => setTodos(todosItems))
       .catch(error => {
         throw new Error(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
     const filteredTodos = todos
       .filter(todo => {
         switch (todosStatus) {
-          case 'active':
+          case Status.Active:
             return !todo.completed;
 
-          case 'completed':
+          case Status.Completed:
             return todo.completed;
 
+          case Status.All:
           default:
             return todo;
         }

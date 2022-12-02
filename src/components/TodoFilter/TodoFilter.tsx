@@ -16,11 +16,11 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleTodosStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTodosStatus(event.currentTarget.value);
+    setTodosStatus(event.target.value);
   };
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.currentTarget.value);
+    setQuery(event.target.value);
   };
 
   const handleClearButton = () => setQuery('');
