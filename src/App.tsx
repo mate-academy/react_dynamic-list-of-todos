@@ -18,6 +18,11 @@ import {
 } from './api';
 import { Todo } from './types/Todo';
 
+enum Filter {
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [userTodos, setUserTodos] = useState<Todo[]>([]);
   const [filterSelection, setFilterSelection] = useState('all');
@@ -28,10 +33,10 @@ export const App: React.FC = () => {
 
   const filteredTodos = () => {
     switch (filterSelection) {
-      case 'active':
+      case Filter.Active:
         return getActiveTodos();
 
-      case 'completed':
+      case Filter.Completed:
         return getCompletedTodos();
 
       default:
@@ -80,7 +85,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {userTodos.length === 0
+              {!userTodos.length
                 ? (<Loader />)
                 : (
                   <TodoList
