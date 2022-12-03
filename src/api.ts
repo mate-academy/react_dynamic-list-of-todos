@@ -11,8 +11,7 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+  const fullURL = `${BASE_URL + url}.json`;
 
   return wait(300)
     .then(() => fetch(fullURL))
@@ -20,5 +19,15 @@ function get<T>(url: string): Promise<T> {
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
+
+export const getCompletedTodos = () => {
+  return getTodos()
+    .then(todos => todos.filter(todo => todo.completed));
+};
+
+export const getActiveTodos = () => {
+  return getTodos()
+    .then(todos => todos.filter(todo => !todo.completed));
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
