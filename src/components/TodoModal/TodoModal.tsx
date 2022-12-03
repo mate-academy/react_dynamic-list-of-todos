@@ -14,6 +14,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   const getUserFromApi = async (userId: number) => {
     const userFromApi = await getUser(userId);
@@ -22,6 +23,7 @@ export const TodoModal: React.FC<Props> = ({
       setIsUserLoading(false);
 
       setUserName(userFromApi.name);
+      setUserEmail(userFromApi.email);
     }
   };
 
@@ -69,7 +71,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${userEmail}`}>
                 {userName}
               </a>
             </p>

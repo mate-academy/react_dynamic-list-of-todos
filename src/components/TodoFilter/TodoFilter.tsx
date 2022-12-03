@@ -1,18 +1,18 @@
-import { QueryType } from '../../types/QueryType';
+import { SelectedTodosType } from '../../types/SelectedTodosType';
 
 type Props = {
   query: string,
   setQuery: (value: string) => void,
-  queryType: QueryType,
-  selectQueryType: (value: QueryType) => void,
+  selectedTodosType: SelectedTodosType,
+  handelSelectedTodosType: (value: SelectedTodosType) => void,
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
     query,
     setQuery,
-    queryType,
-    selectQueryType,
+    selectedTodosType,
+    handelSelectedTodosType,
   } = props;
 
   return (
@@ -21,14 +21,14 @@ export const TodoFilter: React.FC<Props> = (props) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={queryType}
+            value={selectedTodosType}
             onChange={(event) => {
-              selectQueryType(event.target.value as QueryType);
+              handelSelectedTodosType(event.target.value as SelectedTodosType);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectedTodosType.All}>All</option>
+            <option value={SelectedTodosType.Active}>Active</option>
+            <option value={SelectedTodosType.Completed}>Completed</option>
           </select>
         </span>
       </p>

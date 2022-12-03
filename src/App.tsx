@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,117 +9,68 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter';
-import { QueryType } from './types/QueryType';
-
-type State = {
-  isLoading: boolean,
-  isTodoModel: boolean,
-  todos: Todo[],
-  visiableTodos: Todo[],
-  query: string,
-  queryType: QueryType,
-  todoModel: Todo | null,
-};
+import { SelectedTodosType } from './types/SelectedTodosType';
 
 export const App: React.FC = () => {
-  const [state, setState] = useState<State>({
-    isLoading: true,
-    isTodoModel: false,
-    todos: [],
-    visiableTodos: [],
-    query: '',
-    queryType: 'all',
-    todoModel: null,
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visiableTodos, setVisiableTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [selectedTods, setSelectedTodos] = useState<SelectedTodosType>(SelectedTodosType.All);
+  const [todoModel, setTodoModel] = useState<Todo | null>(null);
 
-  const getTodosFromApi = async () => {
-    const reseivedTodos = await getTodos();
+  const getTodosFromApi = useCallback(
+    async () => {
+      setIsLoading(true);
 
-    if (reseivedTodos) {
-      setState(prevState => {
-        return {
-          ...prevState,
-          isLoading: false,
-          todos: reseivedTodos,
-          visiableTodos: reseivedTodos,
-        };
-      });
-    }
-  };
+      await getTodos()
+        .then(res => {
+          setTodos(res);
+          setVisiableTodos(res);
+        })
+        .catch(() => setIsLoading(false))
+        .then(() => setIsLoading(false));
+    },
+    [],
+  );
 
   useEffect(() => {
     getTodosFromApi();
   }, []);
 
-  const setVisiableTodos = () => {
-    setState(prevState => {
-      const { todos, query, queryType } = prevState;
-      let filteredTodos = todos;
-
+  const handelVisiableTodos = useCallback(
+    () => {
       const checkTitle = (title: string) => {
         return title.toLowerCase().includes(query.toLowerCase());
       };
 
-      if (queryType === 'completed') {
-        filteredTodos = todos.filter(todo => todo.completed && checkTitle(todo.title));
-      }
+      setVisiableTodos(todos.filter(todo => {
+        if (selectedTods === SelectedTodosType.Completed) {
+          return todo.completed && checkTitle(todo.title);
+        }
 
-      if (queryType === 'active') {
-        filteredTodos = todos.filter(todo => !todo.completed && checkTitle(todo.title));
-      }
+        if (selectedTods === SelectedTodosType.Active) {
+          return !todo.completed && checkTitle(todo.title);
+        }
 
-      if (queryType === 'all') {
-        filteredTodos = todos.filter(todo => checkTitle(todo.title));
-      }
-
-      return {
-        ...prevState,
-        visiableTodos: filteredTodos,
-      };
-    });
-  };
+        return checkTitle(todo.title);
+      }));
+    },
+    [query, selectedTods],
+  );
 
   useEffect(() => {
-    setVisiableTodos();
-  }, [state.query, state.queryType]);
+    handelVisiableTodos();
+  }, [query, selectedTods]);
 
-  const handelQuery = (value: string) => {
-    setState(prevState => {
-      return {
-        ...prevState,
-        query: value,
-      };
-    });
-  };
+  const handelSetTodoModel = (id: number) => {
+    const newModel = visiableTodos.find(todo => todo.id === id) || null;
 
-  const handelQueryType = (value: QueryType) => {
-    setState(prevState => {
-      return {
-        ...prevState,
-        queryType: value,
-      };
-    });
-  };
-
-  const setTodoModel = (id: number) => {
-    const todoModel = state.visiableTodos
-      .find(todo => todo.id === id) || null;
-
-    setState(prevState => {
-      return {
-        ...prevState,
-        todoModel,
-      };
-    });
+    setTodoModel(newModel);
   };
 
   const handelCloseTodoModel = () => {
-    setState(prevState => {
-      return {
-        ...prevState,
-        todoModel: null,
-      };
-    });
+    setTodoModel(null);
   };
 
   return (
@@ -131,22 +82,22 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={state.query}
-                setQuery={(value: string) => handelQuery(value)}
-                queryType={state.queryType}
-                selectQueryType={(value: QueryType) => handelQueryType(value)}
+                query={query}
+                setQuery={setQuery}
+                selectedTodosType={selectedTods}
+                handelSelectedTodosType={setSelectedTodos}
               />
             </div>
 
             <div className="block">
-              {state.isLoading
+              {isLoading
                 ? (
                   <Loader />
                 ) : (
                   <TodoList
-                    todos={state.visiableTodos}
-                    todoModel={state.todoModel}
-                    handelEyeBtn={(id: number) => setTodoModel(id)}
+                    todos={visiableTodos}
+                    todoModel={todoModel}
+                    handelEyeBtn={handelSetTodoModel}
                   />
                 )}
             </div>
@@ -154,9 +105,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {state.todoModel !== null && (
+      {todoModel !== null && (
         <TodoModal
-          todo={state.todoModel}
+          todo={todoModel}
           closeTodoModel={handelCloseTodoModel}
         />
       )}
