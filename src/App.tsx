@@ -9,6 +9,12 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+enum FilterStatus {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 function isIncludesQuery(todoTitle: string, query: string) {
   return todoTitle.toLowerCase().includes(query.toLowerCase());
 }
@@ -17,7 +23,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
 
   const handleSelectTodo = (todoId: number | null) => (
@@ -35,7 +41,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleVisibleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setVisibleTodos(event.target.value);
+    setFilterStatus(event.target.value);
   };
 
   const handleQueryChange = (value: string) => {
@@ -44,28 +50,24 @@ export const App: React.FC = () => {
 
   const getFilteredTodos = () => {
     return initialTodos.filter(todo => {
-      switch (visibleTodos) {
-        case 'all': {
-          return isIncludesQuery(todo.title, query);
-        }
-
-        case 'active': {
-          return !todo.completed && isIncludesQuery(todo.title, query);
-        }
-
-        case 'completed': {
+      switch (filterStatus) {
+        case FilterStatus.COMPLETED: {
           return todo.completed && isIncludesQuery(todo.title, query);
         }
 
+        case FilterStatus.ACTIVE: {
+          return !todo.completed && isIncludesQuery(todo.title, query);
+        }
+
         default:
-          return todo.title;
+          return isIncludesQuery(todo.title, query);
       }
     });
   };
 
   useEffect(() => {
     setTodos(getFilteredTodos);
-  }, [initialTodos, query, visibleTodos]);
+  }, [initialTodos, query, filterStatus]);
 
   return (
     <>
@@ -76,7 +78,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectStatus={visibleTodos}
+                selectStatus={filterStatus}
                 onSelectStatus={handleVisibleStatus}
                 query={query}
                 onQueryChange={handleQueryChange}
