@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,17 +31,17 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const handleSelect = (selectedTodoId: number) => {
+  const handleSelect = useCallback((selectedTodoId: number) => {
     const selected = todos.find(({ id }) => id === selectedTodoId);
 
     if (selected) {
       setSelectedTodo(selected);
     }
-  };
+  }, [selectedTodo, todos]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, [selectedTodo]);
 
   const visibleTodos = useMemo(() => {
     return (todos.filter(todo => {
