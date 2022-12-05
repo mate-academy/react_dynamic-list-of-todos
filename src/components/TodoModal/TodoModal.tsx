@@ -25,11 +25,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     getUser(userId)
       .then((userFromServer) => {
         setUser(userFromServer);
-        setIsLoading(false);
       })
       .catch(error => {
         throw new Error(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
