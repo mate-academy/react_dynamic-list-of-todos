@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useMemo, useCallback, useEffect, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -23,7 +25,7 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }, []);
 
-  const filterTodos = () => {
+  const filterTodos = useMemo(() => {
     const todosMatchedQuery = todos.filter(({ title }) => {
       const lowerCasedTitle = title.toLowerCase();
       const lowerCasedQuery = query.toLowerCase();
@@ -43,7 +45,7 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-  };
+  }, [todos, selectValue]);
 
   useEffect(() => {
     getTodos()
@@ -55,8 +57,6 @@ export const App: React.FC = () => {
         throw new Error(error);
       });
   }, []);
-
-  const filterTodoFunction = filterTodos();
 
   return (
     <>
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
               {areTodosLoaded
                 ? (
                   <TodoList
-                    todos={filterTodoFunction}
+                    todos={filterTodos}
                     selectedTodo={selectedTodo}
                     onSelect={chooseUser}
                   />

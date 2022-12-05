@@ -14,9 +14,11 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value);
+    }, [],
+  );
 
   const handleSelection = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
