@@ -1,17 +1,20 @@
 import React from 'react';
+import { DebouncedFunc } from 'lodash';
 
 type Props = {
   filterBy: string;
   setFilterBy: React.Dispatch<React.SetStateAction<string>>,
-  searchBy: string,
-  setSearchBy: React.Dispatch<React.SetStateAction<string>>,
+  setValue: React.Dispatch<React.SetStateAction<string>>,
+  applySearch: DebouncedFunc<React.Dispatch<React.SetStateAction<string>>>,
+  value: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterBy,
   setFilterBy,
-  searchBy,
-  setSearchBy,
+  setValue,
+  applySearch,
+  value,
 }) => {
   const handleChangeSelect = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -19,9 +22,12 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleChangeInput = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ) => setSearchBy(event.target.value);
+  ) => {
+    setValue(event.target.value);
+    applySearch(event.target.value);
+  };
 
-  const handleClearSearchButton = () => setSearchBy('');
+  const handleClearSearchButton = () => setValue('');
 
   return (
     <form className="field has-addons">
@@ -44,14 +50,14 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchBy}
+          value={value}
           onChange={handleChangeInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {searchBy.length > 0 && (
+          {value.length > 0 && (
             /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button
               data-cy="clearSearchButton"

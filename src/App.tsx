@@ -1,7 +1,12 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { debounce } from 'lodash';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -14,9 +19,14 @@ export const App: React.FC = () => {
   const initialTodo = {} as Todo;
   const [filterBy, setFilterBy] = useState('all');
   const [todos, setTodos] = useState(initialTodos);
-  const [searchBy, setSearchBy] = useState('');
+  const [value, setValue] = useState('');
   const [showTodoModal, setShowTodoModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(initialTodo);
+  const [search, setSearch] = useState('');
+  const applySearch = useCallback(
+    debounce(setSearch, 500),
+    [],
+  );
 
   useEffect(() => {
     getTodos()
@@ -36,13 +46,14 @@ export const App: React.FC = () => {
     }
   });
 
-  if (searchBy) {
-    visibleTodos = visibleTodos.filter(todo => todo.title
-      .toLocaleLowerCase()
-      .includes(searchBy.toLocaleLowerCase()));
-  }
+  useMemo(() => {
+    visibleTodos = visibleTodos
+      .filter(todo => todo.title
+        .toLocaleLowerCase()
+        .includes(value.toLocaleLowerCase()));
+  }, [search]);
 
-  const isVisibleLoader = visibleTodos.length === 0 && searchBy === '';
+  const isVisibleLoader = visibleTodos.length === 0 && value === '';
 
   return (
     <>
@@ -55,8 +66,9 @@ export const App: React.FC = () => {
               <TodoFilter
                 setFilterBy={setFilterBy}
                 filterBy={filterBy}
-                searchBy={searchBy}
-                setSearchBy={setSearchBy}
+                setValue={setValue}
+                applySearch={applySearch}
+                value={value}
               />
             </div>
 
