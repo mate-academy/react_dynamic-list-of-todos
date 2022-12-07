@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
 import { getTodos } from './api';
@@ -17,11 +17,13 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [filterBy, setFilterBy] = useState('All');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [loadingTodos, setLoadingTodos] = useState(false);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
       const todosFromServer = await getTodos();
 
+      setLoadingTodos(true);
       setTodos(todosFromServer);
     };
 
@@ -67,13 +69,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
+              {!loadingTodos ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={displayedTodos}
+                  selectedTodoId={selectedTodoId}
+                  onSetSelectedTodoId={setSelectedTodoId}
+                  onSetUserId={setUserId}
+                />
+              )}
+              {/* <Loader />
               <TodoList
                 todos={displayedTodos}
                 selectedTodoId={selectedTodoId}
                 onSetSelectedTodoId={setSelectedTodoId}
                 onSetUserId={setUserId}
-              />
+              /> */}
             </div>
           </div>
         </div>
