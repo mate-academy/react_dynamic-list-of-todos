@@ -19,41 +19,34 @@ export const App: React.FC = () => {
   // const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const fetchResponse = async () => {
-      const resultTodos = await getTodos();
-
-      setTodos(resultTodos);
+    const fetchTodosFromServer = async () => {
+      setTodos(await getTodos());
     };
 
-    fetchResponse();
+    fetchTodosFromServer();
   }, []);
-
-  // const updateSelectedItems = (event: { target: { value: React.SetStateAction<number>; }; }) => {
-  //   setSelectedOption(event.target.value);
-  //   console.log(event.target.value, '<= event.target.value');
-
-  //   const filterByActive = todos.filter(todo => todo.completed === false);
-  //   const filterByCompleted = todos.filter(todo => todo.completed === true);
-
-  //   switch (selectedOption) {
-  //     case 0:
-  //       return todos;
-
-  //     case 1:
-  //       return setTodos(filterByActive);
-
-  //     case 2:
-  //       return setTodos(filterByCompleted);
-
-  //     default:
-  //       return null;
-  //   }
-  // };
 
   const updateSelectedItems = (event: { target: { value: React.SetStateAction<number>; }; }) => {
     setSelectedOption(event.target.value);
-    console.log(event.target.value);
-    setTodos(todos.filter(todo => todo.completed === false));
+    console.log(event.target.value, '<= event.target.value');
+
+    const showAll = setTodos(todos);
+    const filterByActive = setTodos(todos.filter(todo => todo.completed === false));
+    const filterByCompleted = setTodos(todos.filter(todo => todo.completed === true));
+
+    switch (selectedOption) {
+      case 0:
+        return showAll;
+
+      case 1:
+        return filterByCompleted;
+
+      case 2:
+        return filterByActive;
+
+      default:
+        return null;
+    }
   };
 
   const displayedTodos = todos.filter(todo => {
