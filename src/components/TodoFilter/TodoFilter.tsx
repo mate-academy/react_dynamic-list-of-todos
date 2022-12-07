@@ -2,17 +2,17 @@ import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   onQueryChange: Dispatch<SetStateAction<string>>;
-  updateSelectedItems: (event: any) => void;
   query: string;
-  selectedOption: number;
+  filterBy: string
+  onFilterChange: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
     query,
-    selectedOption,
+    filterBy,
     onQueryChange,
-    updateSelectedItems,
+    onFilterChange,
   } = props;
 
   const questionTags = [
@@ -27,13 +27,13 @@ export const TodoFilter: React.FC<Props> = (props) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedOption}
-            onChange={event => updateSelectedItems(event)}
+            value={filterBy}
+            onChange={event => onFilterChange(event.target.value)}
           >
             {questionTags.map(tag => (
               <option
                 key={tag.value}
-                value={tag.value}
+                value={tag.label}
               >
                 {tag.label}
               </option>

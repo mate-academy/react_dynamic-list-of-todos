@@ -15,41 +15,36 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [filterBy, setFilterBy] = useState('All');
   // const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const fetchTodosFromServer = async () => {
-      setTodos(await getTodos());
+    const getTodosFromServer = async () => {
+      const TodosFromServer = await getTodos();
+
+      setTodos(TodosFromServer);
     };
 
-    fetchTodosFromServer();
+    getTodosFromServer();
   }, []);
 
-  const updateSelectedItems = (event: { target: { value: React.SetStateAction<number>; }; }) => {
-    setSelectedOption(event.target.value);
-    console.log(event.target.value, '<= event.target.value');
+  const filterTodos = todos.filter(todo => {
+    switch (filterBy) {
+      case 'All':
+        return todo;
 
-    const showAll = setTodos(todos);
-    const filterByActive = setTodos(todos.filter(todo => todo.completed === false));
-    const filterByCompleted = setTodos(todos.filter(todo => todo.completed === true));
+      case 'Active':
+        return !todo.completed;
 
-    switch (selectedOption) {
-      case 0:
-        return showAll;
-
-      case 1:
-        return filterByCompleted;
-
-      case 2:
-        return filterByActive;
+      case 'Completed':
+        return todo.completed;
 
       default:
-        return null;
+        return 0;
     }
-  };
+  });
 
-  const displayedTodos = todos.filter(todo => {
+  const displayedTodos = filterTodos.filter(todo => {
     return todo.title.includes(query.trim().toLowerCase());
   });
 
@@ -62,10 +57,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQueryChange={setQuery}
-                updateSelectedItems={updateSelectedItems}
                 query={query}
-                selectedOption={selectedOption}
+                onQueryChange={setQuery}
+                filterBy={filterBy}
+                onFilterChange={setFilterBy}
               />
             </div>
 
