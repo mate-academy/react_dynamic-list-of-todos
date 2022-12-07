@@ -7,6 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
 import { Todo } from './types/Todo';
 
 import { getTodos } from './api';
@@ -50,8 +51,6 @@ export const App: React.FC = () => {
     return todo.title.includes(query.trim().toLowerCase());
   });
 
-  // console.log(userId, 'userId from state');
-
   return (
     <>
       <div className="section">
@@ -79,13 +78,6 @@ export const App: React.FC = () => {
                   onSetUserId={setUserId}
                 />
               )}
-              {/* <Loader />
-              <TodoList
-                todos={displayedTodos}
-                selectedTodoId={selectedTodoId}
-                onSetSelectedTodoId={setSelectedTodoId}
-                onSetUserId={setUserId}
-              /> */}
             </div>
           </div>
         </div>

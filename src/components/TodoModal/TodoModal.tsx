@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
+
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+
 import { Loader } from '../Loader';
 
 type Props = {

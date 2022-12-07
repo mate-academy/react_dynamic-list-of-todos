@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import React from 'react';
+
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -79,7 +80,6 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => {
                     onSetSelectedTodoId(todo.id);
                     onSetUserId(todo.userId);
-                    // console.log(todo.id, '<= todo.id');
                   }}
                 >
                   <span className="icon">
