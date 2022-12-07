@@ -6,12 +6,14 @@ type Props = {
   todos: Todo[]
   selectedTodoId: number;
   onSetSelectedTodoId: (value: number) => void;
+  onSetUserId: (value: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodoId,
   onSetSelectedTodoId,
+  onSetUserId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -76,7 +78,8 @@ export const TodoList: React.FC<Props> = ({
                   type="button"
                   onClick={() => {
                     onSetSelectedTodoId(todo.id);
-                    console.log(todo.id, '<= todo.id');
+                    onSetUserId(todo.userId);
+                    // console.log(todo.id, '<= todo.id');
                   }}
                 >
                   <span className="icon">

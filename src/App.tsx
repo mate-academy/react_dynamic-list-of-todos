@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 // import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
@@ -13,6 +13,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [userId, setUserId] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [filterBy, setFilterBy] = useState('All');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
@@ -20,13 +21,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     const getTodosFromServer = async () => {
       const todosFromServer = await getTodos();
-      // const todosWithUsersFromServer = todosFromServer.map(async todo => ({
-      //   ...todo,
-      //   user: await getUser(todo.userId),
-      // }));
 
       setTodos(todosFromServer);
-      // console.log(todosWithUsersFromServer);
     };
 
     getTodosFromServer();
@@ -52,6 +48,8 @@ export const App: React.FC = () => {
     return todo.title.includes(query.trim().toLowerCase());
   });
 
+  // console.log(userId, 'userId from state');
+
   return (
     <>
       <div className="section">
@@ -69,19 +67,26 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* Here should be condition when to show todos */}
               {/* <Loader /> */}
               <TodoList
                 todos={displayedTodos}
                 selectedTodoId={selectedTodoId}
                 onSetSelectedTodoId={setSelectedTodoId}
+                onSetUserId={setUserId}
               />
             </div>
           </div>
         </div>
       </div>
-      {/* Here should be condition for show the TodoModal */}
-      {/* <TodoModal /> */}
+      {userId !== 0 && (
+        <TodoModal
+          userId={userId}
+          todos={todos}
+          onSetUserId={setUserId}
+          selectedTodoId={selectedTodoId}
+          onSelectedTodoId={setSelectedTodoId}
+        />
+      )}
     </>
   );
 };
