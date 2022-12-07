@@ -27,10 +27,12 @@ export const App: React.FC = () => {
     debounce(setSearch, 500),
     [],
   );
+  const [isVisibleLoader, setIsVisibleLoader] = useState(true);
 
   useEffect(() => {
     getTodos()
-      .then(response => setTodos(response));
+      .then(response => setTodos(response))
+      .then(() => setIsVisibleLoader(false));
   }, []);
 
   let visibleTodos = todos.filter(todo => {
@@ -50,10 +52,8 @@ export const App: React.FC = () => {
     visibleTodos = visibleTodos
       .filter(todo => todo.title
         .toLocaleLowerCase()
-        .includes(value.toLocaleLowerCase()));
+        .includes(search.toLocaleLowerCase()));
   }, [search]);
-
-  const isVisibleLoader = visibleTodos.length === 0 && value === '';
 
   return (
     <>
