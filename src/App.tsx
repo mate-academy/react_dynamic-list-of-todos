@@ -10,19 +10,23 @@ import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 
 import { getTodos } from './api';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [filterBy, setFilterBy] = useState('All');
-  // const [user, setUser] = useState<User | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
-      const TodosFromServer = await getTodos();
+      const todosFromServer = await getTodos();
+      // const todosWithUsersFromServer = todosFromServer.map(async todo => ({
+      //   ...todo,
+      //   user: await getUser(todo.userId),
+      // }));
 
-      setTodos(TodosFromServer);
+      setTodos(todosFromServer);
+      // console.log(todosWithUsersFromServer);
     };
 
     getTodosFromServer();
@@ -67,7 +71,11 @@ export const App: React.FC = () => {
             <div className="block">
               {/* Here should be condition when to show todos */}
               {/* <Loader /> */}
-              <TodoList todos={displayedTodos} />
+              <TodoList
+                todos={displayedTodos}
+                selectedTodoId={selectedTodoId}
+                onSetSelectedTodoId={setSelectedTodoId}
+              />
             </div>
           </div>
         </div>
