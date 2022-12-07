@@ -54,11 +54,8 @@ export const TodoFilter: React.FC<Props> = (props) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            <i
+            <button
               aria-label="text"
-              role="button"
-              tabIndex={0}
-              onKeyDown={reset}
               data-cy="clearSearchButton"
               type="button"
               className="delete"

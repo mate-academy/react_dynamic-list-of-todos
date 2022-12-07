@@ -31,7 +31,6 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
       {!user ? (
         <Loader />
       ) : (
@@ -43,12 +42,8 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
             >
               {`Todo #${id}`}
             </div>
-
-            <i
+            <button
               aria-label="text"
-              role="button"
-              tabIndex={0}
-              onKeyDown={toClose}
               type="button"
               className="delete"
               data-cy="modal-close"

@@ -56,10 +56,7 @@ export const TodoList: React.FC<Props> = (props) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <i
-                role="button"
-                tabIndex={0}
-                onKeyDown={() => onSelectTodo(id)}
+              <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
@@ -73,7 +70,7 @@ export const TodoList: React.FC<Props> = (props) => {
                   )}
                   />
                 </span>
-              </i>
+              </button>
             </td>
           </tr>
         ))}
