@@ -1,4 +1,5 @@
 import React from 'react';
+import { SelectedStatus } from '../../types/Todo';
 
 type Props = {
   selectStatus: string,
@@ -32,9 +33,9 @@ export const TodoFilter: React.FC<Props> = (props) => {
             value={selectStatus}
             onChange={onSelectStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed </option>
+            <option value={SelectedStatus.All}>All</option>
+            <option value={SelectedStatus.Active}>Active</option>
+            <option value={SelectedStatus.Completed}>Completed </option>
           </select>
         </span>
       </p>

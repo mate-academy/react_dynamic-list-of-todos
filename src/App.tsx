@@ -7,14 +7,8 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-import { Todo } from './types/Todo';
+import { Todo, SelectedStatus } from './types/Todo';
 import { getTodos } from './api';
-
-enum SelectedStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
 
 function isIncludesQuery(todoTitle: string, query: string) {
   return todoTitle.toLowerCase().includes(query.toLowerCase());
@@ -25,7 +19,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedTodoStatus, setSelectedTodoStatus] = useState<string>('all');
+  const [selectedTodoStatus, setSelectedTodoStatus]
+  = useState<string>(SelectedStatus.All);
 
   const handleSelectTodo = (todoId: number | null) => (
     todoId
