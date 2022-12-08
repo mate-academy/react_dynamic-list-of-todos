@@ -7,11 +7,14 @@ type Props = {
   onChangeQuery: (query: string) => void,
 };
 
-export const TodoFilter:React.FC<Props> = React.memo((
-  {
-    query, status, onChangeStatus, onChangeQuery,
-  },
-) => {
+export const TodoFilter:React.FC<Props> = React.memo((props) => {
+  const {
+    query,
+    status,
+    onChangeStatus,
+    onChangeQuery,
+  } = props;
+
   const reset = useCallback(() => onChangeQuery(''), []);
 
   return (
@@ -43,7 +46,7 @@ export const TodoFilter:React.FC<Props> = React.memo((
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query !== '' && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

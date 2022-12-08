@@ -9,9 +9,10 @@ type Props = {
   onSelectTodo: (selectedTodo: Todo | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = React.memo((
-  { selectedTodo, onSelectTodo },
-) => {
+export const TodoModal: React.FC<Props> = React.memo(({
+  selectedTodo,
+  onSelectTodo,
+}) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {

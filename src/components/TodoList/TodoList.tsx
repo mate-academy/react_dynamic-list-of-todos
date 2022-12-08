@@ -8,9 +8,11 @@ type Props = {
   onSelectTodo: (selectedTodo: Todo | null) => void,
 };
 
-export const TodoList: React.FC<Props> = React.memo((
-  { todos, selectedTodo, onSelectTodo },
-) => (
+export const TodoList: React.FC<Props> = React.memo(({
+  todos,
+  selectedTodo,
+  onSelectTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
