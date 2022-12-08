@@ -39,6 +39,7 @@ export const App: React.FC = () => {
         case 'completed':
           return todo.completed && includesQuery;
 
+        case 'all':
         default:
           return includesQuery;
       }
