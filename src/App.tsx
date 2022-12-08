@@ -9,10 +9,11 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const [visibleToDos, setVisibleToDos] = useState<Todo[]>([]);
-  const [select, setSelect] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -20,11 +21,11 @@ export const App: React.FC = () => {
 
   const getSelectedTodos = (todos: Todo[]) => {
     const filteredTodos = todos.filter(({ completed, title }) => {
-      switch (select) {
-        case 'active':
+      switch (filterStatus) {
+        case FilterStatus.Active:
           return !completed && isMatch(title);
 
-        case 'completed':
+        case FilterStatus.Completed:
           return completed && isMatch(title);
 
         default:
@@ -35,10 +36,18 @@ export const App: React.FC = () => {
     setVisibleToDos(filteredTodos);
   };
 
+  const handleFilterSelect = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Object.values(FilterStatus).find(key => key === e.target.value);
+
+    if (value) {
+      setFilterStatus(value);
+    }
+  };
+
   useEffect(() => {
     getTodos()
       .then(todos => getSelectedTodos(todos));
-  }, [select, query]);
+  }, [filterStatus, query]);
 
   return (
     <>
@@ -49,10 +58,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelect={setSelect}
-                selectValue={select}
+                onFilterSelect={handleFilterSelect}
+                selectValue={filterStatus}
                 query={query}
-                setQuery={setQuery}
+                onQueryChange={setQuery}
               />
             </div>
 
@@ -61,7 +70,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleToDos}
-                    chooseTodo={setSelectedTodo}
+                    onTodoSelect={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
                 )
@@ -74,7 +83,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          deleteSelection={() => setSelectedTodo(null)}
+          onDeleteSelection={() => setSelectedTodo(null)}
         />
       )}
     </>
