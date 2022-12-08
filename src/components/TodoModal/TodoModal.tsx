@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 
 import { Todo } from '../../types/Todo';
@@ -35,11 +35,11 @@ export const TodoModal: React.FC<Props> = ({
     getUserFromServer();
   }, []);
 
-  const findClickedTodoBySelectedId = (todoId: number) => {
+  const findClickedTodoBySelectedId = useCallback((todoId: number) => {
     const findedTodo = todos.find(todo => todo.id === todoId);
 
     return findedTodo;
-  };
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -75,9 +75,13 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {findClickedTodoBySelectedId(selectedTodoId)?.completed && (
+                <strong className="has-text-success">Done</strong>
+              )}
 
+              {!findClickedTodoBySelectedId(selectedTodoId)?.completed && (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
 
               <a href="mailto:Sincere@april.biz">

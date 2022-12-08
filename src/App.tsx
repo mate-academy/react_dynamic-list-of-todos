@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -47,9 +47,16 @@ export const App: React.FC = () => {
     }
   });
 
-  const displayedTodos = filterTodos.filter(todo => {
-    return todo.title.includes(query.trim().toLowerCase());
-  });
+  const getDisplayedTodos = () => {
+    return filterTodos.filter(todo => {
+      return todo.title.toLowerCase().includes(query.trim().toLowerCase());
+    });
+  };
+
+  const displayedTodos = useMemo(
+    getDisplayedTodos,
+    [todos, query],
+  );
 
   return (
     <>
