@@ -12,6 +12,7 @@ loaded and show them using `TodoList`;
 works as expected;
 1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
 1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);
+1. Show the Loader while waiting for the user;
 1. `x` button should close the modal;
 1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos;
 1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
@@ -23,4 +24,4 @@ works as expected;
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://iryna-lelyk.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
