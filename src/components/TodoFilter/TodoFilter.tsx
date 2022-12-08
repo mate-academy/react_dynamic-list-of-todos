@@ -1,4 +1,6 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+export const TodoFilter: React.FC = () => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
