@@ -28,26 +28,22 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
 
   const filteredTodos = useMemo(() => {
-    if (query === '') {
-      return todos;
-    }
+    return todos.filter(todo => {
+      const includesQuery = todo.title.toLocaleLowerCase()
+        .includes(query.toLocaleLowerCase());
 
-    return todos.filter(todo => (
-      todo.title.toLocaleLowerCase()
-        .includes(query.toLocaleLowerCase())));
-  }, [query, todos]);
+      switch (status) {
+        case 'active':
+          return !todo.completed && includesQuery;
 
-  const showedTodos = useMemo(() => {
-    if (status === 'all') {
-      return filteredTodos;
-    }
+        case 'completed':
+          return todo.completed && includesQuery;
 
-    return filteredTodos.filter(todo => (
-      status === 'active'
-        ? !todo.completed
-        : todo.completed
-    ));
-  }, [status, filteredTodos]);
+        default:
+          return includesQuery;
+      }
+    });
+  }, [status, query, todos]);
 
   return (
     <>
@@ -70,7 +66,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={showedTodos}
+                    todos={filteredTodos}
                     selectedTodo={selectedTodo}
                     onSelectTodo={setSelectedTodo}
                   />
