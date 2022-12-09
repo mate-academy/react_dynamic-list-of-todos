@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Props {
+  selectedOption: string,
   onSelect: (option: string) => void,
+  query: string,
   onSearch: (str: string) => void,
 }
 
-export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
-  const [selectedOption, setSelectedOption] = useState('all');
-  const [inputValue, setInputValue] = useState('');
-
+export const TodoFilter: React.FC<Props> = ({
+  selectedOption,
+  onSelect,
+  query,
+  onSearch,
+}) => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onSelect(event.target.value);
-    setSelectedOption(event.target.value);
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(event.target.value);
-    setInputValue(event.target.value);
   };
 
   const handleClear = () => {
-    setInputValue('');
     onSearch('');
   };
 
@@ -46,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
           type="text"
           className="input"
           placeholder="Search..."
-          value={inputValue}
+          value={query}
           onChange={handleInput}
         />
 
@@ -54,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {inputValue && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

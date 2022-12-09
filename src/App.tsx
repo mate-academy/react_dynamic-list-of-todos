@@ -90,7 +90,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                selectedOption={selectedOption}
                 onSelect={setSelectedOption}
+                query={query}
                 onSearch={setQuery}
               />
             </div>
