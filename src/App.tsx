@@ -35,15 +35,15 @@ export const App: React.FC = () => {
     if (chosenTodo) {
       setSelectedTodo(chosenTodo);
     }
-  }, [selectedTodo, todos]);
+  }, []);
 
   const handleClose = useCallback(() => {
     setSelectedTodo(null);
-  }, [selectedTodo]);
+  }, []);
 
   const handleStatus = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(event.target.value as Status);
-  }, [status]);
+  }, []);
 
   const getVisibleTodos = (): Todo[] => {
     return todos.filter(todo => {
@@ -70,11 +70,11 @@ export const App: React.FC = () => {
 
   const handleQuery = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-  }, [query]);
+  }, []);
 
   const clearQuery = useCallback(() => {
     setQuery('');
-  }, [query]);
+  }, []);
 
   return (
     <>
