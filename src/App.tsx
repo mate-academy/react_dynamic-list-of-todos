@@ -63,6 +63,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     onSetCheckedTodo={setCheckedTodo}
+                    checkedTodo={checkedTodo}
                   />
                 )}
             </div>

@@ -1,12 +1,14 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
   onSetCheckedTodo: (todo: Todo) => void
+  checkedTodo: Todo | null
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSetCheckedTodo }) => (
+export const TodoList: React.FC<Props> = ({ todos, onSetCheckedTodo, checkedTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -48,7 +50,14 @@ export const TodoList: React.FC<Props> = ({ todos, onSetCheckedTodo }) => (
               onClick={() => onSetCheckedTodo(todo)}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={classNames(
+                  'far',
+                  {
+                    'fa-eye': todo !== checkedTodo,
+                    'fa-eye-slash': todo === checkedTodo,
+                  },
+                )}
+                />
               </span>
             </button>
           </td>
