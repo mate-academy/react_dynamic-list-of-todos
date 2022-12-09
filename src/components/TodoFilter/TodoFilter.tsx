@@ -9,6 +9,21 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
   const [selectedOption, setSelectedOption] = useState('all');
   const [inputValue, setInputValue] = useState('');
 
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelect(event.target.value);
+    setSelectedOption(event.target.value);
+  };
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(event.target.value);
+    setInputValue(event.target.value);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    onSearch('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -16,10 +31,7 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
           <select
             data-cy="statusSelect"
             value={selectedOption}
-            onChange={(event) => {
-              onSelect(event.target.value);
-              setSelectedOption(event.target.value);
-            }}
+            onChange={handleSelect}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -35,10 +47,7 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
           className="input"
           placeholder="Search..."
           value={inputValue}
-          onChange={(event) => {
-            setInputValue(event.target.value);
-            onSearch(event.target.value);
-          }}
+          onChange={handleInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -50,10 +59,7 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onSearch }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setInputValue('');
-                onSearch('');
-              }}
+              onClick={handleClear}
             />
           </span>
         )}

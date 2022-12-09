@@ -11,12 +11,6 @@ import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
 import { User } from './types/User';
 
-// export enum SortType {
-//   ALL = 'all',
-//   ACTIVE = 'active',
-//   COMPLITED = 'completed',
-// }
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -67,14 +61,6 @@ export const App: React.FC = () => {
     setIsButtonClicked(false);
   };
 
-  const selectOption = (option: string) => {
-    setSelectedOption(option);
-  };
-
-  const filterByInput = (str: string) => {
-    setQuery(str);
-  };
-
   return (
     <>
       <div className="section">
@@ -84,8 +70,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelect={selectOption}
-                onSearch={filterByInput}
+                onSelect={setSelectedOption}
+                onSearch={setQuery}
               />
             </div>
 
