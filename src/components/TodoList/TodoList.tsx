@@ -8,7 +8,11 @@ type Props = {
   checkedTodo: Todo | null
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSetCheckedTodo, checkedTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSetCheckedTodo,
+  checkedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>

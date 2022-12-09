@@ -15,8 +15,12 @@ export const TodoFilter: React.FC<Props> = ({
         setToggleFilter(false);
         break;
 
-      case 'complited':
+      case 'completed':
         setToggleFilter(true);
+        break;
+
+      case 'all':
+        setToggleFilter(null);
         break;
 
       default:
@@ -38,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({
           >
             <option value="all">All</option>
             <option value="active">Active</option>
-            <option value="complited">Completed</option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>
