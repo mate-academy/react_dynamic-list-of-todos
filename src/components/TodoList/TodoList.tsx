@@ -9,7 +9,11 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { todos, onSelectTodo, selectedId } = props;
+  const {
+    todos,
+    onSelectTodo,
+    selectedId,
+  } = props;
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -45,6 +49,7 @@ export const TodoList: React.FC<Props> = (props) => {
             ) : (
               <td className="is-vcentered" />
             )}
+
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames(
@@ -55,6 +60,7 @@ export const TodoList: React.FC<Props> = (props) => {
                 {title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
