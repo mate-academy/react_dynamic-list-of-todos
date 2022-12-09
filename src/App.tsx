@@ -26,10 +26,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos().then(visTodos => {
-      setTodos(visTodos);
-      setIsTodosLoaded(true);
-    });
+    getTodos()
+      .then(visTodos => {
+        setTodos(visTodos);
+        setIsTodosLoaded(true);
+      });
   }, []);
 
   const filterBySelect = useCallback((todosFromServer: Todo[], option: string) => {
@@ -65,7 +66,8 @@ export const App: React.FC = () => {
   }, [visibleTodos, query]);
 
   const onInfoButtonClick = useCallback((todo: Todo) => {
-    getUser(todo.userId).then(user => setSelectedUser(user));
+    getUser(todo.userId)
+      .then(user => setSelectedUser(user));
 
     setSelectedTodo(todo);
     setIsButtonClicked(true);
@@ -105,6 +107,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+
       {isButtonClicked && (
         <TodoModal
           user={selectedUser}
