@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,12 +20,12 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
-  async function fetchTodos() {
+  const fetchTodos = useCallback(async () => {
     const response = await getTodos();
 
     setTodosLoaded(true);
     setTodos(response);
-  }
+  }, []);
 
   useEffect(() => {
     fetchTodos();
@@ -65,6 +67,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
+                filter={filter}
                 setQuery={(newQuery: string) => setQuery(newQuery)}
                 setFilter={(selectedFilter: string) => setFilter(selectedFilter)}
               />

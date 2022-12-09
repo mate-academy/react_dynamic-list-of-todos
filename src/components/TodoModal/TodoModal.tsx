@@ -10,10 +10,11 @@ interface Props {
   setSelectedTodo: (selectedTodo: Todo | null) => void,
 }
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodo,
-}) => {
+export const TodoModal: React.FC<Props> = (props) => {
+  const {
+    selectedTodo,
+    setSelectedTodo,
+  } = props;
   const [user, setUser] = useState<User | null>(null);
 
   async function fetchUsers() {

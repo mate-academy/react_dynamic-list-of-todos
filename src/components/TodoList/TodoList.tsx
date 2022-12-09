@@ -34,7 +34,6 @@ export const TodoList: React.FC<Props> = ({
           completed,
           id,
           title,
-          // userId,
         } = todo;
 
         return (
