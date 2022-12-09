@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  filterGoods: (showGoods: Todo[]) => void,
-  todos: Todo[],
+  getQuery: (query: string) => void,
+  getOption: (option: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ filterGoods, todos }) => {
+export const TodoFilter: React.FC<Props> = (
+  { getQuery, getOption },
+) => {
   const [query, setQuery] = useState('');
   const [selectedField, setSelectedFieldy] = useState('all');
 
@@ -17,7 +18,10 @@ export const TodoFilter: React.FC<Props> = ({ filterGoods, todos }) => {
           <select
             data-cy="statusSelect"
             value={selectedField}
-            onChange={(event) => setSelectedFieldy(event.target.value)}
+            onChange={(event) => {
+              setSelectedFieldy(event.target.value);
+              getOption(event.target.value);
+            }}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -34,23 +38,28 @@ export const TodoFilter: React.FC<Props> = ({ filterGoods, todos }) => {
           placeholder="Search..."
           value={query}
           onChange={(event) => {
+            getQuery(event.target.value);
             setQuery(event.target.value);
-            filterGoods(todos.filter(todo => todo.title.toLocaleLowerCase()
-              .includes(event.target.value.toLocaleLowerCase())));
           }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => {
+                setQuery('');
+                getQuery('');
+              }}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

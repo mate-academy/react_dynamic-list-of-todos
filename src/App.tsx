@@ -12,16 +12,31 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleGoods, setVisibleGoods] = useState(todos);
   const [userId, setUserId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [queryToFilter, setQueryToFilter] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+
+  let visibleGoods = todos;
+
+  switch (selectedStatus) {
+    case 'completed':
+      visibleGoods = visibleGoods.filter(todo => todo.completed === true);
+      break;
+
+    case 'active':
+      visibleGoods = todos.filter(todo => todo.completed === false);
+      break;
+
+    default: visibleGoods = todos;
+  }
+
+  visibleGoods = visibleGoods.filter(todo => todo.title.toLocaleLowerCase()
+    .includes(queryToFilter.toLocaleLowerCase()));
 
   useEffect(() => {
     getTodos()
-      .then(todosFrom => {
-        setTodos(todosFrom);
-        setVisibleGoods(todosFrom);
-      });
+      .then(setTodos);
   }, []);
 
   return (
@@ -33,8 +48,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterGoods={(showGoods) => setVisibleGoods(showGoods)}
-                todos={todos}
+                getQuery={(query) => setQueryToFilter(query)}
+                getOption={(option) => setSelectedStatus(option)}
               />
             </div>
 
@@ -43,9 +58,9 @@ export const App: React.FC = () => {
                 && (
                   <TodoList
                     todos={visibleGoods}
-                    selectedUserId={userId}
-                    selectUserId={(newUserId) => setUserId(newUserId)}
-                    selectedTodo={(todo) => setSelectedTodo(todo)}
+                    selectedTodo={selectedTodo}
+                    setCurrentUserId={(newUserId) => setUserId(newUserId)}
+                    setCurrentTodo={(todo) => setSelectedTodo(todo)}
                   />
                 )}
               {visibleGoods.length === 0 && todos.length === 0 && <Loader />}
@@ -77,6 +92,7 @@ export const App: React.FC = () => {
             userId={userId}
             selectedTodo={selectedTodo}
             closeTodoModal={() => setUserId(0)}
+            setCurrentTodo={() => setSelectedTodo(null)}
           />
         )}
     </>
