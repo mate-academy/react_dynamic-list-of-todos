@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -27,39 +32,50 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  let visibleTodos = [...todos].filter(todo => {
-    switch (selectedOption) {
-      case 'active':
-        return todo.completed === false;
+  const filterBySelect = useCallback((todosFromServer: Todo[], option: string) => {
+    return todosFromServer.filter(todo => {
+      switch (option) {
+        case 'active':
+          return todo.completed === false;
 
-      case 'completed':
-        return todo.completed === true;
+        case 'completed':
+          return todo.completed === true;
 
-      case 'all':
-      default:
-        return true;
-    }
-  });
+        case 'all':
+        default:
+          return true;
+      }
+    });
+  }, []);
 
-  visibleTodos = visibleTodos
-    .filter(todo => {
-      const normQuery = query.toLocaleLowerCase();
+  const filterByQuery = useCallback((visTodos: Todo[], inputQuery: string) => {
+    return visTodos.filter(todo => {
+      const normQuery = inputQuery.toLocaleLowerCase();
 
       return todo.title.toLocaleLowerCase().includes(normQuery);
     });
+  }, []);
 
-  const onInfoButtonClick = (todo: Todo) => {
+  let visibleTodos = useMemo(() => {
+    return filterBySelect(todos, selectedOption);
+  }, [todos, selectedOption]);
+
+  visibleTodos = useMemo(() => {
+    return filterByQuery(visibleTodos, query);
+  }, [visibleTodos, query]);
+
+  const onInfoButtonClick = useCallback((todo: Todo) => {
     getUser(todo.userId).then(user => setSelectedUser(user));
 
     setSelectedTodo(todo);
     setIsButtonClicked(true);
-  };
+  }, []);
 
-  const onCrossButtonClick = () => {
+  const onCrossButtonClick = useCallback(() => {
     setSelectedUser(null);
     setSelectedTodo(null);
     setIsButtonClicked(false);
-  };
+  }, []);
 
   return (
     <>
