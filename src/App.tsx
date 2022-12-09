@@ -47,7 +47,7 @@ export const App: React.FC = () => {
 
   const getVisibleTodos = (): Todo[] => {
     return todos.filter(todo => {
-      const filteredByQuery = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+      const filteredByQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
       switch (status) {
         case Status.Active:
@@ -56,6 +56,7 @@ export const App: React.FC = () => {
         case Status.Completed:
           return todo.completed && filteredByQuery;
 
+        case Status.All:
         default:
           return filteredByQuery;
       }
