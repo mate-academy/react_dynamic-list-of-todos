@@ -50,12 +50,9 @@ export const TodoList: React.FC<Props> = React.memo(({
             )}
 
           <td className="is-vcentered is-expanded">
-            <p className={classNames(
-              {
-                'has-text-success': todo.completed,
-                'has-text-danger': !todo.completed,
-              },
-            )}
+            <p className={todo.completed
+              ? 'has-text-success'
+              : 'has-text-danger'}
             >
               {todo.title}
             </p>
@@ -66,23 +63,17 @@ export const TodoList: React.FC<Props> = React.memo(({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => {
-                if (selectedTodo?.id === todo.id) {
-                  onSelectTodo(null);
-                } else {
-                  onSelectTodo(todo);
-                }
-              }}
+              onClick={() => (
+                selectedTodo?.id === todo.id
+                  ? onSelectTodo(null)
+                  : onSelectTodo(todo)
+              )}
             >
               <span className="icon">
                 <i
-                  className={classNames(
-                    'far',
-                    {
-                      'fa-eye': selectedTodo?.id !== todo.id,
-                      'fa-eye-slash': selectedTodo?.id === todo.id,
-                    },
-                  )}
+                  className={selectedTodo?.id === todo.id
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
                 />
               </span>
             </button>

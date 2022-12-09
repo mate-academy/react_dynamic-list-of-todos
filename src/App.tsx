@@ -13,8 +13,10 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
-
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
 
   useEffect(() => {
     getTodos()
@@ -23,9 +25,6 @@ export const App: React.FC = () => {
         setTodos(loadedTodos);
       });
   }, []);
-
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
