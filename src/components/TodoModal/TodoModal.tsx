@@ -7,13 +7,12 @@ import { Loader } from '../Loader';
 type Props = {
   userId: number,
   selectedTodo: Todo | null,
-  closeTodoModal: () => void
-  setCurrentTodo: () => void,
+  closeTodoModal: () => void,
 };
 
 export const TodoModal: React.FC<Props> = (
   {
-    userId, selectedTodo, closeTodoModal, setCurrentTodo: selectTodo,
+    userId, selectedTodo, closeTodoModal,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
@@ -46,7 +45,6 @@ export const TodoModal: React.FC<Props> = (
               data-cy="modal-close"
               onClick={() => {
                 closeTodoModal();
-                selectTodo();
               }}
             />
           </header>

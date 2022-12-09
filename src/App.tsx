@@ -39,6 +39,11 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
+  const closeTodoModal = () => {
+    setUserId(0);
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -91,8 +96,7 @@ export const App: React.FC = () => {
           <TodoModal
             userId={userId}
             selectedTodo={selectedTodo}
-            closeTodoModal={() => setUserId(0)}
-            setCurrentTodo={() => setSelectedTodo(null)}
+            closeTodoModal={closeTodoModal}
           />
         )}
     </>
