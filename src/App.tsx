@@ -35,7 +35,7 @@ export const App: React.FC = () => {
     if (chosenTodo) {
       setSelectedTodo(chosenTodo);
     }
-  }, []);
+  }, [selectedTodo, todos]);
 
   const handleClose = useCallback(() => {
     setSelectedTodo(null);
