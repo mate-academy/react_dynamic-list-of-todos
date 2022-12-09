@@ -12,9 +12,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
 import { User } from './types/User';
+
+import { getTodos, getUser } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
