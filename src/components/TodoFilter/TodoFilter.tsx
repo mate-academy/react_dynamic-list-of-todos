@@ -12,7 +12,7 @@ export const TodoFilter: React.FC<Props> = ({
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="todoStatusSelect">
+        <select data-cy="statusSelect">
           <option
             value="all"
             onClick={() => onGetStatusTodos('all')}
