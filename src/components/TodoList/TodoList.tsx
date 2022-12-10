@@ -5,14 +5,12 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[],
   onShowInfo: (id: number, todo: Todo) => Promise<void>,
-  selectedUserId: number,
   selectedTodo: Todo | null,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onShowInfo,
-  selectedUserId,
   selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -32,13 +30,12 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => {
         const isSelectedTodo = todo.id === selectedTodo?.id;
-        const isSelectedUser = todo.userId === selectedUserId;
 
         return (
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': isSelectedUser,
+              'has-background-info-light': isSelectedTodo,
             })}
             key={todo.id}
           >

@@ -13,7 +13,6 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todoStatus, setTodoStatus] = useState('all');
   const [query, setQuery] = useState('');
@@ -25,14 +24,12 @@ export const App: React.FC = () => {
   }, []);
 
   const showInfo = async (id: number, todo: Todo) => {
-    setSelectedUserId(id);
     setSelectedTodo(todo);
     setUser(await getUser(id));
   };
 
   const closeInfo = () => {
     setSelectedTodo(null);
-    setSelectedUserId(0);
     setUser(null);
   };
 
@@ -91,7 +88,6 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     onShowInfo={showInfo}
-                    selectedUserId={selectedUserId}
                     selectedTodo={selectedTodo}
                   />
                 )}
