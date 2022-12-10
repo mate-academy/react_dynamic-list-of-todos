@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -44,6 +44,14 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
+  const getQuery = useCallback((query) => {
+    setQueryToFilter(query);
+  }, []);
+
+  const getOption = useCallback((option) => {
+    setSelectedStatus(option);
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -53,8 +61,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                getQuery={(query) => setQueryToFilter(query)}
-                getOption={(option) => setSelectedStatus(option)}
+                getQuery={getQuery}
+                getOption={getOption}
               />
             </div>
 

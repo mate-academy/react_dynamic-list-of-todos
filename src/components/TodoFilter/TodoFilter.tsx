@@ -1,15 +1,38 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 type Props = {
   getQuery: (query: string) => void,
   getOption: (option: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = (
+export const TodoFilter: React.FC<Props> = React.memo((
   { getQuery, getOption },
 ) => {
   const [query, setQuery] = useState('');
   const [selectedField, setSelectedFieldy] = useState('all');
+
+  const fillOption = useCallback((
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { value } = event.target;
+
+    setSelectedFieldy(value);
+    getOption(value);
+  }, []);
+
+  const fillQuery = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { value } = event.target;
+
+    setSelectedFieldy(value);
+    getOption(value);
+  }, []);
+
+  const clearQuery = useCallback(() => {
+    setQuery('');
+    getQuery('');
+  }, []);
 
   return (
     <form className="field has-addons">
@@ -18,10 +41,7 @@ export const TodoFilter: React.FC<Props> = (
           <select
             data-cy="statusSelect"
             value={selectedField}
-            onChange={(event) => {
-              setSelectedFieldy(event.target.value);
-              getOption(event.target.value);
-            }}
+            onChange={fillOption}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -37,10 +57,7 @@ export const TodoFilter: React.FC<Props> = (
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => {
-            getQuery(event.target.value);
-            setQuery(event.target.value);
-          }}
+          onChange={fillQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,14 +70,11 @@ export const TodoFilter: React.FC<Props> = (
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setQuery('');
-                getQuery('');
-              }}
+              onClick={clearQuery}
             />
           </span>
         )}
       </p>
     </form>
   );
-};
+});

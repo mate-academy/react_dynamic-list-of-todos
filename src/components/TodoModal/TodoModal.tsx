@@ -10,7 +10,7 @@ type Props = {
   closeTodoModal: () => void,
 };
 
-export const TodoModal: React.FC<Props> = (
+export const TodoModal: React.FC<Props> = React.memo((
   {
     userId, selectedTodo, closeTodoModal,
   },
@@ -43,9 +43,7 @@ export const TodoModal: React.FC<Props> = (
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                closeTodoModal();
-              }}
+              onClick={closeTodoModal}
             />
           </header>
 
@@ -70,4 +68,4 @@ export const TodoModal: React.FC<Props> = (
       )}
     </div>
   );
-};
+});
