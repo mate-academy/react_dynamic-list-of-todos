@@ -13,18 +13,18 @@ export const TodoModal: React.FC<Props> = memo(({
   todo,
   onTodo,
 }) => {
-  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(response => setUserDetails(response));
+      .then(setUser);
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!userDetails ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -61,8 +61,8 @@ export const TodoModal: React.FC<Props> = memo(({
 
               {' by '}
 
-              <a href={`mailto:${userDetails.email}`}>
-                {userDetails.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>

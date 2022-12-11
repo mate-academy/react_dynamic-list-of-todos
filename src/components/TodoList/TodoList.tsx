@@ -37,6 +37,7 @@ export const TodoList: React.FC<Props> = memo(({
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
+
           {todo.completed
             ? (
               <td className="is-vcentered">
@@ -47,6 +48,7 @@ export const TodoList: React.FC<Props> = memo(({
             ) : (
               <td className="is-vcentered" />
             )}
+
           <td className="is-vcentered is-expanded">
             <p className={todo.completed
               ? 'has-text-success'
@@ -55,6 +57,7 @@ export const TodoList: React.FC<Props> = memo(({
               {todo.title}
             </p>
           </td>
+
           <td className="has-text-right is-vcentered">
             <button
               data-cy="selectButton"

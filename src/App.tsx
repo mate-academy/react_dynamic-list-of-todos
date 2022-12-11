@@ -18,12 +18,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(response => setTodos(response));
+      .then(setTodos);
   }, []);
 
-  // console.log(selectedTodo);
-  const visibleTodos = () => {
-    return todos.filter(todo => {
+  const visibleTodos = () => (
+    todos.filter(todo => {
       const filteredByQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
       switch (option) {
@@ -36,8 +35,7 @@ export const App: React.FC = () => {
         default:
           return filteredByQuery;
       }
-    });
-  };
+    }));
 
   return (
     <>
