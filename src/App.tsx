@@ -7,39 +7,19 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todoStatus, setTodoStatus] = useState('all');
   const [query, setQuery] = useState('');
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer));
+      .then(setTodos);
   }, []);
-
-  const showInfo = async (id: number, todo: Todo) => {
-    setSelectedTodo(todo);
-    setUser(await getUser(id));
-  };
-
-  const closeInfo = () => {
-    setSelectedTodo(null);
-    setUser(null);
-  };
-
-  const getQuery = (text: string) => {
-    setQuery(text);
-  };
-
-  const getStatusedTodos = (choosedTodoStatus: string) => {
-    setTodoStatus(choosedTodoStatus);
-  };
 
   let filteredTodos = todos.filter(todo => {
     switch (todoStatus) {
@@ -75,8 +55,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onGetStatusTodos={getStatusedTodos}
-                onGetQuery={getQuery}
+                onChangeStatusTodos={setTodoStatus}
+                onChangeQuery={setQuery}
                 query={query}
               />
             </div>
@@ -87,7 +67,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    onShowInfo={showInfo}
+                    onShowInfo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
                 )}
@@ -98,9 +78,8 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          user={user}
           todo={selectedTodo}
-          onCloseInfo={closeInfo}
+          onCloseInfo={setSelectedTodo}
         />
       )}
     </>

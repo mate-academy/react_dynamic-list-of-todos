@@ -1,12 +1,12 @@
 interface Props {
-  onGetStatusTodos: (choosedTodoStatus: string) => void,
-  onGetQuery: (text: string) => void,
+  onChangeStatusTodos: (choosedTodoStatus: string) => void,
+  onChangeQuery: (text: string) => void,
   query: string,
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  onGetStatusTodos,
-  onGetQuery,
+  onChangeStatusTodos,
+  onChangeQuery,
   query,
 }) => (
   <form className="field has-addons">
@@ -15,19 +15,19 @@ export const TodoFilter: React.FC<Props> = ({
         <select data-cy="statusSelect">
           <option
             value="all"
-            onClick={() => onGetStatusTodos('all')}
+            onClick={() => onChangeStatusTodos('all')}
           >
             All
           </option>
           <option
             value="active"
-            onClick={() => onGetStatusTodos('active')}
+            onClick={() => onChangeStatusTodos('active')}
           >
             Active
           </option>
           <option
             value="completed"
-            onClick={() => onGetStatusTodos('completed')}
+            onClick={() => onChangeStatusTodos('completed')}
           >
             Completed
           </option>
@@ -42,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => onGetQuery(event.target.value)}
+        onChange={(event) => onChangeQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -55,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => onGetQuery('')}
+            onClick={() => onChangeQuery('')}
           />
         )}
       </span>

@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  onShowInfo: (id: number, todo: Todo) => Promise<void>,
+  onShowInfo: (todo: Todo) => void,
   selectedTodo: Todo | null,
 }
 
@@ -65,7 +65,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onShowInfo(todo.userId, todo)}
+                onClick={() => onShowInfo(todo)}
               >
                 <span className="icon">
                   <i className={classNames('far', {
