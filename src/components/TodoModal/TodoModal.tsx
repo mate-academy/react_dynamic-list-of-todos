@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -9,7 +9,7 @@ type Props = {
   onTodo: (todo: Todo | null) => void
 };
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal: React.FC<Props> = memo(({
   todo,
   onTodo,
 }) => {
@@ -70,4 +70,4 @@ export const TodoModal: React.FC<Props> = ({
       )}
     </div>
   );
-};
+});
