@@ -13,6 +13,8 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
 
   useEffect(() => {
     getTodos()
@@ -31,18 +33,18 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   }, [todos, selectedTodo]);
 
-  // const filterByTitle = (todos: Todo[]) => {
-  //   function searchInput(input: string) {
-  //     return input.trim().toLowerCase().includes(query.toLowerCase());
-  //   }
-  //   setTodos(todos.filter(todo => searchInput(todo.title)));
-  // };
+  const filteredTodos = todos.filter(todo => {
+    const filteredByQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
-  // const filterActiveTodos = (todos: Todo[]) => {
-  //   const activeTodos = todos.filter((todo: Todo) => !todo.completed);
-  //   setTodos(activeTodos);
-  //   setQuery('active')
-  // };
+    switch (status) {
+      case 'active':
+        return filteredByQuery && !todo.completed;
+      case 'completed':
+        return filteredByQuery && todo.completed;
+      default:
+        return filteredByQuery;
+    }
+  });
 
   return (
     <>
@@ -52,7 +54,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                query={query}
+                onChangeStatus={setStatus}
+                onChangeQuery={setQuery}
+              />
             </div>
 
             <div className="block">
@@ -60,7 +67,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   selectTodo={handleSelection}
                 />

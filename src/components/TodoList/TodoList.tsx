@@ -8,10 +8,10 @@ type Props = {
   selectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = ({ 
-  todos, 
+export const TodoList: React.FC<Props> = ({
+  todos,
   selectTodo,
-  selectedTodo
+  selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
