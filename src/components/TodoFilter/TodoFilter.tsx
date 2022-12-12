@@ -7,7 +7,9 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  inputState, setInputState, setToggleFilter,
+  inputState,
+  setInputState,
+  setToggleFilter,
 }) => {
   const getToggleValue = (value: string) => {
     switch (value) {
@@ -17,10 +19,6 @@ export const TodoFilter: React.FC<Props> = ({
 
       case 'completed':
         setToggleFilter(true);
-        break;
-
-      case 'all':
-        setToggleFilter(null);
         break;
 
       default:
