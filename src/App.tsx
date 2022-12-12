@@ -23,9 +23,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(loadingTodos => {
-        setLoadedTodos(loadingTodos);
-      });
+      .then(setLoadedTodos);
   }, []);
 
   const visibleTodos = useMemo(() => {
