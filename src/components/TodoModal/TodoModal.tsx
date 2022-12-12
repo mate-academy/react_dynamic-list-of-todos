@@ -13,17 +13,32 @@ export const TodoModal: React.FC<Props> = ({
   todo,
   onCloseInfo,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
+  const [loader, setLoader] = useState(false);
+
+  const loadUser = async (userId: number) => {
+    const loadedUser = await getUser(userId);
+
+    if (loadedUser) {
+      setUser(loadedUser);
+    } else {
+      setUser(null);
+    }
+
+    setLoader(false);
+  };
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
-  });
+    setLoader(true);
+
+    loadUser(todo.userId);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user
+      {loader
         ? <Loader />
         : (
           <div className="modal-card">
@@ -56,8 +71,8 @@ export const TodoModal: React.FC<Props> = ({
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>

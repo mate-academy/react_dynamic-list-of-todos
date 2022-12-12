@@ -41,20 +41,19 @@ export const TodoList: React.FC<Props> = ({
           >
             <td className="is-vcentered">{todo.id}</td>
 
-            {todo.completed
-              ? (
-                <td className="is-vcentered">
+            <td className="is-vcentered">
+              {todo.completed
+                && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
-                </td>
-              )
-              : <td className="is-vcentered" />}
+                )}
+            </td>
 
             <td className="is-vcentered is-expanded">
-              <p className={classNames('has-text-success', {
-                'has-text-danger': !todo.completed,
-              })}
+              <p className={todo.completed
+                ? 'has-text-success'
+                : 'has-text-danger'}
               >
                 {todo.title}
               </p>
@@ -68,10 +67,9 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onShowInfo(todo)}
               >
                 <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye-slash': isSelectedTodo,
-                    'fa-eye': !isSelectedTodo,
-                  })}
+                  <i className={isSelectedTodo
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
                   />
                 </span>
               </button>

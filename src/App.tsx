@@ -9,11 +9,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [todoStatus, setTodoStatus] = useState('all');
+  const [todoStatus, setTodoStatus] = useState(TodoStatus.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -21,30 +22,25 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  let filteredTodos = todos.filter(todo => {
-    switch (todoStatus) {
-      case 'all':
-        return todo;
+  const getVisibleTodos = () => {
+    return todos.filter(todo => {
+      const normalizedQuery = query.toLocaleLowerCase();
 
-      case 'active':
-        return !todo.completed;
+      switch (todoStatus) {
+        case TodoStatus.ALL:
+          return todo.title.includes(normalizedQuery);
 
-      case 'completed':
-        return todo.completed;
+        case TodoStatus.ACTIVE:
+          return !todo.completed && todo.title.includes(normalizedQuery);
 
-      default:
-        throw new Error('Incorrect todoStatus');
-    }
-  });
+        case TodoStatus.COMPLETED:
+          return todo.completed && todo.title.includes(normalizedQuery);
 
-  filteredTodos = filteredTodos.filter(todo => {
-    const normalizedQuery = query.toLocaleLowerCase();
-    const normalizedTitle = todo.title.toLocaleLowerCase();
-
-    return (
-      normalizedTitle.includes(normalizedQuery)
-    );
-  });
+        default:
+          return todo;
+      }
+    });
+  };
 
   return (
     <>
@@ -63,11 +59,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length
+              {todos.length === 0
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos}
+                    todos={getVisibleTodos()}
                     onShowInfo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
