@@ -6,7 +6,7 @@ import { Loader } from '../Loader';
 
 interface Props {
   selectedTodo: Todo,
-  onSelectedTodo: (seletedTodo: Todo | null) => void,
+  onSelectedTodo: (seleсtedTodo: Todo | null) => void,
 }
 
 export const TodoModal: React.FC<Props>

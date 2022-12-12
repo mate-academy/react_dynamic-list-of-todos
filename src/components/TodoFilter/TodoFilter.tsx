@@ -2,14 +2,14 @@ import React from 'react';
 
 interface Props {
   query: string;
-  filteredTodos: string;
+  status: string;
   onChangeQuery: (query: string) => void,
-  onChangeFilter: (filteredTodos: string) => void,
+  onChangeFilter: (status: string) => void,
 }
 
 export const TodoFilter: React.FC<Props> = React.memo((
   {
-    query, filteredTodos, onChangeQuery, onChangeFilter,
+    query, status, onChangeQuery, onChangeFilter,
   },
 ) => (
   <form className="field has-addons">
@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = React.memo((
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={filteredTodos}
+          value={status}
           onChange={(event) => onChangeFilter(event.target.value)}
         >
           <option value="all">All</option>

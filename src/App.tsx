@@ -14,39 +14,39 @@ export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState('all');
+  const [status, setStatus] = useState('all');
 
   useEffect(() => {
-    getTodos().then(todos => setSelectedTodos(todos));
-    setLoadingTodos(false);
+    getTodos().then(todos => {
+      setSelectedTodos(todos);
+      setLoadingTodos(false);
+    });
   }, []);
 
-  const todosWithFilter = () => {
-    switch (filteredTodos) {
+  const filtredTodos = () => {
+    const todosWithQuery = () => {
+      if (query === '') {
+        return selectedTodos;
+      }
+
+      return selectedTodos.filter(todo => (
+        todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())));
+    };
+
+    switch (status) {
       case 'active':
-        return selectedTodos.filter(todo => !todo.completed);
+        return todosWithQuery().filter(todo => !todo.completed);
 
       case 'completed':
-        return selectedTodos.filter(todo => todo.completed);
+        return todosWithQuery().filter(todo => todo.completed);
 
       case 'all':
       default:
-        return selectedTodos;
+        return todosWithQuery();
     }
   };
 
-  const todosWithQuery = () => {
-    if (query === '') {
-      return todosWithFilter();
-    }
-
-    const filteredTodosWithFilter = todosWithFilter();
-
-    return filteredTodosWithFilter.filter(todo => (
-      todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())));
-  };
-
-  const visibleTodos = todosWithQuery();
+  const visibleTodos = filtredTodos();
 
   return (
     <>
@@ -58,9 +58,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                filteredTodos={filteredTodos}
+                status={status}
                 onChangeQuery={setQuery}
-                onChangeFilter={setFilteredTodos}
+                onChangeFilter={setStatus}
               />
             </div>
 

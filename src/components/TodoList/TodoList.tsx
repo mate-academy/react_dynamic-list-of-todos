@@ -57,11 +57,7 @@ export const TodoList: React.FC<Props> = React.memo(
                   className="button"
                   type="button"
                   onClick={() => {
-                    if (selectedTodo?.id === todo.id) {
-                      onSelectedTodo(null);
-                    } else {
-                      onSelectedTodo(todo);
-                    }
+                    onSelectedTodo(todo);
                   }}
                 >
                   <span className="icon">
