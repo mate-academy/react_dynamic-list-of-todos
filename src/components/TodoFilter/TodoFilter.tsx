@@ -1,5 +1,7 @@
+import { TodosStatus } from '../../types/TodosStatus';
+
 type Props = {
-  filterByStatus: (option: string) => void
+  filterByStatus: (option: TodosStatus) => void
   filterByQuery: (query: string) => void
   query: string
 };
@@ -15,17 +17,19 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => filterByStatus(event.target.value)}
+            onChange={
+              (event) => filterByStatus(event.target.value as TodosStatus)
+            }
           >
-            <option value="all">
+            <option value={TodosStatus.ALL}>
               All
             </option>
 
-            <option value="active">
+            <option value={TodosStatus.ACTIVE}>
               Active
             </option>
 
-            <option value="completed">
+            <option value={TodosStatus.COMPLETED}>
               Completed
             </option>
           </select>
