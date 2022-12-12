@@ -21,6 +21,10 @@ export const TodoFilter: React.FC<Props> = ({
         setToggleFilter(true);
         break;
 
+      case 'all':
+        setToggleFilter(null);
+        break;
+
       default:
         setToggleFilter(null);
         break;
