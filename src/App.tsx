@@ -54,14 +54,14 @@ export const App: React.FC = () => {
     enum Status {
       All = 'All',
       Active = 'active',
-      Complited = 'completed',
+      Completed = 'completed',
     }
 
     switch (status) {
       case Status.Active:
         return filteredbyQuery.filter(todo => !todo.completed);
 
-      case Status.Complited:
+      case Status.Completed:
         return filteredbyQuery.filter(todo => todo.completed);
 
       case Status.All:
