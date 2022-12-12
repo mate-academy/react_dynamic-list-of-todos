@@ -1,33 +1,36 @@
 interface Props {
   onChangeStatusTodos: (choosedTodoStatus: string) => void,
+  todoStatus: string,
   onChangeQuery: (text: string) => void,
   query: string,
 }
 
 export const TodoFilter: React.FC<Props> = ({
   onChangeStatusTodos,
+  todoStatus,
   onChangeQuery,
   query,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={todoStatus}
+          onChange={event => onChangeStatusTodos(event.target.value)}
+        >
           <option
             value="all"
-            onClick={() => onChangeStatusTodos('all')}
           >
             All
           </option>
           <option
             value="active"
-            onClick={() => onChangeStatusTodos('active')}
           >
             Active
           </option>
           <option
             value="completed"
-            onClick={() => onChangeStatusTodos('completed')}
           >
             Completed
           </option>
