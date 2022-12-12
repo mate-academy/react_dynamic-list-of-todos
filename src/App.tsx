@@ -1,83 +1,122 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
-
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
-// import { User } from './types/User';
+import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
+
+import { Todo } from './types/Todo';
+import { User } from './types/User';
+
+import { getTodos, getUser } from './api';
 
 export const App: React.FC = () => {
-  const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  // const [allUsers, setAllUsers] = useState<User | {}>({});
-  const [status, setStatus] = useState<string>('all');
-  const [showModal, setShowModal] = useState<boolean>(false);
-  // const [selectedTodo, setSelectedTodo] = useState<Todo | {}>({});
-
-  const onStatusChange = (newStatus: string) => {
-    setStatus(newStatus);
-  };
-
-  const onOpenModal = () => {
-    setShowModal(prevState => !prevState);
-  };
-
-  const filteringStatus = (stat: string) => {
-    switch (stat) {
-      case 'completed': {
-        return allTodos.filter(todo => todo.completed === true);
-      }
-
-      case 'active': {
-        return allTodos.filter(todo => todo.completed === false);
-      }
-
-      default: {
-        return allTodos;
-      }
-    }
-  };
-
-  const filteredTodoByStatus = filteringStatus(status);
-
-  function getTodosFromServer() {
-    getTodos()
-      .then(resultTodos => setAllTodos(resultTodos));
-  }
+  const [allTodos, setTodos] = useState<Todo[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('all');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodosFromServer();
+    getTodos()
+      .then(visTodos => {
+        setTodos(visTodos);
+        setIsTodosLoaded(true);
+      });
+  }, []);
+
+  const filterBySelect = useCallback((todosFromServer: Todo[], option: string) => {
+    return todosFromServer.filter(todo => {
+      switch (option) {
+        case 'active':
+
+          return todo.completed === false;
+
+        case 'completed':
+          return todo.completed === true;
+
+        case 'all':
+        default:
+          return true;
+      }
+    });
+  }, []);
+
+  const filterByQuery = useCallback((visTodos: Todo[], inputQuery: string) => {
+    return visTodos.filter(todo => {
+      const normQuery = inputQuery.toLocaleLowerCase();
+
+      return todo.title.toLocaleLowerCase().includes(normQuery);
+    });
+  }, []);
+
+  let visibleTodos = useMemo(() => {
+    return filterBySelect(allTodos, selectedOption);
+  }, [allTodos, selectedOption]);
+
+  visibleTodos = useMemo(() => {
+    return filterByQuery(visibleTodos, query);
+  }, [visibleTodos, query]);
+
+  const onInfoButtonClick = useCallback((todo: Todo) => {
+    getUser(todo.userId)
+      .then(user => setSelectedUser(user));
+
+    setSelectedTodo(todo);
+    setIsButtonClicked(true);
+  }, []);
+
+  const onCrossButtonClick = useCallback(() => {
+    setSelectedUser(null);
+    setSelectedTodo(null);
+    setIsButtonClicked(false);
   }, []);
 
   return (
     <>
       <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+        <h1 className="title">allTodos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                onStatusChange={onStatusChange}
+        <div className="block">
+          <TodoFilter
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            query={query}
+            onSearch={setQuery}
+          />
+        </div>
+
+        <div className="block">
+          {!isTodosLoaded
+            ? (<Loader />)
+            : (
+              <TodoList
+                allTodos={visibleTodos}
+                onButtonClick={onInfoButtonClick}
+                selectedTodo={selectedTodo}
               />
-            </div>
-
-            <div className="block">
-              {/* <Loader /> */}
-              <TodoList allTodos={filteredTodoByStatus} onOpenModal={onOpenModal} />
-            </div>
-          </div>
+            )}
         </div>
       </div>
-
-      {showModal && (
-        <TodoModal showModal={showModal} onOpenModal={onOpenModal} />
-      )}
+      <div>
+        {isButtonClicked && (
+          <TodoModal
+            user={selectedUser}
+            todo={selectedTodo}
+            onCrossClick={onCrossButtonClick}
+          />
+        )}
+      </div >
     </>
   );
 };
