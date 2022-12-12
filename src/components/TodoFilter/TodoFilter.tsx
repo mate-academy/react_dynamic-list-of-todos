@@ -1,15 +1,15 @@
 import React from 'react';
 
 type Props = {
-  onChangeQuery: (query: string) => void,
   query: string,
+  onChangeQuery: (query: string) => void,
   status: string,
   onChangeStatus: (status: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onChangeQuery,
   query,
+  onChangeQuery,
   status,
   onChangeStatus,
 }) => (
