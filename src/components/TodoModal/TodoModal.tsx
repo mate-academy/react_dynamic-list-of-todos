@@ -1,14 +1,20 @@
 import React from 'react';
-import { Loader } from '../Loader';
+// import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  onOpenModal: () => void
+  showModal: boolean
+};
+
+export const TodoModal: React.FC<Props> = ({ onOpenModal, showModal }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {/* {true ? (
         <Loader />
-      ) : (
+      ) :  */}
+      {showModal && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -23,6 +29,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onOpenModal()}
             />
           </header>
 
