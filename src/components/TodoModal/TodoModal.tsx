@@ -57,11 +57,9 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              {completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 

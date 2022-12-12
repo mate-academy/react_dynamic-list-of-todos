@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedTodoStatus, setSelectedTodoStatus]
-  = useState<string>(SelectedStatus.All);
+    = useState<string>(SelectedStatus.All);
 
   const handleSelectTodo = (todoId: number | null) => (
     todoId

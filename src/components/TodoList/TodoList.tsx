@@ -42,7 +42,7 @@ export const TodoList: React.FC<Props> = (props) => {
             <td className="is-vcentered">{id}</td>
             {completed ? (
               <td className="is-vcentered">
-                <span className="icon">
+                <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               </td>
