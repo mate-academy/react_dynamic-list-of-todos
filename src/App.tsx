@@ -10,6 +10,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum Options {
+  active = 'active',
+  completed = 'completed',
+  all = 'all',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -26,10 +32,10 @@ export const App: React.FC = () => {
       const filteredByQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
       switch (option) {
-        case 'active':
+        case Options.active:
           return !todo.completed && filteredByQuery;
 
-        case 'completed':
+        case Options.completed:
           return todo.completed && filteredByQuery;
 
         default:
