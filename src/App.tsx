@@ -19,8 +19,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todos => setSelectedTodos(todos));
-    setIsLoading(false);
+      .then(todos => {
+        setSelectedTodos(todos);
+        setIsLoading(false);
+      });
   }, []);
 
   const initialFilter = () => {
