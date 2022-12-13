@@ -1,8 +1,9 @@
 import React from 'react';
+import { SortType } from '../../types/SortType';
 
 interface Props {
-  selectedOption: string,
-  onSelect: (option: string) => void,
+  selectedOption: SortType | string,
+  onSelect: (option: SortType | string) => void,
   query: string,
   onSearch: (str: string) => void,
 }
@@ -35,8 +36,8 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleSelect}
           >
             <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortType.ACTIVE}>Active</option>
+            <option value={SortType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

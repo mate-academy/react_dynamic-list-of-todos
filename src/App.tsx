@@ -17,6 +17,7 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 import { getTodos, getUser } from './api';
+import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState<SortType | string>(SortType.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -35,16 +36,16 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filterBySelect = useCallback((todosFromServer: Todo[], option: string) => {
+  const filterBySelect = useCallback((todosFromServer: Todo[], option: SortType | string) => {
     return todosFromServer.filter(todo => {
       switch (option) {
-        case 'active':
+        case SortType.ACTIVE:
           return todo.completed === false;
 
-        case 'completed':
+        case SortType.COMPLETED:
           return todo.completed === true;
 
-        case 'all':
+        case SortType.ALL:
         default:
           return true;
       }
