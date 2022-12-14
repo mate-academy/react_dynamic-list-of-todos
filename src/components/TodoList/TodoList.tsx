@@ -7,7 +7,7 @@ type Props = {
   selectTodo: (todoId: number) => void;
   selectedTodoId: number;
 };
-// {todo.completed === true &&}
+
 export const TodoList: React.FC<Props> = ({
   todos, selectTodo, selectedTodoId,
 }) => (
@@ -40,8 +40,9 @@ export const TodoList: React.FC<Props> = ({
 
           <td className="is-vcentered is-expanded">
             <p className={classnames(
-              'has-text-danger', {
-                'has-text-green': todo.completed,
+              {
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
               },
             )}
             >

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -14,15 +14,30 @@ export const TodoFilter: React.FC<Props> = ({
 
   const toLowerCase = query.toLowerCase();
 
-  const filterTodos = todos
+  const filterTodo = todos
     .filter(todo => todo.title.toLowerCase()
       .includes(toLowerCase));
 
-  const setter = (() => {
-    setFilteredTodos(filterTodos);
-  });
+  const filterTodos = (filter: string) => {
+    switch (filter) {
+      case 'all':
+        setcurrentFilter(filter);
 
-  useMemo(setter, [todos, query]);
+        return todos;
+      case 'active':
+        setcurrentFilter(filter);
+
+        return todos.filter(todo => !todo.completed);
+      case 'completed':
+        setcurrentFilter(filter);
+
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  };
+
+  useEffect(() => setFilteredTodos(filterTodo), [todos, query]);
 
   // const handleAll = todos;
 
@@ -30,33 +45,15 @@ export const TodoFilter: React.FC<Props> = ({
 
   // const handleCompleted = todos.filter(todo => todo.completed);
 
-  const filterTodo = (filter: string) => {
-    switch (filter) {
-      case 'all':
-        setcurrentFilter(filter);
-
-        return setFilteredTodos(todos);
-      case 'active':
-        setcurrentFilter(filter);
-
-        return setFilteredTodos(todos.filter(todo => !todo.completed));
-      case 'completed':
-        setcurrentFilter(filter);
-
-        return setFilteredTodos(todos.filter(todo => todo.completed));
-      default:
-        return 0;
-    }
-  };
-
   const Handle = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
 
     const { value } = event.target;
-    const filter = useMemo(() => filterTodo(value), [todos]);
+    const filters = filterTodos(value);
 
-    return filter;
+    setFilteredTodos(filters);
   };
+
   /* const handle = () => {
     const s = () => setFilteredTodos(handleActive);
     useMemo(s, [todos]);

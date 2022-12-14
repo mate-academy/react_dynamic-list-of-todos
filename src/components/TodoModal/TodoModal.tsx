@@ -12,18 +12,19 @@ export const TodoModal: React.FC<Props> = ({ todo }) => {
   const [userID, setUsers] = useState(0);
   const [isOpen, setisOpen] = useState(false);
 
+  // setisLoading(true);
   const user = async () => {
     setUsers(todo.userId);
     getUser(userID);
   };
 
-  return (isOpen) ? (
+  return (isOpen && user) ? (
     null
   ) : (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(todo.user === null && user) ? (
+      {(todo.user === null) ? (
         <Loader />
       ) : (
 
