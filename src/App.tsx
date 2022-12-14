@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,36 +9,36 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<string>(Status.ALL);
 
   const visibleTodos = todos.filter(todo => {
-    enum Status {
-      ALL = 'all',
-      Completed = 'completed',
-      Active = 'active',
-    }
-
     switch (status) {
       case Status.Active:
-        return !todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        return !todo.completed && todo.title.toLowerCase().trim().includes(query.toLowerCase().trim());
 
       case Status.Completed:
-        return todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        return todo.completed && todo.title.toLowerCase().trim().includes(query.toLowerCase().trim());
 
       case Status.ALL:
       default:
-        return todo.title.toLowerCase().includes(query.toLowerCase());
+        return todo.title.toLowerCase().trim().includes(query.toLowerCase().trim());
     }
   });
 
+  const getTodoFromServer = useCallback(async () => {
+    const todoFromServer = await getTodos();
+
+    setTodos(todoFromServer);
+  }, []);
+
   useEffect(() => {
-    getTodos()
-      .then(todoFromServer => setTodos(todoFromServer));
+    getTodoFromServer();
   }, []);
 
   return (
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length === 0 && (
+              {!visibleTodos.length && (
                 <Loader />
               )}
               <TodoList

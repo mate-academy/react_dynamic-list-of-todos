@@ -59,9 +59,7 @@ export const TodoList: React.FC<Props> = ({
               className="button"
               type="button"
               onClick={() => (
-                selectedTodo?.id === todo.id
-                  ? onSetSelectedTodo(null)
-                  : onSetSelectedTodo(todo)
+                onSetSelectedTodo(todo)
               )}
             >
               <span className="icon">

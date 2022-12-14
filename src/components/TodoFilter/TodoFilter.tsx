@@ -1,8 +1,10 @@
+import { Status } from '../../types/Status';
+
 type Props = {
   query: string,
   status: string,
   onSetQuery: (query: string) => void,
-  onSetStatus: (status: string) => void,
+  onSetStatus: (value: string | Status) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -25,8 +27,8 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={(event) => onSetStatus(event.target.value)}
           >
             <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -43,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {query.length > 0 && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
