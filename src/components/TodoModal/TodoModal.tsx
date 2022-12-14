@@ -27,7 +27,7 @@ export const TodoModal: React.FC<Props> = React.memo(
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
 
-        {user === null ? (
+        {!user ? (
           <Loader />
         ) : (
           <div className="modal-card">
@@ -54,7 +54,6 @@ export const TodoModal: React.FC<Props> = React.memo(
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
                 <strong
                   className={
                     selectedTodo.completed
