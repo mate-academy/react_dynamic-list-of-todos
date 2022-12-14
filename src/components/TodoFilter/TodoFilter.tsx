@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
   query: string,
@@ -13,8 +14,6 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeSelectedTodos,
   onChangeQuery,
 }) => {
-  const reset = useCallback(() => onChangeQuery(''), []);
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -22,11 +21,13 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedTodos}
-            onChange={event => onChangeSelectedTodos(event.target.value)}
+            onChange={event => (
+              onChangeSelectedTodos(event.target.value)
+            )}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>{Status.All}</option>
+            <option value={Status.Active}>{Status.Active}</option>
+            <option value={Status.Completed}>{Status.Completed}</option>
           </select>
         </span>
       </p>
@@ -51,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={reset}
+              onClick={() => onChangeQuery('')}
             />
           </span>
         )}

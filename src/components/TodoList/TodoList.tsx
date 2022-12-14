@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  showingTodo: Todo | null,
-  onShowingTodo: (showingTodo: Todo | null) => void,
+  selectedTodo: Todo | null,
+  onSelectedTodo: (showingTodo: Todo | null) => void,
 };
 
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
-  showingTodo,
-  onShowingTodo,
+  selectedTodo,
+  onSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = React.memo(({
           key={todo.id}
           data-cy="todo"
           className={classNames({
-            'has-background-info-light': todo.id === showingTodo?.id,
+            'has-background-info-light': todo.id === selectedTodo?.id,
           })}
         >
           <td className="is-vcentered">{todo.id}</td>
@@ -59,15 +59,15 @@ export const TodoList: React.FC<Props> = React.memo(({
               className="button"
               type="button"
               onClick={() => (
-                showingTodo?.id === todo.id
-                  ? onShowingTodo(null)
-                  : onShowingTodo(todo)
+                selectedTodo?.id === todo.id
+                  ? onSelectedTodo(null)
+                  : onSelectedTodo(todo)
               )}
             >
               <span className="icon">
                 <i className={classNames({
-                  'far fa-eye': !showingTodo?.id,
-                  'far fa-eye-slash': showingTodo?.id === todo.id,
+                  'far fa-eye': !selectedTodo?.id,
+                  'far fa-eye-slash': selectedTodo?.id === todo.id,
                 })}
                 />
               </span>

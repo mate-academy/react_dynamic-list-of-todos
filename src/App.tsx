@@ -12,14 +12,15 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [showingTodo, setShowingTodo] = useState<Todo | null>(null);
-  const [selectedTodos, setSelectedTodos] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [todosStatus, setTodosStatus] = useState('all');
 
   useEffect(() => {
     getTodos()
@@ -31,19 +32,19 @@ export const App: React.FC = () => {
       const queried = todo.title.toLocaleLowerCase()
         .includes(query.toLocaleLowerCase());
 
-      switch (selectedTodos) {
-        case 'completed':
+      switch (todosStatus) {
+        case Status.Completed:
           return todo.completed && queried;
 
-        case 'active':
+        case Status.Active:
           return !todo.completed && queried;
 
-        case 'all':
+        case Status.All:
         default:
           return queried;
       }
     });
-  }, [selectedTodos, query, loadedTodos]);
+  }, [todosStatus, query, loadedTodos]);
 
   return (
     <>
@@ -55,8 +56,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                selectedTodos={selectedTodos}
-                onChangeSelectedTodos={setSelectedTodos}
+                selectedTodos={todosStatus}
+                onChangeSelectedTodos={setTodosStatus}
                 onChangeQuery={setQuery}
               />
             </div>
@@ -66,20 +67,23 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    showingTodo={showingTodo}
-                    onShowingTodo={setShowingTodo}
+                    selectedTodo={selectedTodo}
+                    onSelectedTodo={setSelectedTodo}
                   />
                 )
                 : <Loader />}
+              {loadedTodos.length === 0 && (
+                <p>No todos yet. You can rest for now!</p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {showingTodo && (
+      {selectedTodo && (
         <TodoModal
-          showingTodo={showingTodo}
-          onShowingTodo={setShowingTodo}
+          showingTodo={selectedTodo}
+          onShowingTodo={setSelectedTodo}
         />
       )}
     </>
