@@ -1,22 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   getQuery: (query: string) => void,
   getOption: (option: string) => void,
+  queryToFilter: string,
+  selectedStatus: Filter
 };
 
 export const TodoFilter: React.FC<Props> = React.memo((
-  { getQuery, getOption },
+  {
+    getQuery,
+    getOption,
+    queryToFilter,
+    selectedStatus,
+  },
 ) => {
-  const [query, setQuery] = useState('');
-  const [selectedField, setSelectedFieldy] = useState('all');
-
   const fillOption = useCallback((
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const { value } = event.target;
 
-    setSelectedFieldy(value);
     getOption(value);
   }, []);
 
@@ -25,12 +29,10 @@ export const TodoFilter: React.FC<Props> = React.memo((
   ) => {
     const { value } = event.target;
 
-    setSelectedFieldy(value);
-    getOption(value);
+    getQuery(value);
   }, []);
 
   const clearQuery = useCallback(() => {
-    setQuery('');
     getQuery('');
   }, []);
 
@@ -40,12 +42,12 @@ export const TodoFilter: React.FC<Props> = React.memo((
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedField}
+            value={selectedStatus}
             onChange={fillOption}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.ALL}>All</option>
+            <option value={Filter.ACTIVE}>Active</option>
+            <option value={Filter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -56,14 +58,14 @@ export const TodoFilter: React.FC<Props> = React.memo((
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={queryToFilter}
           onChange={fillQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {queryToFilter && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

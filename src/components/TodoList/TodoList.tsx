@@ -11,7 +11,10 @@ type Props = {
 
 export const TodoList: React.FC<Props> = (
   {
-    todos, selectedTodo, setCurrentUserId, setCurrentTodo,
+    todos,
+    selectedTodo,
+    setCurrentUserId,
+    setCurrentTodo,
   },
 ) => (
   <table className="table is-narrow is-fullwidth">

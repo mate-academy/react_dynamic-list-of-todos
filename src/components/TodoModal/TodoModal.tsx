@@ -12,7 +12,9 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = React.memo((
   {
-    userId, selectedTodo, closeTodoModal,
+    userId,
+    selectedTodo,
+    closeTodoModal,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
