@@ -16,14 +16,14 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  async function LoadUser() {
+  async function loadUser() {
     const reponse = await getUser(selectedTodo.userId);
 
     setUser(reponse);
   }
 
   useEffect(() => {
-    LoadUser();
+    loadUser();
   }, []);
 
   return (

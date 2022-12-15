@@ -52,18 +52,14 @@ export const App: React.FC = () => {
           return todo.completed === true;
 
         default:
-          return todo;
+          return true;
       }
     });
 
-    let visibleGoods = filteredByFilter;
-
-    if (input) {
-      visibleGoods = filteredByFilter.filter(todo => todo
-        .title.toLocaleLowerCase().includes(query.toLowerCase().trim()));
-    }
-
-    return visibleGoods;
+    return (input)
+      ? filteredByFilter.filter(todo => todo
+        .title.toLocaleLowerCase().includes(query.toLowerCase().trim()))
+      : filteredByFilter;
   }
 
   const visibleTodos = useMemo(() => {
@@ -74,9 +70,7 @@ export const App: React.FC = () => {
     setSelectedTodo(id);
   };
 
-  const onChangeInput = (str: string) => {
-    setQuery(str);
-  };
+  const onChangeInput = setQuery;
 
   return (
     <>
