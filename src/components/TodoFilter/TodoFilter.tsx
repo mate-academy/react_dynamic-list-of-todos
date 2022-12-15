@@ -1,38 +1,26 @@
 import React from 'react';
 
-interface Props {
-  selectedOption: string,
-  onSelect: (option: string) => void,
+type Props = {
   query: string,
-  onSearch: (str: string) => void,
-}
+  setQuery: (str: string) => void,
+  todoOption: string,
+  setTodoOption: (str: string) => void,
+};
 
 export const TodoFilter: React.FC<Props> = ({
-  selectedOption,
-  onSelect,
   query,
-  onSearch,
+  setQuery,
+  todoOption,
+  setTodoOption,
 }) => {
-  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSelect(event.target.value);
-  };
-
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(event.target.value);
-  };
-
-  const handleClear = () => {
-    onSearch('');
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedOption}
-            onChange={handleSelect}
+            value={todoOption}
+            onChange={(event) => setTodoOption(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -48,20 +36,20 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleInput}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {query.length > 0 && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClear}
+              onClick={() => setQuery('')}
             />
           </span>
         )}
