@@ -4,7 +4,7 @@ import { Status } from '../../types/Status';
 type Props = {
   query: string,
   selectedTodos: string,
-  onChangeSelectedTodos: (selectedTodos: string) => void,
+  onChangeSelectedTodos: (selectedTodos: Status) => void,
   onChangeQuery: (query: string) => void,
 };
 
@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={selectedTodos}
             onChange={event => (
-              onChangeSelectedTodos(event.target.value)
+              onChangeSelectedTodos(event.target.value as Status)
             )}
           >
             <option value={Status.All}>{Status.All}</option>
