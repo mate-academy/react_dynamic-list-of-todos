@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [todosStatus, setTodosStatus] = useState('all');
+  const [todosStatus, setTodosStatus] = useState(Status.All);
 
   useEffect(() => {
     getTodos()
