@@ -1,64 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import { TodoFilterBy } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
-  setFilteredTodos: (value: React.SetStateAction<Todo[]>) => void;
+  setFilter:(newFilter: TodoFilterBy) => void,
+  setQuery:(query: string) => void,
+  filter: string,
+  query: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos, setFilteredTodos,
+  setFilter, setQuery, filter, query,
 }) => {
-  const [query, setQuery] = useState('');
-  const [currentFilter, setcurrentFilter] = useState('all');
-
-  const toLowerCase = query.toLowerCase();
-
-  const filterTodo = todos
-    .filter(todo => todo.title.toLowerCase()
-      .includes(toLowerCase));
-
-  const filterTodos = (filter: string) => {
-    switch (filter) {
-      case 'all':
-        setcurrentFilter(filter);
-
-        return todos;
-      case 'active':
-        setcurrentFilter(filter);
-
-        return todos.filter(todo => !todo.completed);
-      case 'completed':
-        setcurrentFilter(filter);
-
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
-    }
-  };
-
-  useEffect(() => setFilteredTodos(filterTodo), [todos, query]);
-
-  // const handleAll = todos;
-
-  // const handleActive = todos.filter(todo => !todo.completed);
-
-  // const handleCompleted = todos.filter(todo => todo.completed);
-
-  const Handle = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    event.preventDefault();
-
-    const { value } = event.target;
-    const filters = filterTodos(value);
-
-    setFilteredTodos(filters);
-  };
-
-  /* const handle = () => {
-    const s = () => setFilteredTodos(handleActive);
-    useMemo(s, [todos]);
-  }; */
-
   const reset = () => {
     setQuery('');
   };
@@ -69,12 +20,14 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={currentFilter}
-            onChange={Handle}
+            value={filter}
+            onChange={
+              ({ target }) => setFilter(target.value as TodoFilterBy)
+            }
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">
+            <option value={TodoFilterBy.NONE}>All</option>
+            <option value={TodoFilterBy.ACTIVE}>Active</option>
+            <option value={TodoFilterBy.COMPLETED}>
               Completed
             </option>
           </select>

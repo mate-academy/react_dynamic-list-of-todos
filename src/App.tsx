@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,19 +7,36 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { Todo, TodoFilterBy } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(TodoFilterBy.NONE);
   const [isLoading, setisLoading] = useState(true);
 
-  getTodos()
-    .then(todo => setTodos(todo))
-    .then(() => setisLoading(false));
+  const toLowerCase = query.toLowerCase();
+
+  const filteredList = todos.filter(todo => todo.title.toLowerCase()
+    .includes(toLowerCase)).filter(todo => {
+    switch (filter) {
+      case TodoFilterBy.ACTIVE:
+        return !todo.completed;
+      case TodoFilterBy.COMPLETED:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
+
+  useEffect(() => {
+    getTodos()
+      .then(todo => setTodos(todo))
+      .then(() => setisLoading(false));
+  }, []);
 
   const selectedTodo = todos.find(x => x.id === todoId);
 
@@ -32,8 +49,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setFilteredTodos={setFilteredTodos}
+                setFilter={setFilter}
+                setQuery={setQuery}
+                filter={filter}
+                query={query}
               />
             </div>
 
@@ -41,7 +60,7 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
 
               <TodoList
-                todos={filteredTodos}
+                todos={filteredList}
                 selectedTodoId={todoId}
                 selectTodo={(todoID) => {
                   setTodoId(todoID);
@@ -53,7 +72,12 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} />
+        <TodoModal
+          todo={selectedTodo}
+          selectTodo={(todoID) => {
+            setTodoId(todoID);
+          }}
+        />
       )}
     </>
   );

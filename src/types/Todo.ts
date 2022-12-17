@@ -7,3 +7,9 @@ export interface Todo {
   userId: number;
   user: User;
 }
+
+export enum TodoFilterBy {
+  NONE = 'all',
+  COMPLETED = 'completed',
+  ACTIVE = 'active',
+}
