@@ -1,8 +1,8 @@
 import { TodoFilterBy } from '../../types/Todo';
 
 type Props = {
-  setFilter:(newFilter: TodoFilterBy) => void,
-  setQuery:(query: string) => void,
+  setFilter: React.Dispatch<React.SetStateAction<TodoFilterBy>>,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
   filter: string,
   query: string,
 };

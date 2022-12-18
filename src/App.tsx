@@ -13,10 +13,10 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(TodoFilterBy.NONE);
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
 
   const toLowerCase = query.toLowerCase();
 
@@ -34,11 +34,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo))
-      .then(() => setisLoading(false));
+      .then(setTodos)
+      .then(() => setisLoading(true));
   }, []);
 
-  const selectedTodo = todos.find(x => x.id === todoId);
+  const selectedTodo = todos.find(x => x.id === selectedTodoId);
 
   return (
     <>
@@ -57,25 +57,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
+              {!isLoading && <Loader />}
 
               <TodoList
                 todos={filteredList}
-                selectedTodoId={todoId}
+                selectedTodoId={selectedTodoId}
                 selectTodo={(todoID) => {
-                  setTodoId(todoID);
+                  setSelectedTodoId(todoID);
                 }}
               />
             </div>
           </div>
         </div>
       </div>
-
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           selectTodo={(todoID) => {
-            setTodoId(todoID);
+            setSelectedTodoId(todoID);
           }}
         />
       )}
