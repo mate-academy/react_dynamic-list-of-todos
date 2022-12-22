@@ -14,14 +14,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>();
 
   useEffect(() => {
-    getTodos().then(result => {
-      setTodos(result);
-      setIsLoading(true);
-    });
+    getTodos()
+      .then(result => {
+        setTodos(result);
+    })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,7 +68,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
