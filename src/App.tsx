@@ -25,14 +25,21 @@ const defaultTodo: Todo = {
   userId: 0,
 };
 
+enum Filter {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [currentTodos, setCurrentTodos] = useState<Todo[]>([]);
   const [isModalShown, setIsModalShown] = useState(false);
   const [currentUser, setCurrentUser] = useState<User>(defaultUser);
   const [selectedTodo, setSelectedTodo] = useState<Todo>(defaultTodo);
+  const [currentFilter, setCurrentFilter] = useState<Filter | string>(Filter.ALL);
+  const [inputValue, setInputValue] = useState('');
 
   const loadingData = async () => {
     setIsLoading(true);
@@ -42,11 +49,9 @@ export const App: React.FC = () => {
 
       setIsLoading(false);
       setTodos(todosList);
-      setCurrentTodos(todosList);
     } catch (error) {
       setIsLoading(false);
       setTodos([]);
-      setCurrentTodos([]);
     }
   };
 
@@ -71,28 +76,28 @@ export const App: React.FC = () => {
     setSelectedTodo(defaultTodo);
   };
 
-  const onFilterSelect = (value: string) => {
-    const filteredTodos = todos.filter(todo => {
-      if (value === 'completed') {
-        return todo.completed;
-      }
-
-      if (value === 'active') {
-        return !todo.completed;
-      }
-
-      return todo;
-    });
-
-    setCurrentTodos(filteredTodos);
+  const onFilterSelect = (value: Filter | string) => {
+    setCurrentFilter(value);
   };
 
   const onInputChange = (value: string) => {
-    const matchedTodos = todos.filter(todo => {
-      return todo.title.toLowerCase().includes(value.toLowerCase());
-    });
+    setInputValue(value);
+  };
 
-    setCurrentTodos(matchedTodos);
+  const onFilter = () => {
+    return todos.filter(todo => {
+      const matchedInputTodo = todo.title.toLowerCase().includes(inputValue.toLowerCase());
+
+      if (currentFilter === Filter.COMPLETED) {
+        return todo.completed && matchedInputTodo;
+      }
+
+      if (currentFilter === Filter.ACTIVE) {
+        return !todo.completed && matchedInputTodo;
+      }
+
+      return todo && matchedInputTodo;
+    });
   };
 
   useEffect(() => {
@@ -107,21 +112,22 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onInputChange={onInputChange} onFilterSelect={onFilterSelect} />
+              <TodoFilter
+                onInputChange={onInputChange}
+                onFilterSelect={onFilterSelect}
+              />
             </div>
 
             <div className="block">
-              {
-                isLoading
-                  ? <Loader />
-                  : (
-                    <TodoList
-                      todos={currentTodos}
-                      isShown={onShowModal}
-                      currentTodo={selectedTodo}
-                    />
-                  )
-              }
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={onFilter()}
+                  isShown={onShowModal}
+                  currentTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -1,16 +1,40 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+enum Filter {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 type Props = {
   onInputChange: (value: string) => void;
-  onFilterSelect: (value: string) => void;
+  onFilterSelect: (value: Filter | string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onInputChange,
   onFilterSelect,
 }) => {
-  const [currentFilter, setCurrentFilter] = useState('all');
+  const [currentFilter, setCurrentFilter]
+    = useState<Filter | string>(Filter.ALL);
   const [inputValue, setInputValue] = useState('');
+
+  const onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.currentTarget;
+
+    setCurrentFilter(value);
+    onFilterSelect(value);
+  };
+
+  const onQueryInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onInputChange(event.target.value);
+    setInputValue(event.target.value);
+  };
+
+  const onQueryRemove = () => {
+    onInputChange('');
+    setInputValue('');
+  };
 
   return (
     <form className="field has-addons">
@@ -19,14 +43,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={currentFilter}
-            onChange={(event) => {
-              setCurrentFilter(event.currentTarget.value);
-              onFilterSelect(event.currentTarget.value);
-            }}
+            onChange={onSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.ALL}>All</option>
+            <option value={Filter.ACTIVE}>Active</option>
+            <option value={Filter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -38,10 +59,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={inputValue}
-          onChange={event => {
-            onInputChange(event.target.value);
-            setInputValue(event.target.value);
-          }}
+          onChange={onQueryInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -49,15 +67,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {inputValue && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                onInputChange('');
-                setInputValue('');
-              }}
+              aria-label="delete"
+              onClick={onQueryRemove}
             />
           )}
         </span>
