@@ -1,5 +1,4 @@
-import classNames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -15,16 +14,13 @@ export const TodoList: React.FC<Props> = ({
   settargetRowId,
   setTargetUserId,
 }) => {
-  const [selectedRow, setSelectedRow] = useState(false);
-
   const hendleClick = (item: Todo) => {
     settargetRowId(item.id);
-    setSelectedRow(!selectedRow);
     setTargetUserId(item.userId);
   };
 
   const booleanValue = (item: Todo) => {
-    return item.id === targetRowId && selectedRow;
+    return item.id === targetRowId;
   };
 
   return (
@@ -47,9 +43,7 @@ export const TodoList: React.FC<Props> = ({
           <tr
             key={todo.id}
             data-cy="todo"
-            className={classNames({
-              'has-background-info-light': booleanValue(todo),
-            })}
+            className=""
           >
             <td className="is-vcentered">
               {todo.id}

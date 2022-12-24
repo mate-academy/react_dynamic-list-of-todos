@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,6 +8,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+
+enum Options {
+  active = 'active',
+  completed = 'completed',
+  all = 'all',
+}
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -21,33 +26,28 @@ export const App: React.FC = () => {
     getTodos().then(items => setTodosFromServer(items));
   }, []);
 
-  let listOfTodos = [...todosFromServer];
+  const listOfTodos = () => {
+    let list = [...todosFromServer].filter(todo => (
+      (todo.title).toLowerCase().includes(inputValue.toLowerCase())
+    ));
 
-  function filterBy(value: string, subStr: string) {
-    switch (value) {
-      case 'active':
-        listOfTodos = [...todosFromServer]
-          .filter(todo => !todo.completed)
-          .filter(item => item.title.includes(subStr.toLowerCase()));
+    switch (selectedOption) {
+      case Options.active:
+        list = list.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
-        listOfTodos = [...todosFromServer]
-          .filter(todo => todo.completed)
-          .filter(item => item.title.includes(subStr.toLowerCase()));
+      case Options.completed:
+        list = list.filter(todo => todo.completed);
         break;
 
       default:
-        listOfTodos = [...todosFromServer].filter(
-          item => item.title.includes(subStr.toLowerCase()),
-        );
-        break;
+        return list;
     }
-  }
 
-  filterBy(selectedOption, inputValue);
+    return list;
+  };
 
-  const targetTodo = listOfTodos.find(todo => todo.id === targetRowId);
+  const targetTodo = listOfTodos().find(todo => todo.id === targetRowId);
 
   return (
     <>
@@ -65,15 +65,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!listOfTodos.length && <Loader />}
-              {listOfTodos.length && (
-                <TodoList
-                  todos={listOfTodos}
-                  targetRowId={targetRowId}
-                  settargetRowId={settargetRowId}
-                  setTargetUserId={setTargetUserId}
-                />
-              )}
+              {todosFromServer.length
+                ? (
+                  <TodoList
+                    todos={listOfTodos()}
+                    targetRowId={targetRowId}
+                    settargetRowId={settargetRowId}
+                    setTargetUserId={setTargetUserId}
+                  />
+                ) : <Loader />}
             </div>
           </div>
         </div>

@@ -7,9 +7,9 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
+  inputValue,
   setSelectedOption,
   setInputValue,
-  inputValue,
 }) => {
   return (
     <form className="field has-addons">
@@ -42,15 +42,18 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={(() => {
-              setInputValue('');
-            })}
-          />
+          {inputValue.length && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={(() => {
+                setInputValue('');
+              })}
+            >
+              {}
+            </button>
+          )}
         </span>
       </p>
     </form>
