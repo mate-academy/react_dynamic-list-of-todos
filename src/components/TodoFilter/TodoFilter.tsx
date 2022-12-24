@@ -28,8 +28,6 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelection(event.target.value);
 
-    // let result = allTodos;
-
     if (event.target.value === 'all') {
       setFilterTodos(allTodos);
     } else if (event.target.value === 'active') {
@@ -37,8 +35,6 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
     } else {
       setFilterTodos(allTodos.filter(todo => todo.completed));
     }
-
-    // setFilterTodos(result);
   };
 
   return (
