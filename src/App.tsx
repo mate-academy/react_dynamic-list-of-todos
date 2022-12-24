@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,6 +8,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,25 +20,27 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  const setterOfSelectedTodo = (pickedTodo: Todo | null) => {
+  const handleTodoSelection = (pickedTodo: Todo | null) => {
     setSelectedTodo(pickedTodo);
   };
 
   const filterByStatus = (option: string) => {
-    if (option === 'all') {
-      setStatus(null);
-    }
+    switch (option) {
+      case Status.Active:
+        setStatus(false);
+        break;
 
-    if (option === 'active') {
-      setStatus(false);
-    }
+      case Status.Completed:
+        setStatus(true);
+        break;
 
-    if (option === 'completed') {
-      setStatus(true);
+      case Status.All:
+      default:
+        setStatus(null);
     }
   };
 
-  const handleClose = useCallback(() => {
+  const handleModalClosing = useCallback(() => {
     setSelectedTodo(null);
   }, []);
 
@@ -57,7 +59,8 @@ export const App: React.FC = () => {
     const lowerQuery = query.toLocaleLowerCase().trim();
 
     filteredTodos = filteredTodos
-      .filter(todoQuery => todoQuery.title.toLocaleLowerCase().trim().includes(lowerQuery));
+      .filter(todoQuery => todoQuery.title.toLowerCase()
+        .trim().includes(lowerQuery));
   }
 
   return (
@@ -69,19 +72,19 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterByStatus={filterByStatus}
+                onStatusChange={filterByStatus}
                 filterByQuery={filterByQuery}
                 query={query}
               />
             </div>
 
             <div className="block">
-              {todos.length
+              {todos.length !== 0
                 ? (
                   <TodoList
                     todos={filteredTodos}
                     selectedTodo={selectedTodo}
-                    setterOfSelectedTodo={setterOfSelectedTodo}
+                    onTodoSelection={handleTodoSelection}
                   />
                 )
                 : (<Loader />)}
@@ -93,7 +96,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onClose={handleClose}
+          onClose={handleModalClosing}
         />
       )}
     </>
