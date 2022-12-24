@@ -6,14 +6,13 @@ import { UserInfo } from '../UserInfo';
 //
 type Props = {
   selectedTodo: Todo;
-  setSelectedTodoId: any;
+  setSelectedTodoId: (selectedTodoId: number)=> void;
 };
 
 export const TodoModal: React.FC<Props>
 = ({ selectedTodo, setSelectedTodoId }) => {
   const [isLoaded, setIsLoader] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
-  // const [showModal,setShowModal] = useState(false);
 
   const selectedUser: User | null = allUsers
     .find((user: User) => user.id === selectedTodo.userId) || null;

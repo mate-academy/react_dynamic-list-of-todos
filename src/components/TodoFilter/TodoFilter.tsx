@@ -41,22 +41,6 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
     }
 
     setFilterTodos(result);
-
-    // switch (option) {
-    //   case 'all':
-    //     return setFilteredTodos(allTodos);
-
-    //   case 'active':
-    //     return setFilteredTodos(allTodos.filter(el => el.completed));
-
-    //   case 'completed':
-    //     return setFilteredTodos(allTodos.filter(el => !el.completed));
-
-    //   default:
-    //     break;
-    // }
-
-    // return filteredTodos;
   };
 
   return (

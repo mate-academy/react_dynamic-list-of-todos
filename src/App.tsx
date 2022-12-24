@@ -34,6 +34,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(todos => {
         setAllTodos(todos);
+        setFilterTodos(todos);
       })
       .finally(() => {
         setIsLoaded(false);
