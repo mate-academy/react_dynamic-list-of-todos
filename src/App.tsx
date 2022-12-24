@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState([]);
-  const [filterTodos, setFilterTodos] = useState(allTodos);
+  const [filterTodos, setFilterTodos] = useState<Todo[]>(allTodos);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const selectedTodo: Todo | null = allTodos.find((el: Todo) => el.id === selectedTodoId) || null;
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const BASE_URL = 'https://mate-academy.github.io'
   + '/react_dynamic-list-of-todos/api';
 
-  const request = (url: any) => {
+  const request = (url: string) => {
     return fetch(`${BASE_URL}${url}`)
       .then(response => {
         return response.json();

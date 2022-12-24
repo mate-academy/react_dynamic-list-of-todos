@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
-// import { Todo } from '../../types/Todo';
 
 type Props = {
   allTodos:Todo[];
-  setFilterTodos: any;
+  setFilterTodos: (allTodos: Todo[]) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
   const [selection, setSelection] = useState('');
   const [query, setQuery] = useState('');
-  // const [filteredTodos, setFilteredTodos] = useState(allTodos);
 
   const searchTitle = (input: string) => {
     const inputToLowercase = input.toLocaleLowerCase();
@@ -30,17 +28,17 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelection(event.target.value);
 
-    let result = allTodos;
+    // let result = allTodos;
 
     if (event.target.value === 'all') {
-      result = allTodos;
+      setFilterTodos(allTodos);
     } else if (event.target.value === 'active') {
-      result = allTodos.filter(todo => !todo.completed);
+      setFilterTodos(allTodos.filter(todo => !todo.completed));
     } else {
-      result = allTodos.filter(todo => todo.completed);
+      setFilterTodos(allTodos.filter(todo => todo.completed));
     }
 
-    setFilterTodos(result);
+    // setFilterTodos(result);
   };
 
   return (
