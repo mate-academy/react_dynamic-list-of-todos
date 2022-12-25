@@ -17,6 +17,10 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
 
+  const clearSelectedTodo = () => {
+    setTodo(null);
+  };
+
   useEffect(() => {
     getTodos()
       .then(result => {
@@ -31,15 +35,17 @@ export const App: React.FC = () => {
 
   const filterTodos = todos
     .filter(todoItem => {
-      if (filterBy === 'active') {
-        return !todoItem.completed;
-      }
+      switch (filterBy) {
+        case 'active':
+          return !todoItem.completed;
 
-      if (filterBy === 'completed') {
-        return todoItem.completed;
-      }
+        case 'completed':
+          return todoItem.completed;
 
-      return todoItem;
+        case 'all':
+        default:
+          return todoItem;
+      }
     })
     .filter(todoItem => (
       lowerText(todoItem.title)
@@ -80,7 +86,7 @@ export const App: React.FC = () => {
       {todo?.userId && (
         <TodoModal
           todo={todo}
-          setTodo={setTodo}
+          clearSelectedTodo={clearSelectedTodo}
         />
       )}
     </>
