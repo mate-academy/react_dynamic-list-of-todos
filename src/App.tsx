@@ -8,26 +8,14 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { getTodos } from './api/api2';
 
 export const App: React.FC = () => {
-  const [allTodos, setAllTodos] = useState([]);
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filterTodos, setFilterTodos] = useState<Todo[]>(allTodos);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const selectedTodo: Todo | null = allTodos.find((el: Todo) => el.id === selectedTodoId) || null;
-
-  const BASE_URL = 'https://mate-academy.github.io'
-  + '/react_dynamic-list-of-todos/api';
-
-  const request = (url: string) => {
-    return fetch(`${BASE_URL}${url}`)
-      .then(response => {
-        return response.json();
-      })
-      .then(result => result);
-  };
-
-  const getTodos = () => request('/todos.json');
 
   useEffect(() => {
     setIsLoaded(true);
@@ -41,7 +29,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleclick = (id: number) => {
+  const handleclick = (id: Todo['id']) => {
     setSelectedTodoId(id);
   };
 
@@ -56,6 +44,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 allTodos={allTodos}
                 setFilterTodos={setFilterTodos}
+                filterTodos={filterTodos}
               />
             </div>
 

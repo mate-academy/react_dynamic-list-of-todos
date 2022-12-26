@@ -3,6 +3,7 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { UserInfo } from '../UserInfo';
+import { getUsers } from '../../api/api2';
 //
 type Props = {
   selectedTodo: Todo;
@@ -16,19 +17,6 @@ export const TodoModal: React.FC<Props>
 
   const selectedUser: User | null = allUsers
     .find((user: User) => user.id === selectedTodo.userId) || null;
-
-  const BASE_URL = 'https://mate-academy.github.io'
-  + '/react_dynamic-list-of-todos/api';
-
-  const request = (url: any) => {
-    return fetch(`${BASE_URL}${url}`)
-      .then(response => {
-        return response.json();
-      })
-      .then(result => result);
-  };
-
-  const getUsers = () => request('/users.json');
 
   useEffect(() => {
     setIsLoader(true);

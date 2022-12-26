@@ -4,9 +4,11 @@ import { Todo } from '../../types/Todo';
 type Props = {
   allTodos:Todo[];
   setFilterTodos: (allTodos: Todo[]) => void;
+  filterTodos: Todo[];
 };
 
-export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
+export const TodoFilter: React.FC<Props>
+= ({ allTodos, setFilterTodos, filterTodos }) => {
   const [selection, setSelection] = useState('');
   const [query, setQuery] = useState('');
 
@@ -28,13 +30,21 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelection(event.target.value);
 
-    if (event.target.value === 'all') {
-      setFilterTodos(allTodos);
-    } else if (event.target.value === 'active') {
-      setFilterTodos(allTodos.filter(todo => !todo.completed));
-    } else {
-      setFilterTodos(allTodos.filter(todo => todo.completed));
+    switch (event.target.value) {
+      case 'all':
+        return setFilterTodos(allTodos);
+
+      case 'active':
+        return setFilterTodos(allTodos.filter(el => el.completed));
+
+      case 'completed':
+        return setFilterTodos(allTodos.filter(el => !el.completed));
+
+      default:
+        break;
     }
+
+    return filterTodos;
   };
 
   return (
@@ -82,34 +92,3 @@ export const TodoFilter: React.FC<Props> = ({ allTodos, setFilterTodos }) => {
     </form>
   );
 };
-
-// 1. find all completed
-// 2. find all not completed
-
-//   if (value === all) {
-//     return setAllTodos([])
-//   } else if (value === active) {
-//     return 1
-//   } else {
-//     return 2
-//   }
-
-// switch (key) {
-//   case value === all:
-//     return setAllTodos(allTodos);
-
-//   case value === active:
-//     return setAllTodos(allTodos.completed !== true);
-
-//   case value === completed:
-//     return setAllTodos(allTodos.completed === true );
-
-//   default:
-//     break;
-// }
-
-// const [todosToFilter, setTodosToFilter] = useState(allTodos);
-// const [filter, setFilter] = useState(allTodos);
-// const [filterCompletedTodos, setFilterCompletedTodos] = useState(allTodos);
-// const [filterNotCompletedTodos, setFilterNotCompletedTodos]
-// = useState(allTodos);
