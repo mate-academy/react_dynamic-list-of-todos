@@ -10,6 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,21 +32,22 @@ export const App: React.FC = () => {
     setUserId(0);
   };
 
-  const filterTodo = (filterBy: string, searchBy: string) => {
+  const filterTodo = (filterBy: Filter, searchBy: string) => {
+    const searchByStr = (title: string) => {
+      return title.toLowerCase().includes(searchBy.toLowerCase());
+    };
+
     switch (filterBy) {
-      case 'active':
-        setVisibleTodos(todos.filter(visibleGood => !visibleGood.completed
-          && visibleGood.title.toLowerCase()
-            .includes(searchBy.toLowerCase())));
+      case Filter.Active:
+        setVisibleTodos(todos.filter(visible => !visible.completed
+          && searchByStr(visible.title)));
         break;
-      case 'completed':
-        setVisibleTodos(todos.filter(visibleGood => visibleGood.completed
-          && visibleGood.title.toLowerCase()
-            .includes(searchBy.toLowerCase())));
+      case Filter.Completed:
+        setVisibleTodos(todos.filter(visible => visible.completed
+          && searchByStr(visible.title)));
         break;
-      case 'all':
-        setVisibleTodos(todos.filter(visibleGood => visibleGood.title.toLowerCase()
-          .includes(searchBy.toLowerCase())));
+      case Filter.All:
+        setVisibleTodos(todos.filter(visible => searchByStr(visible.title)));
         break;
       default:
         break;
@@ -68,7 +70,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {!todos ? (
                 <Loader />
               ) : (
                 <TodoList

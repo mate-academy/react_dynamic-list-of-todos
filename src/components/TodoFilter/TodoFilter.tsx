@@ -1,15 +1,16 @@
 import { useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 type Props = {
-  onFilter: (filterBy: string, searchBy: string) => void;
+  onFilter: (filterBy: Filter, searchBy: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Filter.All);
   const [searchBy, setSearchBy] = useState('');
 
-  const handleFilterSetting = (target: string) => {
-    setStatus(target || 'all');
+  const handleFilterSetting = (target: Filter) => {
+    setStatus(target || Filter.All);
     onFilter(target, searchBy);
   };
 
@@ -20,12 +21,12 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
           <select
             data-cy="statusSelect"
             onChange={(event) => {
-              handleFilterSetting(event.target.value);
+              handleFilterSetting(event.target.value as Filter);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.Active}>Active</option>
+            <option value={Filter.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -47,16 +48,18 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            onClick={() => {
-              setSearchBy('');
-              onFilter(status, '');
-            }}
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {searchBy && (
+            /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+            <button
+              onClick={() => {
+                setSearchBy('');
+                onFilter(status, '');
+              }}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+            />
+          )}
         </span>
       </p>
     </form>
