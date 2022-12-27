@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -20,6 +21,12 @@ export const TodoList: React.FC<Props> = (props) => {
     selectedTodo,
   } = props;
 
+  const handleClickSelectButton = (todo: Todo) => {
+    onTodoUserId(todo.userId);
+    onModalStatus(!modalStatus);
+    onSelectedTodo(todo);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -39,39 +46,38 @@ export const TodoList: React.FC<Props> = (props) => {
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className=""
             key={todo.id}
+            className={classNames(
+              {
+                'has-background-info-light': selectedTodo?.id === todo.id,
+              },
+            )}
           >
             <td className="is-vcentered">{todo.id}</td>
-            {todo.completed
-              ? (
-                <>
-                  <td className="is-vcentered">
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  </td>
-                  <td className="is-vcentered is-expanded">
-                    <p className="has-text-success">{todo.title}</p>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="is-vcentered" />
-                  <td className="is-vcentered is-expanded">
-                    <p className="has-text-danger">{todo.title}</p>
-                  </td>
-                </>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
               )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p className={classNames({
+                'has-text-danger': !todo.completed,
+                'has-text-success': todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={() => {
-                  onTodoUserId(todo.userId);
-                  onModalStatus(!modalStatus);
-                  onSelectedTodo(todo);
+                  handleClickSelectButton(todo);
                 }}
               >
                 <span className="icon">

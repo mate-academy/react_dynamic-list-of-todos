@@ -8,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
   = useState<number | null>(null);
   const [modalStatus, setModalStatus] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterByStatus, setFilterByStatus] = useState('all');
+  const [filterByStatus, setFilterByStatus] = useState(SortType.all);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -46,8 +47,6 @@ export const App: React.FC = () => {
     });
   };
 
-  const filteredTodos = getFilteredTodos();
-
   return (
     <>
       <div className="section">
@@ -69,7 +68,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos}
+                    todos={getFilteredTodos()}
                     onTodoUserId={setSelectedTodoUserId}
                     modalStatus={modalStatus}
                     onModalStatus={setModalStatus}
