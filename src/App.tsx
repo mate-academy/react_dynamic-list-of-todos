@@ -33,6 +33,12 @@ export const App: React.FC = () => {
           && todo.title.toLowerCase().includes(queryTodo.toLowerCase()));
 
       default:
+        if (query.length > 0) {
+          return todos.filter(
+            todo => todo.title.toLowerCase().includes(queryTodo.toLowerCase()),
+          );
+        }
+
         return todos;
     }
   };
@@ -74,7 +80,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length
+              {!(todos.length > 0)
                 ? <Loader />
                 : (
                   <TodoList
