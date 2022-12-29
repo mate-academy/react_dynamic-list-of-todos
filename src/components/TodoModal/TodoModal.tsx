@@ -3,8 +3,8 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { UserInfo } from '../UserInfo';
-import { getUsers } from '../../api/api2';
-//
+import { getUsers } from '../../api/apiFunction';
+
 type Props = {
   selectedTodo: Todo;
   setSelectedTodoId: (selectedTodoId: number)=> void;
@@ -76,7 +76,6 @@ export const TodoModal: React.FC<Props>
 
               { selectedUser && (
                 <UserInfo selectedUser={selectedUser} />
-
               )}
 
             </p>

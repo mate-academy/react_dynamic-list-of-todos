@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos } from './api/api2';
+import { getTodos } from './api/apiFunction';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
