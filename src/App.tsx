@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,32 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api/apiFunction';
 
 export const App: React.FC = () => {
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
+  const [filterTodos, setFilterTodos] = useState<Todo[]>(allTodos);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const selectedTodo: Todo | null = allTodos.find((el: Todo) => el.id === selectedTodoId) || null;
+
+  useEffect(() => {
+    setIsLoaded(true);
+    getTodos()
+      .then(todos => {
+        setAllTodos(todos);
+        setFilterTodos(todos);
+      })
+      .finally(() => {
+        setIsLoaded(false);
+      });
+  }, []);
+
+  const handleclick = (id: Todo['id']) => {
+    setSelectedTodoId(id);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +41,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                allTodos={allTodos}
+                setFilterTodos={setFilterTodos}
+                filterTodos={filterTodos}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoaded && (
+                <Loader />
+              )}
+
+              <TodoList
+                todos={filterTodos}
+                selectTodo={handleclick}
+              />
             </div>
           </div>
         </div>
       </div>
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodoId={setSelectedTodoId}
+        />
+      )}
 
-      <TodoModal />
     </>
   );
 };
