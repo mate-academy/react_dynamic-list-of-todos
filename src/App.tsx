@@ -13,52 +13,44 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todoFromServer, setTodoFromServer] = useState<Todo[]>([]);
   const [areUsersLoaded, setLoadingStatus] = useState(false);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  useEffect(() => {
+  const loadTodos = (statusOfTodos: string) => {
+    setLoadingStatus(false);
+
     getTodos()
       .then(todos => {
-        setTodoFromServer(todos);
-        setVisibleTodos(todos);
+        switch (statusOfTodos) {
+          case 'all':
+            setTodoFromServer(todos);
+            break;
+          case 'active':
+            setTodoFromServer(todos.filter(todo => !todo.completed));
+            break;
+          case 'completed':
+            setTodoFromServer(todos.filter(todo => todo.completed));
+            break;
+
+          default:
+            break;
+        }
+
         setLoadingStatus(true);
       });
-  }, []);
+  };
 
   useEffect(() => {
-    let newTodos = todoFromServer;
-
-    switch (filterType) {
-      case 'all':
-        break;
-      case 'active':
-        newTodos = newTodos.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        newTodos = newTodos.filter(todo => todo.completed);
-        break;
-
-      default:
-        break;
-    }
-
-    newTodos = newTodos.filter(todo => {
-      return todo.title
-        .toLowerCase()
-        .includes(query.toLowerCase());
-    });
-
-    setVisibleTodos(newTodos);
-  }, [filterType, query]);
+    loadTodos(filterType);
+  }, [filterType]);
 
   const handleClean = () => {
     setQuery('');
   };
 
   const handleTodoSelect = (id: number) => {
-    const newSelectedTodo = visibleTodos.find(todo => todo.id === id) || null;
+    const newSelectedTodo = todoFromServer.find(todo => todo.id === id) || null;
 
     setSelectedTodo(newSelectedTodo);
   };
@@ -66,6 +58,12 @@ export const App: React.FC = () => {
   const handleTodoClose = () => {
     setSelectedTodo(null);
   };
+
+  const visibleTodos = todoFromServer.filter(todo => {
+    return todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+  });
 
   return (
     <>
@@ -101,7 +99,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      { selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={handleTodoClose} /> }
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={handleTodoClose} />}
     </>
   );
 };
