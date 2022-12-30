@@ -39,13 +39,14 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={() => selectTodo(0)}
-            />
+            >
+              {}
+            </button>
           </header>
 
           <div className="modal-card-body">
@@ -55,12 +56,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
 
             {user && (
               <p className="block" data-cy="modal-user">
-                {selectedTodo.completed
-                  ? (
-                    <strong className="has-text-success">Done</strong>
-                  ) : (
-                    <strong className="has-text-danger">Planned</strong>
-                  )}
+                {selectedTodo.completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
                 {' by '}
 
                 <a href={`mailto:${user.email}`}>

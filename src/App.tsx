@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [filterOption, setFilterOption] = useState('all');
+  const [filterOption, setFilterOption] = useState<string>(Filter.All);
   const [searchTodo, setSearchTodo] = useState('');
 
   useEffect(() => {
@@ -57,8 +57,9 @@ export const App: React.FC = () => {
         filteredTodos = todos;
     }
 
-    return filteredTodos
-      .filter(todo => todo.title.toLowerCase().includes(searchTodo.toLowerCase()));
+    return filteredTodos.filter(todo => {
+      return todo.title.toLowerCase().includes(searchTodo.toLowerCase());
+    });
   };
 
   const filteredTodos = useMemo(getFilteredTodos, [todos, filterOption, searchTodo]);
