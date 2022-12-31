@@ -47,6 +47,14 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const todoList = (
+    <TodoList
+      selectedTodo={selectedTodo?.id || 0}
+      onSelect={selectTodo}
+      todos={filterTodos()}
+    />
+  );
+
   return (
     <>
       <div className="section">
@@ -65,28 +73,21 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                !todos.length
-                  ? <Loader />
-                  : (
-                    <TodoList
-                      selectedTodo={selectedTodo?.id || 0}
-                      onSelect={selectTodo}
-                      todos={filterTodos()}
-                    />
-                  )
+                todos.length
+                  ? todoList
+                  : <Loader />
               }
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo
-        && (
-          <TodoModal
-            todo={selectedTodo}
-            closeModal={closeModal}
-          />
-        )}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };
