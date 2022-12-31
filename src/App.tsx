@@ -24,28 +24,47 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => (
-    setSearchInput(event.target.value)
-  );
+  const changeVisibleTodos = (recentInput: string, recentStatus: string) => {
+    setVisibleTodos(todos.filter(prevTodo => {
+      if (recentStatus === 'active') {
+        return !prevTodo.completed
+          && prevTodo.title.includes(recentInput);
+      }
 
-  const handleRemoveSearchInput = () => setSearchInput('');
+      if (recentStatus === 'completed') {
+        return !prevTodo.completed
+          && prevTodo.title.includes(recentInput);
+      }
+
+      return prevTodo.title.includes(recentInput);
+    }));
+  };
+
+  const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setSearchInput(value);
+
+    changeVisibleTodos(
+      value.toLocaleLowerCase(),
+      selectedStatus.toLocaleLowerCase(),
+    );
+  };
 
   const onStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
     setSelectedStatus(value);
 
-    switch (value) {
-      case 'active':
-        setVisibleTodos(todos.filter(prevTodo => !prevTodo.completed));
-        break;
-      case 'completed':
-        setVisibleTodos(todos.filter(prevTodo => prevTodo.completed));
-        break;
-      default:
-        setVisibleTodos(todos);
-        break;
-    }
+    changeVisibleTodos(
+      searchInput.toLocaleLowerCase(),
+      value.toLocaleLowerCase(),
+    );
+  };
+
+  const handleRemoveSearchInput = () => {
+    setSearchInput('');
+    setVisibleTodos(todos);
   };
 
   return (
