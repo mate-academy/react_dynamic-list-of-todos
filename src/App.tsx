@@ -1,21 +1,27 @@
 /* eslint-disable max-len */
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent, useEffect, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { User } from './types/User';
+import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [visibleTodos, setVisibleTodos] = useState<Todo[] | []>([]);
 
   const [searchInput, setSearchInput] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+
+  const [selectedButton, setSelectedButton] = useState(0);
 
   useEffect(() => {
     getTodos().then(result => {
@@ -24,19 +30,34 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const changeVisibleTodos = (recentInput: string, recentStatus: string) => {
+  // this is incorrect
+  useEffect(() => {
+    if (todos && selectedButton > 0) {
+      const { userId } = todos[selectedButton - 1];
+
+      getUser(userId).then(result => {
+        setUser(result);
+      });
+    }
+  }, [selectedButton]);
+
+  const changeVisibleTodos = (
+    recentInput: string,
+    recentStatus: string,
+  ) => {
     setVisibleTodos(todos.filter(prevTodo => {
-      if (recentStatus === 'active') {
-        return !prevTodo.completed
-          && prevTodo.title.includes(recentInput);
+      const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
+        .includes(recentInput.toLocaleLowerCase());
+
+      if (recentStatus === 'active' && isTitleContainInput) {
+        return !prevTodo.completed;
       }
 
-      if (recentStatus === 'completed') {
-        return !prevTodo.completed
-          && prevTodo.title.includes(recentInput);
+      if (recentStatus === 'completed' && isTitleContainInput) {
+        return prevTodo.completed;
       }
 
-      return prevTodo.title.includes(recentInput);
+      return isTitleContainInput;
     }));
   };
 
@@ -46,8 +67,8 @@ export const App: React.FC = () => {
     setSearchInput(value);
 
     changeVisibleTodos(
-      value.toLocaleLowerCase(),
-      selectedStatus.toLocaleLowerCase(),
+      value,
+      selectedStatus,
     );
   };
 
@@ -57,14 +78,22 @@ export const App: React.FC = () => {
     setSelectedStatus(value);
 
     changeVisibleTodos(
-      searchInput.toLocaleLowerCase(),
-      value.toLocaleLowerCase(),
+      searchInput,
+      value,
     );
   };
 
   const handleRemoveSearchInput = () => {
     setSearchInput('');
     setVisibleTodos(todos);
+  };
+
+  const handleSelectButtonClick = (id: number) => {
+    setSelectedButton(id);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedButton(0);
   };
 
   return (
@@ -85,14 +114,30 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              <TodoList visibleTodos={visibleTodos} />
+              {
+                todos.length === 0
+                && <Loader />
+              }
+              <TodoList
+                visibleTodos={visibleTodos}
+                handleSelectButtonClick={handleSelectButtonClick}
+                selectedButton={selectedButton}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {
+        selectedButton > 0
+        && (
+          <TodoModal
+            recentTodo={todos[selectedButton - 1]}
+            user={user}
+            handleCloseModal={handleCloseModal}
+          />
+        )
+      }
     </>
   );
 };
