@@ -30,7 +30,6 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  // this is incorrect
   useEffect(() => {
     if (todos && selectedButton > 0) {
       const { userId } = todos[selectedButton - 1];
