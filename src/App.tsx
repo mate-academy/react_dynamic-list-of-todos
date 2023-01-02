@@ -14,15 +14,19 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState([...todos]);
   const [userId, setUserId] = useState(0);
+  const [searchBy, setSearchBy] = useState('');
+  const [filterBy, setFilterBy] = useState('');
 
   const getTodosFromServer = async () => {
     const loadedTodos = await getTodos();
 
     setTodos(loadedTodos);
-    setVisibleTodos(loadedTodos);
   };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
 
   const showTodo = (userNum: number) => {
     setUserId(userNum);
@@ -32,31 +36,10 @@ export const App: React.FC = () => {
     setUserId(0);
   };
 
-  const filterTodo = (filterBy: Filter, searchBy: string) => {
-    const searchByStr = (title: string) => {
-      return title.toLowerCase().includes(searchBy.toLowerCase());
-    };
-
-    switch (filterBy) {
-      case Filter.Active:
-        setVisibleTodos(todos.filter(visible => !visible.completed
-          && searchByStr(visible.title)));
-        break;
-      case Filter.Completed:
-        setVisibleTodos(todos.filter(visible => visible.completed
-          && searchByStr(visible.title)));
-        break;
-      case Filter.All:
-        setVisibleTodos(todos.filter(visible => searchByStr(visible.title)));
-        break;
-      default:
-        break;
-    }
+  const filterByFunc = (filterByProps: Filter, searchByProps: string) => {
+    setSearchBy(searchByProps);
+    setFilterBy(filterByProps);
   };
-
-  useEffect(() => {
-    getTodosFromServer();
-  }, []);
 
   return (
     <>
@@ -66,7 +49,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilter={filterTodo} />
+              <TodoFilter onFilter={filterByFunc} />
             </div>
 
             <div className="block">
@@ -74,8 +57,10 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={visibleTodos}
+                  todos={todos}
                   onShow={showTodo}
+                  filterBy={filterBy as Filter}
+                  searchBy={searchBy}
                 />
               )}
             </div>
