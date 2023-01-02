@@ -19,6 +19,14 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = async (): Promise<Todo[]> => {
+  const loadedTodos = await get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+  return loadedTodos;
+};
+
+export const getUser = async (userId: number): Promise<User> => {
+  const loadedUser = await get<User>(`/users/${userId}`);
+
+  return loadedUser;
+};
