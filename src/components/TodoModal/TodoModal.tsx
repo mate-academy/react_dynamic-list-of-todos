@@ -1,23 +1,38 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
 
 interface Props {
   recentTodo: Todo;
-  user: User | null;
   handleCloseModal: () => void;
+  selectedButton: number;
+  todos: Todo[];
 }
 export const TodoModal: FC<Props> = ({
   recentTodo,
-  user,
   handleCloseModal,
+  selectedButton,
+  todos,
 }) => {
   const {
     id,
     title,
     completed,
   } = recentTodo || {};
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (todos && selectedButton > 0) {
+      const { userId } = todos[selectedButton - 1];
+
+      getUser(userId).then(result => {
+        setUser(result);
+      });
+    }
+  }, [selectedButton]);
 
   const { email, name } = user || {};
 

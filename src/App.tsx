@@ -7,15 +7,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [user, setUser] = useState<User | null>(null);
   const [visibleTodos, setVisibleTodos] = useState<Todo[] | []>([]);
 
   const [searchInput, setSearchInput] = useState('');
@@ -29,16 +27,6 @@ export const App: React.FC = () => {
       setVisibleTodos(result);
     });
   }, []);
-
-  useEffect(() => {
-    if (todos && selectedButton > 0) {
-      const { userId } = todos[selectedButton - 1];
-
-      getUser(userId).then(result => {
-        setUser(result);
-      });
-    }
-  }, [selectedButton]);
 
   const changeVisibleTodos = (
     recentInput: string,
@@ -132,8 +120,9 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             recentTodo={todos[selectedButton - 1]}
-            user={user}
+            todos={todos}
             handleCloseModal={handleCloseModal}
+            selectedButton={selectedButton}
           />
         )
       }
