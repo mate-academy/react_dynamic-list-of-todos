@@ -14,7 +14,6 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | []>([]);
 
   const [searchInput, setSearchInput] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -22,66 +21,43 @@ export const App: React.FC = () => {
   const [selectedButton, setSelectedButton] = useState(0);
 
   useEffect(() => {
-    getTodos().then(result => {
-      setTodos(result);
-      setVisibleTodos(result);
-    });
+    getTodos().then(setTodos);
   }, []);
 
-  const changeVisibleTodos = (
-    recentInput: string,
-    recentStatus: string,
-  ) => {
-    setVisibleTodos(todos.filter(prevTodo => {
+  const getVisibleTodos = () => {
+    return todos.filter(prevTodo => {
       const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
-        .includes(recentInput.toLocaleLowerCase());
+        .includes(searchInput.toLocaleLowerCase());
 
-      if (recentStatus === 'active' && isTitleContainInput) {
+      if (selectedStatus === 'active' && isTitleContainInput) {
         return !prevTodo.completed;
       }
 
-      if (recentStatus === 'completed' && isTitleContainInput) {
+      if (selectedStatus === 'completed' && isTitleContainInput) {
         return prevTodo.completed;
       }
 
       return isTitleContainInput;
-    }));
+    });
   };
 
   const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     setSearchInput(value);
-
-    changeVisibleTodos(
-      value,
-      selectedStatus,
-    );
   };
 
   const onStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
     setSelectedStatus(value);
-
-    changeVisibleTodos(
-      searchInput,
-      value,
-    );
   };
 
-  const handleRemoveSearchInput = () => {
-    setSearchInput('');
-    setVisibleTodos(todos);
-  };
+  const handleRemoveSearchInput = () => setSearchInput('');
 
-  const handleSelectButtonClick = (id: number) => {
-    setSelectedButton(id);
-  };
+  const handleSelectButtonClick = (id: number) => setSelectedButton(id);
 
-  const handleCloseModal = () => {
-    setSelectedButton(0);
-  };
+  const handleCloseModal = () => setSelectedButton(0);
 
   return (
     <>
@@ -106,7 +82,7 @@ export const App: React.FC = () => {
                 && <Loader />
               }
               <TodoList
-                visibleTodos={visibleTodos}
+                visibleTodos={getVisibleTodos()}
                 handleSelectButtonClick={handleSelectButtonClick}
                 selectedButton={selectedButton}
               />
@@ -120,7 +96,6 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             recentTodo={todos[selectedButton - 1]}
-            todos={todos}
             handleCloseModal={handleCloseModal}
             selectedButton={selectedButton}
           />
