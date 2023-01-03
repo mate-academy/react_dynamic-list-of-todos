@@ -17,17 +17,13 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const loadTodos = () => {
+  useEffect(() => {
     getTodos()
       .then(todos => {
         setTodoFromServer(todos);
         setLoadingStatus(true);
       });
-  };
-
-  useEffect(() => {
-    loadTodos();
-  }, [filterType]);
+  }, []);
 
   const handleClean = () => {
     setQuery('');
