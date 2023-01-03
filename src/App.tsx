@@ -17,32 +17,16 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const loadTodos = (statusOfTodos: string) => {
-    setLoadingStatus(false);
-
+  const loadTodos = () => {
     getTodos()
       .then(todos => {
-        switch (statusOfTodos) {
-          case 'all':
-            setTodoFromServer(todos);
-            break;
-          case 'active':
-            setTodoFromServer(todos.filter(todo => !todo.completed));
-            break;
-          case 'completed':
-            setTodoFromServer(todos.filter(todo => todo.completed));
-            break;
-
-          default:
-            break;
-        }
-
+        setTodoFromServer(todos);
         setLoadingStatus(true);
       });
   };
 
   useEffect(() => {
-    loadTodos(filterType);
+    loadTodos();
   }, [filterType]);
 
   const handleClean = () => {
@@ -60,9 +44,20 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todoFromServer.filter(todo => {
-    return todo.title
+    const condition1 = todo.title
       .toLowerCase()
       .includes(query.toLowerCase());
+
+    switch (filterType) {
+      case 'all':
+        return condition1;
+      case 'active':
+        return condition1 && !todo.completed;
+      case 'completed':
+        return condition1 && todo.completed;
+      default:
+        return true;
+    }
   });
 
   return (
