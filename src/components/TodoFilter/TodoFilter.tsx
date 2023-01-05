@@ -1,8 +1,20 @@
-export const TodoFilter = () => (
+import type { ChangeEvent, FC } from 'react';
+import type { TodoFilterStatus } from '../../App';
+
+type Props = {
+  changeSort: (filter: TodoFilterStatus) => void;
+};
+
+export const TodoFilter: FC<Props> = ({ changeSort }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+            changeSort(event.target.value as TodoFilterStatus);
+          }}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -23,11 +35,7 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
+        <button data-cy="clearSearchButton" type="button" className="delete" />
       </span>
     </p>
   </form>
