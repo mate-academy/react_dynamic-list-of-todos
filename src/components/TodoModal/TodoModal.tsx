@@ -6,21 +6,21 @@ import { getUser } from '../../api';
 
 type Props = {
   todos: Todo[];
-  setSelectedTodoId: (value: number) => void;
-  selectedTodoId: number;
+  setSelectedTodo: () => void;
+  selectedTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todos,
-  setSelectedTodoId,
-  selectedTodoId,
+  setSelectedTodo,
+  selectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const chosenTodo = todos.find(todo => todo.id === selectedTodo.id);
 
   const getApiUser = async () => {
-    if (selectedTodo) {
-      const data = await getUser(selectedTodo.userId);
+    if (chosenTodo) {
+      const data = await getUser(chosenTodo.userId);
 
       setUser(data);
     }
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodoId}`}
+              {`Todo #${chosenTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -51,17 +51,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodoId(0)}
+              onClick={setSelectedTodo}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {chosenTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo?.completed
+              {chosenTodo?.completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 

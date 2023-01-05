@@ -14,14 +14,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const getApiTodos = async () => {
     const data = await getTodos();
 
     setTodos(data);
-    setDataLoaded(true);
   };
 
   useEffect(() => {
@@ -59,23 +57,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!dataLoaded && <Loader />}
+              {!todos.length && <Loader />}
               <TodoList
                 todos={filteredTodos}
-                setSelectedTodoId={setSelectedTodoId}
-                selectedTodoId={selectedTodoId}
+                setSelectedTodo={setSelectedTodo}
+                selectedTodo={selectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodoId
+      {selectedTodo
         && (
           <TodoModal
             todos={filteredTodos}
-            setSelectedTodoId={setSelectedTodoId}
-            selectedTodoId={selectedTodoId}
+            setSelectedTodo={() => setSelectedTodo(null)}
+            selectedTodo={selectedTodo}
           />
         )}
     </>
