@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import type { User } from '../../types/User';
 import type { Todo } from '../../types/Todo';
 
 type Props = {
-  isLoading: boolean;
   todo: Todo;
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ isLoading, todo, onClose }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  onClose,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   const getUser = async (userId: number) => {
-    const userFromServer = await axios.get<User>(
-      `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${userId}.json`,
-    );
+    try {
+      const userFromServer = await axios.get<User>(
+        `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${userId}.json`,
+      );
 
-    setUser(userFromServer.data);
+      setUser(userFromServer.data);
+    } catch (error: unknown) {
+      setUser(null);
+    }
   };
 
   useEffect(() => {
@@ -28,10 +35,7 @@ export const TodoModal: React.FC<Props> = ({ isLoading, todo, onClose }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {user ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -57,16 +61,23 @@ export const TodoModal: React.FC<Props> = ({ isLoading, todo, onClose }) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );

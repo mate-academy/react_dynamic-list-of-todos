@@ -13,11 +13,10 @@ import type { Todo } from './types/Todo';
 export type TodoFilterStatus = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [sort, setSort] = useState<TodoFilterStatus>('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
 
   const selectTodo = (todoId: number) => {
     setSelectedTodo(todos.find((todo) => todo.id === todoId) || null);
@@ -28,47 +27,47 @@ export const App: React.FC = () => {
   };
 
   const loadTodos = async () => {
-    setIsLoading(true);
-
     try {
       const response = await axios.get<Todo[]>(
         'https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json',
       );
 
       setTodos(response.data);
-
-      setIsLoading(false);
     } catch (error: unknown) {
-      setIsLoading(false);
+      setTodos([]);
     }
   };
 
   const sortTodos = useCallback(
     (todosToSort: Todo[]) => {
-      switch (sort) {
-        case 'all':
-          return todosToSort;
+      const cleanQuery = query.trim().toLowerCase();
 
+      switch (sort) {
         case 'active':
-          return todosToSort.filter((todo) => !todo.completed);
+          return todosToSort
+            .filter((todo) => !todo.completed
+              && todo.title
+                .toLowerCase()
+                .includes(cleanQuery));
 
         case 'completed':
-          return todosToSort.filter((todo) => todo.completed);
+          return todosToSort
+            .filter((todo) => todo.completed
+              && todo.title
+                .toLowerCase()
+                .includes(cleanQuery));
 
         default:
-          return todosToSort;
+          return todosToSort
+            .filter((todo) => todo.title.toLowerCase().includes(cleanQuery));
       }
     },
-    [sort],
+    [sort, query],
   );
 
   useEffect(() => {
     loadTodos();
   }, []);
-
-  useEffect(() => {
-    setFilteredTodos(sortTodos(todos));
-  }, [todos, sort]);
 
   return (
     <>
@@ -78,31 +77,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter changeSort={setSort} />
+              <TodoFilter
+                changeSort={setSort}
+                changeQuery={setQuery}
+                query={query}
+              />
             </div>
 
             <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
+              {todos.length ? (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={sortTodos(todos)}
                   selectedTodoId={selectedTodo?.id || 0}
                   onSelect={selectTodo}
                 />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
-        <TodoModal
-          isLoading={isLoading}
-          todo={selectedTodo}
-          onClose={closeModal}
-        />
-      )}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={closeModal} />}
     </>
   );
 };
