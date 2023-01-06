@@ -3,6 +3,7 @@ import React, {
   ChangeEvent,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -32,20 +33,22 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  const getVisibleTodos = todos.filter(prevTodo => {
-    const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
-      .includes(searchInput.toLocaleLowerCase());
+  const visibleTodos = useMemo(() => (
+    todos.filter(prevTodo => {
+      const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
+        .includes(searchInput.toLocaleLowerCase());
 
-    if (selectedStatus === 'active' && isTitleContainInput) {
-      return !prevTodo.completed;
-    }
+      if (selectedStatus === 'active' && isTitleContainInput) {
+        return !prevTodo.completed;
+      }
 
-    if (selectedStatus === 'completed' && isTitleContainInput) {
-      return prevTodo.completed;
-    }
+      if (selectedStatus === 'completed' && isTitleContainInput) {
+        return prevTodo.completed;
+      }
 
-    return isTitleContainInput;
-  });
+      return isTitleContainInput;
+    })
+  ), [todos, selectedStatus, searchInput]);
 
   const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -88,7 +91,7 @@ export const App: React.FC = () => {
                   ? <Loader />
                   : (
                     <TodoList
-                      visibleTodos={getVisibleTodos}
+                      visibleTodos={visibleTodos}
                       handleSelectButtonClick={handleSelectButtonClick}
                       selectedButtonId={selectedButtonId}
                     />
