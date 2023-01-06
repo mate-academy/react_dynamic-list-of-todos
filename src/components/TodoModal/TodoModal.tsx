@@ -6,13 +6,13 @@ import { getUser } from '../../api';
 
 type Props = {
   todos: Todo[];
-  deleteSelectedTodo: () => void;
+  setSelectedTodo: () => void;
   selectedTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todos,
-  deleteSelectedTodo,
+  setSelectedTodo,
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -51,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={deleteSelectedTodo}
+              onClick={setSelectedTodo}
             />
           </header>
 
