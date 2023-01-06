@@ -26,9 +26,9 @@ export const App: React.FC = () => {
     getApiTodos();
   }, []);
 
-  const normalizeTodosWithQuery = todos.filter(({ title }) => {
-    return title.toLowerCase().includes(query.toLowerCase());
-  });
+  const normalizeTodosWithQuery = todos.filter(
+    (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
+  );
 
   const filteredTodos = normalizeTodosWithQuery.filter(todo => {
     switch (filterType) {
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             todos={filteredTodos}
-            closeSelectedTodo={() => setSelectedTodo(null)}
+            setSelectedTodo={setSelectedTodo}
             selectedTodo={selectedTodo}
           />
         )}
