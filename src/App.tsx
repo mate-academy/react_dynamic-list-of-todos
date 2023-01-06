@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             todos={filteredTodos}
-            setSelectedTodo={() => setSelectedTodo(null)}
+            closeSelectedTodo={() => setSelectedTodo(null)}
             selectedTodo={selectedTodo}
           />
         )}
