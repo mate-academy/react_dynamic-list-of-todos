@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
@@ -6,12 +7,12 @@ import { getUser } from '../../api';
 
 interface Props {
   handleCloseModal: () => void;
-  selectedButton: number;
+  selectedButtonId: number;
   recentTodo: Todo;
 }
 export const TodoModal: FC<Props> = ({
   handleCloseModal,
-  selectedButton,
+  selectedButtonId,
   recentTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -21,11 +22,11 @@ export const TodoModal: FC<Props> = ({
     id,
     title,
     completed,
-  } = recentTodo || {};
+  } = recentTodo;
 
   useEffect(() => {
     getUser(userId).then(setUser);
-  }, [selectedButton]);
+  }, [selectedButtonId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -57,11 +58,17 @@ export const TodoModal: FC<Props> = ({
                 </p>
 
                 <p className="block" data-cy="modal-user">
-                  {
-                    completed
-                      ? <strong className="has-text-success">Done</strong>
-                      : <strong className="has-text-danger">Planned</strong>
-                  }
+                  <strong className={cn(
+                    { 'has-text-success': completed },
+                    { 'has-text-danger': !completed },
+                  )}
+                  >
+                    {
+                      completed
+                        ? 'Done'
+                        : 'Planned'
+                    }
+                  </strong>
                   {' by '}
 
                   <a href={`mailto:${user.email}`}>{user.name}</a>

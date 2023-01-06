@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 import React, {
-  ChangeEvent, useEffect, useState,
+  ChangeEvent,
+  useEffect,
+  useState,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -12,34 +14,38 @@ import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
+enum Filter {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const [searchInput, setSearchInput] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>(Filter.ALL);
 
-  const [selectedButton, setSelectedButton] = useState(0);
+  const [selectedButtonId, setSelectedButtonId] = useState(0);
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
 
-  const getVisibleTodos = () => {
-    return todos.filter(prevTodo => {
-      const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
-        .includes(searchInput.toLocaleLowerCase());
+  const getVisibleTodos = todos.filter(prevTodo => {
+    const isTitleContainInput = prevTodo.title.toLocaleLowerCase()
+      .includes(searchInput.toLocaleLowerCase());
 
-      if (selectedStatus === 'active' && isTitleContainInput) {
-        return !prevTodo.completed;
-      }
+    if (selectedStatus === 'active' && isTitleContainInput) {
+      return !prevTodo.completed;
+    }
 
-      if (selectedStatus === 'completed' && isTitleContainInput) {
-        return prevTodo.completed;
-      }
+    if (selectedStatus === 'completed' && isTitleContainInput) {
+      return prevTodo.completed;
+    }
 
-      return isTitleContainInput;
-    });
-  };
+    return isTitleContainInput;
+  });
 
   const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -55,9 +61,9 @@ export const App: React.FC = () => {
 
   const handleRemoveSearchInput = () => setSearchInput('');
 
-  const handleSelectButtonClick = (id: number) => setSelectedButton(id);
+  const handleSelectButtonClick = (id: number) => setSelectedButtonId(id);
 
-  const handleCloseModal = () => setSelectedButton(0);
+  const handleCloseModal = () => setSelectedButtonId(0);
 
   return (
     <>
@@ -79,25 +85,27 @@ export const App: React.FC = () => {
             <div className="block">
               {
                 todos.length === 0
-                && <Loader />
+                  ? <Loader />
+                  : (
+                    <TodoList
+                      visibleTodos={getVisibleTodos}
+                      handleSelectButtonClick={handleSelectButtonClick}
+                      selectedButtonId={selectedButtonId}
+                    />
+                  )
               }
-              <TodoList
-                visibleTodos={getVisibleTodos()}
-                handleSelectButtonClick={handleSelectButtonClick}
-                selectedButton={selectedButton}
-              />
             </div>
           </div>
         </div>
       </div>
 
       {
-        selectedButton > 0
+        selectedButtonId > 0
         && (
           <TodoModal
-            recentTodo={todos[selectedButton - 1]}
+            recentTodo={todos[selectedButtonId - 1]}
             handleCloseModal={handleCloseModal}
-            selectedButton={selectedButton}
+            selectedButtonId={selectedButtonId}
           />
         )
       }
