@@ -15,7 +15,7 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
   selectedTodo,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>();
   const chosenTodo = todos.find(todo => todo.id === selectedTodo.id);
 
   const getApiUser = async () => {
@@ -46,12 +46,12 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${chosenTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={() => setSelectedTodo(null)}
+              aria-label="close-button"
             />
           </header>
 
