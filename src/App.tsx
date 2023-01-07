@@ -7,6 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Filter } from './types/Filter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
@@ -21,17 +22,17 @@ export const App: React.FC = () => {
     getTodos()
       .then((data) => setTodos(data))
       .then(() => setLoading(false));
-  }, [todos]);
+  }, []);
 
   const filteredTodos = () => {
     const queryTodo = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
     return queryTodo.filter(todo => {
       switch (option) {
-        case 'active':
+        case Filter.Active:
           return !todo.completed;
 
-        case 'completed':
+        case Filter.Completed:
           return todo.completed;
 
         default:

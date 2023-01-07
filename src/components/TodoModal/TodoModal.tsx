@@ -24,7 +24,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     getUser(userId)
       .then((data) => setUser(data))
       .then(() => setLoading(false));
-  }, [user]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -63,9 +63,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user?.email}`}>
+                  {user.name}
+                </a>
+              )}
+
             </p>
           </div>
         </div>
