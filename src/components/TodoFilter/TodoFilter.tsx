@@ -1,3 +1,6 @@
+import React from 'react';
+import { Filter } from '../../types/Filter';
+
 type Props = {
   option: string;
   setOption: (option: string) => void;
@@ -14,13 +17,13 @@ export const TodoFilter: React.FC<Props> = ({
   const handleOptionValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
       case 'active':
-        return setOption('active');
+        return setOption(Filter.Active);
 
       case 'completed':
-        return setOption('completed');
+        return setOption(Filter.Completed);
 
       default:
-        return setOption('all');
+        return setOption(Filter.All);
     }
   };
 

@@ -14,7 +14,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState('all');
+  const [option, setOption] = useState<string>(Filter.All);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [checkedTodo, setCheckedTodo] = useState<Todo | null>(null);
 
