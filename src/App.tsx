@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -26,16 +25,16 @@ export const App: React.FC = () => {
     getApiTodos();
   }, []);
 
-  const normalizeTodosWithQuery = todos.filter(
-    (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
-  );
+  const normalizeTodosWithQuery = todos.filter((todo) => {
+    return todo.title.toLowerCase().includes(query.toLowerCase());
+  });
 
   const filteredTodos = normalizeTodosWithQuery.filter(todo => {
     switch (filterType) {
       case Condition.active:
-        return todo.completed === false;
+        return !todo.completed;
       case Condition.completed:
-        return todo.completed === true;
+        return todo.completed;
       default:
         return Condition.all;
     }
@@ -57,25 +56,27 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
-              <TodoList
-                todos={filteredTodos}
-                setSelectedTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    setSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo
-        && (
-          <TodoModal
-            todos={filteredTodos}
-            setSelectedTodo={setSelectedTodo}
-            selectedTodo={selectedTodo}
-          />
-        )}
+      {selectedTodo && (
+        <TodoModal
+          todos={filteredTodos}
+          setSelectedTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+        />
+      )}
     </>
   );
 };
