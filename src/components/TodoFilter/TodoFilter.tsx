@@ -15,8 +15,8 @@ enum FilterType {
 
 export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   const [inputValue, setInputValue] = useState('');
-  const [active, setActive] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const filterTodosSelect = (value: boolean, input: string = inputValue) => {
     return setVisibleTodos(todos.filter((todo) => {
@@ -27,22 +27,22 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   const filterTodosByOption = (value: string) => {
     switch (value) {
       case FilterType.all:
-        setActive(false);
-        setCompleted(false);
+        setIsActive(false);
+        setIsCompleted(false);
 
         return setVisibleTodos(todos.filter((todo) => {
           return todo.title.includes(inputValue);
         }));
 
       case FilterType.active:
-        setActive(true);
-        setCompleted(false);
+        setIsActive(true);
+        setIsCompleted(false);
 
         return filterTodosSelect(false);
 
       case FilterType.completed:
-        setCompleted(true);
-        setActive(false);
+        setIsCompleted(true);
+        setIsActive(false);
 
         return filterTodosSelect(true);
 
@@ -54,13 +54,13 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   };
 
   function filterByInput(event = '') {
-    if (active) {
+    if (isActive) {
       filterTodosByOption('active');
 
       return filterTodosSelect(false, event);
     }
 
-    if (completed) {
+    if (isCompleted) {
       filterTodosByOption('completed');
 
       return filterTodosSelect(true, event);
