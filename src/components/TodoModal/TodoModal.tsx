@@ -8,25 +8,42 @@ import { getUser } from '../../api';
 interface Props {
   handleCloseModal: () => void;
   selectedButtonId: number;
-  recentTodo: Todo;
+  todos: Todo[];
 }
 export const TodoModal: FC<Props> = ({
   handleCloseModal,
   selectedButtonId,
-  recentTodo,
+  todos,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  let whichTodo = selectedButtonId;
+
+  if (whichTodo < 1) {
+    whichTodo = 0;
+  }
+
+  if (whichTodo >= todos.length) {
+    whichTodo = todos.length;
+  }
 
   const {
     userId,
     id,
     title,
     completed,
-  } = recentTodo;
+  } = todos[whichTodo - 1];
+
+  const loadUser = async () => {
+    const loadedUsers = await getUser(userId);
+
+    setUser(loadedUsers);
+  };
 
   useEffect(() => {
-    getUser(userId).then(setUser);
-  }, [selectedButtonId]);
+    // getUser(userId).then(setUser);
+    loadUser();
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

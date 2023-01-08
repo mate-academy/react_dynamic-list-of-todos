@@ -29,8 +29,14 @@ export const App: React.FC = () => {
 
   const [selectedButtonId, setSelectedButtonId] = useState(0);
 
+  const loadTodos = async () => {
+    const loadedTodos = await getTodos();
+
+    setTodos(loadedTodos);
+  };
+
   useEffect(() => {
-    getTodos().then(setTodos);
+    loadTodos();
   }, []);
 
   const visibleTodos = useMemo(() => (
@@ -106,9 +112,9 @@ export const App: React.FC = () => {
         selectedButtonId > 0
         && (
           <TodoModal
-            recentTodo={todos[selectedButtonId - 1]}
-            handleCloseModal={handleCloseModal}
             selectedButtonId={selectedButtonId}
+            todos={todos}
+            handleCloseModal={handleCloseModal}
           />
         )
       }
