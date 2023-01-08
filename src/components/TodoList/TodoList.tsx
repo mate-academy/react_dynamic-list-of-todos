@@ -1,13 +1,15 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setTodo: (arg0: Todo) => void,
+  setTodo: (arg0: any) => void,
   setShowModalBoolean: (arg0: boolean) => void,
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList:
+React.FC<Props> = ({
   todos,
   setTodo,
   setShowModalBoolean,
@@ -30,30 +32,30 @@ export const TodoList: React.FC<Props> = ({
 
         <tbody>
           {
-            todos.map((todo: Todo) => {
+            todos.map((todo:Todo) => {
+              const { id, completed, title } = todo;
+              const btnClass = classNames({
+                'has-text-success': completed,
+                'has-text-danger': !completed,
+              });
+
               return (
                 <tr
                   data-cy="todo"
                   className=""
-                  key={todo.id}
+                  key={id}
                 >
-                  <td className="is-vcentered">{todo.id}</td>
+                  <td className="is-vcentered">{id}</td>
                   <td className="is-vcentered">
-                    {todo.completed
-                      && (
-                        <span className="icon" data-cy="iconCompleted">
-                          <i className="fas fa-check" />
-                        </span>
-                      )}
+                    {completed && (
+                      <span className="icon" data-cy="iconCompleted">
+                        <i className="fas fa-check" />
+                      </span>
+                    )}
                   </td>
                   <td className="is-vcentered is-expanded">
-                    <p className={
-                      todo.completed
-                        ? 'has-text-success'
-                        : 'has-text-danger'
-                    }
-                    >
-                      {todo.title}
+                    <p className={btnClass}>
+                      {title}
                     </p>
                   </td>
                   <td className="has-text-right is-vcentered">

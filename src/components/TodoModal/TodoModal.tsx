@@ -11,7 +11,8 @@ type Props = {
   setLoadingModal: (arg0: boolean) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal:
+React.FC<Props> = ({
   todo,
   setShowModalBoolean,
   loadingModal,
@@ -24,10 +25,15 @@ export const TodoModal: React.FC<Props> = ({
     phone: '',
   });
 
+  const {
+    title, id, userId, completed,
+  } = todo;
+  const { name, email } = user;
+
   useEffect(() => {
     const getUserFromServer = async () => {
       setLoadingModal(true);
-      const result = await getUser(todo.userId);
+      const result = await getUser(userId);
 
       setUser(result);
       setLoadingModal(false);
@@ -49,13 +55,13 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
+              aria-label="Close modal"
               data-cy="modal-close"
               onClick={() => {
                 setShowModalBoolean(false);
@@ -65,19 +71,19 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {
-                !todo.completed
+                !completed
                   ? <strong className="has-text-danger">Planned</strong>
                   : <strong className="has-text-success">Done</strong>
               }
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${email}`}>
+                {name}
               </a>
             </p>
           </div>

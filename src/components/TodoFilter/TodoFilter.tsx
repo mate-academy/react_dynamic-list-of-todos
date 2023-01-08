@@ -7,9 +7,13 @@ type Props = {
   visibleTodos: Todo[]
 };
 
-export const TodoFilter: React.FC<Props> = ({
-  todos, setVisibleTodos,
-}) => {
+enum FilterType {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
+export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   const [inputValue, setInputValue] = useState('');
   const [active, setActive] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -22,7 +26,7 @@ export const TodoFilter: React.FC<Props> = ({
 
   const filterTodosByOption = (value: string) => {
     switch (value) {
-      case 'all':
+      case FilterType.all:
         setActive(false);
         setCompleted(false);
 
@@ -30,13 +34,13 @@ export const TodoFilter: React.FC<Props> = ({
           return todo.title.includes(inputValue);
         }));
 
-      case 'active':
+      case FilterType.active:
         setActive(true);
         setCompleted(false);
 
         return filterTodosSelect(false);
 
-      case 'completed':
+      case FilterType.completed:
         setCompleted(true);
         setActive(false);
 
@@ -67,6 +71,11 @@ export const TodoFilter: React.FC<Props> = ({
     }));
   }
 
+  const filterTodosByInput = ({ target: { value } }: any) => {
+    setInputValue(value);
+    filterByInput(value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -91,32 +100,23 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={inputValue}
-          onChange={((event) => {
-            setInputValue(event.target.value);
-            filterByInput(event.target.value);
-          })}
+          onChange={filterTodosByInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {
-          inputValue
-          && (
-            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <button
-                data-cy="clearSearchButton"
-                type="button"
-                className="delete"
-                onClick={() => {
-                  setInputValue('');
-                  filterByInput();
-                }}
-              />
-            </span>
-          )
-        }
+        {inputValue && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              aria-label="Clear input"
+              type="button"
+              className="delete"
+              onClick={filterTodosByInput}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

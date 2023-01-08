@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,12 +10,13 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [loadingModal, setLoadingModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingModal, setIsLoadingModal] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [showModalBoolean, setShowModalBoolean] = useState(false);
-  const [todo, setTodo] = useState({
+
+  const [defaultTodo, setDefaultTodo] = useState({
     title: '',
     id: 0,
     completed: false,
@@ -24,12 +25,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const getTodosFromServer = async () => {
-      setLoading(true);
+      setIsLoading(true);
       const result = await getTodos();
 
       setTodos(result);
       setVisibleTodos(result);
-      setLoading(false);
+      setIsLoading(false);
     };
 
     getTodosFromServer();
@@ -51,10 +52,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={visibleTodos}
-                setTodo={setTodo}
+                setTodo={setDefaultTodo}
                 setShowModalBoolean={setShowModalBoolean}
               />
             </div>
@@ -62,15 +63,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModalBoolean
-        && (
-          <TodoModal
-            todo={todo}
-            setShowModalBoolean={setShowModalBoolean}
-            loadingModal={loadingModal}
-            setLoadingModal={setLoadingModal}
-          />
-        )}
+      {showModalBoolean && (
+        <TodoModal
+          todo={defaultTodo}
+          setShowModalBoolean={setShowModalBoolean}
+          loadingModal={isLoadingModal}
+          setLoadingModal={setIsLoadingModal}
+        />
+      )}
     </>
   );
 };
