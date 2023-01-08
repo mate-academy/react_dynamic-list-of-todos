@@ -17,22 +17,14 @@ export const TodoModal: FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  let localButtonId = selectedButtonId;
-
-  if (localButtonId < 0) {
-    localButtonId = 0;
-  }
-
-  if (localButtonId > todos.length) {
-    localButtonId = todos.length;
-  }
-
   const {
     userId,
     id,
     title,
     completed,
-  } = todos[localButtonId - 1];
+  } = selectedButtonId > todos.length
+    ? todos[todos.length - 1]
+    : todos[selectedButtonId - 1];
 
   const loadUser = async () => {
     const loadedUsers = await getUser(userId);
