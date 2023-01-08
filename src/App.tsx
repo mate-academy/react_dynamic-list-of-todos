@@ -15,12 +15,13 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
 
   async function getTodosFromServer() {
+    setIsLoading(true);
     const allTodos = await getTodos();
 
     setTodosFromServer(allTodos);
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
   }, []);
 
   const getFilteredTodos = () => {
-    const toFilter = todos.filter(todo => {
+    return todos.filter(todo => {
       const filterByQuery = todo.title.toLowerCase()
         .includes(query.toLowerCase());
 
@@ -46,8 +47,6 @@ export const App: React.FC = () => {
           return filterByQuery;
       }
     });
-
-    return toFilter;
   };
 
   const resetHandler = () => {
