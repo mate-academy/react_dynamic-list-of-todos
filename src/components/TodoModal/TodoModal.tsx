@@ -57,9 +57,9 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="Mute volume"
               className="delete"
               data-cy="modal-close"
               onClick={() => deleteSelectedTodo()}
@@ -77,9 +77,12 @@ export const TodoModal: React.FC<Props> = ({
                 : (<strong className="has-text-danger">Planned</strong>)}
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              )}
+
             </p>
           </div>
         </div>

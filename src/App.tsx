@@ -9,12 +9,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
+import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectParametr, setSelectParametr] = useState('all');
+  const [selectParametr, setSelectParametr] = useState(SortType.all);
   const [copyTodos, setCopyTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
 
@@ -49,10 +50,10 @@ export const App: React.FC = () => {
       .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()))
       .filter(todo => {
         switch (selectParametr) {
-          case 'active':
+          case SortType.active:
             return !todo.completed;
 
-          case 'completed':
+          case SortType.completed:
             return todo.completed;
 
           default:
@@ -66,7 +67,7 @@ export const App: React.FC = () => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    setSelectParametr(value);
+    setSelectParametr(value as SortType);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,11 +99,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              <TodoList
-                todos={todos}
-                selectedTodo={selectedTodo}
-                selectTodo={selectTodo}
-              />
+              {(!loading || todos.length !== 0) && (
+                <TodoList
+                  todos={todos}
+                  selectedTodo={selectedTodo}
+                  selectTodo={selectTodo}
+                />
+              )}
+
             </div>
           </div>
         </div>
