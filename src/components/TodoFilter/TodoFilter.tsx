@@ -1,27 +1,25 @@
 import { useState } from 'react';
+import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setVisibleTodos: (arg0: Todo[]) => void,
+  setVisibleTodos: (todos: Todo[]) => void,
   visibleTodos: Todo[]
 };
-
-enum FilterType {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
-}
 
 export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   const [inputValue, setInputValue] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  let filteredTodos = [];
 
   const filterTodosSelect = (value: boolean, input: string = inputValue) => {
-    return setVisibleTodos(todos.filter((todo) => {
+    filteredTodos = todos.filter((todo) => {
       return todo.completed === value && todo.title.includes(input);
-    }));
+    });
+
+    return setVisibleTodos(filteredTodos);
   };
 
   const filterTodosByOption = (value: string) => {
@@ -30,9 +28,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
         setIsActive(false);
         setIsCompleted(false);
 
-        return setVisibleTodos(todos.filter((todo) => {
+        filteredTodos = todos.filter((todo) => {
           return todo.title.includes(inputValue);
-        }));
+        });
+
+        return setVisibleTodos(filteredTodos);
 
       case FilterType.active:
         setIsActive(true);
@@ -55,13 +55,13 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
 
   function filterByInput(event = '') {
     if (isActive) {
-      filterTodosByOption('active');
+      filterTodosByOption(FilterType.active);
 
       return filterTodosSelect(false, event);
     }
 
     if (isCompleted) {
-      filterTodosByOption('completed');
+      filterTodosByOption(FilterType.completed);
 
       return filterTodosSelect(true, event);
     }
@@ -71,9 +71,14 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
     }));
   }
 
-  const filterTodosByInput = ({ target: { value } }: any) => {
+  const filterTodosByInput = (value: string) => {
     setInputValue(value);
     filterByInput(value);
+  };
+
+  const clearInput = () => {
+    setInputValue('');
+    filterByInput('');
   };
 
   return (
@@ -84,11 +89,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
             data-cy="statusSelect"
             onChange={(event) => filterTodosByOption(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">
+            <option value={FilterType.all}>All</option>
+            <option value={FilterType.active}>
               Active
             </option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -100,7 +105,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
           className="input"
           placeholder="Search..."
           value={inputValue}
-          onChange={filterTodosByInput}
+          onChange={(event) => filterTodosByInput(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -113,7 +118,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
               aria-label="Clear input"
               type="button"
               className="delete"
-              onClick={filterTodosByInput}
+              onClick={clearInput}
             />
           </span>
         )}

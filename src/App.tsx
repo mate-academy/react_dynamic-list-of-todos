@@ -11,10 +11,10 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [showModalBoolean, setShowModalBoolean] = useState(false);
+  const [isModalSeen, setIsModalSeen] = useState(false);
 
   const [defaultTodo, setDefaultTodo] = useState({
     title: '',
@@ -53,22 +53,24 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                setTodo={setDefaultTodo}
-                setShowModalBoolean={setShowModalBoolean}
-              />
+              {(!!todos.length || !isLoading) && (
+                <TodoList
+                  todos={visibleTodos}
+                  setTodo={setDefaultTodo}
+                  setIsModalSeen={setIsModalSeen}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {showModalBoolean && (
+      {isModalSeen && (
         <TodoModal
           todo={defaultTodo}
-          setShowModalBoolean={setShowModalBoolean}
-          loadingModal={isLoadingModal}
-          setLoadingModal={setIsLoadingModal}
+          setIsModalSeen={setIsModalSeen}
+          loadingModal={isModalLoading}
+          setLoadingModal={setIsModalLoading}
         />
       )}
     </>

@@ -4,16 +4,21 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setTodo: (arg0: any) => void,
-  setShowModalBoolean: (arg0: boolean) => void,
+  setTodo: (todo: Todo) => void,
+  setIsModalSeen: (value: boolean) => void,
 };
 
 export const TodoList:
 React.FC<Props> = ({
   todos,
   setTodo,
-  setShowModalBoolean,
+  setIsModalSeen,
 }) => {
+  const showModal = (todo: Todo) => {
+    setIsModalSeen(true);
+    setTodo(todo);
+  };
+
   return (
     <>
       <table className="table is-narrow is-fullwidth">
@@ -63,10 +68,7 @@ React.FC<Props> = ({
                       data-cy="selectButton"
                       className="button"
                       type="button"
-                      onClick={() => {
-                        setShowModalBoolean(true);
-                        setTodo(todo);
-                      }}
+                      onClick={() => showModal(todo)}
                     >
                       <span className="icon">
                         <i className="far fa-eye" />

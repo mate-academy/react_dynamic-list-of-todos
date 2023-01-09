@@ -6,15 +6,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  setShowModalBoolean: (arg0: boolean) => void,
+  setIsModalSeen: (arg0: boolean) => void,
   loadingModal: boolean,
   setLoadingModal: (arg0: boolean) => void,
 };
 
-export const TodoModal:
-React.FC<Props> = ({
+export const TodoModal: React.FC<Props> = ({
   todo,
-  setShowModalBoolean,
+  setIsModalSeen: setShowModalBoolean,
   loadingModal,
   setLoadingModal,
 }) => {
