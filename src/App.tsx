@@ -14,13 +14,13 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer));
+      .then(setTodos);
   }, []);
 
   const filteredTodosByStatus = todos.filter(todo => {
@@ -57,14 +57,12 @@ export const App: React.FC = () => {
     setStatus(value);
   };
 
-  const selectTodo = (todoId: number) => {
-    setSelectedTodo(
-      visibleTodos.find(todo => todo.id === todoId) || null,
-    );
-  };
+  const selectedTodo = visibleTodos.find(
+    todo => todo.id === selectedTodoId,
+  ) || null;
 
   const closeTodoModal = () => {
-    setSelectedTodo(null);
+    setSelectedTodoId(null);
   };
 
   return (
@@ -88,8 +86,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    onSelectTodo={selectTodo}
-                    selectedTodoId={selectedTodo?.id}
+                    onSelectTodoId={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
                   />
                 )
                 : <Loader />}
