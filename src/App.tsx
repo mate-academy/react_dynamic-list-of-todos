@@ -14,9 +14,11 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('all');
+
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -76,17 +78,17 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 selectedTodo={selectedTodo}
-                onChange={setSelectedTodo}
+                onChange={setSelectedTodoId}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId && selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onChange={setSelectedTodo}
+          onChange={setSelectedTodoId}
         />
       )}
     </>

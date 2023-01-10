@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | undefined;
-  onChange: React.Dispatch<React.SetStateAction<Todo | undefined>>;
+  onChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
@@ -61,7 +61,7 @@ export const TodoList: React.FC<Props> = (props) => {
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => onChange(undefined)}
+                    onClick={() => onChange(null)}
                   >
                     <span className="icon">
                       <i className="far fa-eye-slash" />
@@ -74,7 +74,7 @@ export const TodoList: React.FC<Props> = (props) => {
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => onChange(todo)}
+                    onClick={() => onChange(todo.id)}
                   >
                     <span className="icon">
                       <i className="far fa-eye" />

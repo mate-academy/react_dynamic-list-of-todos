@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  onChange: React.Dispatch<React.SetStateAction<Todo | undefined>>;
+  onChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const TodoModal: React.FC<Props> = (props) => {
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = (props) => {
               data-cy="modal-close"
               onClick={() => {
                 setUser(undefined);
-                onChange(undefined);
+                onChange(null);
               }}
             />
           </header>
