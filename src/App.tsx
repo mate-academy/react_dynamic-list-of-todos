@@ -16,12 +16,14 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [isModalSeen, setIsModalSeen] = useState(false);
 
-  const [defaultTodo, setDefaultTodo] = useState({
+  const defaultTodo = {
     title: '',
     id: 0,
     completed: false,
     userId: 0,
-  });
+  };
+
+  const [todo, setTodo] = useState(defaultTodo);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
@@ -56,7 +58,7 @@ export const App: React.FC = () => {
               {(!!todos.length || !isLoading) && (
                 <TodoList
                   todos={visibleTodos}
-                  setTodo={setDefaultTodo}
+                  setTodo={setTodo}
                   setIsModalSeen={setIsModalSeen}
                 />
               )}
@@ -67,7 +69,7 @@ export const App: React.FC = () => {
 
       {isModalSeen && (
         <TodoModal
-          todo={defaultTodo}
+          todo={todo}
           setIsModalSeen={setIsModalSeen}
           loadingModal={isModalLoading}
           setLoadingModal={setIsModalLoading}
