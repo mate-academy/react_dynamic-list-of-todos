@@ -20,12 +20,12 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    async function todosFetch() {
+    const todosFetch = async () => {
       const data = await getTodos();
 
       setTodos(data);
       setIsLoaded(true);
-    }
+    };
 
     todosFetch();
   }, []);
@@ -38,20 +38,24 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
+  const filtredByQuery = (someTitle: string, someQuery: string) => {
+    return someTitle.toLowerCase().includes(someQuery.toLowerCase());
+  };
+
   const seacrhTodos = (position: string, searchQuery: string) => {
     switch (position) {
       case MainFilter.active:
         return todos.filter(todo => !todo.completed
-           && todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
+           && filtredByQuery(todo.title, searchQuery));
 
       case MainFilter.completed:
         return todos.filter(todo => todo.completed
-          && todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
+          && filtredByQuery(todo.title, searchQuery));
 
       default:
         if (searchQuery.length > 0) {
           return todos.filter(
-            todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+            todo => filtredByQuery(todo.title, searchQuery),
           );
         }
 

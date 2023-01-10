@@ -11,13 +11,19 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
 
   useEffect(() => {
-    async function userFetch() {
-      const loadedUser = await getUser(todo.userId);
+    const userFetch = async () => {
+      const loadedUser = await getUser(userId);
 
       setUser(loadedUser);
-    }
+    };
 
     userFetch();
   }, []);
@@ -35,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -49,11 +55,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed
+              {completed
                 ? (<strong className="has-text-success">Done</strong>)
                 : (<strong className="has-text-danger">Planned</strong>)}
 
