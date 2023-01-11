@@ -13,7 +13,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('all');
@@ -26,10 +26,10 @@ export const App: React.FC = () => {
         const loadedTodos = await getTodos();
 
         setTodos(loadedTodos);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         setTodos([]);
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -74,7 +74,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={filteredTodos}
                 selectedTodo={selectedTodo}
