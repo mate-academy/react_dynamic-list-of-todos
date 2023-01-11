@@ -1,4 +1,9 @@
-import { ChangeEvent, useState, FC } from 'react';
+import {
+  ChangeEvent,
+  useState,
+  FC,
+  useEffect,
+} from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -40,23 +45,24 @@ export const TodoFilter: FC<Props> = ({ todos, setTodos }) => {
     setTodos(getTodosByStatus(newStatus));
   };
 
-  const handleQuery = (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newQuery = event.target.value;
+  const onClear = () => {
+    setQuery('');
+    setTodos(currentTodos);
+  };
 
-    setQuery(newQuery);
-
-    if (newQuery.length) {
+  useEffect(() => {
+    if (query.length) {
       const newTodos = currentTodos.filter(
-        ({ title }) => RegExp(newQuery, 'i').test(title),
+        ({ title }) => RegExp(query, 'i').test(title),
       );
 
       setTodos(newTodos);
-    } else {
-      setTodos(currentTodos);
+
+      return;
     }
-  };
+
+    onClear();
+  }, [query, status]);
 
   return (
     <form className="field has-addons">
@@ -81,7 +87,7 @@ export const TodoFilter: FC<Props> = ({ todos, setTodos }) => {
           value={query}
           className="input"
           placeholder="Search..."
-          onChange={handleQuery}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -97,10 +103,7 @@ export const TodoFilter: FC<Props> = ({ todos, setTodos }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setQuery('');
-                setTodos(currentTodos);
-              }}
+              onClick={onClear}
             />
           )}
         </span>
