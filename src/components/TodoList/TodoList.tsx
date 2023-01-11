@@ -36,49 +36,47 @@ React.FC<Props> = ({
         </thead>
 
         <tbody>
-          {
-            todos.map((todo:Todo) => {
-              const { id, completed, title } = todo;
-              const btnClass = classNames({
-                'has-text-success': completed,
-                'has-text-danger': !completed,
-              });
+          { todos.map((todo:Todo) => {
+            const { id, completed, title } = todo;
+            const btnClass = classNames({
+              'has-text-success': completed,
+              'has-text-danger': !completed,
+            });
 
-              return (
-                <tr
-                  data-cy="todo"
-                  className=""
-                  key={id}
-                >
-                  <td className="is-vcentered">{id}</td>
-                  <td className="is-vcentered">
-                    {completed && (
-                      <span className="icon" data-cy="iconCompleted">
-                        <i className="fas fa-check" />
-                      </span>
-                    )}
-                  </td>
-                  <td className="is-vcentered is-expanded">
-                    <p className={btnClass}>
-                      {title}
-                    </p>
-                  </td>
-                  <td className="has-text-right is-vcentered">
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={() => showModal(todo)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye" />
-                      </span>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
-          }
+            return (
+              <tr
+                data-cy="todo"
+                className=""
+                key={id}
+              >
+                <td className="is-vcentered">{id}</td>
+                <td className="is-vcentered">
+                  {completed && (
+                    <span className="icon" data-cy="iconCompleted">
+                      <i className="fas fa-check" />
+                    </span>
+                  )}
+                </td>
+                <td className="is-vcentered is-expanded">
+                  <p className={btnClass}>
+                    {title}
+                  </p>
+                </td>
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => showModal(todo)}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>

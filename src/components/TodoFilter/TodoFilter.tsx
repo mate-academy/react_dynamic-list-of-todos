@@ -7,12 +7,12 @@ type Props = {
   setVisibleTodos: (todos: Todo[]) => void,
   visibleTodos: Todo[]
 };
+let filteredTodos = [];
 
 export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
   const [inputValue, setInputValue] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  let filteredTodos = [];
 
   const filterTodosSelect = (value: boolean, input: string = inputValue) => {
     filteredTodos = todos.filter((todo) => {

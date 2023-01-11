@@ -6,9 +6,9 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  setIsModalSeen: (arg0: boolean) => void,
+  setIsModalSeen: (value: boolean) => void,
   loadingModal: boolean,
-  setLoadingModal: (arg0: boolean) => void,
+  setLoadingModal: (value: boolean) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -17,15 +17,20 @@ export const TodoModal: React.FC<Props> = ({
   loadingModal,
   setLoadingModal,
 }) => {
-  const [user, setUser] = useState<User>({
+  const defaultUser = {
     name: '',
     email: '',
     id: 0,
     phone: '',
-  });
+  };
+
+  const [user, setUser] = useState<User>(defaultUser);
 
   const {
-    title, id, userId, completed,
+    title,
+    id,
+    userId,
+    completed,
   } = todo;
   const { name, email } = user;
 
