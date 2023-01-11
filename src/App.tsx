@@ -61,16 +61,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
-                ? (
+              {todos.length === 0
+                ? <Loader />
+                : (
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={todo}
                     setTodo={(newTodo: Todo) => setTodo(newTodo)}
                     setUserId={(id: number) => setUserId(id)}
                   />
-                )
-                : <Loader />}
+                )}
             </div>
           </div>
         </div>
