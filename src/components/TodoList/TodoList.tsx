@@ -26,7 +26,8 @@ export const TodoList: FC<Props> = ({
             </span>
           </th>
           <th>Title</th>
-          <th> </th>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <th />
         </tr>
       </thead>
 
@@ -39,12 +40,14 @@ export const TodoList: FC<Props> = ({
             userId,
           } = todo;
 
+          const isSelected = selectedTodo.id === id;
+
           return (
             <tr
               key={id}
               data-cy="todo"
               className={cn({
-                'has-background-info-light': id === selectedTodo.id,
+                'has-background-info-light': isSelected,
               })}
             >
               <td className="is-vcentered">{id}</td>
@@ -57,9 +60,11 @@ export const TodoList: FC<Props> = ({
               </td>
 
               <td className="is-vcentered is-expanded">
-                <p className={`has-text-${completed
-                  ? 'success'
-                  : 'danger'}`}
+                <p
+                  className={cn({
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  })}
                 >
                   {title}
                 </p>
@@ -77,9 +82,10 @@ export const TodoList: FC<Props> = ({
                 >
                   <span className="icon">
                     <i
-                      className={`far fa-eye${selectedTodo.id === id
-                        ? '-slash'
-                        : ''}`}
+                      className={cn('far', {
+                        'fa-eye-slash': isSelected,
+                        'fa-eye': !isSelected,
+                      })}
                     />
                   </span>
                 </button>
