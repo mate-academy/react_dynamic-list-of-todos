@@ -27,10 +27,10 @@ export const App: React.FC = () => {
           return todo;
 
         case 'completed':
-          return todo.completed === true;
+          return todo.completed;
 
         case 'active':
-          return todo.completed === false;
+          return !todo.completed;
 
         default:
           return 0;
