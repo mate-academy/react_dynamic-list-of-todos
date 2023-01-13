@@ -58,6 +58,8 @@ export const App: React.FC = () => {
               {(!!todos.length || !isLoading) && (
                 <TodoList
                   todos={visibleTodos}
+                  isModalSeen={isModalSeen}
+                  todo={todo}
                   setTodo={setTodo}
                   setIsModalSeen={setIsModalSeen}
                 />
@@ -71,7 +73,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={todo}
           setIsModalSeen={setIsModalSeen}
-          loadingModal={isModalLoading}
+          isModalLoading={isModalLoading}
           setLoadingModal={setIsModalLoading}
         />
       )}

@@ -16,7 +16,8 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
 
   const filterTodosSelect = (value: boolean, input: string = inputValue) => {
     filteredTodos = todos.filter((todo) => {
-      return todo.completed === value && todo.title.includes(input);
+      return todo.completed
+      === value && todo.title.toLowerCase().includes(input.toLowerCase());
     });
 
     return setVisibleTodos(filteredTodos);
@@ -29,7 +30,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
         setIsCompleted(false);
 
         filteredTodos = todos.filter((todo) => {
-          return todo.title.includes(inputValue);
+          return todo.title.toLowerCase().includes(inputValue.toLowerCase());
         });
 
         return setVisibleTodos(filteredTodos);
@@ -67,7 +68,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setVisibleTodos }) => {
     }
 
     return setVisibleTodos(todos.filter((todo) => {
-      return todo.title.includes(event);
+      return todo.title.toLowerCase().includes(event.toLowerCase());
     }));
   }
 

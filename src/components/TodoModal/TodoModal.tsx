@@ -7,14 +7,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo,
   setIsModalSeen: (value: boolean) => void,
-  loadingModal: boolean,
+  isModalLoading: boolean,
   setLoadingModal: (value: boolean) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
   setIsModalSeen: setShowModalBoolean,
-  loadingModal,
+  isModalLoading,
   setLoadingModal,
 }) => {
   const defaultUser = {
@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadingModal ? (
+      {isModalLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

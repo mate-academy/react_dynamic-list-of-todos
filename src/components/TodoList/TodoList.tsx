@@ -4,6 +4,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
+  todo: Todo,
+  isModalSeen: boolean,
   setTodo: (todo: Todo) => void,
   setIsModalSeen: (value: boolean) => void,
 };
@@ -11,12 +13,14 @@ type Props = {
 export const TodoList:
 React.FC<Props> = ({
   todos,
+  todo,
+  isModalSeen,
   setTodo,
   setIsModalSeen,
 }) => {
-  const showModal = (todo: Todo) => {
+  const showModal = (item: Todo) => {
     setIsModalSeen(true);
-    setTodo(todo);
+    setTodo(item);
   };
 
   return (
@@ -36,8 +40,8 @@ React.FC<Props> = ({
         </thead>
 
         <tbody>
-          { todos.map((todo:Todo) => {
-            const { id, completed, title } = todo;
+          { todos.map((item:Todo) => {
+            const { id, completed, title } = item;
             const btnClass = classNames({
               'has-text-success': completed,
               'has-text-danger': !completed,
@@ -67,10 +71,15 @@ React.FC<Props> = ({
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => showModal(todo)}
+                    onClick={() => showModal(item)}
                   >
                     <span className="icon">
-                      <i className="far fa-eye" />
+                      <i className={
+                        isModalSeen && item === todo
+                          ? 'far fa-eye-slash'
+                          : 'far fa-eye'
+                      }
+                      />
                     </span>
                   </button>
                 </td>
