@@ -9,10 +9,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
@@ -31,25 +32,30 @@ export const App: React.FC = () => {
     const activeTodos = queryResult.filter(todo => !todo.completed);
 
     switch (filterType) {
-      case 'active':
+      case Filter.all:
+        return !queryResult ? arrOfTodos : queryResult;
+
+      case Filter.active:
         return activeTodos;
 
-      case 'completed':
+      case Filter.completed:
         return completedTodos;
 
       default:
-        return !queryResult ? arrOfTodos : queryResult;
+        throw new Error('Wrong filter type');
     }
   };
 
   const visibleTodos = handleFilter(todos, filter, query);
 
   useEffect(() => {
+    setLoading(true);
+
     getTodos().then(result => {
       setTodos(result);
       setLoading(false);
     });
-  });
+  }, []);
 
   return (
     <>
