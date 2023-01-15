@@ -17,9 +17,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const handleSelectTodo = async (id: number) => {
-    setSelectedTodoId(id);
-  };
+  const handleSelectTodo = (id: number) => setSelectedTodoId(id);
 
   const handleQuery = (str: string) => setQuery(str.toLowerCase());
   const deleteQuery = () => setQuery('');
@@ -28,7 +26,6 @@ export const App: React.FC = () => {
   const closingModal = () => setSelectedTodoId(0);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
-
   const visibleTodos = getVisibleTodos(todos, query, filter);
 
   useEffect(() => {
