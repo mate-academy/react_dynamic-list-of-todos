@@ -16,9 +16,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
-  const [filterByStatus, setFilterByStatus] = useState('all');
-
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const [filterStatus, setFilterStatus] = useState('all');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -26,9 +24,9 @@ export const App: React.FC = () => {
         const loadedTodos = await getTodos();
 
         setTodos(loadedTodos);
-        setIsLoading(false);
       } catch (error) {
         setTodos([]);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -42,7 +40,7 @@ export const App: React.FC = () => {
       const normalizeQuery = query.trim().toLowerCase();
       const isTitleIncludesQuery = title.includes(normalizeQuery);
 
-      switch (filterByStatus) {
+      switch (filterStatus) {
         case 'completed':
           return todo.completed && isTitleIncludesQuery;
 
@@ -55,7 +53,8 @@ export const App: React.FC = () => {
     });
   };
 
-  const filteredTodos = filterTodos();
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const visibleTodos = filterTodos();
 
   return (
     <>
@@ -67,25 +66,27 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                filterByStatus={filterByStatus}
+                filterStatus={filterStatus}
                 onInputChange={setQuery}
-                onSelectChange={setFilterByStatus}
+                onSelectChange={setFilterStatus}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList
-                todos={filteredTodos}
-                selectedTodo={selectedTodo}
-                onChange={setSelectedTodoId}
-              />
+              {todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  onChange={setSelectedTodoId}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodoId && selectedTodo && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           onChange={setSelectedTodoId}

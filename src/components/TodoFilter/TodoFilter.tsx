@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   query: string;
-  filterByStatus: string;
+  filterStatus: string;
   onInputChange: React.Dispatch<React.SetStateAction<string>>;
   onSelectChange: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -10,7 +10,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
     query,
-    filterByStatus,
+    filterStatus,
     onInputChange,
     onSelectChange,
   } = props;
@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = (props) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filterByStatus}
+            value={filterStatus}
             onChange={(event) => onSelectChange(event.target.value)}
           >
             <option value="all">All</option>

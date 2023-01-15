@@ -11,7 +11,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = (props) => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   const { selectedTodo, onChange } = props;
 
@@ -21,9 +21,9 @@ export const TodoModal: React.FC<Props> = (props) => {
         const loadedUser = await getUser(selectedTodo.userId);
 
         setUser(loadedUser);
-        setLoading(false);
       } catch (error) {
-        setUser(undefined);
+        setUser(null);
+      } finally {
         setLoading(false);
       }
     };
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = (props) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setUser(undefined);
+                setUser(null);
                 onChange(null);
               }}
             />

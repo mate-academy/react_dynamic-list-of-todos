@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: Todo | undefined;
+  selectedTodo?: Todo;
   onChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
@@ -54,34 +54,28 @@ export const TodoList: React.FC<Props> = (props) => {
               </p>
             </td>
 
-            {selectedTodo?.id === todo.id
-              ? (
-                <td className="has-text-right is-vcentered">
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => onChange(null)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  </button>
-                </td>
-              ) : (
-                <td className="has-text-right is-vcentered">
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => onChange(todo.id)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  </button>
-                </td>
-              )}
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => (
+                  selectedTodo?.id === todo.id
+                    ? onChange(null)
+                    : onChange(todo.id)
+                )}
+              >
+                <span className="icon">
+                  <i
+                    className={cn(
+                      'far',
+                      { 'fa-eye-slash': selectedTodo?.id === todo.id },
+                      { 'fa-eye': selectedTodo?.id !== todo.id },
+                    )}
+                  />
+                </span>
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>
