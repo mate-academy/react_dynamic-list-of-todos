@@ -3,8 +3,8 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onSelectTodoId: React.Dispatch<React.SetStateAction<number | null>>;
-  selectedTodoId: number | null;
+  onSelectTodoId: (todoId: number) => void;
+  selectedTodoId: number;
 };
 
 export const TodoList: React.FC<Props> = ({

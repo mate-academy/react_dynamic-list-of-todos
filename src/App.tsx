@@ -14,7 +14,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
 
@@ -23,47 +23,53 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  const filteredTodosByStatus = todos.filter(todo => {
-    switch (status) {
-      case 'active':
-        return !todo.completed;
-
-      case 'completed':
-        return todo.completed;
-
-      default:
-        return true;
-    }
-  });
-
-  const getFilteredTodosByQuery = (
-    enteredQuery: string,
-    todosList: Todo[],
-  ) => {
-    const normalizedQuery = enteredQuery
-      .toLowerCase()
-      .split(' ')
-      .filter(Boolean)
-      .join(' ');
-
-    return todosList.filter(
-      todo => todo.title.toLowerCase().includes(normalizedQuery),
-    );
-  };
-
-  const visibleTodos = getFilteredTodosByQuery(query, filteredTodosByStatus);
-
   const selectStatus = (value: string) => {
     setStatus(value);
   };
 
-  const selectedTodo = visibleTodos.find(
-    todo => todo.id === selectedTodoId,
-  ) || null;
+  const setFilterQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const selectTodoId = (todoId: number) => {
+    setSelectedTodoId(todoId);
+  };
 
   const closeTodoModal = () => {
-    setSelectedTodoId(null);
+    setSelectedTodoId(0);
   };
+
+  const normalizedQuery = query
+    .toLowerCase()
+    .split(' ')
+    .filter(Boolean)
+    .join(' ');
+
+  const visibleTodos = todos.filter(todo => {
+    const normalizedTodoTitle = todo.title.toLowerCase();
+    const isSearchQueryMatch = normalizedTodoTitle.includes(normalizedQuery);
+
+    let isStatusMatch = true;
+
+    switch (status) {
+      case 'active':
+        isStatusMatch = !todo.completed;
+        break;
+
+      case 'completed':
+        isStatusMatch = todo.completed;
+        break;
+
+      default:
+        isStatusMatch = true;
+    }
+
+    return isSearchQueryMatch && isStatusMatch;
+  });
+
+  const selectedTodo = visibleTodos.find(
+    todo => todo.id === selectedTodoId,
+  );
 
   return (
     <>
@@ -76,7 +82,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onSelectStatus={selectStatus}
                 status={status}
-                onFilter={setQuery}
+                onFilter={setFilterQuery}
                 query={query}
               />
             </div>
@@ -86,7 +92,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    onSelectTodoId={setSelectedTodoId}
+                    onSelectTodoId={selectTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )

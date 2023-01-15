@@ -3,7 +3,7 @@ import React from 'react';
 type Props = {
   onSelectStatus: (status: string) => void;
   status: string;
-  onFilter: React.Dispatch<React.SetStateAction<string>>;
+  onFilter: (value: string) => void;
   query: string;
 };
 
