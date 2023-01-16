@@ -9,32 +9,25 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Filters } from './types/Filters';
 
 export const App: React.FC = () => {
-  const defaultTodo = {
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  };
-
-  const [visibleTodos, setVisibleTodos] = useState([defaultTodo]);
-  const [selectedTodo, setSelectedTodo] = useState(defaultTodo);
-  const [isModalVisible, setModalVisability] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [value, setSelectValue] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos().then(setVisibleTodos);
+    getTodos().then(setTodos);
   }, []);
 
-  const filteredTodos = visibleTodos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     switch (value) {
-      case 'all':
+      case Filters.All:
         return todo;
-      case 'completed':
+      case Filters.Completed:
         return todo.completed === true;
-      case 'active':
+      case Filters.Active:
         return todo.completed === false;
       default:
         return todo;
@@ -43,9 +36,12 @@ export const App: React.FC = () => {
 
   const searchedTodos = filteredTodos.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
 
-  const handleClick = async (isClicked: boolean, todo: Todo) => {
-    setModalVisability(isClicked);
+  const handleClick = (todo: Todo | null) => {
     setSelectedTodo(todo);
+  };
+
+  const handleFilter = (filter: string) => {
+    setSelectValue(filter);
   };
 
   return (
@@ -57,7 +53,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChange={setSelectValue}
+                onChange={handleFilter}
                 onSearch={setQuery}
                 selectValue={value}
                 query={query}
@@ -65,25 +61,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos[0] === defaultTodo
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList
                     todos={searchedTodos}
                     onClick={handleClick}
-                    selectedTodoId={selectedTodo.id}
+                    selectedTodo={selectedTodo}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-
-      {isModalVisible && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onClick={handleClick}
-          defaultTodo={defaultTodo}
         />
       )}
     </>

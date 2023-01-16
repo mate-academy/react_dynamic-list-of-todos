@@ -5,11 +5,10 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
-  onClick: (variable: boolean, todo: Todo) => void;
-  defaultTodo: Todo;
+  onClick: (todo: null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onClick, defaultTodo }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
   const [user, setUser] = useState({
     id: 0,
     name: '',
@@ -27,7 +26,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClick, defaultTodo }) => {
   const { email, name } = user;
 
   useEffect(() => {
-    getUser(userId).then(setUser);
+    if (userId > 0) {
+      getUser(userId).then(setUser);
+    }
   }, []);
 
   return (
@@ -53,7 +54,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClick, defaultTodo }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onClick(false, defaultTodo);
+                onClick(null);
               }}
             />
           </header>

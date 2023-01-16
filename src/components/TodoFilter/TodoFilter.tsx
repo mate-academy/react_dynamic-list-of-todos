@@ -1,3 +1,5 @@
+import { Filters } from '../../types/Filters';
+
 type Props = {
   onChange: (selectValue: string) => void
   onSearch: (query: string) => void
@@ -22,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
               onChange(e.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filters.All}>All</option>
+            <option value={Filters.Active}>Active</option>
+            <option value={Filters.Completed}>Completed</option>
           </select>
         </span>
       </p>
