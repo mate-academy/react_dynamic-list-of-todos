@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,7 +15,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-export const App: React.FC = () => {
+export const App: React.FC = memo(() => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
@@ -38,7 +43,12 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find(todo => todo.id === todoId);
 
-  const onCloseModal = () => setTodoId(0);
+  const onCloseModal = useCallback(
+    () => {
+      setTodoId(0);
+    },
+    [],
+  );
 
   useEffect(() => {
     getTodos()
@@ -83,4 +93,4 @@ export const App: React.FC = () => {
       )}
     </>
   );
-};
+});
