@@ -1,7 +1,12 @@
 /* eslint-disable max-len */
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bulma/css/bulma.css';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Todo } from './types/Todo';
 
 import { Loader } from './components/Loader';
@@ -23,29 +28,31 @@ export const App: React.FC = () => {
     }));
   }, []);
 
-  const handleClickTodo = (todoId: number) => {
+  const handleClickTodo = useCallback((todoId: number) => {
     setSelectedTodo(todoId);
-  };
+  }, []);
 
   const todo = todos.find(item => item.id === selectedTodo);
 
-  const visibleTodos = getFilteredTodos(todos, query, filter);
+  const visibleTodos = useMemo(() => {
+    return getFilteredTodos(todos, query, filter);
+  }, [query, todos, filter]);
 
   const handleCloseModal = () => {
     setSelectedTodo(0);
   };
 
-  const handleChange = (value: string) => {
+  const handleChange = useCallback((value: string) => {
     setQuery(value);
-  };
+  }, []);
 
-  const handleChangeFilter = (value: string) => {
+  const handleChangeFilter = useCallback((value: string) => {
     setFilter(value);
-  };
+  }, []);
 
-  const handleDeleteQuery = () => {
+  const handleDeleteQuery = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
   return (
     <>
@@ -65,13 +72,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length ? (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  onCLick={handleClickTodo}
-                />
-              ) : <Loader />}
+              {todos.length
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    onCLick={handleClickTodo}
+                  />
+                )
+
+                : <Loader />
+              }
 
             </div>
           </div>
