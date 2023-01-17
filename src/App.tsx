@@ -1,5 +1,11 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,8 +16,8 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-export const App: React.FC = () => {
-  const [todoFromServer, setTodoFromServer] = useState<Todo[]>([]);
+export const App: FC = () => {
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [areUsersLoaded, setLoadingStatus] = useState(false);
   const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
@@ -20,41 +26,43 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(todos => {
-        setTodoFromServer(todos);
+        setTodosFromServer(todos);
         setLoadingStatus(true);
       });
   }, []);
 
-  const handleClean = () => {
+  const handleClean = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
-  const handleTodoSelect = (id: number) => {
-    const newSelectedTodo = todoFromServer.find(todo => todo.id === id) || null;
+  const handleTodoSelect = useCallback((id: number) => {
+    const newSelectedTodo = todosFromServer.find(todo => todo.id === id) || null;
 
     setSelectedTodo(newSelectedTodo);
-  };
+  }, [todosFromServer]);
 
-  const handleTodoClose = () => {
+  const handleTodoClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const visibleTodos = todoFromServer.filter(todo => {
-    const condition1 = todo.title
-      .toLowerCase()
-      .includes(query.toLowerCase());
+  const visibleTodos = useMemo(() => (
+    todosFromServer.filter(todo => {
+      const condition1 = todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase());
 
-    switch (filterType) {
-      case 'all':
-        return condition1;
-      case 'active':
-        return condition1 && !todo.completed;
-      case 'completed':
-        return condition1 && todo.completed;
-      default:
-        return true;
-    }
-  });
+      switch (filterType) {
+        case 'all':
+          return condition1;
+        case 'active':
+          return condition1 && !todo.completed;
+        case 'completed':
+          return condition1 && todo.completed;
+        default:
+          return true;
+      }
+    })
+  ), [todosFromServer, filterType, query]);
 
   return (
     <>
@@ -66,8 +74,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterType={filterType}
-                onFilter={setFilterType}
                 query={query}
+                onFilter={setFilterType}
                 onSearch={setQuery}
                 onClean={handleClean}
               />
