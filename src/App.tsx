@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, {
-  memo,
   useCallback,
   useEffect,
   useState,
@@ -15,7 +14,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-export const App: React.FC = memo(() => {
+export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
@@ -93,4 +92,4 @@ export const App: React.FC = memo(() => {
       )}
     </>
   );
-});
+};
