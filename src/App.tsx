@@ -37,7 +37,7 @@ export const App: React.FC = () => {
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
   const visibleTodos = useMemo(() => (
     getVisibleTodos(todos, query, filter)
-  ), [query, filter]);
+  ), [query, filter, todos]);
 
   useEffect(() => {
     async function fetchTodos() {
