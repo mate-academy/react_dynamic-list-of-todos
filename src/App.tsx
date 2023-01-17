@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,16 +22,22 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const handleSelectTodo = (id: number) => setSelectedTodoId(id);
+  const handleSelectTodo = useCallback((id: number) => {
+    setSelectedTodoId(id);
+  }, []);
 
-  const handleQuery = (str: string) => setQuery(str.toLowerCase());
-  const deleteQuery = () => setQuery('');
+  const handleQuery = useCallback((str: string) => {
+    setQuery(str.toLowerCase());
+  }, []);
+  const deleteQuery = useCallback(() => setQuery(''), []);
 
-  const handleFilter = (str : string) => setFilter(str);
-  const closingModal = () => setSelectedTodoId(0);
+  const handleFilter = useCallback((str : string) => setFilter(str), []);
+  const closingModal = useCallback(() => setSelectedTodoId(0), []);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
-  const visibleTodos = getVisibleTodos(todos, query, filter);
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, query, filter)
+  ), [query, filter]);
 
   useEffect(() => {
     async function fetchTodos() {

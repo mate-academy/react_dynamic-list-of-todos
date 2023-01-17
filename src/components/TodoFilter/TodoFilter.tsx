@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 interface Props {
   onQuery: (str: string) => void;
@@ -7,7 +7,7 @@ interface Props {
   queryValue: string;
   filterValue: string;
 }
-export const TodoFilter: FC<Props> = ({
+export const TodoFilter: FC<Props> = memo(({
   onQuery,
   queryValue,
   onFilter,
@@ -55,4 +55,4 @@ export const TodoFilter: FC<Props> = ({
       )}
     </p>
   </form>
-);
+));
