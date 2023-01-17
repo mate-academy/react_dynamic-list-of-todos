@@ -14,7 +14,7 @@ import { Filters } from './types/Filters';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [value, setSelectValue] = useState('all');
+  const [value, setSelectValue] = useState<string>(Filters.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
