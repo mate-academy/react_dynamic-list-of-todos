@@ -34,9 +34,14 @@ export const App: React.FC = () => {
   const handleFilter = useCallback((str : string) => setFilter(str), []);
   const closingModal = useCallback(() => setSelectedTodoId(0), []);
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [selectedTodoId]);
+
   const visibleTodos = useMemo(() => (
-    getVisibleTodos(todos, query, filter)
+    filter !== 'all'
+      ? getVisibleTodos(todos, query, filter)
+      : todos
   ), [query, filter, todos]);
 
   useEffect(() => {
