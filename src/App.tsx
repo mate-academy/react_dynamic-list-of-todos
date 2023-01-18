@@ -15,6 +15,7 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { debounce } from './components/helpers/debounce';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -39,21 +40,6 @@ export const App: React.FC = () => {
 
     loadTodos();
   }, []);
-
-  const debounce = (
-    func: React.Dispatch<React.SetStateAction<string>>,
-    delay: number,
-  ) => {
-    let timerId = 0;
-
-    return (...args: unknown[]) => {
-      if (timerId) {
-        clearTimeout(timerId);
-      }
-
-      timerId = setTimeout(func, delay, ...args);
-    };
-  };
 
   const debouncedCallback = useCallback(
     debounce(setDebouncedQuery, 400),
