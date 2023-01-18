@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface Props {
   query: string,
   selectFilterType: string,
-  onChangeQuery: (str: string) => void,
+  onInputChange: (value: string) => void,
   onChangeFilter: (str: string) => void,
 }
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   query,
-  onChangeQuery,
+  onInputChange,
   selectFilterType,
   onChangeFilter,
 }) => {
-  const handleClickReset = () => onChangeQuery('');
+  const handleClickReset = () => onInputChange('');
 
   return (
     <form className="field has-addons">
@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onChangeQuery(event.currentTarget.value)}
+          onChange={(event) => onInputChange(event.currentTarget.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -58,4 +58,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

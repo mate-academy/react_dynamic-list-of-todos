@@ -2,6 +2,7 @@
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import 'bulma/css/bulma.css';
@@ -14,14 +15,40 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const debounce = (
+  func: React.Dispatch<React.SetStateAction<string>>,
+  delay = 500,
+) => {
+  let id = 0;
+
+  return (...args: unknown[]) => {
+    if (id) {
+      clearTimeout(id);
+    }
+
+    id = setTimeout(func, delay, ...args);
+  };
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectFilterType, setSelectFilterType] = useState('all');
 
-  const visibleTodos = todos.filter(todo => {
-    const preparedQuery = query.toLowerCase().trim();
+  const debouncedCallback = useCallback(
+    debounce(setDebouncedQuery, 500),
+    [],
+  );
+
+  const handleInputChange = useCallback((value: string) => {
+    setQuery(value);
+    debouncedCallback(value);
+  }, []);
+
+  const visibleTodos = useMemo(() => todos.filter(todo => {
+    const preparedQuery = debouncedQuery.toLowerCase().trim();
     const preparedTitle = todo.title.toLowerCase();
     const filteredTodos = preparedTitle.includes(preparedQuery);
 
@@ -38,20 +65,15 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), [debouncedQuery, todos]);
 
-  const selectedTodo = todos.find(todo => todo.id === todoId);
-
-  const onCloseModal = useCallback(
-    () => {
-      setTodoId(0);
-    },
-    [],
-  );
+  const selectedTodo = useMemo(() => todos.find(todo => todo.id === todoId), [todoId]);
+  const handleSelectTodo = useCallback((id: number) => setTodoId(id), []);
+  const onCloseModal = useCallback(() => setTodoId(0), []);
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo));
+      .then(setTodos);
   }, []);
 
   return (
@@ -66,7 +88,7 @@ export const App: React.FC = () => {
                 query={query}
                 selectFilterType={selectFilterType}
                 onChangeFilter={setSelectFilterType}
-                onChangeQuery={setQuery}
+                onInputChange={handleInputChange}
               />
             </div>
 
@@ -75,9 +97,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={todoId}
-                  selectTodo={(id: number) => {
-                    setTodoId(id);
-                  }}
+                  selectTodo={handleSelectTodo}
                 />
               ) : (
                 <Loader />
