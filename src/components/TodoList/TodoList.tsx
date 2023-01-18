@@ -1,10 +1,11 @@
+import cn from 'classnames';
 import { FC, memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  onSelect: (id: number) => void,
   selectedId: number,
+  onSelect: (id: number) => void,
 }
 
 export const TodoList: FC<Props> = memo(
@@ -61,7 +62,13 @@ export const TodoList: FC<Props> = memo(
                   onClick={() => onSelect(id)}
                 >
                   <span className="icon">
-                    <i className={`far fa-eye${selectedId === id ? '-slash' : ''}`} />
+                    <i
+                      className={cn({
+                        far: true,
+                        'fa-eye': selectedId !== id,
+                        'fa-eye-slash': selectedId === id,
+                      })}
+                    />
                   </span>
                 </button>
               </td>

@@ -10,7 +10,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface Props {
-  selectedTodo: Todo,
+  selectedTodo: Todo | null,
   onClose: () => void,
 }
 
@@ -21,7 +21,7 @@ export const TodoModal: FC<Props> = memo(
       title,
       completed,
       userId,
-    } = selectedTodo;
+    } = selectedTodo as Todo;
 
     const [isUserLoading, setLoadingStatus] = useState(true);
     const [user, setUser] = useState<User | null>(null);

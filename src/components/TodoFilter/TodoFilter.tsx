@@ -2,8 +2,8 @@ import { FC, memo } from 'react';
 
 interface Props {
   filterType: string,
-  onFilter: React.Dispatch<React.SetStateAction<string>>,
   query: string,
+  onFilter: React.Dispatch<React.SetStateAction<string>>,
   onSearch: React.Dispatch<React.SetStateAction<string>>,
   onClean: () => void,
 }

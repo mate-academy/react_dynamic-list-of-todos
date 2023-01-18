@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   FC,
   useCallback,
@@ -21,7 +20,7 @@ export const App: FC = () => {
   const [areUsersLoaded, setLoadingStatus] = useState(false);
   const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<number>(0);
 
   useEffect(() => {
     getTodos()
@@ -36,13 +35,18 @@ export const App: FC = () => {
   }, []);
 
   const handleTodoSelect = useCallback((id: number) => {
-    const newSelectedTodo = todosFromServer.find(todo => todo.id === id) || null;
+    // const newSelectedTodo = todosFromServer
+    //   .find(todo => todo.id === id) || null;
 
-    setSelectedTodo(newSelectedTodo);
+    setSelectedTodo(id);
   }, [todosFromServer]);
 
+  const getSelectedTodo = (id: number) => (
+    todosFromServer.find(todo => todo.id === id) || null
+  );
+
   const handleTodoClose = useCallback(() => {
-    setSelectedTodo(null);
+    setSelectedTodo(0);
   }, []);
 
   const visibleTodos = useMemo(() => (
@@ -88,7 +92,7 @@ export const App: FC = () => {
                     <TodoList
                       todos={visibleTodos}
                       onSelect={handleTodoSelect}
-                      selectedId={selectedTodo?.id || 0}
+                      selectedId={selectedTodo}
                     />
                   )
                   : <Loader />
@@ -98,7 +102,12 @@ export const App: FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={handleTodoClose} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={getSelectedTodo(selectedTodo)}
+          onClose={handleTodoClose}
+        />
+      )}
     </>
   );
 };
