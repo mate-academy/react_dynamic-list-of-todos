@@ -11,12 +11,12 @@ export function getTodos(): Promise<Todo[]> {
     .then(response => response.json());
 }
 
-export function getUserInfo(userId: number | undefined): Promise<User> {
+export function getUserById(userId: number | undefined): Promise<User> {
   return fetch(`${API_USERS}/${userId}.json`)
     .then(response => response.json());
 }
 
-export const getTodoById = async (todoId: number) => {
+export const getTodo = async (todoId: number) => {
   const todo = await (await getTodos())
     .find(item => item.id === todoId) || null;
 
