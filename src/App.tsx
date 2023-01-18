@@ -39,9 +39,7 @@ export const App: React.FC = () => {
   ), [selectedTodoId]);
 
   const visibleTodos = useMemo(() => (
-    filter !== 'all'
-      ? getVisibleTodos(todos, query, filter)
-      : todos
+    getVisibleTodos(todos, query, filter)
   ), [query, filter, todos]);
 
   useEffect(() => {

@@ -5,24 +5,28 @@ export const getVisibleTodos = (
   query: string,
   filter: string,
 ) => {
-  return todos.filter(todo => {
-    const isIncludeQuery = todo.title.toLowerCase().includes(query);
-    let isFiltered;
+  if (filter !== 'all' || query) {
+    return todos.filter(todo => {
+      const isIncludeQuery = todo.title.toLowerCase().includes(query);
+      let isFiltered;
 
-    switch (filter) {
-      case 'active':
-        isFiltered = todo.completed === false;
-        break;
+      switch (filter) {
+        case 'active':
+          isFiltered = todo.completed === false;
+          break;
 
-      case 'completed':
-        isFiltered = todo.completed === true;
-        break;
+        case 'completed':
+          isFiltered = todo.completed === true;
+          break;
 
-      default:
-        isFiltered = true;
-        break;
-    }
+        default:
+          isFiltered = true;
+          break;
+      }
 
-    return isIncludeQuery && isFiltered;
-  });
+      return isIncludeQuery && isFiltered;
+    });
+  }
+
+  return todos;
 };
