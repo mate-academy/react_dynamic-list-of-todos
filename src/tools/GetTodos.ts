@@ -16,7 +16,7 @@ export function getUserInfo(userId: number | undefined): Promise<User> {
     .then(response => response.json());
 }
 
-export const getTodo = async (todoId: number) => {
+export const getTodoById = async (todoId: number) => {
   const todo = await (await getTodos())
     .find(item => item.id === todoId) || null;
 

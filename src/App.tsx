@@ -9,40 +9,45 @@ import React, {
 } from 'react';
 import { Todo } from './types/Todo';
 
+import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { getFilteredTodos } from './tools/filter';
-import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState(0);
+  const [selectedTodoId, setSelectedTodo] = useState(0);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    getTodos().then((todosFromAPI => {
-      setTodos(todosFromAPI);
-    }));
+    try {
+      getTodos()
+        .then(setTodos);
+    } catch (error) {
+      setTodos([]);
+    }
   }, []);
 
   const handleClickTodo = useCallback((todoId: number) => {
     setSelectedTodo(todoId);
   }, []);
 
-  const todo = todos.find(item => item.id === selectedTodo);
+  const todo = useMemo(() => (
+    todos.find(item => item.id === selectedTodoId)
+  ), [selectedTodoId]);
 
   const visibleTodos = useMemo(() => {
     return getFilteredTodos(todos, query, filter);
   }, [query, todos, filter]);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedTodo(0);
-  };
+  }, []);
 
-  const handleChange = useCallback((value: string) => {
+  const handleChangeQuery = useCallback((value: string) => {
     setQuery(value);
   }, []);
 
@@ -50,7 +55,7 @@ export const App: React.FC = () => {
     setFilter(value);
   }, []);
 
-  const handleDeleteQuery = useCallback(() => {
+  const handleclearQuery = useCallback(() => {
     setQuery('');
   }, []);
 
@@ -63,10 +68,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChange={handleChange}
+                onInputChange={handleChangeQuery}
                 query={query}
                 value={filter}
-                onDeleteQuery={handleDeleteQuery}
+                onDeleteQuery={handleclearQuery}
                 onFilterChange={handleChangeFilter}
               />
             </div>
@@ -76,8 +81,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    onCLick={handleClickTodo}
+                    selectedTodoId={selectedTodoId}
+                    onSelectTodo={handleClickTodo}
                   />
                 )
 

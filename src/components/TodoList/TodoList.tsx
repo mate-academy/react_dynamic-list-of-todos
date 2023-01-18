@@ -1,14 +1,15 @@
+import cn from 'classnames';
 import { memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: number;
-  onCLick: (todoId: number) => void;
+  selectedTodoId: number;
+  onSelectTodo: (todoId: number) => void;
 };
 
 export const TodoList: React.FC<Props> = memo(
-  ({ todos, onCLick, selectedTodo }) => {
+  ({ todos, onSelectTodo, selectedTodoId }) => {
     return (
       <table className="table is-narrow is-fullwidth">
         <thead>
@@ -40,10 +41,10 @@ export const TodoList: React.FC<Props> = memo(
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={completed
-                  ? 'has-text-success'
-                  : 'has-text-danger'
-                }>
+                <p className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}>
                   {title}
                 </p>
               </td>
@@ -52,10 +53,10 @@ export const TodoList: React.FC<Props> = memo(
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onCLick(id)}
+                  onClick={() => onSelectTodo(id)}
                 >
                   <span className="icon">
-                    <i className={`far ${selectedTodo === id
+                    <i className={`far ${selectedTodoId === id
                       ? 'fa-eye-slash'
                       : 'fa-eye'}`}
                     />

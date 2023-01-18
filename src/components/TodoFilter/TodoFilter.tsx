@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 type Props = {
-  onChange: (value: string) => void;
+  onInputChange: (value: string) => void;
   query: string;
   value: string
   onDeleteQuery: () => void;
@@ -10,7 +10,7 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = memo(
   ({
-    onChange,
+    onInputChange,
     value,
     query,
     onDeleteQuery,
@@ -23,9 +23,7 @@ export const TodoFilter: React.FC<Props> = memo(
             <select
               data-cy="statusSelect"
               value={value}
-              onChange={(event) => {
-                onFilterChange(event.target.value);
-              }}
+              onChange={(event) => onFilterChange(event.target.value)}
             >
               <option value="all">All</option>
               <option value="active">Active</option>
@@ -41,9 +39,7 @@ export const TodoFilter: React.FC<Props> = memo(
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={(event) => {
-              onChange(event.target.value);
-            }}
+            onChange={(event) => onInputChange(event.target.value)}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />

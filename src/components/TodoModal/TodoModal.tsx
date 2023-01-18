@@ -4,6 +4,7 @@ import {
   useState,
   FC,
 } from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
@@ -18,17 +19,13 @@ export const TodoModal: FC<Props> = memo(
   ({ todo, onCancelModal }) => {
     const [user, setSelectedUser] = useState<User | null>(null);
 
-    const handleClickClose = () => {
-      onCancelModal();
-    };
-
     useEffect(() => {
-      getUser(todo.userId)
-        .then((person) => {
-          setSelectedUser(person);
-
-          window.console.log(person);
-        });
+      try {
+        getUser(todo.userId)
+          .then(setSelectedUser);
+      } catch {
+        setSelectedUser(null);
+      }
     }, []);
 
     return (
@@ -49,7 +46,7 @@ export const TodoModal: FC<Props> = memo(
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
-                onClick={handleClickClose}
+                onClick={onCancelModal}
                 type="button"
                 className="delete"
                 data-cy="modal-close"
@@ -63,10 +60,10 @@ export const TodoModal: FC<Props> = memo(
 
               <p className="block" data-cy="modal-user">
                 {/* <strong className="has-text-success">Done</strong> */}
-                <strong className={
-                  todo?.completed
-                    ? 'has-text-success'
-                    : 'has-text-danger'
+                <strong className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })
                 }>
                   {todo?.completed
                     ? 'Done'
