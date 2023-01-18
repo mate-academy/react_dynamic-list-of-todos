@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -6,14 +6,14 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  onChange: React.Dispatch<React.SetStateAction<number | null>>;
+  onSelectedTodoIdChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const TodoModal: React.FC<Props> = (props) => {
+export const TodoModal: React.FC<Props> = memo((props) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  const { selectedTodo, onChange } = props;
+  const { selectedTodo, onSelectedTodoIdChange } = props;
 
   useEffect(() => {
     const loadUser = async () => {
@@ -53,8 +53,7 @@ export const TodoModal: React.FC<Props> = (props) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setUser(null);
-                onChange(null);
+                onSelectedTodoIdChange(null);
               }}
             />
           </header>
@@ -82,4 +81,4 @@ export const TodoModal: React.FC<Props> = (props) => {
       )}
     </div>
   );
-};
+});

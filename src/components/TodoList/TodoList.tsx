@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
   selectedTodo?: Todo;
-  onChange: React.Dispatch<React.SetStateAction<number | null>>;
+  onSelectedTodoIdChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const TodoList: React.FC<Props> = (props) => {
+export const TodoList: React.FC<Props> = memo((props) => {
   const {
     todos,
     selectedTodo,
-    onChange,
+    onSelectedTodoIdChange,
   } = props;
 
   return (
@@ -61,8 +61,8 @@ export const TodoList: React.FC<Props> = (props) => {
                 type="button"
                 onClick={() => (
                   selectedTodo?.id === todo.id
-                    ? onChange(null)
-                    : onChange(todo.id)
+                    ? onSelectedTodoIdChange(null)
+                    : onSelectedTodoIdChange(todo.id)
                 )}
               >
                 <span className="icon">
@@ -81,4 +81,4 @@ export const TodoList: React.FC<Props> = (props) => {
       </tbody>
     </table>
   );
-};
+});

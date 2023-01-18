@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 type Props = {
   query: string;
   filterStatus: string;
-  onInputChange: React.Dispatch<React.SetStateAction<string>>;
+  onInputChange: (value: string) => void;
   onSelectChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const TodoFilter: React.FC<Props> = (props) => {
+export const TodoFilter: React.FC<Props> = memo((props) => {
   const {
     query,
     filterStatus,
@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = (props) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onInputChange(event.currentTarget.value)}
+          onChange={(event) => onInputChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -58,4 +58,4 @@ export const TodoFilter: React.FC<Props> = (props) => {
       </p>
     </form>
   );
-};
+});
