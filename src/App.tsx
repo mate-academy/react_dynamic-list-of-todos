@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -27,13 +25,27 @@ export const App: React.FC = () => {
   const preaperedSearchQuery = searchQuery.toLowerCase();
 
   const visibleTodo = todos.filter(todo => {
-    const searchingTodo = todo.title.toLowerCase().includes(preaperedSearchQuery);
+    const searchingTodo = todo.title.toLowerCase()
+      .includes(preaperedSearchQuery);
 
-    const filteredTodo = filter === 'completed'
-      ? todo.completed === true
-      : filter === 'active'
-        ? todo.completed === false
-        : todo;
+    const swithCase = (value: string) => {
+      switch (value) {
+        case 'all':
+          return todo;
+
+        case 'active':
+          return todo.completed === true;
+
+        case 'completed':
+          return todo.completed === false;
+        default:
+          break;
+      }
+
+      return value;
+    };
+
+    const filteredTodo = swithCase(filter);
 
     return searchingTodo && filteredTodo;
   });
