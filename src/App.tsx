@@ -14,21 +14,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-const debounce = (
-  func: React.Dispatch<React.SetStateAction<string>>,
-  delay = 500,
-) => {
-  let id = 0;
-
-  return (...args: unknown[]) => {
-    if (id) {
-      clearTimeout(id);
-    }
-
-    id = setTimeout(func, delay, ...args);
-  };
-};
+import { debounce } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
