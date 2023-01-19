@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+
 interface Props {
   query: string,
   onSearchQueryChange: (word: string)=> void,

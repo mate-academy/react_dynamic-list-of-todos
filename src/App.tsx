@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
@@ -40,11 +42,9 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  const selectedTodo = todos.find(todo => todoId === todo.id) || 0;
+  const selectedTodo = useMemo(() => todos.find(todo => todo.id === todoId), [todoId]);
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  }, [query]);
+  const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   let visibleTodos = filteredTodos;
 
