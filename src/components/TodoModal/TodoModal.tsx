@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
-import { Request } from '../Request';
+import { request } from '../../api/request';
 
 type Props = {
   selectedTodo: Todo | null,
@@ -18,7 +18,7 @@ export const TodoModal: React.FC<Props> = ({
   const url = selectedTodo?.userId;
 
   useEffect(() => {
-    Request(`users/${url}`)
+    request(`users/${url}`)
       .then(data => setUser(data));
   }, [selectedTodo]);
 
@@ -38,8 +38,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${selectedTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="delete"
               type="button"
               className="delete"
               data-cy="modal-close"

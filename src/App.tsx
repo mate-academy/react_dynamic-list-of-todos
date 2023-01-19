@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-import { Request } from './components/Request';
+import { request } from './api/request';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import { Loader } from './components/Loader';
@@ -17,26 +17,31 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>(All);
   const [query, setQuery] = useState('');
+  const [isLoaded, setisLoaded] = useState(false);
 
-  const todosPoint = 'todos';
+  const todosPoint = useMemo(() => 'todos', []);
 
   useEffect(() => {
-    Request(todosPoint)
-      .then(data => setTodos(data));
+    setisLoaded(false);
+    request(todosPoint)
+      .then(data => {
+        setTodos(data);
+      })
+      .finally(() => setisLoaded(true));
   }, []);
 
-  const filterTodos = useMemo(() => todos.filter((e) => {
+  const filterTodos = useMemo(() => todos.filter((todo) => {
     switch (selectedFilter) {
       case Completed:
-        return e.completed === true;
+        return todo.completed === true;
       case Active:
-        return e.completed === false;
+        return todo.completed === false;
       default:
-        return e;
+        return todo;
     }
   }), [selectedFilter, todos]);
 
-  const filterTodosByQuery = useMemo(() => filterTodos.filter((e) => e.title.includes(query.toLowerCase())), [query, filterTodos]);
+  const filterTodosByQuery = useMemo(() => filterTodos.filter((todo) => todo.title.includes(query.toLowerCase())), [query, filterTodos]);
 
   return (
     <>
@@ -47,19 +52,25 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                query={query}
                 setQuery={(phrase) => setQuery(phrase)}
                 setSelectedFilter={(filter: string) => setSelectedFilter(filter)}
               />
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              {todos.length > 0 ? (
-                <TodoList
-                  todos={filterTodosByQuery}
-                  setSelectedTodo={(todo: Todo) => setSelectedTodo(todo)}
-                  selectedTodo={selectedTodo}
-                />
+              {isLoaded ? (
+                (todos.length !== 0 && (
+                  <TodoList
+                    todos={filterTodosByQuery}
+                    setSelectedTodo={(todo: Todo) => setSelectedTodo(todo)}
+                    selectedTodo={selectedTodo}
+                  />
+                )) || (
+                  <h2 className="has-text-danger bold">
+                    Something went wrong or to-dos list is empty!
+                  </h2>
+                )
               ) : (
                 <Loader />
               )}
@@ -68,7 +79,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodo={(todo: null) => setSelectedTodo(todo)}
