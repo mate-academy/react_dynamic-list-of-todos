@@ -42,11 +42,9 @@ export const App: FC = () => {
 
   visibleTodos = useMemo(() => visibleTodos.filter(todo => {
     switch (filter) {
-      case Filter.all:
-        return true;
-      case Filter.active:
+      case Filter.Active:
         return !todo.completed;
-      case Filter.completed:
+      case Filter.Completed:
         return todo.completed;
       default:
         return true;
