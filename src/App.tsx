@@ -26,9 +26,9 @@ export const App: React.FC = () => {
       case Filters.All:
         return todo;
       case Filters.Completed:
-        return todo.completed === true;
+        return todo.completed;
       case Filters.Active:
-        return todo.completed === false;
+        return !todo.completed;
       default:
         return todo;
     }
@@ -70,6 +70,11 @@ export const App: React.FC = () => {
                     selectedTodo={selectedTodo}
                   />
                 )}
+              {!searchedTodos.length && todos.length > 0 && (
+                <h1 style={{ color: 'red' }}>
+                  Unable to find any todos match your request
+                </h1>
+              )}
             </div>
           </div>
         </div>
