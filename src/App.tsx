@@ -1,14 +1,30 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  // const [query, setQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    getTodos().then(todosFromServ => setTodos(todosFromServ));
+  }, []);
+
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [todos, selectedTodoId]);
+
+  // const visibleTodos = useMemo((), [todos]);
+
   return (
     <>
       <div className="section">
@@ -21,14 +37,26 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length > 0
+                ? (
+                  <TodoList
+                    todos={todos}
+                    selectedTodo={selectedTodo}
+                    onSelectedTodoIdChange={setSelectedTodoId}
+                  />
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onSelectedTodoIdChange={setSelectedTodoId}
+        />
+      )}
     </>
   );
 };
