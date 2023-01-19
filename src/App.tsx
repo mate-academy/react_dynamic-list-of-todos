@@ -8,65 +8,92 @@ import {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import debounce from 'lodash.debounce';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterTypeEnum } from './types/filterType';
 
 export const App: FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [areUsersLoaded, setLoadingStatus] = useState(false);
-  const [filterType, setFilterType] = useState('all');
+  const [areUsersLoaded, setAreUsersLoaded] = useState(false);
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<number>(0);
+  const [appliedQuery, setAppliedQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [filterType, setFilterType] = useState<FilterTypeEnum>(
+    FilterTypeEnum.all,
+  );
 
   useEffect(() => {
+    setErrorMessage('');
     getTodos()
       .then(todos => {
         setTodosFromServer(todos);
-        setLoadingStatus(true);
-      });
+        setAreUsersLoaded(true);
+      })
+      .catch(() => {
+        setErrorMessage('something went wrong, try to reload the page');
+      })
+      .finally(() => setAreUsersLoaded(true));
   }, []);
+
+  const debouncedSetAppliedQuery = useCallback(
+    debounce(setAppliedQuery, 300),
+    [],
+  );
+
+  const applyQuery = (queryToApply: string) => {
+    setQuery(queryToApply);
+    debouncedSetAppliedQuery(queryToApply);
+  };
 
   const handleClean = useCallback(() => {
     setQuery('');
+    debouncedSetAppliedQuery('');
   }, []);
 
   const handleTodoSelect = useCallback((id: number) => {
-    // const newSelectedTodo = todosFromServer
-    //   .find(todo => todo.id === id) || null;
-
-    setSelectedTodo(id);
+    setSelectedTodoId(id);
   }, [todosFromServer]);
 
-  const getSelectedTodo = (id: number) => (
+  const getSelectedTodo = useCallback((id: number) => (
     todosFromServer.find(todo => todo.id === id) || null
-  );
+  ), [selectedTodoId]);
 
   const handleTodoClose = useCallback(() => {
-    setSelectedTodo(0);
+    setSelectedTodoId(0);
   }, []);
 
-  const visibleTodos = useMemo(() => (
-    todosFromServer.filter(todo => {
+  const visibleTodos = useMemo(() => {
+    if (!filterType) {
+      return todosFromServer;
+    }
+
+    return todosFromServer.filter(todo => {
       const condition1 = todo.title
         .toLowerCase()
-        .includes(query.toLowerCase());
+        .includes(appliedQuery.toLowerCase());
 
       switch (filterType) {
-        case 'all':
+        case FilterTypeEnum.all:
           return condition1;
-        case 'active':
+        case FilterTypeEnum.active:
           return condition1 && !todo.completed;
-        case 'completed':
+        case FilterTypeEnum.completed:
           return condition1 && todo.completed;
         default:
           return true;
       }
-    })
-  ), [todosFromServer, filterType, query]);
+    });
+  }, [todosFromServer, filterType, appliedQuery]);
+
+  const shouldTodosBeRendered = areUsersLoaded && !errorMessage;
+
+  const shouldErrorMessageBeRendered = errorMessage;
 
   return (
     <>
@@ -80,31 +107,46 @@ export const App: FC = () => {
                 filterType={filterType}
                 query={query}
                 onFilter={setFilterType}
-                onSearch={setQuery}
+                onSearch={applyQuery}
                 onClean={handleClean}
               />
             </div>
 
             <div className="block">
               {
-                areUsersLoaded
-                  ? (
-                    <TodoList
-                      todos={visibleTodos}
-                      onSelect={handleTodoSelect}
-                      selectedId={selectedTodo}
-                    />
-                  )
-                  : <Loader />
+                !areUsersLoaded && (
+                  <Loader />
+                )
+              }
+
+              {
+                shouldTodosBeRendered && (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSelect={handleTodoSelect}
+                    selectedId={selectedTodoId}
+                  />
+                )
+              }
+
+              {
+                shouldErrorMessageBeRendered && (
+                  <h1
+                    className="title"
+                    style={{ textAlign: 'center', color: 'red' }}
+                  >
+                    {errorMessage}
+                  </h1>
+                )
               }
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {!!selectedTodoId && (
         <TodoModal
-          selectedTodo={getSelectedTodo(selectedTodo)}
+          selectedTodo={getSelectedTodo(selectedTodoId)}
           onClose={handleTodoClose}
         />
       )}
