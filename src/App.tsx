@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
@@ -15,33 +15,36 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selector, setSelector] = useState('All');
 
-  const closeTodoModal = () => {
+  const closeTodoModal = useCallback(() => {
     setTodoId(0);
-  };
+  }, []);
 
-  const handleSetTodo = (id:number) => {
+  const handleSetTodo = useCallback((id:number) => {
     setTodoId(id);
-  };
+  }, []);
 
-  const handleSetQuery = (word: string) => {
+  const handleSetQuery = useCallback((word: string) => {
     setQuery(word);
-  };
+  }, []);
 
-  const handleSetSelector = (option: string) => {
+  const handleSetSelector = useCallback((option: string) => {
     setSelector(option);
-  };
+  }, []);
 
-  const handleDeleteQueryText = () => {
+  const handleDeleteQueryText = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
   useEffect(() => {
     getTodos()
       .then(setTodos);
   }, []);
+
   const selectedTodo = todos.find(todo => todoId === todo.id) || 0;
 
-  const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  }, [query]);
 
   let visibleTodos = filteredTodos;
 
@@ -85,7 +88,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo !== 0 && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onClickCloseTodoModal={closeTodoModal}

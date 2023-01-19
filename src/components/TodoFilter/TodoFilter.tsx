@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 interface Props {
   query: string,
   onSearchQueryChange: (word: string)=> void,
@@ -6,7 +7,7 @@ interface Props {
   onDeleteButtonClick: () => void,
 }
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   query,
   onSearchQueryChange,
   selector,
@@ -54,4 +55,4 @@ export const TodoFilter: React.FC<Props> = ({
       )}
     </p>
   </form>
-);
+));
