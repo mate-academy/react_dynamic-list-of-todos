@@ -17,7 +17,7 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Filter>(Filter.all);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
