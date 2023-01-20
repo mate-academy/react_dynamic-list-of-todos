@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
                 {' by '}
-                <a href={user.email}>
+                <a href={`mailto:${user.email}`}>
                   {user.name}
                 </a>
               </p>

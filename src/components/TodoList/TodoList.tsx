@@ -35,15 +35,17 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
-          {todo.completed
-            ? (
-              <td className="is-vcentered">
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              </td>
-            )
-            : <td className="is-vcentered" />}
+          {
+            todo.completed
+              ? (
+                <td className="is-vcentered">
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                </td>
+              )
+              : <td className="is-vcentered" />
+          }
 
           <td className="is-vcentered is-expanded">
             <p className={classNames({
