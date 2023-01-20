@@ -1,3 +1,5 @@
+import { Filter } from '../../types/Filter';
+
 type Props = {
   query: string,
   setQuery: (query: string) => void,
@@ -9,6 +11,8 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   setSelectedFilter,
 }) => {
+  const { All, Active, Completed } = Filter;
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -18,17 +22,17 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={(event) => setSelectedFilter(event.target.value)}
           >
             <option
-              value="all"
+              value={All}
             >
               All
             </option>
             <option
-              value="active"
+              value={Active}
             >
               Active
             </option>
             <option
-              value="completed"
+              value={Completed}
             >
               Completed
             </option>
@@ -44,14 +48,13 @@ export const TodoFilter: React.FC<Props> = ({
           placeholder="Search..."
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query !== '' ? (
+          {!!query && (
             <button
               aria-label="reset"
               data-cy="clearSearchButton"
@@ -59,7 +62,7 @@ export const TodoFilter: React.FC<Props> = ({
               className="delete"
               onClick={() => setQuery('')}
             />
-          ) : ''}
+          )}
         </span>
       </p>
     </form>

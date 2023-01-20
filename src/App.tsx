@@ -17,25 +17,26 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>(All);
   const [query, setQuery] = useState('');
-  const [isLoaded, setisLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
   const todosPoint = useMemo(() => 'todos', []);
 
   useEffect(() => {
-    setisLoaded(false);
     request(todosPoint)
       .then(data => {
         setTodos(data);
       })
-      .finally(() => setisLoaded(true));
+      .catch(() => setError(true))
+      .finally(() => setIsLoaded(true));
   }, []);
 
   const filterTodos = useMemo(() => todos.filter((todo) => {
     switch (selectedFilter) {
       case Completed:
-        return todo.completed === true;
+        return todo.completed;
       case Active:
-        return todo.completed === false;
+        return !todo.completed;
       default:
         return todo;
     }
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoaded ? (
-                (todos.length !== 0 && (
+                (todos.length !== 0 && !error && (
                   <TodoList
                     todos={filterTodosByQuery}
                     setSelectedTodo={(todo: Todo) => setSelectedTodo(todo)}
