@@ -11,7 +11,8 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  // const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -23,7 +24,27 @@ export const App: React.FC = () => {
     todos.find(todo => todo.id === selectedTodoId)
   ), [todos, selectedTodoId]);
 
-  // const visibleTodos = useMemo((), [todos]);
+  const visibleTodos = useMemo(() => {
+    const preparedQuery = query.toLowerCase();
+
+    return todos.filter((todo) => {
+      const { title } = todo;
+      const preparedTitle = title.toLowerCase();
+
+      const isQueryMatching = preparedTitle.includes(preparedQuery);
+
+      switch (filterStatus) {
+        case 'active':
+          return !todo.completed && isQueryMatching;
+
+        case 'completed':
+          return todo.completed && isQueryMatching;
+
+        default:
+          return isQueryMatching;
+      }
+    });
+  }, [todos, query, filterStatus]);
 
   return (
     <>
@@ -33,14 +54,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                filterStatus={filterStatus}
+                onInputChange={setQuery}
+                onFilterStatusChange={setFilterStatus}
+              />
             </div>
 
             <div className="block">
               {todos.length > 0
                 ? (
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodos}
                     selectedTodo={selectedTodo}
                     onSelectedTodoIdChange={setSelectedTodoId}
                   />
