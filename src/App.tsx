@@ -1,14 +1,73 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  const visibleTodos = todos.filter(todo => {
+    const lowerTitle = todo.title.toLowerCase();
+    const normalizedQuery = query.toLowerCase().trim();
+
+    const isQueryMatch = lowerTitle.includes(normalizedQuery);
+    let isStatus = true;
+
+    switch (status) {
+      case 'active':
+        isStatus = !todo.completed;
+        break;
+
+      case 'completed':
+        isStatus = todo.completed;
+        break;
+
+      default:
+        isStatus = true;
+    }
+
+    return isQueryMatch && isStatus;
+  });
+
+  const selectTodoId = (todoId: number) => {
+    setSelectedTodoId(todoId);
+  };
+
+  const selectedTodo = visibleTodos.find(todo => (
+    todo.id === selectedTodoId
+  ));
+
+  const closeSelectedTodo = () => {
+    setSelectedTodoId(0);
+  };
+
+  const filterByQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const clearQuery = () => {
+    setQuery('');
+  };
+
+  const selectStatus = (value: string) => {
+    setStatus(value);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +76,38 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                filter={filterByQuery}
+                onClose={clearQuery}
+                onSelectStatus={selectStatus}
+                status={status}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length > 0
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    onSelectedTodoId={selectTodoId}
+                  />
+                )
+                : (
+                  <Loader />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          onModal={closeSelectedTodo}
+          todo={selectedTodo}
+        />
+      )}
     </>
   );
 };
