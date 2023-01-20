@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
+import { debounce } from './components/helpers/debounce';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -12,11 +15,14 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [selectedTodoId]);
 
   useEffect(() => {
     getTodos()
@@ -27,23 +33,37 @@ export const App: React.FC = () => {
     setSelectedTodoId(0)
   ), []);
 
-  const visibleTodos = todos.filter(todo => {
-    const normalizedTitle = todo.title.toLowerCase();
-    const normalizedQuery = query.toLowerCase().trim();
-    const isQueryMatchTitle = normalizedTitle.includes(normalizedQuery);
+  const debounceQuery = useCallback((
+    debounce(setDebouncedQuery, 1000)
+  ), []);
 
-    switch (filter) {
-      case 'completed':
-        return todo.completed && isQueryMatchTitle;
+  const handleInputChange = useCallback((value: string) => {
+    setQuery(value);
+    debounceQuery(value);
+  }, []);
 
-      case 'active':
-        return !todo.completed && isQueryMatchTitle;
+  const visibleTodos = useMemo(() => {
+    if (debouncedQuery || filter !== 'all') {
+      return todos.filter(todo => {
+        const normalizedTitle = todo.title.toLowerCase();
+        const normalizedQuery = debouncedQuery.toLowerCase().trim();
+        const isQueryMatchTitle = normalizedTitle.includes(normalizedQuery);
 
-      case 'all':
-      default:
-        return todo && isQueryMatchTitle;
+        switch (filter) {
+          case 'completed':
+            return todo.completed && isQueryMatchTitle;
+
+          case 'active':
+            return !todo.completed && isQueryMatchTitle;
+
+          default:
+            return todo && isQueryMatchTitle;
+        }
+      });
     }
-  });
+
+    return todos;
+  }, [todos, filter, debouncedQuery]);
 
   return (
     <>
@@ -57,7 +77,7 @@ export const App: React.FC = () => {
                 filter={filter}
                 query={query}
                 onFilterChange={setFilter}
-                onQueryChange={setQuery}
+                onQueryChange={handleInputChange}
               />
             </div>
 
@@ -68,7 +88,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={selectedTodo}
-                    onSelectTodo={(id: number) => setSelectedTodoId(id)}
+                    onSelectTodo={setSelectedTodoId}
                   />
                 )}
             </div>
