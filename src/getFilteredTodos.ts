@@ -9,7 +9,8 @@ export const getFilteredTodos = (
     const preparedSearchQuery = searchQuery.toLowerCase();
 
     return todos.filter(todo => {
-      const isSearchQueryMatch = todo.title.includes(preparedSearchQuery);
+      const isSearchQueryMatch = todo.title.toLowerCase()
+        .includes(preparedSearchQuery);
       let isFilterMatch;
 
       switch (selectedFilter) {
