@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
-import { Properties } from '../../types/Properties';
+import { Properties } from '../../types/ModalProps';
 
-export const TodoModal: React.FC<Properties> = ({ todo, handleOnClose }) => {
+export const TodoModal: React.FC<Properties> = memo(({
+  todo,
+  handleOnClose,
+}) => {
   const [user, setUser] = useState<User | 0>(0);
 
   useEffect(() => {
@@ -58,4 +61,4 @@ export const TodoModal: React.FC<Properties> = ({ todo, handleOnClose }) => {
       )}
     </div>
   );
-};
+});
