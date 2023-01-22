@@ -36,26 +36,30 @@ export const App: React.FC = () => {
     setSelectedTodoId(0);
   }, []);
 
+  const handleInputChange = useCallback((value: string) => {
+    setQuery(value);
+  }, []);
+
   const visibleTodos = useMemo(() => {
-    const filter = todos.filter(todo => {
-      const preparedTitle = todo.title.toLowerCase();
-      const preparedQuery = query.toLowerCase().trim();
+    return (status !== 'all' || query)
+      ? (todos.filter(todo => {
+        const preparedTitle = todo.title.toLowerCase();
+        const preparedQuery = query.toLowerCase().trim();
 
-      const filterByTitle = preparedTitle.includes(preparedQuery);
+        const filterByTitle = preparedTitle.includes(preparedQuery);
 
-      switch (status) {
-        case 'completed':
-          return filterByTitle && todo.completed;
+        switch (status) {
+          case 'completed':
+            return filterByTitle && todo.completed;
 
-        case 'active':
-          return filterByTitle && !todo.completed;
+          case 'active':
+            return filterByTitle && !todo.completed;
 
-        default:
-          return filterByTitle && todo;
-      }
-    });
-
-    return filter;
+          default:
+            return filterByTitle && todo;
+        }
+      })
+      ) : todos;
   }, [todos, query, status]);
 
   return (
@@ -68,7 +72,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                setQuery={handleInputChange}
                 setStatus={setStatus}
                 status={status}
               />
