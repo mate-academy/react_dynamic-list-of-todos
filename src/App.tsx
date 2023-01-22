@@ -15,22 +15,26 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState(0);
-  const [filter, setFilter] = useState('All');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
+  const [filter, setFilterChange] = useState('all');
 
   useEffect(() => {
     getTodos()
-      .then(setTodos);
+      .then((loadedTodos) => setTodos(loadedTodos));
   }, []);
 
-  const selectTodo = useMemo(() => (
-    todos.find(todo => todo.id === selectedTodo)
-  ), [selectedTodo]);
+  const selectTodoId = (todoId: number) => {
+    setSelectedTodoId(todoId);
+  };
 
   const closeModal = useCallback(() => (
-    setSelectedTodo(0)
+    setSelectedTodoId(0)
   ), []);
+
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [selectedTodoId]);
 
   const visibleTodos = todos.filter(todo => {
     const isSearchQuery = todo.title.toLowerCase().includes(query.toLowerCase());
@@ -65,32 +69,34 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
                 query={query}
-                filterChange={setFilter}
                 setQuery={setQuery}
+                filter={filter}
+                filterChange={setFilterChange}
               />
             </div>
 
             <div className="block">
-              {!todos.length
-                ? <Loader />
-                : (
+              {visibleTodos.length > 0
+                ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    selectTodo={setSelectedTodo}
+                    selectTodoId={selectTodoId}
+                    selectedTodoId={selectedTodoId}
                   />
+                )
+                : (
+                  <Loader />
                 )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectTodo
+      {selectedTodo
         && (
           <TodoModal
-            todo={selectTodo}
+            todo={selectedTodo}
             closeModal={closeModal}
           />
         )}
