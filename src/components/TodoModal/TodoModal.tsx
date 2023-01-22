@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { getUser } from '../../api';
 import { Loader } from '../Loader';
 
@@ -10,15 +10,13 @@ type Props = {
   closeModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
+export const TodoModal: React.FC<Props> = memo(({ todo, closeModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(todo.userId)
       .then(setUser);
   }, []);
-
-  const handleClickCloseModal = () => closeModal();
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -41,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleClickCloseModal}
+              onClick={closeModal}
             />
           </header>
 
@@ -51,8 +49,9 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todo.completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
 
               {' by '}
 
@@ -65,4 +64,4 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
       )}
     </div>
   );
-};
+});

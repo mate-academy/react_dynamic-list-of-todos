@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
   selectedTodoId: number
 };
 
-export const TodoList: React.FC<Props> = (
+export const TodoList: React.FC<Props> = memo((
   {
     todos,
     selectTodoId,
@@ -31,12 +31,16 @@ export const TodoList: React.FC<Props> = (
 
     <tbody>
       {todos.map(todo => (
-        <tr data-cy="todo" className="" key={todo.id}>
+        <tr
+          data-cy="todo"
+          className=""
+          key={todo.id}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed
               ? (
-                <span className="icon">
+                <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               )
@@ -61,7 +65,11 @@ export const TodoList: React.FC<Props> = (
               }}
             >
               <span className="icon">
-                <i className={`far fa-eye${selectedTodoId === todo.id ? '-slash' : ''}`} />
+                <i
+                  className={cn('far',
+                    { 'fa-eye': selectedTodoId === 0 },
+                    { 'fa-eye-slash': selectedTodoId === todo.id })}
+                />
               </span>
             </button>
           </td>
@@ -69,4 +77,4 @@ export const TodoList: React.FC<Props> = (
       ))}
     </tbody>
   </table>
-);
+));
