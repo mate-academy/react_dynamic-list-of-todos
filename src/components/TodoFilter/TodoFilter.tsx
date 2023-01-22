@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 
 export type Props = {
   query: string
@@ -7,15 +7,15 @@ export type Props = {
   setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   query,
   onSearch,
   value,
   setValue,
 }) => {
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     onSearch('');
-  };
+  }, []);
 
   return (
     <form
@@ -65,4 +65,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

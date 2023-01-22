@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -9,7 +9,7 @@ export type Props = {
   onClose(todId: number): void
 };
 
-export const TodoModal: React.FC<Props> = ({ todoUserId, onClose }) => {
+export const TodoModal: React.FC<Props> = memo(({ todoUserId, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -17,9 +17,9 @@ export const TodoModal: React.FC<Props> = ({ todoUserId, onClose }) => {
       .then(userInfo => setUser(userInfo));
   }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     onClose(0);
-  };
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -67,4 +67,4 @@ export const TodoModal: React.FC<Props> = ({ todoUserId, onClose }) => {
       )}
     </div>
   );
-};
+});

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 export type Props = {
@@ -8,7 +8,7 @@ export type Props = {
   selectedIdTodo: number | undefined
 };
 
-export const TodoList: React.FC<Props> = (
+export const TodoList: React.FC<Props> = memo((
   { todos, selectedTodo, selectedIdTodo },
 ) => (
   <table className="table is-narrow is-fullwidth">
@@ -82,4 +82,4 @@ export const TodoList: React.FC<Props> = (
       ))}
     </tbody>
   </table>
-);
+));

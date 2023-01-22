@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,24 +10,24 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-export const App: React.FC = () => {
+export const App: React.FC = memo(() => {
   const [todos, setTodo] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>();
   const [query, setQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState('all');
 
-  const selectTodo = (todoId: number) => {
+  const selectTodo = useCallback((todoId: number) => {
     setSelectedTodo(
       todos.find(todo => todo.id === todoId) || null,
     );
-  };
+  }, [todos]);
 
   const preaperedSearchQuery = query.toLowerCase();
 
   const visibleTodo = todos.filter(todo => {
     const serchingQuery = todo.title.toLowerCase().includes(preaperedSearchQuery);
 
-    const swithCase = (value: string) => {
+    const selectedOption = (value: string) => {
       switch (value) {
         case 'all':
           return todo;
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
       return value;
     };
 
-    const filteredTodo = swithCase(selectFilter);
+    const filteredTodo = selectedOption(selectFilter);
 
     return serchingQuery && filteredTodo;
   });
@@ -99,4 +99,4 @@ export const App: React.FC = () => {
       )}
     </>
   );
-};
+});
