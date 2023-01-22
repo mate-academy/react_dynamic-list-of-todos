@@ -37,7 +37,7 @@ export const App: React.FC = () => {
   const todosFilter = (
     todosArr: Todo[],
     typeToFilter: string,
-    valueToSearch: string
+    valueToSearch: string,
   ) => {
     const resFilterTodos = todosArr.filter((todo) => {
       return todo.title

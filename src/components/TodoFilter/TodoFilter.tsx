@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 type Props = {
@@ -47,12 +48,14 @@ export const TodoFilter: React.FC<Props> = ({
           style={{ pointerEvents: 'all' }}
         >
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setSearchValue('')}
-          />
+          {searchValue && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setSearchValue('')}
+            />
+          )}
         </span>
       </p>
     </form>
