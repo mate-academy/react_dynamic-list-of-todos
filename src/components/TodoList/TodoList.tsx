@@ -28,6 +28,7 @@ export const TodoList: React.FC<ListProps> = memo(({
           data-cy="todo"
           className=""
         >
+          <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
               <span className="icon" data-cy="iconCompleted">

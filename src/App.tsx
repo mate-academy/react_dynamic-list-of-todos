@@ -41,13 +41,13 @@ export const App: React.FC = () => {
     return isQueryInclude && isValue;
   });
 
-  const selectedTodo = visibleTodos.find(todo => (
-    todo.id === selectedTodoId
-  ));
-
   const selectTodoId = (todoId: number) => {
     setSelectedTodoId(todoId);
   };
+
+  const selectedTodo = visibleTodos.find(todo => (
+    todo.id === selectedTodoId
+  ));
 
   const selectValue = (value: string) => {
     setTheValue(value);

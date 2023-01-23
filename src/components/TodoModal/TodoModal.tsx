@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Properties> = memo(({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo ${todo.id}`}
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -48,7 +48,7 @@ export const TodoModal: React.FC<Properties> = memo(({
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed
-                ? <strong className="has-text-danger">Completed</strong>
+                ? <strong className="has-text-danger">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
               {' by '}
 
