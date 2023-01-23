@@ -30,7 +30,9 @@ export const App: React.FC = () => {
     setSelectedTodoId(todoId);
   };
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = useMemo(() => {
+    return todos.find(todo => todo.id === selectedTodoId);
+  }, [selectedTodoId, todos]);
 
   const closeModal = useCallback(() => {
     setSelectedTodoId(0);
