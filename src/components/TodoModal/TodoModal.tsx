@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, Dispatch, SetStateAction,
+  useEffect, useState,
 } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -7,12 +7,12 @@ import { Loader } from '../Loader';
 
 type Props = {
   personalTodo: Todo,
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>,
+  onCloseModal: () => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   personalTodo,
-  setIsModalOpen,
+  onCloseModal,
 }) => {
   const [userName, setUserName] = useState('');
   const [isFetching, setIsFetching] = useState(false);
@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isFetching ? (
+      {isFetching || !userName ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -52,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setIsModalOpen(false)}
+              onClick={onCloseModal}
             />
           </header>
 

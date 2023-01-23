@@ -13,10 +13,15 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-  const [personalTodo, setPersonalTodo] = useState<Todo>();
+  const [personalTodo, setPersonalTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTodos, setSelectedTodos] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const onCloseModal = () => {
+    setIsModalOpen(false);
+    setPersonalTodo(null);
+  };
 
   const handleSelectedTodos = (value: string) => {
     setSelectedTodos(value);
@@ -25,25 +30,6 @@ export const App: React.FC = () => {
   const handleSearchQuery = (event: React.SetStateAction<string>) => {
     setSearchQuery(event);
   };
-
-  const visibleTodos = todos.filter(todo => {
-    const filteredTodo = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-    switch (selectedTodos) {
-      case 'active':
-        return todo.completed === false && filteredTodo;
-        break;
-
-      case 'completed':
-        return todo.completed === true && filteredTodo;
-        break;
-
-      default:
-        break;
-    }
-
-    return filteredTodo;
-  });
 
   const handleClickModalButton = (todo: Todo) => {
     setPersonalTodo(todo);
@@ -63,6 +49,25 @@ export const App: React.FC = () => {
   useEffect(() => {
     loadTodos();
   }, []);
+
+  const visibleTodos = todos.filter(todo => {
+    const filteredTodo = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+    switch (selectedTodos) {
+      case 'active':
+        return todo.completed === false && filteredTodo;
+        break;
+
+      case 'completed':
+        return todo.completed === true && filteredTodo;
+        break;
+
+      default:
+        break;
+    }
+
+    return filteredTodo;
+  });
 
   return (
     <>
@@ -98,12 +103,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {personalTodo
-        && isModalOpen
+      {personalTodo && isModalOpen
         && (
           <TodoModal
             personalTodo={personalTodo}
-            setIsModalOpen={setIsModalOpen}
+            onCloseModal={onCloseModal}
           />
         )}
     </>

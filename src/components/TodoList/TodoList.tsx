@@ -5,7 +5,7 @@ type Props = {
   visibleTodos: Todo[],
   handleClickModalButton: (todo: Todo) => void,
   isModalOpen: boolean,
-  personalTodo?: Todo,
+  personalTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
