@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface Props {
   query: string;
@@ -7,7 +7,7 @@ interface Props {
   setSearchBy: (value: string) => void;
 }
 
-export const TodoFilter: React.FC<Props> = (props) => {
+export const TodoFilter: React.FC<Props> = memo((props) => {
   const {
     query,
     setQuery,
@@ -58,4 +58,4 @@ export const TodoFilter: React.FC<Props> = (props) => {
       </p>
     </form>
   );
-};
+});

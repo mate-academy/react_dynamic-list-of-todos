@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,43 +19,51 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [searchBy, setSearchBy] = useState('all');
+  const [isTodoLoading, setIsTodoLoading] = useState(false);
 
   useEffect(() => {
+    setIsTodoLoading(true);
+
     getTodos()
-      .then((loadedTodos) => setTodos(loadedTodos));
+      .then((loadedTodos) => setTodos(loadedTodos))
+      .finally(() => setIsTodoLoading(false));
   }, []);
 
   const selectTodoId = (todoId: number) => {
     setSelectedTodoId(todoId);
   };
 
-  const visibleTodos = todos.filter(todo => {
-    const normalizedTitle = todo.title.toLowerCase();
-    const normalizedQuery = query.toLowerCase();
-    const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const normalizedTitle = todo.title.toLowerCase();
+      const normalizedQuery = query.toLowerCase();
+      const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
 
-    switch (searchBy) {
-      case 'completed':
-        return todo.completed && isTitleIncludesQuery;
+      switch (searchBy) {
+        case 'completed':
+          return todo.completed && isTitleIncludesQuery;
 
-      case 'active':
-        return !todo.completed && isTitleIncludesQuery;
+        case 'active':
+          return !todo.completed && isTitleIncludesQuery;
 
-      case 'all':
-        return isTitleIncludesQuery;
+        case 'all':
+          return isTitleIncludesQuery;
 
-      default:
-        return isTitleIncludesQuery;
-    }
-  });
+        default:
+          return isTitleIncludesQuery;
+      }
+    });
+  }, [query, todos, searchBy]);
 
-  const selectedTodo = visibleTodos.find(
-    todo => todo.id === selectedTodoId,
-  );
+  const selectedTodo = useMemo(() => {
+    return todos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, todos]);
 
-  const unselectUser = () => {
+  const unselectUser = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
   return (
     <>
@@ -69,7 +82,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length > 0
+              {!isTodoLoading
                 ? (
                   <TodoList
                     todos={visibleTodos}

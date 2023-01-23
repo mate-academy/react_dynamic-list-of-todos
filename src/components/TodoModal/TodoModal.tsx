@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -9,13 +9,17 @@ interface Props {
   closeTodoModal: () => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, closeTodoModal }) => {
+export const TodoModal: React.FC<Props> = memo(({ todo, closeTodoModal }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [, setIsUserLoading] = useState(false);
 
   useEffect(() => {
+    setIsUserLoading(true);
+
     getUser(todo.userId)
-      .then(setUser);
-  }, []);
+      .then((loadedUser) => setUser(loadedUser))
+      .finally(() => setIsUserLoading(false));
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -63,4 +67,4 @@ export const TodoModal: React.FC<Props> = ({ todo, closeTodoModal }) => {
       )}
     </div>
   );
-};
+});

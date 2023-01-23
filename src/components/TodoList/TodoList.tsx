@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,7 +8,7 @@ interface Props {
   onSelect: (todoId: number) => void;
 }
 
-export const TodoList: React.FC<Props> = (props) => {
+export const TodoList: React.FC<Props> = memo((props) => {
   const {
     todos,
     selectedTodoId,
@@ -81,4 +81,4 @@ export const TodoList: React.FC<Props> = (props) => {
       </tbody>
     </table>
   );
-};
+});
