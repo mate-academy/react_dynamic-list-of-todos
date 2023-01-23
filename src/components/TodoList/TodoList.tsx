@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import React, { memo } from "react";
-import { Todo } from "../../types/Todo";
+import classNames from 'classnames';
+import React, { memo } from 'react';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
@@ -41,8 +41,8 @@ export const TodoList: React.FC<Props> = memo(
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames({
-                  "has-text-danger": !todo.completed,
-                  "has-text-success": todo.completed,
+                  'has-text-danger': !todo.completed,
+                  'has-text-success': todo.completed,
                 })}
               >
                 {todo.title}
@@ -59,8 +59,8 @@ export const TodoList: React.FC<Props> = memo(
                   <i
                     className={classNames({
                       far: true,
-                      "fa-eye": selectedId !== todo.id,
-                      "fa-eye-slash": selectedId === todo.id,
+                      'fa-eye': selectedId !== todo.id,
+                      'fa-eye-slash': selectedId === todo.id,
                     })}
                   />
                 </span>

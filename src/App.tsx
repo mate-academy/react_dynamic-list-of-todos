@@ -1,20 +1,22 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import "bulma/css/bulma.css";
-import "@fortawesome/fontawesome-free/css/all.css";
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from "./components/TodoList";
-import { TodoFilter } from "./components/TodoFilter";
-import { TodoModal } from "./components/TodoModal";
-import { Loader } from "./components/Loader";
-import { getTodos } from "./api";
-import { Todo } from "./types/Todo";
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoModal } from './components/TodoModal';
+import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
-  const [query, setQuery] = useState("");
-  const [option, setOption] = useState("all");
+  const [query, setQuery] = useState('');
+  const [option, setOption] = useState('all');
 
   const closeModal = useCallback(
     () => {
@@ -29,24 +31,21 @@ export const App: React.FC = () => {
 
   let visibleTodos = todos;
 
-  if (query) {
-    const queryLowerCase = query.toLocaleLowerCase();
+  visibleTodos = useMemo(() => visibleTodos.filter((todo) => {
+    const queryLowerCase = query.toLocaleLowerCase().trim();
+    const filterByTitle = todo.title.toLocaleLowerCase().includes(queryLowerCase);
 
-    visibleTodos = todos.filter((todo) => todo.title.toLocaleLowerCase().includes(queryLowerCase));
-  }
-
-  visibleTodos = useMemo(() => todos.filter((todo) => {
     switch (option) {
-      case "active":
-        return !todo.completed;
+      case 'active':
+        return !todo.completed && filterByTitle;
 
-      case "completed":
-        return todo.completed;
+      case 'completed':
+        return todo.completed && filterByTitle;
 
       default:
-        return true;
+        return todo && filterByTitle;
     }
-  }), [option, todos]);
+  }), [option, visibleTodos, query]);
 
   const selectedTodo = useMemo(
     () => visibleTodos.find((todo) => todo.id === selectedTodoId),
