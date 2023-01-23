@@ -14,7 +14,9 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onCloseModal }) => {
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(setUser);
+      .then(setUser)
+      .catch(() => setUser(null));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

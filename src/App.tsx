@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -19,40 +21,45 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo));
+      .then(setTodos)
+      .catch(() => setTodos([]));
   }, []);
 
-  const closeTodoModal = () => {
+  const closeTodoModal = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-    let searchSelect;
+      let searchSelect;
 
-    switch (selectedFilter) {
-      case 'completed':
-        searchSelect = todo.completed;
-        break;
+      switch (selectedFilter) {
+        case 'completed':
+          searchSelect = todo.completed;
+          break;
 
-      case 'active':
-        searchSelect = !todo.completed;
-        break;
+        case 'active':
+          searchSelect = !todo.completed;
+          break;
 
-      case 'all':
-        return isSearchQuery;
+        case 'all':
+          return isSearchQuery;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
 
-    return isSearchQuery && searchSelect;
-  });
+      return isSearchQuery && searchSelect;
+    });
+  }, [searchQuery, selectedFilter, todos]);
 
-  const selectedTodo = visibleTodos.find(
-    todo => todo.id === selectedTodoId,
-  );
+  const selectedTodo = useMemo(() => {
+    return visibleTodos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, visibleTodos]);
 
   return (
     <>
@@ -65,17 +72,17 @@ export const App: React.FC = () => {
               <TodoFilter
                 selectedFilter={selectedFilter}
                 searchQuery={searchQuery}
-                onSelectedFilter={(option) => setSelectedFilter(option)}
-                onSearchQuery={(title) => setSearchQuery(title)}
+                onSelectedFilter={setSelectedFilter}
+                onSearchQuery={setSearchQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos.length
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodoId={(todoId) => setSelectedTodoId(todoId)}
+                    selectTodoId={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )
