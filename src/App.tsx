@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [isTodoError, setIsTodoError] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [status, setStatus] = useState('All');
 
   useEffect(() => {
     setIsTodosLoading(true);
@@ -36,10 +37,24 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter((todo) => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
-    ));
-  }, [query, todos]);
+    const filteredByQuery = todos.filter((todo) => (
+      todo.title.toLowerCase().includes(query.toLowerCase())));
+
+    const filteredByStatus = filteredByQuery.filter((todo) => {
+      switch (status) {
+        case 'active':
+          return todo.completed === false;
+
+        case 'completed':
+          return todo.completed === true;
+
+        default:
+          return todo;
+      }
+    });
+
+    return filteredByQuery && filteredByStatus;
+  }, [query, todos, status]);
 
   const selectedTodo = useMemo(() => {
     return todos.find(todo => todo.id === selectedTodoId);
@@ -58,6 +73,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
+                setStatus={setStatus}
+                status={status}
               />
             </div>
 
@@ -85,7 +102,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo
-      && <TodoModal todo={selectedTodo} onClose={unselectedUser} />}
+        && <TodoModal todo={selectedTodo} onClose={unselectedUser} />}
     </>
   );
 };
