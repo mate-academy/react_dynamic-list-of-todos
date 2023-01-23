@@ -4,10 +4,10 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 
-type Props = {
+interface Props {
   todo: Todo;
   closeTodoModal: () => void;
-};
+}
 
 export const TodoModal: React.FC<Props> = ({ todo, closeTodoModal }) => {
   const [user, setUser] = useState<User | null>(null);

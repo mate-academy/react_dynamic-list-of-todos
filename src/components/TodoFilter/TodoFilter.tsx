@@ -1,11 +1,11 @@
 import React from 'react';
 
-type Props = {
+interface Props {
   query: string;
   setQuery: (value: string) => void;
   searchBy: string
   setSearchBy: (value: string) => void;
-};
+}
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {

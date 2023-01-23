@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -49,7 +48,7 @@ export const App: React.FC = () => {
     todo => todo.id === selectedTodoId,
   );
 
-  const closeTodoModal = () => {
+  const unselectUser = () => {
     setSelectedTodoId(0);
   };
 
@@ -75,7 +74,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectedTodoId={selectedTodoId}
-                    selectTodoId={selectTodoId}
+                    onSelect={selectTodoId}
                   />
                 )
                 : (<Loader />)}
@@ -87,7 +86,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          closeTodoModal={closeTodoModal}
+          closeTodoModal={unselectUser}
         />
       )}
     </>

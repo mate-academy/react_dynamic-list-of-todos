@@ -2,17 +2,17 @@ import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[];
   selectedTodoId: number;
-  selectTodoId: (todoId: number) => void;
-};
+  onSelect: (todoId: number) => void;
+}
 
 export const TodoList: React.FC<Props> = (props) => {
   const {
     todos,
     selectedTodoId,
-    selectTodoId,
+    onSelect,
   } = props;
 
   return (
@@ -50,11 +50,10 @@ export const TodoList: React.FC<Props> = (props) => {
             </td>
 
             <td className="is-vcentered is-expanded">
-              <p className={cn('',
-                {
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                })}
+              <p className={cn('', {
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
               >
                 {todo.title}
               </p>
@@ -65,15 +64,14 @@ export const TodoList: React.FC<Props> = (props) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => selectTodoId(todo.id)}
+                onClick={() => onSelect(todo.id)}
               >
                 <span className="icon">
                   <i
-                    className={cn('far',
-                      {
-                        'fa-eye': selectedTodoId === 0,
-                        'fa-eye-slash': selectedTodoId === todo.id,
-                      })}
+                    className={cn('far', {
+                      'fa-eye': selectedTodoId === 0,
+                      'fa-eye-slash': selectedTodoId === todo.id,
+                    })}
                   />
                 </span>
               </button>
