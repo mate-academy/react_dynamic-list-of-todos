@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+export const TodoModal: FC = () => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -35,7 +35,7 @@ export const TodoModal: React.FC = () => {
               {/* <strong className="has-text-success">Done</strong> */}
               <strong className="has-text-danger">Planned</strong>
 
-              {' by '}
+              <span> by </span>
 
               <a href="mailto:Sincere@april.biz">
                 Leanne Graham

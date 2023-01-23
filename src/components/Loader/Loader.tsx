@@ -1,8 +1,15 @@
-import React from 'react';
+import { FC } from 'react';
 import './Loader.scss';
+import { Todo } from '../../types/Todo';
 
-export const Loader: React.FC = () => (
+type Props = {
+  todos: Todo[],
+};
+
+export const Loader: FC<Props> = ({ todos }) => (
   <div className="Loader" data-cy="loader">
-    <div className="Loader__content" />
+    {todos.length === 0 && (
+      <div className="Loader__content" />
+    )}
   </div>
 );
