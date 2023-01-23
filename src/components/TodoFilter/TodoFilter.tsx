@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 type Props = {
   selectStatus: string,
@@ -7,7 +7,7 @@ type Props = {
   onQueryChange: (value: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   selectStatus,
   onSelectStatus,
   query,
@@ -70,4 +70,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

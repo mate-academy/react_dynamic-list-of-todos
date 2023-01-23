@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
@@ -9,7 +9,7 @@ type Props = {
   onClose: (id: number | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
+export const TodoModal: React.FC<Props> = memo(({ selectedTodo, onClose }) => {
   const {
     id,
     title,
@@ -78,4 +78,4 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
       )}
     </div>
   );
-};
+});

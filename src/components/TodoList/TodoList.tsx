@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,7 +8,7 @@ type Props = {
   onSelected: (userId: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = memo(({
   todos,
   selectedId,
   onSelected,
@@ -51,7 +51,8 @@ export const TodoList: React.FC<Props> = ({
             )}
             <td className="is-vcentered is-expanded">
               <p
-                className={cn('has-text-success',
+                className={cn('',
+                  { 'has-text-success': todo.completed },
                   { 'has-text-danger': !todo.completed })}
               >
                 {todo.title}
@@ -79,4 +80,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-};
+});
