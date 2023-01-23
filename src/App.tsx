@@ -2,7 +2,7 @@ import React, {
   useEffect,
   useState,
   useMemo,
-//  useCallback,
+  useCallback,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -13,6 +13,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import './App.scss';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -30,9 +31,9 @@ export const App: React.FC = () => {
       .finally(() => setIsTodosLoading(false));
   }, []);
 
-  //  const unselectedUser = useCallback(() => {
-  //    setSelectedTodoId(0);
-  //  }, []);
+  const unselectedUser = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
 
   const visibleTodos = useMemo(() => {
     return todos.filter((todo) => (
@@ -40,9 +41,9 @@ export const App: React.FC = () => {
     ));
   }, [query, todos]);
 
-  // const selectedTodo = useMemo(() => {
-  //   return todos.find(todo => todo.id === selectedTodoId);
-  // }, [selectedTodoId, todos]);
+  const selectedTodo = useMemo(() => {
+    return todos.find(todo => todo.id === selectedTodoId);
+  }, [selectedTodoId, todos]);
 
   const isNoFiltersResult = query && !visibleTodos.length;
 
@@ -83,7 +84,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo
+      && <TodoModal todo={selectedTodo} onClose={unselectedUser} />}
     </>
   );
 };
