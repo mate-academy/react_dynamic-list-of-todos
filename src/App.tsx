@@ -1,78 +1,78 @@
-/* eslint-disable max-len */
 import React, {
-  useState,
+  useCallback,
   useEffect,
   useMemo,
-  useCallback,
+  useState,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-import { Todo } from './types/Todo';
-import { getTodos } from './api';
-import { debounce } from './components/helpers/debounce';
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [query, setQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [searchQuery, setSearchQuert] = useState('');
+  const [searchSelect, setSearchSelect] = useState('all');
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [isTodosError, setIsTodosError] = useState(false);
 
   useEffect(() => {
-    const loadTodos = async () => {
-      try {
-        const loadedTodos = await getTodos();
-
-        setTodos(loadedTodos);
-      } catch (error) {
-        setTodos([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadTodos();
+    setIsTodosLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(() => setIsTodosError(true))
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const debouncedCallback = useCallback(
-    debounce(setDebouncedQuery, 400),
-    [],
-  );
+  const selectTodoId = useCallback((todoId: number) => {
+    setSelectedTodoId(todoId);
+  }, []);
 
-  const handleInputChange = useCallback((value: string) => {
-    setQuery(value);
-    debouncedCallback(value);
+  const closeTodoModal = useCallback(() => {
+    setSelectedTodoId(0);
   }, []);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
-      const title = todo.title.toLowerCase();
-      const normalizeQuery = debouncedQuery.toLowerCase().trim();
-      const isTitleIncludesQuery = title.includes(normalizeQuery);
+      const isSearchQuery = todo
+        .title.toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
-      switch (filterStatus) {
+      let isSearchBySelect;
+
+      switch (searchSelect) {
         case 'completed':
-          return todo.completed && isTitleIncludesQuery;
+          isSearchBySelect = todo.completed;
+          break;
 
         case 'active':
-          return !todo.completed && isTitleIncludesQuery;
+          isSearchBySelect = !todo.completed;
+          break;
+
+        case 'all':
+          return isSearchQuery;
 
         default:
-          return isTitleIncludesQuery;
+          break;
       }
-    });
-  }, [todos, filterStatus, debouncedQuery]);
 
-  const selectedTodo = useMemo(() => (
-    todos.find(todo => todo.id === selectedTodoId)
-  ), [todos, selectedTodoId]);
+      return isSearchQuery && isSearchBySelect;
+    });
+  }, [todos, searchQuery, searchSelect]);
+
+  const isNoFiltersResult = searchQuery && !visibleTodos.length;
+
+  const selectedTodo = useMemo(() => {
+    return todos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, todos]);
 
   return (
     <>
@@ -83,33 +83,39 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                filterStatus={filterStatus}
-                onInputChange={handleInputChange}
-                onSelectChange={setFilterStatus}
+                query={searchQuery}
+                setQuery={setSearchQuert}
+                searchBySelect={searchSelect}
+                setSearchBySelect={setSearchSelect}
               />
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
+              {!isTodosLoading
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectTodoId={selectTodoId}
+                    selectedTodoId={selectedTodoId}
+                  />
+                )
+                : (
+                  <Loader />
+                )}
 
-              {visibleTodos.length > 0 && (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  onSelectedTodoIdChange={setSelectedTodoId}
-                />
+              {isTodosError && (
+                <p>Something went wrong</p>
+              )}
+
+              {isNoFiltersResult && (
+                <p>No todos matched filters</p>
               )}
             </div>
           </div>
         </div>
       </div>
-
       {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          onSelectedTodoIdChange={setSelectedTodoId}
-        />
+        <TodoModal todo={selectedTodo} closeModal={closeTodoModal} />
       )}
     </>
   );
