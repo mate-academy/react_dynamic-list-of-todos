@@ -20,24 +20,22 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    try {
-      getTodos()
-        .then(setTodos);
-    } catch (error) {
-      setTodos([]);
-    }
+    getTodos()
+      .then(setTodos)
+      // eslint-disable-next-line no-console
+      .catch(error => console.info(error));
   }, []);
 
   const handleSelectTodoId = useCallback((id: number) => {
     setSelectedTodoId(id);
   }, []);
 
-  const handleQuery = useCallback((value: string) => {
+  const handleChangeQuery = useCallback((value: string) => {
     setQuery(value);
   }, []);
   const handleDeleteQuery = useCallback(() => setQuery(''), []);
 
-  const handleStatus = useCallback((value : string) => setStatus(value), []);
+  const handleChangeStatus = useCallback((value : string) => setStatus(value), []);
   const handleCloseModal = useCallback(() => setSelectedTodoId(0), []);
 
   const selectedTodo = useMemo(() => (
@@ -57,8 +55,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQuery={handleQuery}
-                onStatus={handleStatus}
+                onQuery={handleChangeQuery}
+                onStatus={handleChangeStatus}
                 onDeleteQuery={handleDeleteQuery}
                 query={query}
                 status={status}

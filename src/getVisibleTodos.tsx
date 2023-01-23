@@ -22,7 +22,7 @@ export const getVisibleTodos = (
           break;
 
         case 'completed':
-          isStatusMatch = todo.completed;
+          isStatusMatch = todo.completed === true;
           break;
 
         default:
