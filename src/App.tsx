@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -16,10 +21,8 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filterBySelect, setFilterBySelect] = useState<string>('all');
 
-  let visibleTodos = todos;
-
-  if (filterBySelect !== 'all' || searchQuery) {
-    visibleTodos = todos.filter(todo => {
+  const visibleTodos = useMemo(() => (
+    todos.filter(todo => {
       const normalizedTitle = todo.title.toLowerCase();
       const normalizedQuery = searchQuery.toLowerCase().trim();
       const isQueryMatched = normalizedTitle.includes(normalizedQuery);
@@ -28,11 +31,11 @@ export const App: React.FC = () => {
 
       switch (filterBySelect) {
         case 'active':
-          isFilterBySelectMatched = todo.completed === false;
+          isFilterBySelectMatched = !todo.completed;
           break;
 
         case 'completed':
-          isFilterBySelectMatched = todo.completed === true;
+          isFilterBySelectMatched = todo.completed;
           break;
 
         default:
@@ -41,8 +44,8 @@ export const App: React.FC = () => {
       }
 
       return isQueryMatched && isFilterBySelectMatched;
-    });
-  }
+    })
+  ), [todos, filterBySelect]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,11 +56,14 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const onCloseModal = () => {
-    setSelectedTodoId(0);
-  };
+  const onCloseModal = useCallback(() => setSelectedTodoId(0), []);
+  const onSelectTodo = useCallback((id: number) => setSelectedTodoId(id), []);
+  const setQuery = useCallback((value: string) => setSearchQuery(value), []);
+  const setFilter = useCallback((value: string) => setFilterBySelect(value), []);
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [todos, selectedTodoId]);
 
   return (
     <>
@@ -69,19 +75,22 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={searchQuery}
-                setQuery={(value: string) => setSearchQuery(value)}
+                setQuery={setQuery}
                 filter={filterBySelect}
-                setFilter={(value: string) => setFilterBySelect(value)}
+                setFilter={setFilter}
               />
             </div>
 
             <div className="block">
-              {isLoading && (<Loader />)}
-              <TodoList
-                todos={visibleTodos}
-                selectedTodoId={selectedTodoId}
-                selectTodo={(id: number) => setSelectedTodoId(id)}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  onSelectTodo={onSelectTodo}
+                />
+              )}
             </div>
           </div>
         </div>

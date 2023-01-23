@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 
-export interface Props {
+interface Props {
   onClose: () => void,
   selectedTodo: Todo;
 }
-export const TodoModal: React.FC<Props> = (
+export const TodoModal: React.FC<Props> = memo((
   { onClose, selectedTodo },
 ) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -71,4 +71,4 @@ export const TodoModal: React.FC<Props> = (
         )}
     </div>
   );
-};
+});

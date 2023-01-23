@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 export interface Props {
   query: string,
@@ -7,11 +7,12 @@ export interface Props {
   setFilter: (value: string) => void,
 }
 
-export const TodoFilter: FC<Props> = (
-  {
-    query, setQuery, filter, setFilter,
-  },
-) => {
+export const TodoFilter: FC<Props> = memo(({
+  query,
+  setQuery,
+  filter,
+  setFilter,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -51,8 +52,7 @@ export const TodoFilter: FC<Props> = (
             />
           </span>
         )}
-
       </p>
     </form>
   );
-};
+});
