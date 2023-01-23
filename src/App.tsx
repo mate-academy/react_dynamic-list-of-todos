@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -10,53 +12,58 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import './App.css';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [searchQuery, setSearchQuert] = useState('');
   const [searchBySelect, setSearchBySelect] = useState('all');
+  const [, setIsTodosLoading] = useState(false);
 
   useEffect(() => {
+    setIsTodosLoading(true);
+
     getTodos()
-      .then((loadedTodos) => setTodos(loadedTodos));
+      .then(setTodos)
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const selectTodoId = (todoId: number) => {
-    setSelectedTodoId(todoId);
-  };
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-  const closeTodoModal = () => {
+      let isSearchBySelect;
+
+      switch (searchBySelect) {
+        case 'completed':
+          isSearchBySelect = todo.completed;
+          break;
+
+        case 'active':
+          isSearchBySelect = !todo.completed;
+          break;
+
+        case 'all':
+          return isSearchQuery;
+
+        default:
+          break;
+      }
+
+      return isSearchQuery && isSearchBySelect;
+    });
+  }, [searchBySelect, searchQuery, todos]);
+
+  const selectedTodo = useMemo(() => {
+    return visibleTodos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, visibleTodos]);
+
+  const unselectUser = useCallback(() => {
     setSelectedTodoId(0);
-  };
-
-  const visibleTodos = todos.filter(todo => {
-    const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-    let isSearchBySelect;
-
-    switch (searchBySelect) {
-      case 'completed':
-        isSearchBySelect = todo.completed;
-        break;
-
-      case 'active':
-        isSearchBySelect = !todo.completed;
-        break;
-
-      case 'all':
-        return isSearchQuery;
-
-      default:
-        break;
-    }
-
-    return isSearchQuery && isSearchBySelect;
-  });
-
-  const selectedTodo = visibleTodos.find(
-    todo => todo.id === selectedTodoId,
-  );
+  }, []);
 
   return (
     <>
@@ -79,7 +86,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodoId={selectTodoId}
+                    selectTodoId={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )
@@ -92,7 +99,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} closeModal={closeTodoModal} />
+        <TodoModal todo={selectedTodo} closeModal={unselectUser} />
       )}
     </>
   );
