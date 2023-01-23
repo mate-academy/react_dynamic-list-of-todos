@@ -1,50 +1,63 @@
 /* eslint-disable max-len */
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useEffect, useState, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
-import * as todosAPI from './api';
+import { getTodos } from './api';
+import './App.scss';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [chosenStatus, setChosenStatus] = useState('all');
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [isTodosLoadingError, setIsTodosLoadingError] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
-    todosAPI.getTodos()
-      .then(todo => setTodos(todo));
+    setIsTodosLoading(true);
+
+    getTodos()
+      .then((loadedTodos) => setTodos(loadedTodos))
+      .catch(() => setIsTodosLoadingError(true))
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const filterTodosByStatus = (sentStatus: string) => {
-    let filteredTodos = todos;
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const preparedQuery = query.toLowerCase().trim();
+      const isQueryInTitle = todo.title.toLowerCase().includes(preparedQuery);
 
-    switch (sentStatus) {
-      case 'active':
-        filteredTodos = todos.filter(todo => !todo.completed);
-        break;
+      switch (chosenStatus) {
+        case 'completed':
+          return todo.completed && isQueryInTitle;
 
-      case 'completed ':
-        filteredTodos = todos.filter(todo => todo.completed);
-        break;
+        case 'active':
+          return !todo.completed && isQueryInTitle;
 
-      default:
-        filteredTodos = todos;
-    }
+        default:
+          return isQueryInTitle;
+      }
+    });
+  }, [todos, query, chosenStatus]);
 
-    setTodos(filteredTodos);
-  };
+  const isNoMatchingTodos = query && !filteredTodos.length;
 
-  const filterTodosByTitle = (title: string) => {
-    const filteredTodos = todos.filter(
-      todo => todo.title.toLowerCase().includes(title.toLowerCase()),
-    );
+  const selectedTodo = useMemo(() => {
+    return todos.find(todo => todo.id === selectedTodoId);
+  }, [todos, selectedTodoId]);
 
-    setTodos(filteredTodos);
-  };
+  const closeModal = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
 
   return (
     <>
@@ -54,18 +67,43 @@ export const App: FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onSelection={filterTodosByStatus} onFilter={filterTodosByTitle} />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                chosenStatus={chosenStatus}
+                setChosenStatus={setChosenStatus}
+              />
             </div>
 
             <div className="block">
-              <Loader todos={todos} />
-              <TodoList todos={todos} />
+              {isTodosLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedTodoId={selectedTodoId}
+                    onSelect={setSelectedTodoId}
+                  />
+                )}
+
+              {isTodosLoadingError && (
+                <p>Error occured while loading todos</p>
+              )}
+
+              {isNoMatchingTodos && (
+                <p>None of todos is matching your criteria</p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 };

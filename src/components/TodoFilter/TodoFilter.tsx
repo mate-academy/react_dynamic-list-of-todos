@@ -1,29 +1,18 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 type Props = {
-  onSelection: (status: string) => void,
-  onFilter: (title: string) => void,
+  query: string,
+  setQuery: (query: string) => void,
+  chosenStatus: string,
+  setChosenStatus: (chosenStatus: string) => void,
 };
 
-export const TodoFilter: FC<Props> = ({ onSelection, onFilter }) => {
-  const [query, setQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-
+export const TodoFilter: FC<Props> = ({
+  query, setQuery, chosenStatus, setChosenStatus,
+}) => {
   const clearFilter = () => {
     setQuery('');
-    setSelectedStatus('all');
-  };
-
-  const handleStatusSelection = (sentStatus: string) => {
-    setSelectedStatus(sentStatus);
-
-    onSelection(selectedStatus);
-  };
-
-  const handleChange = (sentQuery: string) => {
-    setQuery(sentQuery);
-
-    onFilter(query);
+    setChosenStatus('all');
   };
 
   return (
@@ -34,8 +23,8 @@ export const TodoFilter: FC<Props> = ({ onSelection, onFilter }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedStatus}
-            onChange={(event) => handleStatusSelection(event.target.value)}
+            value={chosenStatus}
+            onChange={(event) => setChosenStatus(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -51,7 +40,7 @@ export const TodoFilter: FC<Props> = ({ onSelection, onFilter }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => handleChange(event.target.value)}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
