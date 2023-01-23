@@ -31,21 +31,24 @@ export const App: React.FC = () => {
 
   let visibleTodos = todos;
 
-  visibleTodos = useMemo(() => visibleTodos.filter((todo) => {
+  if (query) {
     const queryLowerCase = query.toLocaleLowerCase().trim();
-    const filterByTitle = todo.title.toLocaleLowerCase().includes(queryLowerCase);
 
+    visibleTodos = visibleTodos.filter((todo) => todo.title.toLocaleLowerCase().includes(queryLowerCase));
+  }
+
+  visibleTodos = useMemo(() => visibleTodos.filter((todo) => {
     switch (option) {
       case 'active':
-        return !todo.completed && filterByTitle;
+        return !todo.completed;
 
       case 'completed':
-        return todo.completed && filterByTitle;
+        return todo.completed;
 
       default:
-        return todo && filterByTitle;
+        return true;
     }
-  }), [option, visibleTodos, query]);
+  }), [option, visibleTodos]);
 
   const selectedTodo = useMemo(
     () => visibleTodos.find((todo) => todo.id === selectedTodoId),
