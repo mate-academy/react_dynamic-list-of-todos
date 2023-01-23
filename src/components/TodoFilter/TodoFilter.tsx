@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 
 type Props = {
   query: string;
-  setQuery: (value: string) => void;
+  setQuery: (query: string) => void;
   searchBySelect: string
-  setSearchBySelect: (value: string) => void;
+  setSearchBySelect: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
