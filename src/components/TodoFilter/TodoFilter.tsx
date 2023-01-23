@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface Props {
   onSelectFilter: (status: string) => void;
   filter: string;
@@ -5,7 +7,7 @@ interface Props {
   query: string;
 }
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   onSelectFilter,
   filter,
   onFilter,
@@ -13,11 +15,11 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const handleChangeFilterQuery = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ) => onFilter(event.currentTarget.value);
+  ) => onFilter(event.target.value);
 
   const handleChangeStatus = (
     event: React.ChangeEvent<HTMLSelectElement>,
-  ) => onSelectFilter(event.currentTarget.value);
+  ) => onSelectFilter(event.target.value);
 
   const handleClickResetFilter = () => onFilter('');
 
@@ -64,4 +66,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

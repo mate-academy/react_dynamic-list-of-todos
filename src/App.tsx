@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -21,53 +26,56 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  const selectFilter = (value: string) => {
+  const selectFilter = useCallback((value: string) => {
     setFilter(value);
-  };
+  }, []);
 
-  const setFilterQuery = (value: string) => {
+  const setFilterQuery = useCallback((value: string) => {
     setQuery(value);
-  };
+  }, []);
 
-  const selectTodoId = (todoId: number) => {
+  const selectTodoId = useCallback((todoId: number) => {
     setSelectedTodoId(todoId);
-  };
+  }, []);
 
-  const closeTodoModal = () => {
+  const closeTodoModal = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
   const normalizedQuery = query
     .toLowerCase()
     .split(' ')
     .filter(Boolean)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     .join(' ');
 
-  const visibleTodos = todos.filter(todo => {
-    const normalizedTodoTitle = todo.title.toLowerCase();
-    const isSearchQueryMatch = normalizedTodoTitle.includes(normalizedQuery);
+  const visibleTodos = useMemo<Todo[]>(() => {
+    return todos.filter(todo => {
+      const normalizedTodoTitle = todo.title.toLowerCase();
+      const isSearchQueryMatch = normalizedTodoTitle.includes(normalizedQuery);
 
-    let isStatusMatch = true;
+      let isStatusMatch = true;
 
-    switch (filter) {
-      case 'active':
-        isStatusMatch = !todo.completed;
-        break;
+      switch (filter) {
+        case 'active':
+          isStatusMatch = !todo.completed;
+          break;
 
-      case 'completed':
-        isStatusMatch = todo.completed;
-        break;
+        case 'completed':
+          isStatusMatch = todo.completed;
+          break;
 
-      default:
-        isStatusMatch = true;
-    }
+        default:
+          isStatusMatch = true;
+      }
 
-    return isSearchQueryMatch && isStatusMatch;
-  });
+      return isSearchQueryMatch && isStatusMatch;
+    });
+  }, [filter, normalizedQuery, todos]);
 
-  const selectedTodo = visibleTodos.find(
+  const selectedTodo = useMemo(() => visibleTodos.find(
     todo => todo.id === selectedTodoId,
-  );
+  ), [selectedTodoId, visibleTodos]);
 
   return (
     <>
@@ -86,7 +94,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length
+              {visibleTodos.length
                 ? (
                   <TodoList
                     todos={visibleTodos}

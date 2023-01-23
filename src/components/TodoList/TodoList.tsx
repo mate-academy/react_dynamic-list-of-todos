@@ -1,4 +1,5 @@
-import React from 'react';
+import cn from 'classnames';
+import React, { memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
   selectedTodoId: number;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = memo(({
   todos, selectedTodoId, onSelectTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -26,7 +27,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => (
-        <tr data-cy="todo" className="" key={todo.id}>
+        <tr data-cy="todo" key={todo.id}>
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
@@ -37,9 +38,10 @@ export const TodoList: React.FC<Props> = ({
           </td>
           <td className="is-vcentered is-expanded">
             <p
-              className={todo.completed
-                ? 'has-text-success'
-                : 'has-text-danger'}
+              className={cn({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
             >
               {todo.title}
             </p>
@@ -60,4 +62,4 @@ export const TodoList: React.FC<Props> = ({
       ))}
     </tbody>
   </table>
-);
+));
