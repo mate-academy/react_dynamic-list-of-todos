@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,35 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [sortType, setSortType] = useState('all');
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  const getTodo = (): Todo => {
+    return todos.find(todo => todo.id === selectedTodoId) || todos[0];
+  };
+
+  const filteredTodos: Todo[] = todos.filter(todo => {
+    if (sortType === 'active') {
+      return !todo.completed;
+    }
+
+    if (sortType === 'completed') {
+      return todo.completed;
+    }
+
+    return true;
+  }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+
   return (
     <>
       <div className="section">
@@ -17,18 +44,18 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter setSortType={setSortType} sortType={sortType} query={query} setQuery={setQuery} />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0 && <Loader />}
+              <TodoList todos={filteredTodos} setSelectedTodoId={setSelectedTodoId} selectedTodoId={selectedTodoId} />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodoId && <TodoModal selectedTodo={getTodo()} setSelectedTodoId={setSelectedTodoId} />}
     </>
   );
 };
