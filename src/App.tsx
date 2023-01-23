@@ -22,6 +22,8 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectFilterType, setSelectFilterType] = useState('all');
+  const [isTodoLoading, setIsTodoLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const debouncedCallback = useCallback(
     debounce(setDebouncedQuery, 500),
@@ -58,8 +60,12 @@ export const App: React.FC = () => {
   const onCloseModal = useCallback(() => setTodoId(0), []);
 
   useEffect(() => {
+    setIsTodoLoading(true);
+
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => setIsError(true))
+      .finally(() => setIsTodoLoading(false));
   }, []);
 
   return (
@@ -79,16 +85,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length ? (
+              {isTodoLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={todoId}
                   selectTodo={handleSelectTodo}
                 />
-              ) : (
-                <Loader />
               )}
             </div>
+
+            {isError && (
+              <p>There is an error</p>
+            )}
           </div>
         </div>
       </div>
