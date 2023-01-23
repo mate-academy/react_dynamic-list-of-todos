@@ -1,8 +1,25 @@
-export const TodoFilter = () => (
+import { memo } from 'react';
+
+type Props = {
+  query: string,
+  onSearch: (query: string) => void,
+  filter: string,
+  toFilter: (filterType: string) => void,
+};
+
+export const TodoFilter: React.FC<Props> = memo((
+  {
+    query, onSearch, filter, toFilter,
+  },
+) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={(event) => toFilter(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,19 +33,23 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => onSearch(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
-
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onSearch('')}
+          />
+        </span>
+      )}
     </p>
   </form>
-);
+));

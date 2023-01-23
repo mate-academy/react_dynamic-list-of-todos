@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,13 +10,46 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum SortType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState('all');
 
-  getTodos()
-    .then(data => (setTodosList(() => data)))
-    .then(() => setLoading(false));
+  useEffect(() => {
+    getTodos()
+      .then(data => (setTodosList(() => data)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const getSelected = (allTodos: Todo[]): Todo[] => {
+    return allTodos.filter(item => {
+      switch (filter) {
+        case SortType.ALL:
+          return true;
+
+        case SortType.COMPLETED:
+          return item.completed === true;
+
+        case SortType.ACTIVE:
+          return item.completed === false;
+
+        default: return true;
+      }
+    });
+  };
+
+  const visibleTodos = useMemo(() => {
+    const selected = getSelected(todosList);
+
+    return selected.filter(todo => todo.title.includes(searchQuery));
+  }, [searchQuery, todosList, filter]);
 
   return (
     <>
@@ -26,7 +59,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={searchQuery}
+                onSearch={setSearchQuery}
+                filter={filter}
+                toFilter={setFilter}
+              />
             </div>
 
             <div className="block">
@@ -34,7 +72,7 @@ export const App: React.FC = () => {
                 <Loader />
               )}
               {todosList.length && (
-                <TodoList todos={todosList} />
+                <TodoList todos={visibleTodos} />
               )}
             </div>
           </div>
