@@ -45,7 +45,7 @@ export const App: React.FC = () => {
 
       return isQueryMatched && isFilterBySelectMatched;
     })
-  ), [todos, filterBySelect]);
+  ), [todos, filterBySelect, searchQuery]);
 
   useEffect(() => {
     setIsLoading(true);

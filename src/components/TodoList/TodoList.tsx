@@ -65,8 +65,7 @@ export const TodoList: React.FC<Props> = memo(({
                     <i className="far fa-eye-slash" />
                   </span>
                 </button>
-              )
-              : (
+              ) : (
                 <button
                   data-cy="selectButton"
                   className="button"
