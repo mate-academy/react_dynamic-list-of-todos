@@ -26,7 +26,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => setTodos([]));
   }, []);
 
   const closeModal = useCallback(() => (
