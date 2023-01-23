@@ -1,5 +1,9 @@
-/* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -27,11 +31,15 @@ export const App: React.FC = () => {
 
   const selectedTodo = useMemo(() => {
     return todos.find(todo => todo.id === selectTodoId) || null;
-  }, [selectTodoId]);
+  }, [selectTodoId, todos]);
 
   const visibleTodos = useMemo(() => (
     getFilteredTodos(todos, selectedFilter, searchQuery)
   ), [todos, selectedFilter, searchQuery]);
+
+  const unselecedUser = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
 
   return (
     <>
@@ -69,7 +77,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             todo={selectedTodo}
-            onClose={() => setSelectedTodoId(0)}
+            onClose={unselecedUser}
           />
         )}
     </>
