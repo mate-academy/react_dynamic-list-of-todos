@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -10,12 +10,12 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoModal: React.FC<Props> = ({ onCloseModal, todo }) => {
+export const TodoModal: React.FC<Props> = memo(({ onCloseModal, todo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(todo.userId).then((usersFromApi) => setUser(usersFromApi));
-  }, []);
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -67,4 +67,4 @@ export const TodoModal: React.FC<Props> = ({ onCloseModal, todo }) => {
       )}
     </div>
   );
-};
+});

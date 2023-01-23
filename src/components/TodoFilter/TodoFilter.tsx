@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 type Props = {
   query: string;
@@ -7,7 +7,7 @@ type Props = {
   setOption: (event: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = memo(({
   query,
   onQuery,
   option,
@@ -60,4 +60,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});
