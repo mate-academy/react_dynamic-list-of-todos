@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [filterBySelect, setFilterBySelect] = useState<string>('all');
+  const [complitedFilter, setComplitedFilter] = useState<string>('all');
 
   const visibleTodos = useMemo(() => (
     todos.filter(todo => {
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
 
       let isFilterBySelectMatched = null;
 
-      switch (filterBySelect) {
+      switch (complitedFilter) {
         case 'active':
           isFilterBySelectMatched = !todo.completed;
           break;
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
 
       return isQueryMatched && isFilterBySelectMatched;
     })
-  ), [todos, filterBySelect, searchQuery]);
+  ), [todos, complitedFilter, searchQuery]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
   const onCloseModal = useCallback(() => setSelectedTodoId(0), []);
   const onSelectTodo = useCallback((id: number) => setSelectedTodoId(id), []);
   const setQuery = useCallback((value: string) => setSearchQuery(value), []);
-  const setFilter = useCallback((value: string) => setFilterBySelect(value), []);
+  const setFilter = useCallback((value: string) => setComplitedFilter(value), []);
 
   const selectedTodo = useMemo(() => (
     todos.find(todo => todo.id === selectedTodoId)
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={searchQuery}
                 setQuery={setQuery}
-                filter={filterBySelect}
+                filter={complitedFilter}
                 setFilter={setFilter}
               />
             </div>
