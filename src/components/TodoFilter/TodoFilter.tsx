@@ -30,7 +30,12 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
 
-      <p className="control is-expanded has-icons-left has-icons-right">
+      <p className="
+        control
+        is-expanded
+        has-icons-left
+        has-icons-right"
+      >
         <input
           data-cy="searchInput"
           type="text"

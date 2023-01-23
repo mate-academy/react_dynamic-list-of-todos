@@ -13,13 +13,13 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     (async () => {
       try {
@@ -27,10 +27,10 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch {
-        setError(true);
+        setIsError(true);
       }
 
-      setLoading(false);
+      setIsLoading(false);
     })();
   }, []);
 
@@ -78,23 +78,17 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {error ? (
-              <div className="block">
-                <h3>An error occurred on load todos</h3>
-              </div>
-            ) : (
-              <div className="block">
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-                  />
-                )}
-              </div>
-            )}
+            <div className="block">
+              {isError && <h3>An error occurred on load todos</h3>}
+              {isLoading && <Loader />}
+              {!isLoading && !isError && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
