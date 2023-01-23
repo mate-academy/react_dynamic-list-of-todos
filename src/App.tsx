@@ -55,7 +55,7 @@ export const App: React.FC = () => {
     }
   }), [debouncedQuery, todos, selectFilterType]);
 
-  const selectedTodo = useMemo(() => todos.find(todo => todo.id === todoId), [todoId]);
+  const selectedTodo = useMemo(() => todos.find(todo => todo.id === todoId), [todoId, todos]);
   const handleSelectTodo = useCallback((id: number) => setTodoId(id), []);
   const onCloseModal = useCallback(() => setTodoId(0), []);
 
