@@ -12,11 +12,17 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = memo(({ todo, onClose }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>();
+  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [isUserError, setIsUserError] = useState(false);
 
   useEffect(() => {
+    setIsUserLoading(true);
+
     getUser(todo.userId)
-      .then(setUser);
+      .then(setUser)
+      .catch(() => setIsUserError(true))
+      .finally(() => setIsUserLoading(false));
   }, [todo.userId]);
 
   const handleClickCloseModal = () => onClose();
@@ -25,7 +31,7 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user
+      {isUserLoading
         ? <Loader />
         : (
           <div className="modal-card">
@@ -59,13 +65,17 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onClose }) => {
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>
           </div>
         )}
+
+      {isUserError && (
+        <p className="has-text-danger">Can not load user</p>
+      )}
     </div>
   );
 });

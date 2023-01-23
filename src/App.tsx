@@ -20,10 +20,16 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [isTodosError, setIsTodosError] = useState(false);
 
   useEffect(() => {
+    setIsTodosLoading(true);
+
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => setIsTodosError(true))
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
   const selectFilter = useCallback((value: string) => {
@@ -77,6 +83,8 @@ export const App: React.FC = () => {
     todo => todo.id === selectedTodoId,
   ), [selectedTodoId, visibleTodos]);
 
+  const isNoFiltredTodos = query && !visibleTodos.length;
+
   return (
     <>
       <div className="section">
@@ -94,7 +102,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length
+              {!isTodosLoading
                 ? (
                   <TodoList
                     todos={visibleTodos}
@@ -103,6 +111,18 @@ export const App: React.FC = () => {
                   />
                 )
                 : <Loader />}
+
+              {isTodosError && (
+                <p className="has-text-danger">Can not load todos.</p>
+              )}
+
+              {isNoFiltredTodos && (
+                <p
+                  className="has-text-danger"
+                >
+                  no matched todos
+                </p>
+              )}
             </div>
           </div>
         </div>
