@@ -10,6 +10,7 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { FilterType } from './types/FilterType';
+import { getFiltredTodos } from './helpers/getFiltredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -32,25 +33,7 @@ export const App: React.FC = () => {
   }, [selectedTodoId]);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const normalizeTodoTitle = todo.title.toLowerCase();
-
-      const isTitleFilterMatch = titleFilter
-        ? normalizeTodoTitle.includes(titleFilter.toLowerCase())
-        : true;
-
-      switch (selectedFilter) {
-        case FilterType.ACTIVE:
-          return !todo.completed && isTitleFilterMatch;
-
-        case FilterType.COMPLETED:
-          return todo.completed && isTitleFilterMatch;
-
-        case FilterType.NONE:
-        default:
-          return isTitleFilterMatch;
-      }
-    });
+    return getFiltredTodos(todos, titleFilter, selectedFilter);
   }, [selectedFilter, titleFilter, todos]);
 
   return (
