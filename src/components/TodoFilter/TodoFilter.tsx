@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 type Props = {
   query: string;
@@ -7,7 +7,7 @@ type Props = {
   onFilterStatusChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const TodoFilter: FC<Props> = (props) => {
+export const TodoFilter: FC<Props> = memo((props) => {
   const {
     query,
     filterStatus,
@@ -58,4 +58,4 @@ export const TodoFilter: FC<Props> = (props) => {
       </p>
     </form>
   );
-};
+});

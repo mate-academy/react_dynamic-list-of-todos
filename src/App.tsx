@@ -15,9 +15,14 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    getTodos().then(todosFromServ => setTodos(todosFromServ));
+    try {
+      getTodos().then(setTodos);
+    } catch {
+      setIsError(true);
+    }
   }, []);
 
   const selectedTodo = useMemo(() => (
@@ -48,34 +53,38 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+      {isError
+        ? <h1>Ooops, looks like smth went wrong</h1>
+        : (
+          <div className="section">
+            <div className="container">
+              <div className="box">
+                <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                query={query}
-                filterStatus={filterStatus}
-                onInputChange={setQuery}
-                onFilterStatusChange={setFilterStatus}
-              />
-            </div>
-
-            <div className="block">
-              {todos.length > 0
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    onSelectedTodoIdChange={setSelectedTodoId}
+                <div className="block">
+                  <TodoFilter
+                    query={query}
+                    filterStatus={filterStatus}
+                    onInputChange={setQuery}
+                    onFilterStatusChange={setFilterStatus}
                   />
-                )
-                : <Loader />}
+                </div>
+
+                <div className="block">
+                  {todos.length > 0
+                    ? (
+                      <TodoList
+                        todos={visibleTodos}
+                        selectedTodo={selectedTodo}
+                        onSelectedTodoIdChange={setSelectedTodoId}
+                      />
+                    )
+                    : <Loader />}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
 
       {selectedTodo && (
         <TodoModal

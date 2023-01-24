@@ -11,16 +11,24 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = memo((props) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
 
   const { selectedTodo, onSelectedTodoIdChange } = props;
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(userFromServ => setUser(userFromServ));
+    try {
+      getUser(selectedTodo.userId).then(setUser);
+    } catch {
+      setIsError(true);
+    }
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
+      {isError && (
+        <h1>Ooops, looks like smth went wrong</h1>
+      )}
 
       {user === null
         ? <Loader />
