@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [searchQuery, setSearchQuert] = useState('');
   const [searchBySelect, setSearchBySelect] = useState('all');
-  const [, setIsTodosLoading] = useState(false);
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
 
   useEffect(() => {
     setIsTodosLoading(true);
@@ -82,16 +82,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length > 0
-                ? (
+              {isTodosLoading
+                ? <Loader />
+                : (
                   <TodoList
                     todos={visibleTodos}
                     selectTodoId={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
-                )
-                : (
-                  <Loader />
                 )}
             </div>
           </div>
