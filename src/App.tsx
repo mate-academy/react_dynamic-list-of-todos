@@ -53,7 +53,7 @@ export const App: React.FC = () => {
     setQuery(value);
   }, []);
 
-  const getFilteredTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filteredStatus) {
         case FilterStatus.COMPLETED: {
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={getFilteredTodos}
+                  todos={filteredTodos}
                   selectedId={selectedTodo?.id}
                   onSelected={handelSelectedTodo}
                 />
