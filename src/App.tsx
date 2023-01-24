@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,30 +26,34 @@ export const App: React.FC = () => {
       .finally(() => setIsLoaded(true));
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const normalizedTitle = todo.title.toLowerCase();
-    const normalizedQuery = searchQuery
-      .toLowerCase()
-      .split(' ')
-      .filter(Boolean)
-      .join(' ');
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const normalizedTitle = todo.title.toLowerCase();
+      const normalizedQuery = searchQuery
+        .toLowerCase()
+        .split(' ')
+        .filter(Boolean)
+        .join(' ');
 
-    const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
+      const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
 
-    switch (statusFilter) {
-      case 'active':
-        return !todo.completed && isTitleIncludesQuery;
+      switch (statusFilter) {
+        case 'active':
+          return !todo.completed && isTitleIncludesQuery;
 
-      case 'completed':
-        return todo.completed && isTitleIncludesQuery;
+        case 'completed':
+          return todo.completed && isTitleIncludesQuery;
 
-      case 'all':
-      default:
-        return isTitleIncludesQuery;
-    }
-  });
+        case 'all':
+        default:
+          return isTitleIncludesQuery;
+      }
+    });
+  }, [todos, statusFilter]);
 
-  const selectedTodo = visibleTodos.find(todo => (todo.id === selectedTodoId)) || null;
+  const selectedTodo = useMemo(() => {
+    return visibleTodos.find(todo => (todo.id === selectedTodoId)) || null;
+  }, [visibleTodos, selectedTodoId]);
 
   return (
     <>
