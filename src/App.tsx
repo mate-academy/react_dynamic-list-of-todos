@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -23,7 +28,6 @@ function handleQuery(todoTitle: string, query: string) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [filteredStatus, setFilteredStatus] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
 
@@ -34,23 +38,23 @@ export const App: React.FC = () => {
   );
 
   const requestedTodos = async () => (
-    setInitialTodos(await getTodos())
+    setTodos(await getTodos())
   );
 
   useEffect(() => {
     requestedTodos();
   }, []);
 
-  const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatus = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilteredStatus(event.target.value);
-  };
+  }, []);
 
-  const handleQueryChange = (value: string) => {
+  const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
-  };
+  }, []);
 
-  const getFilteredTodos = () => {
-    return initialTodos.filter(todo => {
+  const getFilteredTodos = useMemo(() => {
+    return todos.filter(todo => {
       switch (filteredStatus) {
         case FilterStatus.COMPLETED: {
           return todo.completed && handleQuery(todo.title, query);
@@ -64,11 +68,7 @@ export const App: React.FC = () => {
           return handleQuery(todo.title, query);
       }
     });
-  };
-
-  useEffect(() => {
-    setTodos(getFilteredTodos);
-  }, [initialTodos, query, filteredStatus]);
+  }, [todos, query, filteredStatus]);
 
   return (
     <>
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={getFilteredTodos}
                   selectedId={selectedTodo?.id}
                   onSelected={handelSelectedTodo}
                 />
