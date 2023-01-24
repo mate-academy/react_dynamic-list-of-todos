@@ -1,26 +1,25 @@
 import { Todo } from '../../types/Todo';
 
-export const getTodosIncludesQuery = (todos: Todo[], query: string) => {
-  const queryLowerCase = query.toLocaleLowerCase().trim();
-
-  return todos
-    .filter((todo) => todo.title.toLocaleLowerCase().includes(queryLowerCase));
-};
-
-export const getTodosFilteredByCompleted = (
+export const getTodosFilteredByCompletedAndIncludesQuery = (
   todos: Todo[],
   filterByCompleted: string,
+  query: string,
 ) => {
   return todos.filter((todo: Todo) => {
+    const queryLowerCase = query.toLocaleLowerCase().trim();
+
+    const filterByTitle = todo.title.toLocaleLowerCase()
+      .includes(queryLowerCase);
+
     switch (filterByCompleted) {
       case 'active':
-        return !todo.completed;
+        return !todo.completed && filterByTitle;
 
       case 'completed':
-        return todo.completed;
+        return todo.completed && filterByTitle;
 
       default:
-        return true;
+        return todo && filterByTitle;
     }
   });
 };
