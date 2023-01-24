@@ -13,44 +13,43 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoadError, setIsLoadError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState('');
-  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setIsLoaded(true);
-      });
+      .then(setTodos)
+      .catch(() => setIsLoadError(true))
+      .finally(() => setIsLoaded(true));
   }, []);
 
-  let visibleTodos = todos;
+  const visibleTodos = todos.filter(todo => {
+    const normalizedTitle = todo.title.toLowerCase();
+    const normalizedQuery = searchQuery
+      .toLowerCase()
+      .split(' ')
+      .filter(Boolean)
+      .join(' ');
 
-  if (query) {
-    visibleTodos = visibleTodos.filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
-    ));
-  }
+    const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
 
-  if (selectedFilter) {
-    switch (selectedFilter) {
+    switch (statusFilter) {
       case 'active':
-        visibleTodos = visibleTodos.filter(todo => !todo.completed);
-        break;
+        return !todo.completed && isTitleIncludesQuery;
 
       case 'completed':
-        visibleTodos = visibleTodos.filter(todo => todo.completed);
-        break;
+        return todo.completed && isTitleIncludesQuery;
 
       case 'all':
       default:
-        break;
+        return isTitleIncludesQuery;
     }
-  }
+  });
 
-  const selectedTodo = todos.find(todo => (todo.id === selectedTodoId)) || null;
+  const selectedTodo = visibleTodos.find(todo => (todo.id === selectedTodoId)) || null;
 
   return (
     <>
@@ -61,22 +60,26 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectedFilter={selectedFilter}
-                onFilterSelect={setSelectedFilter}
-                query={query}
-                onQueryChange={setQuery}
+                selectedFilter={statusFilter}
+                onFilterSelect={setStatusFilter}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
               />
             </div>
 
             <div className="block">
-              {!isLoaded && <Loader />}
-
-              {isLoaded && (
+              {!isLoaded ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   onTodoSelect={setSelectedTodoId}
                   selectedTodoId={selectedTodoId}
                 />
+              )}
+
+              {isLoadError && (
+                <p>We are unable to load todos now, try again later</p>
               )}
             </div>
           </div>

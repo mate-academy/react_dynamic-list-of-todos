@@ -18,9 +18,7 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(userFromServer => {
-          setTodoOwner(userFromServer);
-        });
+        .then(setTodoOwner);
     }
   }, []);
 
