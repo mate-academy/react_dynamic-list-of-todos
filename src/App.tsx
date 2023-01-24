@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -21,36 +21,40 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const lowerTitle = todo.title.toLowerCase();
-    const normalizedQuery = query.toLowerCase().trim();
+  const visibleTodos = useMemo(() => (
+    todos.filter(todo => {
+      const lowerTitle = todo.title.toLowerCase();
+      const normalizedQuery = query.toLowerCase().trim();
 
-    const isQueryMatch = lowerTitle.includes(normalizedQuery);
-    let isStatus = true;
+      const isQueryMatch = lowerTitle.includes(normalizedQuery);
+      let isStatus = true;
 
-    switch (status) {
-      case 'active':
-        isStatus = !todo.completed;
-        break;
+      switch (status) {
+        case 'active':
+          isStatus = !todo.completed;
+          break;
 
-      case 'completed':
-        isStatus = todo.completed;
-        break;
+        case 'completed':
+          isStatus = todo.completed;
+          break;
 
-      default:
-        isStatus = true;
-    }
+        default:
+          isStatus = true;
+      }
 
-    return isQueryMatch && isStatus;
-  });
+      return isQueryMatch && isStatus;
+    })
+  ), [todos, query, status]);
 
   const selectTodoId = (todoId: number) => {
     setSelectedTodoId(todoId);
   };
 
-  const selectedTodo = visibleTodos.find(todo => (
-    todo.id === selectedTodoId
-  ));
+  const selectedTodo = useMemo(() => (
+    visibleTodos.find(todo => (
+      todo.id === selectedTodoId
+    ))
+  ), [visibleTodos, selectTodoId]);
 
   const closeSelectedTodo = () => {
     setSelectedTodoId(0);
