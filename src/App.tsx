@@ -35,20 +35,20 @@ export const App: React.FC = () => {
     return todos.filter(todo => {
       const normalizeTodoTitle = todo.title.toLowerCase();
 
-      const isTitleFilterMuth = titleFilter
+      const isTitleFilterMatch = titleFilter
         ? normalizeTodoTitle.includes(titleFilter.toLowerCase())
         : true;
 
       switch (selectedFilter) {
         case FilterType.ACTIVE:
-          return !todo.completed && isTitleFilterMuth;
+          return !todo.completed && isTitleFilterMatch;
 
         case FilterType.COMPLETED:
-          return todo.completed && isTitleFilterMuth;
+          return todo.completed && isTitleFilterMatch;
 
         case FilterType.NONE:
         default:
-          return isTitleFilterMuth;
+          return isTitleFilterMatch;
       }
     });
   }, [selectedFilter, titleFilter, todos]);
