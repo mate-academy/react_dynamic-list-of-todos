@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { debounce } from 'lodash';
 import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
@@ -34,9 +39,11 @@ export const TodoFilter: React.FC<Props> = ({
     setQuery('');
   }, []);
 
-  const visibleTodos = filterByStatus().filter(
-    todo => todo.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
-  );
+  const visibleTodos = useMemo(() => {
+    return filterByStatus().filter(
+      todo => todo.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
+    );
+  }, [debouncedQuery, currentFilter]);
 
   useEffect(() => {
     onFilter(visibleTodos);
