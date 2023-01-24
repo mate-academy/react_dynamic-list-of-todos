@@ -3,7 +3,7 @@ import React from 'react';
 type Props = {
   query: string,
   filter: (value: string) => void,
-  onClose: () => void,
+  onReset: () => void,
   onSelectStatus: (value: string) => void,
   status: string,
 };
@@ -11,7 +11,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   query,
   filter,
-  onClose,
+  onReset,
   onSelectStatus,
   status,
 }) => (
@@ -50,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={onClose}
+            onClick={onReset}
           />
         )}
       </span>

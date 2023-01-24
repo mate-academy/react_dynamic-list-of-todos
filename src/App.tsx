@@ -83,7 +83,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 filter={filterByQuery}
-                onClose={clearQuery}
+                onReset={clearQuery}
                 onSelectStatus={selectStatus}
                 status={status}
               />
