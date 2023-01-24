@@ -1,20 +1,22 @@
 import React, { memo } from 'react';
 
 type Props = {
-  query: string;
-  onQuery: (event: string) => void;
-  option: string;
-  setOption: (event: string) => void;
+  titleFilter: string;
+  onTitleFilterChange: (event: string) => void;
+  completedFilter: string;
+  onChangeFilter: (event: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
-  query,
-  onQuery,
-  option,
-  setOption,
+  titleFilter,
+  onTitleFilterChange,
+  completedFilter,
+  onChangeFilter,
 }) => {
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOption(event.target.value);
+  const handleChangeFilterQuery = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    onChangeFilter(event.target.value);
   };
 
   return (
@@ -23,8 +25,8 @@ export const TodoFilter: React.FC<Props> = memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={handleSelectChange}
-            value={option}
+            onChange={handleChangeFilterQuery}
+            value={completedFilter}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -39,21 +41,21 @@ export const TodoFilter: React.FC<Props> = memo(({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
-          onChange={(event) => onQuery(event.currentTarget.value)}
+          value={titleFilter}
+          onChange={(event) => onTitleFilterChange(event.currentTarget.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query && (
+          {titleFilter && (
             /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQuery('')}
+              onClick={() => onTitleFilterChange('')}
             />
           )}
         </span>
