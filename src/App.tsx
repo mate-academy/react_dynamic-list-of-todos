@@ -13,38 +13,42 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState(0);
-  const [query, setQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [input, setInput] = useState('');
   const [selector, setSelector] = useState('All');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const closeTodoModal = useCallback(() => {
-    setTodoId(0);
+    setSelectedTodoId(0);
   }, []);
 
-  const handleSetTodo = useCallback((id:number) => {
-    setTodoId(id);
+  const handleSelectTodo = useCallback((id:number) => {
+    setSelectedTodoId(id);
   }, []);
 
-  const handleSetQuery = useCallback((word: string) => {
-    setQuery(word);
+  const handleChangeQuery = useCallback((word: string) => {
+    setInput(word);
   }, []);
 
-  const handleSetSelector = useCallback((option: string) => {
+  const handleChangeSelector = useCallback((option: string) => {
     setSelector(option);
   }, []);
 
   const handleDeleteQueryText = useCallback(() => {
-    setQuery('');
+    setInput('');
   }, []);
 
   useEffect(() => {
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const selectedTodo = useMemo(() => todos.find(todo => todo.id === todoId), [todoId]);
+  const selectedTodo = useMemo(() => todos.find(todo => todo.id === selectedTodoId), [selectedTodoId]);
 
-  const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(input.toLowerCase()));
 
   let visibleTodos = filteredTodos;
 
@@ -65,25 +69,32 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                onSearchQueryChange={handleSetQuery}
+                query={input}
+                onSearchQueryChange={handleChangeQuery}
                 selector={selector}
-                onSelectorChange={handleSetSelector}
+                onSelectorChange={handleChangeSelector}
                 onDeleteButtonClick={handleDeleteQueryText}
               />
             </div>
 
             <div className="block">
-              {!todos.length ? (
+              {isLoading ? (
                 <Loader />
               )
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodo={handleSetTodo}
-                    selectTodoId={todoId}
+                    selectTodo={handleSelectTodo}
+                    selectTodoId={selectedTodoId}
                   />
                 )}
+              {isError && (
+                <p>Something went wrong</p>
+              )}
+
+              {!visibleTodos.length && (
+                <p>No todos matched filters</p>
+              )}
             </div>
           </div>
         </div>

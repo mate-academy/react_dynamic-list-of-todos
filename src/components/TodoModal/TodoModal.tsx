@@ -14,17 +14,22 @@ export const TodoModal: React.FC<Props> = memo(({
   onClickCloseTodoModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(false);
 
   useEffect(() => {
+    setIsUserLoading(true);
+
     getUser(todo.userId)
-      .then(setUser);
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setIsUserLoading(false));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -58,8 +63,8 @@ export const TodoModal: React.FC<Props> = memo(({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

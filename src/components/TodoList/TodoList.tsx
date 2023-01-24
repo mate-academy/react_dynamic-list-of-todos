@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -31,7 +32,6 @@ export const TodoList: React.FC<Props> = memo(({
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className=""
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -44,9 +44,9 @@ export const TodoList: React.FC<Props> = memo(({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={todo.completed
-                  ? 'has-text-success'
-                  : 'has-text-danger'}
+                className={classNames('',
+                  { 'has-text-success': todo.completed },
+                  { 'has-text-danger': !todo.completed })}
               >
                 {todo.title}
               </p>
