@@ -12,6 +12,7 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingError, setIsLoadingError] = useState(false);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -19,6 +20,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then((response) => setTodos(response))
+      .catch(() => {
+        setIsLoadingError(true);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -60,12 +64,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (<Loader />)}
-              <TodoList
-                todos={filteredTodos()}
-                checkedTodo={selectedTodo}
-                onCheckedTodo={setSelectedTodo}
-              />
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos()}
+                    checkedTodo={selectedTodo}
+                    onCheckedTodo={setSelectedTodo}
+                  />
+                )}
+              {isLoadingError && (
+                <div className="notification is-danger is-light">
+                  An error occured when loading users!
+                </div>
+              )}
             </div>
           </div>
         </div>
