@@ -8,19 +8,18 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadingStatus, setLoadingStatus] = useState(true);
-  const [filter, setFilter] = useState<string>(Filter.all);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
       .then((response) => setTodos(response))
-      .then(() => setLoadingStatus(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = () => {
@@ -29,13 +28,13 @@ export const App: React.FC = () => {
 
     return querryResult.filter(todo => {
       switch (filter) {
-        case Filter.all:
+        case 'all':
           return todo;
 
-        case Filter.active:
+        case 'active':
           return !todo.completed;
 
-        case Filter.completed:
+        case 'completed':
           return todo.completed;
 
         default:
@@ -61,7 +60,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingStatus && (<Loader />)}
+              {isLoading && (<Loader />)}
               <TodoList
                 todos={filteredTodos()}
                 checkedTodo={selectedTodo}
