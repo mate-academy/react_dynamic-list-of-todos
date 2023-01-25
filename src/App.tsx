@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,6 +10,12 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+
+enum Filter {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -45,41 +51,42 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
-  useEffect(() => {
-    const todosFromServer = async () => {
-      const newTodos: Todo[] = await getTodos();
+  // eslint-disable-next-line consistent-return
+  const todosFromServer = async () => {
+    const newTodos: Todo[] = await getTodos();
 
-      if (selectedFilter === 'all') {
+    switch (selectedFilter) {
+      case Filter.completed:
+        return setVisibleTodos(newTodos.filter(todo => todo.completed === true));
+
+      case Filter.active:
+        return setVisibleTodos(newTodos.filter(todo => todo.completed === false));
+
+      case Filter.all:
+      default:
         setVisibleTodos(newTodos);
-      }
+    }
+  };
 
-      if (selectedFilter === 'completed') {
-        setVisibleTodos(newTodos.filter(todo => todo.completed === true));
-      }
+  useMemo(
+    todosFromServer,
+    [selectedFilter],
+  );
 
-      if (selectedFilter === 'active') {
-        setVisibleTodos(newTodos.filter(todo => todo.completed === false));
-      }
-    };
+  const userFromServer = async () => {
+    let newUser = null;
 
-    todosFromServer();
-  }, [selectedFilter]);
+    if (selectedTodo !== null) {
+      newUser = await getUser(selectedTodo.userId);
+    }
 
-  useEffect(() => {
-    const userFromServer = async () => {
-      let newUser = null;
+    setUser(newUser);
+  };
 
-      if (selectedTodo !== null) {
-        newUser = await getUser(selectedTodo.userId);
-      }
-
-      setUser(newUser);
-    };
-
-    userFromServer();
-  }, [selectedTodo]);
-
-  // console.log(user);
+  useMemo(
+    userFromServer,
+    [selectedTodo],
+  );
 
   const getVisibleTodos = () => {
     if (query !== '') {
