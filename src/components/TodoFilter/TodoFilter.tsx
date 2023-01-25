@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = memo(({
     event.preventDefault();
   };
 
-  const handleTodo = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTodoOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onQueryChange(event.target.value);
   };
 
@@ -26,7 +26,10 @@ export const TodoFilter: React.FC<Props> = memo(({
   };
 
   return (
-    <form className="field has-addons" onSubmit={handleSubmit}>
+    <form
+      className="field has-addons"
+      onSubmit={handleSubmit}
+    >
       <p className="control">
         <span className="select">
           <select
@@ -48,7 +51,7 @@ export const TodoFilter: React.FC<Props> = memo(({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleTodo}
+          onChange={handleTodoOnChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

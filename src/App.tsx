@@ -31,15 +31,15 @@ export const App: React.FC = () => {
   const [filteredStatus, setFilteredStatus] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
 
-  const handelSelectedTodo = (todoId: number | null) => (
+  const handelSelectedTodo = useCallback((todoId: number | null) => (
     todoId
       ? (setSelectedTodo(todos.find(todo => todo.id === todoId) || null))
       : setSelectedTodo(null)
-  );
+  ), []);
 
-  const requestedTodos = async () => (
+  const requestedTodos = useCallback(async () => (
     setTodos(await getTodos())
-  );
+  ), []);
 
   useEffect(() => {
     requestedTodos();
@@ -54,20 +54,22 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filteredStatus) {
-        case FilterStatus.COMPLETED: {
+    switch (filteredStatus) {
+      case FilterStatus.COMPLETED:
+        return todos.filter(todo => {
           return todo.completed && handleQuery(todo.title, query);
-        }
+        });
 
-        case FilterStatus.ACTIVE: {
+      case FilterStatus.ACTIVE:
+        return todos.filter(todo => {
           return !todo.completed && handleQuery(todo.title, query);
-        }
+        });
 
-        default:
+      default:
+        return todos.filter(todo => {
           return handleQuery(todo.title, query);
-      }
-    });
+        });
+    }
   }, [todos, query, filteredStatus]);
 
   return (
@@ -87,15 +89,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedId={selectedTodo?.id}
-                  onSelected={handelSelectedTodo}
-                />
-              )}
+              {!todos.length
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedId={selectedTodo?.id}
+                    onSelected={handelSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
