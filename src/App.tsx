@@ -12,9 +12,9 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 enum Filter {
-  all = 'all',
   completed = 'completed',
   active = 'active',
+  all = 'all',
 }
 
 export const App: React.FC = () => {
