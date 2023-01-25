@@ -13,17 +13,17 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoadError, setIsLoadError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [statusFilter, setStatusFilter] = useState('');
+  const [todosStatusFilter, setTodosStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => setIsLoadError(true))
-      .finally(() => setIsLoaded(true));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
 
       const isTitleIncludesQuery = normalizedTitle.includes(normalizedQuery);
 
-      switch (statusFilter) {
+      switch (todosStatusFilter) {
         case 'active':
           return !todo.completed && isTitleIncludesQuery;
 
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
           return isTitleIncludesQuery;
       }
     });
-  }, [todos, statusFilter]);
+  }, [todos, todosStatusFilter, searchQuery]);
 
   const selectedTodo = useMemo(() => {
     return visibleTodos.find(todo => (todo.id === selectedTodoId)) || null;
@@ -64,15 +64,15 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectedFilter={statusFilter}
-                onFilterSelect={setStatusFilter}
+                selectedFilter={todosStatusFilter}
+                onFilterSelect={setTodosStatusFilter}
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
               />
             </div>
 
             <div className="block">
-              {!isLoaded ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
