@@ -44,6 +44,7 @@ export const App: React.FC = () => {
   };
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId) as Todo;
+  const areTodosReady = !isLoading && !isLoadingFailed;
 
   return (
     <>
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
                 <p>No todos were loaded!</p>
               )}
 
-              {!isLoading && !isLoadingFailed && (
+              {areTodosReady && (
                 <TodoList
                   selectTodo={selectTodo}
                   selectedTodoId={selectedTodoId}

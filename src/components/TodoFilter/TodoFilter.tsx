@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { Todo } from '../../types/Todo';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   todos: Todo[];
@@ -30,10 +31,17 @@ export const TodoFilter:React.FC<Props> = ({
       );
     }
 
-    if (status !== 'all') {
-      filteredTodos = filteredTodos.filter(
-        todo => todo.completed === (status === 'completed'),
-      );
+    switch (status) {
+      case TodoStatus.All:
+        break;
+      case TodoStatus.Completed:
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+      case TodoStatus.Active:
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+      default:
+        break;
     }
 
     return filteredTodos;
@@ -43,17 +51,17 @@ export const TodoFilter:React.FC<Props> = ({
     setPreparedTodos(prepareTodos(todos));
   }, [status, debouncedQuery, todos]);
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  const handleQueryChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (event.target.name === 'title') {
-      setQuery(event.target.value);
-      applyQuery(event.target.value);
-    }
+    setQuery(event.target.value);
+    applyQuery(event.target.value);
+  };
 
-    if (event.target.name === 'status') {
-      setStatus(event.target.value);
-    }
+  const handleSelectClick = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setStatus(event.target.value);
   };
 
   return (
@@ -64,11 +72,11 @@ export const TodoFilter:React.FC<Props> = ({
             name="status"
             data-cy="statusSelect"
             value={status}
-            onChange={handleChange}
+            onChange={handleSelectClick}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -81,7 +89,7 @@ export const TodoFilter:React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleChange}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
