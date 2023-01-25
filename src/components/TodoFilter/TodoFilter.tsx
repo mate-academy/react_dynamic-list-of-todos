@@ -1,3 +1,5 @@
+import React from 'react';
+
 type Props = {
   filterType: string
   onFilter: React.Dispatch<React.SetStateAction<string>>,
@@ -5,7 +7,7 @@ type Props = {
   onChangeQuery: React.Dispatch<React.SetStateAction<string>>,
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   filterType,
   onFilter,
   query,
@@ -53,4 +55,4 @@ export const TodoFilter: React.FC<Props> = ({
       )}
     </p>
   </form>
-);
+));

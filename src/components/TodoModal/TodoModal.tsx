@@ -9,7 +9,7 @@ type Props = {
   onClose: () => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+export const TodoModal: React.FC<Props> = React.memo(({ todo, onClose }) => {
   const {
     userId,
     id,
@@ -73,4 +73,4 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       )}
     </div>
   );
-};
+});
