@@ -8,6 +8,7 @@ import React, {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getVisibleTodos } from './GetVisibleTodos';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -19,7 +20,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [completedFilter, setCompletedFilter] = useState('all');
 
   const handleSelectTodo = useCallback((id: number) => {
     setSelectedTodoId(id);
@@ -31,56 +32,20 @@ export const App: React.FC = () => {
 
   const deleteQuery = useCallback(() => setQuery(''), []);
 
-  const handleFilter = useCallback((str: string) => setFilter(str), []);
+  const handleFilter = useCallback((str: string) => setCompletedFilter(str), []);
   const closeModal = useCallback(() => setSelectedTodoId(0), []);
 
   const selectedTodo = useMemo(() => (
     todos.find(todo => todo.id === selectedTodoId)
   ), [selectedTodoId]);
 
-  const getVisibleTodos = (
-    todoOnPage: Todo[],
-    queryOnPage: string,
-    filterOnPage: string,
-  ) => {
-    if (filterOnPage !== 'all' || queryOnPage) {
-      return todoOnPage.filter(todo => {
-        const isIncluded = todo.title.toLowerCase().includes(query);
-        let isCompleted;
-
-        switch (filterOnPage) {
-          case 'active':
-            isCompleted = todo.completed === false;
-            break;
-
-          case 'completed':
-            isCompleted = todo.completed === true;
-            break;
-
-          default:
-            isCompleted = true;
-            break;
-        }
-
-        return isIncluded && isCompleted;
-      });
-    }
-
-    return todos;
-  };
-
   const visibleTodos = useMemo(() => (
-    getVisibleTodos(todos, query, filter)
-  ), [query, filter, todos]);
+    getVisibleTodos(todos, query, completedFilter)
+  ), [query, completedFilter, todos]);
 
   useEffect(() => {
-    async function fetchTodos() {
-      const todosFromServer = await getTodos();
-
-      setTodos(todosFromServer);
-    }
-
-    fetchTodos();
+    getTodos()
+      .then((loadedTodo) => setTodos(loadedTodo));
   }, []);
 
   return (
@@ -92,11 +57,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQuery={handleQuery}
-                onFilter={handleFilter}
-                queryValue={query}
-                filterValue={filter}
-                deleteQuery={deleteQuery}
+                onChangeQuery={handleQuery}
+                onChangeComplitedFilter={handleFilter}
+                query={query}
+                complitedFilter={completedFilter}
+                onClearQueryFilter={deleteQuery}
               />
             </div>
 
@@ -117,7 +82,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onCancelModal={closeModal} />
+        <TodoModal todo={selectedTodo} onCloseModal={closeModal} />
       )}
     </>
   );

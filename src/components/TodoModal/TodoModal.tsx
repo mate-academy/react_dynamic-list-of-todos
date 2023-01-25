@@ -6,10 +6,10 @@ import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
-  onCancelModal: () => void;
+  onCloseModal: () => void;
 }
 
-export const TodoModal: React.FC<Props> = memo(({ todo, onCancelModal }) => {
+export const TodoModal: React.FC<Props> = memo(({ todo, onCloseModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onCancelModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onCancelModal}
+              onClick={onCloseModal}
             />
           </header>
 

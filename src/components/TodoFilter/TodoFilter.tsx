@@ -1,19 +1,19 @@
 import { FC, memo } from 'react';
 
 interface Props {
-  onQuery: (str: string) => void;
-  onFilter: (str: string) => void;
-  deleteQuery: () => void;
-  queryValue: string;
-  filterValue: string;
+  onChangeQuery: (str: string) => void;
+  onChangeComplitedFilter: (str: string) => void;
+  query: string;
+  complitedFilter: string;
+  onClearQueryFilter: () => void;
 }
 
 export const TodoFilter: FC<Props> = memo(({
-  onQuery,
-  onFilter,
-  deleteQuery,
-  queryValue,
-  filterValue,
+  onChangeQuery,
+  onChangeComplitedFilter,
+  onClearQueryFilter,
+  query,
+  complitedFilter,
 }) => (
 
   <form className="field has-addons">
@@ -21,8 +21,8 @@ export const TodoFilter: FC<Props> = memo(({
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={filterValue}
-          onChange={(event) => onFilter(event.target.value)}
+          value={complitedFilter}
+          onChange={(event) => onChangeComplitedFilter(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -37,21 +37,21 @@ export const TodoFilter: FC<Props> = memo(({
         type="text"
         className="input"
         placeholder="Search..."
-        value={queryValue}
-        onChange={(event) => onQuery(event.target.value)}
+        value={query}
+        onChange={(event) => onChangeQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {queryValue && (
+      {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={deleteQuery}
+            onClick={onClearQueryFilter}
           />
         </span>
       )}
