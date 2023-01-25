@@ -1,8 +1,25 @@
-export const TodoFilter = () => (
+/* eslint-disable jsx-a11y/control-has-associated-label */
+type Props = {
+  selectedOption: string
+  searchQuery: string
+  onChangeSelect: (selectedOption: string) => void
+  onChangeSearch: (searchQuery: string) => void
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  selectedOption,
+  searchQuery,
+  onChangeSelect,
+  onChangeSearch,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          value={selectedOption}
+          onChange={(event) => onChangeSelect(event.target.value)}
+          data-cy="statusSelect"
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,18 +33,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={searchQuery}
+        onChange={(event) => onChangeSearch(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
+        {
+          searchQuery && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => onChangeSearch('')}
+            />
+          )
+        }
       </span>
     </p>
   </form>
