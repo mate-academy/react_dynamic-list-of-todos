@@ -18,7 +18,7 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
-  const waitForTodos = async () => {
+  const fetchTodos = async () => {
     await getTodos().then((todosFromServer) => {
       setTodos(todosFromServer);
       setFilteredTodos(todosFromServer);
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    waitForTodos();
+    fetchTodos();
   }, []);
 
   const onSelectTodo = useCallback(
@@ -56,17 +56,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                isLoading
-                  ? <Loader />
-                  : (
-                    <TodoList
-                      todos={filteredTodos}
-                      onSelectTodo={onSelectTodo}
-                      selectedId={selectedTodoId}
-                    />
-                  )
-              }
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onSelectTodo={onSelectTodo}
+                    selectedId={selectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
