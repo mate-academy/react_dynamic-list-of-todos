@@ -49,7 +49,10 @@ export const TodoFilter: React.FC<Props> = React.memo(
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQueryChange('')}
+              onClick={() => {
+                onQueryChange('');
+                onFilterSelect('all');
+              }}
             />
           </span>
         )}
