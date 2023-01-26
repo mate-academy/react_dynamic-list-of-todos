@@ -1,18 +1,19 @@
 import React from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   selectedFilter: string;
-  onFilterSelect: (selectedFilter: string) => void;
-  query: string;
-  onQueryChange: (query: string) => void;
+  selectFilterType: (selectedFilter: FilterType) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(
   ({
     selectedFilter,
-    onFilterSelect,
-    query,
-    onQueryChange,
+    selectFilterType,
+    searchQuery,
+    setSearchQuery,
   }) => (
     <form className="field has-addons">
       <p className="control">
@@ -20,11 +21,13 @@ export const TodoFilter: React.FC<Props> = React.memo(
           <select
             data-cy="statusSelect"
             value={selectedFilter}
-            onChange={(event) => onFilterSelect(event.currentTarget.value)}
+            onChange={(event) => {
+              selectFilterType(event.currentTarget.value as FilterType);
+            }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.ALL}>All</option>
+            <option value={FilterType.ACTIVE}>Active</option>
+            <option value={FilterType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -35,14 +38,14 @@ export const TodoFilter: React.FC<Props> = React.memo(
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
-          onChange={(event) => onQueryChange(event.currentTarget.value)}
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {searchQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
@@ -50,8 +53,8 @@ export const TodoFilter: React.FC<Props> = React.memo(
               type="button"
               className="delete"
               onClick={() => {
-                onQueryChange('');
-                onFilterSelect('all');
+                setSearchQuery('');
+                selectFilterType(FilterType.ALL);
               }}
             />
           </span>
