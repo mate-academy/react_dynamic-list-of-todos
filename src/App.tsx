@@ -33,7 +33,12 @@ export const App: FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
-      const preparedQuery = query.toLowerCase().trim();
+      const preparedQuery = query
+        .toLowerCase()
+        .split(' ')
+        .filter(Boolean)
+        .join(' ');
+
       const isQueryInTitle = todo.title.toLowerCase().includes(preparedQuery);
 
       switch (chosenStatus) {
@@ -52,8 +57,8 @@ export const App: FC = () => {
   const isNoMatchingTodos = query && !filteredTodos.length;
 
   const selectedTodo = useMemo(() => {
-    return todos.find(todo => todo.id === selectedTodoId);
-  }, [todos, selectedTodoId]);
+    return filteredTodos.find(todo => todo.id === selectedTodoId);
+  }, [filteredTodos, selectedTodoId]);
 
   const closeModal = useCallback(() => {
     setSelectedTodoId(0);
