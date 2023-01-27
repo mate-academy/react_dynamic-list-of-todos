@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +12,66 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+
+enum FilterStatus {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
+function handleQuery(todoTitle: string, query: string) {
+  return todoTitle.toLowerCase().includes(query.toLowerCase());
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filteredStatus, setFilteredStatus] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');
+
+  const handelSelectedTodo = useCallback((todoId: number | null) => (
+    todoId
+      ? (setSelectedTodo(todos.find(todo => todo.id === todoId) || null))
+      : setSelectedTodo(null)
+  ), []);
+
+  const requestedTodos = useCallback(async () => (
+    setTodos(await getTodos())
+  ), []);
+
+  useEffect(() => {
+    requestedTodos();
+  }, []);
+
+  const handleStatus = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilteredStatus(event.target.value);
+  }, []);
+
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(value);
+  }, []);
+
+  const filteredTodos = useMemo(() => {
+    switch (filteredStatus) {
+      case FilterStatus.COMPLETED:
+        return todos.filter(todo => {
+          return todo.completed && handleQuery(todo.title, query);
+        });
+
+      case FilterStatus.ACTIVE:
+        return todos.filter(todo => {
+          return !todo.completed && handleQuery(todo.title, query);
+        });
+
+      default:
+        return todos.filter(todo => {
+          return handleQuery(todo.title, query);
+        });
+    }
+  }, [todos, query, filteredStatus]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +80,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                selectStatus={filteredStatus}
+                onSelectStatus={handleStatus}
+                query={query}
+                onQueryChange={handleQueryChange}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!todos.length
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedId={selectedTodo?.id}
+                    onSelected={handelSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={handelSelectedTodo}
+        />
+      )}
     </>
   );
 };
