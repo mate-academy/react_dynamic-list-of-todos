@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,33 +11,34 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { filterTodos } from './helpers/helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-  const [personalTodo, setPersonalTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTodos, setSelectedTodos] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const onCloseModal = () => {
     setIsModalOpen(false);
-    setPersonalTodo(null);
+    setSelectedTodo(null);
   };
 
-  const handleSelectedTodos = (value: string) => {
-    setSelectedTodos(value);
+  const handleSelectTodosByFilter = (value: string) => {
+    setFilterType(value);
   };
 
   const handleSearchQuery = (event: React.SetStateAction<string>) => {
     setSearchQuery(event);
   };
 
-  const handleClickModalButton = (todo: Todo) => {
-    setPersonalTodo(todo);
+  const onSelectTodo = useCallback((todo: Todo) => {
+    setSelectedTodo(todo);
 
     setIsModalOpen(true);
-  };
+  }, []);
 
   const loadTodos = async () => {
     setIsFetching(true);
@@ -50,24 +53,13 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const filteredTodo = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-    switch (selectedTodos) {
-      case 'active':
-        return todo.completed === false && filteredTodo;
-        break;
-
-      case 'completed':
-        return todo.completed === true && filteredTodo;
-        break;
-
-      default:
-        break;
-    }
-
-    return filteredTodo;
-  });
+  const visibleTodos = useMemo(
+    () => filterTodos(
+      todos,
+      filterType,
+      searchQuery,
+    ), [todos, filterType, searchQuery],
+  );
 
   return (
     <>
@@ -78,8 +70,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectedTodos={selectedTodos}
-                handleSelectedTodos={handleSelectedTodos}
+                filterType={filterType}
+                handleSelectTodosByFilter={handleSelectTodosByFilter}
                 searchQuery={searchQuery}
                 handleSearchQuery={handleSearchQuery}
                 setSearchQuery={setSearchQuery}
@@ -91,10 +83,10 @@ export const App: React.FC = () => {
               : (
                 <div className="block">
                   <TodoList
-                    visibleTodos={visibleTodos}
-                    handleClickModalButton={handleClickModalButton}
+                    todos={visibleTodos}
+                    onSelectTodo={onSelectTodo}
                     isModalOpen={isModalOpen}
-                    personalTodo={personalTodo}
+                    selectedTodo={selectedTodo}
                   />
                 </div>
               )}
@@ -103,10 +95,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {personalTodo && isModalOpen
+      {selectedTodo && isModalOpen
         && (
           <TodoModal
-            personalTodo={personalTodo}
+            selectedTodo={selectedTodo}
             onCloseModal={onCloseModal}
           />
         )}

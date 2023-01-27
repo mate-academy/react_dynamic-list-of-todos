@@ -6,12 +6,12 @@ import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
 type Props = {
-  personalTodo: Todo,
+  selectedTodo: Todo,
   onCloseModal: () => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  personalTodo,
+  selectedTodo,
   onCloseModal,
 }) => {
   const [userName, setUserName] = useState('');
@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = ({
   const getLoadedUser = async () => {
     setIsFetching(true);
 
-    const loadedTodo = await getUser(personalTodo.userId);
+    const loadedTodo = await getUser(selectedTodo.userId);
 
     setUserName(loadedTodo.name);
 
@@ -44,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${personalTodo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -58,11 +58,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {personalTodo.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {personalTodo.completed
+              {selectedTodo.completed
                 ? (
                   <strong className="has-text-success">
                     Done

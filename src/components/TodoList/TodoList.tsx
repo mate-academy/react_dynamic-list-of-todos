@@ -2,14 +2,14 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  visibleTodos: Todo[],
-  handleClickModalButton: (todo: Todo) => void,
+  todos: Todo[],
+  onSelectTodo: (todo: Todo) => void,
   isModalOpen: boolean,
-  personalTodo: Todo | null,
+  selectedTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
-  visibleTodos, handleClickModalButton, isModalOpen, personalTodo,
+  todos, onSelectTodo, isModalOpen, selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -26,7 +26,7 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {visibleTodos.map(todo => {
+      {todos.map(todo => {
         return (
           <tr
             data-cy="todo"
@@ -62,10 +62,10 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleClickModalButton(todo)}
+                onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
-                  <i className={isModalOpen && personalTodo === todo
+                  <i className={isModalOpen && selectedTodo === todo
                     ? 'far fa-eye-slash'
                     : 'far fa-eye'}
                   />
