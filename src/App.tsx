@@ -25,7 +25,8 @@ export const App: React.FC = () => {
     setIsTodoLoading(true);
 
     getTodos()
-      .then((loadedTodos) => setTodos(loadedTodos))
+      .then(setTodos)
+      .catch(() => setTodos([]))
       .finally(() => setIsTodoLoading(false));
   }, []);
 

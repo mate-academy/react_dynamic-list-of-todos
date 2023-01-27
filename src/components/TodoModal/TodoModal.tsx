@@ -17,7 +17,8 @@ export const TodoModal: React.FC<Props> = memo(({ todo, closeTodoModal }) => {
     setIsUserLoading(true);
 
     getUser(todo.userId)
-      .then((loadedUser) => setUser(loadedUser))
+      .then(setUser)
+      .catch(() => setUser(null))
       .finally(() => setIsUserLoading(false));
   }, [todo.userId]);
 
