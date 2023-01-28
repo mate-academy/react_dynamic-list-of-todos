@@ -1,8 +1,11 @@
+import { Dispatch, SetStateAction } from 'react';
+import { FilterOption } from '../../enums/FilterOptions';
+
 type Props = {
   filterOption: string,
   query: string,
-  setFilterOption: (filterOption: string) => void,
-  setQuery: (query: string) => void,
+  setFilterOption: Dispatch<SetStateAction<FilterOption>>,
+  setQuery: Dispatch<SetStateAction<string>>,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,13 +18,13 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             value={filterOption}
             onChange={event => {
-              setFilterOption(event.target.value);
+              setFilterOption(event.target.value as FilterOption);
             }}
             data-cy="statusSelect"
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterOption.All}>All</option>
+            <option value={FilterOption.Active}>Active</option>
+            <option value={FilterOption.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -41,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right">
           {query && (
             /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button

@@ -9,23 +9,21 @@ import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
-
-export enum FilterOption {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { FilterOption } from './enums/FilterOptions';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterOption, setFilterOption] = useState('all');
+  const [filterOption, setFilterOption] = useState<FilterOption>(FilterOption.All);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+        setIsLoading(false);
       })
       .catch(() => {
         throw new Error('Todos loading is failed');
@@ -33,16 +31,16 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
+    return todos.filter(({ title, completed }) => {
       const searchQuery = (
-        todo.title.toLowerCase().includes(query.trim().toLowerCase())
+        title.toLowerCase().includes(query.trim().toLowerCase())
       );
 
       switch (filterOption) {
         case FilterOption.Active:
-          return todo.completed === false && searchQuery;
+          return !completed && searchQuery;
         case FilterOption.Completed:
-          return todo.completed === true && searchQuery;
+          return completed && searchQuery;
         default:
           return searchQuery;
       }
@@ -66,7 +64,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
@@ -74,15 +74,13 @@ export const App: React.FC = () => {
                     setSelectedTodo(todo);
                   }}
                 />
-              ) : (
-                <Loader />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {!!selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           closeModal={() => {

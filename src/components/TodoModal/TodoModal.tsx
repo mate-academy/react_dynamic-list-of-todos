@@ -9,27 +9,31 @@ type Props = {
   closeModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo: {
     id, title, userId, completed,
-  } = selectedTodo;
+  }, closeModal,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getUser(userId)
       .then(selectedUser => {
         setUser(selectedUser);
+        setIsLoading(false);
       })
       .catch(() => {
         throw new Error('User not found');
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -38,7 +42,8 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${id}`}
+              Todo #
+              {id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -46,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => closeModal()}
+              onClick={closeModal}
             />
           </header>
 
@@ -64,9 +69,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>
