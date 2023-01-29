@@ -14,7 +14,8 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onCloseModal }) => {
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(setUser);
+      .then(setUser)
+      .catch(() => setUser(null));
   }, []);
 
   return (

@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,46 +15,50 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo));
+      .then(setTodos)
+      .catch(() => setTodos([]));
   }, []);
 
-  const closeTodoModal = () => {
+  const closeTodoModal = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const isSearchQuery = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-    let searchSelect;
+      let searchSelect;
 
-    switch (selectedFilter) {
-      case 'completed':
-        searchSelect = todo.completed;
-        break;
+      switch (selectedFilter) {
+        case 'completed':
+          searchSelect = todo.completed;
+          break;
 
-      case 'active':
-        searchSelect = !todo.completed;
-        break;
+        case 'active':
+          searchSelect = !todo.completed;
+          break;
 
-      case 'all':
-        return isSearchQuery;
+        case 'all':
+          return isSearchQuery;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
 
-    return isSearchQuery && searchSelect;
-  });
+      return isSearchQuery && searchSelect;
+    });
+  }, [selectedFilter, todos, searchQuery]);
 
-  const selectedTodo = visibleTodos.find(
-    todo => todo.id === selectedTodoId,
-  );
+  const selectedTodo = useMemo(() => {
+    return visibleTodos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, visibleTodos]);
 
   return (
     <>
@@ -65,8 +71,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 selectedFilter={selectedFilter}
                 searchQuery={searchQuery}
-                onSelectedFilter={(option) => setSelectedFilter(option)}
-                onSearchQuery={(title) => setSearchQuery(title)}
+                onSelectedFilter={setSelectedFilter}
+                onSearchQuery={setSearchQuery}
               />
             </div>
 
@@ -75,7 +81,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodoId={(todoId) => setSelectedTodoId(todoId)}
+                    selectTodoId={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )
