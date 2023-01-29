@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todoList: Todo[] | undefined;
-  currentTodo: Todo;
+  currentTodo: Todo | null;
   setCurrentTodo: (todo: Todo) => void;
 };
 
