@@ -4,10 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todoList: Todo[] | undefined;
+  currentTodo: Todo;
   setCurrentTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todoList, setCurrentTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todoList,
+  currentTodo,
+  setCurrentTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -65,8 +70,8 @@ export const TodoList: React.FC<Props> = ({ todoList, setCurrentTodo }) => (
                     className={cn(
                       'far',
                       {
-                        'fa-eye': !completed,
-                        'fa-eye-slash': completed,
+                        'fa-eye': currentTodo !== todo,
+                        'fa-eye-slash': currentTodo === todo,
                       },
                     )}
                   />

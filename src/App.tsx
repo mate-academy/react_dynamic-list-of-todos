@@ -82,6 +82,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todoList={visibleTodos}
+                    currentTodo={currentTodo}
                     setCurrentTodo={setCurrentTodo}
                   />
                 ) : (
