@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   list: Todo[],
-  handleChanges(changedList: Todo[] | []): void,
+  onListChanging(changedList: Todo[] | []): void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   list,
-  handleChanges,
+  onListChanging,
 }) => {
   const [selected, setSelected] = useState(Select.all);
   const [query, setQuery] = useState('');
@@ -38,12 +38,19 @@ export const TodoFilter: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    handleChanges(modifiedList);
+    onListChanging(modifiedList);
   }, [query, selected]);
 
   const eraseInput = () => {
     setResetIsClicked(false);
     setQuery('');
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setQuery(value);
+    setResetIsClicked(true);
   };
 
   return (
@@ -69,28 +76,24 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => {
-            setQuery(event.target.value);
-            setResetIsClicked(true);
-          }}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {resetIsClicked
-        && query
-        && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={eraseInput}
-            />
-          </span>
-        )}
+        {resetIsClicked && query
+          && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={eraseInput}
+              />
+            </span>
+          )}
       </p>
     </form>
   );

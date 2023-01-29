@@ -7,12 +7,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo?: Todo;
-  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+  onButtonCross: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  handleClick,
+  onButtonCross,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleClick}
+              onClick={onButtonCross}
             />
           </header>
 

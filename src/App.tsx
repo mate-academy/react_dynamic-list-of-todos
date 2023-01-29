@@ -14,20 +14,20 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [list, setList] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
-  const [todoIsClicked, setTodoIsClicked] = useState(false);
+  const [isTodoClicked, setIsTodoClicked] = useState(false);
   const [listModified, setListModified] = useState(list);
 
-  const todoButtonStatus = () => {
-    setTodoIsClicked(false);
+  const handleButtonCross = () => {
+    setIsTodoClicked(false);
   };
 
-  const listChanging = (changedList: Todo[] | []) => {
+  const handleListChanging = (changedList: Todo[] | []) => {
     setListModified(changedList);
   };
 
-  const setUserId = (todoId: number) => {
+  const handleButtonClick = (todoId: number) => {
     setSelectedTodoId(todoId);
-    setTodoIsClicked(true);
+    setIsTodoClicked(true);
   };
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 list={list}
-                handleChanges={listChanging}
+                onListChanging={handleListChanging}
               />
             </div>
 
@@ -59,8 +59,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     list={listModified}
-                    handleButton={setUserId}
-                    isClicked={todoIsClicked}
+                    onButtonClick={handleButtonClick}
+                    isClicked={isTodoClicked}
                   />
                 )
                 : <Loader />}
@@ -69,9 +69,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoIsClicked && (
+      {isTodoClicked && (
         <TodoModal
-          handleClick={todoButtonStatus}
+          onButtonCross={handleButtonCross}
           todo={todo}
         />
       )}
