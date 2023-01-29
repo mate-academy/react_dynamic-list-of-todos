@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,61 +9,75 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getFilteredTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [theValue, setTheValue] = useState('all');
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     getTodos()
       .then(setTodos);
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const isQueryInclude = todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
-    let isValue = true;
+  // const visibleTodos = todos.filter(todo => {
+  //   const isQueryInclude = todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+  //   let isFilter = true;
 
-    switch (theValue) {
-      case 'active':
-        isValue = !todo.completed;
-        break;
+  //   switch (filter) {
+  //     case 'active':
+  //       isFilter = !todo.completed;
+  //       break;
 
-      case 'completed':
-        isValue = todo.completed;
-        break;
+  //     case 'completed':
+  //       isFilter = todo.completed;
+  //       break;
 
-      default:
-        isValue = true;
-    }
+  //     default:
+  //       isFilter = true;
+  //   }
 
-    return isQueryInclude && isValue;
-  });
+  //   return isQueryInclude && isFilter;
+  // });
+
+  const visibleTodos = useMemo(() => (
+    getFilteredTodos(todos, filter, searchQuery)
+  ), [todos, filter, searchQuery]);
 
   const selectTodoId = (todoId: number) => {
     setSelectedTodoId(todoId);
   };
+  // const selectTodoId = useCallback(() => (
+  //   todoId: number,
+  // ) => setSelectedTodoId(todoId), []);
 
   const selectedTodo = visibleTodos.find(todo => (
     todo.id === selectedTodoId
   ));
 
-  const selectValue = (value: string) => {
-    setTheValue(value);
-  };
+  // const selectedTodo = useMemo(() => (
+  //   visibleTodos.find(todo => (
+  //     todo.id === selectTodoId
+  //   ))
+  // ), [selectedTodoId, visibleTodos]);
 
-  const clearSearchQuery = () => {
+  const selectValue = useCallback((value: string) => {
+    setFilter(value);
+  }, []);
+
+  const clearSearchQuery = useCallback(() => {
     setSearchQuery('');
-  };
+  }, []);
 
-  const changeInSearchQuery = (value: string) => {
+  const changeInSearchQuery = useCallback((value: string) => {
     setSearchQuery(value);
-  };
+  }, []);
 
-  const closeSelectedTodo = () => {
+  const closeSelectedTodo = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
   return (
     <>
@@ -75,7 +89,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchQuery={searchQuery}
-                value={theValue}
+                value={filter}
                 handleOnChange={changeInSearchQuery}
                 handleOnDelete={clearSearchQuery}
                 handleOnFilter={selectValue}
