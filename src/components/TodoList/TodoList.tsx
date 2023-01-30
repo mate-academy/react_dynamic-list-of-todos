@@ -1,6 +1,20 @@
+import classNames from 'classnames';
 import React from 'react';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
+interface Props {
+  todos: Todo[],
+  todoId: number,
+  onSelectTodo: (id: number) => void,
+  onSelectUser: (id: number) => void,
+}
+
+export const TodoList: React.FC<Props> = ({
+  todos,
+  todoId,
+  onSelectTodo,
+  onSelectUser,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,7 +30,76 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
+      {todos.map(todo => (
+        todo.id === todoId
+          ? (
+            <tr
+              key={todo.id}
+              data-cy="todo"
+              className="has-background-info-light"
+            >
+              <td className="is-vcentered">{ todo.id }</td>
+              <td className="is-vcentered" />
+              <td className="is-vcentered is-expanded">
+                <p className="has-text-danger">
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                >
+                  <span className="icon">
+                    <i className="far fa-eye-slash" />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          )
+          : (
+            <tr
+              key={todo.id}
+              data-cy="todo"
+              className=""
+            >
+              <td className="is-vcentered">{ todo.id }</td>
+              {!todo.completed && <td className="is-vcentered" />}
+              {todo.completed && (
+                <td className="is-vcentered">
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                </td>
+              )}
+              <td className="is-vcentered is-expanded">
+                <p className={classNames('has-text-success', {
+                  'has-text-danger': !todo.completed,
+                })}
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => {
+                    onSelectTodo(todo.id);
+                    onSelectUser(todo.userId);
+                  }}
+                >
+                  <span className="icon">
+                    <i className="far fa-eye" />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          )
+      ))}
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -94,7 +177,7 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
     </tbody>
   </table>
 );
