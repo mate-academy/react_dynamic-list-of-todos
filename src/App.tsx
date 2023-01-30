@@ -1,14 +1,41 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [toDoId, setTodoId] = useState<number>(0);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  const clear = async () => {
+    await setTodoId(0);
+  };
+
+  useEffect(() => {
+    getTodos()
+      .then(todosArr => {
+        setTodos(todosArr);
+      });
+  }, []);
+
+  const visibleTodos = todos.filter(todo => {
+    if ((filter === 'active' && todo.completed)
+    || (filter === 'completed' && !todo.completed)) {
+      return false;
+    }
+
+    return todo.title.toLowerCase()
+      .includes(query.toLocaleLowerCase());
+  });
+
   return (
     <>
       <div className="section">
@@ -17,18 +44,28 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                setFilter={setFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={toDoId}
+                    selectToDo={(id: number) => setTodoId(id)}
+                    clear={clear}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
     </>
   );
 };
