@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -22,46 +24,17 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  // const visibleTodos = todos.filter(todo => {
-  //   const isQueryInclude = todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
-  //   let isFilter = true;
-
-  //   switch (filter) {
-  //     case 'active':
-  //       isFilter = !todo.completed;
-  //       break;
-
-  //     case 'completed':
-  //       isFilter = todo.completed;
-  //       break;
-
-  //     default:
-  //       isFilter = true;
-  //   }
-
-  //   return isQueryInclude && isFilter;
-  // });
-
   const visibleTodos = useMemo(() => (
     getFilteredTodos(todos, filter, searchQuery)
   ), [todos, filter, searchQuery]);
 
-  const selectTodoId = (todoId: number) => {
-    setSelectedTodoId(todoId);
-  };
-  // const selectTodoId = useCallback(() => (
-  //   todoId: number,
-  // ) => setSelectedTodoId(todoId), []);
+  const selectTodoId = useCallback((todoId: number) => setSelectedTodoId(todoId), []);
 
-  const selectedTodo = visibleTodos.find(todo => (
-    todo.id === selectedTodoId
-  ));
-
-  // const selectedTodo = useMemo(() => (
-  //   visibleTodos.find(todo => (
-  //     todo.id === selectTodoId
-  //   ))
-  // ), [selectedTodoId, visibleTodos]);
+  const selectedTodo = useMemo(() => (
+    visibleTodos.find(todo => (
+      todo.id === selectedTodoId
+    ))
+  ), [selectedTodoId, visibleTodos]);
 
   const selectValue = useCallback((value: string) => {
     setFilter(value);
