@@ -19,7 +19,13 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see now the laoder works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${response.status} - ${response.statusText}`);
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
