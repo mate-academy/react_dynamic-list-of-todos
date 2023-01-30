@@ -3,7 +3,7 @@ import { FilterProps } from '../../types/FilterProps';
 
 export const TodoFilter: React.FC<FilterProps> = memo(({
   searchQuery,
-  value,
+  filter,
   handleOnChange,
   handleOnDelete,
   handleOnFilter,
@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<FilterProps> = memo(({
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={value}
+          value={filter}
           onChange={event => handleOnFilter(event.target.value)}
         >
           <option value="all">All</option>

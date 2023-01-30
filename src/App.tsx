@@ -36,7 +36,7 @@ export const App: React.FC = () => {
     ))
   ), [selectedTodoId, visibleTodos]);
 
-  const selectValue = useCallback((value: string) => {
+  const selectFilter = useCallback((value: string) => {
     setFilter(value);
   }, []);
 
@@ -62,10 +62,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchQuery={searchQuery}
-                value={filter}
+                filter={filter}
                 handleOnChange={changeInSearchQuery}
                 handleOnDelete={clearSearchQuery}
-                handleOnFilter={selectValue}
+                handleOnFilter={selectFilter}
               />
             </div>
 
