@@ -1,14 +1,57 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getFilteredTodos } from './helpers';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos);
+  }, []);
+
+  const visibleTodos = useMemo(() => (
+    getFilteredTodos(todos, filter, searchQuery)
+  ), [todos, filter, searchQuery]);
+
+  const selectTodoId = useCallback((todoId: number) => setSelectedTodoId(todoId), []);
+
+  const selectedTodo = useMemo(() => (
+    visibleTodos.find(todo => (
+      todo.id === selectedTodoId
+    ))
+  ), [selectedTodoId, visibleTodos]);
+
+  const selectFilter = useCallback((value: string) => {
+    setFilter(value);
+  }, []);
+
+  const clearSearchQuery = useCallback(() => {
+    setSearchQuery('');
+  }, []);
+
+  const changeInSearchQuery = useCallback((value: string) => {
+    setSearchQuery(value);
+  }, []);
+
+  const closeSelectedTodo = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +60,38 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchQuery={searchQuery}
+                filter={filter}
+                handleOnChange={changeInSearchQuery}
+                handleOnDelete={clearSearchQuery}
+                handleOnFilter={selectFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length > 0
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoById={selectedTodoId}
+                    handleSelectTodo={selectTodoId}
+                  />
+                )
+                : (
+                  <Loader />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          handleOnClose={closeSelectedTodo}
+        />
+      )}
     </>
   );
 };
