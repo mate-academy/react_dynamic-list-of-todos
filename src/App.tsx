@@ -12,12 +12,13 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([] as Todo[]);
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+
+  const handleSelectTodo = (todo: Todo) => setActiveTodo(todo);
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => {
-        setVisibleTodos(todosFromServer);
-      });
+      .then(setVisibleTodos);
   }, []);
 
   return (
@@ -32,9 +33,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {false
-                && <Loader />}
-              <TodoList todos={visibleTodos} />
+              {!visibleTodos.length ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  activeTodo={activeTodo}
+                  selectTodo={handleSelectTodo}
+                />
+              )}
             </div>
           </div>
         </div>
