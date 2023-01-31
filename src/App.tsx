@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([] as Todo[]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
 
-  const handleSelectTodo = (todo: Todo) => setActiveTodo(todo);
+  const handleSelectTodo = (todo: Todo | null) => setActiveTodo(todo);
 
   useEffect(() => {
     getTodos()
@@ -47,9 +47,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {(false
-      && <TodoModal />
-
+      {activeTodo && (
+        <TodoModal
+          activeTodo={activeTodo}
+          selectTodo={handleSelectTodo}
+        />
       )}
     </>
   );
