@@ -21,13 +21,9 @@ export const App: React.FC = () => {
     return todos.find(todo => todo.id === id) as Todo;
   };
 
-  const selectTodoId = (id: number) => {
-    setTodoId(id);
-  };
+  const selectTodoId = (id: number) => (setTodoId(id));
 
-  const selectUserId = (id: number) => {
-    setUserId(id);
-  };
+  const selectUserId = (id: number) => (setUserId(id));
 
   const loadTodos = async () => {
     const loadedTodos = await getTodos();
