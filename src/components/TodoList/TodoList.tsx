@@ -32,71 +32,64 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          todo.id === todoId ? (
-            <tr
-              key={todo.id}
-              data-cy="todo"
-              className="has-background-info-light"
-            >
-              <td className="is-vcentered">{ todo.id }</td>
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className={cn({
+              'has-background-info-light': todo.id === todoId,
+            })}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            {!todo.completed && (
               <td className="is-vcentered" />
-              <td className="is-vcentered is-expanded">
-                <p className="has-text-danger">
-                  {todo.title}
-                </p>
+            )}
+            {todo.completed && (
+              <td className="is-vcentered">
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
               </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                >
-                  <span className="icon">
-                    <i className="far fa-eye-slash" />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          ) : (
-            <tr
-              key={todo.id}
-              data-cy="todo"
-              className=""
-            >
-              <td className="is-vcentered">{ todo.id }</td>
-              {!todo.completed && <td className="is-vcentered" />}
-              {todo.completed && (
-                <td className="is-vcentered">
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
+            )}
+            <td className="is-vcentered is-expanded">
+              <p className={cn('has-text-success', {
+                'has-text-danger': !todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            {todo.id === todoId
+              ? (
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye-slash" />
+                    </span>
+                  </button>
+                </td>
+              )
+              : (
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => {
+                      onSelectTodo(todo.id);
+                      onSelectUser(todo.userId);
+                    }}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  </button>
                 </td>
               )}
-              <td className="is-vcentered is-expanded">
-                <p className={cn('has-text-success', {
-                  'has-text-danger': !todo.completed,
-                })}
-                >
-                  {todo.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => {
-                    onSelectTodo(todo.id);
-                    onSelectUser(todo.userId);
-                  }}
-                >
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          )
+          </tr>
         ))}
       </tbody>
     </table>

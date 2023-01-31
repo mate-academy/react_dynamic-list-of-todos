@@ -31,22 +31,6 @@ export const App: React.FC = () => {
     return todos.find(todo => todo.id === id) || null;
   };
 
-  const handleTodoId = (id: number) => {
-    setTodoId(id);
-  };
-
-  const handleUserId = (id: number) => {
-    setUserId(id);
-  };
-
-  const handleField = (field: string) => {
-    setSelectedField(field);
-  };
-
-  const handleQuery = (description: string) => {
-    setQuery(description);
-  };
-
   let visibleTodos = [...todos];
 
   if (selectedField === 'completed') {
@@ -74,8 +58,12 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectedField={selectedField}
-                onSelectField={handleField}
-                onQuery={handleQuery}
+                onSelectField={(field: string) => {
+                  setSelectedField(field);
+                }}
+                onQuery={(description: string) => {
+                  setQuery(description);
+                }}
                 query={query}
               />
             </div>
@@ -87,8 +75,12 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   todoId={todoId}
-                  onSelectTodo={handleTodoId}
-                  onSelectUser={handleUserId}
+                  onSelectTodo={(id: number) => {
+                    setTodoId(id);
+                  }}
+                  onSelectUser={(id: number) => {
+                    setUserId(id);
+                  }}
                 />
               )}
             </div>
@@ -99,7 +91,9 @@ export const App: React.FC = () => {
         <TodoModal
           userId={userId}
           todo={getTodoById(todoId)}
-          onClose={handleTodoId}
+          onClose={(id: number) => {
+            setTodoId(id);
+          }}
         />
       )}
 
