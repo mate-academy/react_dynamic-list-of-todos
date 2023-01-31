@@ -12,6 +12,7 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { todosFilter } from './helpers/helpers';
 import './App.scss';
 
 export const App: FC = () => {
@@ -31,28 +32,8 @@ export const App: FC = () => {
       .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const preparedQuery = query
-        .toLowerCase()
-        .split(' ')
-        .filter(Boolean)
-        .join(' ');
-
-      const isQueryInTitle = todo.title.toLowerCase().includes(preparedQuery);
-
-      switch (chosenStatus) {
-        case 'completed':
-          return todo.completed && isQueryInTitle;
-
-        case 'active':
-          return !todo.completed && isQueryInTitle;
-
-        default:
-          return isQueryInTitle;
-      }
-    });
-  }, [todos, query, chosenStatus]);
+  const filteredTodos = useMemo(() => todosFilter(todos, query, chosenStatus),
+    [todos, query, chosenStatus]);
 
   const isNoMatchingTodos = query && !filteredTodos.length;
 
