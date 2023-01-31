@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +12,79 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
+  const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [isTodosError, setIsTodosError] = useState(false);
+
+  useEffect(() => {
+    setIsTodosLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => setIsTodosError(true))
+      .finally(() => setIsTodosLoading(false));
+  }, []);
+
+  const selectFilter = useCallback((value: string) => {
+    setFilter(value);
+  }, []);
+
+  const setFilterQuery = useCallback((value: string) => {
+    setQuery(value);
+  }, []);
+
+  const selectTodoId = useCallback((todoId: number) => {
+    setSelectedTodoId(todoId);
+  }, []);
+
+  const closeTodoModal = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
+
+  const normalizedQuery = query
+    .toLowerCase()
+    .split(' ')
+    .filter(Boolean)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    .join(' ');
+
+  const visibleTodos = useMemo<Todo[]>(() => {
+    return todos.filter(todo => {
+      const normalizedTodoTitle = todo.title.toLowerCase();
+      const isSearchQueryMatch = normalizedTodoTitle.includes(normalizedQuery);
+
+      let isStatusMatch = true;
+
+      switch (filter) {
+        case 'active':
+          isStatusMatch = !todo.completed;
+          break;
+
+        case 'completed':
+          isStatusMatch = todo.completed;
+          break;
+
+        default:
+          isStatusMatch = true;
+      }
+
+      return isSearchQueryMatch && isStatusMatch;
+    });
+  }, [filter, normalizedQuery, todos]);
+
+  const selectedTodo = useMemo(() => visibleTodos.find(
+    todo => todo.id === selectedTodoId,
+  ), [selectedTodoId, visibleTodos]);
+
+  const isNoFiltredTodos = query && !visibleTodos.length;
+
   return (
     <>
       <div className="section">
@@ -17,18 +93,44 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                onSelectFilter={selectFilter}
+                filter={filter}
+                onFilter={setFilterQuery}
+                query={query}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!isTodosLoading
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSelectTodoId={selectTodoId}
+                    selectedTodoId={selectedTodoId}
+                  />
+                )
+                : <Loader />}
+
+              {isTodosError && (
+                <p className="has-text-danger">Can not load todos.</p>
+              )}
+
+              {isNoFiltredTodos && (
+                <p
+                  className="has-text-danger"
+                >
+                  no matched todos
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={closeTodoModal} />
+      )}
     </>
   );
 };

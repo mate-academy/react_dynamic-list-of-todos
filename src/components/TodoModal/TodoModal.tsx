@@ -1,49 +1,81 @@
-import React from 'react';
+import React, { memo, useEffect, useState } from 'react';
+
+import { getUser } from '../../api';
+
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = memo(({ todo, onClose }) => {
+  const [user, setUser] = useState<User>();
+  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [isUserError, setIsUserError] = useState(false);
+
+  useEffect(() => {
+    setIsUserLoading(true);
+
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => setIsUserError(true))
+      .finally(() => setIsUserLoading(false));
+  }, [todo.userId]);
+
+  const handleClickCloseModal = () => onClose();
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
+      {isUserLoading
+        ? <Loader />
+        : (
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
+              >
+                {`Todo #${todo.id}`}
+              </div>
+
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={handleClickCloseModal}
+              />
+            </header>
+
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {todo.title}
+              </p>
+
+              <p className="block" data-cy="modal-user">
+
+                {todo.completed
+                  ? <strong className="has-text-success">Done</strong>
+                  : <strong className="has-text-danger">Planned</strong>}
+
+                {' by '}
+
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              </p>
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
           </div>
-        </div>
+        )}
+
+      {isUserError && (
+        <p className="has-text-danger">Can not load user</p>
       )}
     </div>
   );
-};
+});
