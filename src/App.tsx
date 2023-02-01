@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [isSelected, setIsSelected] = useState(false);
   const [filter, setSelectedFilter] = useState('all');
+  const [query, setQuery] = useState('');
 
   const loadingAllTodos = async () => {
     const loadedTodos = await getTodos();
@@ -36,6 +37,13 @@ export const App: React.FC = () => {
     }
   };
 
+  // const visibleTodos = [...todos].filter((todo) => {
+  //   const trimmed = query.toLowerCase().trim();
+  //   const title = todo.title.toLocaleLowerCase();
+
+  //   return title.includes(trimmed);
+  // });
+
   useEffect(() => {
     loadingAllTodos();
   }, [filter, selectedTodo]);
@@ -51,6 +59,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 onSetSelectedFilter={setSelectedFilter}
                 filter={filter}
+                query={query}
+                onSetQuery={setQuery}
               />
             </div>
             <div className="block">
