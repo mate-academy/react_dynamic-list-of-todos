@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   onSetIsSelected,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>();
 
   const loadingUser = async () => {
     const selectedUser = await getUser(selectedTodo.userId);
@@ -24,13 +24,13 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     loadingUser();
-  }, []);
+  });
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedTodo.id
+      {!user
         ? (
           <Loader />
         ) : (

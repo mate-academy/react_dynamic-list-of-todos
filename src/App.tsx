@@ -38,11 +38,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadingAllTodos();
-  }, [filter]);
-
-  useEffect(() => {
-    setSelectedTodo(selectedTodo);
-  }, [selectedTodo]);
+  }, [filter, selectedTodo]);
 
   return (
     <>
@@ -57,7 +53,6 @@ export const App: React.FC = () => {
                 filter={filter}
               />
             </div>
-
             <div className="block">
               {todos.length === 0
                 ? (
@@ -75,12 +70,16 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && isSelected && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          onSetIsSelected={setIsSelected}
-        />
-      )}
+      {selectedTodo && isSelected
+        ? (
+          <TodoModal
+            selectedTodo={selectedTodo}
+            onSetIsSelected={setIsSelected}
+          />
+        )
+        : (
+          <Loader />
+        )}
     </>
   );
 };
