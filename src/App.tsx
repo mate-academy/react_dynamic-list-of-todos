@@ -13,6 +13,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [visibleTodos, setvisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadedTodos = async () => {
     setvisibleTodos(await getTodos());
@@ -40,15 +41,17 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     setSelectedTodo={setSelectedTodo}
+                    onClose={setIsModalOpen}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo && (
+      {selectedTodo && isModalOpen && (
         <TodoModal
           todo={selectedTodo}
+          onClose={setIsModalOpen}
         />
       )}
     </>
