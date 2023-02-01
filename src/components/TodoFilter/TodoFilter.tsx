@@ -1,4 +1,14 @@
-export const TodoFilter = () => (
+import { FC } from 'react';
+
+type Props = {
+  handleSetQuery: (query: string) => void,
+  queryValue: string,
+};
+
+export const TodoFilter: FC<Props> = ({
+  handleSetQuery,
+  queryValue,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -16,19 +26,28 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={queryValue}
+        onChange={(event) => handleSetQuery(
+          event.target.value.trim(),
+        )}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {queryValue && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => {
+              handleSetQuery('');
+            }}
+          />
+        </span>
+      )}
     </p>
   </form>
 );

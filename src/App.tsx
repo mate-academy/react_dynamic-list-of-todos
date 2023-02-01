@@ -11,15 +11,24 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([] as Todo[]);
+  const [loadedTodos, setLoadedTodos] = useState<Todo[]>([] as Todo[]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
 
   const handleSelectTodo = (todo: Todo | null) => setActiveTodo(todo);
+  const handleSetQuery = (queryValue: string) => setQuery(queryValue);
+
+  // eslint-disable-next-line no-console
+  console.log(query);
 
   useEffect(() => {
     getTodos()
-      .then(setVisibleTodos);
+      .then(setLoadedTodos);
   }, []);
+
+  const visibleTodos = loadedTodos.filter(todo => {
+    return todo.title.toLowerCase().includes(query);
+  });
 
   return (
     <>
@@ -29,11 +38,14 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                handleSetQuery={handleSetQuery}
+                queryValue={query}
+              />
             </div>
 
             <div className="block">
-              {!visibleTodos.length ? (
+              {!loadedTodos.length ? (
                 <Loader />
               ) : (
                 <TodoList
