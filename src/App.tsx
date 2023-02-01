@@ -1,33 +1,44 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { Todo } from './types/Todo';
+import { FilterOptions } from './types/FilterOptions';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([] as Todo[]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
 
   const handleSelectTodo = (todo: Todo | null) => setActiveTodo(todo);
-  const handleSetQuery = (queryValue: string) => setQuery(queryValue);
-
-  // eslint-disable-next-line no-console
-  console.log(query);
+  const handleSetFilter = (arg: string) => setFilter(arg);
+  const handleSetQuery = (arg: string) => setQuery(arg);
 
   useEffect(() => {
     getTodos()
       .then(setLoadedTodos);
   }, []);
 
-  const visibleTodos = loadedTodos.filter(todo => {
-    return todo.title.toLowerCase().includes(query);
+  const visibleTodos = loadedTodos.filter(({
+    title,
+    completed,
+  }) => {
+    const isMatchingQuery = title.toLowerCase()
+      .includes(query.toLowerCase());
+
+    const filters: FilterOptions = {
+      all: true,
+      completed,
+      active: !completed,
+    };
+
+    return isMatchingQuery && filters[filter];
   });
 
   return (
@@ -39,8 +50,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                query={query}
+                handleSetFilter={handleSetFilter}
                 handleSetQuery={handleSetQuery}
-                queryValue={query}
               />
             </div>
 

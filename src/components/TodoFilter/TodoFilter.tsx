@@ -1,21 +1,41 @@
 import { FC } from 'react';
 
+enum SelectOption {
+  All,
+  Active,
+  Completed,
+}
+
 type Props = {
+  query: string,
+  handleSetFilter: (query: string) => void,
   handleSetQuery: (query: string) => void,
-  queryValue: string,
 };
 
 export const TodoFilter: FC<Props> = ({
+  query,
+  handleSetFilter,
   handleSetQuery,
-  queryValue,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          onChange={(event) => handleSetFilter(
+            event.target.value,
+          )}
+        >
+          {Object.values(SelectOption)
+            .filter(value => typeof value === 'string')
+            .map((option, i) => (
+              <option
+                key={option}
+                value={SelectOption[i].toLowerCase()}
+              >
+                {option}
+              </option>
+            ))}
         </select>
       </span>
     </p>
@@ -26,7 +46,7 @@ export const TodoFilter: FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={queryValue}
+        value={query}
         onChange={(event) => handleSetQuery(
           event.target.value.trim(),
         )}
@@ -35,8 +55,11 @@ export const TodoFilter: FC<Props> = ({
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {queryValue && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+      {query && (
+        <span
+          className="icon is-right"
+          style={{ pointerEvents: 'all' }}
+        >
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
