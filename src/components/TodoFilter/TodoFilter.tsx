@@ -58,6 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
               hidden
               onClick={(() => {
                 onSetQuery('');
+                onSetSelectedFilter('all');
               })}
             />
           </span>
