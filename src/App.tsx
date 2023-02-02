@@ -13,8 +13,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [isSelected, setIsSelected] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setSelectedFilter] = useState('all');
@@ -69,17 +68,16 @@ export const App: React.FC = () => {
               <TodoList
                 todos={visibleTodos}
                 onSetSelectedTodo={setSelectedTodo}
-                onSetIsSelected={setIsSelected}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && isSelected && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onSetIsSelected={setIsSelected}
+          onSetSelectedTodo={setSelectedTodo}
         />
       )}
     </>

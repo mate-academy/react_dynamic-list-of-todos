@@ -5,13 +5,11 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[],
   onSetSelectedTodo: (todo: Todo) => void,
-  onSetIsSelected: (state: boolean) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSetSelectedTodo,
-  onSetIsSelected,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -60,7 +58,6 @@ export const TodoList: React.FC<Props> = ({
                 type="button"
                 onClick={() => {
                   onSetSelectedTodo(todo);
-                  onSetIsSelected(true);
                 }}
               >
                 <span className="icon">
