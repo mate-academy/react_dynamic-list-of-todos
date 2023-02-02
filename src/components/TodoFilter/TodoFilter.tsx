@@ -1,17 +1,17 @@
 import React from 'react';
 
 type Props = {
-  onSetSelectedFilter: (filter:string) => void,
-  filter: string,
-  onSetQuery: (query: string) => void,
-  query: string
+  query:string
+  filter:string
+  onSetQuery: (value: string) => void;
+  onSetSelectedFilter: (value: string) => void;
 };
 
 export const TodoFilter:React.FC<Props> = ({
-  onSetSelectedFilter,
+  query,
   filter,
   onSetQuery,
-  query,
+  onSetSelectedFilter,
 }) => {
   return (
     <form className="field has-addons">
@@ -55,6 +55,9 @@ export const TodoFilter:React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={(() => {
+              onSetQuery('');
+            })}
           />
         </span>
       </p>

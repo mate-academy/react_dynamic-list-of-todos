@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
@@ -11,42 +12,39 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [isSelected, setIsSelected] = useState(false);
-  const [filter, setSelectedFilter] = useState('all');
   const [query, setQuery] = useState('');
-
-  const loadingAllTodos = async () => {
-    const loadedTodos = await getTodos();
-
-    const completedTodos = loadedTodos.filter((todo) => todo.completed);
-
-    const activeTodos = loadedTodos.filter((todo) => !todo.completed);
-
-    switch (filter) {
-      case 'all':
-        return setTodos(loadedTodos);
-      case 'active':
-        return setTodos(activeTodos);
-      case 'completed':
-        return setTodos(completedTodos);
-
-      default:
-        return 0;
-    }
-  };
-
-  // const visibleTodos = [...todos].filter((todo) => {
-  //   const trimmed = query.toLowerCase().trim();
-  //   const title = todo.title.toLocaleLowerCase();
-
-  //   return title.includes(trimmed);
-  // });
+  const [filter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
-    loadingAllTodos();
-  }, [filter, selectedTodo]);
+    getTodos().then(setAllTodos);
+  }, []);
+
+  const visibleTodos = allTodos
+    .filter((todo) => {
+      const trimmed = query.toLocaleLowerCase().trim();
+      const title = todo.title.toLocaleLowerCase();
+
+      return title.includes(trimmed);
+    })
+    .filter((todo) => {
+      switch (filter) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+
+        default:
+          return true;
+      }
+    });
+
+  // eslint-disable-next-line no-console
+  // console.log({ visibleTodos });
+  console.log({ allTodos });
+  // console.log({ todos });
 
   return (
     <>
@@ -57,20 +55,20 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSetSelectedFilter={setSelectedFilter}
-                filter={filter}
                 query={query}
+                filter={filter}
                 onSetQuery={setQuery}
+                onSetSelectedFilter={setSelectedFilter}
               />
             </div>
             <div className="block">
-              {todos.length === 0
+              {visibleTodos.length === 0
                 ? (
                   <Loader />
                 )
                 : (
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodos}
                     onSetSelectedTodo={setSelectedTodo}
                     onSetIsSelected={setIsSelected}
                   />
