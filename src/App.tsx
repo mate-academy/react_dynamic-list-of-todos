@@ -9,28 +9,36 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SortSelectors } from './types/SortSelectors';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [select, setSelect] = useState('all');
+  const [
+    select,
+    setSelect,
+  ] = useState<SortSelectors | string>(SortSelectors.all);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [selectTodo, setSelectTodo] = useState<Todo>();
+  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(result => setAllTodos(result));
 
     setVisibleTodos(allTodos.filter(todo => {
-      switch (select) {
-        case ('all'):
-          return todo.title.toUpperCase().includes(query.toUpperCase().trim());
+      const queryFilter = todo.title
+        .toUpperCase()
+        .includes(query.toUpperCase().trim());
 
-        case ('active'):
-          return todo.title.toUpperCase().includes(query.toUpperCase().trim())
+      switch (select) {
+        case (SortSelectors.all):
+          return queryFilter;
+
+        case (SortSelectors.active):
+          return queryFilter
             && !todo.completed;
 
-        case ('completed'):
-          return todo.title.toUpperCase().includes(query.toUpperCase().trim())
+        case (SortSelectors.completed):
+          return queryFilter
             && todo.completed;
 
         default:
@@ -56,7 +64,7 @@ export const App: React.FC = () => {
   };
 
   const onModalClose = () => {
-    setSelectTodo(undefined);
+    setSelectTodo(null);
   };
 
   return (
@@ -77,10 +85,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               {!allTodos.length && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                onUserClick={gettingTodo}
-              />
+              {visibleTodos.length && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectTodo={selectTodo}
+                  onUserClick={gettingTodo}
+                />
+              )}
             </div>
           </div>
         </div>

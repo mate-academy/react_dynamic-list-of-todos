@@ -1,5 +1,6 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+
+import { SortSelectors } from '../../types/SortSelectors';
 
 type Props = {
   query: string,
@@ -22,9 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={onSelectChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortSelectors.all}>All</option>
+            <option value={SortSelectors.active}>Active</option>
+            <option value={SortSelectors.completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -50,6 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
               type="button"
               className="delete"
               onClick={onDelete}
+              aria-label="clear query"
             />
           </span>
         )}

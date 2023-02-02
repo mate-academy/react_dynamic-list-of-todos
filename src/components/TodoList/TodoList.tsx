@@ -4,10 +4,21 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
+  selectTodo: Todo | null,
   onUserClick: (todo: Todo) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onUserClick }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectTodo,
+  onUserClick,
+}) => {
+  const selectButtonState = classNames(
+    'far',
+    { 'fa-eye': !selectTodo },
+    { 'fa-eye-slash': selectTodo },
+  );
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -68,7 +79,7 @@ export const TodoList: React.FC<Props> = ({ todos, onUserClick }) => {
                   onClick={getTodo}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={selectButtonState} />
                   </span>
                 </button>
               </td>
