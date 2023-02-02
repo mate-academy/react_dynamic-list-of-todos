@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,11 +20,6 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
 
-  const visibleTodos = useMemo(
-    () => getVisibleTodos(todos, filterType, query),
-    [query, filterType, todos],
-  );
-
   useEffect(() => {
     getTodos()
       .then(allTodos => {
@@ -31,11 +28,24 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const showModal = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
+  const visibleTodos = useMemo(
+    () => getVisibleTodos(todos, filterType, query),
+    [query, filterType, todos],
+  );
+
+  const showModal = useCallback(
+    (todo: Todo) => {
+      setSelectedTodo(todo);
+    },
+    [],
+  );
 
   const hideModal = () => setSelectedTodo(null);
+
+  const clearQuery = useCallback(
+    () => setQuery(''),
+    [],
+  );
 
   return (
     <>
@@ -50,7 +60,7 @@ export const App: React.FC = () => {
                 filterType={filterType}
                 setQuery={setQuery}
                 setFilter={setFilterType}
-                clear={() => setQuery('')}
+                clear={clearQuery}
               />
             </div>
 

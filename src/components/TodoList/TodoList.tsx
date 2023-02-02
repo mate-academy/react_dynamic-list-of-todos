@@ -1,6 +1,6 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types';
+import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[],
@@ -29,51 +29,15 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => {
-        const { id, completed, title } = todo;
         const isSelectedTodo = todo === selected;
 
         return (
-          <tr
-            key={id}
-            data-cy="todo"
-            className=""
-          >
-            <td className="is-vcentered">{id}</td>
-            <td className="is-vcentered">
-              {completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames({
-                  'has-text-success': completed,
-                  'has-text-danger': !completed,
-                })}
-              >
-                {title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onClick(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={classNames('far', {
-                      'fa-eye': !isSelectedTodo,
-                      'fa-eye-slash': isSelectedTodo,
-                    })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isSelected={isSelectedTodo}
+            onClick={onClick}
+          />
         );
       })}
     </tbody>
