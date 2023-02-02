@@ -1,17 +1,17 @@
 import React, { memo, useCallback } from 'react';
 
 export type Props = {
-  query: string
+  searchQuery: string
   onSearch: React.Dispatch<React.SetStateAction<string>>;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  complitedFilter: string;
+  setComplitedFilter: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
-  query,
+  searchQuery,
   onSearch,
-  value,
-  setValue,
+  complitedFilter,
+  setComplitedFilter,
 }) => {
   const handleDelete = useCallback(() => {
     onSearch('');
@@ -25,8 +25,8 @@ export const TodoFilter: React.FC<Props> = memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
+            value={complitedFilter}
+            onChange={(event) => setComplitedFilter(event.target.value)}
           >
             <option value="all">
               All
@@ -43,13 +43,13 @@ export const TodoFilter: React.FC<Props> = memo(({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={searchQuery}
           onChange={(event) => onSearch(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {query
+        {searchQuery
           && (
             <span className="icon is-right" style={{ pointerEvents: 'all' }}>
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

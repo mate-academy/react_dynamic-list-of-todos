@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,51 +9,36 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { selectedOption } from './helpers/helpers';
 
-export const App: React.FC = memo(() => {
+export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>();
-  const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
-
-  const selectTodo = useCallback((todoId: number) => {
-    setSelectedTodo(
-      todos.find(todo => todo.id === todoId) || null,
-    );
-  }, [todos]);
-
-  const preaperedSearchQuery = query.toLowerCase();
-
-  const visibleTodo = todos.filter(todo => {
-    const serchingQuery = todo.title.toLowerCase().includes(preaperedSearchQuery);
-
-    const selectedOption = (value: string) => {
-      switch (value) {
-        case 'all':
-          return todo;
-
-        case 'active':
-          return todo.completed === false;
-
-        case 'completed':
-          return todo.completed === true;
-
-        default:
-          break;
-      }
-
-      return value;
-    };
-
-    const filteredTodo = selectedOption(selectFilter);
-
-    return serchingQuery && filteredTodo;
-  });
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [complitedFilter, setComplitedFilter] = useState('all');
 
   useEffect(() => {
     getTodos()
       .then(todo => setTodo(todo));
   }, []);
+
+  const selectedTodo = (
+    todos.find(todo => todo.id === selectedTodoId)
+  );
+
+  const onCloseModal = () => {
+    setSelectedTodoId(0);
+  };
+
+  const preaperedSearchQuery = searchQuery.toLowerCase();
+
+  const filterTodosByComplited = todos.filter(todo => {
+    const serchingQuery = todo.title.toLowerCase().includes(preaperedSearchQuery);
+
+    const filteredTodo = selectedOption(complitedFilter, todo);
+
+    return serchingQuery && filteredTodo;
+  });
 
   return (
     <>
@@ -64,25 +49,21 @@ export const App: React.FC = memo(() => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                onSearch={setQuery}
-                value={selectFilter}
-                setValue={setSelectFilter}
+                searchQuery={searchQuery}
+                onSearch={setSearchQuery}
+                complitedFilter={complitedFilter}
+                setComplitedFilter={setComplitedFilter}
               />
             </div>
 
             <div className="block">
-              {visibleTodo.length === 0
-
+              {filterTodosByComplited.length === 0
                 ? <Loader />
-
                 : (
                   <TodoList
-                    todos={visibleTodo}
-                    selectedIdTodo={selectedTodo?.id}
-                    selectedTodo={(idTodo) => {
-                      selectTodo(idTodo);
-                    }}
+                    todos={filterTodosByComplited}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
                   />
                 )}
 
@@ -93,10 +74,10 @@ export const App: React.FC = memo(() => {
 
       {selectedTodo && (
         <TodoModal
-          todoUserId={selectedTodo}
-          onClose={(todId: number) => selectTodo(todId)}
+          todo={selectedTodo}
+          onCloseModal={onCloseModal}
         />
       )}
     </>
   );
-});
+};
