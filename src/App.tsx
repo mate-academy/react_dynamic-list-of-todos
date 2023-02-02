@@ -26,7 +26,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = allTodos
-    .filter(todo => todo.title.includes(query))
+    .filter(todo => todo.title.toLowerCase().includes(query))
     .filter(todo => {
       switch (todoStatus) {
         case 'active':
