@@ -1,16 +1,16 @@
 import { FC, memo } from 'react';
 
 interface Props {
-  onQuery: (str: string) => void;
-  onStatus: (str: string) => void;
+  onQueryChange: (str: string) => void;
+  onStatusChange: (str: string) => void;
   onDeleteQuery: () => void;
   query: string;
   status: string;
 }
 
 export const TodoFilter: FC<Props> = memo(({
-  onQuery,
-  onStatus,
+  onQueryChange,
+  onStatusChange,
   onDeleteQuery,
   query,
   status,
@@ -21,7 +21,7 @@ export const TodoFilter: FC<Props> = memo(({
         <select
           data-cy="statusSelect"
           value={status}
-          onChange={(event) => onStatus(event.target.value)}
+          onChange={(event) => onStatusChange(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -37,7 +37,7 @@ export const TodoFilter: FC<Props> = memo(({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => onQuery(event.target.value)}
+        onChange={(event) => onQueryChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />

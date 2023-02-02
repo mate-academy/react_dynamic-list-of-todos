@@ -20,7 +20,7 @@ import { getVisibleTodos } from './getVisibleTodo';
 export const App: React.FC = memo(() => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState('');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -36,12 +36,12 @@ export const App: React.FC = memo(() => {
     setSelectedTodoId(id);
   }, []);
 
-  const handleQuery = useCallback((value: string) => {
+  const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
   }, []);
   const handleDeleteQuery = useCallback(() => setQuery(''), []);
 
-  const handleStatus = useCallback((value : string) => setStatus(value), []);
+  const handleStatusChange = useCallback((value : string) => setStatus(value), []);
   const handleCloseModal = useCallback(() => setSelectedTodoId(0), []);
 
   const selectedTodo = useMemo(() => (
@@ -61,8 +61,8 @@ export const App: React.FC = memo(() => {
 
             <div className="block">
               <TodoFilter
-                onQuery={handleQuery}
-                onStatus={handleStatus}
+                onQueryChange={handleQueryChange}
+                onStatusChange={handleStatusChange}
                 onDeleteQuery={handleDeleteQuery}
                 query={query}
                 status={status}
