@@ -68,6 +68,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={visibleTodos}
                 onSetSelectedTodo={setSelectedTodo}
+                selectedTodo={selectedTodo}
               />
             </div>
           </div>

@@ -35,27 +35,23 @@ export const TodoModal: React.FC<Props> = ({
           <Loader />
         ) : (
           <div className="modal-card">
-            {selectedTodo && (
-              <header className="modal-card-head">
-                <div
-                  className="modal-card-title has-text-weight-medium"
-                  data-cy="modal-header"
-                >
-                  {`Todo #${selectedTodo.id}`}
-                </div>
-
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                <button
-                  type="button"
-                  className="delete"
-                  data-cy="modal-close"
-                  onClick={() => {
-                    onSetSelectedTodo(null);
-                  }}
-                />
-              </header>
-            )}
-
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
+              >
+                {`Todo #${selectedTodo.id}`}
+              </div>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={() => {
+                  onSetSelectedTodo(null);
+                }}
+              />
+            </header>
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
                 {selectedTodo.title}
