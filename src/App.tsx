@@ -15,11 +15,17 @@ export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [isSelected, setIsSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
-    getTodos().then(setAllTodos);
+    setIsLoading(true);
+    getTodos().then(setAllTodos)
+
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const visibleTodos = allTodos
@@ -41,11 +47,6 @@ export const App: React.FC = () => {
       }
     });
 
-  // eslint-disable-next-line no-console
-  // console.log({ visibleTodos });
-  console.log({ allTodos });
-  // console.log({ todos });
-
   return (
     <>
       <div className="section">
@@ -62,32 +63,25 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {visibleTodos.length === 0
-                ? (
-                  <Loader />
-                )
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    onSetSelectedTodo={setSelectedTodo}
-                    onSetIsSelected={setIsSelected}
-                  />
-                )}
+              {isLoading && (
+                <Loader />
+              )}
+              <TodoList
+                todos={visibleTodos}
+                onSetSelectedTodo={setSelectedTodo}
+                onSetIsSelected={setIsSelected}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && isSelected
-        ? (
-          <TodoModal
-            selectedTodo={selectedTodo}
-            onSetIsSelected={setIsSelected}
-          />
-        )
-        : (
-          <Loader />
-        )}
+      {selectedTodo && isSelected && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onSetIsSelected={setIsSelected}
+        />
+      )}
     </>
   );
 };

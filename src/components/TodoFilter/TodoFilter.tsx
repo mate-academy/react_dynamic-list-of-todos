@@ -1,13 +1,13 @@
 import React from 'react';
 
 type Props = {
-  query:string
-  filter:string
+  query: string
+  filter: string
   onSetQuery: (value: string) => void;
   onSetSelectedFilter: (value: string) => void;
 };
 
-export const TodoFilter:React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = ({
   query,
   filter,
   onSetQuery,
@@ -45,21 +45,23 @@ export const TodoFilter:React.FC<Props> = ({
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
-        <span
-          className="icon is-right"
-          style={{ pointerEvents: 'all' }}
-        >
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={(() => {
-              onSetQuery('');
-            })}
-          />
-        </span>
+        {query && (
+          <span
+            className="icon is-right"
+            style={{ pointerEvents: 'all' }}
+          >
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              hidden
+              onClick={(() => {
+                onSetQuery('');
+              })}
+            />
+          </span>
+        )}
       </p>
     </form>
   );
