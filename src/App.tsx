@@ -11,17 +11,32 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [visibleTodos, setvisibleTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [todoStatus, setTodoStatus] = useState('all');
 
   const loadedTodos = async () => {
-    setvisibleTodos(await getTodos());
+    setAllTodos(await getTodos());
   };
 
   useEffect(() => {
     loadedTodos();
   }, []);
+
+  const visibleTodos = allTodos
+    .filter(todo => todo.title.includes(query))
+    .filter(todo => {
+      switch (todoStatus) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
 
   return (
     <>
@@ -31,19 +46,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onSetQuery={setQuery}
+                todoStatus={todoStatus}
+                onSetStatus={setTodoStatus}
+              />
             </div>
 
             <div className="block">
-              {visibleTodos.length === 0
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    setSelectedTodo={setSelectedTodo}
-                    onClose={setIsModalOpen}
-                  />
-                )}
+              {allTodos.length === 0 && (
+                <Loader />
+              )}
+
+              <TodoList
+                todos={visibleTodos}
+                selectedTodo={selectedTodo}
+                setSelectedTodo={setSelectedTodo}
+                onClose={setIsModalOpen}
+              />
             </div>
           </div>
         </div>
@@ -51,6 +72,7 @@ export const App: React.FC = () => {
       {selectedTodo && isModalOpen && (
         <TodoModal
           todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
           onClose={setIsModalOpen}
         />
       )}

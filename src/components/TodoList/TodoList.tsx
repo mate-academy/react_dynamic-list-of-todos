@@ -4,12 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  setSelectedTodo: (todo: Todo) => void
+  selectedTodo: Todo | null
+  setSelectedTodo: (todo: Todo | null) => void
   onClose: (value: boolean) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  selectedTodo,
   setSelectedTodo,
   onClose,
 }) => (
@@ -62,7 +64,12 @@ export const TodoList: React.FC<Props> = ({
               }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={classNames('far',
+                  {
+                    'fa-eye-slash': selectedTodo === todo,
+                    'fa-eye': selectedTodo !== todo,
+                  })}
+                />
               </span>
             </button>
           </td>
