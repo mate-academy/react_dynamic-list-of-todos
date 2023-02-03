@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,7 +25,7 @@ export const App: React.FC = () => {
     getTodos().then(todo => setTodos(todo));
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
+  const visibleTodos = useMemo(() => todos.filter(todo => {
     const isQueryMatch = todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
     let selectedFilterStatus = true;
 
@@ -38,19 +43,19 @@ export const App: React.FC = () => {
     }
 
     return isQueryMatch && selectedFilterStatus;
-  });
+  }), [todos, status, searchQuery]);
 
   const selectTodoId = (todoId: number) => {
     setSelectedTodoId(todoId);
   };
 
-  const selectedTodo = visibleTodos.find(todo => (
+  const selectedTodo = useMemo(() => visibleTodos.find(todo => (
     todo.id === selectedTodoId
-  ));
+  )), [selectedTodoId, visibleTodos]);
 
-  const closeSelectedTodo = () => {
+  const closeSelectedTodo = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
   const filterByQuery = (value: string) => {
     setSearchQuery(value);
