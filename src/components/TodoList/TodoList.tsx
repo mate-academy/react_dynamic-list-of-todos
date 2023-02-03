@@ -1,17 +1,15 @@
-import React, { memo } from 'react';
-import cn from 'classnames';
+import React from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
 type Props = {
-  todos: Todo[];
-  onSelectTodoId: (todoId: number) => void;
-  selectedTodoId: number;
+  todos: Todo[],
+  showTodo: (todo: Todo) => void,
+  selectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = memo(({
-  todos,
-  onSelectTodoId,
-  selectedTodoId,
+export const TodoList: React.FC<Props> = ({
+  todos, showTodo, selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -29,44 +27,13 @@ export const TodoList: React.FC<Props> = memo(({
 
     <tbody>
       {todos.map(todo => (
-        <tr
+        <TodoItem
           key={todo.id}
-          data-cy="todo"
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={cn({
-              'has-text-success': todo.completed,
-              'has-text-danger': !todo.completed,
-            })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => onSelectTodoId(todo.id)}
-            >
-              <span className="icon">
-                <i className={`far ${selectedTodoId === todo.id
-                  ? 'fa-eye-slash'
-                  : 'fa-eye'}`}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
+          todo={todo}
+          showTodo={showTodo}
+          selectedTodo={selectedTodo}
+        />
       ))}
     </tbody>
   </table>
-));
+);

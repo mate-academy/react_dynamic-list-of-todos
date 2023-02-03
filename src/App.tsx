@@ -1,56 +1,51 @@
 /* eslint-disable max-len */
-import React, {
-  memo,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { getVisibleTodos } from './getVisibleTodo';
+import { Todo } from './types/Todo';
+import { Loader } from './components/Loader';
+import { FilterOption } from './enums/FilterOptions';
 
-export const App: React.FC = memo(() => {
+export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [status, setStatus] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterOption, setFilterOption] = useState<FilterOption>(FilterOption.All);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    try {
-      getTodos()
-        .then(setTodos);
-    } catch (error) {
-      setTodos([]);
-    }
+    setIsLoading(true);
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        throw new Error('Todos loading is failed');
+      });
   }, []);
 
-  const handleSelectTodoId = useCallback((id: number) => {
-    setSelectedTodoId(id);
-  }, []);
+  const visibleTodos = useMemo(() => {
+    return todos.filter(({ title, completed }) => {
+      const searchQuery = (
+        title.toLowerCase().includes(query.trim().toLowerCase())
+      );
 
-  const handleQueryChange = useCallback((value: string) => {
-    setQuery(value);
-  }, []);
-  const handleDeleteQuery = useCallback(() => setQuery(''), []);
-
-  const handleStatusChange = useCallback((value : string) => setStatus(value), []);
-  const handleCloseModal = useCallback(() => setSelectedTodoId(0), []);
-
-  const selectedTodo = useMemo(() => (
-    todos.find(todo => todo.id === selectedTodoId)
-  ), [selectedTodoId]);
-
-  const visibleTodos = useMemo(() => (
-    getVisibleTodos(todos, query, status)
-  ), [todos, query, status]);
+      switch (filterOption) {
+        case FilterOption.Active:
+          return !completed && searchQuery;
+        case FilterOption.Completed:
+          return completed && searchQuery;
+        default:
+          return searchQuery;
+      }
+    });
+  }, [todos, filterOption, query]);
 
   return (
     <>
@@ -61,35 +56,38 @@ export const App: React.FC = memo(() => {
 
             <div className="block">
               <TodoFilter
-                onQueryChange={handleQueryChange}
-                onStatusChange={handleStatusChange}
-                onDeleteQuery={handleDeleteQuery}
+                filterOption={filterOption}
+                setFilterOption={setFilterOption}
+                setQuery={setQuery}
                 query={query}
-                status={status}
               />
             </div>
 
             <div className="block">
-              {todos.length ? (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
-                  selectedTodoId={selectedTodoId}
-                  onSelectTodoId={handleSelectTodoId}
+                  selectedTodo={selectedTodo}
+                  showTodo={(todo) => {
+                    setSelectedTodo(todo);
+                  }}
                 />
-              ) : (
-                <Loader />
-              ) }
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {!!selectedTodo && (
         <TodoModal
-          todo={selectedTodo}
-          onCloseModal={handleCloseModal}
+          selectedTodo={selectedTodo}
+          closeModal={() => {
+            setSelectedTodo(null);
+          }}
         />
       )}
     </>
   );
-});
+};
