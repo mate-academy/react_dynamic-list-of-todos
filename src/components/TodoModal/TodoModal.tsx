@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todo: Todo;
+  onClick: (todo: null) => void;
+};
+
+export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
+  const [user, setUser] = useState({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+
+  const {
+    id,
+    completed,
+    title,
+    userId,
+  } = todo;
+
+  const { email, name } = user;
+
+  useEffect(() => {
+    if (userId > 0) {
+      getUser(userId).then(setUser);
+    }
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!name ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +44,8 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #
+              {id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +53,26 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                onClick(null);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
-              {' by '}
+              &nbsp;by&nbsp;
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${email}`}>
+                {name}
               </a>
             </p>
           </div>
