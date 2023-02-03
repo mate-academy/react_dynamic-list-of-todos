@@ -13,6 +13,12 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
   const [query, setQuery] = useState('');
 
   const customFilter = useCallback(async (input: string) => {
+    if (input === 'all') {
+      const v = await getTodos();
+
+      onFilter(v);
+    }
+
     if (input === 'completed') {
       const v = await getCompletedTodos();
 
@@ -66,16 +72,18 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => {
-              searchFilter('');
-              setQuery('');
-            }}
-          />
+          {query && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => {
+                searchFilter('');
+                setQuery('');
+              }}
+            />
+          )}
         </span>
       </p>
     </form>

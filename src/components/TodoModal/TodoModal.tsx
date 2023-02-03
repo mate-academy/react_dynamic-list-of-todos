@@ -8,15 +8,16 @@ import { Loader } from '../Loader';
 type Props = {
   todo: Todo,
   onCheck: (isSelected: boolean) => void,
+  onSelect: (selectedTodoId: number) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onCheck }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onCheck, onSelect }) => {
   const [user, setUser] = useState<User>();
   const [loader, setLoader] = useState(true);
 
   setTimeout(() => {
     setLoader(false);
-  }, 500);
+  }, 300);
 
   useEffect(() => {
     getUser(todo.userId).then(setUser);
@@ -43,7 +44,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onCheck }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => onCheck(false)}
+                onClick={() => {
+                  onCheck(false);
+                  onSelect(0);
+                }}
               />
             </header>
 
@@ -65,7 +69,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onCheck }) => {
                 {' by '}
 
                 <a href={`mailto:${user?.email}`}>
-                  {user}
+                  {user?.name}
                 </a>
               </p>
             </div>

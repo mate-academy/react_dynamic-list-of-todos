@@ -37,8 +37,13 @@ export const getActiveTodos = () => {
 };
 
 export const getSearchedTodos = (searchedLetters: string) => {
-  const input = searchedLetters.toLowerCase();
+  const input = searchedLetters.trim().toLowerCase();
 
   return getTodos()
-    .then(todos => todos.filter(todo => todo.title.includes(input)));
+    .then(todos => todos
+      .filter(todo => todo.title.toLowerCase().includes(input)));
+};
+
+export const selectTodo = (todoId: number) => {
+  getTodos().then(todos => todos.find(todo => todo.id === todoId) || null);
 };

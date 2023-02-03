@@ -7,9 +7,13 @@ type Props = {
   appTodo: Todo[],
   setTodo: (todo: Todo) => void,
   onCheck: (isSelected: boolean) => void,
+  onSelect: (selectedTodoId: number) => void,
+  selected: number,
 };
 
-export const TodoList: React.FC<Props> = ({ appTodo, setTodo, onCheck }) => {
+export const TodoList: React.FC<Props> = ({
+  appTodo, setTodo, onCheck, onSelect, selected,
+}) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -37,7 +41,7 @@ export const TodoList: React.FC<Props> = ({ appTodo, setTodo, onCheck }) => {
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="">
+          <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -63,10 +67,16 @@ export const TodoList: React.FC<Props> = ({ appTodo, setTodo, onCheck }) => {
                 onClick={() => {
                   onCheck(true);
                   setTodo(todo);
+                  onSelect(todo.id);
                 }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={cn(
+                    'far',
+                    { 'fa-eye': selected !== todo.id },
+                    { 'fa-eye-slash': selected === todo.id },
+                  )}
+                  />
                 </span>
               </button>
             </td>
