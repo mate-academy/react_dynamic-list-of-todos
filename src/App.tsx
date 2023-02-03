@@ -12,6 +12,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,10 +24,6 @@ export const App: React.FC = () => {
     getTodos()
       .then((loadedTodos) => setTodos(loadedTodos));
   }, []);
-
-  const selectTodoId = (todoId: number) => {
-    setSelectedTodoId(todoId);
-  };
 
   const closeModal = useCallback(() => (
     setSelectedTodoId(0)
@@ -42,15 +39,15 @@ export const App: React.FC = () => {
     let isSearchBySelect;
 
     switch (filter) {
-      case 'completed':
+      case Filter.COMPLETED:
         isSearchBySelect = todo.completed;
         break;
 
-      case 'active':
+      case Filter.ACTIVE:
         isSearchBySelect = !todo.completed;
         break;
 
-      case 'all':
+      case Filter.All:
         return isSearchQuery;
 
       default:
@@ -81,7 +78,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodoId={selectTodoId}
+                    selectTodoId={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )
