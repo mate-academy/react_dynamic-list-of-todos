@@ -1,9 +1,27 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+type Props = {
+  onSelectOption: string,
+  onSetSelectOption: (value: string) => void
+  onQuery: string,
+  onSetQuery: (value: string) => void
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  onSelectOption, onSetSelectOption, onQuery, onSetQuery,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={onSelectOption}
+          onChange={(event) => {
+            onSetSelectOption(event.target.value);
+          }}
+        >
           <option value="all">All</option>
+
           <option value="active">Active</option>
           <option value="completed">Completed</option>
         </select>
@@ -16,19 +34,27 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={onQuery}
+        onChange={(event) => {
+          onSetQuery(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {onQuery && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* s2al alaa , bhott && aw bhot if condition , fare2 ? */}
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+          />
+        </span>
+      )}
+
     </p>
   </form>
 );
