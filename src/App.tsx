@@ -9,10 +9,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterTypes } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [option, setOption] = useState('all');
+  const [filterType, setFilterType] = useState(FilterTypes.All);
   const [query, setQuery] = useState('');
   const [isTodosLoading, setIsTodosLoading] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
@@ -28,12 +29,17 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     let preparedTodos = todos;
 
-    if (option === 'active') {
-      preparedTodos = todos.filter(todo => !todo.completed);
-    }
+    switch (filterType) {
+      case FilterTypes.Active:
+        preparedTodos = todos.filter(todo => !todo.completed);
+        break;
 
-    if (option === 'completed') {
-      preparedTodos = todos.filter(todo => todo.completed);
+      case FilterTypes.Completed:
+        preparedTodos = todos.filter(todo => todo.completed);
+        break;
+
+      default:
+        break;
     }
 
     return query
@@ -41,7 +47,7 @@ export const App: React.FC = () => {
         todo.title.toLocaleLowerCase().includes(query.toLowerCase())
       ))
       : preparedTodos;
-  }, [todos, option, query]);
+  }, [todos, filterType, query]);
 
   const selectedTodo = useMemo(() => {
     return todos.find(todo => todo.id === selectedTodoId);
@@ -56,8 +62,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                option={option}
-                setOption={setOption}
+                filterType={filterType}
+                setFilterType={setFilterType}
                 query={query}
                 setQuery={setQuery}
               />

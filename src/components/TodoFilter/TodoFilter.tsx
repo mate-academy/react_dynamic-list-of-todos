@@ -1,19 +1,39 @@
 import React from 'react';
+import { FilterTypes } from '../../types/FilterTypes';
 
 interface Props {
-  option: string,
-  setOption: (option: string) => void,
+  filterType: FilterTypes,
+  setFilterType: (filterType: FilterTypes) => void,
   query: string,
   setQuery: (query: string) => void,
 }
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
-    option,
-    setOption,
+    filterType,
+    setFilterType,
     query,
     setQuery,
   } = props;
+
+  const onSelectOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case FilterTypes.All:
+        setFilterType(FilterTypes.All);
+        break;
+
+      case FilterTypes.Active:
+        setFilterType(FilterTypes.Active);
+        break;
+
+      case FilterTypes.Completed:
+        setFilterType(FilterTypes.Completed);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <form className="field has-addons">
@@ -21,12 +41,12 @@ export const TodoFilter: React.FC<Props> = (props) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={option}
-            onChange={event => setOption(event.target.value)}
+            value={filterType}
+            onChange={onSelectOption}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterTypes.All}>All</option>
+            <option value={FilterTypes.Active}>Active</option>
+            <option value={FilterTypes.Completed}>Completed</option>
           </select>
         </span>
       </p>
