@@ -10,6 +10,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
+enum Status {
+  Active = 'active',
+  Completed = 'completed',
+}
+
 function searchInTitle(title: string, search: string) {
   return title.toLowerCase().includes(search.trim().toLowerCase());
 }
@@ -28,11 +33,11 @@ export const App: React.FC = () => {
   let visibleTodos;
 
   switch (filterByStatus) {
-    case 'active':
+    case Status.Active:
       selectedTodos = todos.filter(currentTodo => !currentTodo.completed);
       break;
 
-    case 'completed':
+    case Status.Completed:
       selectedTodos = todos.filter(currentTodo => currentTodo.completed);
       break;
 
