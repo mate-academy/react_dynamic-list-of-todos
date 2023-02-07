@@ -27,9 +27,10 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const trimmed = query.toLocaleLowerCase().trim();
+
   const visibleTodos = allTodos
     .filter((todo) => {
-      const trimmed = query.toLocaleLowerCase().trim();
       const title = todo.title.toLocaleLowerCase();
 
       return title.includes(trimmed);
@@ -62,14 +63,18 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {isLoading && (
-                <Loader />
-              )}
-              <TodoList
-                todos={visibleTodos}
-                onSetSelectedTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
+              {isLoading
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSetSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                  />
+
+                )}
             </div>
           </div>
         </div>
