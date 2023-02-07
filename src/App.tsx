@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,13 +8,19 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 // import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setQuery] = useState('');
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const filteredTodos = todos.filter(todo => {
+  const onInputQuery = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
+
+  const onClearInput = () => setQuery('');
+
+  const visibleTodos = filteredTodos.filter(todo => {
     const lowerTitle = todo.title.toLowerCase();
     const lowerQuery = searchQuery.toLowerCase().trim();
 
@@ -22,11 +28,29 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(data => {
         setTodos(data);
+        setFilteredTodos(data);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
+  const onSelectTodos = (event: ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case 'active':
+        setFilteredTodos(todos.filter(todo => !todo.completed));
+        break;
+      case 'completed':
+        setFilteredTodos(todos.filter(todo => todo.completed));
+        break;
+      default:
+        setFilteredTodos(todos);
+    }
+  };
 
   return (
     <>
@@ -38,13 +62,15 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={searchQuery}
-                setQuery={setQuery}
+                onInputQuery={onInputQuery}
+                onSelectTodos={onSelectTodos}
+                onClearInput={onClearInput}
               />
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              <TodoList todos={filteredTodos} />
+              {isLoading && <Loader />}
+              <TodoList visibleTodos={visibleTodos} />
             </div>
           </div>
         </div>
