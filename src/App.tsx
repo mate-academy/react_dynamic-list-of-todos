@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [filter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
       return title.includes(trimmed);
     })
     .filter((todo) => {
-      switch (filter) {
+      switch (selectedFilter) {
         case 'active':
           return !todo.completed;
         case 'completed':
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                filter={filter}
+                selectedFilter={selectedFilter}
                 onSetQuery={setQuery}
                 onSetSelectedFilter={setSelectedFilter}
               />

@@ -2,14 +2,14 @@ import React from 'react';
 
 type Props = {
   query: string
-  filter: string
+  selectedFilter: string
   onSetQuery: (value: string) => void;
   onSetSelectedFilter: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  filter,
+  selectedFilter: filter,
   onSetQuery,
   onSetSelectedFilter,
 }) => {

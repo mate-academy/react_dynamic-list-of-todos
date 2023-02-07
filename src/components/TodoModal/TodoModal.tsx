@@ -30,10 +30,8 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user
+      {user
         ? (
-          <Loader />
-        ) : (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -58,7 +56,6 @@ export const TodoModal: React.FC<Props> = ({
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
                 <strong
                   className={classNames({
                     'has-text-danger': !selectedTodo.completed,
@@ -78,6 +75,9 @@ export const TodoModal: React.FC<Props> = ({
               </p>
             </div>
           </div>
+        )
+        : (
+          <Loader />
         )}
     </div>
   );
