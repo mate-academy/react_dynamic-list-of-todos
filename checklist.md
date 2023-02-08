@@ -1,4 +1,4 @@
-- make sure you can't add movie with empty data (with spaces only);
+- make sure you can't add todo with empty data (with spaces only);
 - don't interact with DOM directly, use React as much as possible;
 - make sure you described objects in propTypes;
 - don't use `isLoad`, it can be `isLoading` or `isLoaded`;
