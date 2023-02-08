@@ -2,10 +2,11 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
+  selectTodo: (todo: Todo) => void,
   visibleTodos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
+export const TodoList: React.FC<Props> = ({ visibleTodos, selectTodo }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -37,17 +38,23 @@ export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={
-                classNames(
-                  todo.completed ? 'has-text-success' : 'has-text-danger',
-                )
-              }
+              <p className={classNames(
+                {
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                },
+              )}
               >
                 {todo.title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => selectTodo(todo)}
+              >
                 <span className="icon">
                   <i className="far fa-eye-slash" />
                 </span>

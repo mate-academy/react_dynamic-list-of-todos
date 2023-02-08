@@ -2,23 +2,25 @@ import { ChangeEvent } from 'react';
 
 type Props = {
   query: string,
-  onInputQuery: (event: ChangeEvent<HTMLInputElement>) => void,
-  onSelectTodos: (event: ChangeEvent<HTMLSelectElement>) => void,
+  handleInput: (event: ChangeEvent<HTMLInputElement>) => void,
+  getSelectTodos: (event: ChangeEvent<HTMLSelectElement>) => void,
   onClearInput: () => void,
+  isSearchActive: boolean;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onInputQuery,
-  onSelectTodos,
+  handleInput,
+  getSelectTodos,
   onClearInput,
+  isSearchActive,
 }) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span
           className="select"
-          onChange={onSelectTodos}
+          onChange={getSelectTodos}
         >
           <select data-cy="statusSelect">
             <option value="all">All</option>
@@ -35,21 +37,23 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={onInputQuery}
+          onChange={handleInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={onClearInput}
-          />
-        </span>
+        {isSearchActive && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={onClearInput}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

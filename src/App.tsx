@@ -5,20 +5,39 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setQuery] = useState('');
   const [filteredTodos, setFilteredTodos] = useState(todos);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearchActive, setSearchActive] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const onInputQuery = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+    setSearchActive(true);
+  };
 
-  const onClearInput = () => setQuery('');
+  const selectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const closePopUp = () => {
+    setSelectedTodo(null);
+  };
+
+  const onClearInput = () => {
+    setQuery('');
+    setSearchActive(false);
+  };
 
   const visibleTodos = filteredTodos.filter(todo => {
     const lowerTitle = todo.title.toLowerCase();
@@ -39,7 +58,20 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const onSelectTodos = (event: ChangeEvent<HTMLSelectElement>) => {
+  useEffect(() => {
+    setIsLoadingUser(true);
+    if (selectedTodo) {
+      getUser(selectedTodo.userId)
+        .then(user => {
+          setSelectedUser(user);
+        })
+        .finally(() => {
+          setIsLoadingUser(false);
+        });
+    }
+  }, [selectedTodo]);
+
+  const getSelectTodos = (event: ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
       case 'active':
         setFilteredTodos(todos.filter(todo => !todo.completed));
@@ -62,21 +94,32 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={searchQuery}
-                onInputQuery={onInputQuery}
-                onSelectTodos={onSelectTodos}
+                handleInput={handleInput}
+                isSearchActive={isSearchActive}
+                getSelectTodos={getSelectTodos}
                 onClearInput={onClearInput}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList visibleTodos={visibleTodos} />
+              <TodoList
+                visibleTodos={visibleTodos}
+                selectTodo={selectTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {selectedTodo && (
+        <TodoModal
+          selectedUser={selectedUser}
+          selectedTodo={selectedTodo}
+          isLoadingUser={isLoadingUser}
+          onClosePopUp={closePopUp}
+        />
+      )}
     </>
   );
 };
