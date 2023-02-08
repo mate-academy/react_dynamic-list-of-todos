@@ -24,14 +24,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos().then((todos) => setVisibleToDos(todos));
+    getTodos().then(setVisibleToDos);
   }, []);
 
   const filteredTodos = useMemo(() => {
     return visibleToDos.filter((todo) => {
       const filteredByQuery = todo.title
         .toLowerCase()
-        .includes(query.toLowerCase());
+        .includes(query.toLowerCase().trim());
 
       switch (status) {
         case 'active':

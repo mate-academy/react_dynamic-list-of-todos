@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then((user) => setCurrentUser(user));
+    getUser(selectedTodo.userId).then(setCurrentUser);
   });
 
   return (
