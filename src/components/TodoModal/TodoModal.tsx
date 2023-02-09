@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -47,10 +48,15 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">
-                Planned
-                {selectedTodo.completed}
+              <strong
+                className={classNames({
+                  'has-text-success': selectedTodo.completed,
+                  'has-text-danger': !selectedTodo.completed,
+                })}
+              >
+                {selectedTodo.completed
+                  ? 'Done'
+                  : 'Planned'}
               </strong>
 
               {' by '}
