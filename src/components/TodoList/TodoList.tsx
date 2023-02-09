@@ -4,9 +4,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   selectTodo: (todo: Todo) => void,
   visibleTodos: Todo[];
+  selectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = ({ visibleTodos, selectTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  visibleTodos,
+  selectTodo,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -56,7 +61,14 @@ export const TodoList: React.FC<Props> = ({ visibleTodos, selectTodo }) => {
                 onClick={() => selectTodo(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye-slash" />
+                  <i className={classNames(
+                    'far',
+                    {
+                      'fa-eye': todo !== selectedTodo,
+                      'fa-eye-slash': todo === selectedTodo,
+                    },
+                  )}
+                  />
                 </span>
               </button>
             </td>

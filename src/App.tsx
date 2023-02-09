@@ -106,6 +106,7 @@ export const App: React.FC = () => {
               <TodoList
                 visibleTodos={visibleTodos}
                 selectTodo={selectTodo}
+                selectedTodo={selectedTodo}
               />
             </div>
           </div>
