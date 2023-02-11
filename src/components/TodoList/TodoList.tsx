@@ -2,17 +2,16 @@ import React from 'react';
 
 import { TodoItem } from '../TodoItem';
 
-import { OptionalTodo } from '../../types/OptionalTodo';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: OptionalTodo;
+  selectedTodoId: number;
   selectTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = React.memo(
-  ({ todos, selectedTodo, selectTodo }) => (
+  ({ todos, selectedTodoId, selectTodo }) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -32,7 +31,7 @@ export const TodoList: React.FC<Props> = React.memo(
           <TodoItem
             key={todo.id}
             todo={todo}
-            selectedTodo={selectedTodo}
+            selectedTodoId={selectedTodoId}
             selectTodo={selectTodo}
           />
         ))}

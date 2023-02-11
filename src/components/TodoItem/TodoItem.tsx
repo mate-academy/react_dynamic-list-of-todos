@@ -1,22 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { OptionalTodo } from '../../types/OptionalTodo';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  selectedTodo: OptionalTodo;
+  selectedTodoId: number;
   selectTodo: (todo: Todo) => void;
 };
 
 export const TodoItem: React.FC<Props> = React.memo(
-  ({ todo, selectedTodo, selectTodo }) => {
+  ({ todo, selectedTodoId, selectTodo }) => {
     return (
       <tr
         data-cy="todo"
         className={classNames({
-          'has-background-info-light': todo.id === selectedTodo?.id,
+          'has-background-info-light': todo.id === selectedTodoId,
         })}
       >
         <td className="is-vcentered">{todo.id}</td>
@@ -52,8 +51,8 @@ export const TodoItem: React.FC<Props> = React.memo(
             <span className="icon">
               <i
                 className={classNames('far', {
-                  'fa-eye': todo.id !== selectedTodo?.id,
-                  'fa-eye-slash': todo.id === selectedTodo?.id,
+                  'fa-eye': todo.id !== selectedTodoId,
+                  'fa-eye-slash': todo.id === selectedTodoId,
                 })}
               />
             </span>

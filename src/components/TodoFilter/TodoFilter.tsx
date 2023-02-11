@@ -1,13 +1,15 @@
 import React from 'react';
 
+import { FilterOptions } from '../../enums/FilterOptions';
+
 type Props = {
-  selectedFilter: string;
+  selectedFilter: FilterOptions;
   searchQuery: string;
-  onSelectedFilterChange: (newFilter: string) => void;
+  onSelectedFilterChange: (newFilter: FilterOptions) => void;
   onSearchQueryChange: (newQuery: string) => void;
 };
 
-const filterOptions = ['all', 'active', 'completed'] as const;
+const filterOptions = Object.values(FilterOptions);
 
 export const TodoFilter: React.FC<Props> = React.memo(
   ({
@@ -26,7 +28,7 @@ export const TodoFilter: React.FC<Props> = React.memo(
               data-cy="statusSelect"
               value={selectedFilter}
               onChange={(event) => {
-                onSelectedFilterChange(event.target.value);
+                onSelectedFilterChange(event.target.value as FilterOptions);
               }}
             >
               {filterOptions.map((filterOption) => (

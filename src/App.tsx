@@ -12,11 +12,13 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { OptionalTodo } from './types/OptionalTodo';
 
+import { FilterOptions } from './enums/FilterOptions';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [areTodosLoading, setAreTodosLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<OptionalTodo>(null);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState(FilterOptions.All);
   const [filterQuery, setFilterQuery] = useState('');
 
   useEffect(() => {
@@ -29,13 +31,13 @@ export const App: React.FC = () => {
   const filteredTodosByOption = useMemo(() => {
     return todos.filter((todo) => {
       switch (selectedFilter) {
-        case 'all':
+        case FilterOptions.All:
           return true;
 
-        case 'active':
+        case FilterOptions.Active:
           return !todo.completed;
 
-        case 'completed':
+        case FilterOptions.Completed:
           return todo.completed;
 
         default:
@@ -74,7 +76,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  selectedTodo={selectedTodo}
+                  selectedTodoId={selectedTodo?.id || 0}
                   selectTodo={setSelectedTodo}
                 />
               )}
