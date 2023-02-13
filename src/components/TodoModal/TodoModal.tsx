@@ -1,5 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import { Loader } from '../Loader';
+import { ErrorMessage } from '../ErrorMessage';
 import { User, Todo } from '../../types';
 import { getUser } from '../../api';
 
@@ -9,8 +12,10 @@ type Props = {
 };
 
 export const TodoModal: FC<Props> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
   const {
     id,
     title,
@@ -18,12 +23,23 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
     userId,
   } = todo;
 
+  const fetchUser = useCallback(async () => {
+    setHasError(false);
+    setIsLoading(true);
+
+    try {
+      const fetchedUser = await getUser(userId);
+
+      setUser(fetchedUser);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    getUser(userId)
-      .then(foundUser => {
-        setIsLoading(false);
-        setUser(foundUser);
-      });
+    fetchUser();
   }, []);
 
   return (
@@ -39,7 +55,7 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${id}`}
+              {`TodoItem #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -56,19 +72,28 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
               {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {
-                completed
-                  ? <strong className="has-text-success">Done</strong>
-                  : <strong className="has-text-danger">Planned</strong>
-              }
+            {hasError && (
+              <ErrorMessage
+                message="Unable to fetch a user"
+                onRetry={fetchUser}
+              />
+            )}
 
-              {' by '}
+            {!!user && (
+              <p className="block" data-cy="modal-user">
+                {
+                  completed
+                    ? <strong className="has-text-success">Done</strong>
+                    : <strong className="has-text-danger">Planned</strong>
+                }
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
-            </p>
+                {' by '}
+
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}

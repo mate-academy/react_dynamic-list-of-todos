@@ -12,20 +12,36 @@ import { Loader } from './components/Loader';
 import { Todo, FilterType } from './types';
 import { getTodos } from './api';
 import { getVisibleTodos } from './utils';
+import { ErrorMessage } from './components/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [hasReceivedTodos, setHasReceivedTodos] = useState(false);
+
   const [filterType, setFilterType] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
 
+  const fetchTodos = useCallback(async () => {
+    setIsLoading(true);
+    setHasError(false);
+
+    try {
+      const fetchedTodos = await getTodos();
+
+      setTodos(fetchedTodos);
+      setHasReceivedTodos(true);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    getTodos()
-      .then(allTodos => {
-        setIsLoading(false);
-        setTodos(allTodos);
-      });
+    fetchTodos();
   }, []);
 
   const visibleTodos = useMemo(
@@ -40,7 +56,7 @@ export const App: React.FC = () => {
     [],
   );
 
-  const hideModal = () => setSelectedTodo(null);
+  const hideModal = useCallback(() => setSelectedTodo(null), []);
 
   const clearQuery = useCallback(
     () => setQuery(''),
@@ -65,18 +81,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                isLoading
-                  ? (
-                    <Loader />
-                  ) : (
-                    <TodoList
-                      todos={visibleTodos}
-                      selected={selectedTodo}
-                      onClick={showModal}
-                    />
-                  )
-              }
+              {isLoading && <Loader />}
+
+              {hasError && (
+                <ErrorMessage
+                  message="Unable to load todos"
+                  onRetry={fetchTodos}
+                />
+              )}
+
+              {hasReceivedTodos && (
+                <TodoList
+                  todos={visibleTodos}
+                  selected={selectedTodo}
+                  onClick={showModal}
+                />
+              )}
             </div>
           </div>
         </div>
