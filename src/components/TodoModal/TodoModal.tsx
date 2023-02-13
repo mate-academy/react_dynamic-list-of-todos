@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -19,14 +19,15 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
         const userData = await getUser(selectedTodo.userId);
 
         setUser(userData);
-        setIsLoading(false);
       } catch (error) {
+        throw new Error('no such user');
+      } finally {
         setIsLoading(false);
       }
     };
 
     getUserTodo();
-  }, [selectedTodo]);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -65,9 +66,15 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {user === null
+                ? (
+                  <p>No such user</p>
+                )
+                : (
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                )}
             </p>
           </div>
         </div>

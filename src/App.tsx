@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -25,17 +25,17 @@ export const App: React.FC = () => {
         const allTodos = await getTodos();
 
         setTodos(allTodos);
-        setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
         setHasRejectResponse(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     onLoadGetTodos();
   }, []);
 
-  const handleFilterTodos = useCallback(() => {
+  const visibleTodos = useMemo(() => {
     let allTodos = todos.filter(todo => {
       switch (filterBy) {
         case FilterBy.ACTIVE:
@@ -48,15 +48,18 @@ export const App: React.FC = () => {
     });
 
     if (query) {
+      const lowerCaseQuery = query.toLowerCase();
+
       allTodos = allTodos.filter(todo => {
-        return todo.title.toLowerCase().includes(query.toLowerCase());
+        return todo.title.toLowerCase().includes(lowerCaseQuery);
       });
     }
 
     return allTodos;
   }, [query, filterBy, todos]);
 
-  const visibleTodos = handleFilterTodos();
+  const hasError = !isLoading && hasRejectResponse;
+  const hasNoError = !isLoading && !hasRejectResponse;
 
   return (
     <>
@@ -75,21 +78,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? <Loader />
-                : (
-                  <>
-                    {hasRejectResponse
-                      ? <p>Error loading todos, please reload page</p>
-                      : (
-                        <TodoList
-                          todos={visibleTodos}
-                          onSelectTodo={setSelectedTodo}
-                          selectedTodo={selectedTodo}
-                        />
-                      )}
-                  </>
-                )}
+              {isLoading && (
+                <Loader />
+              )}
+
+              {hasError && (
+                <p>Error loading todos, please reload page</p>
+              )}
+
+              {hasNoError && (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelectTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
