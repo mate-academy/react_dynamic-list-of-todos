@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,28 +11,32 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [selectedItem, setSelectedItem] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(result => {
         setTodos(result);
-        setLoading(false);
       })
-      .catch(() => {
-        throw new Error('Uploading error');
+      .catch((error) => {
+      // eslint-disable-next-line no-console
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
-  const filterHandler = (
+  const filterTodos = useCallback((
     filterType: string,
     queryValue: string,
     allTodos: Todo[],
@@ -40,18 +46,18 @@ export const App: React.FC = () => {
     const completed = filteredQuery.filter(todo => todo.completed);
 
     switch (filterType) {
-      case 'all':
+      case FilterType.all:
         return !queryValue ? allTodos : filteredQuery;
-      case 'active':
+      case FilterType.active:
         return active;
-      case 'completed':
+      case FilterType.completed:
         return completed;
       default:
         throw new Error('No filter type');
     }
-  };
+  }, []);
 
-  const visibleTodos = filterHandler(filter, query, todos);
+  const visibleTodos = useMemo(() => filterTodos(filter, query, todos), [filter, query, todos]);
 
   return (
     <>
@@ -70,12 +76,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
-                loading={loading}
+                loading={isLoading}
               />
             </div>
           </div>

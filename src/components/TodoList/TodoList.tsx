@@ -39,7 +39,7 @@ export const TodoList: React.FC<Props> = ({
           className={classNames(
             {
               'has-background-info-light':
-              selectedItem && selectedItem.id === todo.id,
+              selectedItem?.id === todo.id,
             },
           )}
         >
@@ -73,7 +73,7 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i
                   className={
-                    selectedItem && selectedItem.id === todo.id
+                    selectedItem?.id === todo.id
                       ? 'far fa-eye-slash'
                       : 'far fa-eye'
                   }
