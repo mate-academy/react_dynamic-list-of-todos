@@ -20,10 +20,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
 
-    getTodos().then(result => {
-      setTodos(result);
-      setLoading(false);
-    });
+    getTodos()
+      .then(result => {
+        setTodos(result);
+        setLoading(false);
+      })
+      .catch(() => {
+        throw new Error('Uploading error');
+      });
   }, []);
 
   const filterHandler = (
@@ -71,6 +75,7 @@ export const App: React.FC = () => {
                 todos={visibleTodos}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
+                loading={loading}
               />
             </div>
           </div>
