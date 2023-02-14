@@ -13,7 +13,11 @@ export const TodoItem: React.FC<Props> = ({
   selectTodo,
   selectedTodo,
 }) => {
-  const { title, id, completed } = todo;
+  const {
+    title,
+    id,
+    completed,
+  } = todo;
   const isTodoSelected = id === selectedTodo?.id;
 
   return (
