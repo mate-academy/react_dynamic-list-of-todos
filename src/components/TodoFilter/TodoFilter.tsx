@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortBy}
-          onChange={event => handleSelect(event.target.value)}
+          onChange={(event) => handleSelect(event.target.value)}
         >
           <option value={SortBy.All}>All</option>
           <option value={SortBy.Active}>Active</option>
@@ -36,14 +36,14 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => handleChange(event.target.value)}
+        onChange={(event) => handleChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {query && (
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           <button
             aria-label="delete"
             data-cy="clearSearchButton"
@@ -51,8 +51,8 @@ export const TodoFilter: React.FC<Props> = ({
             className="delete"
             onClick={() => handleChange('')}
           />
-        )}
-      </span>
+        </span>
+      )}
     </p>
   </form>
 );
