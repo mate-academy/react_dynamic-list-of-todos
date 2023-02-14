@@ -6,14 +6,14 @@ type Props = {
   todos: Todo[],
   selectedItem: Todo | null,
   setSelectedItem: (todo: Todo) => void,
-  loading: boolean,
+  isLoading: boolean,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedItem,
   setSelectedItem,
-  loading,
+  isLoading: loading,
 }) => (
   <table className="table is-narrow is-fullwidth">
     {!loading && (

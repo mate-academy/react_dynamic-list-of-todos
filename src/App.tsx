@@ -19,6 +19,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [selectedItem, setSelectedItem] = useState<Todo | null>(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,9 +28,8 @@ export const App: React.FC = () => {
       .then(result => {
         setTodos(result);
       })
-      .catch((error) => {
-      // eslint-disable-next-line no-console
-        console.error(error);
+      .catch(() => {
+        setHasError(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -76,13 +76,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {hasError && (
+                <h3 style={{ color: 'tomato' }}>
+                  Todos loading error
+                </h3>
+              )}
               {isLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                selectedItem={selectedItem}
-                setSelectedItem={setSelectedItem}
-                loading={isLoading}
-              />
+              {!isLoading && !hasError && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                  isLoading={isLoading}
+                />
+              )}
             </div>
           </div>
         </div>
