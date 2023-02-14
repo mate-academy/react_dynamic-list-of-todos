@@ -52,14 +52,8 @@ export const TodoList: React.FC<Props> = ({
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p
-              className={classNames(
-                {
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                },
-              )}
-            >
+            {/* eslint-disable-next-line max-len */}
+            <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
               {todo.title}
             </p>
           </td>
@@ -71,13 +65,8 @@ export const TodoList: React.FC<Props> = ({
               onClick={() => setSelectedItem(todo)}
             >
               <span className="icon">
-                <i
-                  className={
-                    selectedItem?.id === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
-                  }
-                />
+                {/* eslint-disable-next-line max-len */}
+                <i className={selectedItem?.id === todo.id ? 'far fa-eye-slash' : 'far fa-eye'} />
               </span>
             </button>
           </td>
