@@ -1,9 +1,12 @@
+import React from 'react';
+import { SelectFilter } from '../../types/SelectFilter';
+
 type Props = {
   query: string,
   setQuery: (query: string) => void,
   reset: () => void,
-  selectFilter: string,
-  setSelectFilter: (selectFilter: string) => void,
+  selectFilter: SelectFilter,
+  setSelectFilter: (selectFilter: SelectFilter) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,11 +23,13 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={selectFilter}
-          onChange={(event) => setSelectFilter(event.target.value)}
+          onChange={({ target }) => setSelectFilter(
+            target.value as SelectFilter,
+          )}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SelectFilter.ALL}>All</option>
+          <option value={SelectFilter.ACTIVE}>Active</option>
+          <option value={SelectFilter.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>

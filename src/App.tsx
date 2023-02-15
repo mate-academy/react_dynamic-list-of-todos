@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 import React, { useEffect, useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
@@ -9,22 +10,37 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { SelectFilter } from './types/SelectFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState(SelectFilter.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  useEffect(() => {
-    getTodos().then(allTodos => {
+  const fetchTodos = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const resTodos = await getTodos();
+
+      setTodos(resTodos);
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      } else {
+        alert('Unexpected error');
+      }
+    } finally {
       setIsLoading(false);
-      setTodos(allTodos);
-    });
+    }
   }, []);
 
-  const reset = useCallback(() => {
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const resetQuery = useCallback(() => {
     setQuery('');
   }, []);
 
@@ -39,17 +55,20 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
+  const transform = (title: string) => title.toLowerCase();
+
   const visibleTodos = todos.filter(todo => {
-    const isInclude = todo.title.toLowerCase().includes(query.toLowerCase());
+    const { title } = todo;
+    const isInclude = transform(title).includes(transform(query));
 
     switch (selectFilter) {
-      case 'all':
+      case SelectFilter.ALL:
         return isInclude;
 
-      case 'active':
+      case SelectFilter.ACTIVE:
         return !todo.completed && isInclude;
 
-      case 'completed':
+      case SelectFilter.COMPLETED:
         return todo.completed && isInclude;
 
       default:
@@ -68,7 +87,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                reset={reset}
+                reset={resetQuery}
                 selectFilter={selectFilter}
                 setSelectFilter={setSelectFilter}
               />
@@ -77,13 +96,21 @@ export const App: React.FC = () => {
             <div className="block">
               { isLoading
                 ? <Loader />
-                : <TodoList todos={visibleTodos} selectedTodo={selectedTodo} onClick={showModal} />}
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    onClick={showModal}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal todo={selectedTodo} onClose={hideModal} />}
+      { selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={hideModal} />
+      )}
     </>
   );
 };

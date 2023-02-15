@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-alert */
+import classNames from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -13,13 +15,33 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
-  const { id, title, userId } = todo;
+  const {
+    id,
+    title,
+    userId,
+    completed,
+  } = todo;
+
+  const fetchUser = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const fetchedUser = await getUser(userId);
+
+      setUser(fetchedUser);
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      } else {
+        alert('Unexpected error');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    getUser(userId).then(resUser => {
-      setUser(resUser);
-      setIsLoading(false);
-    });
+    fetchUser();
   }, []);
 
   return (
@@ -52,17 +74,22 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               </p>
 
               <p className="block" data-cy="modal-user">
-                {
-                  todo.completed
-                    ? <strong className="has-text-success">Done</strong>
-                    : <strong className="has-text-danger">Planned</strong>
+                <strong className={
+                  classNames({
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  })
                 }
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
-
-                <a href={`mailto:${user?.email}`}>
-                  {user?.name}
-                </a>
+                {user && (
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
+                  </a>
+                )}
               </p>
             </div>
           </div>
