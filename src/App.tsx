@@ -107,7 +107,10 @@ export const App: React.FC = () => {
     applyQuery(event.target.value);
   }, []);
 
-  const handleInputReset = useCallback(() => setQuery(''), []);
+  const handleInputReset = useCallback(() => {
+    setQuery('');
+    setAppliedQuery('');
+  }, []);
 
   return (
     <>
