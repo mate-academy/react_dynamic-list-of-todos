@@ -32,8 +32,8 @@ export const filterTodos = (s: Select, q: string, t: Todo[]): Todo[] => {
     .filter(td => td.title.toLowerCase().includes(lowerAppliedQuery));
 };
 
-export const getTodoById = (id: number, arr: Todo[]): Todo | null => (
-  arr.find(todo => todo.id === id) || null
+export const getTodoById = (id: number, todoArr: Todo[]): Todo | null => (
+  todoArr.find(todo => todo.id === id) || null
 );
 
 export const App: React.FC = () => {
@@ -42,8 +42,11 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState<Select>(Select.ALL);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleTodosLoading = useCallback(() => {
+    setIsLoading(true);
+
     const loadingTodos = async () => {
       try {
         let todosFromServer = await getTodos();
@@ -61,6 +64,7 @@ export const App: React.FC = () => {
             : console.log('filtered some todo from server');
         });
         setTodos(todosFromServer);
+        setIsLoading(false);
       } catch (error) {
         console.log('you catched some error');
       }
@@ -75,7 +79,15 @@ export const App: React.FC = () => {
     filterTodos(select, appliedQuery, todos)
   ), [appliedQuery, select, todos]);
 
-  useEffect(debounce(() => setAppliedQuery(query), 700), [query]);
+  const selectedTodo = useMemo(() => (
+    getTodoById(selectedTodoId, todos)
+  ), [selectedTodoId]);
+
+  const applyQuery = useCallback(debounce((value) => {
+    setIsLoading(false);
+
+    return setAppliedQuery(value);
+  }, 700), []);
 
   const handleSelectedIdChange = useCallback((todoId) => {
     setSelectedTodoId(todoId);
@@ -90,14 +102,12 @@ export const App: React.FC = () => {
   }, []);
 
   const handleQueryChange = useCallback((event) => {
+    setIsLoading(true);
     setQuery(event.target.value);
+    applyQuery(event.target.value);
   }, []);
 
   const handleInputReset = useCallback(() => setQuery(''), []);
-
-  const selectedTodo = useMemo(() => (
-    getTodoById(selectedTodoId, todos)
-  ), [selectedTodoId]);
 
   return (
     <>
@@ -117,7 +127,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
