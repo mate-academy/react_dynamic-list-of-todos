@@ -72,7 +72,7 @@ export const TodoList: React.FC<Props> = React.memo((props) => {
               </td>
             </tr>
           )))
-          : 'No tasks finded'}
+          : 'No todos finded'}
       </tbody>
     </table>
   );
