@@ -10,18 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
-
-enum FilterValues {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { FilterValues } from './types/FilterValues';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedItem, setSelectedItem] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(FilterValues.All);
 
   useEffect(() => {
     getTodos()
