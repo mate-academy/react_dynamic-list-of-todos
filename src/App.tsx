@@ -9,54 +9,32 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-
-export const enum SelectByCompleted {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { TodoStatus } from './types/TodoStatus';
+import { preparedTodos } from './utils/preparedTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectByCompleted, setSelectByCompleted] = useState<string>(SelectByCompleted.ALL);
+  const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   const loadTodos = async () => {
-    const loadedTodos = await getTodos();
+    try {
+      const loadedTodos = await getTodos();
 
-    setTodos(loadedTodos);
-    setIsLoaded(true);
+      setTodos(loadedTodos);
+      setIsLoaded(true);
+    } catch (error) {
+      throw new Error(`There is an error with loading data: ${error}`);
+    }
   };
 
   useEffect(() => {
     loadTodos();
   }, []);
 
-  let visibleTodos = [...todos];
-
-  switch (selectByCompleted) {
-    case SelectByCompleted.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-    case SelectByCompleted.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-    case SelectByCompleted.ALL:
-    default:
-      visibleTodos = [...todos];
-      break;
-  }
-
-  if (query) {
-    const normalizedQuery = query
-      .split(' ')
-      .map(word => word.trim().toLowerCase())
-      .join(' ');
-
-    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
-  }
+  const visibleTodos = preparedTodos(todos, todoStatus, query);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId) || null;
 
@@ -73,9 +51,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelectByCompletedChange={(option) => setSelectByCompleted(option)}
+                onTodoStatus={setTodoStatus}
                 query={query}
-                onQuery={(newQuery) => setQuery(newQuery)}
+                onQuery={setQuery}
               />
             </div>
 
@@ -85,7 +63,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectedTodoId={selectedTodoId}
-                    onSlelectedTodoId={(selectedId) => setSelectedTodoId(selectedId)}
+                    onSelectedTodoId={setSelectedTodoId}
                   />
                 ) : (
                   <Loader />

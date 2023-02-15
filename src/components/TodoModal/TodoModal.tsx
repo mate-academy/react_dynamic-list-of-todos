@@ -13,9 +13,13 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const loadUser = async () => {
-    const loadedUser = await getUser(todo?.userId || 0);
+    try {
+      const loadedUser = await getUser(todo?.userId || 0);
 
-    setUser(loadedUser);
+      setUser(loadedUser);
+    } catch (error) {
+      throw new Error(`There is an error with loading data: ${error}`);
+    }
   };
 
   useEffect(() => {
