@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,9 +17,16 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const loadTodos = async () => {
-    setTodos(await getTodos());
-  };
+  const loadTodos = useCallback(async () => {
+    try {
+      setTodos(await getTodos());
+    } catch (error) {
+      if (error instanceof Error) {
+        /* eslint no-console: */
+        console.log("Todos aren't loaded");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     loadTodos();
