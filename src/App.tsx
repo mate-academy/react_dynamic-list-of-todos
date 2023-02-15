@@ -64,7 +64,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
+              {todos.length ? (
                 <TodoList
                   todos={visibleTodos}
                   selectedItem={selectedItem}

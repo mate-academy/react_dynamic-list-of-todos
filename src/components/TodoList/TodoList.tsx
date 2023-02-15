@@ -30,6 +30,7 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => (
         <tr
+          key={todo.id}
           data-cy="todo"
           className={classNames(
             {
