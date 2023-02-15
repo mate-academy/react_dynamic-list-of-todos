@@ -79,7 +79,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodos && <TodoModal />}
+      {selectTodos && (
+        <TodoModal
+          selectedTodo={selectTodos}
+          onSetSelectedTodo={setSelectTodos}
+        />
+      )}
     </>
   );
 };
