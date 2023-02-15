@@ -9,6 +9,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { ErrorMessage } from './components/ErrorMessage';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
@@ -16,12 +17,18 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>('all');
-  const [appliedQuery, setAppliedQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState<string>('');
+  const [hasRequestError, setHasRequestError] = useState<boolean>(false);
 
   const loadTodos = async () => {
-    const todosFromServer = await getTodos();
+    try {
+      const todosFromServer = await getTodos();
 
-    setTodos(todosFromServer);
+      setTodos(todosFromServer);
+      setHasRequestError(false);
+    } catch (error) {
+      setHasRequestError(true);
+    }
   };
 
   useEffect(() => {
@@ -89,14 +96,18 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              { !todos.length && <Loader />}
-              <TodoList
-                todos={getVisibleTodos}
-                setSelectedTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
-            </div>
+            { hasRequestError
+              ? <ErrorMessage />
+              : (
+                <div className="block">
+                  {!todos.length && <Loader />}
+                  <TodoList
+                    todos={getVisibleTodos}
+                    setSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                </div>
+              )}
           </div>
         </div>
       </div>
