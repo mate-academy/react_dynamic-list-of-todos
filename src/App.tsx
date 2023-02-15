@@ -81,6 +81,10 @@ export const App: React.FC = () => {
     return filteresTodos;
   }, [todos, lowerQuery, selectedOption]);
 
+  if (hasRequestError) {
+    return <ErrorMessage />;
+  }
+
   return (
     <>
       <div className="section">
@@ -96,11 +100,10 @@ export const App: React.FC = () => {
               />
             </div>
 
-            { hasRequestError
-              ? <ErrorMessage />
+            { !todos.length
+              ? <Loader />
               : (
                 <div className="block">
-                  {!todos.length && <Loader />}
                   <TodoList
                     todos={getVisibleTodos}
                     setSelectedTodo={setSelectedTodo}
