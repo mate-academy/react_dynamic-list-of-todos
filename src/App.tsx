@@ -37,9 +37,9 @@ export const App: React.FC = () => {
   };
 
   const fetchTodos = async () => {
-    const goodFromServer = await getTodos();
+    const todoFromServer = await getTodos();
 
-    setTodos(goodFromServer);
+    setTodos(todoFromServer);
   };
 
   useEffect(() => {
