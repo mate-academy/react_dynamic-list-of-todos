@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { debounce } from 'lodash';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -15,12 +16,13 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
+  const [apllyq, setApllyq] = useState('');
 
   let visibleTodos = todos;
 
   const modalTodo = visibleTodos.filter(todo => todo.id === selectedTodoId);
 
-  const lowQuery = query.toLowerCase();
+  const lowQuery = apllyq.toLowerCase();
 
   const isMatchingTodos = (!query)
     ? <Loader />
@@ -61,7 +63,12 @@ export const App: React.FC = () => {
       break;
   }
 
-  if (query) {
+  const debouncedChangeHandler = useCallback(
+    debounce(setApllyq, 1000),
+    [],
+  );
+
+  if (apllyq) {
     visibleTodos = visibleTodos.filter(todo => {
       return todo.title.toLowerCase().includes(lowQuery);
     });
@@ -80,6 +87,7 @@ export const App: React.FC = () => {
                 setQuery={setQuery}
                 status={status}
                 setStatus={setStatus}
+                debounceQuery={debouncedChangeHandler}
               />
             </div>
 

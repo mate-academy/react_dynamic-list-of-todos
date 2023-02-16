@@ -5,6 +5,7 @@ type Props = {
   setQuery: (event: string) => void,
   status: string,
   setStatus: (stats: string) => void;
+  debounceQuery: (event: string) => void;
 };
 
 export const TodoFilter:React.FC<Props> = ({
@@ -12,6 +13,7 @@ export const TodoFilter:React.FC<Props> = ({
   setQuery,
   status,
   setStatus,
+  debounceQuery,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -37,7 +39,10 @@ export const TodoFilter:React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          debounceQuery(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
