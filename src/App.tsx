@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,49 +11,62 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterType, setFilterType] = useState('all');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [filterType, setFilterType] = useState<string>(Filter.All);
   const [query, setQuery] = useState('');
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  const selectTodo = (todoId: number) => {
-    setSelectedTodo(todos.find(todo => todo.id === todoId) || null);
-  };
+  const selectTodoId = useCallback((todoId: number) => {
+    setSelectedTodoId(todoId);
+  }, []);
 
-  const closeModal = () => setSelectedTodo(null);
+  const closeTodoModal = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
 
-  const filterTodos = () => {
-    const cleanQuery = query.trim().toLowerCase();
+  const filterTodos = useMemo(() => {
+    const cleanQuery = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
-    switch (filterType) {
-      case 'active':
-        return todos
-          .filter(todo => !todo.completed
-              && todo.title.toLowerCase().includes(cleanQuery));
-      case 'completed':
-        return todos
-          .filter(todo => todo.completed
-              && todo.title.toLowerCase().includes(cleanQuery));
-      default:
-        return todos
-          .filter(todo => todo.title.toLowerCase().includes(cleanQuery));
-    }
-  };
+    return cleanQuery.filter(todo => {
+      switch (filterType) {
+        case Filter.Active:
+          return !todo.completed;
+
+        case Filter.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [todos, query, filterType]);
 
   useEffect(() => {
+    setIsTodosLoading(true);
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
+      .then(setTodos)
+      .catch(() => setHasError(true))
+      .finally(() => setIsTodosLoading(false));
   }, []);
+
+  const isNoFiltersResult = query && !filterTodos.length;
+
+  const selectedTodo = useMemo(() => {
+    return todos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, todos]);
 
   const todoList = (
     <TodoList
       selectedTodo={selectedTodo?.id || 0}
-      onSelect={selectTodo}
-      todos={filterTodos()}
+      onSelect={selectTodoId}
+      todos={filterTodos}
     />
   );
 
@@ -72,11 +87,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                todos.length
-                  ? todoList
-                  : <Loader />
-              }
+              {!isTodosLoading
+                ? (
+                  todoList
+                )
+                : (
+                  <Loader />
+                )}
+
+              {hasError && (
+                <p>Something went wrong</p>
+              )}
+
+              {isNoFiltersResult && (
+                <p>No todos matched filters</p>
+              )}
             </div>
           </div>
         </div>
@@ -85,7 +110,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          closeModal={closeModal}
+          closeModal={closeTodoModal}
         />
       )}
     </>
