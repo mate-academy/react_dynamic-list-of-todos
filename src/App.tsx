@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, {
-  useEffect, useState, useCallback, Dispatch, SetStateAction, useMemo,
+  useEffect, useState, useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -12,11 +12,12 @@ import { Loader } from './components/Loader';
 import { ErrorMessage } from './components/ErrorMessage';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Options } from './types/Options';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string>('all');
+  const [selectedOption, setSelectedOption] = useState<string>(Options.ALL);
   const [appliedQuery, setAppliedQuery] = useState<string>('');
   const [hasRequestError, setHasRequestError] = useState<boolean>(false);
 
@@ -43,43 +44,25 @@ export const App: React.FC = () => {
     setSelectedOption(option);
   };
 
-  const lowerQuery = appliedQuery.toLowerCase();
-
-  function debounce(f: Dispatch<SetStateAction<string>>, delay: number) {
-    let timerId = 0;
-
-    return (value: string) => {
-      if (timerId) {
-        window.clearTimeout(timerId);
-      }
-
-      timerId = window.setTimeout(() => {
-        f(value);
-      }, delay);
-    };
-  }
-
-  const applyQuery = useCallback(debounce(setAppliedQuery, 800), []);
-
   const getVisibleTodos = useMemo<Todo[]>(() => {
     let filteresTodos: Todo[] = todos;
 
-    if (selectedOption === 'completed') {
+    if (selectedOption === Options.COMPLETED) {
       filteresTodos = filteresTodos.filter(todo => todo.completed);
     }
 
-    if (selectedOption === 'active') {
+    if (selectedOption === Options.ACTIVE) {
       filteresTodos = filteresTodos.filter(todo => !todo.completed);
     }
 
-    if (lowerQuery) {
+    if (appliedQuery) {
       filteresTodos = filteresTodos.filter((todo) => (
-        todo.title.toLowerCase().includes(lowerQuery)
+        todo.title.toLowerCase().includes(appliedQuery.toLowerCase())
       ));
     }
 
     return filteresTodos;
-  }, [todos, lowerQuery, selectedOption]);
+  }, [todos, appliedQuery, selectedOption]);
 
   if (hasRequestError) {
     return <ErrorMessage />;
@@ -95,7 +78,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectOption={selectOption}
-                applyQuery={applyQuery}
+                appliedQuery={appliedQuery}
                 setAppliedQuery={setAppliedQuery}
               />
             </div>
@@ -115,7 +98,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      { selectedTodo && <TodoModal selectedTodo={selectedTodo} clearSelectedTodo={clearSelectedTodo} />}
+      {selectedTodo
+      && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setHasRequestError={setHasRequestError}
+          clearSelectedTodo={clearSelectedTodo}
+        />
+      )}
     </>
   );
 };

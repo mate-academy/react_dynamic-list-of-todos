@@ -1,24 +1,18 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Options } from '../../types/Options';
 
 type Props = {
   selectOption: (arg: string) => void,
-  applyQuery: (value: string) => void
+  appliedQuery: string,
   setAppliedQuery: Dispatch<SetStateAction<string>>
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(
   ({
     selectOption,
-    applyQuery,
+    appliedQuery,
     setAppliedQuery,
   }) => {
-    const [query, setQuery] = useState('');
-
-    const deleteQuery = () => {
-      setQuery('');
-      setAppliedQuery('');
-    };
-
     return (
       <form className="field has-addons">
         <p className="control">
@@ -27,9 +21,9 @@ export const TodoFilter: React.FC<Props> = React.memo(
               data-cy="statusSelect"
               onChange={(event) => selectOption(event.target.value)}
             >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
+              <option value={Options.ALL}>All</option>
+              <option value={Options.ACTIVE}>Active</option>
+              <option value={Options.COMPLETED}>Completed</option>
             </select>
           </span>
         </p>
@@ -40,25 +34,24 @@ export const TodoFilter: React.FC<Props> = React.memo(
             type="text"
             className="input"
             placeholder="Search..."
-            value={query}
+            value={appliedQuery}
             onChange={(event) => {
-              setQuery(event.target.value);
-              applyQuery(event.target.value);
+              setAppliedQuery(event.target.value);
             }}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />
           </span>
 
-          { query
+          { appliedQuery
           && (
             <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={deleteQuery}
+                aria-label="Clear Search"
+                onClick={() => setAppliedQuery('')}
               />
             </span>
           )}

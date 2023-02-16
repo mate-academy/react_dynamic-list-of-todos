@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, Dispatch, SetStateAction,
+} from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -6,19 +8,25 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo,
-  clearSelectedTodo: () => void
+  clearSelectedTodo: () => void,
+  setHasRequestError: Dispatch<SetStateAction<boolean>>,
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   clearSelectedTodo,
+  setHasRequestError,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const getSelectedUser = async () => {
-    const userFromServer = await getUser(selectedTodo.userId);
+    try {
+      const userFromServer = await getUser(selectedTodo.userId);
 
-    setSelectedUser(userFromServer);
+      setSelectedUser(userFromServer);
+    } catch (error) {
+      setHasRequestError(true);
+    }
   };
 
   useEffect(() => {

@@ -28,7 +28,7 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      { todos.map(todo => (
+      {todos.map(todo => (
         <tr
           data-cy="todo"
           className=""
