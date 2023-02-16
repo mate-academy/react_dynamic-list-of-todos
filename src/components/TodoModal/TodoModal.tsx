@@ -16,14 +16,14 @@ export const TodoModal: React.FC<Props> = ({
   todo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isUserLoaded, setIsUserLoaded] = useState(true);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
 
   const getUserFromServer = async () => {
     try {
       const user = await getUser(selectedUserId);
 
       setSelectedUser(user);
-      setIsUserLoaded(false);
+      setIsUserLoaded(true);
     } catch (error) {
       throw new Error('Something went wrong. Try again later, please');
     }
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isUserLoaded ? (
+      {!isUserLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">

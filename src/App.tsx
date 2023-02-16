@@ -17,25 +17,19 @@ function getVisibleTodos(todos: Todo[], filterType: string, query: string): Todo
 
     switch (filterType) {
       case 'all':
-        if (query) {
-          return lowerTitle.includes(lowerQuery);
-        }
-
-        return todo;
+        return query
+          ? lowerTitle.includes(lowerQuery)
+          : todo;
 
       case 'active':
-        if (query) {
-          return lowerTitle.includes(lowerQuery) && !todo.completed;
-        }
-
-        return !todo.completed;
+        return query
+          ? lowerTitle.includes(lowerQuery) && !todo.completed
+          : !todo.completed;
 
       case 'completed':
-        if (query) {
-          return lowerTitle.includes(lowerQuery) && todo.completed;
-        }
-
-        return todo.completed;
+        return query
+          ? lowerTitle.includes(lowerQuery) && todo.completed
+          : todo.completed;
 
       default:
         throw new Error('Invalid filter selected');
@@ -45,7 +39,7 @@ function getVisibleTodos(todos: Todo[], filterType: string, query: string): Todo
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodosLoaded, setIsTodosLoaded] = useState(true);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [idOfSelectedTodo, setIdOfSelectedTodo] = useState(0);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -58,7 +52,7 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
-      setIsTodosLoaded(false);
+      setIsTodosLoaded(true);
     } catch (error) {
       throw new Error('Something went wrong. Try again later, please');
     }
@@ -109,7 +103,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodosLoaded && <Loader />}
+              {!isTodosLoaded && <Loader />}
 
               {todos.length > 0 && (
                 <TodoList
