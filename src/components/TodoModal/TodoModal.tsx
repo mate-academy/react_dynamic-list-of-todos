@@ -13,7 +13,12 @@ export const TodoModal: React.FC<Props> = ({ todo, closeTodo }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [userHasError, setUserHasError] = useState(false);
-  const { id, title, userId } = todo;
+  const {
+    id,
+    title,
+    userId,
+    completed,
+  } = todo;
 
   const findUser = async () => {
     try {
@@ -62,7 +67,13 @@ export const TodoModal: React.FC<Props> = ({ todo, closeTodo }) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {completed
+                ? (
+                  <strong className="has-text-success">Done</strong>
+                )
+                : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
               {' by '}
 
