@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC, useCallback } from 'react';
 import { FilterType } from '../../types';
 
 type Props = {
@@ -6,7 +6,6 @@ type Props = {
   setQuery: (query: string) => void,
   filterType: FilterType,
   setFilter: (filterType: FilterType) => void,
-  clear: () => void,
 };
 
 export const TodoFilter: FC<Props> = React.memo(
@@ -15,48 +14,65 @@ export const TodoFilter: FC<Props> = React.memo(
     filterType,
     setQuery,
     setFilter,
-    clear,
-  }) => (
-    <form className="field has-addons">
-      <p className="control">
-        <span className="select">
-          <select
-            data-cy="statusSelect"
-            value={filterType}
-            onChange={({ target }) => setFilter(target.value as FilterType)}
-          >
-            <option value={FilterType.ALL}>All</option>
-            <option value={FilterType.ACTIVE}>Active</option>
-            <option value={FilterType.COMPLETED}>Completed</option>
-          </select>
-        </span>
-      </p>
+  }) => {
+    const handleInputChange = useCallback(
+      ({ target }: ChangeEvent<HTMLInputElement>) => {
+        setQuery(target.value);
+      }, [],
+    );
 
-      <p className="control is-expanded has-icons-left has-icons-right">
-        <input
-          data-cy="searchInput"
-          type="text"
-          className="input"
-          placeholder="Search..."
-          value={query}
-          onChange={({ target }) => setQuery(target.value)}
-        />
-        <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
-        </span>
+    const handleClearInput = useCallback(() => {
+      setQuery('');
+    }, []);
 
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={clear}
-            />
+    const handleSelectChange = useCallback(
+      ({ target }: ChangeEvent<HTMLSelectElement>) => {
+        setFilter(target.value as FilterType);
+      }, [],
+    );
+
+    return (
+      <form className="field has-addons">
+        <p className="control">
+          <span className="select">
+            <select
+              data-cy="statusSelect"
+              value={filterType}
+              onChange={handleSelectChange}
+            >
+              <option value={FilterType.ALL}>All</option>
+              <option value={FilterType.ACTIVE}>Active</option>
+              <option value={FilterType.COMPLETED}>Completed</option>
+            </select>
           </span>
-        )}
-      </p>
-    </form>
-  ),
+        </p>
+
+        <p className="control is-expanded has-icons-left has-icons-right">
+          <input
+            data-cy="searchInput"
+            type="text"
+            className="input"
+            placeholder="Search..."
+            value={query}
+            onChange={handleInputChange}
+          />
+          <span className="icon is-left">
+            <i className="fas fa-magnifying-glass" />
+          </span>
+
+          {query && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              <button
+                aria-label="Clear search"
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={handleClearInput}
+              />
+            </span>
+          )}
+        </p>
+      </form>
+    );
+  },
 );

@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../../../types';
 
 type Props = {
@@ -15,6 +15,9 @@ export const TodoItem: React.FC<Props> = React.memo(
     return (
       <tr
         data-cy="todo"
+        className={cn({
+          'has-background-info-light': isSelected,
+        })}
       >
         <td className="is-vcentered">{id}</td>
         <td className="is-vcentered">
@@ -26,7 +29,7 @@ export const TodoItem: React.FC<Props> = React.memo(
         </td>
         <td className="is-vcentered is-expanded">
           <p
-            className={classNames({
+            className={cn({
               'has-text-success': completed,
               'has-text-danger': !completed,
             })}
@@ -43,7 +46,7 @@ export const TodoItem: React.FC<Props> = React.memo(
           >
             <span className="icon">
               <i
-                className={classNames('far', {
+                className={cn('far', {
                   'fa-eye': !isSelected,
                   'fa-eye-slash': isSelected,
                 })}

@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [hasReceivedTodos, setHasReceivedTodos] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const [filterType, setFilterType] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
       const fetchedTodos = await getTodos();
 
       setTodos(fetchedTodos);
-      setHasReceivedTodos(true);
+      setIsLoaded(true);
     } catch {
       setHasError(true);
     } finally {
@@ -58,11 +58,6 @@ export const App: React.FC = () => {
 
   const hideModal = useCallback(() => setSelectedTodo(null), []);
 
-  const clearQuery = useCallback(
-    () => setQuery(''),
-    [],
-  );
-
   return (
     <>
       <div className="section">
@@ -76,7 +71,6 @@ export const App: React.FC = () => {
                 filterType={filterType}
                 setQuery={setQuery}
                 setFilter={setFilterType}
-                clear={clearQuery}
               />
             </div>
 
@@ -90,7 +84,7 @@ export const App: React.FC = () => {
                 />
               )}
 
-              {hasReceivedTodos && (
+              {isLoaded && (
                 <TodoList
                   todos={visibleTodos}
                   selected={selectedTodo}
