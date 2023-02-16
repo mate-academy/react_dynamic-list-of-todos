@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { filterTodos, findTodo } from './utils/functions';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -32,43 +33,9 @@ export const App: React.FC = () => {
     loadTodosFromServer();
   }, []);
 
-  const findTodo = (todoId: number) => {
-    return todos.find(todo => todo.id === todoId);
-  };
+  const shownTodo = findTodo(todos, selectedTodoId);
 
-  const shownTodo = findTodo(selectedTodoId);
-
-  const onShowButtonClick = (todoId: number) => {
-    setSelectedTodoId(todoId);
-  };
-
-  const oncloseButtonClick = () => {
-    setSelectedTodoId(0);
-  };
-
-  const filterTodos = () => {
-    let filteredTodos = todos.filter(todo => {
-      switch (selectedStatus) {
-        case 'active':
-          return todo.completed === false;
-        case 'completed':
-          return todo.completed === true;
-        case 'all':
-        default:
-          return true;
-      }
-    });
-
-    if (query) {
-      const normalizedQuery = query.toLowerCase();
-
-      filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
-    }
-
-    return filteredTodos;
-  };
-
-  const visibleTodos = filterTodos();
+  const visibleTodos = filterTodos(todos, selectedStatus, query);
 
   const isLoadingFinished = (hasLoadingError && todos.length === 0) || todos.length;
 
@@ -93,7 +60,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    onShowButtonClick={onShowButtonClick}
+                    onShowButtonClick={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
                 )
@@ -115,7 +82,7 @@ export const App: React.FC = () => {
         <TodoModal
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           selectedTodo={shownTodo!}
-          oncloseButtonClick={oncloseButtonClick}
+          oncloseButtonClick={setSelectedTodoId}
         />
       )}
     </>

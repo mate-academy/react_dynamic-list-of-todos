@@ -6,7 +6,7 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo;
-  oncloseButtonClick: () => void;
+  oncloseButtonClick: (value: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
   const hideModal = () => {
-    oncloseButtonClick();
+    oncloseButtonClick(0);
   };
 
   const loadUserFromServer = async (currentTodo: Todo | null) => {
