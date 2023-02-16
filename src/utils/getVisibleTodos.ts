@@ -1,11 +1,11 @@
 import { SelectValue } from '../types/SelectValue';
 import { Todo } from '../types/Todo';
 
-export function getVisibleTodos(
+export const getVisibleTodos = (
   todos: Todo[],
   select: string,
   query: string,
-): Todo[] {
+): Todo[] => {
   let visibleTodos = [...todos];
 
   switch (select) {
@@ -27,4 +27,4 @@ export function getVisibleTodos(
   }
 
   return visibleTodos;
-}
+};

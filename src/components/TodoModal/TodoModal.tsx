@@ -11,6 +11,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [hasError, setHasError] = useState(false);
   const {
     title,
     id,
@@ -25,6 +26,7 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
 
         setUser(userFromServer);
       } catch (error) {
+        setHasError(true);
         throw new Error(`Oops: ${error}`);
       }
     };
@@ -62,17 +64,21 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
               {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+            {hasError
+              ? <span>No user on server</span>
+              : (
+                <p className="block" data-cy="modal-user">
+                  {completed
+                    ? <strong className="has-text-success">Done</strong>
+                    : <strong className="has-text-danger">Planned</strong>}
 
-              {' by '}
+                  {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
-            </p>
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                </p>
+              )}
           </div>
         </div>
       )}

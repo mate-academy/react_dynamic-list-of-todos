@@ -22,6 +22,7 @@ export const App: React.FC = () => {
   const [selectValue, setSelectValue] = useState(SelectValue.ALL);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
@@ -51,6 +52,7 @@ export const App: React.FC = () => {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
+        setHasError(true);
         setLoading(false);
       }
     };
@@ -77,17 +79,21 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {loading
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    showModal={showModal}
-                    selectedTodo={selectedTodo}
-                  />
-                )}
-            </div>
+            {hasError
+              ? <span> No todos from server</span>
+              : (
+                <div className="block">
+                  {loading
+                    ? <Loader />
+                    : (
+                      <TodoList
+                        todos={visibleTodos}
+                        showModal={showModal}
+                        selectedTodo={selectedTodo}
+                      />
+                    )}
+                </div>
+              )}
           </div>
         </div>
       </div>
