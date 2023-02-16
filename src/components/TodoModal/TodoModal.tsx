@@ -13,9 +13,17 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const fetchData = async () => {
-    const currentUser = await getUser(selectedTodo?.userId || 0);
+    try {
+      const currentUser = await getUser(selectedTodo?.userId || 0);
 
-    setUser(currentUser);
+      setUser(currentUser);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Unexpected error');
+      }
+    }
   };
 
   useEffect(() => {

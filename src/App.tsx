@@ -11,37 +11,71 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const filteredTodos = (todos:Todo[], query:string, filterBy: string) => {
+  let preparedTodos = [...todos];
+
+  if (query) {
+    const preparedQuery = query.trim().toLowerCase();
+
+    preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(preparedQuery));
+  }
+
+  switch (filterBy) {
+    case 'active':
+      preparedTodos = preparedTodos.filter(todo => !todo.completed);
+      break;
+    case 'completed':
+      preparedTodos = preparedTodos.filter(todo => todo.completed);
+      break;
+    case 'all':
+    default:
+      preparedTodos = [...preparedTodos];
+      break;
+  }
+
+  return preparedTodos;
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState('');
 
-  let visibleTodos = [...todos];
+  // let visibleTodos = [...todos];
 
-  if (query) {
-    const preparedQuery = query.trim().toLowerCase();
+  // if (query) {
+  //   const preparedQuery = query.trim().toLowerCase();
 
-    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(preparedQuery));
-  }
+  //   visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(preparedQuery));
+  // }
 
-  switch (filterBy) {
-    case 'active':
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-    case 'completed':
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-    case 'all':
-    default:
-      visibleTodos = [...visibleTodos];
-      break;
-  }
+  // switch (filterBy) {
+  //   case 'active':
+  //     visibleTodos = visibleTodos.filter(todo => !todo.completed);
+  //     break;
+  //   case 'completed':
+  //     visibleTodos = visibleTodos.filter(todo => todo.completed);
+  //     break;
+  //   case 'all':
+  //   default:
+  //     visibleTodos = [...visibleTodos];
+  //     break;
+  // }
+  const visibleTodos = filteredTodos(todos, query, filterBy);
 
   const fetchData = async () => {
-    const data = await getTodos();
+    try {
+      const data = await getTodos();
 
-    setTodos(data);
+      setTodos(data);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Unexpected error');
+      }
+    }
   };
 
   useEffect(() => {
