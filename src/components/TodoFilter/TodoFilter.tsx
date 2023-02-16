@@ -1,14 +1,14 @@
 type Props = {
   selectedField: string;
-  onSelectField: (value: string) => void;
-  onQuery: (value: string) => void;
+  onFieldSelect: (value: string) => void;
+  setDescription: (value: string) => void;
   query: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   selectedField,
-  onSelectField,
-  onQuery,
+  onFieldSelect: onSelectField,
+  setDescription: onQuery,
   query,
 }) => {
   return (

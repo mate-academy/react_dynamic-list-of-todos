@@ -40,16 +40,17 @@ export const TodoList: React.FC<Props> = ({
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
-            {!todo.completed && (
-              <td className="is-vcentered" />
-            )}
-            {todo.completed && (
+
+            {todo.completed ? (
               <td className="is-vcentered">
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               </td>
+            ) : (
+              <td className="is-vcentered" />
             )}
+
             <td className="is-vcentered is-expanded">
               <p className={cn('has-text-success', {
                 'has-text-danger': !todo.completed,

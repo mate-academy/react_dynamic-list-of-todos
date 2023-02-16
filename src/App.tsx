@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
-  const [selectedField, setSelectedField] = useState('all');
+  const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
 
   const loadTodos = async () => {
@@ -33,11 +33,11 @@ export const App: React.FC = () => {
 
   let visibleTodos = [...todos];
 
-  if (selectedField === 'completed') {
+  if (filterBy === 'completed') {
     visibleTodos = visibleTodos.filter(todo => todo.completed);
   }
 
-  if (selectedField === 'active') {
+  if (filterBy === 'active') {
     visibleTodos = visibleTodos.filter(todo => !todo.completed);
   }
 
@@ -57,11 +57,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectedField={selectedField}
-                onSelectField={(field: string) => {
-                  setSelectedField(field);
+                selectedField={filterBy}
+                onFieldSelect={(field: string) => {
+                  setFilterBy(field);
                 }}
-                onQuery={(description: string) => {
+                setDescription={(description: string) => {
                   setQuery(description);
                 }}
                 query={query}
