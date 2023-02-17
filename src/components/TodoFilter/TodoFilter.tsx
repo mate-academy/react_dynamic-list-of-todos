@@ -11,23 +11,23 @@ export const TodoFilter: React.FC = React.memo(() => {
   const [selectedValue, setSelectedValue] = useState('all');
 
   const {
-    FiltredTodosBySearch,
-    FiltredTodosBySelect,
+    filterTodosBySearch,
+    filterTodosBySelect,
   } = useContext(TodosContext);
 
   const changeQuery = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    FiltredTodosBySearch(event.target.value);
+    filterTodosBySearch(event.target.value);
   };
 
   const clearQuery = () => {
     setQuery('');
-    FiltredTodosBySearch('');
+    filterTodosBySearch('');
   };
 
   const changeSelectedValue = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(event.target.value);
-    FiltredTodosBySelect(event.target.value);
+    filterTodosBySelect(event.target.value);
   };
 
   return (
@@ -59,18 +59,17 @@ export const TodoFilter: React.FC = React.memo(() => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query
-          && (
-            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <button
-                data-cy="clearSearchButton"
-                type="button"
-                className="delete"
-                onClick={() => clearQuery()}
-              />
-            </span>
-          )}
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={clearQuery}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

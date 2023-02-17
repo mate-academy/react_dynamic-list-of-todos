@@ -6,13 +6,15 @@ import { TodosContext } from '../TodosProvider';
 type Props = {
   getDataToModal: (userId: number, currentId: Todo) => void;
   isModalLoading: boolean;
+  selectedTodoId: number | null;
 };
 
 export const TodoList: React.FC<Props> = React.memo(({
   getDataToModal,
   isModalLoading,
+  selectedTodoId,
 }) => {
-  const { filtredTodos } = useContext(TodosContext);
+  const { filteredTodos } = useContext(TodosContext);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -29,11 +31,17 @@ export const TodoList: React.FC<Props> = React.memo(({
         </tr>
       </thead>
 
-      {filtredTodos
+      {filteredTodos
         && (
           <tbody>
-            {filtredTodos.map(todo => (
-              <tr key={todo.id} data-cy="todo" className="">
+            {filteredTodos.map(todo => (
+              <tr
+                key={todo.id}
+                data-cy="todo"
+                className={cn({
+                  'has-background-info-light': selectedTodoId === todo.id,
+                })}
+              >
                 <td className="is-vcentered">{todo.id}</td>
                 <td className="is-vcentered">
                   {todo.completed && <i className="fas fa-check" />}

@@ -7,14 +7,12 @@ type Props = {
   userData: User | null;
   currentTodo: Todo | null;
   loadModal: (isLoading: boolean) => void;
-  loadUserDataError: boolean;
 };
 
 export const TodoModal: React.FC<Props> = React.memo(({
   userData,
   currentTodo,
   loadModal,
-  loadUserDataError,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -46,7 +44,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
               {currentTodo.title}
             </p>
 
-            {!loadUserDataError ? (
+            {userData ? (
               <p className="block" data-cy="modal-user">
                 {currentTodo.completed
                   ? <strong className="has-text-success">Done</strong>
@@ -54,12 +52,16 @@ export const TodoModal: React.FC<Props> = React.memo(({
 
                 {' by '}
 
-                <a href={`mailto:${userData?.email}`}>
-                  {userData?.name}
+                <a href={`mailto:${userData.email}`}>
+                  {userData.name}
                 </a>
               </p>
             )
-              : <div className="has-text-danger">Owner todo not found</div>}
+              : (
+                <div className="has-text-danger">
+                  Owner todo not found
+                </div>
+              )}
           </div>
         </div>
       )}

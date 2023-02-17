@@ -16,7 +16,6 @@ export const App: React.FC = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
   const [isModalLoading, setIsModalLoading] = useState(false);
-  const [loadUserDataError, setLoadUserDataError] = useState(false);
 
   const { todos, loadTodosError } = useContext(TodosContext);
 
@@ -28,7 +27,7 @@ export const App: React.FC = () => {
       setCurrentTodo(selectedTodo);
       setUserData(selectedUser);
     } catch (error) {
-      setLoadUserDataError(true);
+      setUserData(null);
       setCurrentTodo(selectedTodo);
     }
   }, []);
@@ -60,11 +59,14 @@ export const App: React.FC = () => {
                     <TodoList
                       getDataToModal={getDataToModal}
                       isModalLoading={isModalLoading}
+                      selectedTodoId={currentTodo?.id || null}
                     />
                   )}
               </div>
             )}
-            {loadTodosError && <div>Todos not found</div>}
+            {loadTodosError && (
+              <div>Todos not found</div>
+            )}
           </div>
         </div>
       </div>
@@ -74,7 +76,6 @@ export const App: React.FC = () => {
           userData={userData}
           currentTodo={currentTodo}
           loadModal={loadModal}
-          loadUserDataError={loadUserDataError}
         />
       )}
     </>
