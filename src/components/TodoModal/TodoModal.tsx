@@ -5,33 +5,41 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo;
-  onTodo: (todo: Todo | null) => void;
+  selectedTodo: Todo;
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo: todo,
+  setSelectedTodo: onTodo,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, hasIsError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
+
   useEffect(() => {
-    getUser(todo.userId)
+    getUser(userId)
       .then(userFromServer => {
         setUser(userFromServer);
         setIsLoaded(true);
       })
       .catch(error => {
         // eslint-disable-next-line no-console
-        console.warn('Error', error);
+        console.warn(error);
         hasIsError(true);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
-
-  const { id, title, completed } = todo;
 
   return (
     <div className="modal is-active" data-cy="modal">

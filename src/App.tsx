@@ -1,10 +1,14 @@
-/* eslint-disable max-len */
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { debounce } from 'lodash';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -13,13 +17,14 @@ import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { FilterType } from './types/FilterType';
 
-const getFilteredTodos = (todos: Todo[], type: string, query: string) => {
+const getVisibleTodos = (todos: Todo[], type: string, query: string) => {
   let preparedTodos = [...todos];
 
   if (query) {
     const lowerQuery = query.toLowerCase();
 
-    preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(lowerQuery));
+    preparedTodos = preparedTodos
+      .filter(todo => todo.title.toLowerCase().includes(lowerQuery));
   }
 
   preparedTodos = preparedTodos.filter(todo => {
@@ -38,20 +43,10 @@ const getFilteredTodos = (todos: Todo[], type: string, query: string) => {
   return preparedTodos;
 };
 
-const debounce = (f: React.Dispatch<React.SetStateAction<string>>, delay: number) => {
-  let timerId: number;
-
-  return (...args: string[]) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(f, delay, ...args);
-  };
-};
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
-  const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -65,7 +60,7 @@ export const App: React.FC = () => {
       })
       .catch(error => {
         // eslint-disable-next-line no-console
-        console.warn('Error', error);
+        console.warn(error);
         hasIsError(true);
       })
       .finally(() => {
@@ -75,8 +70,10 @@ export const App: React.FC = () => {
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
-  const filteredTodos = useMemo(() => getFilteredTodos(todos, filterType, appliedQuery),
-    [todos, filterType, appliedQuery]);
+  const filteredTodos = useMemo(() => (
+    getVisibleTodos(todos, filterType, appliedQuery)
+  ),
+  [todos, filterType, appliedQuery]);
 
   return (
     <>
@@ -88,8 +85,6 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onFilter={setFilterType}
-                query={query}
-                onQuery={setQuery}
                 onApplyQuery={applyQuery}
               />
             </div>
@@ -115,8 +110,8 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          todo={selectedTodo}
-          onTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
