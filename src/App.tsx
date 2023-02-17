@@ -15,32 +15,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { FilterType } from './types/FilterType';
-
-const getVisibleTodos = (todos: Todo[], type: string, query: string) => {
-  let preparedTodos = [...todos];
-
-  if (query) {
-    const lowerQuery = query.toLowerCase();
-
-    preparedTodos = preparedTodos
-      .filter(todo => todo.title.toLowerCase().includes(lowerQuery));
-  }
-
-  preparedTodos = preparedTodos.filter(todo => {
-    switch (type) {
-      case FilterType.All:
-        return true;
-      case FilterType.Active:
-        return !todo.completed;
-      case FilterType.Completed:
-        return todo.completed;
-      default:
-        throw new Error('Filter type is incorrect');
-    }
-  });
-
-  return preparedTodos;
-};
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -48,19 +23,17 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [appliedQuery, setAppliedQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isError, hasIsError] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setIsLoaded(true);
       })
       .catch(error => {
         // eslint-disable-next-line no-console
         console.warn(error);
-        hasIsError(true);
+        setHasError(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -89,15 +62,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {isLoaded && (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodo={selectedTodo}
-                  onSelectedTodo={setSelectedTodo}
-                />
-              )}
-              {isError && (
+              {
+                isLoading
+                  ? <Loader />
+                  : (
+                    <TodoList
+                      todos={filteredTodos}
+                      selectedTodo={selectedTodo}
+                      onSelectedTodo={setSelectedTodo}
+                    />
+                  )
+              }
+              {hasError && (
                 <div className="notification is-danger has-text-centered">
                   <strong>An error occurred when loading todos</strong>
                 </div>
