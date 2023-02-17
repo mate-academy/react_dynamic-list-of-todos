@@ -27,7 +27,6 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
         setUser(userFromServer);
       } catch (error) {
         setHasError(true);
-        throw new Error(`Oops: ${error}`);
       }
     };
 

@@ -50,8 +50,6 @@ export const App: React.FC = () => {
         setLoading(false);
         setTodos(todosFromServer);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
         setHasError(true);
         setLoading(false);
       }

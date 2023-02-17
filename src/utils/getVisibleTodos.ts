@@ -6,25 +6,27 @@ export const getVisibleTodos = (
   select: string,
   query: string,
 ): Todo[] => {
-  let visibleTodos = [...todos];
+  let filteredTodos = todos.filter(todo => {
+    switch (select) {
+      case SelectValue.ACTIVE:
+        return !todo.completed;
 
-  switch (select) {
-    case SelectValue.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-    case SelectValue.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-    case SelectValue.ALL:
-    default:
-      visibleTodos = [...todos];
-  }
+      case SelectValue.COMPLETED:
+        return todo.completed;
+
+      case SelectValue.ALL:
+        return true;
+
+      default:
+        throw new Error('Invalid filter property');
+    }
+  });
 
   if (query) {
-    visibleTodos = visibleTodos.filter(
+    filteredTodos = filteredTodos.filter(
       ({ title }) => title.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
-  return visibleTodos;
+  return filteredTodos;
 };
