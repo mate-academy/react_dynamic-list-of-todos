@@ -44,24 +44,25 @@ export const TodoModal: React.FC<Props> = React.memo(({
               {currentTodo.title}
             </p>
 
-            {userData ? (
-              <p className="block" data-cy="modal-user">
-                {currentTodo.completed
-                  ? <strong className="has-text-success">Done</strong>
-                  : <strong className="has-text-danger">Planned</strong>}
+            <p className="block" data-cy="modal-user">
+              {currentTodo.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
+              {' by '}
+              {userData ? (
+                <>
 
-                {' by '}
-
-                <a href={`mailto:${userData.email}`}>
-                  {userData.name}
-                </a>
-              </p>
-            )
-              : (
-                <div className="has-text-danger">
-                  Owner todo not found
-                </div>
-              )}
+                  <a href={`mailto:${userData.email}`}>
+                    {userData.name}
+                  </a>
+                </>
+              )
+                : (
+                  <span>
+                    unknown
+                  </span>
+                )}
+            </p>
           </div>
         </div>
       )}

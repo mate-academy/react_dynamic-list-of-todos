@@ -19,16 +19,19 @@ export const App: React.FC = () => {
 
   const { todos, loadTodosError } = useContext(TodosContext);
 
+  const setModalInfoData = (user: User | null, todo: Todo) => {
+    setCurrentTodo(todo);
+    setUserData(user);
+  };
+
   const getDataToModal = useCallback(async (userId: number, selectedTodo: Todo) => {
     try {
       setIsModalLoading(true);
       const selectedUser = await getUser(userId);
 
-      setCurrentTodo(selectedTodo);
-      setUserData(selectedUser);
-    } catch (error) {
-      setUserData(null);
-      setCurrentTodo(selectedTodo);
+      setModalInfoData(selectedUser, selectedTodo);
+    } catch {
+      setModalInfoData(null, selectedTodo);
     }
   }, []);
 
