@@ -49,20 +49,8 @@ export const App: React.FC = () => {
 
     const loadingTodos = async () => {
       try {
-        let todosFromServer = await getTodos();
+        const todosFromServer = await getTodos();
 
-        todosFromServer = todosFromServer.filter(todo => {
-          const {
-            id,
-            title,
-            completed,
-            userId,
-          } = todo;
-
-          return (id > 0) && (title.trim()) && (typeof completed === 'boolean') && (userId > 0)
-            ? true
-            : console.log('filtered some todo from server');
-        });
         setTodos(todosFromServer);
         setIsLoading(false);
       } catch (error) {
