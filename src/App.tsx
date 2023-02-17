@@ -1,21 +1,27 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import debounce from 'lodash.debounce';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { prepareTodos } from './utils/prepareTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [hasError, setHasError] = useState(false);
 
   const [sortType, setSortType] = useState('all');
   const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
 
   const fetchedTodos = async () => {
     try {
@@ -25,6 +31,7 @@ export const App: React.FC = () => {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
+      setHasError(true);
     }
   };
 
@@ -32,54 +39,33 @@ export const App: React.FC = () => {
     fetchedTodos();
   }, []);
 
-  const handleSelectTodo = (todo: Todo) => {
+  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+
+  const handleSelectTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const handleHideTodo = () => {
+  const handleHideTodo = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const handleSetSortType = (event: string) => {
+  const handleSetSortType = useCallback((event: string) => {
     setSortType(event);
-  };
+  }, []);
 
-  const handleSetQuery = (event: string) => {
+  const handleSetQuery = useCallback((event: string) => {
     setQuery(event);
-  };
+    applyQuery(event);
+  }, []);
 
-  const handleClearQuery = () => {
+  const handleClearQuery = useCallback(() => {
     setQuery('');
-  };
+    setAppliedQuery('');
+  }, []);
 
-  const prepareTodo = (preparedTodos: Todo[]):Todo[] => {
-    let todosForRender = preparedTodos;
-
-    if (query) {
-      const lowQuery = query.toLowerCase();
-
-      todosForRender = todosForRender.filter(
-        todo => todo.title.toLowerCase().includes(lowQuery),
-      );
-    }
-
-    if (sortType !== 'all') {
-      todosForRender = todosForRender.filter(todo => {
-        switch (sortType) {
-          case 'active':
-            return !todo.completed;
-          case 'completed':
-            return todo.completed;
-          default:
-            return todo;
-        }
-      });
-    }
-
-    return todosForRender;
-  };
-
-  const visibleTodo = prepareTodo(todos);
+  const visibleTodo = useMemo(() => (
+    prepareTodos(todos, appliedQuery, sortType)),
+  [todos, appliedQuery, sortType]);
 
   return (
     <>
@@ -98,19 +84,25 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {todos.length === 0
-                ? (
-                  <Loader />
-                )
-                : (
-                  <TodoList
-                    todos={visibleTodo}
-                    onSelectTodo={handleSelectTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                )}
-            </div>
+            {hasError
+              ? (
+                <span>Sorry, no todos at this moment</span>
+              )
+              : (
+                <div className="block">
+                  {todos.length === 0
+                    ? (
+                      <Loader />
+                    )
+                    : (
+                      <TodoList
+                        todos={visibleTodo}
+                        onSelectTodo={handleSelectTodo}
+                        selectedTodo={selectedTodo}
+                      />
+                    )}
+                </div>
+              )}
           </div>
         </div>
       </div>
