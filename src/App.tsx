@@ -13,6 +13,7 @@ import { ErrorMessage } from './components/ErrorMessage';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Options } from './types/Options';
+import { filterTodos } from './utils/helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -44,25 +45,7 @@ export const App: React.FC = () => {
     setSelectedOption(option);
   };
 
-  const getVisibleTodos = useMemo<Todo[]>(() => {
-    let filteresTodos: Todo[] = todos;
-
-    if (selectedOption === Options.COMPLETED) {
-      filteresTodos = filteresTodos.filter(todo => todo.completed);
-    }
-
-    if (selectedOption === Options.ACTIVE) {
-      filteresTodos = filteresTodos.filter(todo => !todo.completed);
-    }
-
-    if (appliedQuery) {
-      filteresTodos = filteresTodos.filter((todo) => (
-        todo.title.toLowerCase().includes(appliedQuery.toLowerCase())
-      ));
-    }
-
-    return filteresTodos;
-  }, [todos, appliedQuery, selectedOption]);
+  const getVisibleTodos = useMemo<Todo[]>(() => filterTodos(todos, selectedOption, appliedQuery), [todos, appliedQuery, selectedOption]);
 
   if (hasRequestError) {
     return <ErrorMessage />;
@@ -83,7 +66,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            { !todos.length
+            {!todos.length
               ? <Loader />
               : (
                 <div className="block">

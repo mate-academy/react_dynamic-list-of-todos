@@ -4,7 +4,7 @@ import React, {
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { getSelectedUser } from '../../utils/helpers';
 
 type Props = {
   selectedTodo: Todo,
@@ -19,18 +19,12 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const getSelectedUser = async () => {
-    try {
-      const userFromServer = await getUser(selectedTodo.userId);
-
-      setSelectedUser(userFromServer);
-    } catch (error) {
-      setHasRequestError(true);
-    }
-  };
-
   useEffect(() => {
-    getSelectedUser();
+    getSelectedUser(
+      selectedTodo.userId,
+      setSelectedUser,
+      setHasRequestError,
+    );
   }, []);
 
   const closeTodoModal = () => {
