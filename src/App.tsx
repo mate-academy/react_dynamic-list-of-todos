@@ -1,5 +1,8 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,22 +12,37 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { SelectFilter } from './types/SelectFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState<SelectFilter>(SelectFilter.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  useEffect(() => {
-    getTodos().then(allTodos => {
+  const fetchTodos = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const loadedTodos = await getTodos();
+
+      setTodos(loadedTodos);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Unexpected error');
+      }
+    } finally {
       setIsLoading(false);
-      setTodos(allTodos);
-    });
+    }
   }, []);
 
-  const reset = useCallback(() => {
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const resetQuery = useCallback(() => {
     setQuery('');
   }, []);
 
@@ -39,23 +57,28 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const visibleTodos = todos.filter(todo => {
-    const isInclude = todo.title.toLowerCase().includes(query.toLowerCase());
+  const transform = (title: string) => title.toLowerCase();
 
-    switch (selectFilter) {
-      case 'all':
-        return isInclude;
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const { title } = todo;
+      const isInclude = transform(title).includes(transform(query));
 
-      case 'active':
-        return !todo.completed && isInclude;
+      switch (selectFilter) {
+        case SelectFilter.ALL:
+          return isInclude;
 
-      case 'completed':
-        return todo.completed && isInclude;
+        case SelectFilter.ACTIVE:
+          return !todo.completed && isInclude;
 
-      default:
-        throw new Error('error!');
-    }
-  });
+        case SelectFilter.COMPLETED:
+          return todo.completed && isInclude;
+
+        default:
+          throw new Error('error: wrong status.');
+      }
+    });
+  }, [selectFilter, query, todos]);
 
   return (
     <>
@@ -68,7 +91,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                reset={reset}
+                reset={resetQuery}
                 selectFilter={selectFilter}
                 setSelectFilter={setSelectFilter}
               />
