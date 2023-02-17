@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const {
@@ -85,11 +85,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
                 </strong>
 
                 {' by '}
-                {user && (
-                  <a href={`mailto:${user?.email}`}>
-                    {user?.name}
-                  </a>
-                )}
+
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
               </p>
             </div>
           </div>

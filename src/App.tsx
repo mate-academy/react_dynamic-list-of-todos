@@ -16,15 +16,15 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState(SelectFilter.ALL);
+  const [selectFilter, setSelectFilter] = useState<SelectFilter>(SelectFilter.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const fetchTodos = useCallback(async () => {
     setIsLoading(true);
     try {
-      const resTodos = await getTodos();
+      const responseTodos = await getTodos();
 
-      setTodos(resTodos);
+      setTodos(responseTodos);
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
@@ -56,10 +56,11 @@ export const App: React.FC = () => {
   };
 
   const transform = (title: string) => title.toLowerCase();
+  const parsedQuery = transform(query);
 
   const visibleTodos = todos.filter(todo => {
     const { title } = todo;
-    const isInclude = transform(title).includes(transform(query));
+    const isInclude = transform(title).includes(parsedQuery);
 
     switch (selectFilter) {
       case SelectFilter.ALL:
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
         return todo.completed && isInclude;
 
       default:
-        throw new Error('error!');
+        throw new Error('Invalid Filter Type!');
     }
   });
 
