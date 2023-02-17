@@ -1,58 +1,30 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { debounce } from 'lodash';
+import React, { ChangeEvent } from 'react';
 import { Filter } from '../../types/Filter';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  onFilter: (FilteredTodos: Todo[]) => void;
-  todos: Todo[];
+  ready: string;
+  onStatusChange: (value: Filter) => void;
+  query: string;
+  onInputChange: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onFilter,
-  todos,
+  ready,
+  onStatusChange,
+  query,
+  onInputChange,
 }) => {
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [currentFilter, setCurrentFilter] = useState(Filter.All);
+  const changeReady = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
 
-  const filterByStatus = useCallback(
-    () => {
-      switch (currentFilter) {
-        case Filter.Active:
-          return todos.filter(todo => !todo.completed);
-        case Filter.Completed:
-          return todos.filter(todo => todo.completed);
-        default:
-          return todos;
-      }
-    }, [currentFilter, query],
-  );
+    onStatusChange(value as Filter);
+  };
 
-  const clearButton = useCallback(() => {
-    setDebouncedQuery('');
-    setQuery('');
-  }, []);
+  const inputString = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
 
-  const visibleTodos = useMemo(() => {
-    return filterByStatus().filter(
-      todo => todo.title.toLowerCase().includes(debouncedQuery.toLowerCase()),
-    );
-  }, [debouncedQuery, currentFilter]);
-
-  useEffect(() => {
-    onFilter(visibleTodos);
-  }, [debouncedQuery, currentFilter]);
-
-  const debounceQueryHandler = useCallback(
-    debounce(setDebouncedQuery, 500),
-    [],
-  );
+    onInputChange(value);
+  };
 
   return (
     <form className="field has-addons">
@@ -60,9 +32,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => (
-              setCurrentFilter(event.target.value as Filter)
-            )}
+            value={ready}
+            onChange={changeReady}
           >
             <option value={Filter.All}>All</option>
             <option value={Filter.Active}>Active</option>
@@ -78,10 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-            debounceQueryHandler(event.target.value);
-          }}
+          onChange={inputString}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -90,10 +58,11 @@ export const TodoFilter: React.FC<Props> = ({
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="delete"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={clearButton}
+              onClick={() => onInputChange('')}
             />
           </span>
         )}

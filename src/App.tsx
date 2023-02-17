@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,37 +9,36 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
+import { findTodo, filterTodos } from './components/functions';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filtredByReady, setFiltredByReady] = useState(todos);
-  const [hasLoading, setHasIsLoading] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [filtredByReady, setFiltredByReady] = useState<Filter>(Filter.All);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   const fetchTodos = async () => {
-    await getTodos().then((todosFromServer) => {
+    try {
+      const todosFromServer = await getTodos();
+
       setTodos(todosFromServer);
-      setFiltredByReady(todosFromServer);
-    });
-    setHasIsLoading(false);
+      setIsLoading(false);
+    } catch {
+      setIsLoading(true);
+    }
   };
 
   useEffect(() => {
     fetchTodos();
   }, []);
 
-  const selectTodo = useCallback(
-    (todoId: number) => {
-      setSelectedTodoId(todoId);
-    },
-    [selectedTodoId],
-  );
-
-  const onFilter = (todosToFilter: Todo[]) => {
-    setFiltredByReady(todosToFilter);
-  };
+  const selectTodo = findTodo(todos, selectedTodoId);
+  const visibleTodos = filterTodos(todos, filtredByReady, query);
+  const hasLoading = (isLoading && todos.length === 0) || todos.length;
 
   return (
     <>
@@ -50,22 +49,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilter={onFilter}
-                todos={todos}
+                ready={filtredByReady}
+                onStatusChange={setFiltredByReady}
+                query={query}
+                onInputChange={setQuery}
               />
             </div>
 
             <div className="block">
               {hasLoading
-                ? <Loader />
-                : (
+                ? (
                   <TodoList
-                    todos={filtredByReady}
-                    selectTodo={selectTodo}
+                    todos={visibleTodos}
+                    selectTodo={setSelectedTodoId}
                     selectedId={selectedTodoId}
                   />
                 )
-              }
+                : <Loader />}
             </div>
           </div>
         </div>
@@ -73,9 +73,9 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          loadingState={hasLoading}
-          selectedTodo={selectedTodo}
-          onClose={selectTodo}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          selectedTodo={selectTodo!}
+          onClose={setSelectedTodoId}
         />
       )}
     </>
