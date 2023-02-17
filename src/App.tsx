@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 // import React, { useCallback, useEffect, useState } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,8 +10,9 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
 
-const filteredTodos = (todos:Todo[], query:string, filterBy: string) => {
+const filteredTodos = (todos:Todo[], query:string, filterBy: FilterBy) => {
   let preparedTodos = [...todos];
 
   if (query) {
@@ -21,15 +22,14 @@ const filteredTodos = (todos:Todo[], query:string, filterBy: string) => {
   }
 
   switch (filterBy) {
-    case 'active':
+    case FilterBy.ACTIVE:
       preparedTodos = preparedTodos.filter(todo => !todo.completed);
       break;
-    case 'completed':
+    case FilterBy.COMPLETED:
       preparedTodos = preparedTodos.filter(todo => todo.completed);
       break;
-    case 'all':
+    case FilterBy.ALL:
     default:
-      preparedTodos = [...preparedTodos];
       break;
   }
 
@@ -40,28 +40,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
+  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  // let visibleTodos = [...todos];
-
-  // if (query) {
-  //   const preparedQuery = query.trim().toLowerCase();
-
-  //   visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(preparedQuery));
-  // }
-
-  // switch (filterBy) {
-  //   case 'active':
-  //     visibleTodos = visibleTodos.filter(todo => !todo.completed);
-  //     break;
-  //   case 'completed':
-  //     visibleTodos = visibleTodos.filter(todo => todo.completed);
-  //     break;
-  //   case 'all':
-  //   default:
-  //     visibleTodos = [...visibleTodos];
-  //     break;
-  // }
   const visibleTodos = filteredTodos(todos, query, filterBy);
 
   const fetchData = async () => {
@@ -69,12 +51,11 @@ export const App: React.FC = () => {
       const data = await getTodos();
 
       setTodos(data);
+      setIsDataLoading(false);
+      setIsLoadingError(false);
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('Unexpected error');
-      }
+      setIsLoadingError(true);
+      setIsDataLoading(false);
     }
   };
 
@@ -82,13 +63,13 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const showTodo = (todo: Todo) => {
+  const showTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, [selectedTodo]);
 
-  const closeTodo = () => {
+  const closeTodo = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, [selectedTodo]);
 
   return (
     <>
@@ -107,16 +88,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-
-              {todos.length > 0 ? (
-                <TodoList
-                  todos={visibleTodos}
-                  showTodo={showTodo}
-                  selectedTodo={selectedTodo}
-                />
-              ) : (
-                <Loader />
-              )}
+              {isDataLoading && <Loader />}
+              {isLoadingError
+                ? <p>Error, server is unavailable</p>
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    showTodo={showTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
 
             </div>
           </div>

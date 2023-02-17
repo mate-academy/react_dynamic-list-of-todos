@@ -13,6 +13,8 @@ export const TodoList: React.FC<Props> = ({
   showTodo,
   selectedTodo,
 }) => {
+  const isTodoSelected = (id: number) => selectedTodo?.id === id;
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -33,7 +35,7 @@ export const TodoList: React.FC<Props> = ({
           <tr
             data-cy="todo"
             className={cn({
-              'has-background-info-light': selectedTodo?.id === todo.id,
+              'has-background-info-light': isTodoSelected(todo.id),
             })}
             key={todo.id}
           >
@@ -57,7 +59,7 @@ export const TodoList: React.FC<Props> = ({
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              {selectedTodo?.id === todo.id ? (
+              {isTodoSelected(todo.id) ? (
                 <button
                   data-cy="selectButton"
                   className="button"

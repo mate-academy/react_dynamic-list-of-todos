@@ -19,9 +19,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeTodo }) => {
       setUser(currentUser);
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        // eslint-disable-next-line no-console
+        console.warn(error.message);
       } else {
-        alert('Unexpected error');
+        // eslint-disable-next-line no-console
+        console.warn('Unexpected error');
       }
     }
   };
