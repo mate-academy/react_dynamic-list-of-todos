@@ -68,16 +68,20 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {!todos.length && (
+            {!todos.length
+              ? (
                 <Loader />
+              )
+              : (
+                <div className="block">
+                  <TodoList
+                    todos={preparedTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                </div>
               )}
-              <TodoList
-                todos={preparedTodos}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
-            </div>
+
           </div>
         </div>
       </div>
