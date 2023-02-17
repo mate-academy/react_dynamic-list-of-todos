@@ -21,6 +21,7 @@ export const TodoModal: React.FC<Props> = ({ onHideTodo, todo }) => {
         setUser(data);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
