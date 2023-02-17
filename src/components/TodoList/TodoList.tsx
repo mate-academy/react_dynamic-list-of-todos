@@ -4,9 +4,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
+  selectedTodoId: number,
+  setSelectedTodoId: (todoId: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = (
+  {
+    todos,
+    selectedTodoId,
+    setSelectedTodoId,
+  },
+) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -30,7 +38,13 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered" />
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames({
@@ -42,9 +56,18 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => setSelectedTodoId(todo.id)}
+              >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames({
+                    'far fa-eye': selectedTodoId !== todo.id,
+                    'far fa-eye-slash': selectedTodoId === todo.id,
+                  })}
+                  />
                 </span>
               </button>
             </td>
