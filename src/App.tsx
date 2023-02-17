@@ -10,12 +10,13 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { filterTodos, findTodo } from './utils/functions';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [hasLoadingError, setHasLoadingError] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
 
   const loadTodosFromServer = async () => {

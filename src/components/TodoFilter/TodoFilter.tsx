@@ -1,8 +1,9 @@
 import React, { ChangeEvent } from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
   status: string;
-  onStatusChange: (value: string) => void;
+  onStatusChange: (value: Status) => void;
   query: string;
   onInputChange: (value: string) => void;
 };
@@ -18,7 +19,7 @@ export const TodoFilter: React.FC<Props> = (
   const changeStatus = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    onStatusChange(value);
+    onStatusChange(value as Status);
   };
 
   const setSearchString = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +37,9 @@ export const TodoFilter: React.FC<Props> = (
             value={status}
             onChange={changeStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

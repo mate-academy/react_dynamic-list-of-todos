@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -33,7 +33,9 @@ export const TodoModal: React.FC<Props> = ({
     }
   };
 
-  loadUserFromServer(selectedTodo);
+  useEffect(() => {
+    loadUserFromServer(selectedTodo);
+  }, []);
 
   const isLoadingFinished = (hasLoadingError && user === null) || user;
 
