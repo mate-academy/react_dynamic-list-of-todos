@@ -6,24 +6,27 @@ import { Loader } from '../Loader';
 
 type Props = {
   selectedTodo: Todo;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onSelectedTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodo: todo,
-  setSelectedTodo: onTodo,
+  selectedTodo,
+  onSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, hasIsError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // eslint-disable-next-line no-console
+  console.log('TodoModal');
+
   const {
     id,
     title,
     completed,
     userId,
-  } = todo;
+  } = selectedTodo;
 
   useEffect(() => {
     getUser(userId)
@@ -61,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onTodo(null);
+                onSelectedTodo(null);
               }}
             />
           </header>

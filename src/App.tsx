@@ -110,7 +110,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          onSelectedTodo={setSelectedTodo}
         />
       )}
     </>
