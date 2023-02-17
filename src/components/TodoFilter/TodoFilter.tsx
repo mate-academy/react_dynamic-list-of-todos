@@ -30,7 +30,7 @@ export const TodoFilter: React.FC<Props> = (
         >
           <option value={FilterType.ALL}>All</option>
           <option value={FilterType.ACTIVE}>Active</option>
-          <option value={FilterType.COMPLITED}>Completed</option>
+          <option value={FilterType.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>

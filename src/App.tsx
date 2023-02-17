@@ -28,7 +28,7 @@ export function getFilteredTodos(
       visibleTodos = visibleTodos.filter(todo => !todo.completed);
       break;
 
-    case FilterType.COMPLITED:
+    case FilterType.COMPLETED:
       visibleTodos = visibleTodos.filter(todo => todo.completed);
       break;
 
