@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -29,18 +29,6 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setTypeOfTodos(event.target.value);
-  };
-
-  const handleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
-  };
-
-  const handleFilterClear = () => {
-    setFilter('');
-  };
-
   const groupedTodos = typeOfTodos === 'all'
     ? todos
     : todos.filter(({ completed }) => (typeOfTodos === 'completed' ? completed : !completed));
@@ -59,10 +47,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 option={typeOfTodos}
-                onSelectChange={handleTypeChange}
+                setTypeOfTodos={setTypeOfTodos}
                 filter={filter}
-                onFilterChange={handleFilterChange}
-                onFilterClear={handleFilterClear}
+                setFilter={setFilter}
               />
             </div>
 
@@ -72,7 +59,7 @@ export const App: React.FC = () => {
               }
               <TodoList
                 todos={filteredTodos}
-                onButtonClick={(todo) => setTodoToShow(todo)}
+                onButtonClick={setTodoToShow}
                 todoToShow={todoToShow}
               />
             </div>
@@ -80,7 +67,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {
-        todoToShow && <TodoModal todo={todoToShow} onButtonClick={(todo) => setTodoToShow(todo)} />
+        todoToShow && <TodoModal todo={todoToShow} onButtonClick={setTodoToShow} />
       }
     </>
   );
