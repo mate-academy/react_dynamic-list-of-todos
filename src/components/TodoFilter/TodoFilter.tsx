@@ -3,9 +3,9 @@ import { SortBy } from '../../types/SortBy';
 
 type Props = {
   query: string;
-  sortBy: string;
+  sortBy: SortBy;
   handleChange: (query: string) => void;
-  handleSelect: (sortBy: string) => void;
+  handleSelect: (sortBy: SortBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortBy}
-          onChange={(event) => handleSelect(event.target.value)}
+          onChange={(event) => handleSelect(event.target.value as SortBy)}
         >
           <option value={SortBy.All}>All</option>
           <option value={SortBy.Active}>Active</option>

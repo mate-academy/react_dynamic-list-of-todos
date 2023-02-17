@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   selectTodo: (todo: Todo | null) => void;
 };
 
@@ -13,10 +13,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    getUser(selectedTodo!.userId).then((response) => {
-      setUser(response);
-    });
+    if (selectedTodo.userId) {
+      getUser(selectedTodo.userId).then((response) => {
+        setUser(response);
+      });
+    }
   }, []);
 
   return (

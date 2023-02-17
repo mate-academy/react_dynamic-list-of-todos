@@ -12,18 +12,21 @@ import { getTodos } from './api';
 import { SortBy } from './types/SortBy';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('all');
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   const loadTodos = useCallback(async () => {
     try {
       setTodos(await getTodos());
+      setHasLoadingError(false);
     } catch (error) {
       if (error instanceof Error) {
         /* eslint no-console: */
         console.log("Todos aren't loaded");
+        setHasLoadingError(true);
       }
     }
   }, []);
@@ -75,7 +78,10 @@ export const App: React.FC = () => {
                   selectTodo={setSelectedTodo}
                 />
               ) : (
-                <Loader />
+                <>
+                  {hasLoadingError && <p>Sorry, Todos aren&apos;t loaded</p>}
+                  <Loader />
+                </>
               )}
             </div>
           </div>
