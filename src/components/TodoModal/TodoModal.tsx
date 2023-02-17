@@ -18,9 +18,6 @@ export const TodoModal: React.FC<Props> = ({
   const [isError, hasIsError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // eslint-disable-next-line no-console
-  console.log('TodoModal');
-
   const {
     id,
     title,

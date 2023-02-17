@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   onApplyQuery: (event: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   onFilter,
   onApplyQuery,
 }) => {
@@ -62,4 +62,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});
