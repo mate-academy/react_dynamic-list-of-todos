@@ -13,7 +13,7 @@ import { TodosFilterBy } from './types/TodosFilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterTodosBy, setFilterTodosBy] = useState<TodosFilterBy>(TodosFilterBy.ALL);
   const [query, setQuery] = useState('');
 
@@ -74,16 +74,19 @@ export const App: React.FC = () => {
               )}
               <TodoList
                 todos={preparedTodos}
-                selectedTodoId={selectedTodoId}
-                setSelectedTodoId={setSelectedTodoId}
+                selectedTodo={selectedTodo}
+                setSelectedTodo={setSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodoId && (
-        <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
       )}
     </>
   );
