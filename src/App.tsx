@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { debounce } from 'lodash';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -18,12 +21,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [query, setQuery] = useState('');
-
-  const selectTodo = (todo: Todo | null) => {
-    setSelectedTodo(todo);
-  };
-
-  const visibleTodo = filterTodo(todos, filterBy, query);
+  const [appliedQuery, setAppliedQuery] = useState('');
 
   useEffect(() => {
     getTodos().then(result => {
@@ -31,6 +29,14 @@ export const App: React.FC = () => {
       setIsLoading(false);
     });
   }, []);
+
+  const selectTodo = useCallback(((todo: Todo | null) => {
+    setSelectedTodo(todo);
+  }), []);
+
+  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+
+  const visibleTodo = useMemo(() => filterTodo(todos, filterBy, appliedQuery), [todos, filterBy, appliedQuery]);
 
   return (
     <>
@@ -40,7 +46,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter query={query} filterBy={filterBy} setFilterBy={setFilterBy} setQuery={setQuery} />
+              <TodoFilter query={query} filterBy={filterBy} setFilterBy={setFilterBy} setQuery={setQuery} applyQuery={applyQuery} />
             </div>
 
             <div className="block">
