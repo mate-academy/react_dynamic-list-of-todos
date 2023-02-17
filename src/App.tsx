@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,6 +11,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { TodoStatus } from './types/TodoStatus';
 import { preparedTodos } from './utils/preparedTodos';
+import { ErrorMeassage } from './components/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -18,6 +19,7 @@ export const App: React.FC = () => {
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isError, setIsError] = useState(false);
 
   const loadTodos = async () => {
     try {
@@ -26,7 +28,7 @@ export const App: React.FC = () => {
       setTodos(loadedTodos);
       setIsLoaded(true);
     } catch (error) {
-      throw new Error(`There is an error with loading data: ${error}`);
+      setIsError(true);
     }
   };
 
@@ -34,13 +36,19 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const visibleTodos = preparedTodos(todos, todoStatus, query);
+  const visibleTodos = useMemo(() => {
+    return preparedTodos(todos, todoStatus, query);
+  }, [todos, todoStatus, query]);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId) || null;
 
   const handleCloseModal = () => {
     setSelectedTodoId(0);
   };
+
+  if (isError) {
+    return <ErrorMeassage />;
+  }
 
   return (
     <>
@@ -51,7 +59,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onTodoStatus={setTodoStatus}
+                onTodoStatusSelect={setTodoStatus}
                 query={query}
                 onQuery={setQuery}
               />
@@ -74,7 +82,12 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onCloseModal={handleCloseModal} />
+        <TodoModal
+          todo={selectedTodo}
+          onCloseModal={handleCloseModal}
+          isError={isError}
+          setIsError={setIsError}
+        />
       )}
     </>
   );

@@ -2,14 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { ErrorMeassage } from '../ErrorMessage';
 import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | null,
   onCloseModal: () => void,
+  isError: boolean,
+  setIsError: (value: boolean) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  onCloseModal,
+  isError,
+  setIsError,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   const loadUser = async () => {
@@ -18,13 +26,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
 
       setUser(loadedUser);
     } catch (error) {
-      throw new Error(`There is an error with loading data: ${error}`);
+      setIsError(true);
     }
   };
 
   useEffect(() => {
     loadUser();
   }, []);
+
+  if (isError) {
+    return <ErrorMeassage />;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">

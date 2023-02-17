@@ -2,14 +2,14 @@ import React from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
-  onTodoStatus: (option: TodoStatus) => void,
+  onTodoStatusSelect: (option: TodoStatus) => void,
   query: string,
   onQuery: (newQuery: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = (
   {
-    onTodoStatus,
+    onTodoStatusSelect: onTodoStatus,
     query,
     onQuery,
   },
