@@ -25,7 +25,7 @@ export const App: React.FC = () => {
   }, []);
 
   const preparedTodos = useMemo(() => {
-    const LowerQuery = query.toLowerCase().trim();
+    const LowerQuery = query.toLowerCase();
     let newTodos = [...todos];
 
     if (filterTodosBy) {
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
 
     if (query) {
       newTodos = newTodos.filter(todo => {
-        const lowerTitle = todo.title.toLowerCase().trim();
+        const lowerTitle = todo.title.toLowerCase();
 
         return lowerTitle.includes(LowerQuery);
       });
