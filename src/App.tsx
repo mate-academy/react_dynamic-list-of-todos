@@ -7,7 +7,6 @@ import React, {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { debounce } from 'lodash';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
