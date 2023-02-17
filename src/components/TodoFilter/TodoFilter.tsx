@@ -29,9 +29,6 @@ export const TodoFilter: React.FC<Props> = React.memo(
       onInputChange(value);
     };
 
-    // eslint-disable-next-line no-console
-    console.log('filter rendered');
-
     return (
       <form className="field has-addons">
         <p className="control">

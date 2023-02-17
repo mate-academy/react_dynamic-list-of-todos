@@ -17,9 +17,6 @@ export const TodoList: React.FC<Props> = ({
     onShowButtonClick(userId);
   };
 
-  // eslint-disable-next-line no-console
-  console.log('table rendered');
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
