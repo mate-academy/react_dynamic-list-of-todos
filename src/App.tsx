@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterBy } from './types/FilterBy';
+import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -35,28 +36,9 @@ export const App: React.FC = () => {
     onLoadGetTodos();
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    let allTodos = todos.filter(todo => {
-      switch (filterBy) {
-        case FilterBy.ACTIVE:
-          return !todo.completed;
-        case FilterBy.COMPLETE:
-          return todo.completed;
-        default:
-          return true;
-      }
-    });
-
-    if (query) {
-      const lowerCaseQuery = query.toLowerCase();
-
-      allTodos = allTodos.filter(todo => {
-        return todo.title.toLowerCase().includes(lowerCaseQuery);
-      });
-    }
-
-    return allTodos;
-  }, [query, filterBy, todos]);
+  const visibleTodos = useMemo(() => (
+    getFilteredTodos(todos, filterBy, query)
+  ), [query, filterBy, todos]);
 
   const hasError = !isLoading && hasRejectResponse;
   const hasNoError = !isLoading && !hasRejectResponse;
@@ -97,7 +79,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal selectedTodo={selectedTodo} onCloseModal={setSelectedTodo} />
       )}
     </>

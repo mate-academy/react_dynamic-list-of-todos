@@ -66,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
 
               {' by '}
 
-              {user === null
+              {!user
                 ? (
                   <p>No such user</p>
                 )
