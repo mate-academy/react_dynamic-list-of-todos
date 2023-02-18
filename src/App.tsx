@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { SortBy } from './types/SortBy';
+import { filterTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,14 +21,12 @@ export const App: React.FC = () => {
 
   const loadTodos = useCallback(async () => {
     try {
-      setTodos(await getTodos());
+      const loadedTodos = await getTodos();
+
+      setTodos(loadedTodos);
       setHasLoadingError(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        /* eslint no-console: */
-        console.log("Todos aren't loaded");
-        setHasLoadingError(true);
-      }
+    } catch {
+      setHasLoadingError(true);
     }
   }, []);
 
@@ -35,24 +34,9 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const filtredTodos = todos.filter(todo => {
-    const formatedQuery = query.trim().toLowerCase();
-    const titleIncludesQuery = todo.title.toLowerCase().includes(formatedQuery);
+  const formatedQuery = query.trim().toLowerCase();
 
-    switch (sortBy) {
-      case SortBy.Active:
-        return !todo.completed && titleIncludesQuery;
-
-      case SortBy.All:
-        return titleIncludesQuery;
-
-      case SortBy.Completed:
-        return todo.completed && titleIncludesQuery;
-
-      default:
-        throw new Error('Incorect sortBy parameter');
-    }
-  });
+  const filtredTodos = filterTodos(todos, formatedQuery, sortBy);
 
   return (
     <>
