@@ -12,16 +12,20 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selectTodo, todo }) => {
   const [user, setUser] = useState<User>();
+  const [handleError, setHandleError] = useState(false);
 
   const fetchUser = async () => {
-    const userFromServer = await getUser(todo.userId);
+    try {
+      const userFromServer = await getUser(todo.userId);
 
-    setUser(userFromServer);
+      setUser(userFromServer);
+    } catch (error) {
+      setHandleError(true);
+    }
   };
 
   useEffect(() => {
     fetchUser();
-    fetchUser().catch(Error);
   }, []);
 
   return (
@@ -30,6 +34,8 @@ export const TodoModal: React.FC<Props> = ({ selectTodo, todo }) => {
       data-cy="modal"
     >
       <div className="modal-background" />
+      {handleError
+       && <p>No server respone</p>}
 
       {!user
         ? (

@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,65 +12,68 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
-  const [apllyq, setApllyq] = useState('');
+  const [status, setStatus] = useState<string>(FilterType.All);
+  const [apllyQuery, setApllyQuery] = useState('');
+  const [handleError, setHandleError] = useState(false);
 
-  let visibleTodos = todos;
+  let visibleTodos = todos.filter(todo => {
+    switch (status) {
+      case FilterType.Active:
+        return !todo.completed;
 
-  const modalTodo = visibleTodos.filter(todo => todo.id === selectedTodoId);
+      case FilterType.Completed:
+        return todo.completed;
 
-  const lowQuery = apllyq.toLowerCase();
+      default:
+        return todo;
+    }
+  });
+
+  const selectedTodo = useMemo(() => {
+    return todos.find(
+      todo => todo.id === selectedTodoId,
+    );
+  }, [selectedTodoId, todos]);
+
+  const lowQuery = apllyQuery.toLowerCase();
 
   const isMatchingTodos = (!query)
     ? <Loader />
     : <p>Nothing is matching</p>;
 
-  const selectTodo = (id: number) => {
-    if (selectedTodoId !== id) {
-      setSelectedTodoId(id);
-    } else {
-      setSelectedTodoId(0);
-    }
-  };
+  const selectTodo = (id: number) => (
+    (selectedTodoId !== id)
+      ? setSelectedTodoId(id)
+
+      : setSelectedTodoId(0)
+  );
 
   const fetchTodos = async () => {
-    const todoFromServer = await getTodos();
+    try {
+      const todoFromServer = await getTodos();
 
-    setTodos(todoFromServer);
+      setTodos(todoFromServer);
+    } catch (error) {
+      setHandleError(true);
+    }
   };
 
   useEffect(() => {
     fetchTodos();
-    fetchTodos().catch(Error);
   }, []);
 
-  switch (status) {
-    case ('all'):
-      visibleTodos = todos;
-      break;
-
-    case ('active'):
-      visibleTodos = todos.filter(todo => !todo.completed);
-      break;
-    case ('completed'):
-      visibleTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
   const debouncedChangeHandler = useCallback(
-    debounce(setApllyq, 1000),
+    debounce(setApllyQuery, 1000),
     [],
   );
 
-  if (apllyq) {
+  if (apllyQuery) {
     visibleTodos = visibleTodos.filter(todo => {
       return todo.title.toLowerCase().includes(lowQuery);
     });
@@ -92,6 +97,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {handleError
+              && (<p>No server response</p>)}
+
               {visibleTodos.length > 0
                 ? (
                   <TodoList
@@ -106,10 +114,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodoId !== 0
+      {selectedTodo
         && (
           <TodoModal
-            todo={modalTodo[0]}
+            todo={selectedTodo}
             selectTodo={selectTodo}
           />
         )}
