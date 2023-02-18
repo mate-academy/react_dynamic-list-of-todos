@@ -1,5 +1,7 @@
+import { FilterType } from '../../types/FilterType';
+
 type Props = {
-  selectedFilter: string;
+  selectedFilter: FilterType;
   query: string;
   handleClearSearch: () => void;
   handleFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
