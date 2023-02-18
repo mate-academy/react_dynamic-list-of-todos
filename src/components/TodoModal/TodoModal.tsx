@@ -29,12 +29,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       const fetchedUser = await getUser(userId);
 
       setUser(fetchedUser);
-    } catch (e) {
-      if (e instanceof Error) {
-        alert(e.message);
-      } else {
-        alert('Unexpected error');
-      }
+    } catch (error) {
+      const message = error instanceof Error
+        ? error.message
+        : 'Unexpected error';
+
+      alert(message);
     } finally {
       setIsLoading(false);
     }

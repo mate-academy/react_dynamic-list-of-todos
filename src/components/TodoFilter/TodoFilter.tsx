@@ -1,5 +1,6 @@
 import React from 'react';
 import { SelectFilter } from '../../types/SelectFilter';
+import { handleTodoStatusChange } from '../../utils/helper';
 
 type Props = {
   query: string,
@@ -16,23 +17,21 @@ export const TodoFilter: React.FC<Props> = ({
   selectFilter,
   setSelectFilter,
 }) => {
-  const handleTodoStatusCahnge = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    switch (event.target.value) {
-      case 'all':
-        setSelectFilter(SelectFilter.ALL);
-        break;
-      case 'active':
-        setSelectFilter(SelectFilter.ACTIVE);
-        break;
-      case 'completed':
-        setSelectFilter(SelectFilter.COMPLETED);
-        break;
-      default:
-        throw new Error('Unexpected todo status');
-    }
-  };
+  //  const handleTodoStatusCahnge = (
+  //   event: React.ChangeEvent<HTMLSelectElement>,
+  // ) => {
+  //   switch (event.target.value) {
+  //     case SelectFilter.ACTIVE:
+  //       setSelectFilter(SelectFilter.ACTIVE);
+  //       break;
+  //     case SelectFilter.COMPLETED:
+  //       setSelectFilter(SelectFilter.COMPLETED);
+  //       break;
+  //     case SelectFilter.ALL:
+  //     default:
+  //       setSelectFilter(SelectFilter.ALL);
+  //   }
+  // };
 
   return (
     <form className="field has-addons">
@@ -41,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectFilter}
-            onChange={handleTodoStatusCahnge}
+            onChange={handleTodoStatusChange(setSelectFilter)}
           >
             <option value={SelectFilter.ALL}>All</option>
             <option value={SelectFilter.ACTIVE}>Active</option>

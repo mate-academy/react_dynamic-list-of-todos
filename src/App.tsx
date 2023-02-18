@@ -13,6 +13,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { SelectFilter } from './types/SelectFilter';
+import { getFiltredToDos } from './utils/helper';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -28,11 +29,11 @@ export const App: React.FC = () => {
 
       setTodos(loadedTodos);
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('Unexpected error');
-      }
+      const message = error instanceof Error
+        ? error.message
+        : 'Unexpected error';
+
+      alert(message);
     } finally {
       setIsLoading(false);
     }
@@ -57,27 +58,8 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const transform = (title: string) => title.toLowerCase();
-
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const { title } = todo;
-      const isInclude = transform(title).includes(transform(query));
-
-      switch (selectFilter) {
-        case SelectFilter.ALL:
-          return isInclude;
-
-        case SelectFilter.ACTIVE:
-          return !todo.completed && isInclude;
-
-        case SelectFilter.COMPLETED:
-          return todo.completed && isInclude;
-
-        default:
-          throw new Error('error: wrong status.');
-      }
-    });
+    return getFiltredToDos(todos, selectFilter, query);
   }, [selectFilter, query, todos]);
 
   return (
