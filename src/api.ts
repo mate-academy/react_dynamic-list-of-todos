@@ -13,15 +13,18 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+  try {
+    // eslint-disable-next-line prefer-template
+    const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see now the laoder works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+    return wait(300)
+      .then(() => fetch(fullURL))
+      .then(res => res.json());
+  } catch (error) {
+    throw new Error(`Error while fetching ${error}`);
+  }
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number | null) => get<User>(`/users/${userId}`);
