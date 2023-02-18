@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,7 +13,7 @@ import { getTodos } from './api';
 import { prepareTodo } from './utils/PrepareTodo';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isSelectedTodo, setIsSelectedTodo] = useState<Todo | null>(null);
   const [sortBy, setSortBy] = useState('all');
   const [query, setQuery] = useState('');
@@ -21,15 +21,18 @@ export const App: React.FC = () => {
 
   const preparedquery = query.trim().toLocaleLowerCase();
 
-  const preparedTodo = prepareTodo(preparedquery, todos, sortBy);
+  const preparedTodo = useMemo(() => (
+    prepareTodo(preparedquery, todos, sortBy)
+   ),
+   [preparedquery, todos, sortBy]);
 
-  const handleSelect = (sortField: string) => {
+  const handleSelect = useCallback((sortField: string) => {
     setSortBy(sortField);
-  };
+  }, []);
 
-  const handleChangeQuery = (searchString: string) => {
+  const handleChangeQuery = useCallback((searchString: string) => {
     setQuery(searchString);
-  };
+  }, []);
 
   useEffect(() => {
     getTodos()

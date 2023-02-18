@@ -9,7 +9,7 @@ type Props = {
   isSelectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   setSelectedTodo,
   isSelectedTodo,
@@ -89,4 +89,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-};
+});

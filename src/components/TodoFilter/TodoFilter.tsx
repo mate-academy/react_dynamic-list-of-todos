@@ -7,7 +7,7 @@ type Props = {
   onHandleChangeQuery: (searchString: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   sortBy,
   query,
   onHandleSelect,
@@ -62,4 +62,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});
