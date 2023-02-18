@@ -15,14 +15,13 @@ export const TodoModal: React.FC<Props> = ({ onHideTodo, todo }) => {
   const [user, setUser] = useState<User | null>(null);
   const fetchedUser = async () => {
     try {
-      if (todo.userId) {
-        const data = await getUser(todo.userId);
+      const data = await getUser(todo.userId);
 
-        setUser(data);
-      }
+      setUser(data);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
+      throw new Error('Sorry, something goes wrong. Please, try again later');
     }
   };
 

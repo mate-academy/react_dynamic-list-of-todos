@@ -1,7 +1,8 @@
 import React from 'react';
+import { SortType } from '../../types/SortType';
 
 interface Props {
-  sortType: string;
+  sortType: SortType;
   onSortTodos: (event: string) => void;
   onQuery: (event: string) => void;
   query: string;
@@ -45,11 +46,11 @@ export const TodoFilter: React.FC<Props> = ({
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            aria-label="clearSearch"
             onClick={onClear}
           />
         </span>

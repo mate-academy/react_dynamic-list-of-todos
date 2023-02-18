@@ -1,4 +1,5 @@
 import { Todo } from '../types/Todo';
+import { SortType } from '../types/SortType';
 
 export const prepareTodos = (
   todos: Todo[],
@@ -15,18 +16,21 @@ export const prepareTodos = (
     );
   }
 
-  if (sortType !== 'all') {
-    todosForRender = todosForRender.filter(todo => {
-      switch (sortType) {
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return todo;
-      }
-    });
-  }
+  todosForRender = todosForRender.filter(todo => {
+    switch (sortType) {
+      case SortType.ACTIVE:
+        return !todo.completed;
+
+      case SortType.COMPLETED:
+        return todo.completed;
+
+      case SortType.ALL:
+        return true;
+
+      default:
+        throw new Error('Incorrect SortType data');
+    }
+  });
 
   return todosForRender;
 };
