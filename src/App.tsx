@@ -10,55 +10,25 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-function prepareTodo(
-  qwery: string,
-  todos: Todo[],
-  field: string,
-) {
-  let isVisibleTodo = [...todos];
-
-  if (qwery) {
-    isVisibleTodo = isVisibleTodo.filter(todo => {
-      return todo
-        .title
-        .toLocaleLowerCase()
-        .includes(qwery);
-    });
-  }
-
-  switch (field) {
-    case ('active'):
-      isVisibleTodo = isVisibleTodo.filter(todo => !todo.completed);
-      break;
-
-    case ('completed'):
-      isVisibleTodo = isVisibleTodo.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  return isVisibleTodo;
-}
+import { prepareTodo } from './utils/PrepareTodo';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[] | []>([]);
   const [isSelectedTodo, setIsSelectedTodo] = useState<Todo | null>(null);
   const [sortBy, setSortBy] = useState('all');
-  const [qwery, setQwery] = useState('');
-  const [hasErorr, setHasErorr] = useState(false);
+  const [query, setQuery] = useState('');
+  const [hasError, setHasError] = useState(false);
 
-  const preparedQwery = qwery.trim().toLocaleLowerCase();
+  const preparedquery = query.trim().toLocaleLowerCase();
 
-  const preparedTodo = prepareTodo(preparedQwery, todos, sortBy);
+  const preparedTodo = prepareTodo(preparedquery, todos, sortBy);
 
   const handleSelect = (sortField: string) => {
     setSortBy(sortField);
   };
 
-  const handleChangeQwery = (searchString: string) => {
-    setQwery(searchString);
+  const handleChangeQuery = (searchString: string) => {
+    setQuery(searchString);
   };
 
   useEffect(() => {
@@ -67,7 +37,7 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(() => {
-        setHasErorr(true);
+        setHasError(true);
       });
   }, []);
 
@@ -83,7 +53,7 @@ export const App: React.FC = () => {
     <>
       <div className="section">
         <div className="container">
-          {hasErorr
+          {hasError
             ? (
               <span>Sorry, try later</span>
             ) : (
@@ -93,9 +63,9 @@ export const App: React.FC = () => {
                 <div className="block">
                   <TodoFilter
                     sortBy={sortBy}
-                    qwery={qwery}
+                    query={query}
                     onHandleSelect={handleSelect}
-                    onhandleChangeQwery={handleChangeQwery}
+                    onHandleChangeQuery={handleChangeQuery}
                   />
                 </div>
 

@@ -11,17 +11,23 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ isSelectedTodo, closeTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  // const [hasErorr, setHasErorr] = useState(false);
+  const [hasErorr, setHasErorr] = useState(false);
 
   useEffect(() => {
     getUser(isSelectedTodo.userId)
       .then(data => {
         setUser(data);
+      })
+      .catch(() => {
+        setHasErorr(true);
       });
-    // .catch(() => {
-    //   setHasErorr(true);
-    // });
   }, []);
+
+  if (hasErorr) {
+    return (
+      <span>Sorry, try later</span>
+    );
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">

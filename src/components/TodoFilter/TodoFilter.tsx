@@ -2,16 +2,16 @@ import React from 'react';
 
 type Props = {
   sortBy: string
-  qwery: string
+  query: string
   onHandleSelect: (sortField: string) => void,
-  onhandleChangeQwery: (searchString: string) => void,
+  onHandleChangeQuery: (searchString: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   sortBy,
-  qwery,
+  query,
   onHandleSelect,
-  onhandleChangeQwery,
+  onHandleChangeQuery,
 }) => {
   return (
     <form className="field has-addons">
@@ -36,9 +36,9 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="searchInput"
           type="text"
           className="input"
-          value={qwery}
+          value={query}
           onChange={({ target }) => {
-            onhandleChangeQwery(target.value);
+            onHandleChangeQuery(target.value);
           }}
           placeholder="Search..."
         />
@@ -47,14 +47,14 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {qwery && (
+          {query && (
             /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => {
-                onhandleChangeQwery('');
+                onHandleChangeQuery('');
               }}
             />
           )}
