@@ -1,11 +1,22 @@
 import React from 'react';
+import { Status } from '../../types/Todo';
 
 type Props = {
   query: string;
   onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   resetQuery: () => void;
-  status: string;
-  setStatus: (value: string) => void;
+  status: Status;
+  setStatus: (value: Status) => void;
+};
+
+interface StatusIndex {
+  [key: string]: Status;
+}
+
+const statusIndex: StatusIndex = {
+  active: Status.ACTIVE,
+  inactive: Status.ALL,
+  pending: Status.COMPLETED,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -22,11 +33,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={(event) => setStatus(event.target.value)}
+            onChange={(event) => setStatus(statusIndex[event.target.value])}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

@@ -10,16 +10,28 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { Todo } from './types/Todo';
+import { Todo, Status } from './types/Todo';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<Status>(Status.ALL);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
-    getTodos().then((todos) => setVisibleTodos(todos));
+    async function fetchData() {
+      try {
+        const todos = await getTodos();
+
+        setVisibleTodos(todos);
+        setHasLoadingError(false);
+      } catch {
+        setHasLoadingError(true);
+      }
+    }
+
+    fetchData();
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -49,9 +61,11 @@ export const App: React.FC = () => {
     [],
   );
 
-  const reset = useCallback(() => {
+  const resetQuery = useCallback(() => {
     setQuery('');
   }, []);
+
+  const isLoadingFinished = (hasLoadingError && visibleTodos.length === 0) || visibleTodos.length;
 
   return (
     <>
@@ -64,22 +78,24 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onQueryChange={onQueryChange}
-                resetQuery={reset}
+                resetQuery={resetQuery}
                 status={status}
                 setStatus={setStatus}
               />
             </div>
 
             <div className="block">
-              {visibleTodos.length === 0 ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
-                />
-              )}
+              {isLoadingFinished
+                ? (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )
+                : (
+                  <Loader />
+                )}
             </div>
           </div>
         </div>
