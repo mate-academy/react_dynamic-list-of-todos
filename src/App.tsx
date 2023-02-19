@@ -9,12 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Status } from './types/Status';
+
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
 
   const closeModal = () => {
@@ -35,15 +37,15 @@ export const App: React.FC = () => {
 
   let visibleTodos = [...todos];
 
-  if (status !== 'all') {
+  if (status !== Status.All) {
     visibleTodos = visibleTodos.filter(todo => {
       switch (status) {
-        case 'active':
+        case Status.Active:
           return todo.completed !== true;
-        case 'completed':
+        case Status.Completed:
           return todo.completed === true;
         default:
-          return true;
+          throw new Error('Status is incorrect');
       }
     });
   }
