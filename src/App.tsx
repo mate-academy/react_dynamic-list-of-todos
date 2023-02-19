@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,6 +12,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -18,48 +21,39 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [appliedQuery, setAppliedQuery] = useState('');
 
-  const closeModal = () => {
-    setSelectedTodo(null);
-  };
+  const closeModal = useCallback(
+    () => {
+      setSelectedTodo(null);
+    },
+    [],
+  );
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      })
-      .catch(() => {
-        setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const fetchTodos = async () => {
+      setIsLoading(true);
+      try {
+        const todosFromServer = await getTodos();
 
-    setIsLoading(true);
+        setTodos(todosFromServer);
+      } catch {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTodos();
   }, []);
 
-  let visibleTodos = [...todos];
+  useEffect(() => {
+    const timerId = setTimeout(() => setAppliedQuery(query), 1000);
 
-  if (status !== Status.All) {
-    visibleTodos = visibleTodos.filter(todo => {
-      switch (status) {
-        case Status.Active:
-          return todo.completed !== true;
-        case Status.Completed:
-          return todo.completed === true;
-        default:
-          throw new Error('Status is incorrect');
-      }
-    });
-  }
+    return () => clearTimeout(timerId);
+  }, [query]);
 
-  if (query) {
-    const lowerCaseQuery = query.toLowerCase();
-
-    visibleTodos = visibleTodos.filter(todo => (
-      todo.title.toLowerCase().includes(lowerCaseQuery)
-    ));
-  }
+  const visibleTodos = useMemo(() => getVisibleTodos(todos, appliedQuery, status), [todos, appliedQuery, status]);
 
   return (
     <>
