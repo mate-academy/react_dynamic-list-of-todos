@@ -15,11 +15,15 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
   } = selectedTodo;
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     getUser(userId)
       .then(userFromServer => {
         setUser(userFromServer);
+      })
+      .catch(() => {
+        setHasError(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -61,12 +65,24 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
               {completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
+
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {!hasError
+                ? (
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
+                  </a>
+                ) : (
+                  <strong>Unknown</strong>
+                )}
             </p>
+
+            {hasError && (
+              <div className="notification is-warning">
+                Server error!
+              </div>
+            )}
           </div>
         </div>
       )}

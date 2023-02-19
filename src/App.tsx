@@ -11,13 +11,13 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
 
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [status, setStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const closeModal = () => {
     setSelectedTodo(null);
@@ -27,6 +27,9 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+      })
+      .catch(() => {
+        setHasError(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -74,14 +77,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {hasError && (
+                <div className="notification is-warning">
+                  Server error!
+                </div>
+              )}
               {isLoading && (
                 <Loader />
               )}
-              <TodoList
-                todos={visibleTodos}
-                selectTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
+
+              {todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
