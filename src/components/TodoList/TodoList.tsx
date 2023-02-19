@@ -9,7 +9,11 @@ type Props = {
 
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectTodo, selectedTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectTodo,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -31,17 +35,17 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo, selectedTodo }) =
 
           return (
 
-            <tr 
-              data-cy="todo" 
+            <tr
+              data-cy="todo"
               className={classNames({
-                'has-background-info-light': selectedTodo ===todo,
+                'has-background-info-light': selectedTodo === todo,
               })}
             >
               {' '}
               <td className="is-vcentered">{id}</td>
               <td className="is-vcentered">
                 {completed && (
-                  <span 
+                  <span
                     className="icon"
                     data-cy="iconCompleted"
                   >
@@ -67,10 +71,10 @@ export const TodoList: React.FC<Props> = ({ todos, selectTodo, selectedTodo }) =
                 >
                   <span className="icon">
                     <i className={classNames({
-                      'far fa-eye-slash': selectedTodo ===todo,
-                      'far fa-eye': selectedTodo !== todo
+                      'far fa-eye-slash': selectedTodo === todo,
+                      'far fa-eye': selectedTodo !== todo,
                     })}
-                   />
+                    />
                     {' '}
                   </span>
                 </button>

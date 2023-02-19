@@ -39,9 +39,9 @@ export const TodoFilter: FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {query && (
           <button
+            aria-label="clear search"
             data-cy="clearSearchButton"
             type="button"
             className="delete"
