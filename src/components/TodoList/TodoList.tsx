@@ -31,11 +31,11 @@ export const TodoList: React.FC<Props> = ({
       <tbody>
         {todos.map((todo: Todo) => (
           <tr
+            key={todo.id}
             data-cy="todo"
             className={classNames({
               'has-background-info-light': todo.id === selectedTodo?.id,
             })}
-            key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
