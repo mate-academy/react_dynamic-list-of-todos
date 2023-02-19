@@ -101,10 +101,6 @@ export const TodoModal: React.FC<Props> = ({
                       )}
                   </>
                 )}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
             </p>
           </div>
         </div>
