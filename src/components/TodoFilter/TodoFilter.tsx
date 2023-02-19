@@ -17,22 +17,6 @@ export const TodoFilter: React.FC<Props> = ({
   selectFilter,
   setSelectFilter,
 }) => {
-  //  const handleTodoStatusCahnge = (
-  //   event: React.ChangeEvent<HTMLSelectElement>,
-  // ) => {
-  //   switch (event.target.value) {
-  //     case SelectFilter.ACTIVE:
-  //       setSelectFilter(SelectFilter.ACTIVE);
-  //       break;
-  //     case SelectFilter.COMPLETED:
-  //       setSelectFilter(SelectFilter.COMPLETED);
-  //       break;
-  //     case SelectFilter.ALL:
-  //     default:
-  //       setSelectFilter(SelectFilter.ALL);
-  //   }
-  // };
-
   return (
     <form className="field has-addons">
       <p className="control">
