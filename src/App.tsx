@@ -43,19 +43,19 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => {
-    if (filter === Filter.ALL) {
-      return [...todos];
-    }
+    switch (filter) {
+      case Filter.ALL:
+        return [...todos];
 
-    if (filter === Filter.ACTIVE) {
-      return todos.filter(todo => !todo.completed);
-    }
+      case Filter.ACTIVE:
+        return todos.filter(todo => !todo.completed);
 
-    if (filter === Filter.COMPLETED) {
-      return todos.filter(todo => todo.completed);
-    }
+      case Filter.COMPLETED:
+        return todos.filter(todo => todo.completed);
 
-    return [...todos];
+      default:
+        return [...todos];
+    }
   }, [filter, todos]);
 
   const filterQuery = query
