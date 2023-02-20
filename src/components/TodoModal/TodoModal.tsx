@@ -6,19 +6,11 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todos: Todo[];
-  selectedTodoId: number;
+  selectedTodo: Todo | null;
   onHideTodo: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todos,
-  selectedTodoId,
-  onHideTodo,
-}) => {
-  const [selectedTodo] = useState<Todo | undefined>(
-    todos.find((todo) => todo.id === selectedTodoId),
-  );
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onHideTodo }) => {
   const [selectedTodoUser, setSelectedTodoUser] = useState<User | null>(null);
 
   useEffect(() => {

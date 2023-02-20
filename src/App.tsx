@@ -13,7 +13,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then((receivedTodos) => {
@@ -24,12 +24,12 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const showTodoDetails = (todoId: number) => () => {
-    setSelectedTodoId(todoId);
+  const showTodoDetails = (todo: Todo | null) => () => {
+    setSelectedTodo(todo);
   };
 
   const hideTodoDetails = () => {
-    setSelectedTodoId(0);
+    setSelectedTodo(null);
   };
 
   return (
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               <TodoList
                 todos={todos}
-                selectedTodoId={selectedTodoId}
+                selectedTodo={selectedTodo}
                 onShowTodo={showTodoDetails}
               />
             </div>
@@ -55,12 +55,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodoId !== 0 && (
-        <TodoModal
-          todos={todos}
-          selectedTodoId={selectedTodoId}
-          onHideTodo={hideTodoDetails}
-        />
+      {selectedTodo !== null && (
+        <TodoModal selectedTodo={selectedTodo} onHideTodo={hideTodoDetails} />
       )}
     </>
   );

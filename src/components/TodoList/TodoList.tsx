@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId: number;
-  onShowTodo: (todoId: number) => () => void;
+  selectedTodo: Todo | null;
+  onShowTodo: (todo: Todo | null) => () => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
+  selectedTodo,
   onShowTodo,
 }) => {
   return (
@@ -44,12 +44,12 @@ export const TodoList: React.FC<Props> = ({
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              {selectedTodoId === todo.id ? (
+              {selectedTodo === todo ? (
                 <button
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={onShowTodo(0)}
+                  onClick={onShowTodo(null)}
                 >
                   <span className="icon">
                     <i className="far fa-eye-slash" />
@@ -60,7 +60,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={onShowTodo(todo.id)}
+                  onClick={onShowTodo(todo)}
                 >
                   <span className="icon">
                     <i className="far fa-eye" />
