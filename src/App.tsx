@@ -15,18 +15,23 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todoSelector, setTodoSelector] = useState('all');
+  const [todoFilter, setTodoFilter] = useState('');
 
   useEffect(() => {
     getTodos().then((receivedTodos) => {
       if (receivedTodos.length > 0) {
         const selectedTodos = receivedTodos.filter((todo) => {
+          const todoTitleIncludesFilter = todo.title
+            .toLowerCase()
+            .includes(todoFilter.toLowerCase());
+
           switch (todoSelector) {
             case 'active':
-              return !todo.completed;
+              return !todo.completed && todoTitleIncludesFilter;
             case 'completed':
-              return todo.completed;
+              return todo.completed && todoTitleIncludesFilter;
             default:
-              return true;
+              return todoTitleIncludesFilter;
           }
         });
 
@@ -34,7 +39,7 @@ export const App: React.FC = () => {
         setIsLoading(false);
       }
     });
-  }, [todoSelector]);
+  }, [todoSelector, todoFilter]);
 
   const showTodoDetails = (todo: Todo | null) => () => {
     setSelectedTodo(todo);
@@ -48,6 +53,18 @@ export const App: React.FC = () => {
     setTodoSelector(event.target.value);
   };
 
+  const handleTodoFiltering = (
+    event:
+    | React.ChangeEvent<HTMLInputElement>
+    | React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    if (event.currentTarget.className === 'input') {
+      setTodoFilter(event.currentTarget.value);
+    } else {
+      setTodoFilter('');
+    }
+  };
+
   return (
     <>
       <div className="section">
@@ -59,6 +76,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 todoSelector={todoSelector}
                 onChangeTodoSelector={handleTodoSelection}
+                todoFilter={todoFilter}
+                onChangeTodoFilter={handleTodoFiltering}
               />
             </div>
 

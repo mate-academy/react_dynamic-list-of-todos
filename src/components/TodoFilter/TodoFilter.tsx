@@ -1,11 +1,19 @@
 type Props = {
   todoSelector: string;
   onChangeTodoSelector: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  todoFilter: string;
+  onChangeTodoFilter: (
+    event:
+    | React.ChangeEvent<HTMLInputElement>
+    | React.MouseEvent<HTMLButtonElement>,
+  ) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   todoSelector,
   onChangeTodoSelector,
+  todoFilter,
+  onChangeTodoFilter,
 }) => {
   return (
     <form className="field has-addons">
@@ -29,6 +37,8 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
+          value={todoFilter}
+          onChange={onChangeTodoFilter}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -36,11 +46,15 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {todoFilter !== '' && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={onChangeTodoFilter}
+              aria-label="Clear search"
+            />
+          )}
         </span>
       </p>
     </form>
