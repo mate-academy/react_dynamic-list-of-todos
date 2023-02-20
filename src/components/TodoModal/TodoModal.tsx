@@ -6,38 +6,39 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  todo: Todo,
+  todo: Todo | null,
   selectTodo: (id: number) => void;
 };
 export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [user, setUser] = useState<User>();
+  const [userUploadError, setUserUploadError] = useState(false);
+
+  const getUserFromServer = async () => {
+    try {
+      if (todo) {
+        const userFromServer = await getUser(todo.userId);
+
+        setUser(userFromServer);
+      }
+    } catch (error) {
+      setUserUploadError(true);
+    }
+  };
 
   useEffect(() => {
-    const getUserFromServer = async () => {
-      const userFromServer = await getUser(todo.userId);
-
-      setUser(userFromServer);
-    };
-
-    getUserFromServer()
-      .catch(Error);
+    getUserFromServer();
   }, []);
 
   return (
     <div
-      className={cn(
-        'modal',
-        {
-          'is-active': todo,
-        },
-      )}
+      className={cn('modal',
+        { 'is-active': todo })}
       data-cy="modal"
     >
       <div className="modal-background" />
-      {!user
-        ? (
-          <Loader />
-        ) : (
+      {!user || !todo
+        ? <Loader />
+        : (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -70,9 +71,13 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
-                </a>
+                {userUploadError
+                  ? <p>Unknown user</p>
+                  : (
+                    <a href={`mailto:${user.email}`}>
+                      {user.name}
+                    </a>
+                  )}
               </p>
             </div>
           </div>

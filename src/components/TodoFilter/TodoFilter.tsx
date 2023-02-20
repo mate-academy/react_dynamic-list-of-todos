@@ -1,9 +1,10 @@
 import React from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
-  setStatus: (status: string) => void;
+  setStatus: (status: Status) => void;
   setQuery: (query: string) => void;
-  status: string,
+  status: Status,
   query: string,
 };
 export const TodoFilter: React.FC<Props> = (
@@ -14,6 +15,27 @@ export const TodoFilter: React.FC<Props> = (
     query,
   },
 ) => {
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    switch (value) {
+      case Status.ALL:
+        setStatus(Status.ALL);
+        break;
+
+      case Status.ACTIVE:
+        setStatus(Status.ACTIVE);
+        break;
+
+      case Status.COMPLETED:
+        setStatus(Status.COMPLETED);
+        break;
+
+      default:
+        throw new Error('Unexpected filter type');
+    }
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,17 +43,15 @@ export const TodoFilter: React.FC<Props> = (
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={(event) => {
-              setStatus(event.target.value);
-            }}
+            onChange={handleSelect}
           >
-            <option value="all">
+            <option value={Status.ALL}>
               All
             </option>
-            <option value="active">
+            <option value={Status.ACTIVE}>
               Active
             </option>
-            <option value="completed">
+            <option value={Status.COMPLETED}>
               Completed
             </option>
           </select>
@@ -53,7 +73,7 @@ export const TodoFilter: React.FC<Props> = (
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query.length > 0 && (
+        {query.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

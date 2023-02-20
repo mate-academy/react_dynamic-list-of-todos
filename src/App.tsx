@@ -9,49 +9,54 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [uploadError, setUploadError] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
   let visibleTodos = todosFromServer;
-  const todoToModal = visibleTodos.filter(todo => todo.id === selectedTodoId);
+  const todoToModal = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
 
-  useEffect(() => {
-    const getTodosFromServer = async () => {
+  const getTodosFromServer = async () => {
+    try {
       const todos = await getTodos();
 
       setTodosFromServer(todos);
-    };
-
-    getTodosFromServer()
-      .catch(Error);
-  }, []);
-
-  const selectTodo = (id: number) => {
-    if (selectedTodoId !== id) {
-      setSelectedTodoId(id);
-    } else {
-      setSelectedTodoId(0);
+    } catch (error) {
+      setUploadError(true);
     }
   };
 
-  switch (status) {
-    case 'all':
-      visibleTodos = todosFromServer;
-      break;
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
 
-    case 'active':
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
+  const selectTodo = (id: number) => {
+    if (selectedTodoId === id) {
+      return;
+    }
 
-    case 'completed':
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-    default:
-      break;
-  }
+    setSelectedTodoId(id);
+  };
+
+  visibleTodos = visibleTodos.filter(todo => {
+    switch (status) {
+      case Status.ALL:
+        return true;
+
+      case Status.ACTIVE:
+        return !todo.completed;
+
+      case Status.COMPLETED:
+        return todo.completed;
+
+      default:
+        throw new Error('Unexpected status');
+    }
+  });
 
   if (query) {
     visibleTodos = visibleTodos.filter(todo => {
@@ -64,40 +69,50 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
-
-            <div className="block">
-              <TodoFilter
-                query={query}
-                setQuery={setQuery}
-                setStatus={setStatus}
-                status={status}
-              />
-            </div>
-
-            <div className="block">
-              {visibleTodos.length > 0
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectTodo={selectTodo}
-                    selectedTodoId={selectedTodoId}
-                  />
-                )
-                : <Loader />}
-            </div>
+      {uploadError
+        ? (
+          <div className="notification is-danger">
+            Can not upload todos from server
           </div>
-        </div>
-      </div>
-      {selectedTodoId !== 0
-        && (
-          <TodoModal
-            todo={todoToModal[0]}
-            selectTodo={selectTodo}
-          />
+        )
+        : (
+          <>
+            <div className="section">
+              <div className="container">
+                <div className="box">
+                  <h1 className="title">Todos:</h1>
+
+                  <div className="block">
+                    <TodoFilter
+                      query={query}
+                      setQuery={setQuery}
+                      setStatus={setStatus}
+                      status={status}
+                    />
+                  </div>
+
+                  <div className="block">
+                    {visibleTodos.length
+                      ? (
+                        <TodoList
+                          todos={visibleTodos}
+                          selectTodo={selectTodo}
+                          selectedTodoId={selectedTodoId}
+                        />
+                      )
+                      : <Loader />}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {!!selectedTodoId
+              && (
+                <TodoModal
+                  todo={todoToModal}
+                  selectTodo={selectTodo}
+                />
+              )}
+          </>
         )}
     </>
   );
