@@ -11,8 +11,8 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todoSelector, setTodoSelector] = useState('all');
 
@@ -22,13 +22,14 @@ export const App: React.FC = () => {
         const selectedTodos = receivedTodos.filter((todo) => {
           switch (todoSelector) {
             case 'active':
-              return todo.completed === false;
+              return !todo.completed;
             case 'completed':
-              return todo.completed === true;
+              return todo.completed;
             default:
-              return todo;
+              return true;
           }
         });
+
         setTodos(selectedTodos);
         setIsLoading(false);
       }
