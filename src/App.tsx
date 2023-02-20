@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState<SelectFilter>(SelectFilter.ALL);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   const fetchTodos = useCallback(async () => {
     setIsLoading(true);
@@ -46,14 +46,16 @@ export const App: React.FC = () => {
 
   const showModal = useCallback(
     (todo: Todo) => {
-      setSelectedTodo(todo);
+      setSelectedTodoId(todo.id);
     },
     [],
   );
 
   const hideModal = () => {
-    setSelectedTodo(null);
+    setSelectedTodoId(0);
   };
+
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId) || null;
 
   const transform = (title: string) => title.toLowerCase();
   const parsedQuery = transform(query);
@@ -100,8 +102,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    onClick={showModal}
+                    selectedTodoId={selectedTodoId}
+                    onShow={showModal}
                   />
                 )}
             </div>
@@ -109,7 +111,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      { selectedTodo && (
+      { selectedTodoId && (
         <TodoModal todo={selectedTodo} onClose={hideModal} />
       )}
     </>

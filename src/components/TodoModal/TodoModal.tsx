@@ -7,7 +7,7 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo;
+  todo: Todo | null;
   onClose: () => void;
 };
 
@@ -15,18 +15,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const {
-    id,
-    title,
-    userId,
-    completed,
-  } = todo;
-
   const fetchUser = useCallback(async () => {
     setIsLoading(true);
 
     try {
-      const fetchedUser = await getUser(userId);
+      const fetchedUser = await getUser(todo?.userId || 0);
 
       setUser(fetchedUser);
     } catch (e) {
@@ -56,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${id}`}
+                {`Todo #${todo?.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -70,25 +63,27 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {title}
+                {todo?.title}
               </p>
 
               <p className="block" data-cy="modal-user">
                 <strong className={
                   classNames({
-                    'has-text-success': completed,
-                    'has-text-danger': !completed,
+                    'has-text-success': todo?.completed,
+                    'has-text-danger': !todo?.completed,
                   })
                 }
                 >
-                  {completed ? 'Done' : 'Planned'}
+                  {todo?.completed ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}
 
-                <a href={`mailto:${user?.email}`}>
-                  {user?.name}
-                </a>
+                {user && (
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                )}
               </p>
             </div>
           </div>
