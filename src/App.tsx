@@ -59,7 +59,7 @@ export const App: React.FC = () => {
   }, [filter, todos]);
 
   const filterQuery = query
-    ? filteredTodos.filter(todoQuery => todoQuery.title.toLowerCase().includes(query.toLowerCase()))
+    ? filteredTodos.filter(todoQuery => todoQuery.title.toLowerCase().includes(query.toLowerCase().trim()))
     : filteredTodos;
 
   return (
