@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -12,6 +12,26 @@ export const TodoFilter: React.FC<Props> = React.memo(({
 }) => {
   const [query, setQuery] = useState('');
 
+  const handleSelect = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      onFilter(event.target.value as FilterType);
+    },
+    [],
+  );
+
+  const handleQueries = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+      onApplyQuery(event.target.value);
+    },
+    [],
+  );
+
+  const resetQueries = useCallback(() => {
+    setQuery('');
+    onApplyQuery('');
+  }, []);
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -19,7 +39,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           <select
             data-cy="statusSelect"
             onChange={(event) => {
-              onFilter(event.target.value as FilterType);
+              handleSelect(event);
             }}
           >
             <option value="all">All</option>
@@ -37,8 +57,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           placeholder="Search..."
           value={query}
           onChange={(event) => {
-            setQuery(event.target.value);
-            onApplyQuery(event.target.value);
+            handleQueries(event);
           }}
         />
         <span className="icon is-left">
@@ -51,10 +70,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setQuery('');
-                onApplyQuery('');
-              }}
+              onClick={resetQueries}
               aria-label="close modal"
             />
           )}

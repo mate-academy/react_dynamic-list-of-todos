@@ -26,18 +26,21 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
+    const fetchAllTodos = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
         setTodos(todosFromServer);
-      })
-      .catch(error => {
+      } catch (error) {
         // eslint-disable-next-line no-console
         console.warn(error);
         setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchAllTodos();
   }, []);
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
@@ -46,6 +49,14 @@ export const App: React.FC = () => {
     getVisibleTodos(todos, filterType, appliedQuery)
   ),
   [todos, filterType, appliedQuery]);
+
+  const changeFilterType = useCallback((type: FilterType) => {
+    setFilterType(type);
+  }, []);
+
+  const changeSelectedTodo = useCallback((todo: Todo | null) => {
+    setSelectedTodo(todo);
+  }, []);
 
   return (
     <>
@@ -56,7 +67,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilter={setFilterType}
+                onFilter={changeFilterType}
                 onApplyQuery={applyQuery}
               />
             </div>
@@ -69,7 +80,7 @@ export const App: React.FC = () => {
                     <TodoList
                       todos={filteredTodos}
                       selectedTodo={selectedTodo}
-                      onSelectedTodo={setSelectedTodo}
+                      onSelectedTodo={changeSelectedTodo}
                     />
                   )
               }
@@ -86,7 +97,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onSelectedTodo={setSelectedTodo}
+          onSelectedTodo={changeSelectedTodo}
         />
       )}
     </>

@@ -25,18 +25,21 @@ export const TodoModal: React.FC<Props> = ({
   } = selectedTodo;
 
   useEffect(() => {
-    getUser(userId)
-      .then(userFromServer => {
+    const fetchUser = async () => {
+      try {
+        const userFromServer = await getUser(userId);
+
         setUser(userFromServer);
-      })
-      .catch(error => {
+      } catch (error) {
         // eslint-disable-next-line no-console
         console.warn(error);
         setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchUser();
   }, []);
 
   return (
