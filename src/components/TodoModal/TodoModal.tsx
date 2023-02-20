@@ -7,10 +7,10 @@ import { Loader } from '../Loader';
 type Props = {
   userId: number;
   todo: Todo;
-  reset: () => void;
+  onReset: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ userId, todo, reset }) => {
+export const TodoModal: React.FC<Props> = ({ userId, todo, onReset }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, reset }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={reset}
+              onClick={onReset}
             />
           </header>
 

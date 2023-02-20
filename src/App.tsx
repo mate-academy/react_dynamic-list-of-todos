@@ -9,14 +9,15 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { Filter } from './enum/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [userId, setUserId] = useState<number>(0);
+  const [userId, setUserId] = useState(0);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Filter.ALL);
   const [query, setQuery] = useState('');
 
   const newModel = (newTodo: Todo) => {
@@ -31,40 +32,34 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(error => {
-        throw new Error(error);
+        alert(error);
       });
   }, []);
 
-  const reset = () => {
+  const onReset = () => {
     setUserId(0);
     setSelectedTodo(null);
   };
 
-  const filteredTodosByOption = useMemo(() => {
-    return todos.filter((todoToFilter) => {
-      switch (filter) {
-        case 'all':
-          return true;
-
-        case 'active':
-          return !todoToFilter.completed;
-
-        case 'completed':
-          return todoToFilter.completed;
-
-        default:
-          return true;
-      }
-    });
-  }, [filter, todos]);
-
-  const filterQuery = filteredTodosByOption.filter(todoQuery => {
-    if (query) {
-      return todoQuery.title.toLowerCase().includes(query);
+  const filteredTodos = useMemo(() => {
+    if (filter === Filter.ALL) {
+      return [...todos];
     }
 
-    return true;
-  });
+    if (filter === Filter.ACTIVE) {
+      return todos.filter(todo => !todo.completed);
+    }
+
+    if (filter === Filter.COMPLETED) {
+      return todos.filter(todo => todo.completed);
+    }
+
+    return [...todos];
+  }, [filter, todos]);
+
+  const filterQuery = query
+    ? filteredTodos.filter(todoQuery => todoQuery.title.toLowerCase().includes(query.toLowerCase()))
+    : filteredTodos;
 
   return (
     <>
@@ -74,19 +69,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={setFilter} query={setQuery} />
+              <TodoFilter setFilter={setFilter} setQuery={setQuery} query={query} />
             </div>
 
             <div className="block">
               {todos.length
-                ? <TodoList todos={filterQuery} toSelect={newModel} selected={selectedTodo?.id} />
+                ? <TodoList todos={filterQuery} onSelect={newModel} selected={selectedTodo?.id} />
                 : <Loader /> }
             </div>
           </div>
         </div>
       </div>
 
-      { (userId && selectedTodo) && <TodoModal userId={userId} todo={selectedTodo} reset={reset} />}
+      { (userId && selectedTodo) && <TodoModal userId={userId} todo={selectedTodo} onReset={onReset} />}
     </>
   );
 };
