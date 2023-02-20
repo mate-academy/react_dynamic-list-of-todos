@@ -14,15 +14,26 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [todoSelector, setTodoSelector] = useState('all');
 
   useEffect(() => {
     getTodos().then((receivedTodos) => {
       if (receivedTodos.length > 0) {
+        const selectedTodos = receivedTodos.filter((todo) => {
+          switch (todoSelector) {
+            case 'active':
+              return todo.completed === false;
+            case 'completed':
+              return todo.completed === true;
+            default:
+              return todo;
+          }
+        });
+        setTodos(selectedTodos);
         setIsLoading(false);
-        setTodos(receivedTodos);
       }
     });
-  }, []);
+  }, [todoSelector]);
 
   const showTodoDetails = (todo: Todo | null) => () => {
     setSelectedTodo(todo);
@@ -30,6 +41,10 @@ export const App: React.FC = () => {
 
   const hideTodoDetails = () => {
     setSelectedTodo(null);
+  };
+
+  const handleTodoSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setTodoSelector(event.target.value);
   };
 
   return (
@@ -40,7 +55,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                todoSelector={todoSelector}
+                onChangeTodoSelector={handleTodoSelection}
+              />
             </div>
 
             <div className="block">
