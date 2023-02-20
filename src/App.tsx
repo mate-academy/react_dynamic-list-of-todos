@@ -17,9 +17,29 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   getTodos()
+  //     .then((todos) => setTodosToUse(todos));
+  //     .catch(() => setHasError(true))
+  // }, []);
 
   useEffect(() => {
-    getTodos().then((todos) => setTodosToUse(todos));
+    const fetchTodos = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
+        setLoading(false);
+        setTodosToUse(todosFromServer);
+      } catch (error) {
+        setHasError(true);
+        setLoading(false);
+      }
+    };
+
+    fetchTodos();
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -69,17 +89,21 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {todosToUse.length ? (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
-                />
-              ) : (
-                <Loader />
+            {hasError
+              ? <span>No todos from server</span>
+              : (
+                <div className="block">
+                  {loading
+                    ? <Loader />
+                    : (
+                      <TodoList
+                        todos={filteredTodos}
+                        selectedTodo={selectedTodo}
+                        setSelectedTodo={setSelectedTodo}
+                      />
+                    )}
+                </div>
               )}
-            </div>
           </div>
         </div>
       </div>

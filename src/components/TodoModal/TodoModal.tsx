@@ -9,21 +9,32 @@ type Props = {
   setSelectedTodo: (value: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal: React.FC<Props> = React.memo(({
   selectedTodo,
   setSelectedTodo,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then((user) => setCurrentUser(user));
+    const fetchUser = async () => {
+      try {
+        const userFromServer = await getUser(selectedTodo.userId);
+
+        setCurrentUser(userFromServer);
+      } catch (error) {
+        setHasError(true);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!currentUser || !selectedTodo ? (
+      {!currentUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -51,23 +62,26 @@ export const TodoModal: React.FC<Props> = ({
               {selectedTodo.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {selectedTodo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
+            {/* <p className="block" data-cy="modal-user">
+              <strong className="has-text-success">Done</strong> */}
+            {hasError
+              ? <span>No user on server</span>
+              : (
+                <p className="block" data-cy="modal-user">
+                  {selectedTodo.completed
+                    ? <strong className="has-text-success">Done</strong>
+                    : <strong className="has-text-danger">Planned</strong>}
+
+                  {' by '}
+
+                  <a href={`mailto:${currentUser.email}`}>
+                    {currentUser.name}
+                  </a>
+                </p>
               )}
-
-              {' by '}
-
-              <a href={`mailto:${currentUser.email}`}>
-                {currentUser.name}
-              </a>
-            </p>
           </div>
         </div>
       )}
     </div>
   );
-};
+});
