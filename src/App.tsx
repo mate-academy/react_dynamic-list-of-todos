@@ -35,7 +35,7 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const selectTodo = (id: number) => {
+  const handleSelectTodo = (id: number) => {
     if (selectedTodoId === id) {
       return;
     }
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
                       ? (
                         <TodoList
                           todos={visibleTodos}
-                          selectTodo={selectTodo}
+                          selectTodo={handleSelectTodo}
                           selectedTodoId={selectedTodoId}
                         />
                       )
@@ -104,7 +104,7 @@ export const App: React.FC = () => {
               && (
                 <TodoModal
                   todo={todoToModal}
-                  selectTodo={selectTodo}
+                  selectTodo={handleSelectTodo}
                 />
               )}
           </>
