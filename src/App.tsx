@@ -30,14 +30,14 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  if (inputState) {
+  if (inputState && inputState.length > 0) {
     const normInputState = inputState.toLocaleLowerCase().trim();
 
-    filteredTodos = filteredTodos.filter(({ title }) => title.toLocaleLowerCase()
+    filteredTodos = filteredTodos.filter(todo => todo.title.toLocaleLowerCase()
       .includes(normInputState));
   }
 
-  if (toggleFilter) {
+  if (toggleFilter !== null) {
     filteredTodos = filteredTodos.filter(todo => todo.completed === toggleFilter);
   }
 
