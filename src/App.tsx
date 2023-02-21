@@ -13,6 +13,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterType } from './types/Filter';
+import { getVisibleTodos } from './components/utils/PreparedTodo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -22,26 +23,16 @@ export const App: React.FC = () => {
   const [apllyQuery, setApllyQuery] = useState('');
   const [handleError, setHandleError] = useState(false);
 
-  let visibleTodos = todos.filter(todo => {
-    switch (status) {
-      case FilterType.Active:
-        return !todo.completed;
-
-      case FilterType.Completed:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, status, apllyQuery)
+  ),
+  [todos, status, apllyQuery]);
 
   const selectedTodo = useMemo(() => {
     return todos.find(
       todo => todo.id === selectedTodoId,
     );
   }, [selectedTodoId, todos]);
-
-  const lowQuery = apllyQuery.toLowerCase();
 
   const isMatchingTodos = (!query)
     ? <Loader />
@@ -73,12 +64,6 @@ export const App: React.FC = () => {
     [],
   );
 
-  if (apllyQuery) {
-    visibleTodos = visibleTodos.filter(todo => {
-      return todo.title.toLowerCase().includes(lowQuery);
-    });
-  }
-
   return (
     <>
       <div className="section">
@@ -100,15 +85,17 @@ export const App: React.FC = () => {
               {handleError
               && (<p>No server response</p>)}
 
-              {visibleTodos.length > 0
+              {!visibleTodos.length
                 ? (
+                  isMatchingTodos
+                )
+                : (
                   <TodoList
                     todos={visibleTodos}
                     selectTodo={selectTodo}
                     selectedTodoId={selectedTodoId}
                   />
-                )
-                : (isMatchingTodos)}
+                )}
             </div>
           </div>
         </div>
