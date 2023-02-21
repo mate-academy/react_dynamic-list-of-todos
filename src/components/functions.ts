@@ -1,19 +1,18 @@
 import { Todo } from '../types/Todo';
-
-export const findTodo = (todos: Todo[], todoId: number) => {
-  return todos.find(todo => todo.id === todoId);
-};
+import { Filter } from '../types/Filter';
 
 export const filterTodos = (
-  todos: Todo[], filtredByReady: string, query: string,
+  todos: Todo[],
+  filtredByReady: Filter,
+  query: string,
 ) => {
   let filteredTodos = todos.filter(todo => {
     switch (filtredByReady) {
-      case 'active':
+      case Filter.Active:
         return todo.completed === false;
-      case 'completed':
+      case Filter.Completed:
         return todo.completed === true;
-      case 'all':
+      case Filter.All:
       default:
         return true;
     }

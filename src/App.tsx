@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,25 +10,29 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import { findTodo, filterTodos } from './components/functions';
+import { filterTodos } from './components/functions';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [filtredByReady, setFiltredByReady] = useState<Filter>(Filter.All);
+  const [hasError, setHasError] = useState(false);
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = useCallback((todo: Todo) => {
+    setSelectedTodoId(todo);
+  }, []);
 
   const fetchTodos = async () => {
     try {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
-      setIsLoading(false);
     } catch {
-      setIsLoading(true);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -36,9 +40,15 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const selectTodo = findTodo(todos, selectedTodoId);
   const visibleTodos = filterTodos(todos, filtredByReady, query);
-  const hasLoading = (isLoading && todos.length === 0) || todos.length;
+
+  const selectTodo = useCallback((todo: Todo) => {
+    setSelectedTodoId(todo);
+  }, []);
+
+  const onClose = useCallback(() => {
+    setSelectedTodoId(null);
+  }, [selectedTodo]);
 
   return (
     <>
@@ -57,25 +67,25 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {hasLoading
-                ? (
+              {isLoading && <Loader />}
+              {hasError
+                ? <span> No todos from server</span>
+                : (
                   <TodoList
                     todos={visibleTodos}
-                    selectTodo={setSelectedTodoId}
-                    selectedId={selectedTodoId}
+                    selectTodo={selectTodo}
+                    selectedTodoId={selectedTodoId}
                   />
-                )
-                : <Loader />}
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId && (
         <TodoModal
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          selectedTodo={selectTodo!}
-          onClose={setSelectedTodoId}
+          todo={selectedTodoId}
+          onClose={onClose}
         />
       )}
     </>
