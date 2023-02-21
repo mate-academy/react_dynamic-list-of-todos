@@ -12,6 +12,7 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [user, setUser] = useState<User>();
   const [userUploadError, setUserUploadError] = useState(false);
+  const status = todo?.completed ? 'Done' : 'Planned';
 
   const getUserFromServer = async () => {
     try {
@@ -50,8 +51,8 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
                 {`Todo #${todo.id}`}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
+                aria-label="delete-button"
                 type="button"
                 className="delete"
                 data-cy="modal-close"
@@ -67,12 +68,15 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
               </p>
 
               <p className="block" data-cy="modal-user">
-                {todo.completed
-                  ? <strong className="has-text-success">Done</strong>
-                  : <strong className="has-text-danger">Planned</strong>}
-
+                <strong
+                  className={cn({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
+                >
+                  {status}
+                </strong>
                 {' by '}
-
                 {userUploadError
                   ? <p>Unknown user</p>
                   : (
