@@ -17,8 +17,6 @@ export const App: React.FC = () => {
   const [inputState, setInputState] = useState('');
   const [toggleFilter, setToggleFilter] = useState<boolean | null>(null);
 
-  let filteredTodos = [...todos];
-
   const fetchData = useCallback(async () => {
     const data = await getTodos();
 
@@ -30,53 +28,45 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  if (inputState && inputState.length > 0) {
+  const filteredTodos = todos.filter(todo => {
     const normInputState = inputState.toLocaleLowerCase().trim();
+    const isTitleMatch = todo.title.toLocaleLowerCase().includes(normInputState);
+    const isCompletedMatch = toggleFilter === null || todo.completed === toggleFilter;
 
-    filteredTodos = filteredTodos.filter(todo => todo.title.toLocaleLowerCase()
-      .includes(normInputState));
-  }
-
-  if (toggleFilter !== null) {
-    filteredTodos = filteredTodos.filter(todo => todo.completed === toggleFilter);
-  }
+    return isTitleMatch && isCompletedMatch;
+  });
 
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
-
-            <div className="block">
-              <TodoFilter
-                inputState={inputState}
-                setInputState={setInputState}
-                setToggleFilter={setToggleFilter}
+    <div className="section">
+      <div className="container">
+        <div className="box">
+          <h1 className="title">Todos:</h1>
+          <div className="block">
+            <TodoFilter
+              inputState={inputState}
+              setInputState={setInputState}
+              setToggleFilter={setToggleFilter}
+            />
+          </div>
+          <div className="block">
+            {isLoadedTodos ? (
+              <TodoList
+                todos={filteredTodos}
+                onSetSelectedTodo={setSelectedTodo}
+                selectedTodo={selectedTodo}
               />
-            </div>
-
-            <div className="block">
-              {!isLoadedTodos
-                ? (<Loader />)
-                : (
-                  <TodoList
-                    todos={filteredTodos}
-                    onSetSelectedTodo={setSelectedTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                )}
-            </div>
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>
-
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           onClose={() => setSelectedTodo(null)}
         />
       )}
-    </>
+    </div>
   );
 };

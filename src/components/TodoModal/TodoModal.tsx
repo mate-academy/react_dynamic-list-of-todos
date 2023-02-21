@@ -1,36 +1,34 @@
-import React, {
-  ReactEventHandler, useCallback, useEffect, useState,
-} from 'react';
+import React, { ReactEventHandler, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  selectedTodo: Todo
-  onClose: ReactEventHandler
+  selectedTodo: Todo;
+  onClose: ReactEventHandler;
 };
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
-  const [isLoadedUser, setIsLoadedUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  const fetchUser = useCallback(async (id: number) => {
-    const data = await getUser(id);
-
-    setUser(data);
-    setIsLoadedUser(true);
-  }, []);
-
   useEffect(() => {
-    fetchUser(selectedTodo.userId);
-  }, []);
+    const fetchUser = async () => {
+      const data = await getUser(selectedTodo.userId);
+
+      setUser(data);
+      setIsLoading(false);
+    };
+
+    fetchUser();
+  }, [selectedTodo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isLoadedUser ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -41,7 +39,6 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
             >
               {`Todo #${selectedTodo.id}`}
             </div>
-
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
@@ -57,9 +54,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed
-                ? (<strong className="has-text-success">Done</strong>)
-                : (<strong className="has-text-danger">Planned</strong>)}
+              {selectedTodo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
