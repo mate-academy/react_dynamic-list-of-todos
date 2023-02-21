@@ -13,6 +13,8 @@ export const TodoFilter: React.FC<Props> = ({
   todoSearchValue,
   filterBy,
 }) => {
+  const { active, all, completed } = FilterBy;
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -24,9 +26,9 @@ export const TodoFilter: React.FC<Props> = ({
               onSelectValue(e.target.value as FilterBy);
             }}
           >
-            <option value={FilterBy.all}>All</option>
-            <option value={FilterBy.active}>Active</option>
-            <option value={FilterBy.completed}>Completed</option>
+            <option value={all}>All</option>
+            <option value={active}>Active</option>
+            <option value={completed}>Completed</option>
           </select>
         </span>
       </p>
