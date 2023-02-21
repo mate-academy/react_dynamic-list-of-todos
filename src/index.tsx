@@ -1,7 +1,10 @@
 import ReactDOM from 'react-dom';
 import { App } from './App';
+import StateProvider from './reducer';
 
 ReactDOM.render(
-  <App />,
+  <StateProvider>
+    <App />
+  </StateProvider>,
   document.getElementById('root'),
 );
