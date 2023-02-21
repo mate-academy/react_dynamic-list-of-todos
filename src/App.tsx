@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [filterType, setFilterType] = useState(FilterType.ALL);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [query, setQuery] = useState('');
 
   const fetchTodos = useCallback(async () => {
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
               {isLoaded && (
                 <TodoList
                   todos={visibleTodos}
-                  selected={selectedTodo}
+                  selectedTodo={selectedTodo}
                   onClick={showModal}
                 />
               )}

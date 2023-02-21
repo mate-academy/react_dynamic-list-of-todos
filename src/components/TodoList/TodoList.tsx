@@ -4,13 +4,13 @@ import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[],
-  selected: Todo | null,
+  selectedTodo: Todo | null,
   onClick: (todo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selected,
+  selectedTodo,
   onClick,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => {
-        const isSelectedTodo = todo === selected;
+        const isSelectedTodo = todo.id === selectedTodo?.id;
 
         return (
           <TodoItem

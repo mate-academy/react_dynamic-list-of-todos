@@ -4,7 +4,7 @@ import {
 import { Loader } from '../Loader';
 import { ErrorMessage } from '../ErrorMessage';
 import { User, Todo } from '../../types';
-import { getUser } from '../../api';
+import { getUserById } from '../../api';
 
 type Props = {
   todo: Todo,
@@ -28,7 +28,7 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
     setIsLoading(true);
 
     try {
-      const fetchedUser = await getUser(userId);
+      const fetchedUser = await getUserById(userId);
 
       setUser(fetchedUser);
     } catch {
