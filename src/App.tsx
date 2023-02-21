@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isUserFetching, setIsUserFetching] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -45,16 +44,22 @@ export const App: React.FC = () => {
 
   const handleGetUser = async (todo: Todo) => {
     setIsUserFetching(true);
-    const selectedUser = await getUser(todo.userId);
 
-    setUser(selectedUser);
-    setIsUserFetching(false);
+    try {
+      const selectedUser = await getUser(todo.userId);
+
+      setSelectedTodo(todo);
+      setUser(selectedUser);
+    } catch (error) {
+      // eslint-disable-next-line
+      alert(error);
+    } finally {
+      setIsUserFetching(false);
+    }
   };
 
   const handleShowButton = (todo: Todo) => {
-    setSelectedTodo(todo);
     handleGetUser(todo);
-    setIsModalVisible(true);
   };
 
   const handleGetTodos = async () => {
@@ -91,20 +96,18 @@ export const App: React.FC = () => {
                     todos={visibleTodos}
                     handleShowButton={handleShowButton}
                     selectedTodo={selectedTodo}
-                    isModalVisible={isModalVisible}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {isModalVisible && (
+      {selectedTodo !== null && (
         <TodoModal
           todo={selectedTodo}
+          setTodo={setSelectedTodo}
           user={user}
-          isVisible={isModalVisible}
           isFetching={isUserFetching}
-          setIsModalVisible={setIsModalVisible}
         />
       )}
     </>

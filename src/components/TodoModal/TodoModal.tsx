@@ -7,23 +7,19 @@ import { Loader } from '../Loader';
 type Props = {
   todo: Todo | null;
   user: User | null;
-  isVisible: boolean;
   isFetching: boolean;
-  setIsModalVisible: (isVisibe: boolean) => void;
+  setTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
   user,
-  isVisible,
   isFetching,
-  setIsModalVisible,
+  setTodo,
 }) => {
   return (
     <div
-      className={classNames('modal', {
-        'is-active': isVisible,
-      })}
+      className={classNames('modal', 'is-active')}
       data-cy="modal"
     >
       <div className="modal-background" />
@@ -45,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setIsModalVisible(false)}
+              onClick={() => setTodo(null)}
             />
           </header>
 

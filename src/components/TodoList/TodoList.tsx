@@ -6,14 +6,12 @@ type Props = {
   todos: Todo[];
   handleShowButton: (todo: Todo) => void;
   selectedTodo: Todo | null;
-  isModalVisible: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   handleShowButton,
   selectedTodo,
-  isModalVisible,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -61,9 +59,9 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i
                     className={classNames('far', {
-                      'fa-eye': !isModalVisible
+                      'fa-eye': !selectedTodo
                         || todo.id !== selectedTodo?.id,
-                      'fa-eye-slash': isModalVisible
+                      'fa-eye-slash': selectedTodo
                         && todo.id === selectedTodo?.id,
                     })}
                   />
