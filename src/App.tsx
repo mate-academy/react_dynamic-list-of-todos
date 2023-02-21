@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,28 +18,34 @@ export const App: React.FC = () => {
   const [todoFilter, setTodoFilter] = useState('');
 
   useEffect(() => {
-    getTodos().then((receivedTodos) => {
-      if (receivedTodos.length > 0) {
-        const selectedTodos = receivedTodos.filter((todo) => {
-          const todoTitleIncludesFilter = todo.title
-            .toLowerCase()
-            .includes(todoFilter.toLowerCase());
+    getTodos().then((data) => {
+      setTodos(data);
+      setIsLoading(false);
+    });
+  }, []);
 
-          switch (todoSelector) {
-            case 'active':
-              return !todo.completed && todoTitleIncludesFilter;
-            case 'completed':
-              return todo.completed && todoTitleIncludesFilter;
-            default:
-              return todoTitleIncludesFilter;
-          }
-        });
+  const getVisibleTodos = () => {
+    return todos.filter((todo) => {
+      const todoTitleIncludesFilter = todo.title
+        .toLowerCase()
+        .includes(todoFilter.toLowerCase());
 
-        setTodos(selectedTodos);
-        setIsLoading(false);
+      switch (todoSelector) {
+        case 'active':
+          return !todo.completed && todoTitleIncludesFilter;
+        case 'completed':
+          return todo.completed && todoTitleIncludesFilter;
+        default:
+          return todoTitleIncludesFilter;
       }
     });
-  }, [todoSelector, todoFilter]);
+  };
+
+  const visibleTodos = useMemo(getVisibleTodos, [
+    todos,
+    todoSelector,
+    todoFilter,
+  ]);
 
   const showTodoDetails = (todo: Todo | null) => () => {
     setSelectedTodo(todo);
@@ -53,16 +59,12 @@ export const App: React.FC = () => {
     setTodoSelector(event.target.value);
   };
 
-  const handleTodoFiltering = (
-    event:
-    | React.ChangeEvent<HTMLInputElement>
-    | React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    if (event.currentTarget.className === 'input') {
-      setTodoFilter(event.currentTarget.value);
-    } else {
-      setTodoFilter('');
-    }
+  const handleTodoFiltering = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoFilter(event.currentTarget.value);
+  };
+
+  const handleClearFilter = () => {
+    setTodoFilter('');
   };
 
   return (
@@ -78,13 +80,14 @@ export const App: React.FC = () => {
                 onChangeTodoSelector={handleTodoSelection}
                 todoFilter={todoFilter}
                 onChangeTodoFilter={handleTodoFiltering}
+                onClearTodoFilter={handleClearFilter}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
               <TodoList
-                todos={todos}
+                todos={visibleTodos}
                 selectedTodo={selectedTodo}
                 onShowTodo={showTodoDetails}
               />

@@ -2,11 +2,8 @@ type Props = {
   todoSelector: string;
   onChangeTodoSelector: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   todoFilter: string;
-  onChangeTodoFilter: (
-    event:
-    | React.ChangeEvent<HTMLInputElement>
-    | React.MouseEvent<HTMLButtonElement>,
-  ) => void;
+  onChangeTodoFilter: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClearTodoFilter: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,6 +11,7 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeTodoSelector,
   todoFilter,
   onChangeTodoFilter,
+  onClearTodoFilter,
 }) => {
   return (
     <form className="field has-addons">
@@ -51,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={onChangeTodoFilter}
+              onClick={onClearTodoFilter}
               aria-label="Clear search"
             />
           )}
