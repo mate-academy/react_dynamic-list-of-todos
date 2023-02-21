@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -36,7 +38,9 @@ export const App: React.FC = () => {
 
   const formatedQuery = query.trim().toLowerCase();
 
-  const filtredTodos = filterTodos(todos, formatedQuery, sortBy);
+  const filtredTodos = useMemo(() => {
+    return filterTodos(todos, formatedQuery, sortBy);
+  }, [todos, sortBy, query]);
 
   return (
     <>

@@ -14,15 +14,19 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
   const [isInfoLoaded, setIsInfoLoaded] = useState(false);
 
   useEffect(() => {
-    if (selectedTodo.userId) {
-      getUser(selectedTodo.userId)
-        .then((response) => {
-          setUser(response);
-          setIsInfoLoaded(true);
-        })
-        .catch(() => setUser(null))
-        .finally(() => setIsInfoLoaded(true));
-    }
+    const fetchUser = async () => {
+      try {
+        const userFromServer = await getUser(selectedTodo.userId);
+
+        setUser(userFromServer);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsInfoLoaded(true);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   return (
