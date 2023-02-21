@@ -3,20 +3,10 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
-  onSetSelectedTodo: (todo: Todo) => void;
-  selectedTodo: Todo | null;
+  todos: Todo[]
+  onSetSelectedTodo: (todo: Todo) => void
+  selectedTodo: Todo | null
 };
-
-const getIconElement = (className: string) => (
-  <span className="icon" data-cy="iconCompleted">
-    <i className={className} />
-  </span>
-);
-
-const getRowClassName = (selectedTodo: Todo | null, todo: Todo) => classNames(
-  { 'has-background-info-light': selectedTodo?.id === todo.id },
-);
 
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -27,29 +17,40 @@ export const TodoList: React.FC<Props> = ({
     <thead>
       <tr>
         <th>#</th>
-        <th>{getIconElement('fas fa-check')}</th>
+        <th>
+          <span className="icon">
+            <i className="fas fa-check" />
+          </span>
+        </th>
         <th>Title</th>
         <th> </th>
       </tr>
     </thead>
 
     <tbody>
-      {todos.map((todo) => (
+      {todos.map(todo => (
         <tr
           data-cy="todo"
           key={todo.id}
-          className={getRowClassName(selectedTodo, todo)}
+          className={classNames(
+            { 'has-background-info-light': selectedTodo?.id === todo.id },
+          )}
         >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
-            {todo.completed && getIconElement('fas fa-check')}
+            {todo.completed && (
+              <span className="icon" data-cy="iconCompleted">
+                <i className="fas fa-check" />
+              </span>
+            )}
           </td>
-          <td className={classNames('is-vcentered', {
-            'has-text-success': todo.completed,
-            'has-text-danger': !todo.completed,
-          })}
-          >
-            {todo.title}
+          <td className="is-vcentered is-expanded">
+            <p className={
+              todo.completed ? 'has-text-success' : 'has-text-danger'
+            }
+            >
+              {todo.title}
+            </p>
           </td>
           <td className="has-text-right is-vcentered">
             <button
@@ -59,11 +60,13 @@ export const TodoList: React.FC<Props> = ({
               onClick={() => onSetSelectedTodo(todo)}
             >
               <span className="icon">
-                <i
-                  className={classNames('far', {
+                <i className={classNames(
+                  'far',
+                  {
                     'fa-eye': todo !== selectedTodo,
                     'fa-eye-slash': todo === selectedTodo,
-                  })}
+                  },
+                )}
                 />
               </span>
             </button>
