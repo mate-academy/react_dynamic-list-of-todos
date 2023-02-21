@@ -1,40 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import { getUser } from '../../api';
+import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { Loader } from '../Loader';
+import { getUser } from '../../api';
 
 type Props = {
-  todoSelected: Todo,
-  onSelectedTodo: (todoSelected: Todo | null) => void,
+  selectedTodo: Todo;
+  oncloseButtonClick: (value: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  todoSelected,
-  onSelectedTodo,
+  selectedTodo,
+  oncloseButtonClick,
 }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
+
+  const hideModal = () => {
+    oncloseButtonClick(0);
+  };
+
+  const loadUserFromServer = async (currentTodo: Todo | null) => {
+    try {
+      if (currentTodo) {
+        const userFromServer = await getUser(currentTodo.userId);
+
+        setUser(userFromServer);
+        setHasLoadingError(false);
+      }
+    } catch {
+      setHasLoadingError(true);
+    }
+  };
 
   useEffect(() => {
-    getUser(todoSelected.userId)
-      .then(setCurrentUser);
+    loadUserFromServer(selectedTodo);
   }, []);
+
+  const isLoadingFinished = (hasLoadingError && user === null) || user;
+
+  const { id, title, completed } = selectedTodo;
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {!currentUser ? (
+      {!isLoadingFinished ? (
         <Loader />
       ) : (
         <div className="modal-card">
-          {}
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todoSelected.id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -42,33 +61,45 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onSelectedTodo(null)}
+              onClick={() => hideModal()}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todoSelected.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {todoSelected.completed
-                ? (
-                  <strong className="has-text-success">
-                    Done
-                  </strong>
-                ) : (
-                  <strong className="has-text-danger">
-                    Planned
-                  </strong>
+              {hasLoadingError ? (
+                <p className="has-text-danger">
+                  Can&apos;t load user data from server
+                </p>
+              )
+                : (
+                  <>
+                    {completed
+                      ? (
+                        <strong className="has-text-success">Done</strong>
+                      )
+                      : (
+                        <strong className="has-text-danger">Planned</strong>
+                      )}
+
+                    {' by '}
+
+                    {user ? (
+                      <a href="mailto:Sincere@april.biz">
+                        {user.name}
+                      </a>
+                    )
+                      : (
+                        <span className="has-text-danger">
+                          User not found
+                        </span>
+                      )}
+                  </>
                 )}
-
-              {' by '}
-
-              <a href={`mailto:${currentUser.email}`}>
-                {currentUser.name}
-              </a>
             </p>
           </div>
         </div>

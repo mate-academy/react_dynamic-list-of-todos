@@ -7,48 +7,38 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { filterTodos, findTodo } from './utils/functions';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
-  const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [todoSelected, setTodoSelected] = useState<Todo | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
+
+  const loadTodosFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setHasLoadingError(false);
+    } catch {
+      setHasLoadingError(true);
+    }
+  };
 
   useEffect(() => {
-    getTodos()
-      .then(todos => {
-        setSelectedTodos(todos);
-        setIsLoading(false);
-      });
+    loadTodosFromServer();
   }, []);
 
-  const initialFilter = () => {
-    switch (status) {
-      case 'active':
-        return selectedTodos.filter(todo => !todo.completed);
+  const shownTodo = findTodo(todos, selectedTodoId);
 
-      case 'completed':
-        return selectedTodos.filter(todo => todo.completed);
+  const visibleTodos = filterTodos(todos, selectedStatus, query);
 
-      case 'all':
-      default:
-        return selectedTodos;
-    }
-  };
-
-  const todoFilter = () => {
-    if (query === '') {
-      return initialFilter();
-    }
-
-    return initialFilter()
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  };
-
-  const filteredTodos = todoFilter();
+  const isLoadingFinished = (hasLoadingError && todos.length === 0) || todos.length;
 
   return (
     <>
@@ -59,31 +49,41 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                status={selectedStatus}
+                onStatusChange={setSelectedStatus}
                 query={query}
-                status={status}
-                onChangeQuery={setQuery}
-                onChangeStatus={setStatus}
+                onInputChange={setQuery}
               />
             </div>
 
             <div className="block">
-              {isLoading
-                ? <Loader />
-                : (
+              {isLoadingFinished
+                ? (
                   <TodoList
-                    todos={filteredTodos}
-                    todoSelected={todoSelected}
-                    onSelectedTodo={setTodoSelected}
+                    todos={visibleTodos}
+                    onShowButtonClick={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
                   />
+                )
+                : (
+                  <Loader />
                 )}
+
+              {hasLoadingError && (
+                <p className="has-text-danger">
+                  Can&apos;t load data from server
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
-      {todoSelected && (
+
+      {selectedTodoId !== 0 && (
         <TodoModal
-          todoSelected={todoSelected}
-          onSelectedTodo={setTodoSelected}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          selectedTodo={shownTodo!}
+          oncloseButtonClick={setSelectedTodoId}
         />
       )}
     </>
