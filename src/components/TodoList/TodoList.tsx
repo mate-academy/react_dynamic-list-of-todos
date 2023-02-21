@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  selectedTodo: Todo | null,
+  selectedTodoId: number,
   onSelectTodo: (todo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectTodo,
-  selectedTodo,
+  selectedTodoId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
             key={todo.id}
             data-cy="todo"
             className={cn({
-              'has-background-info-light': selectedTodo?.id === todo.id,
+              'has-background-info-light': selectedTodoId === todo.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -67,8 +67,8 @@ export const TodoList: React.FC<Props> = ({
                     className={cn(
                       'far',
                       {
-                        'fa-eye': !selectedTodo,
-                        'fa-eye-slash': selectedTodo,
+                        'fa-eye': selectedTodoId !== todo.id,
+                        'fa-eye-slash': selectedTodoId === todo.id,
                       },
                     )}
                   />
