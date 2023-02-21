@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,6 +8,9 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+// utils
+import { getFilteredTodos } from './utils/getFiltetredTodos';
+
 // get data from server
 import { getTodos } from './api';
 
@@ -16,49 +18,24 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 
-export function getFilteredTodos(
-  todos: Todo[],
-  filterType: FilterType,
-  query: string,
-) {
-  let visibleTodos = [...todos];
-
-  switch (filterType) {
-    case FilterType.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-
-    case FilterType.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-
-    case FilterType.ALL:
-    default:
-      break;
-  }
-
-  return visibleTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
-  const [loadHasError, setLoadHasError] = useState(false);
+  const [loadHasError, setLoadHasError] = useState(true);
 
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
   const [query, setQuery] = useState('');
 
   const getAllTodos = useCallback(async () => {
-    setLoadHasError(false);
+    setLoadHasError(true);
 
     try {
       const allTodos = await getTodos();
 
       setTodos(allTodos);
-      setIsTodosLoaded(true);
+      setLoadHasError(false);
     } catch {
       setLoadHasError(true);
     } finally {
@@ -71,11 +48,10 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, filterBy, query);
-  // console.log(visibleTodos);
 
   const selectTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  }, [selectedTodo]);
+  }, []);
 
   const closeTodo = useCallback(() => {
     setSelectedTodo(null);
@@ -106,17 +82,17 @@ export const App: React.FC = () => {
             <div className="block">
               {!isLoaded && <Loader />}
 
-              {loadHasError && (
+              {isLoaded && loadHasError && (
                 <p>No loaded user</p>
               )}
 
-              {isTodosLoaded && (
+              {isLoaded && !loadHasError && (
                 <TodoList
                   todos={visibleTodos}
                   selectTodo={selectTodo}
                   selectedTodo={selectedTodo}
                 />
-              )}
+              ) }
             </div>
           </div>
         </div>
