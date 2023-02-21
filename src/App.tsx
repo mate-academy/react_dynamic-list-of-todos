@@ -67,6 +67,14 @@ export const App: React.FC = () => {
     });
   }
 
+  const handleQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const handleStatus = (value: Status) => {
+    setStatus(value);
+  };
+
   return (
     <>
       {uploadError
@@ -85,8 +93,8 @@ export const App: React.FC = () => {
                   <div className="block">
                     <TodoFilter
                       query={query}
-                      setQuery={setQuery}
-                      setStatus={setStatus}
+                      handleStatus={handleStatus}
+                      handleQuery={handleQuery}
                       status={status}
                     />
                   </div>

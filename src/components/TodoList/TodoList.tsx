@@ -84,5 +84,3 @@ export const TodoList: React.FC<Props> = (
     </table>
   );
 };
-
-// <i className="far fa-eye fa-eye-slash" />

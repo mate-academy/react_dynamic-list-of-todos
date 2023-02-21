@@ -31,8 +31,10 @@ export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
 
   return (
     <div
-      className={cn('modal',
-        { 'is-active': todo })}
+      className={cn(
+        'modal',
+        { 'is-active': todo },
+      )}
       data-cy="modal"
     >
       <div className="modal-background" />

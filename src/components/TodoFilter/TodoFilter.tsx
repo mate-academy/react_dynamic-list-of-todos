@@ -2,15 +2,15 @@ import React from 'react';
 import { Status } from '../../types/Status';
 
 type Props = {
-  setStatus: (status: Status) => void;
-  setQuery: (query: string) => void;
+  handleStatus: (status: Status) => void;
+  handleQuery: (value: string) => void;
   status: Status,
   query: string,
 };
 export const TodoFilter: React.FC<Props> = (
   {
-    setStatus,
-    setQuery,
+    handleStatus,
+    handleQuery,
     status,
     query,
   },
@@ -18,22 +18,9 @@ export const TodoFilter: React.FC<Props> = (
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    switch (value) {
-      case Status.ALL:
-        setStatus(Status.ALL);
-        break;
+    const enumKey = value as Status;
 
-      case Status.ACTIVE:
-        setStatus(Status.ACTIVE);
-        break;
-
-      case Status.COMPLETED:
-        setStatus(Status.COMPLETED);
-        break;
-
-      default:
-        throw new Error('Unexpected filter type');
-    }
+    handleStatus(enumKey);
   };
 
   return (
@@ -66,22 +53,22 @@ export const TodoFilter: React.FC<Props> = (
           placeholder="Search..."
           value={query}
           onChange={(event) => {
-            setQuery(event.target.value);
+            handleQuery(event.target.value);
           }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query.length && (
+        {!!query.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
+              aria-label="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => {
-                setQuery('');
+                handleQuery('');
               }}
             />
           </span>
