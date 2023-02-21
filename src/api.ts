@@ -28,6 +28,6 @@ export const getUser = async (userId: number) => {
   try {
     return await get<User>(`/users/${userId}`);
   } catch (error) {
-    throw new Error(`Oops: ${error}`);
+    throw Error(`Oops: ${error}`);
   }
 };

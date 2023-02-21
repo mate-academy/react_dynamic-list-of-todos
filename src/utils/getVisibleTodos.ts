@@ -14,11 +14,8 @@ export const getVisibleTodos = (
       case SelectValue.COMPLETED:
         return todo.completed;
 
-      case SelectValue.ALL:
-        return true;
-
       default:
-        throw new Error('Invalid filter property');
+        return true;
     }
   });
 

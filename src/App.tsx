@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import { debounce } from 'lodash';
 import 'bulma/css/bulma.css';
@@ -47,10 +50,10 @@ export const App: React.FC = () => {
       try {
         const todosFromServer = await getTodos();
 
-        setLoading(false);
         setTodos(todosFromServer);
-      } catch (error) {
+      } catch {
         setHasError(true);
+      } finally {
         setLoading(false);
       }
     };
@@ -77,21 +80,18 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {hasError
-              ? <span> No todos from server</span>
-              : (
-                <div className="block">
-                  {loading
-                    ? <Loader />
-                    : (
-                      <TodoList
-                        todos={visibleTodos}
-                        showModal={showModal}
-                        selectedTodo={selectedTodo}
-                      />
-                    )}
-                </div>
-              )}
+            <div className="block">
+              {loading && <Loader />}
+              {hasError
+                ? <span> No todos from server</span>
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    showModal={showModal}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SelectValue } from '../../types/SelectValue';
 
 type Props = {
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void,
@@ -18,9 +19,9 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             data-cy="statusSelect"
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectValue.ALL}>All</option>
+            <option value={SelectValue.ACTIVE}>Active</option>
+            <option value={SelectValue.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
