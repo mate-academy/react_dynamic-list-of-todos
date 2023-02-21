@@ -6,7 +6,7 @@ import { Loader } from '../Loader';
 type Props = {
   user: User | null,
   todo: Todo | null,
-  onCloseBtn: ()=>void,
+  onCloseBtn: () => void,
 };
 
 export const TodoModal: React.FC<Props> = ({ user, todo, onCloseBtn }) => {
@@ -32,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({ user, todo, onCloseBtn }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => (onCloseBtn())}
+              onClick={onCloseBtn}
             />
           </header>
 
@@ -48,8 +48,8 @@ export const TodoModal: React.FC<Props> = ({ user, todo, onCloseBtn }) => {
 
               {' by '}
 
-              <a href={`"mailto:${user?.email}"`}>
-                {user?.name}
+              <a href={`"mailto:${user.email}"`}>
+                {user.name}
               </a>
             </p>
           </div>

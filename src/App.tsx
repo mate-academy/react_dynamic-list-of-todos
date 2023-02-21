@@ -1,161 +1,116 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos, getUser } from './api';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { Options } from './types/Options';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-type State = {
-  todosFromServer: Todo[],
-  user: User | null,
-  currentTodo: Todo | null,
-  isDataReady: boolean,
-  isClickedOnTodos: boolean,
-  query: string,
-  option: string,
-};
+import { filteredTodos } from './components/utils';
 
-export class App extends React.Component {
-  state: Readonly<State> = {
-    todosFromServer: [],
-    user: null,
-    currentTodo: null,
-    isDataReady: false,
-    isClickedOnTodos: false,
-    query: '',
-    option: 'all',
-  };
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [currentTodo, setcurrentTodo] = useState<Todo | null>(null);
+  const [isDataReady, setIsDataReady] = useState<boolean>(false);
+  const [isClickedOnTodos, setIsClickedOnTodos] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>('');
+  const [option, setOption] = useState<Options>(Options.ALL);
 
-  componentDidMount(): void {
-    this.loadTodos();
-  }
+  const loadTodos = async () => {
+    try {
+      const todosFromServer = await getTodos();
 
-  onTodoBtnClick = (userId: number, todo:Todo) => {
-    this.setState({
-      isClickedOnTodos: true,
-      isDataReady: false,
-      currentTodo: todo,
-    });
-
-    this.loadUserInfo(userId);
-  };
-
-  closeModal = () => {
-    this.setState({
-      isClickedOnTodos: false,
-      user: null,
-      currentTodo: null,
-    });
-  };
-
-  selectedTodos = (option: string) => {
-    this.setState({ option });
-  };
-
-  filterByQuery = (query:string) => {
-    this.setState({ query });
-  };
-
-  visibleTodos = () => {
-    const {
-      todosFromServer, option, query,
-    } = this.state;
-    let selectedTodos:Todo[] = todosFromServer;
-
-    const filteredTodos: Todo[] = selectedTodos.filter((todo: Todo) => {
-      return todo.title.toLowerCase().includes(query.toLowerCase());
-    });
-
-    switch (option) {
-      case 'active':
-        selectedTodos = filteredTodos.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        selectedTodos = filteredTodos.filter(todo => todo.completed);
-        break;
-      case 'all':
-        selectedTodos = filteredTodos;
-        break;
-      default:
-        selectedTodos = filteredTodos;
+      setTodos(todosFromServer);
+      setIsDataReady(true);
+    } catch {
+      // eslint-disable-next-line no-alert
+      alert('Sorry, there is no todos yet');
+      setIsDataReady(true);
     }
-
-    return selectedTodos;
   };
 
-  clearQuery = () => {
-    this.setState({
-      query: '',
-    });
-  };
-
-  loadUserInfo = async (userId:number) => {
+  const loadUserInfo = async (userId:number) => {
     const userFromServer = await getUser(userId);
 
-    this.setState({
-      user: userFromServer,
-      isDataReady: true,
-    });
+    setUser(userFromServer);
+    setIsDataReady(true);
   };
 
-  loadTodos = async () => {
-    const todosFromServer = await getTodos();
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
-    this.setState({
-      todosFromServer,
-      isDataReady: true,
-    });
+  const visibleTodos = filteredTodos(todos, option, query);
+
+  const onTodoBtnClick = (userId: number, todo:Todo) => {
+    setIsClickedOnTodos(true);
+    setIsDataReady(false);
+    setcurrentTodo(todo);
+
+    loadUserInfo(userId);
   };
 
-  render() {
-    const {
-      isDataReady, isClickedOnTodos, user, query, currentTodo,
-    } = this.state;
-    const todosToRender = this.visibleTodos();
+  const closeModal = () => {
+    setIsClickedOnTodos(false);
+    setUser(null);
+    setcurrentTodo(null);
+  };
 
-    return (
-      <>
-        <div className="section">
-          <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+  const selectedTodos = (selectedOption: Options) => {
+    setOption(selectedOption);
+  };
 
-              <div className="block">
-                <TodoFilter
-                  onSelectedOption={this.selectedTodos}
-                  onInputChange={this.filterByQuery}
-                  inputValue={query}
-                  onClearQuery={this.clearQuery}
-                />
-              </div>
+  const filterByQuery = (searchQuery:string) => {
+    setQuery(searchQuery);
+  };
 
-              <div className="block">
-                {!isDataReady && <Loader />}
-                <TodoList
-                  todos={todosToRender}
-                  selectedTodo={currentTodo}
-                  clickHandler={this.onTodoBtnClick}
-                />
-              </div>
+  const clearQuery = () => {
+    setQuery('');
+  };
+
+  return (
+    <>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
+
+            <div className="block">
+              <TodoFilter
+                onSelectedOption={selectedTodos}
+                onInputChange={filterByQuery}
+                inputValue={query}
+                onClearQuery={clearQuery}
+              />
+            </div>
+
+            <div className="block">
+              {!isDataReady && <Loader />}
+              <TodoList
+                todos={visibleTodos}
+                selectedTodo={currentTodo}
+                clickHandler={onTodoBtnClick}
+              />
             </div>
           </div>
         </div>
+      </div>
 
-        {(!isDataReady || isClickedOnTodos)
+      {(!isDataReady || isClickedOnTodos)
           && (
             <TodoModal
               user={user}
               todo={currentTodo}
-              onCloseBtn={this.closeModal}
+              onCloseBtn={closeModal}
             />
           )}
-      </>
-    );
-  }
-}
+    </>
+  );
+};

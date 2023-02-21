@@ -1,13 +1,14 @@
 import React from 'react';
+import { Options } from '../../types/Options';
 
 type Props = {
-  onSelectedOption: (option: string) => void;
+  onSelectedOption: (selectedOption: Options) => void;
   onInputChange: (query: string) => void;
   inputValue: string,
   onClearQuery: ()=> void,
 };
 
-const SELECTED_OPTIONS = ['All', 'Active', 'Completed'];
+const SELECTED_OPTIONS = [Options.ALL, Options.ACTIVE, Options.COMPLETED];
 
 export const TodoFilter: React.FC<Props> = ({
   onSelectedOption,
@@ -21,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => (onSelectedOption(e.target.value))}
+            onChange={e => onSelectedOption(e.target.value as Options)}
           >
             {SELECTED_OPTIONS.map(option => {
               return (
