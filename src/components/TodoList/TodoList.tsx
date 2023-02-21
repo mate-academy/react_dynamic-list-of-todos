@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 import cn from 'classnames';
-import { Todo } from '../../types/Todo';
 import { TodosContext } from '../TodosProvider';
 
 type Props = {
-  getDataToModal: (userId: number, currentId: Todo) => void;
+  getDataToModal: (userId: number, selectedTodoId: number) => void;
   isModalLoading: boolean;
   selectedTodoId: number | null;
 };
@@ -61,7 +60,7 @@ export const TodoList: React.FC<Props> = React.memo(({
                     className="button"
                     type="button"
                     onClick={() => (
-                      getDataToModal(todo.userId, todo)
+                      getDataToModal(todo.userId, todo.id)
 
                     )}
                   >

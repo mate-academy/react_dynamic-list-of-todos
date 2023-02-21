@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useCallback, useContext, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,41 +12,44 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getUser } from './api';
 import { TodosContext } from './components/TodosProvider';
 
 export const App: React.FC = () => {
   const [userData, setUserData] = useState<User | null>(null);
-  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
+  const [currentTodoId, setCurrentTodoId] = useState<number | null>(null);
   const [isModalLoading, setIsModalLoading] = useState(false);
 
   const { todos, loadTodosError } = useContext(TodosContext);
 
-  const setModalInfoData = (user: User | null, todo: Todo) => {
-    setCurrentTodo(todo);
+  const setModalInfoData = (user: User | null, todoId: number) => {
+    setCurrentTodoId(todoId);
     setUserData(user);
   };
 
-  const getDataToModal = useCallback(async (userId: number, selectedTodo: Todo) => {
+  const getDataToModal = useCallback(async (userId: number, selectedTodoId: number) => {
     try {
       setIsModalLoading(true);
       const selectedUser = await getUser(userId);
 
-      setModalInfoData(selectedUser, selectedTodo);
+      setModalInfoData(selectedUser, selectedTodoId);
     } catch {
-      setModalInfoData(null, selectedTodo);
+      setModalInfoData(null, selectedTodoId);
     }
   }, []);
 
-  const loadModal = (isLoading: boolean) => {
+  const loadModal = useCallback((isLoading: boolean) => {
     setIsModalLoading(isLoading);
     if (!isLoading) {
-      setCurrentTodo(null);
+      setCurrentTodoId(null);
       setUserData(null);
     }
-  };
+  }, []);
+
+  const currentTodoData = useMemo(() => {
+    return todos.find(todo => todo.id === currentTodoId) || null;
+  }, [currentTodoId, todos]);
 
   return (
     <>
@@ -62,7 +70,7 @@ export const App: React.FC = () => {
                     <TodoList
                       getDataToModal={getDataToModal}
                       isModalLoading={isModalLoading}
-                      selectedTodoId={currentTodo?.id || null}
+                      selectedTodoId={currentTodoId || null}
                     />
                   )}
               </div>
@@ -77,7 +85,7 @@ export const App: React.FC = () => {
       {isModalLoading && (
         <TodoModal
           userData={userData}
-          currentTodo={currentTodo}
+          currentTodoData={currentTodoData}
           loadModal={loadModal}
         />
       )}

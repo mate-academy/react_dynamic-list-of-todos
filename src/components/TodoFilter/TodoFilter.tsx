@@ -8,7 +8,7 @@ import { TodosContext } from '../TodosProvider';
 
 export const TodoFilter: React.FC = React.memo(() => {
   const [query, setQuery] = useState('');
-  const [selectedValue, setSelectedValue] = useState('all');
+  const [selectedValue, setSelectedValue] = useState(Select.all.toString());
 
   const {
     filterTodosBySearch,

@@ -5,20 +5,20 @@ import { Loader } from '../Loader';
 
 type Props = {
   userData: User | null;
-  currentTodo: Todo | null;
+  currentTodoData: Todo | null;
   loadModal: (isLoading: boolean) => void;
 };
 
 export const TodoModal: React.FC<Props> = React.memo(({
   userData,
-  currentTodo,
+  currentTodoData,
   loadModal,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!(currentTodo) ? (
+      {!currentTodoData ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -27,7 +27,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${currentTodo.id}`}
+              {`Todo #${currentTodoData.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -41,21 +41,18 @@ export const TodoModal: React.FC<Props> = React.memo(({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {currentTodo.title}
+              {currentTodoData.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {currentTodo.completed
+              {currentTodoData.completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
               {' by '}
               {userData ? (
-                <>
-
-                  <a href={`mailto:${userData.email}`}>
-                    {userData.name}
-                  </a>
-                </>
+                <a href={`mailto:${userData.email}`}>
+                  {userData.name}
+                </a>
               )
                 : (
                   <span>
