@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
+import { TodosFilter } from './utils/TodosFilter';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -42,21 +43,7 @@ export const App: React.FC = () => {
     setSelectedTodoId(id);
   };
 
-  visibleTodos = visibleTodos.filter(todo => {
-    switch (status) {
-      case Status.ALL:
-        return true;
-
-      case Status.ACTIVE:
-        return !todo.completed;
-
-      case Status.COMPLETED:
-        return todo.completed;
-
-      default:
-        throw new Error('Unexpected status');
-    }
-  });
+  visibleTodos = TodosFilter(visibleTodos, status);
 
   if (query) {
     visibleTodos = visibleTodos.filter(todo => {
