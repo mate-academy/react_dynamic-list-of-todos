@@ -18,6 +18,12 @@ export const TodoFilter: React.FC<Props> = ({
     handleChange('');
   };
 
+  const handleSortBy = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    handleSelect(value as SortBy);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -25,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={sortBy}
-            onChange={(event) => handleSelect(event.target.value as SortBy)}
+            onChange={handleSortBy}
           >
             <option value={SortBy.All}>All</option>
             <option value={SortBy.Active}>Active</option>

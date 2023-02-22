@@ -11,7 +11,8 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isInfoLoaded, setIsInfoLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const { completed, title, id } = selectedTodo;
 
   const todoStatusStyle = completed ? 'success' : 'danger';
@@ -23,21 +24,32 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
         const userFromServer = await getUser(selectedTodo.userId);
 
         setUser(userFromServer);
+        setIsLoaded(true);
+        setHasError(false);
       } catch {
         setUser(null);
-      } finally {
-        setIsInfoLoaded(true);
+        setHasError(true);
+        setIsLoaded(false);
       }
     };
 
     fetchUser();
   }, []);
 
+  if (hasError) {
+    return (
+      <span>
+        Sorry, we were unable to load your todos at this time. Please try again
+        later or contact support if the problem persists.
+      </span>
+    );
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isInfoLoaded ? (
+      {isLoaded ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

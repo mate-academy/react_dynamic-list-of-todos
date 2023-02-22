@@ -42,6 +42,10 @@ export const App: React.FC = () => {
     return filterTodos(todos, formatedQuery, sortBy);
   }, [todos, sortBy, query]);
 
+  const handleChange = (title: string) => {
+    setQuery(title);
+  };
+
   return (
     <>
       <div className="section">
@@ -52,7 +56,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                handleChange={setQuery}
+                handleChange={handleChange}
                 sortBy={sortBy}
                 handleSelect={setSortBy}
               />
