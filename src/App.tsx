@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos, getUser } from './api';
@@ -18,9 +20,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [currentTodo, setcurrentTodo] = useState<Todo | null>(null);
-  const [isDataReady, setIsDataReady] = useState<boolean>(false);
-  const [isClickedOnTodos, setIsClickedOnTodos] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>('');
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [query, setQuery] = useState('');
   const [option, setOption] = useState<Options>(Options.ALL);
 
   const loadTodos = async () => {
@@ -28,10 +29,10 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
-      setIsDataReady(true);
     } catch {
       // eslint-disable-next-line no-alert
       alert('Sorry, there is no todos yet');
+    } finally {
       setIsDataReady(true);
     }
   };
@@ -47,33 +48,32 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const visibleTodos = filteredTodos(todos, option, query);
+  const visibleTodos = useMemo(() => {
+    return filteredTodos(todos, option, query);
+  }, [todos, option, query]);
 
   const onTodoBtnClick = (userId: number, todo:Todo) => {
-    setIsClickedOnTodos(true);
-    setIsDataReady(false);
     setcurrentTodo(todo);
 
     loadUserInfo(userId);
   };
 
   const closeModal = () => {
-    setIsClickedOnTodos(false);
     setUser(null);
     setcurrentTodo(null);
   };
 
-  const selectedTodos = (selectedOption: Options) => {
+  const selectedTodos = useCallback((selectedOption: Options) => {
     setOption(selectedOption);
-  };
+  }, [option]);
 
-  const filterByQuery = (searchQuery:string) => {
+  const filterByQuery = useCallback((searchQuery: string) => {
     setQuery(searchQuery);
-  };
+  }, [query]);
 
-  const clearQuery = () => {
+  const clearQuery = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
   return (
     <>
@@ -103,14 +103,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {(!isDataReady || isClickedOnTodos)
-          && (
-            <TodoModal
-              user={user}
-              todo={currentTodo}
-              onCloseBtn={closeModal}
-            />
-          )}
+      {currentTodo && (
+        <TodoModal
+          user={user}
+          todo={currentTodo}
+          onCloseBtn={closeModal}
+        />
+      )}
     </>
   );
 };

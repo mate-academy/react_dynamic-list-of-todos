@@ -5,7 +5,7 @@ type Props = {
   onSelectedOption: (selectedOption: Options) => void;
   onInputChange: (query: string) => void;
   inputValue: string,
-  onClearQuery: ()=> void,
+  onClearQuery: () => void,
 };
 
 const SELECTED_OPTIONS = [Options.ALL, Options.ACTIVE, Options.COMPLETED];
