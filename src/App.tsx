@@ -17,11 +17,15 @@ export const App: React.FC = () => {
   const [todoSelector, setTodoSelector] = useState('all');
   const [todoFilter, setTodoFilter] = useState('');
 
+  const setInitialTodos = async () => {
+    const data = await getTodos();
+
+    setTodos(data);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    getTodos().then((data) => {
-      setTodos(data);
-      setIsLoading(false);
-    });
+    setInitialTodos();
   }, []);
 
   const getVisibleTodos = () => {
