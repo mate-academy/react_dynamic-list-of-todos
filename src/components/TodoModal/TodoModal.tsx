@@ -46,8 +46,8 @@ export const TodoModal: React.FC<Props> = React.memo(({
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Close modal"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -62,8 +62,6 @@ export const TodoModal: React.FC<Props> = React.memo(({
               {selectedTodo.title}
             </p>
 
-            {/* <p className="block" data-cy="modal-user">
-              <strong className="has-text-success">Done</strong> */}
             {hasError
               ? <span>No user on server</span>
               : (

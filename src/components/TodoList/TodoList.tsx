@@ -37,7 +37,6 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
-          {/* <td className="is-vcentered is-expanded"> */}
           {todo.completed
             ? (
               <td className="is-vcentered">

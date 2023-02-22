@@ -5,7 +5,7 @@ type Props = {
   onChangedQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
   resetQuery: () => void;
   selectFilter: string;
-  setSelectFilter: (value: string) => void;
+  setSelectFilter: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -45,12 +45,12 @@ export const TodoFilter: React.FC<Props> = ({
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
             onClick={resetQuery}
+            aria-label="Clear"
           />
         </span>
       )}

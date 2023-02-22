@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
-import React, {
-  useState, useEffect, useCallback, useMemo,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,56 +9,34 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { filteredTodos } from './utils/function';
+import { SelectFilter } from './types/SelectFilter';
 
 export const App: React.FC = () => {
   const [todosToUse, setTodosToUse] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState<string>(SelectFilter.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   getTodos()
-  //     .then((todos) => setTodosToUse(todos));
-  //     .catch(() => setHasError(true))
-  // }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
         const todosFromServer = await getTodos();
 
-        setLoading(false);
+        setIsLoading(false);
         setTodosToUse(todosFromServer);
       } catch (error) {
         setHasError(true);
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchTodos();
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return todosToUse.filter((todo) => {
-      const filteredByQuery = todo.title
-        .toLowerCase()
-        .includes(query.toLowerCase());
-
-      switch (selectFilter) {
-        case 'active':
-          return !todo.completed && filteredByQuery;
-
-        case 'completed':
-          return todo.completed && filteredByQuery;
-
-        case 'all':
-        default:
-          return filteredByQuery;
-      }
-    });
-  }, [selectFilter, todosToUse, query]);
+  const filterTodos = filteredTodos(todosToUse, selectFilter, query);
 
   const onChangedQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +44,7 @@ export const App: React.FC = () => {
     }, [],
   );
 
-  const reset = useCallback(() => {
+  const resetQuery = useCallback(() => {
     setQuery('');
   }, []);
 
@@ -83,7 +59,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onChangedQuery={onChangedQuery}
-                resetQuery={reset}
+                resetQuery={resetQuery}
                 selectFilter={selectFilter}
                 setSelectFilter={setSelectFilter}
               />
@@ -93,11 +69,11 @@ export const App: React.FC = () => {
               ? <span>No todos from server</span>
               : (
                 <div className="block">
-                  {loading
+                  {isLoading
                     ? <Loader />
                     : (
                       <TodoList
-                        todos={filteredTodos}
+                        todos={filterTodos}
                         selectedTodo={selectedTodo}
                         setSelectedTodo={setSelectedTodo}
                       />
