@@ -25,6 +25,13 @@ export const App: React.FC = () => {
   }, []);
 
   const getVisibleTodos = () => {
+    const needsToFilter
+      = todoSelector === 'active' || todoSelector === 'completed';
+
+    if (!needsToFilter && !todoFilter) {
+      return todos;
+    }
+
     return todos.filter((todo) => {
       const todoTitleIncludesFilter = todo.title
         .toLowerCase()
