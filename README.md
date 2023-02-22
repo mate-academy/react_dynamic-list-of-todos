@@ -1,6 +1,12 @@
 # React dynamic list of TODOs
 
-> See [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
+The goal of this task is to teach you:
+- how to work with a not detailed task description;
+- to learn the existing code before you start;
+- to understand tests and why they fail;
+- to try the working page and implement the same behaviour;
+
+> Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
 
 You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
 and `Loader` components. Load data from the API and show it using the given components.
