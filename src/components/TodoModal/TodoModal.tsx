@@ -23,7 +23,6 @@ export const TodoModal: React.FC<Props> = ({
       data-cy="modal"
     >
       <div className="modal-background" />
-
       {isFetching ? (
         <Loader />
       ) : (

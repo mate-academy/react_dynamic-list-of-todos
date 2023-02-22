@@ -42,24 +42,20 @@ export const App: React.FC = () => {
       }
     });
 
-  const handleGetUser = async (todo: Todo) => {
+  const handleShowModal = async (todo: Todo) => {
     setIsUserFetching(true);
-
+    setSelectedTodo(todo);
     try {
       const selectedUser = await getUser(todo.userId);
 
-      setSelectedTodo(todo);
       setUser(selectedUser);
     } catch (error) {
       // eslint-disable-next-line
-      alert(error);
+      console.error(error);
+      setSelectedTodo(null);
     } finally {
       setIsUserFetching(false);
     }
-  };
-
-  const handleShowButton = (todo: Todo) => {
-    handleGetUser(todo);
   };
 
   const handleGetTodos = async () => {
@@ -94,7 +90,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    handleShowButton={handleShowButton}
+                    handleButtonClick={handleShowModal}
                     selectedTodo={selectedTodo}
                   />
                 )}
@@ -102,7 +98,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           setTodo={setSelectedTodo}
