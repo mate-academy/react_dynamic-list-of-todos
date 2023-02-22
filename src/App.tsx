@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -15,7 +17,7 @@ import { SelectFilter } from './types/SelectFilter';
 export const App: React.FC = () => {
   const [todosToUse, setTodosToUse] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState<string>(SelectFilter.All);
+  const [selectFilter, setSelectFilter] = useState<SelectFilter>(SelectFilter.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +38,9 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const filterTodos = filteredTodos(todosToUse, selectFilter, query);
+  const filterTodos = useMemo(() => {
+    return filteredTodos(todosToUse, selectFilter, query);
+  }, [todosToUse, selectFilter, query]);
 
   const onChangedQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
