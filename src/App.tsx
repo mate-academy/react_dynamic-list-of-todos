@@ -10,15 +10,26 @@ import { TodoList } from './components/TodoList';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortType, setSortType] = useState('all');
+  const [sortType, setSortType] = useState<SortType>(SortType.all);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(todoFromServer => setTodos(todoFromServer));
+    const setTodosFromServer = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch (error) {
+        throw new Error('error');
+      }
+    };
+
+    setTodosFromServer();
   }, []);
 
   const filteredAndSortedTodos = useMemo(() => {
@@ -28,20 +39,20 @@ export const App: React.FC = () => {
         .includes(searchQuery.toLowerCase());
 
       switch (sortType) {
-        case 'active':
+        case SortType.active:
           return !todo.completed && filteredBySearchQuery;
 
-        case 'completed':
+        case SortType.completed:
           return todo.completed && filteredBySearchQuery;
 
-        case 'all':
+        case SortType.all:
         default:
           return filteredBySearchQuery;
       }
     });
   }, [sortType, todos, searchQuery]);
 
-  const onSearchQueryChange = useCallback(
+  const handleSearchQueryChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value);
     },
@@ -61,7 +72,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchQuery={searchQuery}
-                onSearchQueryChange={onSearchQueryChange}
+                handleSearchQueryChange={handleSearchQueryChange}
                 resetSearchQuery={reset}
                 sortType={sortType}
                 setSortType={setSortType}
