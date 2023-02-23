@@ -16,6 +16,10 @@ export const TodoFilter = () => {
     dispatch({ type: 'SearchLine', filter: event.target.value });
   };
 
+  const resetSearchLine = () => {
+    dispatch({ type: 'SearchLine', filter: '' });
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -52,7 +56,7 @@ export const TodoFilter = () => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => dispatch({ type: 'SearchLine', filter: '' })}
+              onClick={resetSearchLine}
             />
           </span>
         )}

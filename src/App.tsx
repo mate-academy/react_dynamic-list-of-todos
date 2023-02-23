@@ -11,13 +11,13 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [state, dispatch] = useContext(GlobalContext);
-  const [load, setLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoad(true);
+    setIsLoading(true);
     getTodos().then(response => {
       dispatch({ type: 'RequestListTodos', list: response });
-      setLoad(false);
+      setIsLoading(false);
     });
   }, []);
 
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {load ? <Loader /> : <TodoList />}
+              {isLoading ? <Loader /> : <TodoList />}
             </div>
           </div>
         </div>

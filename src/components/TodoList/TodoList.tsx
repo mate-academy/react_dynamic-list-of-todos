@@ -40,6 +40,11 @@ export const TodoList: React.FC = () => {
     return filterSearch(state.filterBySearch, result);
   }, [state.filter, state.filterBySearch]);
 
+  const selectElement = (el: Todo) => {
+    dispatch({ type: 'CheckedTodo', todo: el });
+    chooseUser(el.userId);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -91,10 +96,7 @@ export const TodoList: React.FC = () => {
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => {
-                      dispatch({ type: 'CheckedTodo', todo: el });
-                      chooseUser(el.userId);
-                    }}
+                    onClick={() => selectElement(el)}
                   >
                     <span className="icon">
                       <i className={classNames('far', {

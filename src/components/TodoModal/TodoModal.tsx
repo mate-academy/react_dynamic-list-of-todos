@@ -5,13 +5,17 @@ import { Loader } from '../Loader';
 export const TodoModal: React.FC = () => {
   const [state, dispatch] = useContext(GlobalContext);
 
+  const resetAll = () => {
+    dispatch({ type: 'CheckedUser', userId: null });
+    dispatch({ type: 'InfoUser', user: null });
+    dispatch({ type: 'CheckedTodo', todo: null });
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!state.user ? (
-        <Loader />
-      ) : (
+      {state.user ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -26,11 +30,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                dispatch({ type: 'CheckedUser', userId: null });
-                dispatch({ type: 'InfoUser', user: null });
-                dispatch({ type: 'CheckedTodo', todo: null });
-              }}
+              onClick={resetAll}
             />
           </header>
 
@@ -52,6 +52,8 @@ export const TodoModal: React.FC = () => {
             </p>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );
