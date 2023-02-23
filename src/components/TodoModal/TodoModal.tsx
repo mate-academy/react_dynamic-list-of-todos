@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import classNames from 'classnames';
+
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import { ErrorModal } from '../ErrorModal';
 
 interface Props {
-  todo: Todo
+  todo: Todo | null
   clearSelectedTodo: () => void;
 }
 
@@ -14,19 +16,33 @@ export const TodoModal: React.FC<Props> = ({
   todo,
   clearSelectedTodo,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  useEffect(() => {
-    const getUserFromServer = async () => {
-      const userFromServer = await getUser(todo.userId);
+  const loadUser = useCallback(async () => {
+    try {
+      if (todo) {
+        const userFromServer = await getUser(todo.userId);
 
-      setUser(userFromServer);
-    };
-
-    getUserFromServer()
-      .catch(() => setIsLoadingError(true));
+        setUser(userFromServer);
+      }
+    } catch (error) {
+      setIsLoadingError(true);
+    }
   }, []);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  if (isLoadingError) {
+    return (
+      <ErrorModal
+        todo={todo}
+        clearSelectedTodo={clearSelectedTodo}
+      />
+    );
+  }
 
   return (
     <div
@@ -40,9 +56,8 @@ export const TodoModal: React.FC<Props> = ({
     >
       <div className="modal-background" />
 
-      {!user
-        ? (isLoadingError && <p>Error, server is unavailable</p>) || <Loader />
-        : (
+      {user && todo
+        ? (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -52,9 +67,9 @@ export const TodoModal: React.FC<Props> = ({
                 {`Todo #${todo.id}`}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 type="button"
+                aria-label="Close modal"
                 className="delete"
                 data-cy="modal-close"
                 onClick={clearSelectedTodo}
@@ -79,7 +94,8 @@ export const TodoModal: React.FC<Props> = ({
               </p>
             </div>
           </div>
-        )}
+        )
+        : <Loader />}
     </div>
   );
 };

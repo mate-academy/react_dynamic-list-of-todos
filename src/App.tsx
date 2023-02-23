@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,6 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { prepareTodo } from './utils/helper';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,45 +18,43 @@ export const App: React.FC = () => {
   const [isLoadingError, setIsLoadingError] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [todosFilter, setTodosFilter] = useState('all');
+  const [todosFilter, setTodosFilter] = useState<string>(Filter.ALL);
 
-  let visibleTodos = todos.filter(todo => {
-    switch (todosFilter) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      case 'all':
-        return true;
-      default:
-        throw new Error('Wrong todo status');
-    }
-  });
+  const visibleTodos = prepareTodo(todos, searchQuery, todosFilter);
 
-  const [selectedTodo] = visibleTodos.filter(todo => todo.id === selectedTodoId);
-  const clearSelectedTodo = () => {
+  const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
+
+  const clearSelectedTodo = useCallback(() => {
     setSelectedTodoId(0);
-  };
-
-  useEffect(() => {
-    const todosFromServer = async () => {
-      const allTodos = await getTodos();
-
-      setTodos(allTodos);
-      setIsDataLoading(false);
-    };
-
-    todosFromServer()
-      .catch(() => setIsLoadingError(true));
   }, []);
 
-  if (searchQuery) {
-    visibleTodos = visibleTodos.filter(todo => {
-      const preparedQuery = searchQuery.toLowerCase();
-      const preparedTitle = todo.title.toLowerCase();
+  const changeSearchQuery = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
 
-      return preparedTitle.includes(preparedQuery);
-    });
+  const changeTodosFilter = useCallback((filter: string) => {
+    setTodosFilter(filter);
+  }, []);
+
+  const loadTodos = useCallback(async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setIsDataLoading(false);
+    } catch (error) {
+      setIsLoadingError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  if (isLoadingError) {
+    return (
+      <h1>Server is unavailable, try again later...</h1>
+    );
   }
 
   return (
@@ -68,27 +68,25 @@ export const App: React.FC = () => {
               <TodoFilter
                 searchQuery={searchQuery}
                 todosFilter={todosFilter}
-                onSearchQueryChange={setSearchQuery}
-                onTodosFilterChange={setTodosFilter}
+                onSearchQueryChange={changeSearchQuery}
+                onTodosFilterChange={changeTodosFilter}
               />
             </div>
-
-            <div className="block">
-              {isLoadingError || (isDataLoading && <Loader />)}
-              {isLoadingError
-                ? <p>Error, server is unavailable</p>
-                : (
+            {isDataLoading
+              ? <Loader />
+              : (
+                <div className="block">
                   <TodoList
                     todos={visibleTodos}
                     onTodoSelected={setSelectedTodoId}
                     selectedTodoId={selectedTodoId}
                   />
-                )}
-            </div>
+                </div>
+              )}
           </div>
         </div>
       </div>
-      {selectedTodoId !== 0
+      {selectedTodoId
         && (
           <TodoModal
             todo={selectedTodo}
