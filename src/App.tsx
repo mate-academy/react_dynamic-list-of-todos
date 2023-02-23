@@ -63,6 +63,10 @@ export const App: React.FC = () => {
     setSearchQuery('');
   }, []);
 
+  const handleSelectedTodo = useCallback(() => {
+    setSelectedTodo(null);
+  }, [selectedTodo]);
+
   return (
     <>
       <div className="section">
@@ -97,7 +101,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          handleSelectedTodo={handleSelectedTodo}
         />
       )}
     </>
