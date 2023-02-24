@@ -54,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {query.length > 0 && (
+        {!!query.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               aria-label="delete"

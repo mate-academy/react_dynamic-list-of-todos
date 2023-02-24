@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -15,10 +20,9 @@ import { filterTodos } from './components/functions';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingError, setIsLoadingError] = useState(false);
   const [query, setQuery] = useState('');
   const [filtredByReady, setFiltredByReady] = useState<Filter>(Filter.All);
-  const [hasError, setHasError] = useState(false);
 
   const selectedTodo = useCallback((todo: Todo) => {
     setSelectedTodoId(todo);
@@ -29,10 +33,9 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
+      setIsLoadingError(false);
     } catch {
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
+      setIsLoadingError(true);
     }
   };
 
@@ -40,7 +43,9 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const visibleTodos = filterTodos(todos, filtredByReady, query);
+  const visibleTodos = useMemo(() => {
+    return filterTodos(todos, filtredByReady, query);
+  }, [todos, query, filtredByReady]);
 
   const selectTodo = useCallback((todo: Todo) => {
     setSelectedTodoId(todo);
@@ -67,16 +72,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {hasError
-                ? <span> No todos from server</span>
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectTodo={selectTodo}
-                    selectedTodoId={selectedTodoId}
-                  />
-                )}
+              {todos.length ? (
+                <TodoList
+                  todos={visibleTodos}
+                  selectTodo={selectTodo}
+                  selectedTodoId={selectedTodoId}
+                />
+              ) : (
+                <>
+                  {isLoadingError && <span> No todos from server</span>}
+                  <Loader />
+                </>
+              )}
             </div>
           </div>
         </div>

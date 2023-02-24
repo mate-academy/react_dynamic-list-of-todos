@@ -14,7 +14,8 @@ export const TodoModal: React.FC<Props> = ({
   onClose,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [hasLoadingError, setHasLoadingError] = useState(false);
+  const [hasLoading, setHasLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const {
     id,
     title,
@@ -27,10 +28,12 @@ export const TodoModal: React.FC<Props> = ({
       const userFromServer = await getUser(userId);
 
       setUser(userFromServer);
+      setHasLoading(true);
+      setHasError(false);
     } catch {
-      setHasLoadingError(true);
-    } finally {
-      setHasLoadingError(true);
+      setUser(null);
+      setHasLoading(false);
+      setHasError(true);
     }
   };
 
@@ -38,11 +41,22 @@ export const TodoModal: React.FC<Props> = ({
     waitForUsers();
   }, []);
 
+  const todoStatusStyle = completed ? 'success' : 'danger';
+  const todoStatusText = completed ? 'Done' : 'Planned';
+
+  if (hasError) {
+    return (
+      <span>
+        Todos not found
+      </span>
+    );
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(hasLoadingError)
+      {(hasLoading)
         ? (
           <div className="modal-card">
             <header className="modal-card-head">
@@ -68,23 +82,15 @@ export const TodoModal: React.FC<Props> = ({
               </p>
 
               <p className="block" data-cy="modal-user">
-                {completed
-                  ? (
-                    <strong className="has-text-success">Done</strong>
-                  )
-                  : (
-                    <strong className="has-text-danger">Planned</strong>
-                  )}
+                <strong className={`has-text-${todoStatusStyle}`}>
+                  {todoStatusText}
+                </strong>
 
                 {' by '}
 
-                {hasLoadingError
-                  ? ('User not found')
-                  : (
-                    <a href={`mailto:${user?.email}`}>
-                      {user?.name}
-                    </a>
-                  )}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
               </p>
             </div>
           </div>
