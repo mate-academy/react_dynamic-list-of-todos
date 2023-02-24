@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,13 +20,14 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState('all');
   const [query, setQuery] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] =useState(false);
 
   const preparedquery = query.trim().toLocaleLowerCase();
 
   const preparedTodo = useMemo(() => (
     prepareTodo(preparedquery, todos, sortBy)
-   ),
-   [preparedquery, todos, sortBy]);
+  ),
+  [preparedquery, todos, sortBy]);
 
   const handleSelect = useCallback((sortField: string) => {
     setSortBy(sortField);
@@ -34,14 +37,22 @@ export const App: React.FC = () => {
     setQuery(searchString);
   }, []);
 
+  const fetchTodos = async () => {
+    try {
+      setIsLoading(true);
+
+      const data = await getTodos();
+
+      setTodos(data);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
-    getTodos()
-      .then(data => {
-        setTodos(data);
-      })
-      .catch(() => {
-        setHasError(true);
-      });
+    fetchTodos();
   }, []);
 
   const closeTodo = () => {
@@ -73,15 +84,13 @@ export const App: React.FC = () => {
                 </div>
 
                 <div className="block">
-                  {todos.length > 0
-                    ? (
+                  { isLoading && <Loader /> }
+                  {todos.length && (
                       <TodoList
                         todos={preparedTodo}
                         setSelectedTodo={setSelectedTodo}
                         isSelectedTodo={isSelectedTodo}
                       />
-                    ) : (
-                      <Loader />
                     )}
                 </div>
               </div>

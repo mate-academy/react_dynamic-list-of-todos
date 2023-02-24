@@ -79,7 +79,7 @@ export const TodoList: React.FC<Props> = React.memo(({
                     )}
                   >
                     <span className="icon">
-                      <i className="far fa-eye" />
+                      <i className={"far fa-eye"} />
                     </span>
                   </button>
                 )}

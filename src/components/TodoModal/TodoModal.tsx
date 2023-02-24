@@ -12,15 +12,23 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ isSelectedTodo, closeTodo }) => {
   const [user, setUser] = useState<User | null>(null);
   const [hasErorr, setHasErorr] = useState(false);
+  const [isLoading, setIsLoading] =useState(false);
+
+  const fetchUser = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getUser(isSelectedTodo.userId);
+
+      setUser(data);
+    } catch {
+      setHasErorr(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
-    getUser(isSelectedTodo.userId)
-      .then(data => {
-        setUser(data);
-      })
-      .catch(() => {
-        setHasErorr(true);
-      });
+    fetchUser();
   }, []);
 
   if (hasErorr) {
@@ -33,8 +41,9 @@ export const TodoModal: React.FC<Props> = ({ isSelectedTodo, closeTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user
-        ? (
+      { isLoading && <Loader /> }
+
+      {user && (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -75,8 +84,6 @@ export const TodoModal: React.FC<Props> = ({ isSelectedTodo, closeTodo }) => {
               </p>
             </div>
           </div>
-        ) : (
-          <Loader />
         )}
     </div>
   );

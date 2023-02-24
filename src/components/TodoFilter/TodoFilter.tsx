@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   sortBy: string
-  query: string
+  query: string,
   onHandleSelect: (sortField: string) => void,
   onHandleChangeQuery: (searchString: string) => void,
 };
