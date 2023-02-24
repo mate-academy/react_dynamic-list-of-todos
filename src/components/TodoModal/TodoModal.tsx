@@ -26,7 +26,6 @@ export const TodoModal: React.FC<Props> = ({ seletedTodo, onModalClose }) => {
         const userByIdFromServer = await getUser(userId);
 
         setUser(userByIdFromServer);
-        setHasUserError(false);
       } catch (error) {
         setHasUserError(true);
       } finally {
@@ -42,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({ seletedTodo, onModalClose }) => {
       <div className="modal-background" />
 
       {isLoading && <Loader />}
-      {!hasUserError && (
+      {!hasUserError && !isLoading && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

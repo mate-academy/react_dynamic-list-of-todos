@@ -16,30 +16,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterTypes';
-
-export function getFilteredTodos(
-  todos: Todo[],
-  filterType: FilterType,
-  query: string,
-) {
-  let visibleTodos = [...todos];
-
-  switch (filterType) {
-    case FilterType.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-
-    case FilterType.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-
-    case FilterType.ALL:
-    default:
-      break;
-  }
-
-  return visibleTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-}
+import { getFilteredTodos } from './components/helpers/filterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -55,15 +32,15 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
+        setIsLoading(true);
         const todosFromServer = await getTodos();
 
         setTodos(todosFromServer);
         setIsTodosLoaded(true);
       } catch (error) {
         setHasTodosError(`Oppps smth went wrong, error: ${error}`);
-        setIsLoading(false);
       } finally {
-        setIsLoading(true);
+        setIsLoading(false);
       }
     };
 
@@ -127,7 +104,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading && <Loader />}
+              {isLoading && <Loader />}
               {hasTodosError && <span>{hasTodosError}</span>}
               {isTodosLoaded && (
                 <TodoList
