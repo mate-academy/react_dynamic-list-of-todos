@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Status } from '../../types/Status';
 
 type Props = {
   allTodos: Todo[];
@@ -16,9 +17,9 @@ export const TodoFilter: React.FC<Props> = ({
   const filterCallbackByCompleted
   = (todoStatus: boolean, selectedStatus: string) => {
     switch (selectedStatus) {
-      case 'active':
+      case Status.active:
         return !todoStatus;
-      case 'completed':
+      case Status.completed:
         return todoStatus;
       default:
         return true;
@@ -56,9 +57,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={completed}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.all}>{Status.all}</option>
+            <option value={Status.active}>{Status.active}</option>
+            <option value={Status.completed}>{Status.completed}</option>
           </select>
         </span>
       </p>
@@ -78,13 +79,14 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => handleQueryChange('')}
-            />
+            >
+              x
+            </button>
           </span>
         )}
       </p>
