@@ -9,20 +9,21 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState(FilterBy.All);
   const [query, setQuery] = useState('');
 
+  const fetchData = async () => {
+    const data = await getTodos();
+
+    setTodos(data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getTodos();
-
-      setTodos(data);
-    };
-
     fetchData();
   }, []);
 
@@ -31,7 +32,18 @@ export const App: React.FC = () => {
   }, []);
 
   const filterTodos = useCallback((selection: string) => {
-    setFilterBy(selection);
+    switch (selection) {
+      case 'all':
+      default:
+        setFilterBy(FilterBy.All);
+        break;
+      case 'active':
+        setFilterBy(FilterBy.Active);
+        break;
+      case 'completed':
+        setFilterBy(FilterBy.Completed);
+        break;
+    }
   }, []);
 
   const changeQuery = useCallback((value: string) => {
@@ -44,18 +56,20 @@ export const App: React.FC = () => {
 
   let visibleTodos = todos.filter(todo => {
     switch (filterBy) {
-      case 'all':
+      case FilterBy.All:
       default:
         return [];
-      case 'active':
+      case FilterBy.Active:
         return todo.completed === false;
-      case 'completed':
+      case FilterBy.Completed:
         return todo.completed === true;
     }
   });
 
+  const queryToLowerCase = query.toLocaleLowerCase();
+
   if (query) {
-    visibleTodos = [...visibleTodos].filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+    visibleTodos = [...visibleTodos].filter(todo => todo.title.toLocaleLowerCase().includes(queryToLowerCase));
   }
 
   return (

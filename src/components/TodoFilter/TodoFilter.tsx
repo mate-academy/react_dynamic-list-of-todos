@@ -1,4 +1,5 @@
 import React from 'react';
+import { FilterBy } from '../../types/FilterBy';
 
 interface Props {
   filterTodos: (selection: string) => void,
@@ -20,9 +21,9 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           data-cy="statusSelect"
           onChange={(event) => filterTodos(event.target.value)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterBy.All}>All</option>
+          <option value={FilterBy.Active}>Active</option>
+          <option value={FilterBy.Completed}>Completed</option>
         </select>
       </span>
     </p>
