@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onReset }) => {
     getUser(userId)
       .then(setUser)
       .catch(error => {
-        throw new Error(error);
+        alert(error);
       });
   }, []);
 

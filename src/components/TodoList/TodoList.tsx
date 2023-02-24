@@ -5,10 +5,12 @@ import { TodoInfo } from '../TodoInfo';
 type Props = {
   todos: Todo[];
   onSelect: (todo: Todo) => void;
-  selected: number | undefined;
+  selectedTodosId: number | null;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect, selected }) => {
+export const TodoList: React.FC<Props> = ({
+  todos, onSelect, selectedTodosId,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -30,7 +32,7 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect, selected }) => {
             todo={todo}
             key={todo.id}
             onSelect={onSelect}
-            selected={selected}
+            selectedTodosId={selectedTodosId}
           />
         ))}
       </tbody>

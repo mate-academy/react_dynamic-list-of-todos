@@ -4,10 +4,12 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo
   onSelect: (todo: Todo) => void;
-  selected: number | undefined;
+  selectedTodosId: number | null;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo, onSelect, selected }) => {
+export const TodoInfo: React.FC<Props> = ({
+  todo, onSelect, selectedTodosId,
+}) => {
   const { id, completed, title } = todo;
 
   return (
@@ -38,7 +40,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onSelect, selected }) => {
         >
           <span className="icon">
             <i className={classNames(
-              'far', id === selected
+              'far', id === selectedTodosId
                 ? 'fa-eye-slash'
                 : 'fa-eye',
             )}

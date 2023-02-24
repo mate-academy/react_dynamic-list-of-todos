@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [userId, setUserId] = useState(0);
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   const [filter, setFilter] = useState(Filter.ALL);
   const [query, setQuery] = useState('');
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
   const newModel = (newTodo: Todo) => {
     setUserId(newTodo.userId);
 
-    return setSelectedTodo(newTodo);
+    return setSelectedTodoId(newTodo.id);
   };
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const App: React.FC = () => {
 
   const onReset = () => {
     setUserId(0);
-    setSelectedTodo(null);
+    setSelectedTodoId(null);
   };
 
   const filteredTodos = useMemo(() => {
@@ -62,6 +62,8 @@ export const App: React.FC = () => {
     ? filteredTodos.filter(todoQuery => todoQuery.title.toLowerCase().includes(query.toLowerCase().trim()))
     : filteredTodos;
 
+  const selectedTodo = todos.find(todoToFind => todoToFind.id === selectedTodoId) || null;
+
   return (
     <>
       <div className="section">
@@ -75,7 +77,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todos.length
-                ? <TodoList todos={filterQuery} onSelect={newModel} selected={selectedTodo?.id} />
+                ? <TodoList todos={filterQuery} onSelect={newModel} selectedTodosId={selectedTodoId} />
                 : <Loader /> }
             </div>
           </div>
