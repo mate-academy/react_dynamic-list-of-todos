@@ -11,7 +11,9 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ user, todo, onCloseBtn }) => {
   const {
-    id, title, completed,
+    id,
+    title,
+    completed,
   } = todo;
 
   return (

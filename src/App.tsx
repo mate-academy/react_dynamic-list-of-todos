@@ -14,7 +14,7 @@ import { FilteredBy } from './types/FilteredBy';
 
 import { getTodos, getUser } from './api';
 
-const filteredTodos = (todos: Todo[], query: string, filter: FilteredBy) => {
+const getFilteredTodos = (todos: Todo[], query: string, filter: FilteredBy) => {
   let todosCopy = [...todos];
 
   if (query) {
@@ -42,31 +42,30 @@ const filteredTodos = (todos: Todo[], query: string, filter: FilteredBy) => {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosisLoaded, settodosisLoaded] = useState(false);
+  const [areTodosLoaded, setareTodosLoaded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(FilteredBy.ALL);
 
-  const visibleTodos = filteredTodos(todos, query, filter);
+  const visibleTodos = getFilteredTodos(todos, query, filter);
 
   const loadUser = async (userId:number) => {
     const userFromServer = await getUser(userId);
 
     setUser(userFromServer);
-    settodosisLoaded(true);
+    setareTodosLoaded(true);
   };
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
-        settodosisLoaded(true);
+        setareTodosLoaded(true);
 
         return setTodos(todosFromServer);
       })
       .catch(() => {
-        // eslint-disable-next-line no-alert
-        alert('Sorry, there is no todos');
+        throw new Error('Sorry, there is no todos');
       });
   }, []);
 
@@ -75,7 +74,7 @@ export const App: React.FC = () => {
     setCurrentTodo(null);
   };
 
-  const onTodoListBtnClick = (userId: number, todo: Todo) => {
+  const handleTodoListBtnClick = (userId: number, todo: Todo) => {
     setCurrentTodo(todo);
     loadUser(userId);
   };
@@ -97,11 +96,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todosisLoaded && <Loader />}
+              {!areTodosLoaded && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 currentTodo={currentTodo}
-                onClick={onTodoListBtnClick}
+                onClick={handleTodoListBtnClick}
               />
             </div>
           </div>
