@@ -1,5 +1,6 @@
-/* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,11 +19,14 @@ export const App: React.FC = () => {
   const [isLoadingError, setIsLoadingError] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [todosFilter, setTodosFilter] = useState<string>(Filter.ALL);
+  const [todosFilter, setTodosFilter] = useState<Filter>(Filter.ALL);
 
-  const visibleTodos = prepareTodo(todos, searchQuery, todosFilter);
+  const visibleTodos = useMemo(() => (
+    prepareTodo(todos, searchQuery, todosFilter)
+  ), [todos, searchQuery, todosFilter]);
 
-  const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
+  const selectedTodo
+    = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
 
   const clearSelectedTodo = useCallback(() => {
     setSelectedTodoId(0);
@@ -32,7 +36,7 @@ export const App: React.FC = () => {
     setSearchQuery(query);
   }, []);
 
-  const changeTodosFilter = useCallback((filter: string) => {
+  const changeTodosFilter = useCallback((filter: Filter) => {
     setTodosFilter(filter);
   }, []);
 

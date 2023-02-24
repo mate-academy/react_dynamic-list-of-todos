@@ -5,7 +5,7 @@ interface Props {
   searchQuery: string;
   todosFilter: string;
   onSearchQueryChange: (searchQuery: string) => void;
-  onTodosFilterChange: (todosFilter: string) => void;
+  onTodosFilterChange: (todosFilter: Filter) => void;
 }
 export const TodoFilter: React.FC<Props> = ({
   searchQuery,
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           value={todosFilter}
           onChange={(event) => {
-            onTodosFilterChange(event.target.value);
+            onTodosFilterChange(event.target.value as Filter);
           }}
         >
           <option value={Filter.ALL}>All</option>
