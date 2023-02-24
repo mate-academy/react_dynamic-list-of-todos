@@ -31,8 +31,14 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
 
       {todos.map((todo) => {
-        /* eslint-disable max-len */
-        return <TodoInfo todo={todo} key={todo.id} handleTodoSelect={handleTodoSelect} selectedTodo={selectedTodo} />;
+        return (
+          <TodoInfo
+            todo={todo}
+            key={todo.id}
+            handleTodoSelect={handleTodoSelect}
+            selectedTodo={selectedTodo}
+          />
+        );
       })}
     </tbody>
   </table>

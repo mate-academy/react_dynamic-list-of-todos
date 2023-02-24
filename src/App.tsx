@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,51 +20,41 @@ export const App: React.FC = () => {
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const loadTodos = async () => {
-    const todos = await getTodos();
-
+  const loadTodosData = async () => {
+    const todosData = await getTodos();
     setIsLoad(true);
-
-    setTodos(todos);
+    setTodos(todosData);
   };
 
-  const filteredTodos = todos.filter((todo: Todo) => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  const filteredTodos = todos.filter((todo: Todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
   let visibleTodos = filteredTodos;
 
   const setVisibleTodos = () => {
-    switch (filterBy) {
-      case 'all':
-        return filteredTodos;
-      case 'completed':
-        return visibleTodos = filteredTodos.filter((todo) => todo.completed);
+    visibleTodos = filteredTodos.filter((todo) => {
+      switch (filterBy) {
+        case 'all':
+          return todo;
+        case 'completed':
+          return todo.completed;
 
-      case 'active':
-        return visibleTodos = filteredTodos.filter((todo) => !todo.completed);
+        case 'active':
+          return !todo.completed;
 
-      default:
-        return;
-    }
+        default:
+          return [];
+      }
+    })
   };
+
+  useEffect(() => {
+    loadTodosData();
+  }, [visibleTodos])
 
   const onHideModal = () => {
     setSelectedTodo(null);
   };
 
-  const handleTodoSelect = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
-
-  const handleQuatyChange = (value: string) => {
-    setQuery(value);
-  };
-
-  const handleFilteredBy = (value: string) => {
-    setFilterBy(value);
-  };
-
   setVisibleTodos();
-
-  loadTodos();
 
   return (
     <>
@@ -76,9 +66,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                handleQuatyChange={handleQuatyChange}
+                handleQuatyChange={setQuery}
                 filterBy={filterBy}
-                handleFilteredBy={handleFilteredBy}
+                handleFilteredBy={setFilterBy}
               />
             </div>
 
@@ -86,7 +76,7 @@ export const App: React.FC = () => {
               {!isLoad ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} handleTodoSelect={handleTodoSelect} selectedTodo={selectedTodo} />
+                <TodoList todos={visibleTodos} handleTodoSelect={setSelectedTodo} selectedTodo={selectedTodo} />
               )}
             </div>
           </div>
