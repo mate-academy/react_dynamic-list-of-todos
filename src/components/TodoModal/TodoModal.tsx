@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -36,10 +37,9 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onReset }) => {
             >
               {`Todo #${todo.id}`}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="delete button"
               className="delete"
               data-cy="modal-close"
               onClick={onReset}
@@ -52,18 +52,17 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onReset }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {
-                todo.completed
+              <span>
+                {todo.completed
                   ? (<strong className="has-text-success">Done</strong>)
-                  : (<strong className="has-text-danger">Planned</strong>)
-              }
+                  : (<strong className="has-text-danger">Planned</strong>)}
 
-              {' by '}
+                {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </span>
             </p>
           </div>
         </div>
