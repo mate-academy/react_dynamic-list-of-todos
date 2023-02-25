@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import cn from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
-import { getUser } from '../../api';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUserFromServer } from '../../utils/helpers';
 import { Loader } from '../Loader';
 
 type Props = {
@@ -21,23 +21,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
   const [user, setUser] = useState<User | null>(null);
 
-  const handleUserLoading = useCallback(() => {
-    const loadingUser = async () => {
-      try {
-        const userFromServer = await getUser(userId);
-
-        if (userFromServer.name.trim()) {
-          setUser(userFromServer);
-        }
-      } catch (error) {
-        console.log('error catched');
-      }
-    };
-
-    loadingUser();
-  }, []);
-
-  useEffect(handleUserLoading, []);
+  getUserFromServer(userId, setUser);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -55,8 +39,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="modal-close"
               type="button"
               className="delete"
               data-cy="modal-close"

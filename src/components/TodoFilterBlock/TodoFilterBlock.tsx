@@ -1,35 +1,24 @@
 import React from 'react';
 import { Select } from '../../types/Select';
+import { FilterSelect } from '../FilterSelect';
 
 type Props = {
-  status: Select;
+  filter: Select;
   query: string;
-  onSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onInputReset: () => void;
 };
 
-export const TodoFilter:React.FC<Props> = React.memo(({
-  status,
-  onSelectChange,
+export const TodoFilterBlock:React.FC<Props> = React.memo(({
+  filter,
+  onFilterChange,
   query,
   onQueryChange,
   onInputReset,
 }) => (
   <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={status}
-          onChange={onSelectChange}
-        >
-          <option value={Select.ALL}>All</option>
-          <option value={Select.ACTIVE}>Active</option>
-          <option value={Select.COMPLETED}>Completed</option>
-        </select>
-      </span>
-    </p>
+    <FilterSelect filter={filter} onFilterChange={onFilterChange} />
 
     <p className="control is-expanded has-icons-left has-icons-right">
       <input
@@ -46,8 +35,8 @@ export const TodoFilter:React.FC<Props> = React.memo(({
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
+            aria-label="clearSearchButton"
             data-cy="clearSearchButton"
             type="button"
             className="delete"

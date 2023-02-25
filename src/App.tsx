@@ -8,68 +8,33 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import debounce from 'lodash/debounce';
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilterBlock } from './components/TodoFilterBlock';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Select } from './types/Select';
-
-export const filterTodos = (s: Select, q: string, t: Todo[]): Todo[] => {
-  const lowerAppliedQuery = q.toLowerCase();
-
-  return t
-    .filter(td => {
-      switch (s) {
-        case Select.COMPLETED:
-          return td.completed;
-        case Select.ACTIVE:
-          return !td.completed;
-        default:
-          return true;
-      }
-    })
-    .filter(td => td.title.toLowerCase().includes(lowerAppliedQuery));
-};
-
-export const getTodoById = (id: number, todoArr: Todo[]): Todo | null => (
-  todoArr.find(todo => todo.id === id) || null
-);
+import { filterTodos, getTodoById, loadingTodos } from './utils/helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [select, setSelect] = useState<Select>(Select.ALL);
+  const [modalTodoId, setModalTodoId] = useState(0);
+  const [filter, setFilter] = useState<Select>(Select.ALL);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
-  const handleTodosLoading = useCallback(() => {
-    setIsLoading(true);
-
-    const loadingTodos = async () => {
-      try {
-        const todosFromServer = await getTodos();
-
-        setTodos(todosFromServer);
-        setIsLoading(false);
-      } catch (error) {
-        console.log('you catched some error');
-      }
-    };
-
-    loadingTodos();
+  useEffect(() => {
+    loadingTodos(setTodos, setIsLoading, setHasLoadingError);
   }, []);
 
-  useEffect(handleTodosLoading, []);
-
   const visibleTodos = useMemo(() => (
-    filterTodos(select, appliedQuery, todos)
-  ), [appliedQuery, select, todos]);
+    filterTodos(filter, appliedQuery, todos)
+  ), [appliedQuery, filter, todos]);
 
-  const selectedTodo = useMemo(() => (
-    getTodoById(selectedTodoId, todos)
-  ), [selectedTodoId]);
+  const modalTodo = useMemo(() => (
+    getTodoById(modalTodoId, todos)
+  ), [modalTodoId]);
 
   const applyQuery = useCallback(debounce((value) => {
     setIsLoading(false);
@@ -77,16 +42,16 @@ export const App: React.FC = () => {
     return setAppliedQuery(value);
   }, 700), []);
 
-  const handleSelectedIdChange = useCallback((todoId) => {
-    setSelectedTodoId(todoId);
+  const handleModalIdChange = useCallback((todoId) => {
+    setModalTodoId(todoId);
   }, []);
 
   const handleCloseClick = useCallback(() => {
-    setSelectedTodoId(0);
+    setModalTodoId(0);
   }, []);
 
-  const handleSelectChange = useCallback((event) => {
-    setSelect(event.target.value);
+  const handleFilterChange = useCallback((event) => {
+    setFilter(event.target.value);
   }, []);
 
   const handleQueryChange = useCallback((event) => {
@@ -100,6 +65,9 @@ export const App: React.FC = () => {
     setAppliedQuery('');
   }, []);
 
+  const showList = !!visibleTodos.length && !isLoading;
+  const noTodos = !visibleTodos.length && !isLoading;
+
   return (
     <>
       <div className="section">
@@ -108,9 +76,9 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                status={select}
-                onSelectChange={handleSelectChange}
+              <TodoFilterBlock
+                filter={filter}
+                onFilterChange={handleFilterChange}
                 query={query}
                 onQueryChange={handleQueryChange}
                 onInputReset={handleInputReset}
@@ -118,20 +86,28 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    onSelectedIdChange={handleSelectedIdChange}
-                    todoId={selectedTodoId}
-                  />
-                )}
+              {isLoading && <Loader />}
+
+              {showList && (
+                <TodoList
+                  todos={visibleTodos}
+                  onModalIdChange={handleModalIdChange}
+                  todoId={modalTodoId}
+                />
+              )}
+
+              {noTodos && (
+                <p className="notification">No suitable todos</p>
+              )}
+
+              {hasLoadingError && (
+                <p className="notification">Can`t load data from server</p>
+              )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo && <TodoModal todo={selectedTodo} onClose={handleCloseClick} />}
+      {modalTodo && <TodoModal todo={modalTodo} onClose={handleCloseClick} />}
     </>
   );
 };
