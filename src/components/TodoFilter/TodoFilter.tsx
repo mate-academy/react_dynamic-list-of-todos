@@ -9,16 +9,6 @@ type Props = {
   setStatus: (value: Status) => void;
 };
 
-interface StatusIndex {
-  [key: string]: Status;
-}
-
-const statusIndex: StatusIndex = {
-  active: Status.ACTIVE,
-  inactive: Status.ALL,
-  pending: Status.COMPLETED,
-};
-
 export const TodoFilter: React.FC<Props> = ({
   query,
   status,
@@ -33,7 +23,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={(event) => setStatus(statusIndex[event.target.value])}
+            onChange={(event) => setStatus(event.target.value as Status)}
           >
             <option value={Status.ALL}>All</option>
             <option value={Status.ACTIVE}>Active</option>

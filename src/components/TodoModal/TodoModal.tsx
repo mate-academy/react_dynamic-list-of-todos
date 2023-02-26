@@ -14,9 +14,20 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then((user) => setCurrentUser(user));
+    async function fetchUser() {
+      try {
+        const user = await getUser(selectedTodo.userId);
+
+        setCurrentUser(user);
+      } catch {
+        setHasError(true);
+      }
+    }
+
+    fetchUser();
   }, []);
 
   return (
@@ -61,10 +72,21 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${currentUser.email}`}>
-                {currentUser.name}
-              </a>
+              {!hasError
+                ? (
+                  <a href={`mailto:${currentUser?.email}`}>
+                    {currentUser?.name}
+                  </a>
+                ) : (
+                  <strong>Unknown</strong>
+                )}
             </p>
+
+            {hasError && (
+              <div className="notification is-warning">
+                Server error!
+              </div>
+            )}
           </div>
         </div>
       )}

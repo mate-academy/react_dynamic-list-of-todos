@@ -11,6 +11,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo, Status } from './types/Todo';
+import { FilteredByStatus } from './components/FilteredByStatus/FilteredByStatus';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -35,23 +36,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return visibleTodos.filter((todo) => {
-      const filteredByQuery = todo.title
-        .toLowerCase()
-        .includes(query.toLowerCase());
-
-      switch (status) {
-        case 'active':
-          return !todo.completed && filteredByQuery;
-
-        case 'completed':
-          return todo.completed && filteredByQuery;
-
-        case 'all':
-        default:
-          return filteredByQuery;
-      }
-    });
+    return FilteredByStatus(visibleTodos, query, status);
   }, [status, visibleTodos, query]);
 
   const onQueryChange = useCallback(
