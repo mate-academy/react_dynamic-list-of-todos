@@ -5,16 +5,16 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  selectedTodo: Todo,
-  setSelectedTodo: (a:Todo | null) => void,
+  defineSelectedId: (a:number) => void,
+  selectedTodo: Todo
 };
 
 export const TodoModal: React.FC<Props> = ({
+  defineSelectedId,
   selectedTodo,
-  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const handleCloseButton = () => setSelectedTodo(null);
+  const handleCloseButton = () => defineSelectedId(0);
   const {
     title,
     userId,
@@ -30,13 +30,13 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     getUserFromServer();
-  }, [selectedTodo]);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user?.name === undefined
+      {!user?.name
         ? (
           <Loader />
         )

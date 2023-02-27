@@ -3,18 +3,18 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[]
-  setSelectedTodo: (a:Todo | null) => void;
+  todos: Todo[];
+  defineSelectedId: (a:number) => void;
   selectedTodoId: number;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setSelectedTodo,
+  defineSelectedId,
   selectedTodoId,
 }) => {
-  const handleSelectTodo = (todo:Todo) => setSelectedTodo(todo);
-  const handleUnSelectTodo = () => setSelectedTodo(null);
+  const handleSelectTodo = (todo:Todo) => defineSelectedId(todo.id);
+  const handleUnSelectTodo = () => defineSelectedId(0);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -75,7 +75,7 @@ export const TodoList: React.FC<Props> = ({
                       data-cy="selectButton"
                       className="button"
                       type="button"
-                      onClick={() => handleUnSelectTodo()}
+                      onClick={handleUnSelectTodo}
                     >
                       <span className="icon">
                         <i className="far fa-eye-slash" />
@@ -89,7 +89,9 @@ export const TodoList: React.FC<Props> = ({
                       type="button"
                       onClick={() => handleSelectTodo(todo)}
                     >
-                      <span className="icon"><i className="far fa-eye" /></span>
+                      <span className="icon">
+                        <i className="far fa-eye" />
+                      </span>
                     </button>
                   )}
               </td>

@@ -9,41 +9,65 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
+import { FilterTodos } from './types/FilterTodos';
 
-export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedStatus, setCompletedStatus] = useState('');
-  const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
-  useEffect(() => {
-    const getTodosFromServer = async () => {
-      const todosFromServer = await getTodos();
-
-      setTodos(todosFromServer);
-    };
-
-    getTodosFromServer();
-  }, []);
-
-  let visibleTodos = [...todos];
-
-  if (completedStatus === 'active') {
-    visibleTodos = todos.filter(todo => !todo.completed);
-  }
-
-  if (completedStatus === 'completed') {
-    visibleTodos = todos.filter(todo => todo.completed);
-  }
+const filterTodos:FilterTodos = (todos, query, completedStatus) => {
+  let prepearedTodos = [...todos];
 
   if (query.trim()) {
-    visibleTodos = visibleTodos.filter(todo => {
+    prepearedTodos = prepearedTodos.filter(todo => {
       const normalizedTitle = todo.title.toLowerCase();
       const normalizedQuery = query.toLowerCase().trim();
 
       return normalizedTitle.includes(normalizedQuery);
     });
   }
+
+  prepearedTodos = prepearedTodos.filter(todo => {
+    switch (completedStatus) {
+      case TodoStatus.Active:
+        return !todo.completed;
+      case TodoStatus.Completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  return prepearedTodos;
+};
+
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [completedStatus, setCompletedStatus] = useState<TodoStatus>(TodoStatus.All);
+  const [query, setQuery] = useState('');
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+
+  const getTodosFromServer = async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
+  };
+
+  const defineStatus = (value:TodoStatus) => {
+    setCompletedStatus(value);
+  };
+
+  const getQuery = (value:string) => {
+    setQuery(value);
+  };
+
+  const defineSelectedId = (value: number) => {
+    setSelectedTodoId(value);
+  };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const visibleTodos = filterTodos(todos, query, completedStatus);
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   return (
     <>
@@ -55,9 +79,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 status={completedStatus}
-                setStatus={setCompletedStatus}
+                defineStatus={defineStatus}
                 query={query}
-                setQuery={setQuery}
+                getQuery={getQuery}
               />
             </div>
 
@@ -67,8 +91,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    setSelectedTodo={setSelectedTodo}
-                    selectedTodoId={selectedTodo?.id || 0}
+                    defineSelectedId={defineSelectedId}
+                    selectedTodoId={selectedTodoId}
                   />
                 )
                 : <Loader />}
@@ -77,7 +101,13 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo && <TodoModal setSelectedTodo={setSelectedTodo} selectedTodo={selectedTodo} />}
+      {selectedTodo
+      && (
+        <TodoModal
+          defineSelectedId={defineSelectedId}
+          selectedTodo={selectedTodo}
+        />
+      )}
     </>
   );
 };

@@ -1,27 +1,29 @@
+import { TodoStatus } from '../../types/TodoStatus';
+
 type Props = {
-  status: string,
-  setStatus: (a:string) => void,
+  status: TodoStatus,
+  defineStatus: (a:TodoStatus) => void,
   query:string;
-  setQuery:(a:string) => void
+  getQuery:(a:string) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
   status,
-  setStatus,
+  defineStatus,
   query,
-  setQuery,
+  getQuery,
 }) => {
   const handleSelect = (event:React.ChangeEvent<HTMLSelectElement>) => (
-    setStatus(event.target.value)
+    defineStatus(event.target.value as TodoStatus)
   );
 
   const handleInput = (event:React.ChangeEvent<HTMLInputElement>) => (
-    setQuery(event.target.value)
+    getQuery(event.target.value)
   );
 
   const handleReset = () => {
-    setQuery('');
-    setStatus('all');
+    getQuery('');
+    defineStatus(TodoStatus.All);
   };
 
   return (
@@ -33,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={status}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
