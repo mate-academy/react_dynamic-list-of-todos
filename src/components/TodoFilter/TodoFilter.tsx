@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<Props> = ({
   allTodos,
   onSetTodos,
 }) => {
-  const [completed, setCompleted] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
 
   const filterCallbackByCompleted
@@ -39,13 +39,13 @@ export const TodoFilter: React.FC<Props> = ({
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const currentStatus = event.target.value;
 
-    setCompleted(currentStatus);
+    setFilterType(currentStatus);
     setVisibleTodos(query, currentStatus);
   };
 
   const handleQueryChange = (queryValue:string) => {
     setQuery(queryValue);
-    setVisibleTodos(queryValue, completed);
+    setVisibleTodos(queryValue, filterType);
   };
 
   return (
@@ -54,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={completed}
+            value={filterType}
             onChange={handleSelect}
           >
             <option value={Status.all}>{Status.all}</option>

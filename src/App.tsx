@@ -36,7 +36,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {allTodos.length === 0 ? (
+              {!allTodos.length ? (
                 <Loader />
               ) : (
                 <TodoList
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0
+      {todoId
         && (
           <TodoModal
             selectedTodo={selectedTodo}
