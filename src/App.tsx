@@ -10,13 +10,14 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { SelectedStatus } from './types/SelectedStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | 0>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState(SelectedStatus.ALL);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [hasErrorFromServer, setHasErrorFromServer] = useState(false);
 
@@ -24,23 +25,21 @@ export const App: React.FC = () => {
     return todos.find(todo => todo.id === selectedTodoId);
   }, [todos, selectedTodoId]);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      setHasErrorFromServer(false);
-      try {
-        const todosFromServer = await getTodos();
+  const fetchTodos = async () => {
+    setHasErrorFromServer(false);
+    try {
+      const todosFromServer = await getTodos();
 
-        setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
-        setIsLoading(false);
-      } catch {
-        setHasErrorFromServer(true);
-        setIsLoading(false);
-      }
-    };
+      setTodos(todosFromServer);
+      setVisibleTodos(todosFromServer);
+      setIsLoading(false);
+    } catch {
+      setHasErrorFromServer(true);
+      setIsLoading(false);
+    }
+  };
 
-    fetchTodos();
-  }, []);
+  fetchTodos();
 
   useEffect(() => {
     const filterTodos = () => {
@@ -48,11 +47,11 @@ export const App: React.FC = () => {
 
       let todosToShow = todos.filter(todo => {
         switch (selectedStatus) {
-          case 'all':
+          case SelectedStatus.ALL:
             return true;
-          case 'active':
+          case SelectedStatus.ACTIVE:
             return !todo.completed;
-          case 'completed':
+          case SelectedStatus.COMPLETED:
             return todo.completed;
           default:
             return true;
@@ -79,9 +78,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
+                setSearchQuery={() => setSearchQuery}
                 selectedStatus={selectedStatus}
-                setSelectedStatus={setSelectedStatus}
+                setSelectedStatus={() => setSelectedStatus}
               />
             </div>
 
@@ -92,7 +91,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    setSelectedTodoId={setSelectedTodoId}
+                    setSelectedTodoId={() => setSelectedTodoId}
                   />
                 )}
             </div>
@@ -103,7 +102,7 @@ export const App: React.FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           selectedTodoId={selectedTodoId}
-          setSelectedTodoId={setSelectedTodoId}
+          setSelectedTodoId={() => setSelectedTodoId}
         />
       )}
     </>

@@ -7,8 +7,8 @@ import { getUser } from '../../api';
 
 interface TodoModalProps {
   selectedTodo: Todo | undefined,
-  selectedTodoId: number | null,
-  setSelectedTodoId: (selectedTodoId: number | null) => void,
+  selectedTodoId: number | 0,
+  setSelectedTodoId: (selectedTodoId: number | 0) => void,
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({
@@ -17,20 +17,17 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   setSelectedTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const fetchUser = async () => {
+    const userFromServer = await getUser(selectedTodoId);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userFromServer = await getUser(selectedTodoId);
+    setUser(userFromServer);
+  };
 
-      setUser(userFromServer);
-    };
-
-    fetchUser();
-  }, []);
+  fetchUser();
 
   useEffect(() => {
     if (selectedTodo === null) {
-      setSelectedTodoId(null);
+      setSelectedTodoId(0);
     }
   }, []);
 
@@ -61,7 +58,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodoId(null)}
+              onClick={() => setSelectedTodoId(0)}
             />
           </header>
 

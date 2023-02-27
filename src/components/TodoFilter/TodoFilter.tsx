@@ -1,8 +1,9 @@
 import React, { ChangeEvent } from 'react';
+import { SelectedStatus } from '../../types/SelectedStatus';
 
 interface TodoFilterProps {
   selectedStatus: string,
-  setSelectedStatus: (selectedStatus: string) => void,
+  setSelectedStatus: (selectedStatus: SelectedStatus | string) => void,
   searchQuery: string,
   setSearchQuery: (searchQuery: string) => void,
 }
@@ -32,9 +33,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
             value={selectedStatus}
             onChange={handleSelectedStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectedStatus.ALL}>All</option>
+            <option value={SelectedStatus.ACTIVE}>Active</option>
+            <option value={SelectedStatus.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
