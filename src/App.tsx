@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, {
-  useMemo, useEffect, useState, useCallback,
+  useEffect, useState, useCallback,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -11,14 +11,15 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo, Status } from './types/Todo';
-import { FilteredByStatus } from './components/FilteredByStatus/FilteredByStatus';
+import { filteredByStatus } from './components/FilteredByStatus/FilteredByStatus';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<Status>(Status.ALL);
-  const [hasLoadingError, setHasLoadingError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,18 +27,18 @@ export const App: React.FC = () => {
         const todos = await getTodos();
 
         setVisibleTodos(todos);
-        setHasLoadingError(false);
+        setHasError(false);
+        setIsLoaded(true);
       } catch {
-        setHasLoadingError(true);
+        setHasError(true);
+        setIsLoaded(false);
       }
     }
 
     fetchData();
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return FilteredByStatus(visibleTodos, query, status);
-  }, [status, visibleTodos, query]);
+  const filteredTodos = filteredByStatus(visibleTodos, query, status);
 
   const onQueryChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
     setQuery('');
   }, []);
 
-  const isLoadingFinished = (hasLoadingError && visibleTodos.length === 0) || visibleTodos.length;
+  const isLoadingFinished = (hasError && !isLoaded) || isLoaded;
 
   return (
     <>

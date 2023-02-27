@@ -1,6 +1,6 @@
 import { Status, Todo } from '../../types/Todo';
 
-export const FilteredByStatus = (
+export const filteredByStatus = (
   todos: Todo[],
   query: string,
   status: Status,

@@ -78,15 +78,12 @@ export const TodoModal: React.FC<Props> = ({
                     {currentUser?.name}
                   </a>
                 ) : (
-                  <strong>Unknown</strong>
+                  <div className="notification is-warning">
+                    Server error!
+                  </div>
                 )}
             </p>
 
-            {hasError && (
-              <div className="notification is-warning">
-                Server error!
-              </div>
-            )}
           </div>
         </div>
       )}
