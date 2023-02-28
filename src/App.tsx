@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [todoStatus, setTodoStatus] = useState('all');
 
   useEffect(() => {
-    getTodos().then((todos) => setAllTodos(todos));
+    getTodos().then(setAllTodos);
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {allTodos.length === 0 && (
+              {!allTodos.length && (
                 <Loader />
               )}
 
