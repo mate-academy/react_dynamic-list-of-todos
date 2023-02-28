@@ -46,7 +46,7 @@ export const App: React.FC = () => {
   const visibleTodos = filteredTodos(todos, query, filterBy);
 
   const fetchData = async () => {
-    setIsDataLoading(false);
+    setIsDataLoading(true);
     try {
       const data = await getTodos();
 
