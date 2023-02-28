@@ -14,6 +14,8 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userIsLoading, setUserIsLoading] = useState(false);
+  const [isUserLoadidngError, setIsUserLoadingError] = useState(false);
   const handleCloseButton = () => defineSelectedId(0);
   const {
     title,
@@ -22,13 +24,22 @@ export const TodoModal: React.FC<Props> = ({
     completed,
   } = selectedTodo;
 
-  useEffect(() => {
-    const getUserFromServer = async () => {
+  const getUserFromServer = async () => {
+    setIsUserLoadingError(false);
+    setUserIsLoading(true);
+
+    try {
       const UserFromServer = await getUser(userId);
 
       setUser(UserFromServer);
-    };
+    } catch (error) {
+      setIsUserLoadingError(true);
+    } finally {
+      setUserIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getUserFromServer();
   }, []);
 
@@ -36,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user?.name
+      {userIsLoading
         ? (
           <Loader />
         )
@@ -64,18 +75,26 @@ export const TodoModal: React.FC<Props> = ({
                 {title}
               </p>
 
-              <p className="block" data-cy="modal-user">
+              {!isUserLoadidngError && user
+                ? (
+                  <p className="block" data-cy="modal-user">
+                    {completed
+                      ? <strong className="has-text-success">Done</strong>
+                      : <strong className="has-text-danger">Planned</strong>}
 
-                {completed
-                  ? <strong className="has-text-success">Done</strong>
-                  : <strong className="has-text-danger">Planned</strong>}
+                    {' by '}
 
-                {' by '}
+                    <a href={`mailto:${user?.email}`}>
+                      {user?.name}
+                    </a>
+                  </p>
+                )
 
-                <a href="mailto:Sincere@april.biz">
-                  {user?.name}
-                </a>
-              </p>
+                : (
+                  <p className="block has-text-danger">
+                    Couldn`t load the user
+                  </p>
+                )}
             </div>
           </div>
         )}

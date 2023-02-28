@@ -13,8 +13,9 @@ export const TodoList: React.FC<Props> = ({
   defineSelectedId,
   selectedTodoId,
 }) => {
-  const handleSelectTodo = (todo:Todo) => defineSelectedId(todo.id);
-  const handleUnSelectTodo = () => defineSelectedId(0);
+  const handleSelectTodo = (id:number) => defineSelectedId(id);
+
+  // const handleUnSelectTodo = () => defineSelectedId(0);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -38,6 +39,7 @@ export const TodoList: React.FC<Props> = ({
             title,
             completed,
           } = todo;
+          const isSelectedTodo = id === selectedTodoId;
 
           return (
             <tr
@@ -50,12 +52,11 @@ export const TodoList: React.FC<Props> = ({
               <td className="is-vcentered">{id}</td>
 
               <td className="is-vcentered">
-                {completed
-                  && (
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  )}
+                {completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
               </td>
 
               <td className="is-vcentered is-expanded">
@@ -69,31 +70,24 @@ export const TodoList: React.FC<Props> = ({
               </td>
 
               <td className="has-text-right is-vcentered">
-                {id === selectedTodoId
-                  ? (
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={handleUnSelectTodo}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye-slash" />
-                      </span>
-                    </button>
-                  )
-                  : (
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={() => handleSelectTodo(todo)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye" />
-                      </span>
-                    </button>
-                  )}
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => handleSelectTodo(id)}
+                >
+                  <span className="icon">
+                    <i className={classNames(
+                      'far',
+                      {
+                        'fa-eye-slash': isSelectedTodo,
+                        'fa-eye': !isSelectedTodo,
+                      },
+                    )}
+                    />
+                  </span>
+                </button>
+
               </td>
             </tr>
           );

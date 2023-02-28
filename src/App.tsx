@@ -12,24 +12,28 @@ import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
 import { FilterTodos } from './types/FilterTodos';
 
-const filterTodos:FilterTodos = (todos, query, completedStatus) => {
+const filterTodos:FilterTodos = (todos, query, todoStatus) => {
   let prepearedTodos = [...todos];
 
   if (query.trim()) {
+    const normalizedQuery = query.toLowerCase().trim();
+
     prepearedTodos = prepearedTodos.filter(todo => {
       const normalizedTitle = todo.title.toLowerCase();
-      const normalizedQuery = query.toLowerCase().trim();
 
       return normalizedTitle.includes(normalizedQuery);
     });
   }
 
   prepearedTodos = prepearedTodos.filter(todo => {
-    switch (completedStatus) {
+    switch (todoStatus) {
       case TodoStatus.Active:
         return !todo.completed;
+
       case TodoStatus.Completed:
         return todo.completed;
+
+      case TodoStatus.All:
       default:
         return true;
     }
@@ -40,18 +44,28 @@ const filterTodos:FilterTodos = (todos, query, completedStatus) => {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedStatus, setCompletedStatus] = useState<TodoStatus>(TodoStatus.All);
+  const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const getTodosFromServer = async () => {
-    const todosFromServer = await getTodos();
+    setIsLoading(true);
+    try {
+      const todosFromServer = await getTodos();
 
-    setTodos(todosFromServer);
+      setTodos(todosFromServer);
+      setHasError(false);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const defineStatus = (value:TodoStatus) => {
-    setCompletedStatus(value);
+    setTodoStatus(value);
   };
 
   const getQuery = (value:string) => {
@@ -66,48 +80,48 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const visibleTodos = filterTodos(todos, query, completedStatus);
+  const visibleTodos = filterTodos(todos, query, todoStatus);
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+    <div className="section">
+      <div className="container">
+        <div className="box">
+          <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                status={completedStatus}
-                defineStatus={defineStatus}
-                query={query}
-                getQuery={getQuery}
-              />
-            </div>
-
-            <div className="block">
-
-              {todos.length
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    defineSelectedId={defineSelectedId}
-                    selectedTodoId={selectedTodoId}
-                  />
-                )
-                : <Loader />}
-
-            </div>
+          <div className="block">
+            <TodoFilter
+              status={todoStatus}
+              defineStatus={defineStatus}
+              query={query}
+              getQuery={getQuery}
+            />
           </div>
+
+          <div className="block">
+            {isLoading
+              ? <Loader />
+              : (
+                <TodoList
+                  todos={visibleTodos}
+                  defineSelectedId={defineSelectedId}
+                  selectedTodoId={selectedTodoId}
+                />
+              )}
+            {hasError && (
+              <p>Couldn`t load todos</p>
+            )}
+          </div>
+
         </div>
       </div>
-      {selectedTodo
-      && (
+
+      {selectedTodo && (
         <TodoModal
           defineSelectedId={defineSelectedId}
           selectedTodo={selectedTodo}
         />
       )}
-    </>
+    </div>
   );
 };
