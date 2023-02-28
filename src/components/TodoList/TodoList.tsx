@@ -3,9 +3,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  // setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleShowTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = ({ todos, handleShowTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -49,6 +51,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
               data-cy="selectButton"
               className="button"
               type="button"
+              onClick={() => handleShowTodo(todo)}
             >
               <span className="icon">
                 <i className="far fa-eye" />

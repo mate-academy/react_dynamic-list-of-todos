@@ -8,11 +8,16 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [modalIsLoading, setModalIsLoading] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -20,6 +25,21 @@ export const App: React.FC = () => {
       .then((data) => setTodos(data))
       .finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    setModalIsLoading(true);
+
+    if (selectedTodo?.userId) {
+      getUser(selectedTodo?.userId)
+        .then((data) => setSelectedUser(data))
+        .finally(() => setModalIsLoading(false));
+    }
+  }, [selectedTodo]);
+
+  const handleShowTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+    setOpenModal(true);
+  };
 
   return (
     <>
@@ -34,13 +54,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList todos={todos} />
+              <TodoList
+                todos={todos}
+                // setOpenModal={setOpenModal}
+                handleShowTodo={handleShowTodo}
+              />
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {openModal && (
+        <TodoModal
+          setOpenModal={setOpenModal}
+          selectedTodo={selectedTodo}
+          selectedUser={selectedUser}
+          modalIsLoading={modalIsLoading}
+        />
+      )}
     </>
   );
 };
