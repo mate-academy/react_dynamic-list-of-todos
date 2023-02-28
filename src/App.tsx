@@ -1,14 +1,46 @@
 /* eslint-disable max-len */
-import React from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import "bulma/css/bulma.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+import { TodoList } from "./components/TodoList";
+import { TodoFilter } from "./components/TodoFilter";
+import { TodoModal } from "./components/TodoModal";
+import { Loader } from "./components/Loader";
+import { getTodos } from "./api";
+import { Todo } from "./types/Todo";
+import {
+  getTodosFilteredByCompletedAndIncludesQuery,
+} from "./components/helper/helpers";
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [titleFilter, setTitleFilter] = useState("");
+  const [completedFilter, setCompletedFilter] = useState("all");
+
+  const closeModal = useCallback(() => {
+    setSelectedTodoId(0);
+  }, []);
+
+  useEffect(() => {
+    getTodos().then((todo) => setTodos(todo));
+  }, []);
+
+  const visibleTodos = useMemo(
+    () => getTodosFilteredByCompletedAndIncludesQuery(
+      todos,
+      completedFilter,
+      titleFilter,
+    ),
+    [completedFilter, todos, titleFilter],
+  );
+
+  const selectedTodo = useMemo(
+    () => visibleTodos.find((todo) => todo.id === selectedTodoId),
+    [selectedTodoId, visibleTodos],
+  );
+
   return (
     <>
       <div className="section">
@@ -17,18 +49,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                titleFilter={titleFilter}
+                onTitleFilterChange={setTitleFilter}
+                completedFilter={completedFilter}
+                onChangeFilter={setCompletedFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length ? (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelectTodoId={setSelectedTodoId}
+                  selectedTodoId={selectedTodoId}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal onCloseModal={closeModal} todo={selectedTodo} />
+      )}
     </>
   );
 };
