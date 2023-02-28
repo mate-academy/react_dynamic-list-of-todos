@@ -3,10 +3,12 @@ import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
       <div className="modal-background" />
-
-      {true ? (
+      {false ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -27,19 +29,23 @@ export const TodoModal: React.FC = () => {
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
+            <p
+              className="block"
+              data-cy="modal-title"
+            >
               quis ut nam facilis et officia qui
             </p>
 
-            <p className="block" data-cy="modal-user">
+            <p
+              className="block"
+              data-cy="modal-user"
+            >
               {/* <strong className="has-text-success">Done</strong> */}
               <strong className="has-text-danger">Planned</strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
             </p>
           </div>
         </div>
