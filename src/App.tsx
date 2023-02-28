@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
+import { preparingTodos } from './utils';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -54,23 +55,7 @@ export const App: React.FC = () => {
     setQuery('');
   }, []);
 
-  let visibleTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterBy.All:
-      default:
-        return [];
-      case FilterBy.Active:
-        return todo.completed === false;
-      case FilterBy.Completed:
-        return todo.completed === true;
-    }
-  });
-
-  const queryToLowerCase = query.toLocaleLowerCase();
-
-  if (query) {
-    visibleTodos = [...visibleTodos].filter(todo => todo.title.toLocaleLowerCase().includes(queryToLowerCase));
-  }
+  const visibleTodos = preparingTodos(todos, filterBy, query);
 
   return (
     <>
@@ -106,7 +91,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} openModal={openModal} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          openModal={openModal}
+        />
+      )}
 
     </>
   );

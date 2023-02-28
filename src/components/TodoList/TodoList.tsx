@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = React.memo(({
         <tr
           data-cy="todo"
           className={cn({
-            'has-background-info-light': selectedTodo,
+            'has-background-info-light': selectedTodo?.id === todo.id,
           })}
           key={todo.id}
         >
@@ -62,8 +62,8 @@ export const TodoList: React.FC<Props> = React.memo(({
             >
               <span className="icon">
                 <i className={cn('far', {
-                  'fa-eye': !selectedTodo,
-                  'fa-eye-slash': selectedTodo,
+                  'fa-eye': selectedTodo?.id !== todo.id,
+                  'fa-eye-slash': selectedTodo?.id === todo.id,
                 })}
                 />
               </span>

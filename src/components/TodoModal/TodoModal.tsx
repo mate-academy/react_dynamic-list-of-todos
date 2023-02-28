@@ -16,9 +16,13 @@ export const TodoModal: React.FC<Props> = React.memo(({
   const [user, setUser] = useState<User | null>(null);
 
   const fetchData = async () => {
-    const data = await getUser(selectedTodo.userId);
+    try {
+      const data = await getUser(selectedTodo.userId);
 
-    setUser(data);
+      setUser(data);
+    } catch {
+      throw new Error('There is an error with loading');
+    }
   };
 
   useEffect(() => {
