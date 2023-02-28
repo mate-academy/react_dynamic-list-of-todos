@@ -25,10 +25,10 @@ export const TodoModal: React.FC<Props> = ({
       if (error instanceof Error) {
         // eslint-disable-next-line no-console
         console.warn(error.message);
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn('Unexpected error');
       }
-
-      // eslint-disable-next-line no-console
-      console.warn('Unexpected error');
     }
   };
 

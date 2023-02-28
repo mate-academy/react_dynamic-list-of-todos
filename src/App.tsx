@@ -46,13 +46,15 @@ export const App: React.FC = () => {
   const visibleTodos = filteredTodos(todos, query, filterBy);
 
   const fetchData = async () => {
+    setIsDataLoading(false);
     try {
       const data = await getTodos();
 
       setTodos(data);
-      setIsDataLoading(false);
     } catch (error) {
       setIsLoadingError(true);
+    } finally {
+      setIsDataLoading(false);
     }
   };
 
@@ -62,7 +64,7 @@ export const App: React.FC = () => {
 
   const showTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  }, [selectedTodo]);
+  }, []);
 
   const closeTodo = useCallback(() => {
     setSelectedTodo(null);
