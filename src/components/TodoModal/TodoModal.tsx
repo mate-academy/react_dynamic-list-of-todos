@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
             setUser(userFromServer);
           });
       } catch (error) {
-        throw new Error(`User: ${userId} -  not found`);
+        throw new Error(`User: ${userId} - not found. Error: ${error}`);
       }
     }, [selectedTodo]);
 

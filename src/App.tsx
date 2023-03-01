@@ -20,10 +20,14 @@ export const App: React.FC = () => {
   const [search, setSearch] = useState<string>(initValues.initSearch);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
+    try {
+      getTodos()
+        .then(todosFromServer => {
+          setTodos(todosFromServer);
+        });
+    } catch (error) {
+      throw new Error(`Unsuccessful load todos from server with following error: ${error}`);
+    }
   }, []);
 
   return (
