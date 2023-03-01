@@ -1,29 +1,23 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent } from 'react';
+import { TodosType } from '../../types/TodosType';
 
 type Props = {
   option: string,
-  setTypeOfTodos: Dispatch<SetStateAction<string>>,
+  onTodoTypeChange: (t: string) => void,
   filter: string,
-  setFilter: Dispatch<SetStateAction<string>>,
-
+  handleFilterChange: (t: string) => void,
+  handleFilterClear: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   option,
-  setTypeOfTodos,
+  onTodoTypeChange,
   filter,
-  setFilter,
+  handleFilterChange,
+  handleFilterClear,
 }) => {
-  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setTypeOfTodos(event.target.value);
-  };
-
-  const handleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
-  };
-
-  const handleFilterClear = () => {
-    setFilter('');
+  const onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+    handleFilterChange(event.target.value);
   };
 
   return (
@@ -33,11 +27,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={option}
-            onChange={handleTypeChange}
+            onChange={(event) => onTodoTypeChange(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodosType.ALL}>All</option>
+            <option value={TodosType.ACTIVE}>Active</option>
+            <option value={TodosType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -49,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={filter}
-          onChange={handleFilterChange}
+          onChange={onFilterChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

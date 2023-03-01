@@ -1,16 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  onButtonClick: Dispatch<SetStateAction<Todo | null>>
+  onCloseButton: (todo: Todo | null) => void
   todoToShow: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onButtonClick,
+  onCloseButton,
   todoToShow,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -63,7 +63,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onButtonClick(todo)}
+                  onClick={() => onCloseButton(todo)}
                 >
                   <span className="icon">
                     <i

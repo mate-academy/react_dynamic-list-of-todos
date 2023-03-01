@@ -1,7 +1,5 @@
 import React,
 {
-  Dispatch,
-  SetStateAction,
   useEffect,
   useState,
 } from 'react';
@@ -12,10 +10,10 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo,
-  onButtonClick: Dispatch<SetStateAction<Todo | null>>,
+  onCloseButton: (todo: Todo | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onButtonClick }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onCloseButton }) => {
   const {
     userId,
     title,
@@ -26,15 +24,21 @@ export const TodoModal: React.FC<Props> = ({ todo, onButtonClick }) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
+  const fetchUser = async () => {
+    try {
       setIsLoading(true);
       const fetchedUser = await getUser(userId);
 
       setUser(fetchedUser);
+    } catch {
+      // eslint-disable-next-line
+      console.log('Error occurred in Modal fetch')
+    } finally {
       setIsLoading(false);
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -59,7 +63,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onButtonClick }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onButtonClick(null)}
+              onClick={() => onCloseButton(null)}
             />
           </header>
 
