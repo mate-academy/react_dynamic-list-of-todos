@@ -29,10 +29,14 @@ export const TodoModal: React.FC<Props> = ({
     const color = completed ? 'success' : 'danger';
 
     useEffect(() => {
-      getUser(userId)
-        .then(userFromServer => {
-          setUser(userFromServer);
-        });
+      try {
+        getUser(userId)
+          .then(userFromServer => {
+            setUser(userFromServer);
+          });
+      } catch (error) {
+        throw new Error(`User: ${userId} -  not found`);
+      }
     }, [selectedTodo]);
 
     return (
