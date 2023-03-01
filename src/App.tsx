@@ -7,9 +7,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
 import { getTodos } from './api';
-import { Todo } from './types/Todo';
 import { initValues } from './helpers/constants';
+
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(initValues.initTodos);
@@ -33,9 +35,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={(value: string) => setFilter(value)}
+                setFilter={setFilter}
                 filter={filter}
-                setSearch={(value: string) => setSearch(value)}
+                setSearch={setSearch}
                 searchQuery={search}
               />
             </div>
@@ -45,7 +47,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={todos}
                 selectedTodo={selectedTodoId}
-                selectTodo={(todoId: number) => setTodoId(todoId)}
+                selectTodo={setTodoId}
                 filter={filter}
                 search={search}
               />
@@ -58,7 +60,7 @@ export const App: React.FC = () => {
         <TodoModal
           todos={todos}
           selectedTodo={selectedTodoId}
-          unselectTodo={() => setTodoId(0)}
+          unselectTodo={() => setTodoId(initValues.initSelectedTodoId)}
         />
       )}
     </>

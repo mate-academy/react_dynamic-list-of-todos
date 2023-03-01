@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Filter, initValues } from '../../helpers/constants';
+import { Filter } from '../../helpers/constants';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -83,7 +83,6 @@ export const TodoList: FC<Props> = ({
                       data-cy="selectButton"
                       className="button"
                       type="button"
-                      onClick={() => selectTodo(initValues.initSelectedTodoId)}
                     >
                       <span className="icon">
                         <i className="far fa-eye-slash" />
