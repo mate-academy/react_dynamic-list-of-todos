@@ -33,17 +33,14 @@ export const App: React.FC = () => {
   };
 
   switch (selectedOption) {
-    case 'all':
-      visibleTodos = todosFromServer;
-      break;
     case 'active':
-      visibleTodos = todosFromServer.filter(todo => todo.completed === false);
+      visibleTodos = todosFromServer.filter(todo => !todo.completed);
       break;
     case 'completed':
       visibleTodos = todosFromServer.filter(todo => todo.completed);
       break;
     default:
-      break;
+      visibleTodos = todosFromServer;
   }
 
   if (query) {
