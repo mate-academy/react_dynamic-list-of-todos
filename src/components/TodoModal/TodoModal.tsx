@@ -8,12 +8,14 @@ type Props = {
   handleCloseButton: () => void;
   selectedUserId: number;
   todo: Todo | null;
+  handleError: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   handleCloseButton,
   selectedUserId,
   todo,
+  handleError,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
       setSelectedUser(user);
       setIsLoading(true);
     } catch (error) {
-      throw new Error('Something went wrong. Try again later, please');
+      handleError();
     }
   };
 

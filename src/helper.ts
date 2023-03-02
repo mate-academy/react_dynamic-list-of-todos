@@ -2,7 +2,9 @@ import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 
 export function getVisibleTodos(
-  todos: Todo[], filterType: FilterType, query: string,
+  todos: Todo[],
+  filterType: FilterType,
+  query: string,
 ): Todo[] {
   return todos.filter(todo => {
     const lowerQuery = query.toLowerCase();

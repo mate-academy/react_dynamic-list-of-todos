@@ -38,10 +38,19 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const visibleTodos = useMemo(() => getVisibleTodos(todos, selectedFilter, query), [todos, selectedFilter, query]);
+  const visibleTodos = useMemo(() => getVisibleTodos(
+    todos,
+    selectedFilter,
+    query,
+  ),
+  [todos, selectedFilter, query]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(event.target.value as FilterType);
+  };
+
+  const handleError = () => {
+    setHasError(true);
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,6 +112,7 @@ export const App: React.FC = () => {
           handleCloseButton={handleCloseButton}
           selectedUserId={selectedUserId}
           todo={selectedTodo}
+          handleError={handleError}
         />
       )}
     </>
