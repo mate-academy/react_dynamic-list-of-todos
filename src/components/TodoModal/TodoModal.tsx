@@ -8,6 +8,7 @@ type Props = {
   modalIsLoading: boolean;
   selectedTodo: Todo | null;
   selectedUser: User | null;
+  openModal: boolean;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -15,6 +16,7 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   selectedUser,
   modalIsLoading,
+  openModal,
 }) => {
   return (
     <div
@@ -35,12 +37,15 @@ export const TodoModal: React.FC<Props> = ({
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-              onClick={() => setOpenModal(false)}
-            />
+            {openModal && (
+              <button
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={() => setOpenModal(false)}
+                aria-label="Close Modal"
+              />
+            )}
           </header>
 
           <div className="modal-card-body">

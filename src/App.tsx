@@ -18,11 +18,41 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [filter, setFilter] = useState(todos);
+  const [query, setQuery] = useState('');
+
+  const allTodos = [...todos];
+
+  function sortUnfinished() {
+    return [...allTodos].filter((todo) => todo.completed === false);
+  }
+
+  function sortFinished() {
+    return [...allTodos].filter((todo) => todo.completed === true);
+  }
+
+  function switcher(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { value } = event.target;
+
+    if (value === 'active') {
+      setFilter(sortUnfinished);
+    } else if (value === 'completed') {
+      setFilter(sortFinished);
+    } else {
+      // if the "All" option is selected, show all todos
+      setFilter(todos);
+    }
+  }
+
+  const visibleTodos = filter.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then((data) => setTodos(data))
+      .then((data) => {
+        setTodos(data);
+        setFilter(data);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -31,7 +61,9 @@ export const App: React.FC = () => {
 
     if (selectedTodo?.userId) {
       getUser(selectedTodo?.userId)
-        .then((data) => setSelectedUser(data))
+        .then((data) => {
+          setSelectedUser(data);
+        })
         .finally(() => setModalIsLoading(false));
     }
   }, [selectedTodo]);
@@ -49,14 +81,18 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                // eslint-disable-next-line
+                switcher={switcher}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
               <TodoList
-                todos={todos}
-                // setOpenModal={setOpenModal}
+                visibleTodos={visibleTodos}
                 handleShowTodo={handleShowTodo}
               />
             </div>
@@ -69,6 +105,7 @@ export const App: React.FC = () => {
           selectedTodo={selectedTodo}
           selectedUser={selectedUser}
           modalIsLoading={modalIsLoading}
+          openModal={openModal}
         />
       )}
     </>

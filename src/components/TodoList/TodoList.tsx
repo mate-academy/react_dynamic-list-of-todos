@@ -2,12 +2,11 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
-  // setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  visibleTodos: Todo[];
   handleShowTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, handleShowTodo }) => (
+export const TodoList: React.FC<Props> = ({ visibleTodos, handleShowTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -23,7 +22,7 @@ export const TodoList: React.FC<Props> = ({ todos, handleShowTodo }) => (
     </thead>
 
     <tbody>
-      {todos.map((todo) => (
+      {visibleTodos.map((todo) => (
         <tr
           key={todo.id}
           data-cy="todo"
