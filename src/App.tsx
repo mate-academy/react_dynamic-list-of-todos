@@ -23,11 +23,27 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  useEffect(() => {
-    getTodos().then(result => {
-      setTodos(result);
+  const getTodosFromServer = async () => {
+    try {
+      const todoFromServer = await getTodos();
+
+      setTodos(todoFromServer);
       setIsLoading(false);
-    });
+    } catch {
+      // console.log('data no load from server');
+    }
+  };
+
+  const getFilterField = useCallback(((field: FilterBy) => {
+    setFilterBy(field);
+  }), []);
+
+  const getQuery = useCallback(((text: string) => {
+    setQuery(text);
+  }), []);
+
+  useEffect(() => {
+    getTodosFromServer();
   }, []);
 
   const selectTodo = useCallback(((todo: Todo | null) => {
@@ -36,7 +52,9 @@ export const App: React.FC = () => {
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
-  const visibleTodo = useMemo(() => filterTodo(todos, filterBy, appliedQuery), [todos, filterBy, appliedQuery]);
+  const visibleTodo = useMemo(() => (
+    filterTodo(todos, filterBy, appliedQuery)
+  ), [todos, filterBy, appliedQuery]);
 
   return (
     <>
@@ -46,14 +64,26 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter query={query} filterBy={filterBy} setFilterBy={setFilterBy} setQuery={setQuery} applyQuery={applyQuery} />
+              <TodoFilter
+                query={query}
+                filterBy={filterBy}
+                getFilterField={getFilterField}
+                getQuery={getQuery}
+                applyQuery={applyQuery}
+              />
             </div>
 
             <div className="block">
               {
                 isLoading
                   ? <Loader />
-                  : <TodoList todos={visibleTodo} selectTodo={selectTodo} selectedTodo={selectedTodo} />
+                  : (
+                    <TodoList
+                      todos={visibleTodo}
+                      selectTodo={selectTodo}
+                      selectedTodo={selectedTodo}
+                    />
+                  )
               }
             </div>
           </div>
