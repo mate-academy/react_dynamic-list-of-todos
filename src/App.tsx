@@ -20,6 +20,8 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [hasLoadingError, setLoadingError] = useState(false);
 
+  const isError = hasLoadingError ? 'Error: Data has not been loaded' : <Loader />;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoadingError(false);
@@ -58,10 +60,9 @@ export const App: React.FC = () => {
     setQuery(newQuery);
   };
 
-  const visibleTodoList = useMemo(() => {
-    return getFilteredList(filterType)
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
-  }, [query, filterType, todoList]);
+  const visibleTodoList = useMemo(() => getFilteredList(filterType)
+    .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim())),
+  [query, filterType, todoList]);
 
   return (
     <>
@@ -81,7 +82,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todoList.length === 0 ? (
-                hasLoadingError ? 'Error: Data has not been loaded' : <Loader />
+                isError
               ) : (
                 <TodoList
                   todos={visibleTodoList}
