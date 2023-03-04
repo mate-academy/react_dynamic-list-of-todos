@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,18 +11,25 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [selectedTodo, setSlectedTodo] = useState<Todo | null>();
   const [filterType, setFilterType] = useState('all');
   const [query, setQuery] = useState('');
+  const [hasLoadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const newTodoList = await getTodos();
+      setLoadingError(false);
+      try {
+        const newTodoList = await getTodos();
 
-      setTodoList(newTodoList);
+        setTodoList(newTodoList);
+      } catch (error) {
+        setLoadingError(true);
+      }
     };
 
     fetchData();
@@ -33,9 +41,9 @@ export const App: React.FC = () => {
 
   const getFilteredList = (newFilterType: string) => {
     switch (newFilterType) {
-      case 'completed':
+      case FilterType.COMPLETED:
         return todoList.filter(item => item.completed);
-      case 'active':
+      case FilterType.ACTIVE:
         return todoList.filter(item => !item.completed);
       default:
         return todoList;
@@ -50,8 +58,10 @@ export const App: React.FC = () => {
     setQuery(newQuery);
   };
 
-  const visibleTodoList = getFilteredList(filterType)
-    .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
+  const visibleTodoList = useMemo(() => {
+    return getFilteredList(filterType)
+      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
+  }, [query, filterType, todoList]);
 
   return (
     <>
@@ -71,7 +81,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {todoList.length === 0 ? (
-                <Loader />
+                hasLoadingError ? 'Error: Data has not been loaded' : <Loader />
               ) : (
                 <TodoList
                   todos={visibleTodoList}
