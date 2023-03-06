@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 
 interface TodoModalProps {
   selectedTodo: Todo | undefined,
-  selectedTodoId: number | 0,
+  selectedTodoId: number,
   setSelectedTodoId: (selectedTodoId: number | 0) => void,
 }
 
@@ -17,10 +17,17 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   setSelectedTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const fetchUser = async () => {
-    const userFromServer = await getUser(selectedTodoId);
+    try {
+      const userFromServer = await getUser(selectedTodoId);
 
-    setUser(userFromServer);
+      setUser(userFromServer);
+    } catch (error) {
+      alert(`there is an error ${error}`);
+    } finally {
+      setIsUserLoaded(true);
+    }
   };
 
   fetchUser();
@@ -72,10 +79,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               <strong className="has-text-danger">Planned</strong>
 
               {' by '}
-
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {isUserLoaded && (
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              )}
             </p>
           </div>
         </div>

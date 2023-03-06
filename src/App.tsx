@@ -1,20 +1,19 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { SelectedStatus } from './types/SelectedStatus';
+import { filterTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | 0>(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(SelectedStatus.ALL);
@@ -39,34 +38,15 @@ export const App: React.FC = () => {
     }
   };
 
-  fetchTodos();
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   useEffect(() => {
-    const filterTodos = () => {
-      const queryToLowerCase = searchQuery.toLowerCase();
+    const todosToShow = filterTodos(todos, selectedStatus, searchQuery);
 
-      let todosToShow = todos.filter(todo => {
-        switch (selectedStatus) {
-          case SelectedStatus.ALL:
-            return true;
-          case SelectedStatus.ACTIVE:
-            return !todo.completed;
-          case SelectedStatus.COMPLETED:
-            return todo.completed;
-          default:
-            return true;
-        }
-      });
-
-      if (searchQuery) {
-        todosToShow = todosToShow.filter(todo => todo.title.toLowerCase().includes(queryToLowerCase));
-      }
-
-      setVisibleTodos(todosToShow);
-    };
-
-    filterTodos();
-  }, [selectedStatus, searchQuery]);
+    setVisibleTodos(todosToShow);
+  }, [todos, selectedStatus, searchQuery]);
 
   return (
     <>
