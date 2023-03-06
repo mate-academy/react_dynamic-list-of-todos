@@ -17,11 +17,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
 
   useEffect(() => {
     getUser(selectedTodo?.id || 0)
-      .then(res => {
-        setUser(res);
-      }).catch((reg) => {
+      .then(res => setUser(res))
+      .catch(reg => {
         throw new Error(reg);
-      }).finally(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (

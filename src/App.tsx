@@ -3,26 +3,22 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getTodos } from './api';
+
+import { Filter } from './types/Filter';
+import { Todo } from './types/Todo';
+
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
-
-enum Filter {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isModal, setModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState<Filter | string>(Filter.ALL);
+  const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [filteredTodos, setFilteredTodos] = useState(todos);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -44,8 +40,12 @@ export const App: React.FC = () => {
         setFilteredTodos(todos.filter(todo => todo.completed));
 
         break;
-      default:
+      case Filter.ALL:
         setFilteredTodos(todos);
+
+        break;
+      default:
+        break;
     }
   }, [filter, todos]);
 
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
     setModal(false);
   };
 
-  const changeFilter = (value: string) => setFilter(value);
+  const changeFilter = (value: Filter) => setFilter(value);
 
   const changeSearchQuery = (value: string) => {
     setSearchQuery(value);
