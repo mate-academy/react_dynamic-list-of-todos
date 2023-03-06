@@ -1,11 +1,33 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+import { Filter } from '../../types/Filter';
+
+type Props = {
+  filter: string;
+  changeFilter: (value: Filter) => void;
+  searchQuery: string;
+  changeSearchQuery: (value: string) => void;
+  clearSearchQuery: () => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  changeFilter,
+  searchQuery,
+  changeSearchQuery,
+  clearSearchQuery,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={(e) => changeFilter(e.target.value as Filter)}
+        >
+          <option value={Filter.ALL}>All</option>
+          <option value={Filter.ACTIVE}>Active</option>
+          <option value={Filter.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,19 +38,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => changeSearchQuery(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {searchQuery.length > 0 && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={clearSearchQuery}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
