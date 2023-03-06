@@ -9,7 +9,10 @@ type Props = {
 };
 
 export const TodoFilter: FC<Props> = ({
-  status, setStatus, query, setQuery,
+  status,
+  setStatus,
+  query,
+  setQuery,
 }) => (
   <form className="field has-addons">
     <p className="control">

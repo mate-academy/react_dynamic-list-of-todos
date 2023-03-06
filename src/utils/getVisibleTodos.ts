@@ -12,9 +12,9 @@ export const getVisibleTodos = (
     visibleTodos = visibleTodos.filter(todo => {
       switch (status) {
         case Status.Active:
-          return todo.completed !== true;
+          return !todo.completed;
         case Status.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           throw new Error('Status is incorrect');
       }

@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState(Status.All);
+  const [status, setStatus] = useState<Status>(Status.All);
   const [query, setQuery] = useState('');
   const [hasError, setHasError] = useState(false);
   const [appliedQuery, setAppliedQuery] = useState('');
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {todos.length > 0 && (
+              {!!todos.length && (
                 <TodoList
                   todos={visibleTodos}
                   selectTodo={setSelectedTodo}
