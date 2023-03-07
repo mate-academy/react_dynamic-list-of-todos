@@ -17,19 +17,26 @@ export const TodoList: React.FC<Props> = ({
   filter,
   search,
 }) => {
-  const todosForRender = todos
-    .filter((todo: Todo) => {
-      switch (filter) {
-        case Filter.all:
-          return todo;
-        case Filter.completed:
-          return todo.completed;
-        case Filter.active:
-          return !todo.completed;
-        default:
-          throw new Error('Something went wrong with the filtering');
+  const todosFilter = () => {
+    switch (filter) {
+      case Filter.COMPLETED: {
+        return todos.filter(({ completed }) => completed);
       }
-    })
+
+      case Filter.ACTIVE: {
+        return todos.filter(({ completed }) => !completed);
+      }
+
+      case Filter.ALL: {
+        return todos;
+      }
+
+      default:
+        return [];
+    }
+  };
+
+  const todosForRender = todosFilter()
     .filter((todo: Todo) => {
       return todo.title.toLowerCase().includes(search.toLowerCase());
     });
