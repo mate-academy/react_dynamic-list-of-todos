@@ -8,6 +8,8 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 import { debounce } from './helpers';
+import { Filter } from './types/Filter';
+import { getfilteredTodos } from './helpers/filterFunction';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -15,7 +17,7 @@ export const App: React.FC = () => {
   const [isSelected, setIsSelected] = useState(true);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Filter.All);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -24,7 +26,7 @@ export const App: React.FC = () => {
 
         setTodos(loadedTodos);
       } catch (error) {
-        setTodos([]);
+        throw new Error('some error');
       } finally {
         setIsSelected(false);
       }
@@ -37,28 +39,16 @@ export const App: React.FC = () => {
     debounce(setAppliedQuery, 500), [],
   );
 
-  const clearQuery = appliedQuery.toLowerCase().trim();
+  useEffect(() => {
+    const clearQuery = appliedQuery.toLowerCase().trim();
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (filter) {
-      case 'all':
-        return todo.title.toLowerCase()
-          .includes(clearQuery);
+    setAppliedQuery(clearQuery);
+  }, [appliedQuery]);
 
-      case 'active':
-        return !todo.completed
-          && todo.title.toLowerCase()
-            .includes(clearQuery);
-
-      case 'completed':
-        return todo.completed
-          && todo.title.toLowerCase()
-            .includes(clearQuery);
-
-      default:
-        return todo;
-    }
-  });
+  const filteredTodos = getfilteredTodos(todos, filter);
+  const visibleTodos = filteredTodos.filter(todo => todo.title
+    .toLowerCase()
+    .includes(appliedQuery));
 
   return (
     <>

@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isSelected, setIsSelected] = useState(true);
+  const [isSelectedTodo, setIsSelectedTodo] = useState(true);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -25,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({
       } catch (error) {
         setSelectedUser(null);
       } finally {
-        setIsSelected(false);
+        setIsSelectedTodo(false);
       }
     };
 
@@ -36,7 +36,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isSelected ? (
+      {isSelectedTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
