@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[]
-  onSelectedTodo: (a: Todo) => void
+  onSelectedTodo: (todo: Todo) => void
   selectedTodo: Todo | null
 }
 

@@ -14,8 +14,9 @@ import { FilterBy } from './types/FilterBy';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.all);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [todoSearchValue, setTodoSearchValue] = useState('');
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export const App: React.FC = () => {
 
         setTodos(allTodos);
       } catch (error) {
-        throw new Error('error');
+        setIsError(true);
       } finally {
         setIsLoading(false);
       }
@@ -37,10 +38,10 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     const selectedTodos = todos.filter(todo => {
       switch (filterBy) {
-        case FilterBy.completed:
+        case FilterBy.Completed:
           return todo.completed;
 
-        case FilterBy.active:
+        case FilterBy.Active:
           return !todo.completed;
 
         default:
@@ -56,6 +57,8 @@ export const App: React.FC = () => {
 
     return selectedTodos;
   }, [todos, filterBy, todoSearchValue]);
+
+  const isTableShown = !isLoading && !isError;
 
   return (
     <>
@@ -74,11 +77,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? (
-                  <Loader />
-                )
-                : (
+              {isLoading && <Loader />}
+              {isError && <p> There is no todos </p>}
+              {isTableShown
+                && (
                   <TodoList
                     todos={filteredTodos}
                     selectedTodo={selectedTodo}

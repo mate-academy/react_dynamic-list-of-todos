@@ -6,7 +6,7 @@ import { getUser } from '../../api';
 
 interface Props {
   selectedTodo: Todo
-  onCloseTodo: (a: Todo | null) => void
+  onCloseTodo: (todo: Todo | null) => void
 }
 
 export const TodoModal: React.FC<Props> = ({
@@ -15,6 +15,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const setUserFromServer = async () => {
@@ -23,7 +24,7 @@ export const TodoModal: React.FC<Props> = ({
 
         setUser(userData);
       } catch (error) {
-        window.console.warn(error);
+        setIsError(true);
       } finally {
         setIsLoading(false);
       }
@@ -69,7 +70,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              {!user
+              {isError
                 ? (
                   <span>
                     {' Guest'}
