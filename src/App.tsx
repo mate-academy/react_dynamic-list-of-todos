@@ -12,14 +12,16 @@ import { Filter } from './types/Filter';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getTodos()
       .then(serverTodos => {
         setTodos(serverTodos);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);

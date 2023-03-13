@@ -27,8 +27,7 @@ export const TodoModal: React.FC<Props> = ({
         <div className="modal-background" />
         <Loader />
       </div>
-    )
-    : (
+    ) : (
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
         <div className="modal-card">
