@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  hideTodo: () => void,
+  selectedTodo: Todo | null,
+};
+
+export const TodoModal: React.FC<Props> = ({ hideTodo, selectedTodo }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const currentUser = await getUser(selectedTodo?.userId || 0);
+
+        setUser(currentUser);
+      } catch (error) {
+        setIsError(true);
+      }
+    };
+
+    loadUser();
+  }, []);
+
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,31 +43,40 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
+              aria-label="Delete"
               data-cy="modal-close"
+              onClick={hideTodo}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            <p
+              className="block"
+              data-cy="modal-user"
+            >
+              {selectedTodo?.completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              {isError ? (
+                <span className="has-text-danger">The user not found</span>
+              ) : (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>
