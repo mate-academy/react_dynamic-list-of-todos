@@ -11,7 +11,7 @@ type Props = {
   query: string,
   filter: Filter,
   selectedTodo: Todo | null,
-  initialized: boolean,
+  loading: boolean,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -20,12 +20,13 @@ export const TodoList: React.FC<Props> = ({
   query,
   filter,
   selectedTodo,
-  initialized,
+  loading,
 }) => {
   const visibleTodos = filterTodo(todos, filter, query);
 
-  return initialized
-    ? (
+  return loading
+    ? <Loader />
+    : (
       <table className="table is-narrow is-fullwidth">
         <thead>
           <tr>
@@ -53,5 +54,5 @@ export const TodoList: React.FC<Props> = ({
           </tbody>
         )}
       </table>
-    ) : <Loader />;
+    );
 };

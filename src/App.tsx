@@ -14,13 +14,13 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [initialized, setInitialized] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTodos()
       .then(serverTodos => {
         setTodos(serverTodos);
-        setInitialized(true);
+        setLoading(false);
       });
   }, []);
 
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
             </div>
             <div className="block">
               <TodoList
-                initialized={initialized}
+                loading={loading}
                 selectedTodo={selectedTodo}
                 filter={filter}
                 query={query}
