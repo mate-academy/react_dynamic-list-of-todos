@@ -14,6 +14,7 @@ export const TodoModal: React.FC<Props> = ({
   closeTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
   const {
     userId,
     id,
@@ -21,9 +22,13 @@ export const TodoModal: React.FC<Props> = ({
     completed,
   } = selectTodo;
   const fetchUser = async () => {
-    const data = await getUser(userId);
+    try {
+      const data = await getUser(userId);
 
-    setUser(data);
+      setUser(data);
+    } finally {
+      setLoadingUser(false);
+    }
   };
 
   useEffect(() => {
@@ -33,10 +38,8 @@ export const TodoModal: React.FC<Props> = ({
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {!user ? (
-        <Loader />
-      ) : (
+      {loadingUser && <Loader />}
+      {user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

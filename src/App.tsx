@@ -33,12 +33,17 @@ export const App: React.FC = () => {
   const [selectTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.ALL);
   const [query, setQuery] = useState('');
+  const [loadingData, setLoadingData] = useState(true);
   const visibleTodos = filteredTodos(todos, filterBy, query);
 
   const fetchTodos = async () => {
-    const data = await getTodos();
+    try {
+      const data = await getTodos();
 
-    setTodos(data);
+      setTodos(data);
+    } finally {
+      setLoadingData(false);
+    }
   };
 
   const openTodo = (todo: Todo) => {
@@ -70,15 +75,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectTodo={selectTodo}
-                    openTodo={openTodo}
-                  />
-                )
-                : <Loader />}
+              {loadingData ? <Loader /> : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectTodo={selectTodo}
+                  openTodo={openTodo}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
           placeholder="Search..."
           value={query}
           onChange={(e) => {
-            setQuery(e.target.value.trim());
+            setQuery(e.target.value);
           }}
         />
         <span className="icon is-left">
