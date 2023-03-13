@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,24 +11,37 @@ import { Todo } from './types/Todo';
 import { FilteredBy } from './types/Filter';
 import { getTodos } from './api';
 
+// const filteredTodos = (todos: Todo[], query: string, filterBy: FilteredBy) => {
+//   let readyTodos = [...todos];
+
+//   if (query) {
+//     const readyQuery = query.toLowerCase().trim();
+
+//     readyTodos = readyTodos.filter(todo => todo.title.toLowerCase()
+//       .includes(readyQuery));
+//   }
+
+//   switch (filterBy) {
+//     case FilteredBy.ACTIVE:
+//       return readyTodos.filter(todo => !todo.completed);
+//     case FilteredBy.COMPLETED:
+//       return readyTodos.filter(todo => todo.completed);
+//     default:
+//       return readyTodos;
+//   }
+// };
 const filteredTodos = (todos: Todo[], query: string, filterBy: FilteredBy) => {
-  let readyTodos = [...todos];
+  const readyQuery = query.toLowerCase().trim();
 
-  if (query) {
-    const readyQuery = query.toLowerCase().trim();
+  const visibleTodos = (filterBy === FilteredBy.ACTIVE)
+    ? todos.filter(todo => !todo.completed)
+    : (filterBy === FilteredBy.COMPLETED
+      ? todos.filter(todo => todo.completed)
+      : [...todos]);
 
-    readyTodos = readyTodos.filter(todo => todo.title.toLowerCase()
-      .includes(readyQuery));
-  }
-
-  switch (filterBy) {
-    case FilteredBy.ACTIVE:
-      return readyTodos.filter(todo => !todo.completed);
-    case FilteredBy.COMPLETED:
-      return readyTodos.filter(todo => todo.completed);
-    default:
-      return readyTodos;
-  }
+  return readyQuery
+    ? visibleTodos.filter(todo => todo.title.toLowerCase().includes(readyQuery))
+    : visibleTodos;
 };
 
 export const App: React.FC = () => {
@@ -37,7 +51,7 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilteredBy>(FilteredBy.ALL);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const visibleTodos = filteredTodos(todos, query, filterBy);
+  const getVisibleTodos = filteredTodos(todos, query, filterBy);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -87,7 +101,7 @@ export const App: React.FC = () => {
                 </p>
               ) : (
                 <TodoList
-                  todos={visibleTodos}
+                  todos={getVisibleTodos}
                   showTodo={showTodo}
                   selectedTodo={selectedTodo}
                 />
