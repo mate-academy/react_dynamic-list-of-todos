@@ -32,22 +32,18 @@ export const filterTodo = (
   filterParam: Filter,
   queryParam: string,
 ) => {
-  let todosCopy = [...todos];
+  const visibleTodos = filterParam !== Filter.All
+    ? todos.filter(todo => {
+      if (filterParam === Filter.Active) {
+        return !todo.completed;
+      }
 
-  switch (filterParam) {
-    case Filter.Active:
-      todosCopy = todosCopy.filter(todo => !todo.completed);
-      break;
-    case Filter.Completed:
-      todosCopy = todosCopy.filter(todo => todo.completed);
-      break;
-    case Filter.All:
-    default:
-      break;
-  }
+      return todo.completed;
+    })
+    : todos;
 
   if (queryParam) {
-    todosCopy = todosCopy.filter(todo => {
+    return visibleTodos.filter(todo => {
       const lowerQueryParam = queryParam.toLowerCase();
       const lowerTitle = todo.title.toLowerCase();
 
@@ -55,5 +51,5 @@ export const filterTodo = (
     });
   }
 
-  return todosCopy;
+  return visibleTodos;
 };
