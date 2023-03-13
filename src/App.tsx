@@ -1,14 +1,37 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    getTodos()
+      .then(serverTodos => {
+        setTodos(serverTodos);
+        setInitialized(true);
+      });
+  }, []);
+
+  const openModal = (todoId: number) => {
+    setSelectedTodo(todos.find(todo => todo.id === +todoId) || null);
+  };
+
+  const closeModal = () => {
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +40,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                filter={filter}
+                setFilter={setFilter}
+              />
             </div>
-
             <div className="block">
-              <Loader />
-              <TodoList />
+              <TodoList
+                initialized={initialized}
+                selectedTodo={selectedTodo}
+                filter={filter}
+                query={query}
+                todos={todos}
+                openModal={openModal}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };
