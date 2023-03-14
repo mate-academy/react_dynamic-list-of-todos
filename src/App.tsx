@@ -8,16 +8,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
-import { FilterType } from './types/FilterType';
 import { getTodos } from './api';
+import { FilterType } from './types/FilterType';
 
-const filteredTodos = (todos: Todo[], inputQuery: string, filterType: FilterType) => {
+const filteredTodos = (
+  todos: Todo[],
+  inputQuery: string,
+  filterType: FilterType,
+) => {
   let currentTodos = [...todos];
 
   if (inputQuery) {
     const query = inputQuery.trim().toLowerCase();
 
-    currentTodos = currentTodos.filter(todo => todo.title.toLowerCase().includes(query));
+    currentTodos = currentTodos.filter(
+      todo => todo.title.toLowerCase().includes(query),
+    );
   }
 
   switch (filterType) {
