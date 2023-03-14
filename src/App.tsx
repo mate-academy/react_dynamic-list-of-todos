@@ -11,27 +11,30 @@ import { Todo } from './types/Todo';
 import { FilteredBy } from './types/Filter';
 import { getTodos } from './api';
 
-const filteredTodos = (todos: Todo[], query: string, filterBy: FilteredBy) => {
-  const readyQuery = query ? query.toLowerCase().trim() : '';
+const getVisibleTodos = (
+  todos: Todo[],
+  query: string,
+  filterBy: FilteredBy,
+) => {
+  const visibleTodos = filterBy !== FilteredBy.ALL
+    ? todos.filter(todo => {
+      if (filterBy === FilteredBy.COMPLETED) {
+        return todo.completed;
+      }
 
-  const readyTodos = todos.filter(todo => {
-    const todoTitle = todo.title.toLowerCase().trim();
-    const isTitleMatched = todoTitle.includes(readyQuery);
-    const isActiveFilter = filterBy === FilteredBy.ACTIVE && !todo.completed;
-    const isCompletedFilter = filterBy === FilteredBy.COMPLETED
-        && todo.completed;
-    const isAllFilter = filterBy === FilteredBy.ALL;
+      return !todo.completed;
+    })
+    : todos;
+
+  if (query) {
+    const readyQuery = query.toLowerCase().trim();
 
     return (
-      isTitleMatched
-      && (isActiveFilter
-        || isCompletedFilter
-        || isAllFilter
-      )
+      visibleTodos.filter(todo => todo.title.toLowerCase().includes(readyQuery))
     );
-  });
+  }
 
-  return readyTodos;
+  return visibleTodos;
 };
 
 export const App: React.FC = () => {
@@ -41,7 +44,7 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilteredBy>(FilteredBy.ALL);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const getVisibleTodos = filteredTodos(todos, query, filterBy);
+  const visibleTodos = getVisibleTodos(todos, query, filterBy);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -94,7 +97,7 @@ export const App: React.FC = () => {
                 </p>
               ) : (
                 <TodoList
-                  todos={getVisibleTodos}
+                  todos={visibleTodos}
                   showTodo={showTodo}
                   selectedTodo={selectedTodo}
                 />
