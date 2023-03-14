@@ -10,12 +10,14 @@ import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 import { useSortAndSearch } from './hooks/useSortAndSearch';
 import { LoadingError } from './components/LoadingError';
+import { Sort } from './types/Sort';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState({ sort: 'All', query: '' });
+  const [filter, setFilter] = useState<Filter>({ sort: Sort.all, query: '' });
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
   async function fetchTodos() {
@@ -81,12 +83,12 @@ export const App: React.FC = () => {
               )}
 
             {selectedTodo
-            && (
-              <TodoModal
-                selectedTodo={selectedTodo}
-                closeTodo={closeTodo}
-              />
-            )}
+              && (
+                <TodoModal
+                  selectedTodo={selectedTodo}
+                  closeTodo={closeTodo}
+                />
+              )}
           </div>
         </div>
       </div>
