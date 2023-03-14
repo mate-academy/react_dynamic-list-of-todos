@@ -11,37 +11,27 @@ import { Todo } from './types/Todo';
 import { FilteredBy } from './types/Filter';
 import { getTodos } from './api';
 
-// const filteredTodos = (todos: Todo[], query: string, filterBy: FilteredBy) => {
-//   let readyTodos = [...todos];
-
-//   if (query) {
-//     const readyQuery = query.toLowerCase().trim();
-
-//     readyTodos = readyTodos.filter(todo => todo.title.toLowerCase()
-//       .includes(readyQuery));
-//   }
-
-//   switch (filterBy) {
-//     case FilteredBy.ACTIVE:
-//       return readyTodos.filter(todo => !todo.completed);
-//     case FilteredBy.COMPLETED:
-//       return readyTodos.filter(todo => todo.completed);
-//     default:
-//       return readyTodos;
-//   }
-// };
 const filteredTodos = (todos: Todo[], query: string, filterBy: FilteredBy) => {
-  const readyQuery = query.toLowerCase().trim();
+  const readyQuery = query ? query.toLowerCase().trim() : '';
 
-  const visibleTodos = (filterBy === FilteredBy.ACTIVE)
-    ? todos.filter(todo => !todo.completed)
-    : (filterBy === FilteredBy.COMPLETED
-      ? todos.filter(todo => todo.completed)
-      : [...todos]);
+  const readyTodos = todos.filter(todo => {
+    const todoTitle = todo.title.toLowerCase().trim();
+    const isTitleMatched = todoTitle.includes(readyQuery);
+    const isActiveFilter = filterBy === FilteredBy.ACTIVE && !todo.completed;
+    const isCompletedFilter = filterBy === FilteredBy.COMPLETED
+        && todo.completed;
+    const isAllFilter = filterBy === FilteredBy.ALL;
 
-  return readyQuery
-    ? visibleTodos.filter(todo => todo.title.toLowerCase().includes(readyQuery))
-    : visibleTodos;
+    return (
+      isTitleMatched
+      && (isActiveFilter
+        || isCompletedFilter
+        || isAllFilter
+      )
+    );
+  });
+
+  return readyTodos;
 };
 
 export const App: React.FC = () => {
@@ -56,6 +46,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const loadTodos = async () => {
       try {
+        setIsLoading(true);
         const data = await getTodos();
 
         setTodos(data);
@@ -66,7 +57,9 @@ export const App: React.FC = () => {
       }
     };
 
-    loadTodos();
+    loadTodos().finally(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   const showTodo = useCallback((todo: Todo) => {

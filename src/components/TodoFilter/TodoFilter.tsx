@@ -13,56 +13,64 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeQuery,
   filterBy,
   setFilterBy,
-}) => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={filterBy}
-          onChange={({ target }) => {
-            setFilterBy(target.value as FilteredBy);
-          }}
-        >
-          <option value={FilteredBy.ALL}>
-            All
-          </option>
+}) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeQuery(event.target.value);
+  };
 
-          <option value={FilteredBy.ACTIVE}>
-            Active
-          </option>
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterBy(event.target.value as FilteredBy);
+  };
 
-          <option value={FilteredBy.COMPLETED}>
-            Completed
-          </option>
-        </select>
-      </span>
-    </p>
+  const handleClearSearch = () => {
+    onChangeQuery('');
+  };
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={({ target }) => {
-          onChangeQuery(target.value);
-        }}
-      />
-      {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            aria-label="Delete"
-            onClick={() => {
-              onChangeQuery('');
-            }}
-          />
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterBy}
+            onChange={handleSelectChange}
+          >
+            <option value={FilteredBy.ALL}>
+              All
+            </option>
+
+            <option value={FilteredBy.ACTIVE}>
+              Active
+            </option>
+
+            <option value={FilteredBy.COMPLETED}>
+              Completed
+            </option>
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={handleInputChange}
+        />
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="Delete"
+              onClick={handleClearSearch}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
