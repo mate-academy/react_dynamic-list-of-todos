@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,46 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+
+const getVisibleTodos = (
+  todos: Todo[],
+  sortType: string,
+  query: string,
+): Todo[] => {
+  let filtered = todos;
+
+  if (sortType === 'active') {
+    filtered = todos.filter(todo => !todo.completed);
+  }
+
+  if (sortType === 'completed') {
+    filtered = todos.filter(todo => todo.completed);
+  }
+
+  return filtered.filter(todo => (
+    todo.title.toLowerCase().includes(query.toLowerCase())
+  ));
+};
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [activeTodo, setActiveTodo] = useState<Todo>();
+  const [sortType, setSortType] = useState('all');
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    getTodos()
+      .then(todosFromServer => setTodos(todosFromServer));
+  }, []);
+
+  const changeActiveTodo = (id: number) => {
+    setActiveTodo(todos.find(todo => todo.id === id));
+  };
+
+  const visibleTodos = getVisibleTodos(todos, sortType, query);
+
   return (
     <>
       <div className="section">
@@ -17,18 +55,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                changeSortType={setSortType}
+                changeQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    activeId={activeTodo?.id || 0}
+                    setActiveId={changeActiveTodo}
+                  />
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {activeTodo && (
+        <TodoModal
+          todo={activeTodo}
+          onClose={() => changeActiveTodo(0)}
+        />
+      )}
     </>
   );
 };
