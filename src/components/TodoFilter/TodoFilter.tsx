@@ -51,6 +51,7 @@ export const TodoFilter: FC<Props> = ({ filterTodos, searchTodo }) => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            style={{ display: valueInput === '' ? 'none' : 'block' }}
             onClick={resetInput}
           />
         </span>
