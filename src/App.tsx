@@ -13,19 +13,32 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 type ActiveModal = {
-  todo: Todo | null,
-  index: number,
+  selectedTodo: Todo | null,
   isActive: boolean,
 };
 
+const filterTodos = (todos: Todo[], filterBy: string, search: string) => {
+  return todos.filter(({ completed }) => {
+    if (filterBy !== 'all') {
+      return completed !== (filterBy === 'completed');
+    }
+
+    return true;
+  }).filter(({ title }) => {
+    if (search !== '') {
+      return title.toLowerCase().includes(search.toLowerCase());
+    }
+
+    return true;
+  });
+};
+
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [isActiveTodoList, setIsActiveTodoList] = useState(false);
+  const [isActiveTodoList, setIsActiveTodoList] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [activeModal, setActiveModal] = useState<ActiveModal>({
-    todo: null,
-    index: 0,
+    selectedTodo: null,
     isActive: false,
   });
 
@@ -33,55 +46,32 @@ export const App: React.FC = () => {
     getTodos()
       .then((todos) => {
         setVisibleTodos(todos);
-        setTodosFromServer(todos);
       })
       .finally(() => setIsActiveTodoList(true));
   }, []);
 
-  const hendlerFilterTodos = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const filterBy = e.currentTarget.value;
-
+  const hendlerFilterTodos = (filterBy: string, search: string) => {
     setIsActiveTodoList(false);
     getTodos()
-      .then((todos) => (
-        todos.filter(({ completed }) => {
-          if (filterBy !== 'all') {
-            return completed !== (filterBy === 'completed');
-          }
-
-          return true;
-        })))
-      .then((filterTodos) => {
-        setTodosFromServer(filterTodos);
-        setVisibleTodos(filterTodos);
+      .then((todos) => filterTodos(todos, filterBy, search))
+      .then((filteredTodos) => {
+        setVisibleTodos(filteredTodos);
       })
       .finally(() => setIsActiveTodoList(true));
   };
 
-  const searchTodoInput = (value: string) => {
-    if (value === '') {
-      setVisibleTodos(todosFromServer);
-    }
-
-    setVisibleTodos(todosFromServer.filter(({ title }) => (
-      title.includes(value)
-    )));
-  };
-
-  const openModal = (todo: Todo, index: number) => {
+  const openModal = (todo: Todo) => {
     getUser(todo.userId).then((userFromServer) => setUser(userFromServer));
 
     setActiveModal({
-      todo,
-      index,
+      selectedTodo: todo,
       isActive: true,
     });
   };
 
   const closeModal = () => {
     setActiveModal({
-      todo: null,
-      index: 0,
+      selectedTodo: null,
       isActive: false,
     });
     setUser(null);
@@ -97,7 +87,6 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterTodos={hendlerFilterTodos}
-                searchTodo={searchTodoInput}
               />
             </div>
 
@@ -119,8 +108,7 @@ export const App: React.FC = () => {
         <TodoModal
           user={user}
           closeModal={closeModal}
-          todo={activeModal.todo}
-          index={activeModal.index}
+          todo={activeModal.selectedTodo}
         />
       )}
     </>

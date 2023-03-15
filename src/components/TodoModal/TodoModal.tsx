@@ -6,14 +6,12 @@ import { Todo } from '../../types/Todo';
 type Props = {
   user: User | null,
   todo: Todo | null,
-  index: number,
   closeModal: () => void,
 };
 
 export const TodoModal: FC<Props> = ({
   user,
   todo,
-  index,
   closeModal,
 }) => {
   return (
@@ -29,7 +27,7 @@ export const TodoModal: FC<Props> = ({
               data-cy="modal-header"
             >
               Todo #
-              {index}
+              {todo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

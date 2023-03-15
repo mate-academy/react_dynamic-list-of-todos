@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  showDatails: (todo: Todo, i: number) => void,
+  showDatails: (todo: Todo) => void,
 };
 
 export const TodoList: FC<Props> = ({ todos, showDatails }) => (
@@ -23,7 +23,7 @@ export const TodoList: FC<Props> = ({ todos, showDatails }) => (
     </thead>
 
     <tbody>
-      {todos.map((todo, index) => (
+      {todos.map((todo) => (
         <tr
           key={todo.id}
           data-cy="todo"
@@ -31,7 +31,7 @@ export const TodoList: FC<Props> = ({ todos, showDatails }) => (
             'has-background-info-light': false,
           })}
         >
-          <td className="is-vcentered">{index + 1}</td>
+          <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
               <span className="icon" data-cy="iconCompleted">
@@ -53,7 +53,7 @@ export const TodoList: FC<Props> = ({ todos, showDatails }) => (
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => showDatails(todo, index + 1)}
+              onClick={() => showDatails(todo)}
             >
               <span className="icon">
                 <i className="far fa-eye" />

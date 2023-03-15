@@ -1,20 +1,25 @@
 import { FC, useState } from 'react';
 
 type Props = {
-  filterTodos: (e: React.ChangeEvent<HTMLSelectElement>) => void,
-  searchTodo: (value: string) => void,
+  filterTodos: (value: string, search: string) => void,
 };
 
-export const TodoFilter: FC<Props> = ({ filterTodos, searchTodo }) => {
+export const TodoFilter: FC<Props> = ({ filterTodos }) => {
   const [valueInput, setValueInput] = useState('');
-  const hendlerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValueInput(e.currentTarget.value);
-    searchTodo(e.currentTarget.value);
+  const [selectValue, setSelectValue] = useState('all');
+
+  const hendlerInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    filterTodos(selectValue, event.currentTarget.value);
+    setValueInput(event.currentTarget.value);
+  };
+
+  const hendlerSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    filterTodos(event.currentTarget.value, valueInput);
+    setSelectValue(event.currentTarget.value);
   };
 
   const resetInput = () => {
     setValueInput('');
-    searchTodo('');
   };
 
   return (
@@ -23,7 +28,8 @@ export const TodoFilter: FC<Props> = ({ filterTodos, searchTodo }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={filterTodos}
+            value={selectValue}
+            onChange={hendlerSelect}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -46,14 +52,15 @@ export const TodoFilter: FC<Props> = ({ filterTodos, searchTodo }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            style={{ display: valueInput === '' ? 'none' : 'block' }}
-            onClick={resetInput}
-          />
+          {valueInput === '' || (
+            /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={resetInput}
+            />
+          )}
         </span>
       </p>
     </form>
