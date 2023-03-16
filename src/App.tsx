@@ -16,11 +16,11 @@ function filterBySelect(
   todos: Todo[],
 ) {
   switch (filter) {
-    case 'active':
+    case FilterCases.Active:
       return todos
         .filter(({ completed }) => !completed);
 
-    case 'completed':
+    case FilterCases.Completed:
       return todos
         .filter(({ completed }) => completed);
 
@@ -100,15 +100,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length
-                ? <Loader />
-                : (
+              {todos.length
+                ? (
                   <TodoList
                     onTodoClick={handleTodoClick}
                     activeTodo={activeTodo}
                     todos={filteredTodos}
                   />
-                )}
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
