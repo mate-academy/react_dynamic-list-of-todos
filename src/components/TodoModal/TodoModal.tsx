@@ -5,13 +5,13 @@ import { Loader } from '../Loader';
 
 type TodoModalProps = {
   user: User | null,
-  handleModal: (id?: number) => void,
+  onModalClose: (id?: number) => void,
   todo: Todo | undefined;
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   user,
-  handleModal,
+  onModalClose,
   todo,
 }) => {
   const email = user?.email;
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => handleModal()}
+              onClick={() => onModalClose()}
             />
           </header>
 

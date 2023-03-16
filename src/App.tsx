@@ -9,19 +9,20 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { FilterCases } from './types/FilterCases';
 
 function filterBySelect(
-  selectValue: string,
+  filter: FilterCases,
   todos: Todo[],
 ) {
-  switch (selectValue) {
+  switch (filter) {
     case 'active':
       return todos
-        .filter(({ completed }) => completed === false);
+        .filter(({ completed }) => !completed);
 
     case 'completed':
       return todos
-        .filter(({ completed }) => completed === true);
+        .filter(({ completed }) => completed);
 
     default:
       return todos;
@@ -35,7 +36,7 @@ function getTodo(todos: Todo[], id: number) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState<FilterCases>(FilterCases.All);
   const [activeTodo, setActiveTodo] = useState<Todo | undefined>(undefined);
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -44,22 +45,19 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleSelectUpdate = (value: string) => {
+  const handleSelectUpdate = (value: FilterCases) => {
     setSelectFilter(value);
   };
 
-  const handleModal = (id?: number) => {
+  const handleTodoClick = async (id?: number) => {
     setIsOpenModal(current => !current);
 
     if (id) {
       const newActiveTodo = getTodo(todos, id);
+      const user = await getUser(newActiveTodo?.userId);
 
       setActiveTodo(newActiveTodo);
-      const fetchUser = async () => {
-        setActiveUser(await getUser(newActiveTodo?.userId));
-      };
-
-      fetchUser();
+      setActiveUser(user);
     } else {
       setActiveTodo(undefined);
       setActiveUser(null);
@@ -96,17 +94,17 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                handleQueryUpdate={handleQueryUpdate}
-                handleSelectUpdate={handleSelectUpdate}
+                onQueryUpdate={handleQueryUpdate}
+                onSelectUpdate={handleSelectUpdate}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList
-                    handleTodoClick={handleModal}
+                    onTodoClick={handleTodoClick}
                     activeTodo={activeTodo}
                     todos={filteredTodos}
                   />
@@ -120,7 +118,7 @@ export const App: React.FC = () => {
           <TodoModal
             todo={activeTodo}
             user={activeUser}
-            handleModal={handleModal}
+            onModalClose={handleTodoClick}
           />
         )}
     </>
