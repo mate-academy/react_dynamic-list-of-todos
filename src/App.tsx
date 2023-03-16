@@ -18,13 +18,15 @@ type ActiveModal = {
 };
 
 const filterTodos = (todos: Todo[], filterBy: string, search: string) => {
-  return todos.filter(({ completed }) => {
-    if (filterBy !== 'all') {
-      return completed !== (filterBy === 'completed');
-    }
+  let copyTodo = [...todos];
 
-    return true;
-  }).filter(({ title }) => {
+  if (filterBy !== 'all') {
+    copyTodo = todos.filter(({ completed }) => (
+      completed !== (filterBy === 'completed')
+    ));
+  }
+
+  return copyTodo.filter(({ title }) => {
     if (search !== '') {
       return title.toLowerCase().includes(search.toLowerCase());
     }
