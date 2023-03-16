@@ -73,15 +73,19 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    const filteredByQuery = [...todos.filter(({ title }) => {
-      const lowerCaseTitle = title.toLocaleLowerCase();
-      const lowerCaseQuery = query.toLocaleLowerCase();
+    let filterBySelectTodos = filterBySelect(selectFilter, todos);
 
-      return lowerCaseTitle.includes(lowerCaseQuery);
-    }),
-    ];
+    if (query) {
+      filterBySelectTodos = filterBySelectTodos
+        .filter(({ title }) => {
+          const lowerCaseTitle = title.toLocaleLowerCase();
+          const lowerCaseQuery = query.toLocaleLowerCase();
 
-    return filterBySelect(selectFilter, filteredByQuery);
+          return lowerCaseTitle.includes(lowerCaseQuery);
+        });
+    }
+
+    return filterBySelectTodos;
   }, [query, todos, selectFilter]);
 
   return (

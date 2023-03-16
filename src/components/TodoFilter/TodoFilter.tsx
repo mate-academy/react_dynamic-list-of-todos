@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { FilterCases } from '../../types/FilterCases';
 
 type TodoFilterProps = {
@@ -13,14 +13,14 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   query,
 }) => {
   const getFilterCases = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectValue = e.target.value;
+    const selectValue = +e.target.value;
 
     switch (selectValue) {
-      case 'active':
+      case FilterCases.Active:
         onSelectUpdate(FilterCases.Active);
         break;
 
-      case 'completed':
+      case FilterCases.Completed:
         onSelectUpdate(FilterCases.Completed);
         break;
 
@@ -28,6 +28,14 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         onSelectUpdate(FilterCases.All);
         break;
     }
+  };
+
+  const handleQueryUpdate = (e: FormEvent<HTMLInputElement>) => {
+    onQueryUpdate(e.currentTarget.value);
+  };
+
+  const handleQueryReset = () => {
+    onQueryUpdate('');
   };
 
   return (
@@ -38,9 +46,23 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             data-cy="statusSelect"
             onChange={getFilterCases}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option
+              value={FilterCases.All}
+            >
+              All
+            </option>
+
+            <option
+              value={FilterCases.Active}
+            >
+              Active
+            </option>
+
+            <option
+              value={FilterCases.Completed}
+            >
+              Completed
+            </option>
           </select>
         </span>
       </p>
@@ -52,7 +74,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          onInput={(e) => onQueryUpdate(e.currentTarget.value)}
+          onInput={handleQueryUpdate}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -65,7 +87,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQueryUpdate('')}
+              onClick={handleQueryReset}
             />
           )}
         </span>

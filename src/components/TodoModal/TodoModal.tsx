@@ -17,6 +17,10 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   const email = user?.email;
   const name = user?.name;
 
+  const handleModalClose = () => {
+    onModalClose();
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -36,7 +40,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onModalClose()}
+              onClick={handleModalClose}
             />
           </header>
 
