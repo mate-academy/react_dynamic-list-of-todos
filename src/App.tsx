@@ -12,12 +12,12 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [userTodo, setUserTodo] = useState<Todo>();
-  const [isTodoModal, setIsTodoModal] = useState(false);
-  const [selected, isSelected] = useState('all');
-  const [searched, isSearched] = useState('');
-  const isActiveModal = userTodo && isTodoModal;
-  const [selectedTodo, setSelectedTodo] = useState(userTodo?.id || -1);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
+  const [selected, setSelected] = useState('all');
+  const [searched, setSearched] = useState('');
+  const isActiveModal = selectedTodo && isTodoModalOpen;
+  const [activeTodo, setActiveTodo] = useState(selectedTodo?.id || -1);
 
   useEffect(() => {
     getTodos()
@@ -25,15 +25,9 @@ export const App: React.FC = () => {
   }, []);
 
   const changeState = (field: string, newValue: string) => {
-    switch (field) {
-      case 'select':
-        isSelected(newValue);
-        break;
-      case 'input':
-        isSearched(newValue);
-        break;
-      default:
-        break;
+    if (field === 'select' || field === 'input') {
+      setSelected(newValue);
+      setSearched(newValue);
     }
   };
 
@@ -53,23 +47,18 @@ export const App: React.FC = () => {
           return todo;
       }
     })
-      .filter(
-        (todo) => todo.title
-          .toLowerCase()
-          .includes(words
-            .toLowerCase()),
-      );
+      .filter((todo) => todo.title.toLowerCase().includes(words.toLowerCase()));
   };
 
   const choosingUser = (todoUser: Todo) => {
-    setUserTodo(todoUser);
-    setSelectedTodo(todoUser.id);
-    setIsTodoModal(true);
+    setSelectedTodo(todoUser);
+    setActiveTodo(todoUser.id);
+    setIsTodoModalOpen(true);
   };
 
   const changeModalVisibility = (switcher: boolean) => {
-    setIsTodoModal(switcher);
-    setSelectedTodo(0);
+    setIsTodoModalOpen(switcher);
+    setActiveTodo(0);
   };
 
   return (
@@ -93,7 +82,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={todoFiltered(selected, searched)}
                     choosingUser={choosingUser}
-                    choosingRow={selectedTodo}
+                    choosingRow={activeTodo}
                   />
                 )
                 : <Loader />}
@@ -104,7 +93,7 @@ export const App: React.FC = () => {
 
       {isActiveModal && (
         <TodoModal
-          userTodo={userTodo}
+          selectedTodo={selectedTodo}
           removeModal={changeModalVisibility}
         />
       )}

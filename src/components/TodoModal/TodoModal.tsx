@@ -5,15 +5,15 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  userTodo: Todo,
+  selectedTodo: Todo,
   removeModal: (switcher: boolean) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ userTodo, removeModal }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
   const [user, setUser] = useState<User>();
   const {
     userId, title, id, completed,
-  } = userTodo;
+  } = selectedTodo;
 
   useEffect(() => {
     getUser(userId)
