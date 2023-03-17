@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import { FC } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[];
@@ -29,58 +29,14 @@ export const TodoList: FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => {
-          const {
-            completed,
-            id,
-            title,
-          } = todo;
-
-          return (
-            <tr
-              data-cy="todo"
-              className={id === activeId
-                ? 'has-background-info-light'
-                : ''}
-              key={id}
-            >
-              <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={completed
-                    ? 'has-text-success'
-                    : 'has-text-danger'}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => setActiveId(id)}
-                >
-                  <span className="icon">
-                    <i className={classNames(
-                      'far',
-                      { 'fa-eye-slash': id === activeId },
-                      { 'fa-eye': id !== activeId },
-                    )}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+        {todos.map(todo => (
+          <TodoInfo
+            key={todo.id}
+            todo={todo}
+            activeId={activeId}
+            setActiveId={setActiveId}
+          />
+        ))}
       </tbody>
     </table>
   );

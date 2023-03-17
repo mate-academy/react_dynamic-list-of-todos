@@ -20,8 +20,13 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getUser(userId)
-      .then(foundUser => setUser(foundUser));
+    const getUserFromServer = async () => {
+      const newUser = await getUser(userId);
+
+      setUser(newUser);
+    };
+
+    getUserFromServer();
   }, []);
 
   return (

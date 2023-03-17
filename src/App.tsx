@@ -1,4 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,7 +15,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
-const setVisibleTodos = (
+const getVisibleTodos = (
   todos: Todo[],
   sortType: string,
   query: string,
@@ -31,22 +37,33 @@ const setVisibleTodos = (
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [activeTodo, setActiveTodo] = useState<Todo>();
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [sortType, setSortType] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(result => setTodos(result));
+    const getTodosFromServer = async () => {
+      try {
+        const newTodos = await getTodos();
+
+        setTodos(newTodos);
+      } catch {
+        throw new Error('Something went wrong');
+      }
+    };
+
+    getTodosFromServer();
   }, []);
 
-  const handleActiveTodo = (id: number): void => {
+  const handleActiveTodo = useCallback((id: number): void => {
     const newActiveTodo = todos.find(todo => todo.id === id);
 
-    setActiveTodo(newActiveTodo);
-  };
+    setActiveTodo(newActiveTodo || null);
+  }, [todos]);
 
-  const visibleTodos = setVisibleTodos(todos, sortType, query);
+  const visibleTodos = useMemo(() => {
+    return getVisibleTodos(todos, sortType, query);
+  }, [todos, sortType, query]);
 
   return (
     <>
