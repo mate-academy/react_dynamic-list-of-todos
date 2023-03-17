@@ -1,22 +1,24 @@
+import { FilterType } from '../../types/FilterType';
+
 type Props = {
   value: string,
   onReset: () => void,
-  setQuery: (query: string) => void
-  filterType: string,
-  setFilterType: (filterType: string) => void
+  onChange: (query: string) => void
+  filterType: FilterType,
+  onChangeFilterType: (filterType: FilterType) => void
 };
 
 export const TodoFilter: React.FC<Props> = (
   {
     value,
     onReset,
-    setQuery,
+    onChange: setQuery,
     filterType,
-    setFilterType,
+    onChangeFilterType: setFilterType,
   },
 ) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const filter = event.target.value;
+    const filter = event.target.value as FilterType;
 
     setFilterType(filter);
   };

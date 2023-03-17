@@ -7,10 +7,13 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo,
-  selectTodo: (id: number) => void,
+  onSelect: (id: number) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  onSelect: selectTodo,
+}) => {
   const {
     id,
     title,
@@ -70,18 +73,14 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectTodo }) => {
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  classNames({
-                    'has-text-success': completed,
-                    'has-text-danger': !completed,
-                  })
-                }
+                className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
               >
-                {
-                  completed
-                    ? 'Done'
-                    : 'Planned'
-                }
+                {completed
+                  ? 'Done'
+                  : 'Planned'}
               </strong>
 
               {' by '}

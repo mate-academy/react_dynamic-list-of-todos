@@ -32,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(({ id, title, completed }) => (
           <tr data-cy="todo" className="has-background-info-white" key={id}>
             <td className="is-vcentered">{id}</td>
+
             <td className="is-vcentered">
               {completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -39,6 +40,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p className={
                 classNames({
@@ -50,33 +52,32 @@ export const TodoList: React.FC<Props> = ({
                 {title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
-              {
-                selectedTodoId === id
-                  ? (
-                    <button
-                      data-cy="selectButton"
-                      className="button is-link"
-                      type="button"
-                      onClick={() => selectTodo(0)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye-slash" />
-                      </span>
-                    </button>
-                  ) : (
-                    <button
-                      data-cy="selectButton"
-                      className="button "
-                      type="button"
-                      onClick={() => selectTodo(id)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye" />
-                      </span>
-                    </button>
-                  )
-              }
+              {selectedTodoId === id
+                ? (
+                  <button
+                    data-cy="selectButton"
+                    className="button is-link"
+                    type="button"
+                    onClick={() => selectTodo(0)}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye-slash" />
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => selectTodo(id)}
+                  >
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  </button>
+                )}
             </td>
           </tr>
         ))}
