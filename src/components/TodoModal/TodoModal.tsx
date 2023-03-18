@@ -44,9 +44,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
-        <Loader />
-      ) : (
+      {user ? (
         <div className="modal-card" key={user.id}>
           <header className="modal-card-head">
             <div
@@ -83,7 +81,7 @@ export const TodoModal: React.FC<Props> = ({
                   : 'Planned'}
               </strong>
 
-              {' by '}
+              <span>{' by '}</span>
 
               <a href={`mailto:${user.email}`}>
                 {user.name}
@@ -91,6 +89,8 @@ export const TodoModal: React.FC<Props> = ({
             </p>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );
