@@ -65,14 +65,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? <Loader />
-                : <TodoList todos={filteredTodos} selectedTodo={setSelectedTodo} isModalOpen={selectedTodo > 0} />}
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoList todos={filteredTodos} selectedTodo={setSelectedTodo} isModalOpen={!!selectedTodo} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo > 0 ? (<TodoModal todo={selectedUser()} closeModalTodo={() => setSelectedTodo(0)} />) : null}
+      {selectedTodo && (<TodoModal todo={selectedUser()} closeModalTodo={() => setSelectedTodo(0)} />)}
     </>
   );
 };
