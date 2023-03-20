@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -43,9 +43,9 @@ export const App: React.FC = () => {
       .catch(reason => Error(reason));
   }, []);
 
-  const changeActiveTodo = (id: number) => {
+  const changeActiveTodo = useCallback((id: number) => {
     setActiveTodo(todos.find(todo => todo.id === id));
-  };
+  }, [todos]);
 
   const visibleTodos = getVisibleTodos(todos, sortType, query);
 
