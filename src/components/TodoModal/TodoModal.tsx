@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 type Props = {
   closeModal: () => void;
-  currentUser: User | null;
   currentTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = (
-  { closeModal, currentUser, currentTodo },
+  { closeModal, currentTodo },
 ) => {
+  const [currentUser, setCurrentUser] = useState<User>();
+
+  useEffect(() => {
+    getUser(currentTodo.userId).then(user => setCurrentUser(user));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

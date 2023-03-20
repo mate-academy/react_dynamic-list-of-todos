@@ -8,31 +8,24 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchBarValue, setSearchBarValue] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     getTodos().then(data => setTodos(data));
   }, []);
 
-  const showTodo = (todoId: number, userId: number) => {
-    setSelectedTodoId(todoId);
-    setModalOpen(true);
-    getUser(userId).then(user => setCurrentUser(user));
+  const showTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
-    setSelectedTodoId(null);
-    setCurrentUser(null);
+    setSelectedTodo(null);
   };
 
   const getFilter = (filter: string) => setSelectedFilter(filter);
@@ -59,11 +52,11 @@ export const App: React.FC = () => {
   const getSearchBarValue = (value: string) => setSearchBarValue(value);
 
   const getCurrentTodo = () => {
-    if (!selectedTodoId) {
+    if (!selectedTodo) {
       return todos[0];
     }
 
-    return todos.filter(todo => todo.id === selectedTodoId)[0];
+    return todos.filter(todo => todo.id === selectedTodo.id)[0];
   };
 
   return (
@@ -86,17 +79,16 @@ export const App: React.FC = () => {
               {!todos.length && <Loader />}
               <TodoList
                 todos={filterTodos(selectedFilter, searchBarValue)}
-                selectedTodoId={selectedTodoId}
+                selectedTodoId={selectedTodo?.id}
                 showTodo={showTodo}
               />
             </div>
           </div>
         </div>
       </div>
-      {isModalOpen && (
+      {selectedTodo && (
         <TodoModal
           closeModal={closeModal}
-          currentUser={currentUser}
           currentTodo={getCurrentTodo()}
         />
       )}
