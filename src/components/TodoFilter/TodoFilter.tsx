@@ -1,8 +1,9 @@
 import React from 'react';
+import { SortType } from '../../types/SortType';
 
 type Props = {
   query: string,
-  changeSortType: (value: string) => void;
+  changeSortType: (value: SortType) => void;
   changeQuery: (value: string) => void;
 };
 
@@ -12,11 +13,22 @@ export const TodoFilter: React.FC<Props> = ({
   changeQuery,
 }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeSortType(event.target.value);
-  };
+    switch (event.target.value) {
+      case SortType.All:
+        changeSortType(SortType.All);
+        break;
 
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeQuery(event.target.value);
+      case SortType.Active:
+        changeSortType(SortType.Active);
+        break;
+
+      case SortType.Completed:
+        changeSortType(SortType.Completed);
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -27,9 +39,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleSelectChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(SortType).map(current => (
+              <option value={current}>{`${current[0].toUpperCase() + current.slice(1)}`}</option>
+            ))}
           </select>
         </span>
       </p>
@@ -41,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQueryChange}
+          onChange={(event) => changeQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

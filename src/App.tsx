@@ -8,20 +8,21 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { SortType } from './types/SortType';
 import { getTodos } from './api';
 
 const getVisibleTodos = (
   todos: Todo[],
-  sortType: string,
+  sortType: SortType,
   query: string,
 ): Todo[] => {
   let filtered = todos;
 
-  if (sortType === 'active') {
+  if (sortType === SortType.Active) {
     filtered = todos.filter(todo => !todo.completed);
   }
 
-  if (sortType === 'completed') {
+  if (sortType === SortType.Completed) {
     filtered = todos.filter(todo => todo.completed);
   }
 
@@ -33,12 +34,13 @@ const getVisibleTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo>();
-  const [sortType, setSortType] = useState('all');
+  const [sortType, setSortType] = useState(SortType.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer));
+      .then(todosFromServer => setTodos(todosFromServer))
+      .catch(reason => Error(reason));
   }, []);
 
   const changeActiveTodo = (id: number) => {
