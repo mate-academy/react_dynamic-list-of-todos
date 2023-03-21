@@ -1,27 +1,26 @@
 import { memo } from 'react';
 import { GetValue } from '../../types/GetValue';
-import { Option } from '../../types/Option';
+import { Options } from '../../types/Options';
 
 interface Props {
-  options: Option[];
   disabled: boolean;
   onSelect: GetValue;
 }
 
 export const Select: React.FC<Props> = memo(
-  ({ options, disabled, onSelect }) => (
+  ({ disabled, onSelect }) => (
     <span className="select">
       <select
         data-cy="statusSelect"
         disabled={disabled}
         onChange={(e) => onSelect(e.target.value)}
       >
-        {options.map(({ title, value }) => (
+        {Object.values(Options).map((value) => (
           <option
-            value={value}
+            value={value.toLowerCase()}
             key={value}
           >
-            {title}
+            {value}
           </option>
         ))}
       </select>

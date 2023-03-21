@@ -17,29 +17,15 @@ import { getTodos, getUser } from './api';
 import { Modal } from './components/Modal';
 import { User } from './types/User';
 import { LoadingError } from './components/LoadingError';
+import { Options } from './types/Options';
 
 export const App: React.FC = () => {
-  const filterByOptions = useMemo(() => [
-    {
-      title: 'All',
-      value: 'all',
-    },
-    {
-      title: 'Active',
-      value: 'active',
-    },
-    {
-      title: 'Completed',
-      value: 'completed',
-    },
-  ], []);
-
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [filterBy, setFilterBy] = useState(filterByOptions[0].value);
+  const [filterBy, setFilterBy] = useState(Options.all.toLowerCase());
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -96,13 +82,12 @@ export const App: React.FC = () => {
 
             {(!todos.length && !hasLoadingError) && <Loader />}
 
-            {todos.length > 0 && (
+            {todos.length && (
               <>
                 <div className="block">
                   <TodoFilter
                     query={query}
                     disabled={!visibleTodos.length}
-                    filterByOptions={filterByOptions}
                     onSelect={handleSelect}
                     onChange={handleSearch}
                   />
