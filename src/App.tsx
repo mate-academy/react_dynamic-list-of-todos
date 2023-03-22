@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useCallback,
   useEffect,
@@ -25,7 +24,7 @@ export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [filterBy, setFilterBy] = useState(Options.all.toLowerCase());
+  const [filterBy, setFilterBy] = useState(Options.All as string);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -82,7 +81,7 @@ export const App: React.FC = () => {
 
             {(!todos.length && !hasLoadingError) && <Loader />}
 
-            {todos.length && (
+            {todos.length > 0 && (
               <>
                 <div className="block">
                   <TodoFilter

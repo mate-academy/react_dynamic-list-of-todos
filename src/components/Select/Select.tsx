@@ -15,7 +15,7 @@ export const Select: React.FC<Props> = memo(
         disabled={disabled}
         onChange={(e) => onSelect(e.target.value)}
       >
-        {Object.values(Options).map((value) => (
+        {Object.keys(Options).map((value) => (
           <option
             value={value.toLowerCase()}
             key={value}
