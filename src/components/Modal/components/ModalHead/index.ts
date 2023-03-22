@@ -1,0 +1,1 @@
+export { ModalHead } from './ModalHead';

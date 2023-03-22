@@ -1,34 +1,36 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import { memo } from 'react';
+import { Input } from '../Input';
+import { Select } from '../Select';
+import { GetValue } from '../../types/GetValue';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface Props {
+  query: string;
+  disabled: boolean;
+  onSelect: GetValue;
+  onChange: GetValue;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+export const TodoFilter: React.FC<Props> = memo(
+  ({
+    query,
+    disabled,
+    onChange,
+    onSelect,
+  }) => (
+    <form className="field has-addons">
+      <div className="control">
+        <Select
+          disabled={disabled}
+          onSelect={onSelect}
         />
-      </span>
-    </p>
-  </form>
+      </div>
+
+      <div className="control is-expanded has-icons-left has-icons-right">
+        <Input
+          value={query}
+          onChange={onChange}
+        />
+      </div>
+    </form>
+  ),
 );

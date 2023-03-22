@@ -1,14 +1,77 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { debounce, filterTodos } from './helpers';
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos, getUser } from './api';
+import { Modal } from './components/Modal';
+import { User } from './types/User';
+import { LoadingError } from './components/LoadingError';
+import { Options } from './types/Options';
 
 export const App: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todo, setTodo] = useState<Todo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [filterBy, setFilterBy] = useState(Options.All as string);
+  const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
+
+  const handleSelect = useCallback(
+    (value: string) => setFilterBy(value), [filterBy],
+  );
+
+  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+
+  const handleSearch = useCallback(
+    (value: string) => {
+      setQuery(value);
+      applyQuery(value);
+    }, [],
+  );
+
+  useEffect(() => {
+    getTodos()
+      .then(data => setTodos(data))
+      .catch(() => setHasLoadingError(true));
+  }, []);
+
+  const visibleTodos = useMemo(() => filterTodos(todos, filterBy, appliedQuery),
+    [todos, appliedQuery, query, filterBy]);
+
+  const closeModal = useCallback(() => {
+    setIsOpenModal(false);
+    setSelectedTodoId(0);
+    setUser(null);
+  }, [isOpenModal, user]);
+
+  const showTodoInfo = useCallback((currentTodo: Todo) => {
+    setLoading(true);
+    setIsOpenModal(true);
+    setTodo(currentTodo);
+    setSelectedTodoId(currentTodo.id);
+
+    getUser(currentTodo.userId)
+      .then(data => {
+        setLoading(false);
+        setUser(data);
+      })
+      .catch(() => setLoading(false));
+  }, [todo, user]);
+
   return (
     <>
       <div className="section">
@@ -16,19 +79,41 @@ export const App: React.FC = () => {
           <div className="box">
             <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter />
-            </div>
+            {(!todos.length && !hasLoadingError) && <Loader />}
 
-            <div className="block">
-              <Loader />
-              <TodoList />
-            </div>
+            {todos.length > 0 && (
+              <>
+                <div className="block">
+                  <TodoFilter
+                    query={query}
+                    disabled={!visibleTodos.length}
+                    onSelect={handleSelect}
+                    onChange={handleSearch}
+                  />
+                </div>
+                <div className="block">
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    showTodoInfo={showTodoInfo}
+                  />
+                </div>
+              </>
+            )}
+            {hasLoadingError && (
+              <LoadingError textError="todos" />
+            )}
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {isOpenModal && (
+        <Modal
+          loading={loading}
+          todo={todo}
+          user={user}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 };
