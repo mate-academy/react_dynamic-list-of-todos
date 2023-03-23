@@ -6,8 +6,6 @@ export const getFilteredTodos = (
   status: TodoStatus,
   query: string,
 ) => {
-  window.console.log('called');
-
   if (status !== TodoStatus.All || query) {
     const normalizedQuery = query
       .toLowerCase()
