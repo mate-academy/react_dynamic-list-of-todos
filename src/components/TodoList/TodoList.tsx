@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,7 +8,7 @@ interface Props {
   onSelectTodo: (todo: Todo) => void,
 }
 
-export const TodoList: FC<Props> = (props) => {
+export const TodoList: FC<Props> = React.memo((props) => {
   const { todos, selectedTodo, onSelectTodo } = props;
 
   return (
@@ -67,8 +67,8 @@ export const TodoList: FC<Props> = (props) => {
                 >
                   <span className="icon">
                     <i className={cn('far', {
-                      'fa-eye': selectedTodo !== todo,
-                      'fa-eye-slash': selectedTodo === todo,
+                      'fa-eye': selectedTodo?.id !== id,
+                      'fa-eye-slash': selectedTodo?.id === id,
                     })}
                     />
                   </span>
@@ -80,4 +80,4 @@ export const TodoList: FC<Props> = (props) => {
       </tbody>
     </table>
   );
-};
+});
