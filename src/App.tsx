@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   FC,
   useCallback,
@@ -23,17 +22,28 @@ export const App: FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState(FilterType.ALL);
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const visibleTodos = useMemo(() => {
     return getFilteredTodos(todos, filterType, query);
   }, [todos, filterType, query]);
 
   useEffect(() => {
-    getTodos()
-      .then(result => setTodos(result))
-      .catch(error => {
-        throw new Error(error);
-      });
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        setTodos(await getTodos());
+        setIsLoading(false);
+      } catch {
+        setError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleSelectTodo = useCallback((todo: Todo) => {
@@ -61,14 +71,22 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  onSelectTodo={handleSelectTodo}
-                />
-              ) : (
+              {isLoading ? (
                 <Loader />
+              ) : (
+                <>
+                  {error && (
+                    <p style={{ color: 'red' }}>
+                      Error. Something went wrong.
+                    </p>
+                  )}
+
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    onSelectTodo={handleSelectTodo}
+                  />
+                </>
               )}
             </div>
           </div>

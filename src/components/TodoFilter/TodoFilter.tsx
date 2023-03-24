@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import { FilterType } from '../../types/FilterType';
 
-const options = ['All', 'Active', 'Completed'];
-
 interface Props {
   value: string,
   filterTypeValue: FilterType,
@@ -29,12 +27,12 @@ export const TodoFilter: FC<Props> = (props) => {
               onFilterType(target.value as FilterType);
             }}
           >
-            {options.map(option => (
+            {Object.values(FilterType).map(option => (
               <option
-                value={option.toLowerCase()}
+                value={option}
                 key={option}
               >
-                {option}
+                {option.slice(0, 1).toUpperCase() + option.slice(1)}
               </option>
             ))}
           </select>
@@ -52,6 +50,7 @@ export const TodoFilter: FC<Props> = (props) => {
             onQueryChange(target.value);
           }}
         />
+
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
