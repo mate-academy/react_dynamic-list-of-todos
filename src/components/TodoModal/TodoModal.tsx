@@ -31,19 +31,16 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
   }, []);
 
   return (
-    <div
-      className="modal is-active"
-      data-cy="modal"
-    >
+    <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
       {!user ? (
         <Loader />
       ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
+        <div className="modal-card modal-card-body-background-info">
+          <header className="modal-card-head has-background-info">
             <div
-              className="modal-card-title has-text-weight-medium"
+              className="modal-card-title has-text-weight-medium has-text-white"
               data-cy="modal-header"
             >
               {`Todo #${id}`}
@@ -59,17 +56,11 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
           </header>
 
           <div className="modal-card-body">
-            <p
-              className="block"
-              data-cy="modal-title"
-            >
+            <p className="block" data-cy="modal-title">
               {title}
             </p>
 
-            <p
-              className="block"
-              data-cy="modal-user"
-            >
+            <p className="block" data-cy="modal-user">
               {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (

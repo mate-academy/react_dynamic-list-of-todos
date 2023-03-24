@@ -23,18 +23,13 @@ export const TodoItem: FC<Props> = ({ todo, selectedTodoId, openModal }) => {
     >
       <td className="is-vcentered">{id}</td>
 
-      {completed ? (
-        <td className="is-vcentered">
-          <span
-            className="icon"
-            data-cy="iconCompleted"
-          >
-            <i className="fas fa-check" />
-          </span>
-        </td>
-      ) : (
-        <td className="is-vcentered" />
-      )}
+      <td className="is-vcentered">
+        {completed ? (
+          <span data-cy="iconCompleted">{'\u2705'}</span>
+        ) : (
+          <span>{'\u{274C}'}</span>
+        )}
+      </td>
 
       <td className="is-vcentered is-expanded">
         <p
@@ -49,7 +44,7 @@ export const TodoItem: FC<Props> = ({ todo, selectedTodoId, openModal }) => {
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"
-          className="button"
+          className="button is-small is-info is-light"
           type="button"
           onClick={openModal}
         >

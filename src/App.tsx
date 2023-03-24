@@ -53,12 +53,12 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+      <div className="columns is-flex is-justify-content-center">
+        <div className="column is-two-thirds p-6">
+          <div className="panel is-info">
+            <h1 className="panel-heading">Todos:</h1>
 
-            <div className="block">
+            <div className="panel-block">
               <TodoFilter
                 query={query}
                 status={status}
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
+            <div className="panel-block">
               {isListLoading ? (
                 <Loader />
               ) : (
@@ -81,13 +81,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {currentTodo && (
-        <TodoModal
-          todo={currentTodo}
-          onClose={closeModal}
-        />
-      )}
+      {currentTodo && <TodoModal todo={currentTodo} onClose={closeModal} />}
     </>
   );
 };
