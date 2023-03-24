@@ -32,33 +32,33 @@ export const TodoInfo = React.memo(
     }, []);
 
     const searchElement = () => {
-      setTodos([...todos].filter((todo) => {
-        return todo.title.includes(searchHolder);
-      }));
+      if (searchHolder !== '') {
+        setTodos((prevTodos) => {
+          return prevTodos.filter((todo) => todo.title.includes(searchHolder));
+        });
+      }
     };
 
     const filterTodos = () => {
-      if (searchHolder !== '') {
-        searchElement();
-      } else {
-        switch (selected) {
-          case 'active':
-            setTodos(initialTodos);
-            setTodos((todosBefore) => todosBefore
-              .filter((todo) => !todo.completed));
-            break;
-          case 'completed':
-            setTodos(initialTodos);
-            setTodos((todosBefore) => todosBefore
-              .filter((todo) => todo.completed));
+      switch (selected) {
+        case 'active':
+          setTodos(initialTodos);
+          setTodos((todosBefore) => todosBefore
+            .filter((todo) => !todo.completed));
+          searchElement();
+          break;
+        case 'completed':
+          setTodos(initialTodos);
+          setTodos((todosBefore) => todosBefore
+            .filter((todo) => todo.completed));
+          searchElement();
+          break;
 
-            break;
-
-          case 'All':
-          default:
-            setTodos(initialTodos);
-            break;
-        }
+        case 'All':
+        default:
+          setTodos(initialTodos);
+          searchElement();
+          break;
       }
     };
 
