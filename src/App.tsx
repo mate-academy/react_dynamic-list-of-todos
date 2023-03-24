@@ -40,9 +40,13 @@ export const App: React.FC = () => {
 
         switch (select) {
           case 'active':
-            return (!todo.completed && tittleCase.includes(queryCase));
+            return (
+              !todo.completed && tittleCase.includes(queryCase)
+            );
           case 'completed':
-            return (todo.completed && tittleCase.includes(queryCase));
+            return (
+              todo.completed && tittleCase.includes(queryCase)
+            );
           default:
             return (tittleCase.includes(queryCase));
         }
@@ -74,13 +78,28 @@ export const App: React.FC = () => {
             <div className="block">
               {!loading
                 ? <Loader />
-                : <TodoList todos={todos} todoId={todoId} setTodoId={(id: number) => setTodoId(id)} setUserId={(id: number) => setUserId(id)} />}
+                : (
+                  <TodoList
+                    todos={todos}
+                    todoId={todoId}
+                    setTodoId={(id: number) => setTodoId(id)}
+                    setUserId={(id: number) => setUserId(id)}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {todoId > 0 && <TodoModal userId={userId} setUserId={(id: number) => setUserId(id)} setTodo={(id: number) => setTodoId(id)} todoId={todoId} todos={todos} />}
+      {todoId > 0 && (
+        <TodoModal
+          userId={userId}
+          setUserId={(id: number) => setUserId(id)}
+          setTodo={(id: number) => setTodoId(id)}
+          todoId={todoId}
+          todos={todos}
+        />
+      )}
     </>
   );
 };
