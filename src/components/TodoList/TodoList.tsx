@@ -10,34 +10,42 @@ type Props = {
   onTodoClick: (todoId: number) => void;
 };
 
-export const TodoList: FC<Props> = ({ todos, selectedTodoId, onTodoClick }) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export const TodoList: FC<Props> = (props) => {
+  const {
+    todos,
+    selectedTodoId,
+    onTodoClick,
+  } = props;
 
-    <tbody>
-      {todos.map((todo) => {
-        const { id } = todo;
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
 
-        return (
-          <TodoItem
-            key={id}
-            todo={todo}
-            selectedTodoId={selectedTodoId}
-            openModal={() => onTodoClick(id)}
-          />
-        );
-      })}
-    </tbody>
-  </table>
-);
+      <tbody>
+        {todos.map((todo) => {
+          const { id } = todo;
+
+          return (
+            <TodoItem
+              key={id}
+              todo={todo}
+              selectedTodoId={selectedTodoId}
+              openModal={() => onTodoClick(id)}
+            />
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
