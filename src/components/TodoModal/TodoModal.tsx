@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectTodo: Todo,
-  closeModalWin: () => void,
+  closeModalWin: (todoId: number) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -22,7 +22,6 @@ export const TodoModal: React.FC<Props> = ({
     getUser(selectTodo?.userId || 0)
       .then(foundUser => {
         setUser(foundUser);
-        setLoading(false);
       })
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -48,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={closeModalWin}
+              onClick={() => closeModalWin(0)}
               aria-labelledby="button-label"
             />
           </header>
@@ -59,9 +58,15 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              <strong className="has-text-danger">
-                {selectTodo.completed ? 'Done' : 'Planned'}
-              </strong>
+              {selectTodo.completed ? (
+                <strong className="has-text-success">
+                  Done
+                </strong>
+              ) : (
+                <strong className="has-text-warning">
+                  Planned
+                </strong>
+              )}
 
               {' by '}
 

@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useMemo, useState, useEffect,
+  useMemo, useState, useEffect,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -20,14 +20,6 @@ export const App: React.FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [filterType, setFilterType] = useState<string>(Filter.All);
-
-  const selectTodoId = useCallback((todoId: number) => {
-    setSelectedTodoId(todoId);
-  }, []);
-
-  const closeModalWin = useCallback(() => {
-    setSelectedTodoId(0);
-  }, []);
 
   const todoFilter = useMemo(() => {
     const cleanQuerty = todos
@@ -55,7 +47,7 @@ export const App: React.FC = () => {
       .finally(() => setIsTodosLoaded(false));
   }, []);
 
-  const selectTodo = useMemo(() => {
+  const selectedTodo = useMemo(() => {
     return todos.find(todo => todo.id === selectedTodoId);
   }, [selectedTodoId, todos]);
 
@@ -80,7 +72,7 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     selectedTodo={selectedTodoId}
-                    onSelect={selectTodoId}
+                    onSelect={setSelectedTodoId}
                     todos={todoFilter}
                   />
                 ) : (
@@ -88,24 +80,24 @@ export const App: React.FC = () => {
                 )}
 
               {hasError && (
-                <p>
+                <p className='has-text-danger'>
                   Error:
                   {hasError}
                 </p>
               )}
 
               {(query && !todoFilter.length) && (
-                <p>No todos matched filters</p>
+                <p className='has-text-danger'>No todos matched filters</p>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          selectTodo={selectTodo}
-          closeModalWin={closeModalWin}
+          selectTodo={selectedTodo}
+          closeModalWin={setSelectedTodoId}
         />
       ) }
     </>
