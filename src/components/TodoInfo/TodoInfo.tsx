@@ -32,7 +32,7 @@ export const TodoInfo = React.memo(
     }, []);
 
     const searchElement = () => {
-      setTodos([...initialTodos].filter((todo) => {
+      setTodos([...todos].filter((todo) => {
         return todo.title.includes(searchHolder);
       }));
     };
