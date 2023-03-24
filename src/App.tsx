@@ -29,14 +29,6 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }, []);
 
-  const getCurrentTodo = () => {
-    if (!selectedTodo) {
-      return todos[0];
-    }
-
-    return todos.filter(todo => todo.id === selectedTodo.id)[0];
-  };
-
   const closeModal = () => {
     setSelectedTodo(null);
   };
@@ -101,7 +93,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           closeModal={closeModal}
-          currentTodo={getCurrentTodo()}
+          selectedTodo={selectedTodo}
         />
       )}
     </>

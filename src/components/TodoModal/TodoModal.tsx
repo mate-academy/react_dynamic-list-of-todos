@@ -6,16 +6,16 @@ import { User } from '../../types/User';
 
 type Props = {
   closeModal: () => void;
-  currentTodo: Todo;
+  selectedTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = (
-  { closeModal, currentTodo },
+  { closeModal, selectedTodo },
 ) => {
   const [currentUser, setCurrentUser] = useState<User>();
 
   useEffect(() => {
-    getUser(currentTodo.userId).then(user => setCurrentUser(user));
+    getUser(selectedTodo.userId).then(user => setCurrentUser(user));
   }, []);
 
   return (
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = (
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${currentTodo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -45,12 +45,12 @@ export const TodoModal: React.FC<Props> = (
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {currentTodo.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {
-                currentTodo.completed
+                selectedTodo.completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>
               }
