@@ -7,7 +7,7 @@ type Props = {
   getSearchBarValue: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = (
+export const TodoFilter: React.FC<Props> = React.memo((
   {
     getFilter,
     selectedFilter,
@@ -70,4 +70,4 @@ export const TodoFilter: React.FC<Props> = (
       </p>
     </form>
   );
-};
+});

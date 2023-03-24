@@ -8,7 +8,7 @@ type Props = {
   showTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = (
+export const TodoList: React.FC<Props> = React.memo((
   { todos, selectedTodoId, showTodo },
 ) => {
   const selectTodoHandler = (todo: Todo) => () => {
@@ -77,4 +77,4 @@ export const TodoList: React.FC<Props> = (
       </tbody>
     </table>
   );
-};
+});

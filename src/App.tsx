@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,15 +25,25 @@ export const App: React.FC = () => {
     getTodos().then(data => setTodos(data));
   }, []);
 
-  const showTodo = (todo: Todo) => {
+  const showTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
+  }, []);
+
+  const getCurrentTodo = () => {
+    if (!selectedTodo) {
+      return todos[0];
+    }
+
+    return todos.filter(todo => todo.id === selectedTodo.id)[0];
   };
 
   const closeModal = () => {
     setSelectedTodo(null);
   };
 
-  const getFilter = (filter: string) => setSelectedFilter(filter);
+  const getFilter = useCallback(
+    (filter: string) => setSelectedFilter(filter), [],
+  );
 
   const filterTodos = (option: string, searchValue?: string) => {
     let filteredTodos = [...todos];
@@ -49,15 +64,12 @@ export const App: React.FC = () => {
     }
   };
 
-  const getSearchBarValue = (value: string) => setSearchBarValue(value);
+  const filteredTodos = useMemo(() => (
+    filterTodos(selectedFilter, searchBarValue)), [todos, selectedFilter, searchBarValue]);
 
-  const getCurrentTodo = () => {
-    if (!selectedTodo) {
-      return todos[0];
-    }
-
-    return todos.filter(todo => todo.id === selectedTodo.id)[0];
-  };
+  const getSearchBarValue = useCallback(
+    (value: string) => setSearchBarValue(value), [],
+  );
 
   return (
     <>
@@ -78,7 +90,7 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length && <Loader />}
               <TodoList
-                todos={filterTodos(selectedFilter, searchBarValue)}
+                todos={filteredTodos}
                 selectedTodoId={selectedTodo?.id}
                 showTodo={showTodo}
               />
