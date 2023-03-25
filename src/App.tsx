@@ -25,9 +25,9 @@ export const App: React.FC = () => {
     getTodos().then(data => setTodos(data));
   }, []);
 
-  const showTodo = useCallback((todo: Todo) => {
+  const showTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-  }, []);
+  };
 
   const closeModal = () => {
     setSelectedTodo(null);
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     (filter: string) => setSelectedFilter(filter), [],
   );
 
-  const filterTodos = (option: string, searchValue?: string) => {
+  const filterTodos = useCallback((option: string, searchValue?: string) => {
     let filteredTodos = [...todos];
 
     if (searchValue) {
@@ -46,6 +46,7 @@ export const App: React.FC = () => {
 
     switch (option) {
       case 'completed':
+
         return filteredTodos.filter(todo => todo.completed);
 
       case 'active':
@@ -54,10 +55,11 @@ export const App: React.FC = () => {
       default:
         return filteredTodos;
     }
-  };
+  }, [todos]);
 
   const filteredTodos = useMemo(() => (
-    filterTodos(selectedFilter, searchBarValue)), [todos, selectedFilter, searchBarValue]);
+    filterTodos(selectedFilter, searchBarValue)), [
+    todos, selectedFilter, searchBarValue, filterTodos]);
 
   const getSearchBarValue = useCallback(
     (value: string) => setSearchBarValue(value), [],
