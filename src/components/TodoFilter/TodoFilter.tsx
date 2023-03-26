@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<{
   };
 
   const handlePlace = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchHolder(event.currentTarget.value.trimStart());
+    setSearchHolder(event.currentTarget.value.toLowerCase().trimStart());
     setInputText(event.currentTarget.value.trimStart());
   };
 
