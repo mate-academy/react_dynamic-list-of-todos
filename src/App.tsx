@@ -54,7 +54,7 @@ export const App: React.FC = () => {
       break;
   }
 
-  if (searchResult.length) {
+  if (searchResult) {
     prepareTodos = filterTodos(prepareTodos, searchResult);
   }
 
