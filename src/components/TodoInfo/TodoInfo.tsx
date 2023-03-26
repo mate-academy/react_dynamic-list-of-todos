@@ -27,7 +27,8 @@ export const TodoInfo = React.memo(
             setTodos(todosFromServer);
           });
       } catch (error) {
-        <Loader />;
+        // eslint-disable-next-line no-console
+        console.error(error);
       }
     }, []);
 

@@ -26,7 +26,8 @@ export const TodoModal: React.FC<{
           setUser(userFromServer);
         });
     } catch (error) {
-      <Loader />;
+      // eslint-disable-next-line no-console
+      console.error(error);
     }
   }, [userId]);
 
@@ -38,7 +39,7 @@ export const TodoModal: React.FC<{
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!carierTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -72,9 +73,11 @@ export const TodoModal: React.FC<{
               )}
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              {user && (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>
