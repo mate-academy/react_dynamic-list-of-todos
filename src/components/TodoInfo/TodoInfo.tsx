@@ -35,7 +35,8 @@ export const TodoInfo = React.memo(
     const searchElement = () => {
       if (searchHolder) {
         setTodos((prevTodos) => {
-          return prevTodos.filter((todo) => todo.title.includes(searchHolder));
+          return prevTodos.filter((todo) => todo.title
+            .toLowerCase().includes(searchHolder));
         });
       }
     };
