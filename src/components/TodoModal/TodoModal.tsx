@@ -39,7 +39,7 @@ export const TodoModal: React.FC<{
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!carierTodo ? (
+      {carierTodo.id === 0 ? (
         <Loader />
       ) : (
         <div className="modal-card">
