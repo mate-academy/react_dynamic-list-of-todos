@@ -33,7 +33,7 @@ export const TodoInfo = React.memo(
     }, []);
 
     const searchElement = () => {
-      if (searchHolder !== '') {
+      if (searchHolder) {
         setTodos((prevTodos) => {
           return prevTodos.filter((todo) => todo.title.includes(searchHolder));
         });
@@ -67,7 +67,7 @@ export const TodoInfo = React.memo(
       filterTodos();
     }, [selected, searchHolder]);
 
-    if (initialTodos.length >= 1) {
+    if (initialTodos.length) {
       return (
         <table className="table is-narrow is-fullwidth">
           <thead>
