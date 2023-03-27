@@ -1,8 +1,9 @@
 import { ChangeEvent } from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   statusSelect: string,
-  onFilterStatus: (value: string) => void,
+  onFilterStatus: (value: FilterType) => void,
   searchResult: string,
   onSearchChange: (value: string) => void,
   onClearSearch: () => void,
@@ -16,11 +17,11 @@ export const TodoFilter: React.FC<Props> = ({
   onClearSearch,
 }) => {
   const handleAddFilter = (event: ChangeEvent<HTMLSelectElement>) => {
-    onFilterStatus(event.currentTarget.value);
+    onFilterStatus(event.currentTarget.value as FilterType);
   };
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(event.currentTarget.value);
+    onSearchChange(event.currentTarget.value as FilterType);
   };
 
   return (
