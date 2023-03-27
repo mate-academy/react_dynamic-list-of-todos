@@ -34,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
   return (
     <form className="field has-addons">
       <p className="control">
-        <span className="select">
+        <span className="select is-black">
           <select
             data-cy="statusSelect"
             onChange={handleSelectChange}
@@ -50,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
         <input
           data-cy="searchInput"
           type="text"
-          className="input"
+          className="input is-black"
           placeholder="Search..."
           value={query}
           onChange={(event) => changeQuery(event.target.value)}

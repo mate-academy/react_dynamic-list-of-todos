@@ -51,12 +51,12 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+      <div className="columns is-flex is-justify-content-center">
+        <div className="column is-two-thirds m-6">
+          <div className="panel is-info">
+            <h1 className="title panel-heading">Todos:</h1>
 
-            <div className="block">
+            <div className="panel-block is-flex is-justify-content-center">
               <TodoFilter
                 query={query}
                 changeSortType={setSortType}
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
+            <div className="panel-block is-flex is-justify-content-center">
               {todos.length
                 ? (
                   <TodoList

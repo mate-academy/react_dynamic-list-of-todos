@@ -14,17 +14,17 @@ export const TodoList: React.FC<Props> = ({
   setActiveId,
 }) => {
   return (
-    <table className="table is-narrow is-fullwidth">
+    <table className="table is-hoverable is-striped m-3">
       <thead>
         <tr>
-          <th>#</th>
-          <th>
+          <th className="is-info">#</th>
+          <th className="is-info">
             <span className="icon">
               <i className="fas fa-check" />
             </span>
           </th>
-          <th>Title</th>
-          <th> </th>
+          <th className="is-info">Title</th>
+          <th className="is-info"> </th>
         </tr>
       </thead>
 
