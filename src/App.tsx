@@ -10,14 +10,6 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterType } from './types/FilterType';
 
-// export function searchTodos(todos: Todo[], query: string): Todo[] {
-//   return todos.filter(todo => {
-//     return todo.title
-//       .toLowerCase()
-//       .includes(query.toLowerCase().trim());
-//   });
-// }
-
 export function filterTodos(
   todos: Todo[],
   statusSelect: FilterType,
