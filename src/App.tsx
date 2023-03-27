@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,25 +10,22 @@ import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
+import { Filter } from './types/EnumFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState(Filter.ALL);
   const [selectTodoID, setTodoID] = useState(0);
 
   useEffect(() => {
     getTodos()
-      .then(todo => (setTodos(todo)));
+      .then(setTodos);
   }, []);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setQuery(value);
-  };
-
-  const handleFilter = (option: string) => {
-    setFilter(option);
-  };
+  }, [query]);
 
   const filteredTodos = useMemo(() => {
     const visibleTodos = todos
@@ -34,10 +33,10 @@ export const App: React.FC = () => {
         .includes(query.toLocaleLowerCase().trim()));
 
     switch (filter) {
-      case 'completed':
+      case Filter.COMPLETED:
         return visibleTodos.filter(todo => todo.completed === true);
 
-      case 'active':
+      case Filter.ACTIVE:
         return visibleTodos.filter(todo => todo.completed === false);
 
       default:
@@ -62,8 +61,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                search={handleSearch}
-                filter={handleFilter}
+                onSearch={handleSearch}
+                onFilter={setFilter}
                 query={query}
               />
             </div>
