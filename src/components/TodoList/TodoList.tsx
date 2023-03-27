@@ -35,7 +35,6 @@ export const TodoList: React.FC<Props> = ({
             title,
             completed,
           } = todo;
-
           const isActiveId = id === activeId;
 
           return (
