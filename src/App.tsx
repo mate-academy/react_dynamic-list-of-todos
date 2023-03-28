@@ -27,11 +27,11 @@ export const App: React.FC = () => {
     setQuery(value);
   }, [query]);
 
-  const filteredTodos = useMemo(() => {
-    const visibleTodos = todos
-      .filter(todo => todo.title.toLocaleLowerCase()
-        .includes(query.toLocaleLowerCase().trim()));
+  const visibleTodos = todos
+    .filter(todo => todo.title.toLocaleLowerCase()
+      .includes(query.toLocaleLowerCase().trim()));
 
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case Filter.COMPLETED:
         return visibleTodos.filter(todo => todo.completed === true);
@@ -42,8 +42,6 @@ export const App: React.FC = () => {
       default:
         return visibleTodos;
     }
-
-    return visibleTodos;
   }, [todos, query, filter]);
 
   const selectedTodo = useMemo(() => {
