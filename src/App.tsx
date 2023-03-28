@@ -24,8 +24,8 @@ export const App: React.FC = () => {
       .catch(error => {
         // eslint-disable-next-line no-console
         console.warn('Error:', error);
-        setIsLoading(false);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (

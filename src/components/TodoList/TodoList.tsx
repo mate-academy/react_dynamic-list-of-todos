@@ -6,12 +6,6 @@ import { Todo } from '../../types/Todo';
 import { State } from '../TodoFilter';
 
 export const TodoList: React.FC = () => {
-  // enum State {
-  //   ALL = 'all',
-  //   ACTIVE = 'active',
-  //   COMPLETED = 'completed',
-  // }
-
   const [state, dispatch] = useContext(GlobalContext);
   const chooseUser = (id: number) => {
     dispatch({ type: 'CheckedUser', userId: id });
@@ -87,7 +81,7 @@ export const TodoList: React.FC = () => {
                   }
                 </td>
                 <td className="is-vcentered is-expanded">
-                  <p className={classNames('', {
+                  <p className={classNames({
                     'has-text-danger': !el.completed,
                     'has-text-success': el.completed,
                   })}
