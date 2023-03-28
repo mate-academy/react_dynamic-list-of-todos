@@ -1,100 +1,116 @@
-import React from 'react';
+import classNames from 'classnames';
+import React, { useContext, useMemo } from 'react';
+import { getUser } from '../../api';
+import { GlobalContext } from '../../reducer';
+import { Todo } from '../../types/Todo';
+import { State } from '../TodoFilter';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export const TodoList: React.FC = () => {
+  const [state, dispatch] = useContext(GlobalContext);
+  const chooseUser = (id: number) => {
+    dispatch({ type: 'CheckedUser', userId: id });
+    getUser(id)
+      .then(response => dispatch({ type: 'InfoUser', user: response }));
+  };
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  const filterSearch = (search: string, array: Todo[]) => {
+    if (search) {
+      return array
+        .filter((el: Todo) => el.title.toLowerCase()
+          .includes(state.filterBySearch.toLowerCase()));
+    }
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+    return array;
+  };
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  const returnListTodo = useMemo(() => {
+    const result = [...state.listTodos];
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
+    if (state.filter === State.ACTIVE) {
+      return filterSearch(state.filterBySearch, result)
+        .filter((el: Todo) => !el.completed);
+    }
+
+    if (state.filter === State.COMPLETED) {
+      return filterSearch(state.filterBySearch, result)
+        .filter((el: Todo) => el.completed);
+    }
+
+    return filterSearch(state.filterBySearch, result);
+  }, [state.filter, state.filterBySearch]);
+
+  const selectElement = (el: Todo) => {
+    dispatch({ type: 'CheckedTodo', todo: el });
+    chooseUser(el.userId);
+  };
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
             <span className="icon">
-              <i className="far fa-eye" />
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {
+          returnListTodo.map((el: Todo) => {
+            return (
+              <tr
+                data-cy="todo"
+                className={classNames('', {
+                  'has-background-info-light': state.checkTodo === el,
+                })}
+                key={el.id}
+              >
+                <td className="is-vcentered">{el.id}</td>
+                <td className="is-vcentered">
+                  {
+                    el.completed && (
+                      <span className="icon" data-cy="iconCompleted">
+                        <i className="fas fa-check" />
+                      </span>
+                    )
+                  }
+                </td>
+                <td className="is-vcentered is-expanded">
+                  <p className={classNames({
+                    'has-text-danger': !el.completed,
+                    'has-text-success': el.completed,
+                  })}
+                  >
+                    {el.title}
+
+                  </p>
+                </td>
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => selectElement(el)}
+                  >
+                    <span className="icon">
+                      <i className={classNames('far', {
+                        'fa-eye-slash': state.checkTodo === el,
+                        'fa-eye': state.checkTodo !== el,
+                      })}
+                      />
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    </table>
+  );
+};
