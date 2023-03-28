@@ -1,6 +1,12 @@
 import { useContext } from 'react';
 import { GlobalContext } from '../../reducer';
 
+export enum State {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const TodoFilter = () => {
   const [state, dispatch] = useContext(GlobalContext);
   const onChangeHandler = (
@@ -28,9 +34,9 @@ export const TodoFilter = () => {
             value={state.filter}
             onChange={onChangeHandler}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={State.ALL}>All</option>
+            <option value={State.ACTIVE}>Active</option>
+            <option value={State.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -49,13 +55,16 @@ export const TodoFilter = () => {
         </span>
 
         {state.filterBySearch && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span
+            className="icon is-right"
+            style={{ pointerEvents: 'all' }}
+          >
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={resetSearchLine}
+              aria-label="Очистити поле пошуку"
             />
           </span>
         )}

@@ -3,8 +3,15 @@ import React, { useContext, useMemo } from 'react';
 import { getUser } from '../../api';
 import { GlobalContext } from '../../reducer';
 import { Todo } from '../../types/Todo';
+import { State } from '../TodoFilter';
 
 export const TodoList: React.FC = () => {
+  // enum State {
+  //   ALL = 'all',
+  //   ACTIVE = 'active',
+  //   COMPLETED = 'completed',
+  // }
+
   const [state, dispatch] = useContext(GlobalContext);
   const chooseUser = (id: number) => {
     dispatch({ type: 'CheckedUser', userId: id });
@@ -25,12 +32,12 @@ export const TodoList: React.FC = () => {
   const returnListTodo = useMemo(() => {
     const result = [...state.listTodos];
 
-    if (state.filter === 'active') {
+    if (state.filter === State.ACTIVE) {
       return filterSearch(state.filterBySearch, result)
         .filter((el: Todo) => !el.completed);
     }
 
-    if (state.filter === 'completed') {
+    if (state.filter === State.COMPLETED) {
       return filterSearch(state.filterBySearch, result)
         .filter((el: Todo) => el.completed);
     }

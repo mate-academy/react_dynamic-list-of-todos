@@ -16,10 +16,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getTodos().then(response => {
-      dispatch({ type: 'RequestListTodos', list: response });
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(response => {
+        dispatch({ type: 'RequestListTodos', list: response });
+        setIsLoading(false);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.warn('Error:', error);
+        setIsLoading(false);
+      });
   }, []);
 
   return (
