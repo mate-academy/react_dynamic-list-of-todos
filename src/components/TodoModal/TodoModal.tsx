@@ -20,10 +20,20 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userId)
-      .then(userFromServer => {
+    (async () => {
+      try {
+        const userFromServer = await getUser(userId);
+
         setUser(userFromServer);
-      });
+      } catch (err) {
+        setUser({
+          id: 0,
+          name: 'Anonym',
+          email: 'unknown',
+          phone: 'unknown',
+        });
+      }
+    })();
   }, []);
 
   return (

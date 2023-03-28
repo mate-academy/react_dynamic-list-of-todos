@@ -15,10 +15,10 @@ export function filterTodos(
   statusSelect: FilterType,
   searchResult: string,
 ): Todo[] {
-  let prepareTodos = [...todos];
+  let preparedTodos = [...todos];
 
   if (searchResult) {
-    prepareTodos = prepareTodos.filter(todo => {
+    preparedTodos = preparedTodos.filter(todo => {
       return todo.title
         .toLowerCase()
         .includes(searchResult.toLowerCase().trim());
@@ -27,16 +27,16 @@ export function filterTodos(
 
   switch (statusSelect) {
     case FilterType.COMPLETED:
-      prepareTodos = prepareTodos.filter(todo => todo.completed);
+      preparedTodos = preparedTodos.filter(todo => todo.completed);
       break;
     case FilterType.ACTIVE:
-      prepareTodos = prepareTodos.filter(todo => !todo.completed);
+      preparedTodos = preparedTodos.filter(todo => !todo.completed);
       break;
     default:
       break;
   }
 
-  return prepareTodos;
+  return preparedTodos;
 }
 
 export const App: React.FC = () => {
@@ -46,17 +46,22 @@ export const App: React.FC = () => {
   const [searchResult, setSearchResult] = useState('');
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
+    (async () => {
+      try {
+        const todosFromServer = await getTodos();
+
         setTodos(todosFromServer);
-      });
+      } catch (err) {
+        setTodos([]);
+      }
+    })();
   }, []);
 
-  const onShowModal = (todo: Todo) => setSelectedTodo(todo);
-  const onCloseModal = () => setSelectedTodo(null);
-  const onFilterStatus = (value: FilterType) => setStatusSelect(value);
-  const onSearchChange = (query: string) => setSearchResult(query);
-  const onClearSearch = () => setSearchResult('');
+  const handleShowModal = (todo: Todo) => setSelectedTodo(todo);
+  const handleCloseModal = () => setSelectedTodo(null);
+  const handleFilterStatus = (value: FilterType) => setStatusSelect(value);
+  const handleSearchChange = (query: string) => setSearchResult(query);
+  const handleClearSearch = () => setSearchResult('');
 
   const visibleTodos = filterTodos(todos, statusSelect, searchResult);
 
@@ -70,10 +75,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 statusSelect={statusSelect}
-                onFilterStatus={onFilterStatus}
+                onFilterStatus={handleFilterStatus}
                 searchResult={searchResult}
-                onSearchChange={onSearchChange}
-                onClearSearch={onClearSearch}
+                onSearchChange={handleSearchChange}
+                onClearSearch={handleClearSearch}
               />
             </div>
 
@@ -81,7 +86,7 @@ export const App: React.FC = () => {
               {todos.length ? (
                 <TodoList
                   todos={visibleTodos}
-                  onShowModal={onShowModal}
+                  onShowModal={handleShowModal}
                   selectedId={selectedTodo?.id}
                 />
               ) : (
@@ -95,7 +100,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onCloseModal={onCloseModal}
+          onCloseModal={handleCloseModal}
         />
       )}
     </>
