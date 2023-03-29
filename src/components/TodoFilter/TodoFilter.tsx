@@ -1,11 +1,46 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+import { FilterBy } from '../../types/FilterBy';
+
+const filterByOptions = Object.values(FilterBy);
+
+const filterByOptionsNames = {
+  [FilterBy.All]: 'All',
+  [FilterBy.Active]: 'Active',
+  [FilterBy.Completed]: 'Completed',
+};
+
+type Props = {
+  query: string;
+  onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onQueryReset: () => void;
+  filterBy: string;
+  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onQueryChange,
+  onQueryReset,
+  filterBy,
+  onFilterChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={filterBy}
+          onChange={onFilterChange}
+        >
+          {filterByOptions.map(filterByOption => (
+            <option
+              value={filterByOption}
+              selected={filterBy === filterByOption}
+            >
+              {filterByOptionsNames[filterByOption]}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -16,19 +51,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={onQueryChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={onQueryReset}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
