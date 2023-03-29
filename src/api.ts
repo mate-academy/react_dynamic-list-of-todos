@@ -17,9 +17,29 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see now the laoder works
+  // return wait(300)
+  //   .then(() => fetch(fullURL))
+  //   .then(res => res.json());
   return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(async () => {
+      const response = await fetch(fullURL);
+      const {
+        ok,
+        status,
+        statusText,
+        headers,
+      } = response;
+
+      if (!ok) {
+        throw new Error(`${status} - ${statusText}`);
+      }
+
+      if (!headers.get('content-type')?.includes('application/json')) {
+        throw new Error('Content-type is not supported');
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

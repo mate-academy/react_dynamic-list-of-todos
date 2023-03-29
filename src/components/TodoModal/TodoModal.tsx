@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { getUser } from '../../api';
 import { Loader } from '../Loader';
+import { LoadingError } from '../LoadingError';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
@@ -19,12 +20,22 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     userId,
   } = todo;
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   const loadUserInfo = async (userID: number) => {
-    const loadedUser = await getUser(userID);
+    setIsLoading(true);
 
-    setUser(loadedUser);
+    try {
+      const loadedUser = await getUser(userID);
+
+      setUser(loadedUser);
+    } catch (error) {
+      setHasLoadingError(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -35,7 +46,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user ? (
+      {isLoading && (
+        <Loader />
+      )}
+
+      {user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -83,8 +98,20 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
           </div>
         </div>
-      ) : (
-        <Loader />
+      )}
+
+      {hasLoadingError && (
+        <>
+          <LoadingError />
+
+          <button
+            type="button"
+            className="button is-danger"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </>
       )}
     </div>
   );

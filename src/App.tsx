@@ -10,43 +10,51 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { LoadingError } from './components/LoadingError';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
   const loadTodos = async () => {
     setIsLoading(true);
-    let todosFromServer = await getTodos();
 
-    if (query) {
-      todosFromServer = todosFromServer.filter(todo => (
-        todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-      ));
-    }
+    try {
+      let todosFromServer = await getTodos();
 
-    switch (filterBy) {
-      case 'completed':
+      if (query) {
         todosFromServer = todosFromServer.filter(todo => (
-          todo.completed
+          todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
         ));
-        break;
+      }
 
-      case 'active':
-        todosFromServer = todosFromServer.filter(todo => (
-          !todo.completed
-        ));
-        break;
+      switch (filterBy) {
+        case 'completed':
+          todosFromServer = todosFromServer.filter(todo => (
+            todo.completed
+          ));
+          break;
 
-      default:
-        break;
+        case 'active':
+          todosFromServer = todosFromServer.filter(todo => (
+            !todo.completed
+          ));
+          break;
+
+        default:
+          break;
+      }
+
+      setTodos(todosFromServer);
+    } catch (error) {
+      setHasLoadingError(true);
+    } finally {
+      setIsLoading(false);
     }
-
-    setTodos(todosFromServer);
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -96,11 +104,25 @@ export const App: React.FC = () => {
                   <Loader />
                 )
                 : (
-                  <TodoList
-                    todos={todos}
-                    onTodoSelect={handleTodoSelect}
-                    selectedTodo={selectedTodo}
-                  />
+                  <>
+                    {todos.length > 0
+                      ? (
+                        <TodoList
+                          todos={todos}
+                          onTodoSelect={handleTodoSelect}
+                          selectedTodo={selectedTodo}
+                        />
+                      )
+                      : (
+                        <p>
+                          No todos found
+                        </p>
+                      )}
+
+                    {hasLoadingError && (
+                      <LoadingError />
+                    )}
+                  </>
                 )}
 
             </div>
@@ -108,14 +130,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {
-        selectedTodo && (
-          <TodoModal
-            todo={selectedTodo}
-            onClose={handleModalCloseButtonClick}
-          />
-        )
-      }
+      { selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onClose={handleModalCloseButtonClick}
+        />
+      )}
     </>
   );
 };
