@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,10 +17,11 @@ import { Filters } from './helpers';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [todos, setTodos] = useState([] as Todo[]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState(Filters.All);
   const [query, setQuery] = useState('');
+  const [error, setError] = useState('');
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -44,12 +50,23 @@ export const App: React.FC = () => {
     [filterBy, todos, query],
   );
 
+  const loadTodosFromServer = useCallback(async () => {
+    try {
+      const result = await getTodos();
+
+      setTodos(result);
+      setError('');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    getTodos()
-      .then(result => {
-        setTodos(result);
-        setIsLoading(false);
-      });
+    loadTodosFromServer();
   }, []);
 
   return (
@@ -67,6 +84,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {error && <h2>{error}</h2>}
+
               {isLoading
                 ? <Loader />
                 : (

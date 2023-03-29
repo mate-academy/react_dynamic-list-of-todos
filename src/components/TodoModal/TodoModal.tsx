@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -16,6 +16,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState('');
 
   const {
     id,
@@ -24,12 +25,23 @@ export const TodoModal: React.FC<Props> = ({
     userId,
   } = selectedTodo;
 
+  const loadUserFromServer = useCallback(async () => {
+    try {
+      const result = await getUser(userId);
+
+      setUser(result);
+      setError('');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    getUser(userId)
-      .then((result) => {
-        setUser(result);
-        setIsLoading(false);
-      });
+    loadUserFromServer();
   }, []);
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -76,6 +88,8 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-title">
               {title}
             </p>
+
+            {error && <h2>{error}</h2>}
 
             {user !== null && (
               <UserInfo user={user} completed={completed} />

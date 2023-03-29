@@ -1,4 +1,10 @@
-import { ChangeEvent, useState, useEffect } from 'react';
+import {
+  ChangeEvent,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import { Filters } from '../../helpers';
 
 type Props = {
@@ -6,53 +12,58 @@ type Props = {
   setQuery: (query: string) => void,
 };
 
-let timeoutId = 0;
-
 export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
   setQuery,
 }) => {
+  const timeoutId = useRef(0);
   const [queryValue, setQueryValue] = useState('');
   const showClearSearch = queryValue !== '';
 
   useEffect(
     () => () => {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId.current);
     },
     [],
   );
 
-  const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    switch (event.target.value) {
-      case Filters.All:
-        setFilterBy(Filters.All);
-        break;
-      case Filters.Active:
-        setFilterBy(Filters.Active);
-        break;
-      case Filters.Completed:
-        setFilterBy(Filters.Completed);
-        break;
-      default:
-        setFilterBy(Filters.All);
-    }
-  };
+  const handleFilterChange = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      switch (event.target.value) {
+        case Filters.All:
+          setFilterBy(Filters.All);
+          break;
+        case Filters.Active:
+          setFilterBy(Filters.Active);
+          break;
+        case Filters.Completed:
+          setFilterBy(Filters.Completed);
+          break;
+        default:
+          setFilterBy(Filters.All);
+      }
+    },
+    [],
+  );
 
-  const handleClearSearch = () => {
+  const handleClearSearch = useCallback(() => {
     setQuery('');
     setQueryValue('');
-  };
+  }, []);
 
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
+  const handleQueryChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
 
-    setQueryValue(value);
-    clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(
-      () => setQuery(value.trim().toLowerCase()),
-      500,
-    );
-  };
+      setQueryValue(value);
+      clearTimeout(timeoutId.current);
+      timeoutId.current = window.setTimeout(
+        () => setQuery(value.trim().toLowerCase()),
+        500,
+      );
+    },
+    [],
+  );
 
   return (
     <form className="field has-addons">
@@ -62,9 +73,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleFilterChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.entries(Filters).map(([key, value]) => (
+              <option value={value}>{key}</option>
+            ))}
           </select>
         </span>
       </p>
