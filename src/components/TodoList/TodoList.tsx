@@ -1,15 +1,19 @@
-import React, { FC } from 'react';
+import { FC, memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  selectedTodo: Todo | null,
-  onSelectTodo: (todo: Todo) => void,
+  selectedTodoId: number,
+  onSelectTodo: (id: number) => void,
 }
 
-export const TodoList: FC<Props> = React.memo((props) => {
-  const { todos, selectedTodo, onSelectTodo } = props;
+export const TodoList: FC<Props> = memo((props) => {
+  const {
+    todos,
+    onSelectTodo,
+    selectedTodoId,
+  } = props;
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -29,6 +33,7 @@ export const TodoList: FC<Props> = React.memo((props) => {
       <tbody>
         {todos.map(todo => {
           const { title, id, completed } = todo;
+          const isSelected = selectedTodoId === id;
 
           return (
             <tr
@@ -62,13 +67,13 @@ export const TodoList: FC<Props> = React.memo((props) => {
                   className="button"
                   type="button"
                   onClick={() => {
-                    onSelectTodo(todo);
+                    onSelectTodo(id);
                   }}
                 >
                   <span className="icon">
                     <i className={cn('far', {
-                      'fa-eye': selectedTodo?.id !== id,
-                      'fa-eye-slash': selectedTodo?.id === id,
+                      'fa-eye': !isSelected,
+                      'fa-eye-slash': isSelected,
                     })}
                     />
                   </span>

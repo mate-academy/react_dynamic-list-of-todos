@@ -19,7 +19,7 @@ import { FilterType } from './types/FilterType';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState(FilterType.ALL);
   const [error, setError] = useState(false);
@@ -34,7 +34,9 @@ export const App: FC = () => {
       setIsLoading(true);
 
       try {
-        setTodos(await getTodos());
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
         setIsLoading(false);
       } catch {
         setError(true);
@@ -46,13 +48,17 @@ export const App: FC = () => {
     fetchData();
   }, []);
 
-  const handleSelectTodo = useCallback((todo: Todo) => {
-    setSelectedTodo(todo);
+  const handleSelectTodo = useCallback((id: number) => {
+    setSelectedTodoId(id);
   }, []);
 
   const handleCloseModal = useCallback(() => {
-    setSelectedTodo(null);
+    setSelectedTodoId(0);
   }, []);
+
+  const selectedTodo = useMemo(() => {
+    return todos.find(todo => todo.id === selectedTodoId);
+  }, [selectedTodoId]);
 
   return (
     <>
@@ -83,7 +89,7 @@ export const App: FC = () => {
 
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodo={selectedTodo}
+                    selectedTodoId={selectedTodoId}
                     onSelectTodo={handleSelectTodo}
                   />
                 </>

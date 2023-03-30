@@ -19,13 +19,18 @@ export const TodoModal: React.FC<Props> = (props) => {
   } = selectedTodo;
 
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setUser(await getUser(userId));
+        setIsLoading(true);
+        const userFromServer = await getUser(userId);
+
+        setUser(userFromServer);
       } catch {
         setUser(null);
+        setIsLoading(false);
       }
     };
 
@@ -36,7 +41,7 @@ export const TodoModal: React.FC<Props> = (props) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!user && isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -62,23 +67,25 @@ export const TodoModal: React.FC<Props> = (props) => {
               {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {completed ? (
-                <strong className="has-text-success">
-                  Done
-                </strong>
-              ) : (
-                <strong className="has-text-danger">
-                  Planned
-                </strong>
-              )}
+            {user && (
+              <p className="block" data-cy="modal-user">
+                {completed ? (
+                  <strong className="has-text-success">
+                    Done
+                  </strong>
+                ) : (
+                  <strong className="has-text-danger">
+                    Planned
+                  </strong>
+                )}
 
-              {' by '}
+                {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
-            </p>
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
