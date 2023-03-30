@@ -29,10 +29,9 @@ export const TodoList: React.FC<Props> = React.memo(({
       </thead>
 
       <tbody>
-        {todos.map((todo, i) => (
+        {todos.map((todo) => (
           <TodoEach
             todo={todo}
-            i={i}
             chosenTodo={chosenTodo}
             handleChosenTodo={handleChosenTodo}
             key={todo.id}

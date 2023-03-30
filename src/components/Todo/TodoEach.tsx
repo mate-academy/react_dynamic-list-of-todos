@@ -4,14 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  i: number,
   chosenTodo: Todo | null,
   handleChosenTodo: (todo: Todo) => void,
 };
 
 export const TodoEach: React.FC<Props> = ({
   todo,
-  i,
   handleChosenTodo,
   chosenTodo,
 }) => {
@@ -20,7 +18,7 @@ export const TodoEach: React.FC<Props> = ({
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">
-        {i + 1}
+        {id}
       </td>
       <td className="is-vcentered">
         {completed && (

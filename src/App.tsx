@@ -41,7 +41,9 @@ export const App: React.FC = () => {
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
   const visibleTodos = useMemo(() => {
-    const filtered = todos.filter(todo => todo.title.includes(appliedQuery));
+    const filtered = todos.filter(todo => (
+      todo.title.toLowerCase().includes(appliedQuery.toLowerCase())
+    ));
 
     return filtered.filter(todo => {
       switch (filterType) {
