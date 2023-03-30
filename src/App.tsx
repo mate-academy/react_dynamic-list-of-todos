@@ -14,18 +14,24 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [copiedTodos, setCopiedTodos] = useState<Todo[]>([]);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     const fetchList = async () => {
-      const todosFromServer = await getTodos();
+      setIsLoading(true);
 
-      setTodos(todosFromServer);
-      setCopiedTodos(todosFromServer);
-      setLoading(true);
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+        setCopiedTodos(todosFromServer);
+      } catch (error) {
+        setTodos([]);
+        setCopiedTodos([]);
+      }
     };
 
     fetchList();
@@ -33,18 +39,18 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const filteredTodos: Todo[] = copiedTodos.filter((todo: Todo) => {
-      const smallInput = query.toLowerCase();
-      const smallDesc = todo.title.toLowerCase();
+      const lowerCaseInput = query.toLowerCase();
+      const lowerCaseDesc = todo.title.toLowerCase();
 
       switch (selectedFilter) {
         case 'active':
-          return todo.completed === false && smallDesc.includes(smallInput);
+          return todo.completed === false && lowerCaseDesc.includes(lowerCaseInput);
 
         case 'completed':
-          return todo.completed === true && smallDesc.includes(smallInput);
+          return todo.completed === true && lowerCaseDesc.includes(lowerCaseInput);
 
         default:
-          return smallDesc.includes(smallInput);
+          return lowerCaseDesc.includes(lowerCaseInput);
       }
     });
 
@@ -61,14 +67,14 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectedFilter={selectedFilter}
-                setSelectedFilter={(select: string) => setSelectedFilter(select)}
+                setSelectedFilter={setSelectedFilter}
                 query={query}
                 setQuery={(searchText: string) => setQuery(searchText)}
               />
             </div>
 
             <div className="block">
-              {!loading ? (
+              {!isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

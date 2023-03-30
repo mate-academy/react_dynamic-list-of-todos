@@ -19,19 +19,28 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodoId,
   selectTodo,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const selectedUser = await getUser(userId);
+      try {
+        const selectedUser = await getUser(userId);
 
-      setUser(selectedUser);
+        setUser(selectedUser);
+      } catch (error) {
+        setUser(null);
+      }
     };
 
     fetchUser();
   });
 
   const todo: Todo = todos.filter((toDo) => toDo.id === selectedTodoId)[0];
+
+  const handleModalClosing = () => {
+    setUserId(0);
+    selectTodo(0);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -54,10 +63,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setUserId(0);
-                selectTodo(0);
-              }}
+              onClick={handleModalClosing}
             />
           </header>
 
