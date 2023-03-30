@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { TodoStatus } from './enums/TodoStatus';
 import { Todo } from './types/Todo';
@@ -14,26 +20,29 @@ import { getFilteredTodos } from './helpers/getFilteredTodos';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-export const App: React.FC = () => {
+export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState(TodoStatus.All);
   const [currentTodoId, setCurrentTodoId] = useState(0);
   const [isListLoading, setIsListLoading] = useState(false);
 
-  const loadTodos = async () => {
-    setIsListLoading(true);
+  const loadTodos = useCallback(
+    async () => {
+      setIsListLoading(true);
 
-    try {
-      const receivedTodos = await getTodos().then();
+      try {
+        const receivedTodos = await getTodos().then();
 
-      setTodos(receivedTodos);
-    } catch (error) {
-      setTodos([]);
-    }
+        setTodos(receivedTodos);
+      } catch (error) {
+        setTodos([]);
+      }
 
-    setIsListLoading(false);
-  };
+      setIsListLoading(false);
+    },
+    [getTodos],
+  );
 
   const currentTodo = useMemo(
     () => todos.find(({ id }) => id === currentTodoId),
@@ -49,7 +58,10 @@ export const App: React.FC = () => {
     [todos, status, query],
   );
 
-  const closeModal = () => setCurrentTodoId(0);
+  const closeModal = useCallback(
+    () => setCurrentTodoId(0),
+    [setCurrentTodoId],
+  );
 
   return (
     <>
@@ -81,7 +93,10 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {currentTodo && <TodoModal todo={currentTodo} onClose={closeModal} />}
+
+      {currentTodo && (
+        <TodoModal todo={currentTodo} onClose={closeModal} />
+      )}
     </>
   );
 };
