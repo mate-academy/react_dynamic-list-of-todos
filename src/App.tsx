@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -33,21 +38,36 @@ const getVisibleTodos = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [activeTodo, setActiveTodo] = useState<Todo>();
+  const [activeTodoId, setActiveTodoId] = useState(0);
   const [sortType, setSortType] = useState(SortType.All);
   const [query, setQuery] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => setTodos(todosFromServer))
-      .catch(reason => Error(reason));
+    const getTodosFromServer = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch {
+        setIsError(true);
+      }
+    };
+
+    getTodosFromServer();
   }, []);
 
-  const changeActiveTodo = useCallback((id: number) => {
-    setActiveTodo(todos.find(todo => todo.id === id));
-  }, [todos]);
+  const activeTodo = useMemo(() => (
+    todos.find(({ id }) => id === activeTodoId)
+  ), [activeTodoId]);
 
-  const visibleTodos = getVisibleTodos(todos, sortType, query);
+  const changeActiveTodo = useCallback((id: number) => {
+    setActiveTodoId(id);
+  }, []);
+
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, sortType, query)
+  ), [todos, sortType, query]);
 
   return (
     <>
@@ -65,11 +85,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="panel-block is-flex is-justify-content-center">
-              {todos.length
+              {(todos.length && !isError)
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    activeId={activeTodo?.id || 0}
+                    activeId={activeTodoId}
                     setActiveId={changeActiveTodo}
                   />
                 )

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SortType } from '../../types/SortType';
 
 type Props = {
@@ -12,24 +12,26 @@ export const TodoFilter: React.FC<Props> = ({
   changeSortType,
   changeQuery,
 }) => {
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (event.target.value) {
-      case SortType.All:
-        changeSortType(SortType.All);
-        break;
+  const handleSelectChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      switch (event.target.value) {
+        case SortType.All:
+          changeSortType(SortType.All);
+          break;
 
-      case SortType.Active:
-        changeSortType(SortType.Active);
-        break;
+        case SortType.Active:
+          changeSortType(SortType.Active);
+          break;
 
-      case SortType.Completed:
-        changeSortType(SortType.Completed);
-        break;
+        case SortType.Completed:
+          changeSortType(SortType.Completed);
+          break;
 
-      default:
-        break;
-    }
-  };
+        default:
+          break;
+      }
+    }, [],
+  );
 
   return (
     <form className="field has-addons">

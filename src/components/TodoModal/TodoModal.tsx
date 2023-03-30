@@ -12,6 +12,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User>();
+  const [isError, setIsError] = useState(false);
 
   const {
     id,
@@ -21,15 +22,24 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   } = todo;
 
   useEffect(() => {
-    getUser(userId)
-      .then(person => setUser(person));
+    const getUserFromServer = async () => {
+      try {
+        const userFromServer = await getUser(userId);
+
+        setUser(userFromServer);
+      } catch {
+        setIsError(true);
+      }
+    };
+
+    getUserFromServer();
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {(!user || isError) ? (
         <Loader />
       ) : (
         <div className={classNames(
