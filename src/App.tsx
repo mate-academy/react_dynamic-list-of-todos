@@ -85,7 +85,7 @@ export const App: FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    activeId={activeTodo?.id || 0}
+                    activeId={activeTodo?.id}
                     setActiveId={handleActiveTodo}
                   />
                 )

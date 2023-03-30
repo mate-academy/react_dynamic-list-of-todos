@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  activeId: number;
+  activeId?: number;
   setActiveId: (id:number) => void;
 };
 
@@ -37,9 +37,10 @@ export const TodoInfo: FC<Props> = ({
       </td>
       <td className="is-vcentered is-expanded">
         <p
-          className={completed
-            ? 'has-text-success'
-            : 'has-text-danger'}
+          className={classNames(
+            'has-text-success',
+            { 'has-text-danger': !completed },
+          )}
         >
           {title}
         </p>

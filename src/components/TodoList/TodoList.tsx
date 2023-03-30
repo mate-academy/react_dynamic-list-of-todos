@@ -4,7 +4,7 @@ import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[];
-  activeId: number;
+  activeId?: number;
   setActiveId: (id: number) => void;
 };
 
