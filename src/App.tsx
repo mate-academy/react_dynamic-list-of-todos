@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -24,30 +24,7 @@ export const App: React.FC = () => {
     setIsLoading(true);
 
     try {
-      let todosFromServer = await getTodos();
-
-      if (query) {
-        todosFromServer = todosFromServer.filter(todo => (
-          todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-        ));
-      }
-
-      switch (filterBy) {
-        case 'completed':
-          todosFromServer = todosFromServer.filter(todo => (
-            todo.completed
-          ));
-          break;
-
-        case 'active':
-          todosFromServer = todosFromServer.filter(todo => (
-            !todo.completed
-          ));
-          break;
-
-        default:
-          break;
-      }
+      const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
     } catch (error) {
@@ -59,7 +36,36 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodos();
-  }, [query, filterBy]);
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    let filteredTodos = [...todos];
+
+    if (query) {
+      filteredTodos = filteredTodos.filter(todo => (
+        todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      ));
+    }
+
+    switch (filterBy) {
+      case FilterBy.Completed:
+        filteredTodos = filteredTodos.filter(todo => (
+          todo.completed
+        ));
+        break;
+
+      case FilterBy.Active:
+        filteredTodos = filteredTodos.filter(todo => (
+          !todo.completed
+        ));
+        break;
+
+      default:
+        break;
+    }
+
+    return filteredTodos;
+  }, [query, filterBy, isLoading]);
 
   const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -67,18 +73,6 @@ export const App: React.FC = () => {
 
   const handleModalCloseButtonClick = () => {
     setSelectedTodo(null);
-  };
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.currentTarget.value);
-  };
-
-  const handleQueryReset = () => {
-    setQuery('');
-  };
-
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterBy(event.currentTarget.value as FilterBy);
   };
 
   return (
@@ -91,10 +85,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onQueryChange={handleQueryChange}
-                onQueryReset={handleQueryReset}
+                onQueryChange={setQuery}
                 filterBy={filterBy}
-                onFilterChange={handleFilterChange}
+                onFilterChange={setFilterBy}
               />
             </div>
 
@@ -105,10 +98,10 @@ export const App: React.FC = () => {
                 )
                 : (
                   <>
-                    {todos.length > 0
+                    {visibleTodos.length > 0
                       ? (
                         <TodoList
-                          todos={todos}
+                          todos={visibleTodos}
                           onTodoSelect={handleTodoSelect}
                           selectedTodo={selectedTodo}
                         />

@@ -1,74 +1,96 @@
 import React from 'react';
 
 import { FilterBy } from '../../types/FilterBy';
+import { FilterByOptionsNames } from '../../types/FilterByOptionsNames';
 
 const filterByOptions = Object.values(FilterBy);
 
-const filterByOptionsNames = {
-  [FilterBy.All]: 'All',
-  [FilterBy.Active]: 'Active',
-  [FilterBy.Completed]: 'Completed',
-};
+const filterByOptionsNames: FilterByOptionsNames = filterByOptions.reduce(
+  (names, filterByOption) => {
+    const filterByOptionSplit = filterByOption.split('');
+    const nameFirstLetterUpperCased = filterByOptionSplit[0].toUpperCase();
+    const nameRemainingPart = filterByOption.slice(1);
+    const name = nameFirstLetterUpperCased + nameRemainingPart;
+
+    return {
+      ...names,
+      [filterByOption]: name,
+    };
+  },
+  {} as FilterByOptionsNames,
+);
 
 type Props = {
   query: string;
-  onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onQueryReset: () => void;
   filterBy: string;
-  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onQueryChange: (newQuery: string) => void;
+  onFilterChange: (newFilterBy: FilterBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQueryChange,
-  onQueryReset,
   filterBy,
+  onQueryChange,
   onFilterChange,
-}) => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={filterBy}
-          onChange={onFilterChange}
-        >
-          {filterByOptions.map(filterByOption => (
-            <option
-              value={filterByOption}
-              selected={filterBy === filterByOption}
-            >
-              {filterByOptionsNames[filterByOption]}
-            </option>
-          ))}
-        </select>
-      </span>
-    </p>
+}) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onFilterChange(event.currentTarget.value as FilterBy);
+  };
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={onQueryChange}
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(event.currentTarget.value);
+  };
 
-      {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={onQueryReset}
-          />
+  const handleQueryReset = () => {
+    onQueryChange('');
+  };
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterBy}
+            onChange={handleFilterChange}
+          >
+            {filterByOptions.map(filterByOption => (
+              <option
+                value={filterByOption}
+                selected={filterBy === filterByOption}
+              >
+                {filterByOptionsNames[filterByOption]}
+              </option>
+            ))}
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={handleQueryChange}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              aria-label="Reset"
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleQueryReset}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
