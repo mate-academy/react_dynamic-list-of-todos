@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.all);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -41,10 +41,10 @@ export const App: React.FC = () => {
       const lowerCaseDesc = todo.title.toLowerCase();
 
       switch (selectedFilter) {
-        case 'active':
+        case Filter.active:
           return !todo.completed && lowerCaseDesc.includes(lowerCaseInput);
 
-        case 'completed':
+        case Filter.completed:
           return todo.completed && lowerCaseDesc.includes(lowerCaseInput);
 
         default:
