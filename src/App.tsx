@@ -20,9 +20,8 @@ import { SelectFilter } from './types/SelectFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [loader, setLoader] = useState(true);
+  const [isLoader, setIsLoader] = useState(true);
   const [chosenTodo, setChosenTodo] = useState<Todo | null>(null);
-
   const [filterType, setFilterType] = useState(SelectFilter.All);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
@@ -31,7 +30,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => new Error('Sorry todos not found.'))
-      .finally(() => setLoader(false));
+      .finally(() => setIsLoader(false));
   }, []);
 
   const handleChosenTodo = useCallback((arg: null | Todo) => {
@@ -78,7 +77,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loader && <Loader />}
+              {isLoader && <Loader />}
 
               {(todos.length) && (
                 <TodoList
