@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,14 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [copiedTodos, setCopiedTodos] = useState<Todo[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -27,35 +27,31 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos();
 
         setTodos(todosFromServer);
-        setCopiedTodos(todosFromServer);
       } catch (error) {
-        setTodos([]);
-        setCopiedTodos([]);
+        Error('Sorry, something went wrong with todos loading');
       }
     };
 
     fetchList();
   }, []);
 
-  useEffect(() => {
-    const filteredTodos: Todo[] = copiedTodos.filter((todo: Todo) => {
+  const filteredTodos = useMemo<Todo[]>(() => {
+    return todos.filter((todo: Todo) => {
       const lowerCaseInput = query.toLowerCase();
       const lowerCaseDesc = todo.title.toLowerCase();
 
       switch (selectedFilter) {
         case 'active':
-          return todo.completed === false && lowerCaseDesc.includes(lowerCaseInput);
+          return !todo.completed && lowerCaseDesc.includes(lowerCaseInput);
 
         case 'completed':
-          return todo.completed === true && lowerCaseDesc.includes(lowerCaseInput);
+          return todo.completed && lowerCaseDesc.includes(lowerCaseInput);
 
         default:
           return lowerCaseDesc.includes(lowerCaseInput);
       }
     });
-
-    setTodos(filteredTodos);
-  }, [selectedFilter, query]);
+  }, [selectedFilter, query, todos]);
 
   return (
     <>
@@ -78,10 +74,10 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectedTodoId={todoId}
-                  setTodoId={(id: number) => setTodoId(id)}
-                  setUserId={(id: number) => setUserId(id)}
+                  setTodoId={setTodoId}
+                  setUserId={setUserId}
                 />
               )}
             </div>

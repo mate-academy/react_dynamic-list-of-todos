@@ -1,6 +1,8 @@
+import { Filter } from '../../types/Filter';
+
 type Props = {
   selectedFilter: string,
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>,
+  setSelectedFilter: React.Dispatch<React.SetStateAction<Filter>>,
   query: string,
   setQuery: (searchText: string) => void,
 };
@@ -12,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
 }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFilter(event.target.value);
+    setSelectedFilter(event.target.value as Filter);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
