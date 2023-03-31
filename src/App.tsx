@@ -58,22 +58,24 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => {
+    if (query.length === 0 && filterType === FilterType.All) {
+      return todos;
+    }
+
     return todos.filter(({ title, completed }) => {
       const lowerCaseTitle = title.toLowerCase();
       const lowerCaseQuery = query.toLowerCase();
 
       switch (filterType) {
-        case FilterType.All:
-          return lowerCaseTitle.includes(lowerCaseQuery);
-
         case FilterType.Completed:
           return completed && lowerCaseTitle.includes(lowerCaseQuery);
 
         case FilterType.Active:
           return !completed && lowerCaseTitle.includes(lowerCaseQuery);
 
+        case FilterType.All:
         default:
-          return todos;
+          return lowerCaseTitle.includes(lowerCaseQuery);
       }
     });
   }, [todos, filterType, query]);
