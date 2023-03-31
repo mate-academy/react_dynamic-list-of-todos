@@ -20,20 +20,25 @@ export const TodoModal: React.FC<Props> = ({
   selectTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const selectedUser = await getUser(userId);
 
         setUser(selectedUser);
+        setIsLoading(false);
       } catch (error) {
-        setUser(null);
+        setUserId(0);
+        selectTodo(0);
+        Error('Failed to download');
       }
     };
 
     fetchUser();
-  });
+  }, []);
 
   const todo: Todo = todos.filter((toDo) => toDo.id === selectedTodoId)[0];
 
@@ -46,9 +51,9 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+
+      {user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
