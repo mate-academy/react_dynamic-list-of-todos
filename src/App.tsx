@@ -29,7 +29,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((responce) => setTodos(responce))
+      .then(setTodos)
       .catch(() => new Error('Sorry todos not found.'))
       .finally(() => setLoader(false));
   }, []);

@@ -28,9 +28,9 @@ export const TodoModal: React.FC<Props> = ({
     getUser(userId)
       .then((user) => {
         setModalUser(user);
-        setLoader(false);
       })
-      .catch(() => new Error());
+      .catch(() => new Error())
+      .finally(() => setLoader(false));
   }, []);
 
   return (
@@ -76,7 +76,7 @@ export const TodoModal: React.FC<Props> = ({
                     {modalUser.name}
                   </a>
                 ) : (
-                  <span>Sorry, user not fund</span>
+                  <span>Sorry, user not found</span>
                 )}
             </p>
           </div>
