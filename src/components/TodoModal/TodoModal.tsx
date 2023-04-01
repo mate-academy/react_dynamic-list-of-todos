@@ -16,6 +16,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [loader, setLoader] = useState<boolean>(true);
   const [modalUser, setModalUser] = useState<User | null>(null);
+  const [isLoadingError, setIsLoadingError] = useState(false);
 
   const {
     id,
@@ -29,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({
       .then((user) => {
         setModalUser(user);
       })
-      // .catch(() => setModalUser(null))
+      .catch(() => setIsLoadingError(true))
       .finally(() => setLoader(false));
   }, []);
 
@@ -70,13 +71,15 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              {modalUser
+              {modalUser && !isLoadingError
                 ? (
                   <a href={`mailto:${modalUser.email}`}>
                     {modalUser.name}
                   </a>
                 ) : (
-                  <span>- Sorry, user not found -</span>
+                  <span>
+                    --  Error, something went wrong while loading user 😭  --
+                  </span>
                 )}
             </p>
           </div>
