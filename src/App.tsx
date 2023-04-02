@@ -79,7 +79,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoader && <Loader />}
 
-              {(todos.length) && (
+              {(!!todos.length) && (
                 <TodoList
                   todos={visibleTodos}
                   chosenTodo={chosenTodo}
