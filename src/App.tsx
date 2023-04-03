@@ -19,14 +19,14 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | 0>(0);
   const [todoSortByData, setTodoSortByData] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [listLoader, setListLoader] = useState(false);
-  const [modalLoader, setModalLoader] = useState(false);
+  const [isListLoading, setIsListLoading] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
   const loadTodoList = async () => {
     const loadedTodoList = await getTodos();
 
     if (loadedTodoList) {
-      setListLoader(false);
+      setIsListLoading(false);
       setTodos(loadedTodoList);
     }
   };
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     if (loadedUsers) {
       setUser(loadedUsers);
       setTimeout(() => {
-        setModalLoader(false);
+        setIsModalLoading(false);
       }, 300);
     }
   };
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
       setSelectedId(todo.id);
       setSelectedTodo(todo);
       loadUser(todo.id);
-      setModalLoader(true);
+      setIsModalLoading(true);
     }
   };
 
@@ -98,7 +98,7 @@ export const App: React.FC = () => {
   const todoSortedData = onSearch(searchQuery);
 
   useEffect(() => {
-    setListLoader(true);
+    setIsListLoading(true);
     loadTodoList();
   }, []);
 
@@ -119,7 +119,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {listLoader
+              {isListLoading
                 ? (
                   <Loader />
                 )
@@ -140,7 +140,7 @@ export const App: React.FC = () => {
           todo={selectedTodo}
           user={user}
           closeModal={closeModal}
-          modalLoader={modalLoader}
+          modalLoader={isModalLoading}
         />
       )}
     </>
