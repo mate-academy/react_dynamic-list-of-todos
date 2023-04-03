@@ -36,9 +36,7 @@ export const App: React.FC = () => {
 
     if (loadedUsers) {
       setUser(loadedUsers);
-      setTimeout(() => {
-        setIsModalLoading(false);
-      }, 300);
+      setIsModalLoading(false);
     }
   };
 
