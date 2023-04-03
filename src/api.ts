@@ -19,9 +19,19 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see now the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error('Server does not work'));
+      }
+
+      if (!response.headers.get('content-type')?.includes('application/json')) {
+        return Promise.reject(new Error('Wrong format file'));
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number) => get<User>(`/use/${userId}`);

@@ -1,46 +1,28 @@
-/* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-// eslint-disable-next-line import/no-cycle
-import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-export enum FilterBySelect {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-function filterTodos(todos: Todo[], filterBy: string): Todo[] {
-  switch (filterBy) {
-    case 'active':
-      return todos.filter(todo => !todo.completed);
-
-    case 'completed':
-      return todos.filter(todo => todo.completed);
-
-    default:
-      return [...todos];
-  }
-}
+import { FilterBySelect } from './types/FilterBySelect';
+import { filterTodos, getErrorMessage } from './HelperFunctions';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [filterBySelect, setFilterBySelect] = useState('all');
+  const [filterBySelect, setFilterBySelect] = useState(FilterBySelect.All);
   const [query, setQuery] = useState('');
-  const [userId, setUserId] = useState<number>(0);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>(allTodos[0]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [errorGetTodos, setErrorGetTodos] = useState('');
 
   useEffect(() => {
-    getTodos().then(todos => setAllTodos(todos));
+    getTodos().then(todos => setAllTodos(todos))
+      .catch(error => setErrorGetTodos(getErrorMessage(error)));
   }, []);
 
-  const getVisibleTodos = () => {
+  const getVisibleTodos = useCallback(() => {
     const visibleTodos = allTodos.filter(todo => {
       const lowerCaseTodo = todo.title.toLocaleLowerCase();
 
@@ -48,7 +30,7 @@ export const App: React.FC = () => {
     });
 
     return filterTodos(visibleTodos, filterBySelect);
-  };
+  }, [query, filterBySelect, allTodos]);
 
   return (
     <>
@@ -66,27 +48,31 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {allTodos.length === 0
+            {errorGetTodos || (
+              <span>
+                {errorGetTodos}
+              </span>
+            )}
+
+            {allTodos.length === 0 || errorGetTodos
               ? <Loader />
               : (
                 <div className="block">
                   <TodoList
                     todos={getVisibleTodos()}
-                    onSetUserId={setUserId}
-                    currentUserId={userId}
                     onsetSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
                   />
                 </div>
               )}
-
           </div>
         </div>
       </div>
-      {userId
+      {selectedTodo
       && (
         <TodoModal
-          onSetUserId={setUserId}
           selectedTodo={selectedTodo}
+          onsetSelectedTodo={setSelectedTodo}
         />
       )}
     </>

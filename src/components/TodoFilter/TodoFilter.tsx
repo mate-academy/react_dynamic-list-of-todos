@@ -1,13 +1,14 @@
 import React from 'react';
+import { FilterBySelect } from '../../types/FilterBySelect';
 
 type Props = {
   query: string;
   filterBySelect: string;
   onSetQuery: (value: string) => void;
-  onSetFilterBySelect: (value: string) => void;
+  onSetFilterBySelect: (value: FilterBySelect) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   query,
   filterBySelect,
   onSetQuery,
@@ -20,12 +21,17 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           value={filterBySelect}
           onChange={event => {
-            onSetFilterBySelect(event.target.value);
+            onSetFilterBySelect(event.target.value as FilterBySelect);
           }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.values(FilterBySelect).map(option => (
+            <option
+              value={option}
+              key={option}
+            >
+              {option[0].toUpperCase() + option.slice(1)}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -49,15 +55,15 @@ export const TodoFilter: React.FC<Props> = ({
           className="icon is-right"
           style={{ pointerEvents: 'all' }}
         >
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            aria-label="clear"
             onClick={() => onSetQuery('')}
           />
         </span>
       )}
     </p>
   </form>
-);
+));

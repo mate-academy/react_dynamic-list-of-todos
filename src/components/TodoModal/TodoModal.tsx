@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
+import { getErrorMessage } from '../../HelperFunctions';
 
 type Props = {
-  onSetUserId: (userId: number) => void
   selectedTodo: Todo
+  onsetSelectedTodo: (todo: null) => void
 };
 
-export const TodoModal: React.FC<Props> = ({ onSetUserId, selectedTodo }) => {
-  const [user, setUser] = useState<User>();
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  onsetSelectedTodo,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [errorUser, setErrorUser] = useState('');
 
   const {
     userId,
@@ -20,13 +25,16 @@ export const TodoModal: React.FC<Props> = ({ onSetUserId, selectedTodo }) => {
     completed,
   } = selectedTodo;
 
-  getUser(userId).then(person => setUser(person));
+  useEffect(() => {
+    getUser(userId).then(person => setUser(person))
+      .catch(error => setErrorUser(getErrorMessage(error)));
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!user && !errorUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -43,32 +51,44 @@ export const TodoModal: React.FC<Props> = ({ onSetUserId, selectedTodo }) => {
               aria-label="clear"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onSetUserId(0)}
+              onClick={() => {
+                onsetSelectedTodo(null);
+              }}
+
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {title}
-            </p>
+          {errorUser
+            ? (
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  User is not defind
+                </p>
+              </div>
+            ) : (
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
 
-            <p className="block" data-cy="modal-user">
-              <strong
-                className={classNames(
-                  { 'has-text-danger': !completed },
-                  { 'has-text-success': completed },
-                )}
-              >
-                {completed ? 'Done' : 'Planned'}
-              </strong>
+                <p className="block" data-cy="modal-user">
+                  <strong
+                    className={classNames(
+                      { 'has-text-danger': !completed },
+                      { 'has-text-success': completed },
+                    )}
+                  >
+                    {completed ? 'Done' : 'Planned'}
+                  </strong>
 
-              {' by '}
+                  {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
-            </p>
-          </div>
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
+                  </a>
+                </p>
+              </div>
+            )}
         </div>
       )}
     </div>

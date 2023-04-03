@@ -4,16 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onSetUserId: (userId: number) => void
-  currentUserId: number
-  onsetSelectedTodo: (todo: Todo) => void
+  onsetSelectedTodo: (todo: Todo) => void;
+  selectedTodo: Todo | null
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSetUserId,
-  currentUserId,
   onsetSelectedTodo,
+  selectedTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -37,14 +35,13 @@ export const TodoList: React.FC<Props> = ({
             id,
             title,
             completed,
-            userId,
           } = todo;
 
           return (
             <tr
               data-cy="todo"
               className={classNames({
-                'has-background-info-light': userId === currentUserId,
+                'has-background-info-light': id === selectedTodo?.id,
               })}
               key={id}
             >
@@ -77,17 +74,13 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => {
-                    onSetUserId(userId);
-                    onsetSelectedTodo(todo);
-                  }}
+                  onClick={() => onsetSelectedTodo(todo)}
                 >
                   <span className="icon">
                     <i className={classNames('far',
-                      { 'fa-eye-slash': userId === currentUserId },
-                      { 'fa-eye': userId !== currentUserId })}
+                      { 'fa-eye-slash': id === selectedTodo?.id },
+                      { 'fa-eye': id !== selectedTodo?.id })}
                     />
-                    {/* <i className="far fa-eye" /> */}
                   </span>
                 </button>
               </td>
