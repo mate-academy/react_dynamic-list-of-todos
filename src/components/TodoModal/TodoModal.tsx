@@ -19,29 +19,29 @@ export const TodoModal: React.FC<Props> = (props) => {
   } = selectedTodo;
 
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setIsLoading(true);
+        setIsError(false);
+
         const userFromServer = await getUser(userId);
 
         setUser(userFromServer);
       } catch {
-        setUser(null);
-        setIsLoading(false);
+        setIsError(true);
       }
     };
 
     fetchUser();
-  }, [userId]);
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user && isLoading ? (
+      {!user && !isError ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -67,7 +67,7 @@ export const TodoModal: React.FC<Props> = (props) => {
               {title}
             </p>
 
-            {user && (
+            {!isError && user ? (
               <p className="block" data-cy="modal-user">
                 {completed ? (
                   <strong className="has-text-success">
@@ -84,6 +84,10 @@ export const TodoModal: React.FC<Props> = (props) => {
                 <a href={`mailto:${user.email}`}>
                   {user.name}
                 </a>
+              </p>
+            ) : (
+              <p className="has-text-danger">
+                Can not to load a user
               </p>
             )}
           </div>
