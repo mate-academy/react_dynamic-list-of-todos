@@ -1,34 +1,89 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React, { useCallback } from 'react';
+import { FilterType } from '../../types/FilterType';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+type Props = {
+  filterType: FilterType;
+  onChangeFilterType: (filterType: FilterType) => void;
+  query: string;
+  onChangeQuery: (value: string) => void;
+};
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+export const TodoFilter: React.FC<Props> = React.memo(({
+  onChangeFilterType,
+  filterType,
+  query,
+  onChangeQuery,
+}) => {
+  const handleFilterTypeSelect = useCallback((
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ): void => {
+    const { value } = event.target;
+
+    switch (value) {
+      case FilterType.ACTIVE:
+        onChangeFilterType(FilterType.ACTIVE);
+        break;
+
+      case FilterType.COMPLETED:
+        onChangeFilterType(FilterType.COMPLETED);
+        break;
+
+      case FilterType.ALL:
+      default:
+        onChangeFilterType(FilterType.ALL);
+    }
+  }, []);
+
+  const handleInputChange = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const { value } = event.target;
+
+    onChangeQuery(value);
+  }, []);
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterType}
+            onChange={handleFilterTypeSelect}
+          >
+            <option value={FilterType.ALL}>All</option>
+            <option value={FilterType.ACTIVE}>Active</option>
+            <option value={FilterType.COMPLETED}>Completed</option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={handleInputChange}
         />
-      </span>
-    </p>
-  </form>
-);
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query
+          && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={() => onChangeQuery('')}
+              />
+            </span>
+          )}
+      </p>
+    </form>
+  );
+});
