@@ -1,12 +1,31 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type TodoWithUser = {
+  id: number;
+  title: string;
+  completed: boolean;
+  userId: number;
+  user: User,
+};
+
+type Props = {
+  todo:TodoWithUser,
+  isDataLoad:boolean,
+  closeModal:() => void,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  isDataLoad,
+  closeModal,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {(!isDataLoad) ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +34,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +42,24 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => closeModal()}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todo.completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${todo.user.email}`}>
+                {todo.user.name}
               </a>
             </p>
           </div>
