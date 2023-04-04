@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { Todo } from './types/Todo';
@@ -15,13 +14,14 @@ import { Filter } from './types/Filter';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosToShow, setTodosToShow] = useState<Todo[]>([]);
-  const [todosAreLoading, setTodosAreLoading] = useState<boolean>(false);
+  const [isLoadingTodos, setIsLoadingTodos] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.ALL);
   const [query, setQuery] = useState<string>('');
 
-  const handleTodoListLoad = () => {
-    if (!todosAreLoading && todosToShow.length > 0) {
+  const renderTodoList = () => {
+    if (!isLoadingTodos && todosToShow.length > 0) {
       return (
         <TodoList
           todos={todosToShow}
@@ -31,7 +31,11 @@ export const App: React.FC = () => {
       );
     }
 
-    if (!todosAreLoading && todosToShow.length === 0) {
+    if (hasError) {
+      return 'Error occured while loading todos!';
+    }
+
+    if (!isLoadingTodos && todosToShow.length === 0) {
       return 'Todos are not found!';
     }
 
@@ -39,12 +43,18 @@ export const App: React.FC = () => {
   };
 
   const loadTodos = async () => {
-    setTodosAreLoading(true);
-    const todosFromServer = await getTodos();
+    try {
+      setHasError(false);
+      setIsLoadingTodos(true);
+      const todosFromServer = await getTodos();
 
-    setTodos(todosFromServer);
-    setTodosToShow([...todosFromServer]);
-    setTodosAreLoading(false);
+      setTodos(todosFromServer);
+      setTodosToShow([...todosFromServer]);
+      setIsLoadingTodos(false);
+    } catch {
+      setIsLoadingTodos(false);
+      setHasError(true);
+    }
   };
 
   useEffect(() => {
@@ -87,7 +97,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {handleTodoListLoad()}
+              {renderTodoList()}
             </div>
           </div>
         </div>
