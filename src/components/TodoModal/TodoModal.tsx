@@ -14,17 +14,11 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodoId }) => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    const getActiveUser = async () => {
-      try {
-        const userFromServer = await getUser(activeTodo.userId);
-
-        setUser(userFromServer);
-      } catch {
+    getUser(activeTodo.userId)
+      .then(setUser)
+      .catch(() => {
         setHasError(true);
-      }
-    };
-
-    getActiveUser();
+      });
   }, []);
 
   return (

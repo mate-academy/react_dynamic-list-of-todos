@@ -20,16 +20,12 @@ export const App: React.FC = () => {
 
   const activeTodo = todos.find(todo => todo.id === activeTodoId);
 
-  const getTodosList = async (promise: Promise<Todo[]>) => {
-    try {
-      setTodos(await promise);
-    } catch {
-      setHasError(true);
-    }
-  };
-
   useEffect(() => {
-    getTodosList(getTodos());
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
+        setHasError(true);
+      });
   }, []);
 
   let visibleTodos: Todo[] = [...todos];
