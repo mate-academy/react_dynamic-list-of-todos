@@ -47,8 +47,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       {((!user || isError) && !isloading) && (
         <div className="modal-card">
           <header className="modal-card-head">
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close-modal-button"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -78,8 +78,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close-modal-button"
               type="button"
               className="delete"
               data-cy="modal-close"
