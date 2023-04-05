@@ -1,12 +1,39 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { TodoWithUser } from '../../types/TodoWithUser';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  selectedTodoWithUser: TodoWithUser | null;
+  isTodoWithUserLoading: boolean;
+  hasTodoWithUserLoadingError: boolean;
+  unselectTodoWithUser: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  selectedTodoWithUser,
+  isTodoWithUserLoading,
+  hasTodoWithUserLoadingError,
+  unselectTodoWithUser,
+}) => {
+  const {
+    id,
+    title,
+    completed,
+    user,
+  } = selectedTodoWithUser ?? {};
+
+  const {
+    name,
+    email,
+  } = user ?? {};
+
+  // console.log('Render modal', hasTodoWithUserLoadingError);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isTodoWithUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +42,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,24 +50,42 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={unselectTodoWithUser}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            <section className="block" data-cy="modal-user">
+              <strong
+                className={completed ? 'has-text-success' : 'has-text-danger'}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
-              {' by '}
+              {hasTodoWithUserLoadingError
+                ? (
+                  <article className="message is-danger">
+                    <div className="message-body">
+                      {
+                        `Sorry, we couldn't retrieve user information
+                        due to a server error`
+                      }
+                    </div>
+                  </article>
+                ) : (
+                  <>
+                    {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                    <a href={`mailto:${email}`}>
+                      {name}
+                    </a>
+                  </>
+                )}
+            </section>
           </div>
         </div>
       )}
