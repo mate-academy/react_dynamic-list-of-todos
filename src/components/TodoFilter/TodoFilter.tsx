@@ -31,15 +31,15 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             data-cy="statusSelect"
           >
             <option value={TodoCompletionFilter.All}>
-              {TodoCompletionFilter.All}
+              All
             </option>
 
             <option value={TodoCompletionFilter.Active}>
-              {TodoCompletionFilter.Active}
+              Active
             </option>
 
             <option value={TodoCompletionFilter.Completed}>
-              {TodoCompletionFilter.Completed}
+              Completed
             </option>
           </select>
         </span>

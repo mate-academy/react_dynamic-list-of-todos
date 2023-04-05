@@ -56,8 +56,8 @@ export const TodoInfo: React.FC<Props> = React.memo(({
           <span className="icon">
             <i className={classNames(
               'far',
-              'fa-eye',
               {
+                'fa-eye': !isSelected,
                 'fa-eye-slash': isSelected,
               },
             )}

@@ -19,6 +19,8 @@ import { TodoCompletionFilter } from './types/TodoCompletionFilter';
 
 import { getTodos, getUser } from './api';
 
+import { filterTodos } from './helpers';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
@@ -53,7 +55,7 @@ export const App: React.FC = () => {
         user: null,
       });
 
-      getUser(newSelectedTodo.id)
+      getUser(newSelectedTodo.userId)
         .then(user => setSelectedTodoWithUser({
           ...newSelectedTodo,
           user: { ...user },
@@ -70,18 +72,7 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => (
-    todos
-      .filter(todo => {
-        switch (todoCompletionFilterOption) {
-          case TodoCompletionFilter.Completed:
-            return todo.completed;
-          case TodoCompletionFilter.Active:
-            return !todo.completed;
-          default:
-            return true;
-        }
-      })
-      .filter(todo => todo.title.includes(searchQuery))
+    filterTodos(todos, todoCompletionFilterOption, searchQuery)
   ), [todos, todoCompletionFilterOption, searchQuery]);
 
   const isSuccessTodosLoad = !hasTotosLoadingError
