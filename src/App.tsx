@@ -43,7 +43,7 @@ export const App: React.FC = () => {
       .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const selectTodoWithUser = useCallback(
+  const handleTodoWithUserSelect = useCallback(
     (newSelectedTodo: Todo): void => {
       setHasTodoWithUserLoadingError(false);
       setIsTodoWithUserLoading(true);
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
     [],
   );
 
-  const unselectTodoWithUser = (): void => {
+  const handleTodoWithUserUnselect = (): void => {
     setIsTodosWithUserLoadInitialized(false);
     setSelectedTodoWithUser(null);
   };
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
             return true;
         }
       })
-      .filter(todo => todo.title.includes(searchQuery.trim()))
+      .filter(todo => todo.title.includes(searchQuery))
   ), [todos, todoCompletionFilterOption, searchQuery]);
 
   const isSuccessTodosLoad = !hasTotosLoadingError
@@ -125,7 +125,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoWithUser?.id ?? 0}
-                  selectTodoWithUser={selectTodoWithUser}
+                  onTodoWithUserSelect={handleTodoWithUserSelect}
                 />
               )}
             </div>
@@ -138,7 +138,7 @@ export const App: React.FC = () => {
           selectedTodoWithUser={selectedTodoWithUser}
           isTodoWithUserLoading={isTodoWithUserLoading}
           hasTodoWithUserLoadingError={hasTodoWithUserLoadingError}
-          unselectTodoWithUser={unselectTodoWithUser}
+          onTodoWithUserUnselect={handleTodoWithUserUnselect}
         />
       )}
     </>

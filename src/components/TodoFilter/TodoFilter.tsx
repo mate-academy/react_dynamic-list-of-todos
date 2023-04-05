@@ -1,17 +1,14 @@
 import React from 'react';
 import { TodoCompletionFilter } from '../../types/TodoCompletionFilter';
 
-type TodoCompletionFilterDispatch =
-  React.Dispatch<React.SetStateAction<TodoCompletionFilter>>;
-
-type SearchQueryDispatch =
-  React.Dispatch<React.SetStateAction<string>>;
+type SetDispact<T> =
+  React.Dispatch<React.SetStateAction<T>>;
 
 type Props = {
   todoCompletionFilterOption: TodoCompletionFilter;
-  setTodoCompletionFilterOption: TodoCompletionFilterDispatch;
+  setTodoCompletionFilterOption: SetDispact<TodoCompletionFilter>;
   searchQuery: string;
-  setSearchQuery: SearchQueryDispatch;
+  setSearchQuery: SetDispact<string>;
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(({
@@ -36,9 +33,11 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             <option value={TodoCompletionFilter.All}>
               {TodoCompletionFilter.All}
             </option>
+
             <option value={TodoCompletionFilter.Active}>
               {TodoCompletionFilter.Active}
             </option>
+
             <option value={TodoCompletionFilter.Completed}>
               {TodoCompletionFilter.Completed}
             </option>
@@ -57,19 +56,22 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             setSearchQuery(changeEvent.target.value)
           )}
         />
+
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setSearchQuery('')}
-          />
-        </span>
+        {searchQuery && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setSearchQuery('')}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

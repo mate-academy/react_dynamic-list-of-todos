@@ -6,14 +6,14 @@ type Props = {
   selectedTodoWithUser: TodoWithUser | null;
   isTodoWithUserLoading: boolean;
   hasTodoWithUserLoadingError: boolean;
-  unselectTodoWithUser: () => void;
+  onTodoWithUserUnselect: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodoWithUser,
   isTodoWithUserLoading,
   hasTodoWithUserLoadingError,
-  unselectTodoWithUser,
+  onTodoWithUserUnselect,
 }) => {
   const {
     id,
@@ -48,7 +48,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={unselectTodoWithUser}
+              onClick={onTodoWithUserUnselect}
             />
           </header>
 

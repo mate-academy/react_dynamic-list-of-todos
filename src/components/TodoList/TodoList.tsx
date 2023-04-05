@@ -5,26 +5,29 @@ import { TodoInfo } from '../TodoInfo';
 type Props = {
   todos: Todo[];
   selectedTodoId: number;
-  selectTodoWithUser: (newSelectedTodo: Todo) => void;
+  onTodoWithUserSelect: (newSelectedTodo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = React.memo(
   ({
     todos,
     selectedTodoId,
-    selectTodoWithUser,
+    onTodoWithUserSelect,
   }) => {
     return (
       <table className="table is-narrow is-fullwidth">
         <thead>
           <tr>
             <th>#</th>
+
             <th>
               <span className="icon">
                 <i className="fas fa-check" />
               </span>
             </th>
+
             <th>Title</th>
+
             <th> </th>
           </tr>
         </thead>
@@ -35,7 +38,7 @@ export const TodoList: React.FC<Props> = React.memo(
               key={todo.id}
               todo={todo}
               isSelected={todo.id === selectedTodoId}
-              selectTodoWithUser={selectTodoWithUser}
+              onTodoWithUserSelect={onTodoWithUserSelect}
             />
           ))}
         </tbody>
