@@ -14,8 +14,6 @@ export const TodoList: React.FC<Props> = React.memo(
     selectedTodoId,
     selectTodoWithUser,
   }) => {
-    // console.log('render list');
-
     return (
       <table className="table is-narrow is-fullwidth">
         <thead>
@@ -37,7 +35,7 @@ export const TodoList: React.FC<Props> = React.memo(
               key={todo.id}
               todo={todo}
               isSelected={todo.id === selectedTodoId}
-              selectTodoWithUser={() => selectTodoWithUser(todo)}
+              selectTodoWithUser={selectTodoWithUser}
             />
           ))}
         </tbody>

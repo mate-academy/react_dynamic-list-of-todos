@@ -88,8 +88,6 @@ export const App: React.FC = () => {
     && !isTodosLoading
     && isTodosLoadInitialized;
 
-  // console.log('render App');
-
   return (
     <>
       <div className="section">

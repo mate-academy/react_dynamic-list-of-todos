@@ -14,14 +14,12 @@ type Props = {
   setSearchQuery: SearchQueryDispatch;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   todoCompletionFilterOption,
   setTodoCompletionFilterOption,
   searchQuery,
   setSearchQuery,
 }) => {
-  // console.log('render Filter');
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -75,4 +73,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

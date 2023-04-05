@@ -27,8 +27,6 @@ export const TodoModal: React.FC<Props> = ({
     email,
   } = user ?? {};
 
-  // console.log('Render modal', hasTodoWithUserLoadingError);
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

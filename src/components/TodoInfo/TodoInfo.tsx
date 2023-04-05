@@ -5,10 +5,10 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
   isSelected: boolean;
-  selectTodoWithUser: () => void;
+  selectTodoWithUser: (newSelectedTodo: Todo) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({
+export const TodoInfo: React.FC<Props> = React.memo(({
   todo,
   isSelected,
   selectTodoWithUser,
@@ -51,7 +51,7 @@ export const TodoInfo: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={selectTodoWithUser}
+          onClick={() => selectTodoWithUser(todo)}
         >
           <span className="icon">
             <i className={classNames(
@@ -67,4 +67,4 @@ export const TodoInfo: React.FC<Props> = ({
       </td>
     </tr>
   );
-};
+});
