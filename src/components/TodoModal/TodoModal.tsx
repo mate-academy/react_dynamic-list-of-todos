@@ -1,12 +1,57 @@
-import React from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Error } from '../Error';
 
-export const TodoModal: React.FC = () => {
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+
+type Props = {
+  selectedTodo: Todo,
+  onClose: () => void,
+};
+
+export const TodoModal: FC<Props> = (props) => {
+  const {
+    selectedTodo,
+    onClose,
+  } = props;
+
+  const {
+    id,
+    title,
+    userId,
+    completed,
+  } = selectedTodo;
+
+  const [user, setUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [hasUserError, setHasUserError] = useState(false);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      setIsUserLoading(true);
+
+      try {
+        const userFromServer = await getUser(userId);
+
+        setUser(userFromServer);
+        setIsUserLoading(false);
+      } catch {
+        setHasUserError(true);
+      } finally {
+        setIsUserLoading(false);
+      }
+    };
+
+    loadUser();
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,34 +60,44 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close"
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {user && (
+              <p className="block" data-cy="modal-user">
+                {completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
+      )}
+
+      {hasUserError && (
+        <Error />
       )}
     </div>
   );
