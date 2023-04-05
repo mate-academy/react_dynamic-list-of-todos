@@ -4,16 +4,16 @@ import { FilterType } from '../../types/FilterType';
 interface Props {
   value: string,
   filterTypeValue: FilterType,
-  onQueryChange: (query: string) => void
-  onFilterType: (filterTypeValue: FilterType) => void
+  onChangeQuery: (query: string) => void
+  onChangeFilterType: (filterTypeValue: FilterType) => void
 }
 
 export const TodoFilter: FC<Props> = (props) => {
   const {
     value,
     filterTypeValue,
-    onFilterType,
-    onQueryChange,
+    onChangeFilterType,
+    onChangeQuery,
   } = props;
 
   return (
@@ -24,7 +24,7 @@ export const TodoFilter: FC<Props> = (props) => {
             data-cy="statusSelect"
             value={filterTypeValue}
             onChange={({ target }) => {
-              onFilterType(target.value as FilterType);
+              onChangeFilterType(target.value as FilterType);
             }}
           >
             {Object.values(FilterType).map(option => (
@@ -47,7 +47,7 @@ export const TodoFilter: FC<Props> = (props) => {
           className="input"
           placeholder="Search..."
           onChange={({ target }) => {
-            onQueryChange(target.value);
+            onChangeQuery(target.value);
           }}
         />
 
@@ -65,7 +65,7 @@ export const TodoFilter: FC<Props> = (props) => {
               aria-label="clear field"
               type="button"
               className="delete"
-              onClick={() => onQueryChange('')}
+              onClick={() => onChangeQuery('')}
             />
           </span>
         )}

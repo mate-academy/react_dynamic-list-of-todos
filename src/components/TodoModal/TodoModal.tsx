@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -20,20 +21,23 @@ export const TodoModal: React.FC<Props> = (props) => {
 
   const [user, setUser] = useState<User | null>(null);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchUser = async () => {
+    try {
+      setIsError(false);
+
+      const userFromServer = await getUser(userId);
+
+      setUser(userFromServer);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setIsError(false);
-
-        const userFromServer = await getUser(userId);
-
-        setUser(userFromServer);
-      } catch {
-        setIsError(true);
-      }
-    };
-
     fetchUser();
   }, [selectedTodo]);
 
@@ -41,7 +45,7 @@ export const TodoModal: React.FC<Props> = (props) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user && !isError ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -69,15 +73,13 @@ export const TodoModal: React.FC<Props> = (props) => {
 
             {!isError && user ? (
               <p className="block" data-cy="modal-user">
-                {completed ? (
-                  <strong className="has-text-success">
-                    Done
-                  </strong>
-                ) : (
-                  <strong className="has-text-danger">
-                    Planned
-                  </strong>
-                )}
+                <strong className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
 

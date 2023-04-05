@@ -25,26 +25,23 @@ export const App: FC = () => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const visibleTodos = useMemo(() => {
-    return getFilteredTodos(todos, filterType, query);
-  }, [todos, filterType, query]);
+  const visibleTodos = getFilteredTodos(todos, filterType, query);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+    } catch {
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      try {
-        const todosFromServer = await getTodos();
-
-        setTodos(todosFromServer);
-        setIsLoading(false);
-      } catch {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -56,9 +53,9 @@ export const App: FC = () => {
     setSelectedTodoId(0);
   }, []);
 
-  const selectedTodo = useMemo(() => {
-    return todos.find(todo => todo.id === selectedTodoId);
-  }, [selectedTodoId]);
+  const selectedTodo = useMemo(() => (
+    todos.find(todo => todo.id === selectedTodoId)
+  ), [selectedTodoId]);
 
   return (
     <>
@@ -71,8 +68,8 @@ export const App: FC = () => {
               <TodoFilter
                 value={query}
                 filterTypeValue={filterType}
-                onFilterType={setFilterType}
-                onQueryChange={setQuery}
+                onChangeFilterType={setFilterType}
+                onChangeQuery={setQuery}
               />
             </div>
 
