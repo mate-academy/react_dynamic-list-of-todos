@@ -1,5 +1,6 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { ErrorMessage } from '../ErrorMessage';
 import { TodoWithUser } from '../../types/TodoWithUser';
 
 type Props = {
@@ -66,14 +67,10 @@ export const TodoModal: React.FC<Props> = ({
 
               {hasTodoWithUserLoadingError
                 ? (
-                  <article className="message is-danger">
-                    <div className="message-body">
-                      {
-                        `Sorry, we couldn't retrieve user information
-                        due to a server error`
-                      }
-                    </div>
-                  </article>
+                  <ErrorMessage
+                    message={`Sorry, we couldn't retrieve user information
+                    due to a server error`}
+                  />
                 ) : (
                   <>
                     {' by '}

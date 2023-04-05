@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useEffect,
   useState,
@@ -12,6 +11,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { ErrorMessage } from './components/ErrorMessage';
 
 import { Todo } from './types/Todo';
 import { TodoWithUser } from './types/TodoWithUser';
@@ -27,12 +27,17 @@ export const App: React.FC = () => {
   const [hasTotosLoadingError, setHasTodosLoadingError] = useState(false);
   const [isTodosLoadInitialized, setIsTodosLoadInitialized] = useState(false);
 
-  const [selectedTodoWithUser, setSelectedTodoWithUser] = useState<null | TodoWithUser>(null);
-  const [isTodoWithUserLoading, setIsTodoWithUserLoading] = useState(false);
-  const [hasTodoWithUserLoadingError, setHasTodoWithUserLoadingError] = useState(false);
-  const [isTodosWithUserLoadInitialized, setIsTodosWithUserLoadInitialized] = useState(false);
+  const [selectedTodoWithUser, setSelectedTodoWithUser]
+    = useState<null | TodoWithUser>(null);
+  const [isTodoWithUserLoading, setIsTodoWithUserLoading]
+    = useState(false);
+  const [hasTodoWithUserLoadingError, setHasTodoWithUserLoadingError]
+    = useState(false);
+  const [isTodosWithUserLoadInitialized, setIsTodosWithUserLoadInitialized]
+    = useState(false);
 
-  const [todoCompletionFilterOption, setTodoCompletionFilterOption] = useState(TodoCompletionFilter.All);
+  const [todoCompletionFilterOption, setTodoCompletionFilterOption]
+    = useState(TodoCompletionFilter.All);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -99,11 +104,7 @@ export const App: React.FC = () => {
               {isTodosLoading && <Loader />}
 
               {hasTotosLoadingError && (
-                <article className="message is-danger">
-                  <div className="message-body">
-                    An error occured when loading todos
-                  </div>
-                </article>
+                <ErrorMessage message="An error occured when loading todos" />
               )}
 
               {isSuccessTodosLoad && !todos.length && (
