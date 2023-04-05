@@ -38,8 +38,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     getUserFromServer();
   }, []);
 
-  const displayError = (!user || isError) && !isloading;
-  const displayModal = !isloading && !isError && user;
+  const shouldDisplayError = (!user || isError) && !isloading;
+  const shouldDisplayModal = !isloading && !isError && user;
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -47,7 +47,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       {isloading && (
         <Loader />
       )}
-      {displayError && (
+
+      {shouldDisplayError && (
         <div className="modal-card notification is-danger">
           <header className="modal-card-head">
             <div className="modal-card-title">
@@ -69,7 +70,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
           </article>
         </div>
       )}
-      {displayModal && (
+
+      {shouldDisplayModal && (
         <div className={classNames(
           'modal-card',
           'notification',
@@ -102,9 +104,13 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block has-text-dark" data-cy="modal-user">
-              {completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+              <strong className={classNames({
+                'has-text-success': completed,
+                'has-text-danger': !completed,
+              })}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

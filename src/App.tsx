@@ -49,7 +49,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = getVisibleTodos(todos, sortType, query);
-  const displayTodoList = todos.length > 0 && !isError && !isLoading;
+  const shouldDisplayTodoList = todos.length > 0 && !isError && !isLoading;
 
   return (
     <>
@@ -70,10 +70,12 @@ export const App: React.FC = () => {
               {isLoading && !isError && (
                 <Loader />
               )}
+
               {isError && !isLoading && (
                 <p>Eror has happened...</p>
               )}
-              {displayTodoList && (
+
+              {shouldDisplayTodoList && (
                 <TodoList
                   todos={visibleTodos}
                   activeId={activeTodoId}
