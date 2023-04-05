@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,6 +15,8 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { TodoWithUser } from './types/TodoWithUser';
+import { TodoCompletionFilter } from './types/TodoCompletionFilter';
+
 import { getTodos, getUser } from './api';
 
 export const App: React.FC = () => {
@@ -23,6 +30,9 @@ export const App: React.FC = () => {
   const [hasTodoWithUserLoadingError, setHasTodoWithUserLoadingError] = useState(false);
   const [isTodosWithUserLoadInitialized, setIsTodosWithUserLoadInitialized] = useState(false);
 
+  const [todoCompletionFilterOption, setTodoCompletionFilterOption] = useState(TodoCompletionFilter.All);
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     setIsTodosLoading(true);
     setIsTodosLoadInitialized(true);
@@ -35,6 +45,7 @@ export const App: React.FC = () => {
 
   const selectTodoWithUser = useCallback(
     (newSelectedTodo: Todo): void => {
+      setHasTodoWithUserLoadingError(false);
       setIsTodoWithUserLoading(true);
       setIsTodosWithUserLoadInitialized(true);
       setSelectedTodoWithUser({
@@ -58,13 +69,26 @@ export const App: React.FC = () => {
     setSelectedTodoWithUser(null);
   };
 
-  // const filteredTodos = todos.filter(todo => todo)
+  const filteredTodos = useMemo(() => (
+    todos
+      .filter(todo => {
+        switch (todoCompletionFilterOption) {
+          case TodoCompletionFilter.Completed:
+            return todo.completed;
+          case TodoCompletionFilter.Active:
+            return !todo.completed;
+          default:
+            return true;
+        }
+      })
+      .filter(todo => todo.title.includes(searchQuery.trim()))
+  ), [todos, todoCompletionFilterOption, searchQuery]);
 
   const isSuccessTodosLoad = !hasTotosLoadingError
     && !isTodosLoading
     && isTodosLoadInitialized;
 
-  // console.log('render App', isTodosLoading, isTodosLoadInitialized, todos.length, isSuccessTodosLoad);
+  // console.log('render App');
 
   return (
     <>
@@ -74,7 +98,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                todoCompletionFilterOption={todoCompletionFilterOption}
+                setTodoCompletionFilterOption={setTodoCompletionFilterOption}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
             </div>
 
             <div className="block">
@@ -96,7 +125,7 @@ export const App: React.FC = () => {
 
               {isSuccessTodosLoad && Boolean(todos.length) && (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectedTodoId={selectedTodoWithUser?.id ?? 0}
                   selectTodoWithUser={selectTodoWithUser}
                 />
