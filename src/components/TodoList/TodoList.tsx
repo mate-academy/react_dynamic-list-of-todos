@@ -3,9 +3,23 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  onSelectUser: (userId: number) => void;
+  onSelectTodo: (todo: Todo) => void;
+  onUserActive: (boolean: boolean) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectUser,
+  onSelectTodo,
+  onUserActive,
+}) => {
+  const handleClick = (userId: number, todo: Todo) => {
+    onSelectUser(userId);
+    onSelectTodo(todo);
+    onUserActive(true);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -44,9 +58,11 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   data-cy="selectButton"
                   className="button"
                   type="button"
+                  onClick={() => handleClick(todo.userId, todo)}
                 >
                   <span className="icon">
                     <i className="far fa-eye" />
+                    <i className="far fa-eye-slash" />
                   </span>
                 </button>
               </td>
