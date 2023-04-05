@@ -3,28 +3,28 @@ import { SortType } from '../../types/SortType';
 
 type Props = {
   query: string,
-  changeSortType: (value: SortType) => void;
-  changeQuery: (value: string) => void;
+  onChangeSortType: (value: SortType) => void;
+  onChangeQuery: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  changeSortType,
-  changeQuery,
+  onChangeSortType,
+  onChangeQuery,
 }) => {
   const handleSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       switch (event.target.value) {
         case SortType.All:
-          changeSortType(SortType.All);
+          onChangeSortType(SortType.All);
           break;
 
         case SortType.Active:
-          changeSortType(SortType.Active);
+          onChangeSortType(SortType.Active);
           break;
 
         case SortType.Completed:
-          changeSortType(SortType.Completed);
+          onChangeSortType(SortType.Completed);
           break;
 
         default:
@@ -42,7 +42,9 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleSelectChange}
           >
             {Object.values(SortType).map(current => (
-              <option value={current}>{`${current[0].toUpperCase() + current.slice(1)}`}</option>
+              <option value={current}>
+                {`${current[0].toUpperCase() + current.slice(1)}`}
+              </option>
             ))}
           </select>
         </span>
@@ -55,7 +57,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input is-black"
           placeholder="Search..."
           value={query}
-          onChange={(event) => changeQuery(event.target.value)}
+          onChange={(event) => onChangeQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -63,12 +65,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="clear-search-button"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => changeQuery('')}
+              onClick={() => onChangeQuery('')}
             />
           </span>
         )}

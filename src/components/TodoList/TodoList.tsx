@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   activeId: number;
-  setActiveId: (id: number) => void;
+  onActivateTodo: (id: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   activeId,
-  setActiveId,
+  onActivateTodo,
 }) => {
   return (
     <table className="table is-hoverable is-striped m-3">
@@ -48,6 +48,7 @@ export const TodoList: React.FC<Props> = ({
               <td className="is-vcentered">
                 {id}
               </td>
+
               <td className="is-vcentered">
                 {completed && (
                   <span className="icon" data-cy="iconCompleted">
@@ -55,6 +56,7 @@ export const TodoList: React.FC<Props> = ({
                   </span>
                 )}
               </td>
+
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames({
@@ -65,12 +67,13 @@ export const TodoList: React.FC<Props> = ({
                   {title}
                 </p>
               </td>
+
               <td className="has-text-right is-vcentered">
                 <button
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setActiveId(id)}
+                  onClick={() => onActivateTodo(id)}
                 >
                   <span className="icon">
                     <i className={classNames(

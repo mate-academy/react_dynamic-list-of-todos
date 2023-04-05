@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useCallback,
   useEffect,
@@ -15,26 +14,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { SortType } from './types/SortType';
 import { getTodos } from './api';
-
-const getVisibleTodos = (
-  todos: Todo[],
-  sortType: SortType,
-  query: string,
-): Todo[] => {
-  let filtered = todos;
-
-  if (sortType === SortType.Active) {
-    filtered = todos.filter(todo => !todo.completed);
-  }
-
-  if (sortType === SortType.Completed) {
-    filtered = todos.filter(todo => todo.completed);
-  }
-
-  return filtered.filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase())
-  ));
-};
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -42,6 +22,7 @@ export const App: React.FC = () => {
   const [sortType, setSortType] = useState(SortType.All);
   const [query, setQuery] = useState('');
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
@@ -51,6 +32,8 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       } catch {
         setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -65,9 +48,8 @@ export const App: React.FC = () => {
     setActiveTodoId(id);
   }, []);
 
-  const visibleTodos = useMemo(() => (
-    getVisibleTodos(todos, sortType, query)
-  ), [todos, sortType, query]);
+  const visibleTodos = getVisibleTodos(todos, sortType, query);
+  const displayTodoList = todos.length > 0 && !isError && !isLoading;
 
   return (
     <>
@@ -79,21 +61,25 @@ export const App: React.FC = () => {
             <div className="panel-block is-flex is-justify-content-center">
               <TodoFilter
                 query={query}
-                changeSortType={setSortType}
-                changeQuery={setQuery}
+                onChangeSortType={setSortType}
+                onChangeQuery={setQuery}
               />
             </div>
 
             <div className="panel-block is-flex is-justify-content-center">
-              {(todos.length && !isError)
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    activeId={activeTodoId}
-                    setActiveId={changeActiveTodo}
-                  />
-                )
-                : <Loader />}
+              {isLoading && !isError && (
+                <Loader />
+              )}
+              {isError && !isLoading && (
+                <p>Eror has happened...</p>
+              )}
+              {displayTodoList && (
+                <TodoList
+                  todos={visibleTodos}
+                  activeId={activeTodoId}
+                  onActivateTodo={changeActiveTodo}
+                />
+              )}
             </div>
           </div>
         </div>

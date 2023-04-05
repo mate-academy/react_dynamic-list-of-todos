@@ -38,15 +38,21 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     getUserFromServer();
   }, []);
 
+  const displayError = (!user || isError) && !isloading;
+  const displayModal = !isloading && !isError && user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
       {isloading && (
         <Loader />
       )}
-      {((!user || isError) && !isloading) && (
-        <div className="modal-card">
+      {displayError && (
+        <div className="modal-card notification is-danger">
           <header className="modal-card-head">
+            <div className="modal-card-title">
+              Error
+            </div>
             <button
               aria-label="close-modal-button"
               type="button"
@@ -55,12 +61,15 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               onClick={onClose}
             />
           </header>
+
           <article className="modal-card-body">
-            <p>The error has happened...</p>
+            <p className="block has-text-dark has-text-weight-medium">
+              The error has happened...
+            </p>
           </article>
         </div>
       )}
-      {!isloading && !isError && user && (
+      {displayModal && (
         <div className={classNames(
           'modal-card',
           'notification',
@@ -92,19 +101,18 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               {title}
             </p>
 
-            {user && (
-              <p className="block has-text-dark" data-cy="modal-user">
-                {completed
-                  ? <strong className="has-text-success">Done</strong>
-                  : <strong className="has-text-danger">Planned</strong>}
+            <p className="block has-text-dark" data-cy="modal-user">
+              {completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
-                {' by '}
+              {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
-                </a>
-              </p>
-            )}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
+              </a>
+            </p>
+
           </div>
         </div>
       )}
