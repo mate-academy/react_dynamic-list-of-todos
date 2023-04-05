@@ -28,7 +28,6 @@ export const App: React.FC = () => {
   const [openedTodo, setOpenedTodo] = useState<TodoWithUser | null>(null);
   const [isDataLoad, setIsDataLoaded] = useState(false);
   const [isUserLoad, setIsUserLoaded] = useState(false);
-  const [openedTodoId, setOpenedTodoId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosServer, setTodosServer] = useState<Todo[]>([]);
   const openModal = (todo:Todo) => {
@@ -38,16 +37,14 @@ export const App: React.FC = () => {
         ...todo,
         user: res,
       });
-      setOpenedTodoId(todo.id);
       setIsUserLoaded(true);
     });
   };
 
   const closeModal = () => {
     setIsOpenedModal(false);
-    setOpenedTodoId(0);
     if (openedTodo) {
-      setOpenedTodo(prev => ({ ...prev, id: 0 }));
+      setOpenedTodo(null);
     }
   };
 
@@ -60,18 +57,21 @@ export const App: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [input, setInput] = useState('');
 
+  const ifInclude = (str:string, subStr:string) => (
+    str.toLowerCase().includes(subStr.toLowerCase())
+  );
   const filterTodos = (filter:string, inputNew:string) => {
     switch (filter) {
       case FilterType.Active:
-        setTodos(todosServer.filter(todo => todo.completed === false && (todo.title.toLowerCase().includes(inputNew.toLowerCase()))));
+        setTodos(todosServer.filter(todo => todo.completed === false && ifInclude(todo.title, inputNew)));
         break;
       case FilterType.Completed:
-        setTodos(todosServer.filter(todo => todo.completed === true && (todo.title.toLowerCase().includes(inputNew.toLowerCase()))));
+        setTodos(todosServer.filter(todo => todo.completed === true && ifInclude(todo.title, inputNew)));
         break;
 
       default:
         setTodos(todosServer.filter(
-          todo => todo.title.toLowerCase().includes(inputNew.toLowerCase()),
+          todo => ifInclude(todo.title, inputNew),
         ));
         break;
     }
@@ -114,7 +114,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isDataLoad
-                ? <TodoList todos={todos} openModal={openModal} openedTodoId={openedTodoId} />
+                ? <TodoList todos={todos} openModal={openModal} openedTodoId={openedTodo ? openedTodo.id : 0} />
                 : <Loader />}
             </div>
           </div>
