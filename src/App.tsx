@@ -9,15 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
-
-type TodoWithUser = {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-  user: User,
-};
+import { TodoWithUser } from './types/TodoWithUser';
 
 async function loadTodos() {
   const todosFromServer = await getTodos();
@@ -33,20 +25,7 @@ async function loadUserForTodo(todo:Todo) {
 
 export const App: React.FC = () => {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
-  const [openedTodo, setOpenedTodo] = useState<TodoWithUser>(
-    {
-      userId: 1,
-      id: 1,
-      title: 'delectus aut autem',
-      completed: false,
-      user: {
-        id: 1,
-        name: 'Leanne Graham',
-        email: 'Sincere@april.biz',
-        phone: '1-770-736-8031 x56442',
-      },
-    },
-  );
+  const [openedTodo, setOpenedTodo] = useState<TodoWithUser | null>(null);
   const [isDataLoad, setIsDataLoaded] = useState(false);
   const [isUserLoad, setIsUserLoaded] = useState(false);
   const [openedTodoId, setOpenedTodoId] = useState(0);
@@ -67,17 +46,26 @@ export const App: React.FC = () => {
   const closeModal = () => {
     setIsOpenedModal(false);
     setOpenedTodoId(0);
+    if (openedTodo) {
+      setOpenedTodo(prev => ({ ...prev, id: 0 }));
+    }
   };
+
+  enum FilterType {
+    All = 'All',
+    Active = 'active',
+    Completed = 'completed',
+  }
 
   const [statusFilter, setStatusFilter] = useState('all');
   const [input, setInput] = useState('');
 
   const filterTodos = (filter:string, inputNew:string) => {
     switch (filter) {
-      case 'active':
+      case FilterType.Active:
         setTodos(todosServer.filter(todo => todo.completed === false && (todo.title.toLowerCase().includes(inputNew.toLowerCase()))));
         break;
-      case 'completed':
+      case FilterType.Completed:
         setTodos(todosServer.filter(todo => todo.completed === true && (todo.title.toLowerCase().includes(inputNew.toLowerCase()))));
         break;
 

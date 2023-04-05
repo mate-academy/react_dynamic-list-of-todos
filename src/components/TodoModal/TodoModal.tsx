@@ -1,17 +1,9 @@
 import React from 'react';
 import { Loader } from '../Loader';
-import { User } from '../../types/User';
-
-type TodoWithUser = {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-  user: User,
-};
+import { TodoWithUser } from '../../types/TodoWithUser';
 
 type Props = {
-  todo:TodoWithUser,
+  todo:TodoWithUser | null,
   isDataLoad:boolean,
   closeModal:() => void,
 };
@@ -27,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({
 
       {(!isDataLoad) ? (
         <Loader />
-      ) : (
+      ) : todo && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
