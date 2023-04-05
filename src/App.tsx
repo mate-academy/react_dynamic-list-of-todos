@@ -21,7 +21,7 @@ export const App: React.FC = () => {
 
       setTodos(currentTodos);
       setIsLoaded(true);
-      setIsTodoActive(false)
+      setIsTodoActive(false);
     };
 
     fetchTodos();
