@@ -17,6 +17,7 @@ export const TodoFilter = () => (
         className="input"
         placeholder="Search..."
       />
+
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
