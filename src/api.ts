@@ -19,7 +19,20 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see now the laoder works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        return Promise.reject(new Error(`${res.status} - ${res.statusText}`));
+      }
+
+      if (!res.headers.get('Content-Type')?.includes('application/json')) {
+        return Promise.reject(new Error('Content-Type is not json'));
+      }
+
+      return res.json();
+    })
+    .catch(err => {
+      window.console.warn(err);
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
