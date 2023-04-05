@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -23,7 +23,7 @@ export const TodoModal: React.FC<Props> = (props) => {
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUser = async () => {
+  const getUserFromServer = useCallback(async () => {
     try {
       setIsError(false);
 
@@ -35,10 +35,10 @@ export const TodoModal: React.FC<Props> = (props) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchUser();
+    getUserFromServer();
   }, [selectedTodo]);
 
   return (

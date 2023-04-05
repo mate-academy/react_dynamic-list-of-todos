@@ -27,8 +27,9 @@ export const App: FC = () => {
 
   const visibleTodos = getFilteredTodos(todos, filterType, query);
 
-  const fetchData = async () => {
+  const getTodosFromServer = useCallback(async () => {
     setIsLoading(true);
+    setError(false);
 
     try {
       const todosFromServer = await getTodos();
@@ -39,10 +40,10 @@ export const App: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchData();
+    getTodosFromServer();
   }, []);
 
   const handleSelectTodo = useCallback((id: number) => {
