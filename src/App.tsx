@@ -35,7 +35,7 @@ export const App: React.FC = () => {
       return 'Error occured while loading todos!';
     }
 
-    if (!isLoadingTodos && todosToShow.length === 0) {
+    if (!isLoadingTodos && !todosToShow.length) {
       return 'Todos are not found!';
     }
 
@@ -65,11 +65,11 @@ export const App: React.FC = () => {
     const filteredTodos = todos
       .filter(todo => {
         switch (filterBy) {
-          case 'all':
+          case Filter.ALL:
             return true;
-          case 'active':
+          case Filter.ACTIVE:
             return !todo.completed;
-          case 'completed':
+          case Filter.COMPLETED:
             return todo.completed;
           default:
             return false;
