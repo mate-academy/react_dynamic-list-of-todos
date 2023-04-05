@@ -17,16 +17,16 @@ import { getTodos } from './api';
 
 const getVisibleTodos = (
   todos: Todo[],
-  sortType: string,
+  filterType: string,
   query: string,
 ): Todo[] => {
   let categoryFiltered = todos;
 
-  if (sortType === 'active') {
+  if (filterType === 'active') {
     categoryFiltered = todos.filter(todo => !todo.completed);
   }
 
-  if (sortType === 'completed') {
+  if (filterType === 'completed') {
     categoryFiltered = todos.filter(todo => todo.completed);
   }
 
@@ -40,6 +40,8 @@ export const App: FC = () => {
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [sortType, setSortType] = useState('all');
   const [query, setQuery] = useState('');
+  const [hasError, setError] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
@@ -48,7 +50,9 @@ export const App: FC = () => {
 
         setTodos(newTodos);
       } catch {
-        throw new Error('Something went wrong');
+        setError(true);
+      } finally {
+        setLoaded(true);
       }
     };
 
@@ -81,16 +85,24 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    activeId={activeTodo?.id}
-                    setActiveId={handleActiveTodo}
-                  />
-                )
-                : <Loader />}
+              {!isLoaded && (
+                <Loader />
+              )}
+
+              {todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  activeId={activeTodo?.id}
+                  setActiveId={handleActiveTodo}
+                />
+              )}
             </div>
+
+            {hasError && (
+              <div className="notification is-danger">
+                Something went wrong! Impossible to load todos.
+              </div>
+            )}
           </div>
         </div>
       </div>

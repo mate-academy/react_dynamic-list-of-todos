@@ -18,12 +18,23 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
   } = todo;
 
   const [user, setUser] = useState<User>();
+  const [isLoaded, setLoaded] = useState(false);
+  const [hasError, setError] = useState(false);
 
   useEffect(() => {
-    const getUserFromServer = async () => {
-      const newUser = await getUser(userId);
+    setLoaded(false);
+    setError(false);
 
-      setUser(newUser);
+    const getUserFromServer = async () => {
+      try {
+        const newUser = await getUser(userId);
+
+        setUser(newUser);
+      } catch {
+        setError(true);
+      } finally {
+        setLoaded(true);
+      }
     };
 
     getUserFromServer();
@@ -33,9 +44,24 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!isLoaded && (
         <Loader />
-      ) : (
+      )}
+
+      {hasError && (
+        <div className="notification is-danger">
+          <button
+            type="button"
+            className="delete"
+            aria-label="close modal window"
+            onClick={onClose}
+          />
+
+          Something went wrong! Unable to load user. Try again.
+        </div>
+      )}
+
+      {user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -45,11 +71,11 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="close modal window"
               onClick={onClose}
             />
           </header>
