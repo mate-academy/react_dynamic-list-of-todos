@@ -13,8 +13,8 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api'; // , getUser
 
 export const App: React.FC = () => {
-  const [todos, setToods] = useState<Todo[]>([]);
-  const [isLoading] = useState(false); // setIsLoading
+  const [todos, setTods] = useState<Todo[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // console.log('todos:', todos);
 
@@ -23,7 +23,8 @@ export const App: React.FC = () => {
       try {
         const fetchedTodos = await getTodos();
 
-        setToods(fetchedTodos);
+        setTods(fetchedTodos);
+        setIsLoaded(true);
       } catch (error) {
         // console.error(error);
 
@@ -46,15 +47,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
+              {!isLoaded && <Loader />}
 
-              <TodoList todos={todos} />
+              {isLoaded && <TodoList todos={todos} />}
             </div>
           </div>
         </div>
       </div>
 
-      {isLoading && <TodoModal />}
+      {false && <TodoModal />}
     </>
   );
 };
