@@ -46,13 +46,12 @@ export const TodoModal: FC<Props> = ({
           >
             An error occurred when loading the details
           </div>
-
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             type="button"
             className="delete"
             data-cy="modal-close"
             onClick={handleCloseModal}
+            aria-label="close modal"
           />
         </header>
       </div>
@@ -72,12 +71,12 @@ export const TodoModal: FC<Props> = ({
               {`Todo #${todo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={handleCloseModal}
+              aria-label="close modal"
             />
           </header>
 
