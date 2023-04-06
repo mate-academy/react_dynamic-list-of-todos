@@ -48,6 +48,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       {loading && (
         <Loader />
       )}
+
       {dispayError && (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -58,8 +59,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               Error
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close-button"
               type="button"
               className="delete"
               data-cy="modal-close"
