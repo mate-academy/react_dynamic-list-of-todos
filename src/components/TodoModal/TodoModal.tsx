@@ -5,27 +5,36 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  userId: number;
-  todo: Todo;
-  onResetTodo: (boolean: boolean) => void;
+  todo: Todo | null;
+  onResetTodo: (boolean: null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ userId, todo, onResetTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  onResetTodo,
+}) => {
   const [user, setUser] = useState<User>();
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const currentUser = await getUser(userId);
+      if (todo) {
+        const currentUser = await getUser(todo.userId);
 
-      setUser(currentUser);
+        setUser(currentUser);
+      }
+
       setIsUserLoaded(true);
     };
 
     fetchUser();
   }, []);
 
-  const { id, title, completed } = todo;
+  const handleReset = () => {
+    onResetTodo(null);
+  };
+
+  const { id, title, completed } = todo ?? {};
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -48,7 +57,7 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onResetTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onResetTodo(false)}
+              onClick={handleReset}
             />
           </header>
 

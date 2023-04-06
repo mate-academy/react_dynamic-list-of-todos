@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  onSelectUser: (userId: number) => void;
   onSelectTodo: (todo: Todo) => void;
-  onUserActive: (boolean: boolean) => void;
+  onClosedTodo: Todo | null;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSelectUser,
   onSelectTodo,
-  onUserActive,
+  onClosedTodo,
 }) => {
-  const handleClick = (userId: number, todo: Todo) => {
-    onSelectUser(userId);
+  const [currentTodoId, setCurrentTodoId] = useState(0);
+
+  const handleClick = (todo: Todo) => {
+    setCurrentTodoId(todo.id);
     onSelectTodo(todo);
-    onUserActive(true);
   };
 
   return (
@@ -58,11 +57,12 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => handleClick(todo.userId, todo)}
+                  onClick={() => handleClick(todo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
-                    <i className="far fa-eye-slash" />
+                    {currentTodoId === todo.id && onClosedTodo
+                      ? <i className="far fa-eye-slash" />
+                      : <i className="far fa-eye" />}
                   </span>
                 </button>
               </td>

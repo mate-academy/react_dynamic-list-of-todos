@@ -11,11 +11,9 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [isTodoActive, setIsTodoActive] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  const [selectedTodo, setSelectedTodo] = useState(todos[0]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -27,10 +25,6 @@ export const App: React.FC = () => {
 
     fetchTodos();
   }, []);
-
-  const handleSelectUser = (userId: number) => {
-    setSelectedUserId(userId);
-  };
 
   const handleTodo = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -52,9 +46,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={todos}
-                    onSelectUser={handleSelectUser}
                     onSelectTodo={handleTodo}
-                    onUserActive={setIsTodoActive}
+                    onClosedTodo={selectedTodo}
                   />
                 )
                 : <Loader />}
@@ -63,12 +56,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isTodoActive
+      {selectedTodo
         && (
           <TodoModal
-            userId={selectedUserId}
             todo={selectedTodo}
-            onResetTodo={setIsTodoActive}
+            onResetTodo={setSelectedTodo}
           />
         )}
     </>
