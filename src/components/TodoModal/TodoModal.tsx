@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { getErrorMessage } from '../../HELPER_FUNCTIONS';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  selectedTodo: Todo
+  onsetSelectedTodo: (todo: null) => void
+};
+
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  onsetSelectedTodo,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [errorUser, setErrorUser] = useState('');
+
+  const {
+    userId,
+    id,
+    title,
+    completed,
+  } = selectedTodo;
+
+  useEffect(() => {
+    getUser(userId)
+      .then(person => setUser(person))
+      .catch(error => setErrorUser(getErrorMessage(error)));
+  }, [selectedTodo]);
+
+  const inNotUserAndError = !user && !errorUser;
+  const isError = errorUser.length > 0;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {inNotUserAndError ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,32 +47,46 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="clear"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                onsetSelectedTodo(null);
+              }}
+
             />
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+            <p className="block has-text-danger" data-cy="modal-title">
+              {errorUser
+                ? ('Failed to fetch user from server')
+                : title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {isError || (
+              <p className="block" data-cy="modal-user">
+                <strong
+                  className={classNames(
+                    { 'has-text-danger': !completed },
+                    { 'has-text-success': completed },
+                  )}
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
