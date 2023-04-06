@@ -5,9 +5,11 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
+  selectedTodoId?: number,
+  onClick: (todo: Todo) => void
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = ({ todos, selectedTodoId, onClick }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -31,11 +33,13 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
           completed,
         } = todo;
 
+        const isSelectedTodo = selectedTodoId === id;
+
         return (
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': false,
+              'has-background-info-light': isSelectedTodo,
             })}
             key={id}
           >
@@ -63,9 +67,26 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
             </td>
 
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => onClick(todo)}
+              >
                 <span className="icon">
-                  <i className="far fa-eye-slash" />
+                  {/* 'fa-eye-slash' */}
+                  {/* <i className="far fa-eye" /> */}
+                  <i
+                    className={classNames(
+                      'far',
+                      {
+                        'fa-eye': !isSelectedTodo,
+                      },
+                      {
+                        'fa-eye-slash': isSelectedTodo,
+                      },
+                    )}
+                  />
                 </span>
               </button>
             </td>
