@@ -14,12 +14,14 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const currentTodos = await getTodos();
+      const uploadedTodos = await getTodos();
 
-      setTodos(currentTodos);
+      setFilteredTodos(uploadedTodos);
+      setTodos(uploadedTodos);
       setIsLoaded(true);
     };
 
@@ -38,14 +40,17 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                onUploadedTodos={todos}
+                onCurrentTodos={setFilteredTodos}
+              />
             </div>
 
             <div className="block">
               {isLoaded
                 ? (
                   <TodoList
-                    todos={todos}
+                    todos={filteredTodos}
                     onSelectTodo={handleTodo}
                     onClosedTodo={selectedTodo}
                   />
