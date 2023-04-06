@@ -9,7 +9,7 @@ export const getFilteredTodos = (
   const copyVisibleTodos = [...todos];
 
   const searchedTodos = copyVisibleTodos.filter(({ title }) => {
-    return title.toLowerCase().includes(query.toLowerCase().trim());
+    return title.toLowerCase().includes(query.toLowerCase());
   });
 
   return searchedTodos.filter((todo) => {

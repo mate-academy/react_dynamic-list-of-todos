@@ -44,7 +44,11 @@ export const TodoList: FC<Props> = (props) => {
           return (
             <tr
               data-cy="todo"
-              className=""
+              className={classNames(
+                {
+                  'has-background-info-light': isSelectedTodo,
+                },
+              )}
               key={id}
             >
               <td className="is-vcentered">
