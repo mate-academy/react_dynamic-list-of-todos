@@ -15,7 +15,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
-import { prepareTodos } from './helpers';
+import { prepareTodos } from './helpers/helpers';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,11 +31,11 @@ export const App: FC = () => {
       const loadedTodos = await getTodos();
 
       setTodos(loadedTodos);
-      setLoading(false);
     } catch (error) {
       setHasError(true);
-      setLoading(false);
     }
+
+    setLoading(false);
   }, []);
 
   useEffect(() => {
