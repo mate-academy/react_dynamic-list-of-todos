@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -6,7 +7,7 @@ import { Loader } from '../Loader';
 import { UserInfo } from '../UserInfo';
 
 type Props = {
-  setSelectedTodo: (todo: null) => void,
+  setSelectedTodo: (todo: Todo | null) => void,
   selectedTodo: Todo,
 };
 
@@ -44,12 +45,12 @@ export const TodoModal: React.FC<Props> = ({
     loadUserFromServer();
   }, []);
 
-  const handleKeyPress = (event: KeyboardEvent) => {
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
     if (event.key === 'x') {
       setSelectedTodo(null);
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
@@ -89,10 +90,10 @@ export const TodoModal: React.FC<Props> = ({
               {title}
             </p>
 
-            {error && <h2>{error}</h2>}
+            {error && <Alert variant="danger">{error}</Alert>}
 
             {user !== null && (
-              <UserInfo user={user} completed={completed} />
+              <UserInfo user={user} isCompleted={completed} />
             )}
           </div>
         </div>

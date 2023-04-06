@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({
   } = todo;
 
   return (
-    <tr data-cy="todo" className="">
+    <tr data-cy="todo">
       <td className="is-vcentered">{id}</td>
       <td className="is-vcentered">
         {completed && (

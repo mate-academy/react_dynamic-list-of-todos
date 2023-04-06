@@ -1,11 +1,12 @@
+import classNames from 'classnames';
 import { User } from '../../types/User';
 
 type Props = {
   user: User,
-  completed: boolean,
+  isCompleted: boolean,
 };
 
-export const UserInfo: React.FC<Props> = ({ user, completed }) => {
+export const UserInfo: React.FC<Props> = ({ user, isCompleted }) => {
   const {
     name,
     email,
@@ -13,9 +14,14 @@ export const UserInfo: React.FC<Props> = ({ user, completed }) => {
 
   return (
     <p className="block" data-cy="modal-user">
-      {completed
-        ? <strong className="has-text-success">Done</strong>
-        : <strong className="has-text-danger">Planned</strong>}
+      <strong
+        className={classNames({
+          'has-text-success': isCompleted,
+          'has-text-danger': !isCompleted,
+        })}
+      >
+        {isCompleted ? 'Done' : 'Planned'}
+      </strong>
 
       {' by '}
 

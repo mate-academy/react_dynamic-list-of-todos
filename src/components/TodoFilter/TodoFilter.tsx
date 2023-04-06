@@ -74,7 +74,7 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleFilterChange}
           >
             {Object.entries(Filters).map(([key, value]) => (
-              <option value={value}>{key}</option>
+              <option key={`${value}-${key}`} value={value}>{key}</option>
             ))}
           </select>
         </span>
