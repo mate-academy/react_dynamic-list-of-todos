@@ -36,12 +36,11 @@ export const TodoModal: FC<Props> = (props) => {
         const userFromServer = await getUser(userId);
 
         setUser(userFromServer);
-        setIsUserLoading(false);
       } catch {
         setHasUserError(true);
-      } finally {
-        setIsUserLoading(false);
       }
+
+      setIsUserLoading(false);
     };
 
     loadUser();

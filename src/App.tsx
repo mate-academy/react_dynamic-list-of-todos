@@ -40,12 +40,11 @@ export const App: FC = () => {
         const todosFromServer = await getTodos();
 
         setTodos(todosFromServer);
-        setIsLoading(false);
       } catch {
         setHasError(true);
-      } finally {
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     };
 
     loadData();
