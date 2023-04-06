@@ -4,7 +4,7 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
-import { getErrorMessage } from '../../HelperFunctions';
+import { getErrorMessage } from '../../HELPER_FUNCTIONS';
 
 type Props = {
   selectedTodo: Todo
@@ -26,15 +26,19 @@ export const TodoModal: React.FC<Props> = ({
   } = selectedTodo;
 
   useEffect(() => {
-    getUser(userId).then(person => setUser(person))
+    getUser(userId)
+      .then(person => setUser(person))
       .catch(error => setErrorUser(getErrorMessage(error)));
   }, [selectedTodo]);
+
+  const inNotUserAndError = !user && !errorUser;
+  const isError = errorUser.length > 0;
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user && !errorUser ? (
+      {inNotUserAndError ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -58,37 +62,32 @@ export const TodoModal: React.FC<Props> = ({
             />
           </header>
 
-          {errorUser
-            ? (
-              <div className="modal-card-body">
-                <p className="block" data-cy="modal-title">
-                  User is not defind
-                </p>
-              </div>
-            ) : (
-              <div className="modal-card-body">
-                <p className="block" data-cy="modal-title">
-                  {title}
-                </p>
+          <div className="modal-card-body">
+            <p className="block has-text-danger" data-cy="modal-title">
+              {errorUser
+                ? ('Failed to fetch user from server')
+                : title}
+            </p>
 
-                <p className="block" data-cy="modal-user">
-                  <strong
-                    className={classNames(
-                      { 'has-text-danger': !completed },
-                      { 'has-text-success': completed },
-                    )}
-                  >
-                    {completed ? 'Done' : 'Planned'}
-                  </strong>
+            {isError || (
+              <p className="block" data-cy="modal-user">
+                <strong
+                  className={classNames(
+                    { 'has-text-danger': !completed },
+                    { 'has-text-success': completed },
+                  )}
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
-                  {' by '}
+                {' by '}
 
-                  <a href={`mailto:${user?.email}`}>
-                    {user?.name}
-                  </a>
-                </p>
-              </div>
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              </p>
             )}
+          </div>
         </div>
       )}
     </div>

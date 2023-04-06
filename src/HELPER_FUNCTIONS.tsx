@@ -3,10 +3,10 @@ import { Todo } from './types/Todo';
 
 export function filterTodos(todos: Todo[], filterBy: FilterBySelect): Todo[] {
   switch (filterBy) {
-    case FilterBySelect.Active:
+    case FilterBySelect.ACTIVE:
       return todos.filter(todo => !todo.completed);
 
-    case FilterBySelect.Completed:
+    case FilterBySelect.COMPLETED:
       return todos.filter(todo => todo.completed);
 
     default:

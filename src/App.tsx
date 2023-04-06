@@ -8,17 +8,18 @@ import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterBySelect } from './types/FilterBySelect';
-import { filterTodos, getErrorMessage } from './HelperFunctions';
+import { getErrorMessage, filterTodos } from './HELPER_FUNCTIONS';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [filterBySelect, setFilterBySelect] = useState(FilterBySelect.All);
+  const [filterBySelect, setFilterBySelect] = useState(FilterBySelect.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [errorGetTodos, setErrorGetTodos] = useState('');
 
   useEffect(() => {
-    getTodos().then(todos => setAllTodos(todos))
+    getTodos()
+      .then(todos => setAllTodos(todos))
       .catch(error => setErrorGetTodos(getErrorMessage(error)));
   }, []);
 
@@ -31,6 +32,10 @@ export const App: React.FC = () => {
 
     return filterTodos(visibleTodos, filterBySelect);
   }, [query, filterBySelect, allTodos]);
+
+  const visibleTodos = getVisibleTodos();
+  const isAnyTodos = allTodos.length > 0;
+  const isNotTodosAndError = !isAnyTodos && !errorGetTodos;
 
   return (
     <>
@@ -48,28 +53,35 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {errorGetTodos || (
-              <span>
+            {errorGetTodos && (
+              <span style={{
+                display: 'flex',
+                justifyContent: 'center',
+                color: 'red',
+                fontSize: 26,
+              }}
+              >
                 {errorGetTodos}
               </span>
             )}
 
-            {allTodos.length === 0 || errorGetTodos
-              ? <Loader />
-              : (
-                <div className="block">
-                  <TodoList
-                    todos={getVisibleTodos()}
-                    onsetSelectedTodo={setSelectedTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                </div>
-              )}
+            {isNotTodosAndError && <Loader />}
+
+            {isAnyTodos && (
+              <div className="block">
+                <TodoList
+                  todos={visibleTodos}
+                  onsetSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              </div>
+            )}
+
           </div>
         </div>
       </div>
-      {selectedTodo
-      && (
+
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           onsetSelectedTodo={setSelectedTodo}

@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
               value={option}
               key={option}
             >
-              {option[0].toUpperCase() + option.slice(1)}
+              {option[0].toLocaleUpperCase() + option.slice(1)}
             </option>
           ))}
         </select>
@@ -45,12 +45,12 @@ export const TodoFilter: React.FC<Props> = React.memo(({
         value={query}
         onChange={event => onSetQuery(event.target.value)}
       />
+
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {!query
-      || (
+      {query && (
         <span
           className="icon is-right"
           style={{ pointerEvents: 'all' }}
