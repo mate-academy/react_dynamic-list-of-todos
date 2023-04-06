@@ -15,13 +15,17 @@ import { getTodos } from './api'; // , getUser
 export const App: React.FC = () => {
   const [todos, setTods] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  console.log('selectedTodo:', selectedTodo);
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
+
+  // console.log('selectedTodo:', selectedTodo);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -58,7 +62,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={todos}
                   selectedTodoId={selectedTodo?.id}
-                  onClick={handleTodoSelect}
+                  onSelect={handleTodoSelect}
                 />
               )}
             </div>
@@ -66,7 +70,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {false && <TodoModal />}
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={handleCloseModal} />}
     </>
   );
 };
