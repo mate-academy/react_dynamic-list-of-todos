@@ -74,8 +74,8 @@ export const TodoList: FC<TodoListProps> = memo(({
                 onClick={() => handleSelectedTodo(id)}
               >
                 <span className="icon">
-                  <i className={classNames({
-                    'far fa-eye': !isSelectedTodo,
+                  <i className={classNames('far', {
+                    'fa-eye': !isSelectedTodo,
                     'far fa-eye-slash': isSelectedTodo,
                   })}
                   />

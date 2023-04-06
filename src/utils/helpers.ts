@@ -18,11 +18,11 @@ export const getFilteredTodos = (
     .filter(({ title }) => findCurrentTodo(title, query));
 
   return visibleTodos.filter(todo => {
-    switch (true) {
-      case sortType === ACTIVE:
+    switch (sortType) {
+      case ACTIVE:
         return !todo.completed;
 
-      case sortType === COMPLETED:
+      case COMPLETED:
         return todo.completed;
 
       default:
