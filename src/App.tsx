@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortOption, setSortOption] = useState(SortBy.All);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [activeTodoId, setActiveTodoId] = useState(0);
 
@@ -91,11 +91,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {error && !loading && (
-                <p>Something went wrong...</p>
-              )}
               {loading && !error && (
                 <Loader />
+              )}
+
+              {error && !loading && (
+                <p>Something went wrong...</p>
               )}
 
               {displayTodoList && (
