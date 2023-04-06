@@ -31,10 +31,7 @@ function get<T>(url: string): Promise<T> {
       }
 
       return response.json();
-    })
-    .catch(error => (
-      new Error(error)
-    ));
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

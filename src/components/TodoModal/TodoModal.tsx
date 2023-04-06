@@ -47,8 +47,8 @@ export const TodoModal: React.FC<Props> = React.memo(({
             {`Todo #${selectedTodo?.id}`}
           </div>
 
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
+            aria-label="modal-close-button"
             type="button"
             className="delete"
             data-cy="modal-close"
@@ -62,18 +62,26 @@ export const TodoModal: React.FC<Props> = React.memo(({
           </p>
 
           <p className="block" data-cy="modal-user">
-            {selectedTodo?.completed
-              ? (
-                <strong className="has-text-success">Done</strong>
-              )
-              : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+            <strong className={classNames({
+              'has-text-success': selectedTodo?.completed,
+              'has-text-danger': !selectedTodo?.completed,
+            })}
+            >
+              {selectedTodo?.completed
+                ? 'Done'
+                : 'Planned'}
+            </strong>
 
             {' by '}
 
-            <a href={`mailto:${user?.email}`}>
-              {user?.name}
+            <a
+              href={`mailto:${user
+                ? user.email
+                : 'site.support@gmail.com'}`}
+            >
+              {user
+                ? user.name
+                : 'User unknown. If you think its error, write to our support'}
             </a>
           </p>
         </div>

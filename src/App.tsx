@@ -22,11 +22,11 @@ const getVisibleTodos = (
 
   switch (filterType) {
     case FilterType.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => todo.completed === false);
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
       break;
 
     case FilterType.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed === true);
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
       break;
 
     default:
@@ -45,14 +45,14 @@ const getVisibleTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
-  const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
 
-  const handleTodoSelect = (id: number | null) => {
+  const handleTodoSelect = useCallback((id: number | null) => {
     setSelectedTodo(todos.find(todo => todo.id === id) || null);
-  };
+  }, [todos]);
 
   const handleFilterChange = useCallback((typeOfFilter: FilterType) => {
     setFilterType(typeOfFilter);
@@ -60,7 +60,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setHasError(false);
-    setIsLoading(true);
 
     getTodos()
       .then(setTodos)

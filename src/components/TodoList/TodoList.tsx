@@ -21,12 +21,15 @@ export const TodoList: React.FC<Props> = React.memo(({
     <thead>
       <tr>
         <th>#</th>
+
         <th>
           <span className="icon">
             <i className="fas fa-check" />
           </span>
         </th>
+
         <th>Title</th>
+
         <th> </th>
       </tr>
     </thead>
@@ -39,15 +42,18 @@ export const TodoList: React.FC<Props> = React.memo(({
           completed,
         } = todo;
 
+        const isTodoSelected = selectedTodo?.id === id;
+
         return (
           <tr
             key={todo.id}
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': selectedTodo?.id === id,
+              'has-background-info-light': isTodoSelected,
             })}
           >
             <td className="is-vcentered">{id}</td>
+
             <td className="is-vcentered">
               {todo.completed
                 ? (
@@ -61,6 +67,7 @@ export const TodoList: React.FC<Props> = React.memo(({
                   </span>
                 )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p className={classNames({
                 'has-text-danger': !completed,
@@ -70,6 +77,7 @@ export const TodoList: React.FC<Props> = React.memo(({
                 {title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
@@ -81,8 +89,8 @@ export const TodoList: React.FC<Props> = React.memo(({
                   <i className={classNames(
                     'far',
                     {
-                      'fa-eye': selectedTodo?.id !== id,
-                      'fa-eye-slash': selectedTodo?.id === id,
+                      'fa-eye': !isTodoSelected,
+                      'fa-eye-slash': isTodoSelected,
                     },
                   )}
                   />
