@@ -13,13 +13,24 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+  const fullURL = `${BASE_URL}${url}.json`;
 
   // we add some delay to see now the laoder works
-  return wait(300)
+  return wait(800)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(
+          new Error(`${response.status} - ${response.statusText}`),
+        );
+      }
+
+      if (!response.headers.get('content-type')?.includes('application/json')) {
+        return Promise.reject(new Error('Content-type is not supported'));
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
