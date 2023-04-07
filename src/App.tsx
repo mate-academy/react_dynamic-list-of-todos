@@ -14,19 +14,20 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/FilterType.enum';
 
 const getVisibleTodos = (
   todos: Todo[],
-  filterType: string,
+  filterType: FilterType,
   query: string,
 ): Todo[] => {
   let categoryFiltered = todos;
 
-  if (filterType === 'active') {
+  if (filterType === FilterType.ACTIVE) {
     categoryFiltered = todos.filter(todo => !todo.completed);
   }
 
-  if (filterType === 'completed') {
+  if (filterType === FilterType.COMPLETED) {
     categoryFiltered = todos.filter(todo => todo.completed);
   }
 
@@ -38,10 +39,10 @@ const getVisibleTodos = (
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
-  const [sortType, setSortType] = useState('all');
+  const [filterType, setFilterType] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
-  const [hasError, setError] = useState(false);
-  const [isLoaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
@@ -50,24 +51,24 @@ export const App: FC = () => {
 
         setTodos(newTodos);
       } catch {
-        setError(true);
+        setHasError(true);
       } finally {
-        setLoaded(true);
+        setIsLoaded(true);
       }
     };
 
     getTodosFromServer();
   }, []);
 
-  const handleActiveTodo = useCallback((id: number): void => {
+  const handleSetActiveTodo = useCallback((id: number): void => {
     const newActiveTodo = todos.find(todo => todo.id === id);
 
     setActiveTodo(newActiveTodo || null);
   }, [todos]);
 
   const visibleTodos = useMemo(() => {
-    return getVisibleTodos(todos, sortType, query);
-  }, [todos, sortType, query]);
+    return getVisibleTodos(todos, filterType, query);
+  }, [todos, filterType, query]);
 
   return (
     <>
@@ -79,7 +80,7 @@ export const App: FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onSelectChange={setSortType}
+                onSelectChange={setFilterType}
                 onQueryChange={setQuery}
               />
             </div>
@@ -93,7 +94,7 @@ export const App: FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   activeId={activeTodo?.id}
-                  setActiveId={handleActiveTodo}
+                  setActiveId={handleSetActiveTodo}
                 />
               )}
             </div>
@@ -108,7 +109,7 @@ export const App: FC = () => {
       </div>
 
       {activeTodo && (
-        <TodoModal todo={activeTodo} onClose={() => handleActiveTodo(0)} />
+        <TodoModal todo={activeTodo} onClose={() => handleSetActiveTodo(0)} />
       )}
     </>
   );

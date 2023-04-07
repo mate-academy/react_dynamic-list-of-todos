@@ -1,8 +1,9 @@
 import { FC } from 'react';
+import { FilterType } from '../../types/FilterType.enum';
 
 type Props = {
   query: string;
-  onSelectChange: (value: string) => void;
+  onSelectChange: (value: FilterType) => void;
   onQueryChange: (value: string) => void;
 };
 
@@ -16,7 +17,7 @@ export const TodoFilter: FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => onSelectChange(event.target.value)}
+          onChange={(event) => onSelectChange(event.target.value as FilterType)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,18 +35,19 @@ export const TodoFilter: FC<Props> = ({
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
       />
+
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
             onClick={() => onQueryChange('')}
+            aria-label="clear search text"
           />
         </span>
       )}

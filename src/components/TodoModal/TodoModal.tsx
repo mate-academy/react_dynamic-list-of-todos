@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -18,12 +19,12 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
   } = todo;
 
   const [user, setUser] = useState<User>();
-  const [isLoaded, setLoaded] = useState(false);
-  const [hasError, setError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    setLoaded(false);
-    setError(false);
+    setIsLoaded(false);
+    setHasError(false);
 
     const getUserFromServer = async () => {
       try {
@@ -31,9 +32,9 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
 
         setUser(newUser);
       } catch {
-        setError(true);
+        setHasError(true);
       } finally {
-        setLoaded(true);
+        setIsLoaded(true);
       }
     };
 
@@ -86,9 +87,14 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+              <strong
+                className={classNames(
+                  'has-text-success',
+                  { 'has-text-danger': !completed },
+                )}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
