@@ -75,20 +75,20 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {hasError && (
-                    <Error />
-                  )}
+              {hasError && (
+                <Error />
+              )}
 
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    onSelect={handleSelectedTodo}
-                  />
-                </>
+              {isLoading && (
+                <Loader />
+              )}
+
+              {!hasError && !isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  onSelect={handleSelectedTodo}
+                />
               )}
             </div>
           </div>
