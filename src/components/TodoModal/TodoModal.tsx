@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { getUser } from '../../api';
+
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+
 import { Loader } from '../Loader';
 
 interface Props {
@@ -18,7 +21,9 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   } = selectedTodo;
 
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [userErrorMessage, setUserErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,22 +31,35 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
         const fetchedUser = await getUser(userId);
 
         setUser(fetchedUser);
-        setIsLoading(false);
-      } catch (error) {
-        // console.error(error);
-
-        throw new Error(`We have a problem when fetch user - ${error}`);
+        setIsUserLoaded(true);
+      } catch {
+        setUserErrorMessage('Load data is failed. Please try again later.');
+      } finally {
+        setIsUserLoading(false);
       }
     };
 
     fetchUser();
   }, []);
 
-  return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+  const handleBackgroundClick = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
-      {isLoading ? (
+  return (
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
+      <div
+        className="modal-background"
+        onClick={handleBackgroundClick}
+        role="button"
+        tabIndex={0}
+        aria-hidden="true"
+      />
+
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -63,23 +81,37 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {title}
-            </p>
+            {isUserLoaded ? (
+              <>
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
 
-            <p className="block" data-cy="modal-user">
-              {completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+                <p className="block" data-cy="modal-user">
+                  {completed ? (
+                    <strong className="has-text-success">Done</strong>
+                  ) : (
+                    <strong className="has-text-danger">Planned</strong>
+                  )}
 
-              {' by '}
+                  {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
-            </p>
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
+                  </a>
+                </p>
+              </>
+            ) : (
+              <>
+                {userErrorMessage && (
+                  <p className="block">
+                    <strong className="has-text-danger">
+                      {userErrorMessage}
+                    </strong>
+                  </p>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}

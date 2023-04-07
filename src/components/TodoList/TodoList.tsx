@@ -28,7 +28,6 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodoId, onSelect }) =
       {todos.map(todo => {
         const {
           id,
-          // userId,
           title,
           completed,
         } = todo;
@@ -74,8 +73,6 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodoId, onSelect }) =
                 onClick={() => onSelect(todo)}
               >
                 <span className="icon">
-                  {/* 'fa-eye-slash' */}
-                  {/* <i className="far fa-eye" /> */}
                   <i
                     className={classNames(
                       'far',

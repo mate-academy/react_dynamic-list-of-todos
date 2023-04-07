@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -8,24 +7,39 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
-import { getTodos } from './api'; // , getUser
+import { Todo } from './types/Todo';
+import { FilterByStatus } from './types/FilterByStatus';
+import { filterTodos } from './components/utils/handlers';
 
 export const App: React.FC = () => {
   const [todos, setTods] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [hasError, setHasError] = useState('');
 
-  const handleTodoSelect = (todo: Todo) => {
+  const [
+    filterByStatus,
+    setFilterByStatus,
+  ] = useState<FilterByStatus>(FilterByStatus.ALL);
+  const [filterByQuery, setFilterByQuery] = useState('');
+
+  const handlerFilterByQuery = (titleQuery: string) => {
+    setFilterByQuery(titleQuery);
+  };
+
+  const handlerFilterByStatus = (selectedFilter: FilterByStatus) => {
+    setFilterByStatus(selectedFilter);
+  };
+
+  const handlerTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  const handleCloseModal = () => {
+  const handlerCloseModal = () => {
     setSelectedTodo(null);
   };
-
-  // console.log('selectedTodo:', selectedTodo);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -34,15 +48,18 @@ export const App: React.FC = () => {
 
         setTods(fetchedTodos);
         setIsLoaded(true);
-      } catch (error) {
-        // console.error(error);
-
-        throw new Error(`We have a problem when we have loaded data - ${error}`);
+      } catch {
+        setHasError('Load data is failed. Try again later.');
       }
     };
 
     fetchTodos();
   }, []);
+
+  const filteredTodos = filterTodos(todos, filterByStatus, filterByQuery);
+
+  const isLoading = !isLoaded && !hasError;
+  const hasLoadingError = !isLoaded && hasError;
 
   return (
     <>
@@ -52,17 +69,28 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                statusFilter={filterByStatus}
+                onSelect={handlerFilterByStatus}
+                queryFilter={filterByQuery}
+                onQueryInput={handlerFilterByQuery}
+              />
             </div>
 
             <div className="block">
-              {!isLoaded && <Loader />}
+              {isLoading && <Loader />}
+
+              {hasLoadingError && (
+                <p className="has-text-danger">
+                  {hasError}
+                </p>
+              )}
 
               {isLoaded && (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectedTodoId={selectedTodo?.id}
-                  onSelect={handleTodoSelect}
+                  onSelect={handlerTodoSelect}
                 />
               )}
             </div>
@@ -70,7 +98,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={handleCloseModal} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={handlerCloseModal}
+        />
+      )}
     </>
   );
 };
