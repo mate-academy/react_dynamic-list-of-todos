@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -84,29 +89,42 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
+  const handleChangeInput = useMemo(() => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
 
-    setQuery(value);
-  };
+      setQuery(value);
+    };
+  }, [query]);
 
-  const clearInput = () => {
-    setQuery('');
-  };
+  const clearInput = useMemo(() => {
+    return () => {
+      setQuery('');
+    };
+  }, [query]);
 
-  const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
+  const handleChangeSelect = useMemo(() => {
+    return (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const { value } = event.target;
 
-    setStatus(getTodoStatus(value));
-  };
+      setStatus(getTodoStatus(value));
+    };
+  }, [status]);
 
-  const visibleTodos = getFilteredTodos(getTodosByStatus(todos, status), query);
+  const closeModal = useMemo(() => {
+    return () => {
+      setTodoId(0);
+    };
+  }, [todoId]);
+
+  const visibleTodos = useMemo(() => {
+    const filteredTodos = getFilteredTodos(todos, query);
+    const todosByStatus = getTodosByStatus(filteredTodos, status);
+
+    return todosByStatus;
+  }, [todos, status, query]);
 
   const currentTodo = todos.find(todo => todoId === todo.id);
-
-  const closeModal = () => {
-    setTodoId(0);
-  };
 
   return (
     <>
