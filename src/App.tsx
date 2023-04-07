@@ -26,24 +26,6 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const sort = () => {
-    const todosCopy = [...todos].filter(todo => todo.title.includes(query.trim()));
-
-    if (sortBy !== 'all') {
-      return todosCopy.filter(todo => {
-        if (sortBy === 'completed') {
-          return todo.completed === true;
-        }
-
-        return todo.completed === false;
-      });
-    }
-
-    return todosCopy;
-  };
-
-  const sortedList = sort();
-
   return (
     <>
       <div className="section">
@@ -65,10 +47,12 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={sortedList}
+                    todos={todos}
                     setIsOpenModal={setIsOpenModal}
                     setActiveTodo={setActiveTodo}
                     activeTodo={activeTodo}
+                    query={query}
+                    sortBy={sortBy}
                   />
                 )}
             </div>

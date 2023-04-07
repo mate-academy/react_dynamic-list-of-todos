@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos: Todo[],
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
   setActiveTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
-  activeTodo: Todo | null
+  activeTodo: Todo | null,
+  query: string,
+  sortBy: string
 }
 
 export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
@@ -13,12 +15,38 @@ export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
     todos,
     setIsOpenModal, setActiveTodo,
     activeTodo,
+    query,
+    sortBy,
   } = props;
 
   const openTodoModal = (todo: Todo) => {
     setIsOpenModal(true);
     setActiveTodo(todo);
   };
+
+  const sort = () => {
+    const convertedQuery = query.toLowerCase().trim();
+
+    const todosCopy = [...todos].filter(todo => {
+      return todo.title.toLowerCase().includes(convertedQuery);
+    });
+
+    if (sortBy !== 'all') {
+      return todosCopy.filter(todo => {
+        if (sortBy === 'completed') {
+          return todo.completed === true;
+        }
+
+        return todo.completed === false;
+      });
+    }
+
+    return todosCopy;
+  };
+
+  const sortedList = useMemo(() => {
+    return sort();
+  }, [todos, query, sortBy]);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -36,7 +64,7 @@ export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
       </thead>
 
       <tbody>
-        {todos.map((todo) => {
+        {sortedList.map((todo) => {
           return (
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
