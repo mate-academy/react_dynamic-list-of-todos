@@ -44,9 +44,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
+      .then(setTodos);
   }, []);
 
   const todosToShow = getVisibleTodos(todos, query, filterBy);

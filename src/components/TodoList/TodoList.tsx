@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -50,12 +51,9 @@ export const TodoList: React.FC<Props> = ({
               onClick={() => selectTodo(todo)}
             >
               <span className="icon">
-                <i
-                  className={
-                    selectedTodo && selectedTodo.id === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
-                  }
+                <i className={classNames('far',
+                  { 'fa-eye-slash': selectedTodo === todo },
+                  { 'fa-eye': selectedTodo !== todo })}
                 />
               </span>
             </button>
