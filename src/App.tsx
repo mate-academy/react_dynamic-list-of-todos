@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,36 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState <Todo[]>([]);
+  const [todoId, setTodoId] = useState(0);
+  const [userId, setUserId] = useState(0);
+  const [status, setStatus] = useState('all');
+  const [query, setQuery] = useState('');
+
+  const isInQuery = (arg: string) => {
+    if (arg.toLowerCase().includes(query.toLowerCase())) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const visibleTodos = todos.filter(todo => (
+    isInQuery(todo.title)
+  ));
+
+  const handleChange = (value: string) => {
+    setStatus(value);
+  };
+
+  useEffect(() => {
+    getTodos().then(myTodos => setTodos(myTodos));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +45,41 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                handleChange={handleChange}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                todos.length === 0
+                  ? <Loader />
+                  : (
+                    <TodoList
+                      todos={visibleTodos}
+                      fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
+                      selectTodoId={todoId}
+                      fnSelectUser={(selectUserId) => setUserId(selectUserId)}
+                      status={status}
+                    />
+                  )
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todoId !== 0
+      && (
+        <TodoModal
+          userId={userId}
+          todoId={todoId}
+          fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
+        />
+      )}
     </>
   );
 };
