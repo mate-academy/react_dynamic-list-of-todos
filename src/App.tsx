@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,9 +17,6 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [statusSelect, setStatusSelect] = useState('all');
 
-  let visibleTodos = [...todos].filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase().trim())));
-
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
@@ -27,8 +24,10 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  if (statusSelect !== Status.All) {
-    visibleTodos = visibleTodos.filter((todo) => {
+  const visibleTodos = useMemo(() => {
+    return [...todos].filter(todo => (
+      todo.title.toLowerCase().includes(query.toLowerCase().trim())
+    )).filter((todo) => {
       switch (statusSelect) {
         case Status.Active:
           return !todo.completed;
@@ -38,7 +37,7 @@ export const App: React.FC = () => {
           return true;
       }
     });
-  }
+  }, [todos, query, statusSelect]);
 
   return (
     <>
