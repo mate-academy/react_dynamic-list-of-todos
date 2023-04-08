@@ -17,7 +17,7 @@ export const TodoFilter: FC<Props> = ({
   setQuery,
   setTodoStatus,
 }) => {
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
       case 'all':
         setTodoStatus(TodoStatus.ALL);
@@ -29,8 +29,17 @@ export const TodoFilter: FC<Props> = ({
         setTodoStatus(TodoStatus.COMPLETED);
         break;
       default:
+        setTodoStatus(TodoStatus.ALL);
         break;
     }
+  };
+
+  const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const resetQuery = () => {
+    setQuery('');
   };
 
   return (
@@ -39,14 +48,14 @@ export const TodoFilter: FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={handleChange}
+            onChange={handleChangeStatus}
           >
             {Object.values(TodoStatus).map((enumValue) => (
               <option
                 key={enumValue}
                 value={enumValue}
               >
-                {enumValue}
+                {enumValue.slice(0, 1).toUpperCase() + enumValue.slice(1)}
               </option>
             ))}
           </select>
@@ -60,7 +69,7 @@ export const TodoFilter: FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleChangeQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -72,7 +81,7 @@ export const TodoFilter: FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={resetQuery}
               aria-label="clear search"
             />
           </span>

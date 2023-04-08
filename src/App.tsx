@@ -33,9 +33,9 @@ export const App: FC = () => {
       setTodos(loadedTodos);
     } catch (error) {
       setHasError(true);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, []);
 
   useEffect(() => {
