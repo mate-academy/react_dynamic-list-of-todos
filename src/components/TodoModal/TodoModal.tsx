@@ -11,83 +11,88 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
-  const { id, title, userId } = todo;
+  const {
+    id,
+    title,
+    userId,
+    completed,
+  } = todo;
+
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const fetchUser = async () => {
-    try {
-      const user = await getUser(userId);
-
-      setCurrentUser(user);
-    } catch {
-      setErrorMessage('User not found');
-    }
-
-    setIsLoading(false);
-  };
+  const isLoaded = !isLoading && !currentUser;
 
   useEffect(() => {
+    setIsLoading(true);
+
+    const fetchUser = async () => {
+      try {
+        const user = await getUser(userId);
+
+        setCurrentUser(user);
+      } catch {
+        setErrorMessage('User not found');
+      }
+    };
+
     fetchUser();
+    setIsLoading(false);
   }, []);
 
   return (
     <>
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
-        {isLoading ? (
+        {isLoaded ? (
           <Loader />
         ) : (
-          <>
-            {currentUser && (
-              <div className="modal-card">
-                <header className="modal-card-head">
-                  <div
-                    className="modal-card-title has-text-weight-medium"
-                    data-cy="modal-header"
-                  >
-                    {`Todo #${id}`}
-                  </div>
-
-                  <button
-                    aria-label="Close modal"
-                    type="button"
-                    className="delete"
-                    data-cy="modal-close"
-                    onClick={() => setSelectedTodo(null)}
-                  />
-                </header>
-
-                <div className="modal-card-body">
-                  <p className="block" data-cy="modal-title">
-                    {title}
-                  </p>
-
-                  {errorMessage ? (
-                    <p>{errorMessage}</p>
-                  ) : (
-                    <p className="block" data-cy="modal-user">
-                      <strong
-                        className={classNames({
-                          'has-text-danger': !todo.completed,
-                          'has-text-success': todo.completed,
-                        })}
-                      >
-                        {todo.completed ? 'Done' : 'Planned'}
-                      </strong>
-
-                      {' by '}
-
-                      <a href={`mailto:${currentUser?.email}`}>
-                        {currentUser?.name}
-                      </a>
-                    </p>
-                  )}
-                </div>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
+              >
+                {`Todo #${id}`}
               </div>
-            )}
-          </>
+
+              <button
+                aria-label="Close modal"
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={() => setSelectedTodo(null)}
+              />
+            </header>
+
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {title}
+              </p>
+
+              {errorMessage ? (
+                <p>{errorMessage}</p>
+              ) : (
+                <p className="block" data-cy="modal-user">
+                  <strong
+                    className={classNames({
+                      'has-text-danger': !completed,
+                      'has-text-success': completed,
+                    })}
+                  >
+                    {todo.completed ? 'Done' : 'Planned'}
+                  </strong>
+
+                  {' by '}
+
+                  <a href={`mailto:${currentUser?.email}`}>
+                    {currentUser?.name}
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </>

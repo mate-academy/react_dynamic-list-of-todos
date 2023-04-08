@@ -15,12 +15,12 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [sortBy, setSortBy] = useState('all');
+  const [filterBy, setFilterBy] = useState('all');
   const [searchValue, setSearchValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const visibleTodos = filterTodos(todosList, sortBy, searchValue);
+  const visibleTodos = filterTodos(todosList, filterBy, searchValue);
 
   const fetchTodos = async () => {
     try {
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchValue={searchValue}
-                setSortBy={setSortBy}
+                setFilterBy={setFilterBy}
                 setSearchValue={setSearchValue}
               />
             </div>
@@ -59,15 +59,15 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <>
-                  {visibleTodos.length
-                    ? (
-                      <TodoList
-                        todos={visibleTodos}
-                        selectedTodo={selectedTodo}
-                        setSelectedTodo={setSelectedTodo}
-                      />
-                    )
-                    : <p>{errorMessage}</p>}
+                  {visibleTodos.length ? (
+                    <TodoList
+                      todos={visibleTodos}
+                      selectedTodo={selectedTodo}
+                      setSelectedTodo={setSelectedTodo}
+                    />
+                  ) : (
+                    <p>{errorMessage}</p>
+                  )}
                 </>
               )}
             </div>

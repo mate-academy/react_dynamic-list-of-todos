@@ -1,22 +1,26 @@
 type Props = {
   searchValue: string;
-  setSortBy: (value: string) => void;
+  setFilterBy: (value: string) => void;
   setSearchValue: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   searchValue,
-  setSortBy,
+  setFilterBy,
   setSearchValue,
 }) => {
   const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { target: { value } } = event;
+    const {
+      target: { value },
+    } = event;
 
-    setSortBy(value);
+    setFilterBy(value);
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target: { value } } = event;
+    const {
+      target: { value },
+    } = event;
 
     setSearchValue(value);
   };
@@ -26,17 +30,11 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleChangeSelect}>
-            <option value="all">
-              All
-            </option>
+            <option value="all">All</option>
 
-            <option value="active">
-              Active
-            </option>
+            <option value="active">Active</option>
 
-            <option value="completed">
-              Completed
-            </option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>

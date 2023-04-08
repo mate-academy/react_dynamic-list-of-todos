@@ -2,13 +2,13 @@ import { Todo } from '../../types/Todo';
 
 export function filterTodos(
   todos: Todo[],
-  sortBy: string,
+  filterBy: string,
   query: string,
 ): Todo[] {
   const searchQuery = query.trim().toLowerCase();
 
-  const filtered = todos.filter(todo => {
-    switch (sortBy) {
+  const filtered = todos.filter((todo) => {
+    switch (filterBy) {
       case 'active':
         return !todo.completed;
 
@@ -22,10 +22,10 @@ export function filterTodos(
   });
 
   if (query) {
-    return filtered.filter((todo) => todo
-      .title
-      .toLowerCase()
-      .includes(searchQuery));
+    return filtered
+      .filter((todo) => todo.title
+        .toLowerCase()
+        .includes(searchQuery));
   }
 
   return filtered;
