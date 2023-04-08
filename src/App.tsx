@@ -10,6 +10,8 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { TodoWithUser } from './types/TodoWithUser';
+import { FilterType } from './types/FilterType';
+import { ifInclude } from './components/IfInclude';
 
 async function loadTodos() {
   const todosFromServer = await getTodos();
@@ -48,25 +50,16 @@ export const App: React.FC = () => {
     }
   };
 
-  enum FilterType {
-    All = 'All',
-    Active = 'active',
-    Completed = 'completed',
-  }
-
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<string>(FilterType.All);
   const [input, setInput] = useState('');
 
-  const ifInclude = (str:string, subStr:string) => (
-    str.toLowerCase().includes(subStr.toLowerCase())
-  );
   const filterTodos = (filter:string, inputNew:string) => {
     switch (filter) {
       case FilterType.Active:
-        setTodos(todosServer.filter(todo => todo.completed === false && ifInclude(todo.title, inputNew)));
+        setTodos(todosServer.filter(todo => !todo.completed && ifInclude(todo.title, inputNew)));
         break;
       case FilterType.Completed:
-        setTodos(todosServer.filter(todo => todo.completed === true && ifInclude(todo.title, inputNew)));
+        setTodos(todosServer.filter(todo => todo.completed && ifInclude(todo.title, inputNew)));
         break;
 
       default:
