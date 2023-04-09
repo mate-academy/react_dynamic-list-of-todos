@@ -62,7 +62,7 @@ export const App: React.FC = () => {
           && (
             <TodoModal
               todo={selectedTodo}
-              unselect={() => setSelectedTodoId(0)}
+              deselectTodo={() => setSelectedTodoId(0)}
             />
           )
       }

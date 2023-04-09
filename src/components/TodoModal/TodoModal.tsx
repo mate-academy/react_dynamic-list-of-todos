@@ -6,10 +6,13 @@ import { Loader } from '../Loader';
 
 interface Props {
   todo: Todo;
-  unselect: () => void;
+  deselectTodo: () => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, unselect }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  deselectTodo: unselect,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,11 +40,11 @@ export const TodoModal: React.FC<Props> = ({ todo, unselect }) => {
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label=" "
               onClick={unselect}
             />
           </header>
@@ -52,7 +55,6 @@ export const TodoModal: React.FC<Props> = ({ todo, unselect }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed
                 ? (<strong className="has-text-success">Done</strong>)
                 : (<strong className="has-text-danger">Planned</strong>)}
@@ -66,7 +68,6 @@ export const TodoModal: React.FC<Props> = ({ todo, unselect }) => {
                 ) : (
                   'Unknown user'
                 )}
-
             </p>
           </div>
         </div>
