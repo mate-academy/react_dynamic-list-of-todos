@@ -24,7 +24,12 @@ const filteredTodos = (todos: Todo[], filter: Todos) => {
 };
 
 const filteredTodoByQuery = (query: string, todos: Todo[]) => {
-  return todos.filter((todo) => todo.title.includes(query));
+  return todos.filter((todo) => {
+    const fixedTitle = todo.title.toLocaleLowerCase();
+    const fixedQuery = query.toLocaleLowerCase();
+
+    return fixedTitle.includes(fixedQuery);
+  });
 };
 
 const filteredTodosByInputAndStatus = (
