@@ -20,9 +20,15 @@ export const TodoModal: React.FC<Props> = (
   const [user, setUser] = useState<User | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const loadData = async () => {
+    await Promise.all([
+      getUser(userId).then(currentUser => setUser(currentUser)),
+      getTodos().then(myTodos => setTodos(myTodos)),
+    ]);
+  };
+
   useEffect(() => {
-    getUser(userId).then(currentUser => setUser(currentUser));
-    getTodos().then(myTodos => setTodos(myTodos));
+    loadData();
   }, []);
 
   return (
@@ -33,8 +39,12 @@ export const TodoModal: React.FC<Props> = (
         <Loader />
       ) : (
         <div className="modal-card">
-          {todos.map(todo => (
-            todo.id === todoId
+          {todos.map(({
+            id,
+            title,
+            completed,
+          }) => (
+            id === todoId
             && (
               <>
                 <header className="modal-card-head">
@@ -43,12 +53,12 @@ export const TodoModal: React.FC<Props> = (
                     data-cy="modal-header"
                   >
                     Todo #
-                    {todo.id}
+                    {id}
                   </div>
 
-                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                   <button
                     type="button"
+                    aria-label="Mute volume"
                     className="delete"
                     data-cy="modal-close"
                     onClick={() => fnSelectTodo(0)}
@@ -57,11 +67,11 @@ export const TodoModal: React.FC<Props> = (
 
                 <div className="modal-card-body">
                   <p className="block" data-cy="modal-title">
-                    {todo.title}
+                    {title}
                   </p>
 
                   <p className="block" data-cy="modal-user">
-                    {todo.completed ? (
+                    {completed ? (
                       <strong className="has-text-success">Done</strong>)
                       : (
                         <strong className="has-text-danger">Planned</strong>

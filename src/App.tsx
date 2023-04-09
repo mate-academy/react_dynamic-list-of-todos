@@ -17,17 +17,9 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
 
-  const isInQuery = (arg: string) => {
-    if (arg.toLowerCase().includes(query.toLowerCase())) {
-      return true;
-    }
+  const isInQuery = (arg: string) => arg.toLowerCase().includes(query.toLowerCase());
 
-    return false;
-  };
-
-  const visibleTodos = todos.filter(todo => (
-    isInQuery(todo.title)
-  ));
+  const visibleTodos = todos.filter(todo => isInQuery(todo.title));
 
   const handleChange = (value: string) => {
     setStatus(value);
@@ -72,8 +64,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0
-      && (
+      {!!todoId && (
         <TodoModal
           userId={userId}
           todoId={todoId}

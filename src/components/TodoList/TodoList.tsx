@@ -32,15 +32,13 @@ function filterTodos(status: string, todos: Todo[]): Todo[] {
   }
 }
 
-export const TodoList: React.FC<Props> = (
-  {
-    todos,
-    fnSelectTodo,
-    selectTodoId,
-    fnSelectUser,
-    status,
-  },
-) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  fnSelectTodo,
+  selectTodoId,
+  fnSelectUser,
+  status,
+}) => {
   const list: Todo[] = useMemo(() => {
     return filterTodos(status, todos);
   }, [todos, status]);
@@ -61,17 +59,22 @@ export const TodoList: React.FC<Props> = (
       </thead>
 
       <tbody>
-        {list.map(todo => (
+        {list.map(({
+          id,
+          completed,
+          title,
+          userId,
+        }) => (
           <tr
             data-cy="todo"
             className={classNames(
-              { 'has-background-info-light': todo.id === selectTodoId },
+              { 'has-background-info-light': id === selectTodoId },
             )}
-            key={todo.id}
+            key={id}
           >
-            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
-              { todo.completed && (
+              { completed && (
                 <span className="icon">
                   <i className="fas fa-check" />
                 </span>
@@ -79,15 +82,15 @@ export const TodoList: React.FC<Props> = (
             </td>
             <td className="is-vcentered is-expand">
               <p className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
+                'has-text-danger': !completed,
+                'has-text-success': completed,
               })}
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              {selectTodoId === todo.id ? (
+              {selectTodoId === id ? (
                 <button
                   data-cy="selectButton"
                   className="button"
@@ -104,8 +107,8 @@ export const TodoList: React.FC<Props> = (
                   className="button"
                   type="button"
                   onClick={() => {
-                    fnSelectTodo(todo.id);
-                    fnSelectUser(todo.userId);
+                    fnSelectTodo(id);
+                    fnSelectUser(userId);
                   }}
                 >
                   <span className="icon">
