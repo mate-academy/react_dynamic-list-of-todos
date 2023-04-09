@@ -1,12 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todo: Todo;
+  onClose: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+  const [user, setUser] = useState<User>();
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    id,
+    completed,
+    title,
+    userId,
+  } = todo;
+
+  useEffect(() => {
+    const getUserFromServer = async () => {
+      try {
+        const userFromServer = await getUser(userId);
+
+        setUser(userFromServer);
+      } catch {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getUserFromServer();
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +51,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,24 +59,37 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {!isError && user ? (
+              <p className="block" data-cy="modal-user">
+                <strong className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </p>
+            ) : (
+              <p style={{ color: 'red' }}>
+                Ooops... Something went wrong.
+              </p>
+            )}
+
           </div>
         </div>
       )}
