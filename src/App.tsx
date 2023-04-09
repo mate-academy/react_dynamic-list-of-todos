@@ -47,7 +47,7 @@ export const App: React.FC = () => {
         break;
 
       case StatusToFilterBy.Completed:
-        isStatusCorrect = !todo.completed;
+        isStatusCorrect = todo.completed;
         break;
 
       default:
