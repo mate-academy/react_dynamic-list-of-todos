@@ -7,9 +7,9 @@ interface Props {
 }
 
 enum Todos {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed ',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed ',
 }
 
 const filteredTodos = (todos: Todo[], filter: Todos) => {
