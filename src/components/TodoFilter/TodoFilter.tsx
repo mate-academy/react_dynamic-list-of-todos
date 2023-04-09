@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -22,17 +23,59 @@ const filteredTodos = (todos: Todo[], filter: Todos) => {
   }
 };
 
+const filteredTodoByQuery = (query: string, todos: Todo[]) => {
+  return todos.filter((todo) => todo.title.includes(query));
+};
+
+const filteredTodosByInputAndStatus = (
+  todos: Todo[],
+  filter: Todos,
+  query: string,
+) => {
+  const filteredByStatus = filteredTodos(todos, filter);
+
+  return filteredTodoByQuery(query, filteredByStatus);
+};
+
 export const TodoFilter: React.FC<Props> = ({
   onUploadedTodos,
   onCurrentTodos,
 }) => {
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(Todos.All);
+
   const handleStatusSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const currentTodos = filteredTodos(
+    const newFilter = event.target.value as Todos;
+
+    setFilter(newFilter);
+
+    const newTodos = filteredTodosByInputAndStatus(
       onUploadedTodos,
-      event.target.value as Todos,
+      newFilter,
+      query,
     );
 
-    onCurrentTodos(currentTodos);
+    onCurrentTodos(newTodos);
+  };
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = event.target.value;
+
+    setQuery(newQuery);
+
+    const newTodos = filteredTodosByInputAndStatus(
+      onUploadedTodos,
+      filter,
+      newQuery,
+    );
+
+    onCurrentTodos(newTodos);
+  };
+
+  const handleReset = () => {
+    setQuery('');
+    setFilter(Todos.All);
+    onCurrentTodos(onUploadedTodos);
   };
 
   return (
@@ -53,18 +96,24 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
+          value={query}
+          onChange={handleInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {query
+           && (
+             // eslint-disable-next-line jsx-a11y/control-has-associated-label
+             <button
+               data-cy="clearSearchButton"
+               type="button"
+               className="delete"
+               onClick={handleReset}
+             />
+           )}
         </span>
       </p>
     </form>

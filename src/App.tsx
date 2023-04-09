@@ -12,17 +12,23 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosFromServer, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const uploadedTodos = await getTodos();
+      try {
+        const uploadedTodos = await getTodos();
 
-      setFilteredTodos(uploadedTodos);
-      setTodos(uploadedTodos);
-      setIsLoaded(true);
+        setTodos(uploadedTodos);
+        setFilteredTodos(uploadedTodos);
+      } catch {
+        setHasError(true);
+      } finally {
+        setIsLoaded(true);
+      }
     };
 
     fetchTodos();
@@ -41,14 +47,16 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onUploadedTodos={todos}
+                onUploadedTodos={todosFromServer}
                 onCurrentTodos={setFilteredTodos}
               />
             </div>
 
             <div className="block">
+              {hasError
+                && <span>Error 404. Please try later.</span>}
               {isLoaded
-                ? (
+                ? !hasError && (
                   <TodoList
                     todos={filteredTodos}
                     onSelectTodo={handleTodo}
