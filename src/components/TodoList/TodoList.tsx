@@ -7,24 +7,24 @@ type Props = {
   fnSelectTodo: (todoId: number) => void;
   selectTodoId: number;
   fnSelectUser: (selectUserId: number) => void;
-  status: string;
+  status: StatusOfFilter | string;
 };
 
-enum StatusOfFilter {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+export enum StatusOfFilter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
-function filterTodos(status: string, todos: Todo[]): Todo[] {
+function filterTodos(status: StatusOfFilter | string, todos: Todo[]): Todo[] {
   switch (status) {
-    case StatusOfFilter.all:
+    case StatusOfFilter.All:
       return todos.filter(todo => todo);
 
-    case StatusOfFilter.active:
+    case StatusOfFilter.Active:
       return todos.filter(todo => !todo.completed);
 
-    case StatusOfFilter.completed:
+    case StatusOfFilter.Completed:
       return todos.filter(todo => todo.completed);
 
     default:
@@ -42,6 +42,11 @@ export const TodoList: React.FC<Props> = ({
   const list: Todo[] = useMemo(() => {
     return filterTodos(status, todos);
   }, [todos, status]);
+
+  const showTodoModal = (id: number, userId: number) => {
+    fnSelectTodo(id);
+    fnSelectUser(userId);
+  };
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -107,8 +112,7 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    fnSelectTodo(id);
-                    fnSelectUser(userId);
+                    showTodoModal(id, userId);
                   }}
                 >
                   <span className="icon">

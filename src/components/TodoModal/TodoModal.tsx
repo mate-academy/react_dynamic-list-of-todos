@@ -31,63 +31,62 @@ export const TodoModal: React.FC<Props> = (
     loadData();
   }, []);
 
+  const filteredTodos = todos.filter(todo => todo.id === todoId);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
-        <Loader />
-      ) : (
+      {user ? (
         <div className="modal-card">
-          {todos.map(({
+          {filteredTodos.map(({
             id,
             title,
             completed,
           }) => (
-            id === todoId
-            && (
-              <>
-                <header className="modal-card-head">
-                  <div
-                    className="modal-card-title has-text-weight-medium"
-                    data-cy="modal-header"
-                  >
-                    Todo #
-                    {id}
-                  </div>
-
-                  <button
-                    type="button"
-                    aria-label="Mute volume"
-                    className="delete"
-                    data-cy="modal-close"
-                    onClick={() => fnSelectTodo(0)}
-                  />
-                </header>
-
-                <div className="modal-card-body">
-                  <p className="block" data-cy="modal-title">
-                    {title}
-                  </p>
-
-                  <p className="block" data-cy="modal-user">
-                    {completed ? (
-                      <strong className="has-text-success">Done</strong>)
-                      : (
-                        <strong className="has-text-danger">Planned</strong>
-                      )}
-
-                    {' by '}
-
-                    <a href={`mailto:${user.email}`}>
-                      {user.name}
-                    </a>
-                  </p>
+            <>
+              <header className="modal-card-head">
+                <div
+                  className="modal-card-title has-text-weight-medium"
+                  data-cy="modal-header"
+                >
+                  Todo #
+                  {id}
                 </div>
-              </>
-            )
+
+                <button
+                  type="button"
+                  aria-label="Mute volume"
+                  className="delete"
+                  data-cy="modal-close"
+                  onClick={() => fnSelectTodo(0)}
+                />
+              </header>
+
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
+
+                <p className="block" data-cy="modal-user">
+                  {completed ? (
+                    <strong className="has-text-success">Done</strong>)
+                    : (
+                      <strong className="has-text-danger">Planned</strong>
+                    )}
+
+                  {' by '}
+
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                </p>
+              </div>
+            </>
           ))}
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );
