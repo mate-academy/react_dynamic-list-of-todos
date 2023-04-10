@@ -34,13 +34,17 @@ export const App: React.FC = () => {
   const [todosServer, setTodosServer] = useState<Todo[]>([]);
   const openModal = (todo:Todo) => {
     setIsOpenedModal(true);
-    loadUserForTodo(todo).then(res => {
-      setOpenedTodo({
-        ...todo,
-        user: res,
+    loadUserForTodo(todo)
+      .then(res => {
+        setOpenedTodo({
+          ...todo,
+          user: res,
+        });
+        setIsUserLoaded(true);
+      })
+      .finally(() => {
+        setIsUserLoaded(true);
       });
-      setIsUserLoaded(true);
-    });
   };
 
   const closeModal = () => {
