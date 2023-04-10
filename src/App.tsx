@@ -24,7 +24,7 @@ import { filterTodos } from './helpers';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
-  const [hasTotosLoadingError, setHasTodosLoadingError] = useState(false);
+  const [hasTodosLoadingError, setHasTodosLoadingError] = useState(false);
   const [isTodosLoadInitialized, setIsTodosLoadInitialized] = useState(false);
 
   const [selectedTodoWithUser, setSelectedTodoWithUser]
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
     filterTodos(todos, todoCompletionFilterOption, searchQuery)
   ), [todos, todoCompletionFilterOption, searchQuery]);
 
-  const isSuccessTodosLoad = !hasTotosLoadingError
+  const isSuccessTodosLoad = !hasTodosLoadingError
     && !isTodosLoading
     && isTodosLoadInitialized;
 
@@ -103,7 +103,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isTodosLoading && <Loader />}
 
-              {hasTotosLoadingError && (
+              {hasTodosLoadingError && (
                 <ErrorMessage message="An error occured when loading todos" />
               )}
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { TodoCompletionFilter } from '../../types/TodoCompletionFilter';
 
-type SetDispact<T> =
+type SetDispatch<T> =
   React.Dispatch<React.SetStateAction<T>>;
 
 type Props = {
   todoCompletionFilterOption: TodoCompletionFilter;
-  setTodoCompletionFilterOption: SetDispact<TodoCompletionFilter>;
+  setTodoCompletionFilterOption: SetDispatch<TodoCompletionFilter>;
   searchQuery: string;
-  setSearchQuery: SetDispact<string>;
+  setSearchQuery: SetDispatch<string>;
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(({
