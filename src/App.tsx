@@ -58,7 +58,7 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => {
-    if (query.length === 0 && filterType === FilterType.All) {
+    if (!query.length && filterType === FilterType.All) {
       return todos;
     }
 
@@ -73,7 +73,6 @@ export const App: React.FC = () => {
         case FilterType.Active:
           return !completed && lowerCaseTitle.includes(lowerCaseQuery);
 
-        case FilterType.All:
         default:
           return lowerCaseTitle.includes(lowerCaseQuery);
       }
@@ -118,7 +117,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoId > 0 && (
+      {!!selectedTodoId && (
         <TodoModal
           todos={todos}
           userId={selectedUserId}

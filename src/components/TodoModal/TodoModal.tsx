@@ -29,9 +29,9 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     fetchUser();
-  }, []);
+  }, [userId]);
 
-  const todo = todos.filter((tod => tod.id === todoId))[0];
+  const todo = todos.find((tod) => tod.id === todoId);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -63,11 +63,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
+              {todo?.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
