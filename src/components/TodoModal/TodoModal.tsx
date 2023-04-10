@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
         } catch {
           setUser(null);
         }
-      }
+      };
 
       fetchUser();
     }

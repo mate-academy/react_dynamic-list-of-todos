@@ -1,6 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-export type FilterTodoStatus = 'all' | 'active' | 'completed';
+export enum FilterTodoStatus {
+  All = "all",
+  Active = "active",
+  Completed = "completed",
+}
 export interface IFilter {
   status: FilterTodoStatus;
   searchTitle: string;
@@ -9,12 +13,12 @@ export interface IFilter {
 export type OnFilterChange = (filter: IFilter) => void;
 interface Props {
   filter: IFilter;
-  onChange?: OnFilterChange;
+  onChange: OnFilterChange;
 }
 
 export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   const handleStatusChanged = useCallback<
-  React.ChangeEventHandler<HTMLSelectElement>
+    React.ChangeEventHandler<HTMLSelectElement>
   >(
     (event) => {
       if (onChange) {
@@ -25,14 +29,14 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
         }
       }
     },
-    [filter],
+    [filter]
   );
 
   const handleSearchTitleChanged = useCallback<
-  React.ChangeEventHandler<HTMLInputElement>
+    React.ChangeEventHandler<HTMLInputElement>
   >(
     (event) => {
-      if (onChange !== undefined) {
+      if (onChange) {
         const searchTitle = event.target.value.toLowerCase();
 
         if (filter.searchTitle !== searchTitle) {
@@ -40,14 +44,14 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
         }
       }
     },
-    [filter],
+    [filter]
   );
 
   const handleSearchTitleClearClicked = useCallback<
-  React.MouseEventHandler<HTMLButtonElement>
+    React.MouseEventHandler<HTMLButtonElement>
   >(() => {
     if (onChange !== undefined) {
-      const searchTitle = '';
+      const searchTitle = "";
 
       if (filter.searchTitle !== searchTitle) {
         onChange({ ...filter, searchTitle });
@@ -64,9 +68,9 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
             value={filter.status}
             onChange={handleStatusChanged}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterTodoStatus.All}>All</option>
+            <option value={FilterTodoStatus.Active}>Active</option>
+            <option value={FilterTodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -84,8 +88,8 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {filter.searchTitle !== '' && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        {filter.searchTitle !== "" && (
+          <span className="icon is-right" style={{ pointerEvents: "all" }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
