@@ -6,10 +6,7 @@ import { getUser } from '../../api';
 
 type Todos = {
   todos: Todo[];
-  setUser: React.Dispatch<React.SetStateAction<{
-    user: User;
-    buttonClicked: boolean;
-  }>>,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
   setSelectedTodoId: React.Dispatch<React.SetStateAction<number | null>>
 };
 

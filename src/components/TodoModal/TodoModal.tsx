@@ -5,14 +5,8 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  user: {
-    user: User,
-    buttonClicked: boolean,
-  },
-  setUser: React.Dispatch<React.SetStateAction<{
-    user: User;
-    buttonClicked: boolean;
-  }>>
+  user: User,
+  setUser: React.Dispatch<React.SetStateAction<User>>
 
   todos: Todo[],
 
@@ -24,13 +18,10 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const handleDeleteUser = () => {
     setUser({
-      user: {
-        id: 0,
-        name: '',
-        email: '',
-        phone: '',
-      },
-      buttonClicked: false,
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
     });
   };
 
@@ -40,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user.buttonClicked === true && user.user.id === 0 ? (
+      {!selectedTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -78,8 +69,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.user.email}`}>
-                {user.user.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>

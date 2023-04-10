@@ -12,7 +12,7 @@ import { getTodos } from './api';
 import { User } from './types/User';
 
 export const App: React.FC = React.memo(() => {
-  const [todos, setTodos] = useState< {
+  const [todos, setTodos] = useState<{
     todos: Todo[]
     originalTodos: Todo[];
     searchQueryTodo: Todo[];
@@ -22,18 +22,13 @@ export const App: React.FC = React.memo(() => {
     searchQueryTodo: [],
   });
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [user, setUser] = useState<{
-    user: User;
-    buttonClicked: boolean;
-  }>({
-    user: {
-      id: 0,
-      name: '',
-      email: '',
-      phone: '',
-    },
-    buttonClicked: false,
+  const [user, setUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
   });
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     getTodos().then(result => {
@@ -42,8 +37,29 @@ export const App: React.FC = React.memo(() => {
         originalTodos: result,
         searchQueryTodo: result,
       });
+      setLoaded(true);
     });
   }, []);
+
+  const handleFilterTodos = (filterType: string) => {
+    let filteredTodos = todos.originalTodos;
+
+    switch (filterType) {
+      case 'active':
+        filteredTodos = todos.originalTodos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        filteredTodos = todos.originalTodos.filter(todo => todo.completed);
+        break;
+      default:
+    }
+
+    setTodos(prev => ({
+      ...prev,
+      todos: filteredTodos,
+      searchQueryTodo: filteredTodos,
+    }));
+  };
 
   return (
     <>
@@ -53,19 +69,18 @@ export const App: React.FC = React.memo(() => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} setTodos={setTodos} />
+              <TodoFilter todos={todos} setTodos={setTodos} handleFilterTodos={handleFilterTodos} />
             </div>
 
             <div className="block">
-              {todos.todos.length === 0 && <Loader />}
+              {!loaded && <Loader />}
               <TodoList todos={todos.todos} setUser={setUser} setSelectedTodoId={setSelectedTodoId} />
             </div>
           </div>
         </div>
       </div>
 
-      {user.buttonClicked === true
-        && user.user.id !== 0
+      {user.id !== 0
         ? <TodoModal user={user} todos={todos.todos} setUser={setUser} selectedTodoId={selectedTodoId} /> : ''}
     </>
   );

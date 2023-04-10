@@ -12,9 +12,12 @@ type Props = {
     originalTodos: Todo[];
     searchQueryTodo: Todo[];
   }>>,
+  handleFilterTodos: (filterType: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, setTodos }) => {
+export const TodoFilter: React.FC<Props> = ({
+  todos, setTodos, handleFilterTodos,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,26 +33,6 @@ export const TodoFilter: React.FC<Props> = ({ todos, setTodos }) => {
 
   const handleClearSearch = () => {
     setSearchQuery('');
-  };
-
-  const handleFilterTodos = (filterType: string) => {
-    let filteredTodos = todos.originalTodos;
-
-    switch (filterType) {
-      case 'active':
-        filteredTodos = todos.originalTodos.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        filteredTodos = todos.originalTodos.filter(todo => todo.completed);
-        break;
-      default:
-    }
-
-    setTodos(prev => ({
-      ...prev,
-      todos: filteredTodos,
-      searchQueryTodo: filteredTodos,
-    }));
   };
 
   return (
