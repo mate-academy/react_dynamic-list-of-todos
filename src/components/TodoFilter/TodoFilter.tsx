@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   React.ChangeEventHandler<HTMLSelectElement>
   >(
     (event) => {
-      if (onChange !== undefined) {
+      if (onChange) {
         const status = event.target.value as FilterTodoStatus;
 
         if (filter.status !== status) {
@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   >(
     (event) => {
       if (onChange !== undefined) {
-        const searchTitle = event.target.value.trim().toLowerCase();
+        const searchTitle = event.target.value.toLowerCase();
 
         if (filter.searchTitle !== searchTitle) {
           onChange({ ...filter, searchTitle });

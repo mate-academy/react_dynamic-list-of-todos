@@ -5,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { IFilter, TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
@@ -14,7 +13,7 @@ import { TodoModal } from './components/TodoModal';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState<number>(0);
+  const [todoId, setTodoId] = useState(0);
 
   const [filter, setFilter] = useState<IFilter>({
     status: 'all',
@@ -22,7 +21,19 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    getTodos().then((result) => setTodos(result));
+    const fetchData = async () => {
+      try {
+        const todosData = await getTodos();
+
+        setTodos(todosData);
+      } catch {
+        if (!todos.length) {
+          setTodos([]);
+        }
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -59,9 +70,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={todoId}
-                  selectTodo={(newTodoId) => {
-                    setTodoId(newTodoId);
-                  }}
+                  selectTodo={setTodoId}
                 />
               ) : (
                 <Loader />
@@ -76,6 +85,7 @@ export const App: React.FC = () => {
           removeTodo={() => {
             setTodoId(0);
           }}
+          todos={filteredTodos}
         />
       )}
     </>
