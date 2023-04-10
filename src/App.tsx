@@ -17,7 +17,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [todosLoaded, setTodosLoaded] = useState(false);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterOption, setFilterOption] = useState('all');
   const [query, setQuery] = useState('');
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(todos => {
         setVisibleTodos(todos);
-        setTodosLoaded(true);
+        setIsTodosLoaded(true);
       });
   }, []);
 
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosLoaded
+              {isTodosLoaded
                 ? (
                   <TodoList
                     todos={filteredTodos}
