@@ -23,6 +23,10 @@ export const TodoFilter: React.FC<TodoFilterProps> = (props) => {
     setQuery(e.target.value);
   };
 
+  const resetQuery = () => {
+    setQuery('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -59,7 +63,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = (props) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={resetQuery}
             />
           </span>
         )}

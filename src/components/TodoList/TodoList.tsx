@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
@@ -10,7 +11,7 @@ interface TodoListProps {
   sortBy: string
 }
 
-export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
+export const TodoList: React.FC<TodoListProps> = (props) => {
   const {
     todos,
     setIsOpenModal, setActiveTodo,
@@ -33,11 +34,9 @@ export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
 
     if (sortBy !== 'all') {
       return todosCopy.filter(todo => {
-        if (sortBy === 'completed') {
-          return todo.completed === true;
-        }
-
-        return todo.completed === false;
+        return sortBy === 'completed'
+          ? todo.completed
+          : !todo.completed;
       });
     }
 
@@ -76,7 +75,13 @@ export const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={`has-text-${!todo.completed ? 'danger' : 'success'}`}>{todo.title}</p>
+                <p className={classNames(
+                  { 'has-text-danger': !todo.completed },
+                  { 'has-text-success': todo.completed },
+                )}
+                >
+                  {todo.title}
+                </p>
               </td>
               <td className="has-text-right is-vcentered">
                 {activeTodo?.id === todo.id ? (

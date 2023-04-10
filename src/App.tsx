@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -18,12 +18,22 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState('all');
   const [query, setQuery] = useState('');
 
-  useEffect(() => {
+  const getData = async () => {
     setIsLoading(true);
-    getTodos().then((data) => {
-      setTodos(data);
-      setIsLoading(false);
-    });
+
+    getTodos()
+      .then((data) => {
+        setTodos(data);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
 
   return (
@@ -43,24 +53,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={todos}
-                    setIsOpenModal={setIsOpenModal}
-                    setActiveTodo={setActiveTodo}
-                    activeTodo={activeTodo}
-                    query={query}
-                    sortBy={sortBy}
-                  />
-                )}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={todos}
+                  setIsOpenModal={setIsOpenModal}
+                  setActiveTodo={setActiveTodo}
+                  activeTodo={activeTodo}
+                  query={query}
+                  sortBy={sortBy}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      { isOpenModal && (
+      {isOpenModal && (
         <TodoModal
           setIsOpenModal={setIsOpenModal}
           activeTodo={activeTodo}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -15,20 +15,23 @@ export const TodoModal: React.FC<TodoModalProps> = (props: TodoModalProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpenModal(false);
     setActiveTodo(null);
-  };
+  }, []);
 
   useEffect(() => {
     if (!activeTodo) {
       return;
     }
 
-    getUser(activeTodo.userId).then((data) => {
-      setUser(data);
-      setIsLoading(false);
-    });
+    getUser(activeTodo.userId)
+      .then((data) => {
+        setUser(data);
+        setIsLoading(false);
+      })
+    // eslint-disable-next-line no-console
+      .catch(e => console.log(e));
   }, []);
 
   return (
