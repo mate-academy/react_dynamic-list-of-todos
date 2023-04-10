@@ -50,12 +50,10 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   const handleSearchTitleClearClicked = useCallback<
     React.MouseEventHandler<HTMLButtonElement>
   >(() => {
-    if (onChange !== undefined) {
-      const searchTitle = "";
+    const searchTitle = "";
 
-      if (filter.searchTitle !== searchTitle) {
-        onChange({ ...filter, searchTitle });
-      }
+    if (filter.searchTitle !== searchTitle) {
+      onChange({ ...filter, searchTitle });
     }
   }, [filter]);
 
@@ -88,7 +86,7 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {filter.searchTitle !== "" && (
+        {filter.searchTitle && (
           <span className="icon is-right" style={{ pointerEvents: "all" }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
