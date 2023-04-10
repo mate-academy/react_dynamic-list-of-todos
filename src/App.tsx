@@ -15,12 +15,12 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterBy, setFilterBy] = useState('all');
+  const [sortBy, setFilterBy] = useState('all');
   const [searchValue, setSearchValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const visibleTodos = filterTodos(todosList, filterBy, searchValue);
+  const visibleTodos = filterTodos(todosList, sortBy, searchValue);
 
   const fetchTodos = async () => {
     try {

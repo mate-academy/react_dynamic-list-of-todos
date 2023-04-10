@@ -22,8 +22,6 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isLoaded = !isLoading && !currentUser;
-
   useEffect(() => {
     setIsLoading(true);
 
@@ -34,18 +32,19 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
         setCurrentUser(user);
       } catch {
         setErrorMessage('User not found');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchUser();
-    setIsLoading(false);
-  }, []);
+  }, [todo]);
 
   return (
     <>
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
-        {isLoaded ? (
+        {isLoading ? (
           <Loader />
         ) : (
           <div className="modal-card">
