@@ -46,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
 
       {isLoading && (
         <Loader />)}
-      {displayModal ? (
+      {displayModal && (
         <div
           className={classNames(
             'modal-card',
@@ -98,7 +98,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
             </p>
           </div>
         </div>
-      ) : (
+      )}
+      {isError && (
         <div className="modal-card notification is-danger">
           <header className="modal-card-head">
             <div className="modal-card-title">
