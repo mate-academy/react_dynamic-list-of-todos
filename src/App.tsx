@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,7 +12,6 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
 
   const [filter, setFilter] = useState<IFilter>({
@@ -36,22 +35,30 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    let newFilteredTodos = todos;
+  const visibleTodos: Todo[] = useMemo(() => {
+    if (filter.status === 'all' && filter.searchTitle === '') {
+      return todos;
+    }
+
+    let newVisibleTodos = todos;
 
     if (filter.searchTitle !== '') {
-      newFilteredTodos = newFilteredTodos.filter((todo) => todo.title.toLowerCase().includes(filter.searchTitle));
+      newVisibleTodos = newVisibleTodos.filter((todo) => todo.title.toLowerCase().includes(filter.searchTitle));
     }
 
     if (filter.status !== 'all') {
       const completed = filter.status === 'completed';
 
-      newFilteredTodos = newFilteredTodos.filter(
+      newVisibleTodos = newVisibleTodos.filter(
         (todo) => todo.completed === completed,
       );
     }
 
-    setFilteredTodos(newFilteredTodos);
+    if (newVisibleTodos) {
+      return newVisibleTodos;
+    }
+
+    return [];
   }, [todos, filter]);
 
   return (
@@ -68,7 +75,7 @@ export const App: React.FC = () => {
             <div className="block">
               {todos.length > 0 ? (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={visibleTodos}
                   selectedTodoId={todoId}
                   selectTodo={setTodoId}
                 />
@@ -85,7 +92,7 @@ export const App: React.FC = () => {
           removeTodo={() => {
             setTodoId(0);
           }}
-          todos={filteredTodos}
+          todos={visibleTodos}
         />
       )}
     </>

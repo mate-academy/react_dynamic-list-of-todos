@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   todos,
 }) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>();
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     const newSelectedTodo = todos.find((todo) => todo.id === selectedTodoId);
@@ -27,7 +27,17 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then((result) => setUser(result));
+      const fetchUser = async () => {
+        try {
+          const userData = await getUser(selectedTodo.userId);
+
+          setUser(userData);
+        } catch {
+          setUser(null);
+        }
+      }
+
+      fetchUser();
     }
   }, [selectedTodo]);
 
