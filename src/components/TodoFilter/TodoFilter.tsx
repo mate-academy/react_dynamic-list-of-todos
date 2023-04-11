@@ -1,8 +1,9 @@
 import React from 'react';
+import { StatusOfFilter } from '../TodoList';
 
 type Props = {
-  status: string;
-  handleChange: (value: string) => void;
+  status: StatusOfFilter;
+  handleChange: (value: StatusOfFilter) => void;
   query: string;
   setQuery: (arg: string) => void;
 };
@@ -22,11 +23,13 @@ export const TodoFilter: React.FC<Props> = (
           <select
             value={status}
             data-cy="statusSelect"
-            onChange={(event) => handleChange(event.target.value)}
+            onChange={(event) => handleChange(
+              event.target.value as StatusOfFilter,
+            )}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={StatusOfFilter.All}>All</option>
+            <option value={StatusOfFilter.Active}>Active</option>
+            <option value={StatusOfFilter.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -49,7 +52,7 @@ export const TodoFilter: React.FC<Props> = (
             <button
               data-cy="clearSearchButton"
               type="button"
-              aria-label="Mute volume"
+              aria-label="Clear search"
               className="delete"
               onClick={() => setQuery('')}
             />

@@ -7,7 +7,7 @@ type Props = {
   fnSelectTodo: (todoId: number) => void;
   selectTodoId: number;
   fnSelectUser: (selectUserId: number) => void;
-  status: StatusOfFilter | string;
+  status: StatusOfFilter;
 };
 
 export enum StatusOfFilter {
@@ -16,10 +16,10 @@ export enum StatusOfFilter {
   Completed = 'completed',
 }
 
-function filterTodos(status: StatusOfFilter | string, todos: Todo[]): Todo[] {
+function filterTodos(status: StatusOfFilter, todos: Todo[]): Todo[] {
   switch (status) {
     case StatusOfFilter.All:
-      return todos.filter(todo => todo);
+      return todos;
 
     case StatusOfFilter.Active:
       return todos.filter(todo => !todo.completed);
@@ -28,7 +28,7 @@ function filterTodos(status: StatusOfFilter | string, todos: Todo[]): Todo[] {
       return todos.filter(todo => todo.completed);
 
     default:
-      return todos;
+      throw new Error('Unexpected values');
   }
 }
 
@@ -85,7 +85,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               )}
             </td>
-            <td className="is-vcentered is-expand">
+            <td className="is-vcentered is-expanded">
               <p className={classNames({
                 'has-text-danger': !completed,
                 'has-text-success': completed,

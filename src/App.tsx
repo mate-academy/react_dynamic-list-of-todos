@@ -12,15 +12,17 @@ import { Todo } from './types/Todo';
 import { isInQuery } from './helpers/is-in-query';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState <Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
-  const [status, setStatus] = useState<StatusOfFilter | string>(StatusOfFilter.All);
+  const [status, setStatus] = useState<StatusOfFilter>(StatusOfFilter.All);
   const [query, setQuery] = useState('');
 
-  const visibleTodos = todos.filter(todo => isInQuery(todo.title, query));
+  const [todo] = todos.filter(item => item.id === todoId);
 
-  const handleChange = (value: string) => {
+  const visibleTodos = todos.filter(item => isInQuery(item.title, query));
+
+  const handleChange = (value: StatusOfFilter) => {
     setStatus(value);
   };
 
@@ -45,19 +47,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                !todos.length
-                  ? <Loader />
-                  : (
-                    <TodoList
-                      todos={visibleTodos}
-                      fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
-                      selectTodoId={todoId}
-                      fnSelectUser={(selectUserId) => setUserId(selectUserId)}
-                      status={status}
-                    />
-                  )
-              }
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
+                    selectTodoId={todoId}
+                    fnSelectUser={(selectUserId) => setUserId(selectUserId)}
+                    status={status}
+                  />
+                )}
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
       {!!todoId && (
         <TodoModal
           userId={userId}
-          todoId={todoId}
+          todo={todo}
           fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
         />
       )}

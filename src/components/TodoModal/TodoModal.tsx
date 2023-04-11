@@ -1,37 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { getTodos, getUser } from '../../api';
+import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   userId: number;
-  todoId: number;
+  todo: Todo;
   fnSelectTodo: (selectTodoId: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = (
   {
     userId,
-    todoId,
+    todo,
     fnSelectTodo,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const loadData = async () => {
-    await Promise.all([
-      getUser(userId).then(currentUser => setUser(currentUser)),
-      getTodos().then(myTodos => setTodos(myTodos)),
-    ]);
-  };
 
   useEffect(() => {
-    loadData();
+    getUser(userId).then(currentUser => setUser(currentUser));
   }, []);
-
-  const filteredTodos = todos.filter(todo => todo.id === todoId);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,51 +29,43 @@ export const TodoModal: React.FC<Props> = (
 
       {user ? (
         <div className="modal-card">
-          {filteredTodos.map(({
-            id,
-            title,
-            completed,
-          }) => (
-            <>
-              <header className="modal-card-head">
-                <div
-                  className="modal-card-title has-text-weight-medium"
-                  data-cy="modal-header"
-                >
-                  Todo #
-                  {id}
-                </div>
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              Todo #
+              {todo.id}
+            </div>
 
-                <button
-                  type="button"
-                  aria-label="Mute volume"
-                  className="delete"
-                  data-cy="modal-close"
-                  onClick={() => fnSelectTodo(0)}
-                />
-              </header>
+            <button
+              type="button"
+              aria-label="Mute volume"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => fnSelectTodo(0)}
+            />
+          </header>
 
-              <div className="modal-card-body">
-                <p className="block" data-cy="modal-title">
-                  {title}
-                </p>
+          <div className="modal-card-body">
+            <p className="block" data-cy="modal-title">
+              {todo.title}
+            </p>
 
-                <p className="block" data-cy="modal-user">
-                  {completed ? (
-                    <strong className="has-text-success">Done</strong>)
-                    : (
-                      <strong className="has-text-danger">Planned</strong>
-                    )}
+            <p className="block" data-cy="modal-user">
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>)
+                : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-                  {' by '}
+              {' by '}
 
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
-                  </a>
-                </p>
-              </div>
-            </>
-          ))}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
+              </a>
+            </p>
+          </div>
         </div>
       ) : (
         <Loader />
