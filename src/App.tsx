@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -30,7 +30,6 @@ export const App: React.FC = () => {
   const [openedTodo, setOpenedTodo] = useState<TodoWithUser | null>(null);
   const [isDataLoad, setIsDataLoaded] = useState(false);
   const [isUserLoad, setIsUserLoaded] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [todosServer, setTodosServer] = useState<Todo[]>([]);
   const openModal = (todo:Todo) => {
     setIsOpenedModal(true);
@@ -60,39 +59,37 @@ export const App: React.FC = () => {
   const filterTodos = (filter:string, inputNew:string) => {
     switch (filter) {
       case FilterType.Active:
-        setTodos(todosServer.filter(todo => !todo.completed && ifInclude(todo.title, inputNew)));
-        break;
+        return (todosServer.filter(todo => !todo.completed && ifInclude(todo.title, inputNew)));
+
       case FilterType.Completed:
-        setTodos(todosServer.filter(todo => todo.completed && ifInclude(todo.title, inputNew)));
-        break;
+        return (todosServer.filter(todo => todo.completed && ifInclude(todo.title, inputNew)));
 
       default:
-        setTodos(todosServer.filter(
+        return (todosServer.filter(
           todo => ifInclude(todo.title, inputNew),
         ));
-        break;
     }
   };
 
+  const visibleTodos:Todo[] = useMemo(
+    () => filterTodos(statusFilter, input), [statusFilter, input, todosServer],
+  );
+
   const onChangeFilter = (event:React.ChangeEvent<HTMLSelectElement>) => {
     setStatusFilter(event.target.value);
-    filterTodos(event.target.value, input);
   };
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
-    filterTodos(statusFilter, event.target.value);
   };
 
   const clearInput = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setInput('');
-    filterTodos(statusFilter, '');
   };
 
   useEffect(() => {
     loadTodos().then(res => {
-      setTodos(res);
       setTodosServer(res);
       setIsDataLoaded(true);
     });
@@ -111,7 +108,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isDataLoad
-                ? <TodoList todos={todos} openModal={openModal} openedTodoId={openedTodo ? openedTodo.id : 0} />
+                ? <TodoList todos={visibleTodos} openModal={openModal} openedTodoId={openedTodo ? openedTodo.id : 0} />
                 : <Loader />}
             </div>
           </div>
