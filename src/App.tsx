@@ -28,7 +28,7 @@ export const App: React.FC = () => {
         setTodos(todo);
         setIsLoading(true);
       });
-  }, []);
+  }, [selectedTodo?.userId]);
 
   const filterTodo = useMemo(() => {
     return todos.filter(todo => {
