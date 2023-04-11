@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,14 +13,14 @@ import { isInQuery } from './helpers/is-in-query';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoId, setTodoId] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [userId, setUserId] = useState(0);
   const [status, setStatus] = useState<StatusOfFilter>(StatusOfFilter.All);
   const [query, setQuery] = useState('');
 
-  const [todo] = todos.filter(item => item.id === todoId);
+  const todo = useMemo(() => todos.find(item => (item.id === selectedTodoId)) as Todo, [selectedTodoId]);
 
-  const visibleTodos = todos.filter(item => isInQuery(item.title, query));
+  const visibleTodos = useMemo(() => todos.filter(item => isInQuery(item.title, query)), [todos, query]);
 
   const handleChange = (value: StatusOfFilter) => {
     setStatus(value);
@@ -52,8 +52,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
-                    selectTodoId={todoId}
+                    fnSelectTodo={(selectTodoId) => setSelectedTodoId(selectTodoId)}
+                    selectTodoId={selectedTodoId}
                     fnSelectUser={(selectUserId) => setUserId(selectUserId)}
                     status={status}
                   />
@@ -63,11 +63,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {!!todoId && (
+      {!!selectedTodoId && (
         <TodoModal
           userId={userId}
           todo={todo}
-          fnSelectTodo={(selectTodoId) => setTodoId(selectTodoId)}
+          fnSelectTodo={(selectTodoId) => setSelectedTodoId(selectTodoId)}
         />
       )}
     </>
