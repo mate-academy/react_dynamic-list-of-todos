@@ -1,5 +1,5 @@
 import { Todo } from '../types/Todo';
-import { ACTIVE, COMPLETED } from './constants';
+import { SortType } from '../types/Sort';
 
 export const findCurrentTodo = (
   title: string,
@@ -19,10 +19,10 @@ export const getFilteredTodos = (
 
   return visibleTodos.filter(todo => {
     switch (sortType) {
-      case ACTIVE:
+      case SortType.ACTIVE:
         return !todo.completed;
 
-      case COMPLETED:
+      case SortType.COMPLETED:
         return todo.completed;
 
       default:

@@ -1,9 +1,10 @@
 import { FC } from 'react';
+import { SortType } from '../../types/Sort';
 
 interface TodoFilterProps {
   query: string;
   onChangeQuery: (value: string) => void;
-  onChangeFilterType: (sortType: string) => void;
+  onChangeFilterType: (sortType: SortType) => void;
 }
 
 export const TodoFilter: FC<TodoFilterProps> = ({
@@ -17,7 +18,9 @@ export const TodoFilter: FC<TodoFilterProps> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => onChangeFilterType(event.target.value)}
+            onChange={(event) => (
+              onChangeFilterType(event.target.value as SortType)
+            )}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

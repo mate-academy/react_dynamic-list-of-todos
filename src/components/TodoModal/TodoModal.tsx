@@ -29,7 +29,9 @@ export const TodoModal: FC<TodoModalProps> = ({
     setIsLoading(true);
 
     try {
-      setUser(await getUser(userId));
+      const getOneUser = await getUser(userId);
+
+      setUser(getOneUser);
     } catch {
       setError(true);
     } finally {
@@ -39,7 +41,7 @@ export const TodoModal: FC<TodoModalProps> = ({
 
   useEffect(() => {
     fetchUsers();
-  }, [selectedTodo]);
+  }, []);
 
   return (
     <div
@@ -48,73 +50,73 @@ export const TodoModal: FC<TodoModalProps> = ({
     >
       <div className="modal-background" />
 
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              {`Todo #${id}`}
-            </div>
-
-            <button
-              aria-label="Mute volume"
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-              onClick={handleCloseModal}
-            />
-          </header>
-
-          {error
-            ? (
-              <p style={{
-                display: 'block',
-                padding: '20px',
-                width: '100%',
-                backgroundColor: 'white',
-                textAlign: 'center',
-                color: 'darkred',
-              }}
+      {isLoading
+        ? (<Loader />)
+        : (
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
               >
-                Something went wrong! 🗿
-              </p>
-            )
-            : (
-              <div className="modal-card-body">
-                <p
-                  className="block"
-                  data-cy="modal-title"
-                >
-                  {title}
-                </p>
-
-                <p className="block" data-cy="modal-user">
-                  <strong className={classNames(
-                    'has-text-danger',
-                    { 'has-text-success': completed },
-                  )}
-                  >
-                    {completed
-                      ? 'Done'
-                      : 'Planned'}
-                  </strong>
-
-                  {' by '}
-
-                  {user && (
-                    <a href={`mailto:${user.email}`}>
-                      {user.name}
-                    </a>
-                  )}
-                </p>
+                {`Todo #${id}`}
               </div>
-            )}
-        </div>
-      )}
+
+              <button
+                aria-label="Mute volume"
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={handleCloseModal}
+              />
+            </header>
+
+            {error
+              ? (
+                <p style={{
+                  display: 'block',
+                  padding: '20px',
+                  width: '100%',
+                  backgroundColor: 'white',
+                  textAlign: 'center',
+                  color: 'darkred',
+                }}
+                >
+                  Something went wrong! 🗿
+                </p>
+              )
+              : (
+                <div className="modal-card-body">
+                  <p
+                    className="block"
+                    data-cy="modal-title"
+                  >
+                    {title}
+                  </p>
+
+                  <p className="block" data-cy="modal-user">
+                    <strong className={classNames(
+                      'has-text-danger',
+                      { 'has-text-success': completed },
+                    )}
+                    >
+                      {completed
+                        ? 'Done'
+                        : 'Planned'}
+                    </strong>
+
+                    {' by '}
+
+                    {user && (
+                      <a href={`mailto:${user.email}`}>
+                        {user.name}
+                      </a>
+                    )}
+                  </p>
+                </div>
+              )}
+          </div>
+        )}
     </div>
   );
 };
