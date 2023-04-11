@@ -32,20 +32,22 @@ export const App: React.FC = React.memo(() => {
     });
   }, []);
 
-  const handleFilterTodos = (filterType: string) => {
+  const handleFilterTodos = async (filterType: string) => {
+    let filtered = [];
+
     switch (filterType) {
       case 'active':
-        setFilteredTodos(originalTodos.filter(todo => !todo.completed));
-        setSearchQueryTodo(originalTodos.filter(todo => !todo.completed));
+        filtered = originalTodos.filter(todo => !todo.completed);
         break;
       case 'completed':
-        setFilteredTodos(originalTodos.filter(todo => todo.completed));
-        setSearchQueryTodo(originalTodos.filter(todo => todo.completed));
+        filtered = originalTodos.filter(todo => todo.completed);
         break;
       default:
-        setFilteredTodos(originalTodos);
-        setSearchQueryTodo(originalTodos);
+        filtered = originalTodos;
     }
+
+    await setFilteredTodos(filtered);
+    setSearchQueryTodo(filtered);
   };
 
   return (
