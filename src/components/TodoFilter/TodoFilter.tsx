@@ -22,7 +22,13 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   >(
     (event) => {
       if (onChange) {
-        const status = event.target.value as FilterTodoStatus;
+        const statusValue = event.target.value;
+        const status =
+          statusValue === FilterTodoStatus.All ||
+          statusValue === FilterTodoStatus.Active ||
+          statusValue === FilterTodoStatus.Completed
+            ? statusValue
+            : FilterTodoStatus.All;
 
         if (filter.status !== status) {
           onChange({ ...filter, status });

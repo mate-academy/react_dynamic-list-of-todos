@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { FilterTodoStatus, IFilter, TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';

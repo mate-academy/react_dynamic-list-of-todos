@@ -16,11 +16,16 @@ export const TodoModal: React.FC<Props> = ({
   removeTodo,
   todos,
 }) => {
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>();
-  const [user, setUser] = useState<User | null>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const newSelectedTodo = todos.find((todo) => todo.id === selectedTodoId);
+
+    if (!newSelectedTodo) {
+      setSelectedTodo(null);
+      return;
+    }
 
     setSelectedTodo(newSelectedTodo);
   }, [selectedTodoId]);
@@ -73,7 +78,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className=>Done</strong> */}
               <strong
                 className={classNames({
                   'has-text-success': selectedTodo.completed,
