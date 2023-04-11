@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 
 export enum FilterTodoStatus {
-  All = "all",
-  Active = "active",
-  Completed = "completed",
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 export interface IFilter {
   status: FilterTodoStatus;
@@ -18,7 +18,7 @@ interface Props {
 
 export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
   const handleStatusChanged = useCallback<
-    React.ChangeEventHandler<HTMLSelectElement>
+  React.ChangeEventHandler<HTMLSelectElement>
   >(
     (event) => {
       if (onChange) {
@@ -29,11 +29,11 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
         }
       }
     },
-    [filter]
+    [filter],
   );
 
   const handleSearchTitleChanged = useCallback<
-    React.ChangeEventHandler<HTMLInputElement>
+  React.ChangeEventHandler<HTMLInputElement>
   >(
     (event) => {
       if (onChange) {
@@ -44,13 +44,13 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
         }
       }
     },
-    [filter]
+    [filter],
   );
 
   const handleSearchTitleClearClicked = useCallback<
-    React.MouseEventHandler<HTMLButtonElement>
+  React.MouseEventHandler<HTMLButtonElement>
   >(() => {
-    const searchTitle = "";
+    const searchTitle = '';
 
     if (filter.searchTitle !== searchTitle) {
       onChange({ ...filter, searchTitle });
@@ -87,7 +87,7 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
         </span>
 
         {filter.searchTitle && (
-          <span className="icon is-right" style={{ pointerEvents: "all" }}>
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
