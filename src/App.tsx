@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,49 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { User } from './types/User';
 
-export const App: React.FC = () => {
+export const App: React.FC = React.memo(() => {
+  const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [searchQueryTodo, setSearchQueryTodo] = useState<Todo[]>([]);
+  const [user, setUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    getTodos().then(result => {
+      setOriginalTodos(result);
+      setFilteredTodos(result);
+      setLoaded(true);
+    });
+  }, []);
+
+  const handleFilterTodos = async (filterType: string) => {
+    let filtered = [];
+
+    switch (filterType) {
+      case 'active':
+        filtered = originalTodos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        filtered = originalTodos.filter(todo => todo.completed);
+        break;
+      default:
+        filtered = originalTodos;
+    }
+
+    await setFilteredTodos(filtered);
+    setSearchQueryTodo(filtered);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +58,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter searchQueryTodo={searchQueryTodo} handleFilterTodos={handleFilterTodos} setFilteredTodos={setFilteredTodos} />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!loaded && <Loader />}
+              <TodoList todos={filteredTodos} setUser={setUser} setSelectedTodoId={setSelectedTodoId} />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {user.id !== 0
+        ? <TodoModal user={user} todos={filteredTodos} setUser={setUser} selectedTodoId={selectedTodoId} /> : ''}
     </>
   );
-};
+});
