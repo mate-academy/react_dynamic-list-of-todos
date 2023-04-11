@@ -8,32 +8,28 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [visibleTodos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const stateChanger = (field: string, newValue: string) => {
-    switch (field) {
-      case 'select':
-        setFilter(newValue);
-        break;
-      case 'input':
-        setQuery(newValue);
-        break;
-      default:
-        break;
+  const loadTodosFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setIsLoading(true);
+    } catch {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getTodos().then((todos) => {
-      setTodos(todos);
-      setLoading(true);
-    });
+    loadTodosFromServer();
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -43,13 +39,13 @@ export const App: React.FC = () => {
         .includes(query.toLowerCase());
 
       switch (filter) {
-        case 'active':
+        case Status.ACTIVE:
           return !todo.completed && filteredByQuery;
 
-        case 'all':
+        case Status.ALL:
           return filteredByQuery;
 
-        case 'completed':
+        case Status.COMPLETED:
           return todo.completed && filteredByQuery;
 
         default:
@@ -66,13 +62,14 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
             <div className="block">
               <TodoFilter
-                status={filter}
+                select={filter}
                 query={query}
-                stateChanger={stateChanger}
+                selectChanger={setFilter}
+                queryChanger={setQuery}
               />
             </div>
             <div className="block">
-              {!loading ? (
+              {!isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

@@ -1,21 +1,18 @@
 import React from 'react';
+import { Status } from '../../types/Status';
 
 interface Props {
-  stateChanger: (select: string, input: string) => void,
-  status: string;
+  selectChanger: (val: Status) => void,
+  queryChanger: (val: string) => void
+  select: string;
   query: string;
-}
-export interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  status,
+  select,
   query,
-  stateChanger,
+  selectChanger,
+  queryChanger,
 }) => {
   return (
     <form className="field has-addons">
@@ -23,14 +20,12 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={status}
-            onChange={(event) => {
-              stateChanger('select', `${event.target.value}`);
-            }}
+            value={select}
+            onChange={(event) => selectChanger(event.target.value as Status)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -41,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => stateChanger('input', `${event.target.value}`)}
+          onChange={(event) => queryChanger(`${event.target.value}`)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => stateChanger('input', '')}
+              onClick={() => queryChanger('')}
             />
           )}
         </span>
