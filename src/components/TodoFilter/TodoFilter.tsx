@@ -2,33 +2,25 @@ import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: {
-    todos: Todo[];
-    originalTodos: Todo[];
-    searchQueryTodo: Todo[];
-  },
-  setTodos: React.Dispatch<React.SetStateAction<{
-    todos: Todo[];
-    originalTodos: Todo[];
-    searchQueryTodo: Todo[];
-  }>>,
+  searchQueryTodo: Todo[],
   handleFilterTodos: (filterType: string) => void,
+  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos, setTodos, handleFilterTodos,
+  searchQueryTodo, handleFilterTodos, setFilteredTodos,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchQuery(e.target.value);
-    const newQuery = todos.searchQueryTodo.filter(todo => todo.title
+
+    const newlistTodo = searchQueryTodo.filter(todo => todo.title
       .toLowerCase().includes(e.target.value.trim().toLowerCase()));
 
-    setTodos(prev => ({
-      ...prev,
-      todos: newQuery,
-    }));
+    setFilteredTodos(newlistTodo);
   };
 
   const handleClearSearch = () => {

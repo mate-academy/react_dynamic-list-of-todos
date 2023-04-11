@@ -17,11 +17,7 @@ export const TodoList: React.FC<Todos> = ({
     setSelectedTodoId(selectedTodoId);
     getUser(selectedUserId)
       .then((user) => {
-        setUser(prev => ({
-          ...prev,
-          user,
-          buttonClicked: true,
-        }));
+        setUser({ ...user });
       });
   };
 

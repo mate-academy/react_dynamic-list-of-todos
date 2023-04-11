@@ -12,16 +12,10 @@ import { getTodos } from './api';
 import { User } from './types/User';
 
 export const App: React.FC = React.memo(() => {
-  const [todos, setTodos] = useState<{
-    todos: Todo[]
-    originalTodos: Todo[];
-    searchQueryTodo: Todo[];
-  }>({
-    todos: [],
-    originalTodos: [],
-    searchQueryTodo: [],
-  });
+  const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [searchQueryTodo, setSearchQueryTodo] = useState<Todo[]>([]);
   const [user, setUser] = useState<User>({
     id: 0,
     name: '',
@@ -32,33 +26,26 @@ export const App: React.FC = React.memo(() => {
 
   useEffect(() => {
     getTodos().then(result => {
-      setTodos({
-        todos: result,
-        originalTodos: result,
-        searchQueryTodo: result,
-      });
+      setOriginalTodos(result);
+      setFilteredTodos(result);
       setLoaded(true);
     });
   }, []);
 
   const handleFilterTodos = (filterType: string) => {
-    let filteredTodos = todos.originalTodos;
-
     switch (filterType) {
       case 'active':
-        filteredTodos = todos.originalTodos.filter(todo => !todo.completed);
+        setFilteredTodos(originalTodos.filter(todo => !todo.completed));
+        setSearchQueryTodo(originalTodos.filter(todo => !todo.completed));
         break;
       case 'completed':
-        filteredTodos = todos.originalTodos.filter(todo => todo.completed);
+        setFilteredTodos(originalTodos.filter(todo => todo.completed));
+        setSearchQueryTodo(originalTodos.filter(todo => todo.completed));
         break;
       default:
+        setFilteredTodos(originalTodos);
+        setSearchQueryTodo(originalTodos);
     }
-
-    setTodos(prev => ({
-      ...prev,
-      todos: filteredTodos,
-      searchQueryTodo: filteredTodos,
-    }));
   };
 
   return (
@@ -69,19 +56,19 @@ export const App: React.FC = React.memo(() => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} setTodos={setTodos} handleFilterTodos={handleFilterTodos} />
+              <TodoFilter searchQueryTodo={searchQueryTodo} handleFilterTodos={handleFilterTodos} setFilteredTodos={setFilteredTodos} />
             </div>
 
             <div className="block">
               {!loaded && <Loader />}
-              <TodoList todos={todos.todos} setUser={setUser} setSelectedTodoId={setSelectedTodoId} />
+              <TodoList todos={filteredTodos} setUser={setUser} setSelectedTodoId={setSelectedTodoId} />
             </div>
           </div>
         </div>
       </div>
 
       {user.id !== 0
-        ? <TodoModal user={user} todos={todos.todos} setUser={setUser} selectedTodoId={selectedTodoId} /> : ''}
+        ? <TodoModal user={user} todos={filteredTodos} setUser={setUser} selectedTodoId={selectedTodoId} /> : ''}
     </>
   );
 });
