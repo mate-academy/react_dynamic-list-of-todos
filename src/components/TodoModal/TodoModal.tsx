@@ -10,16 +10,16 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
-  const [user, setUser] = useState(():User | null => null);
+  const [user, setUser] = useState<User | null>(null);
 
-  const LoadUsers = async () => {
+  const loadUsers = async () => {
     const selectedUser = await getUser(todo.userId);
 
     return setUser(selectedUser);
   };
 
   useEffect(() => {
-    LoadUsers();
+    loadUsers();
   }, []);
 
   return (
