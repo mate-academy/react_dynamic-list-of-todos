@@ -12,21 +12,21 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { Todo, FilterType } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoadTodo, setIsLoadTodo] = useState(false);
-  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
-  const [filterType, setFilterType] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterType, setFilterType] = useState(FilterType.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(todo => {
         setTodos(todo);
-        setIsLoadTodo(true);
+        setIsLoading(true);
       });
   }, []);
 
@@ -35,13 +35,13 @@ export const App: React.FC = () => {
       const todosFilter = todo.title.toLowerCase().includes(query.toLowerCase());
 
       switch (filterType) {
-        case 'all':
+        case FilterType.ALL:
           return todosFilter;
 
-        case 'completed':
+        case FilterType.COMPLETE:
           return todo.completed && todosFilter;
 
-        case 'active':
+        case FilterType.ACTIVE:
           return !todo.completed && todosFilter;
 
         default:
@@ -76,11 +76,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadTodo
+              {isLoading
                 ? (
                   <TodoList
-                    selectTodo={selectTodo}
-                    setSelectTodo={setSelectTodo}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
                     todos={filterTodo}
                   />
                 )
@@ -92,10 +92,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          selectTodo={selectTodo}
-          setSelectTodo={setSelectTodo}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
