@@ -57,7 +57,7 @@ export const TodoList: React.FC<Props> = ({
                 {title}
               </p>
             </td>
-            
+
             <td className="has-text-right is-vcentered">
               {isTodoSelected ? (
                 <button

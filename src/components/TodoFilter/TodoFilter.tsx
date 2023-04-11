@@ -23,10 +23,10 @@ export const TodoFilter: React.FC<Props> = ({ onChange, filter }) => {
     (event) => {
       if (onChange) {
         const statusValue = event.target.value;
-        const status =
-          statusValue === FilterTodoStatus.All ||
-          statusValue === FilterTodoStatus.Active ||
-          statusValue === FilterTodoStatus.Completed
+        const status
+          = statusValue === FilterTodoStatus.All
+          || statusValue === FilterTodoStatus.Active
+          || statusValue === FilterTodoStatus.Completed
             ? statusValue
             : FilterTodoStatus.All;
 

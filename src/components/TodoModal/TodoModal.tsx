@@ -24,6 +24,7 @@ export const TodoModal: React.FC<Props> = ({
 
     if (!newSelectedTodo) {
       setSelectedTodo(null);
+
       return;
     }
 
