@@ -30,11 +30,10 @@ export const App: React.FC = () => {
 
         setTodos(todo);
       } catch (error) {
-        setIsLoading(false);
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        setIsLoading(true);
+        setIsLoading(false);
       }
     };
 
