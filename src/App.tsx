@@ -23,21 +23,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const todo = await getTodos();
-
+    getTodos()
+      .then(todo => {
         setTodos(todo);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+        setIsLoading(true);
+      });
   }, [selectedTodo?.userId]);
 
   const filterTodo = useMemo(() => {

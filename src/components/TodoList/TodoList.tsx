@@ -29,11 +29,14 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        <TodoItem
-          todos={todos}
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            selectedTodo={selectedTodo}
+            setSelectedTodo={setSelectedTodo}
+          />
+        ))}
       </tbody>
     </table>
   );
