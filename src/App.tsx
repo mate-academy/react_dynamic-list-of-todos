@@ -1,7 +1,6 @@
 import React, {
   useEffect,
   useState,
-  useCallback,
   useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
@@ -14,10 +13,9 @@ import { Loader } from './components/Loader';
 import { ErrorMessage } from './components/ErrorMessage';
 
 import { Todo } from './types/Todo';
-import { TodoWithUser } from './types/TodoWithUser';
 import { TodoCompletionFilter } from './types/TodoCompletionFilter';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 
 import { filterTodos } from './helpers';
 
@@ -27,14 +25,7 @@ export const App: React.FC = () => {
   const [hasTodosLoadingError, setHasTodosLoadingError] = useState(false);
   const [isTodosLoadInitialized, setIsTodosLoadInitialized] = useState(false);
 
-  const [selectedTodoWithUser, setSelectedTodoWithUser]
-    = useState<null | TodoWithUser>(null);
-  const [isTodoWithUserLoading, setIsTodoWithUserLoading]
-    = useState(false);
-  const [hasTodoWithUserLoadingError, setHasTodoWithUserLoadingError]
-    = useState(false);
-  const [isTodosWithUserLoadInitialized, setIsTodosWithUserLoadInitialized]
-    = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
   const [todoCompletionFilterOption, setTodoCompletionFilterOption]
     = useState(TodoCompletionFilter.All);
@@ -50,31 +41,8 @@ export const App: React.FC = () => {
       .finally(() => setIsTodosLoading(false));
   }, []);
 
-  const handleTodoWithUserSelect = useCallback(
-    (newSelectedTodo: Todo): void => {
-      setHasTodoWithUserLoadingError(false);
-      setIsTodoWithUserLoading(true);
-      setIsTodosWithUserLoadInitialized(true);
-      setSelectedTodoWithUser({
-        ...newSelectedTodo,
-        user: null,
-      });
-
-      getUser(newSelectedTodo.userId)
-        .then(user => setSelectedTodoWithUser({
-          ...newSelectedTodo,
-          user: { ...user },
-        }))
-        .catch(() => setHasTodoWithUserLoadingError(true))
-        .finally(() => setIsTodoWithUserLoading(false));
-    },
-    [],
-  );
-
-  const handleTodoWithUserUnselect = (): void => {
-    setIsTodosWithUserLoadInitialized(false);
-    setSelectedTodoWithUser(null);
-  };
+  const handleTodoSelect = (newTodo: Todo) => setSelectedTodo(newTodo);
+  const handleTodoUnselect = (): void => setSelectedTodo(null);
 
   const filteredTodos = useMemo(() => (
     filterTodos(todos, todoCompletionFilterOption, searchQuery)
@@ -116,8 +84,8 @@ export const App: React.FC = () => {
               {isSuccessTodosLoad && Boolean(todos.length) && (
                 <TodoList
                   todos={filteredTodos}
-                  selectedTodoId={selectedTodoWithUser?.id ?? 0}
-                  onTodoWithUserSelect={handleTodoWithUserSelect}
+                  selectedTodoId={selectedTodo?.id ?? 0}
+                  onTodoWithUserSelect={handleTodoSelect}
                 />
               )}
             </div>
@@ -125,12 +93,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isTodosWithUserLoadInitialized && (
+      {selectedTodo && (
         <TodoModal
-          selectedTodoWithUser={selectedTodoWithUser}
-          isTodoWithUserLoading={isTodoWithUserLoading}
-          hasTodoWithUserLoadingError={hasTodoWithUserLoadingError}
-          onTodoWithUserUnselect={handleTodoWithUserUnselect}
+          selectedTodo={selectedTodo}
+          onTodoUnselect={handleTodoUnselect}
         />
       )}
     </>

@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { ErrorMessage } from '../ErrorMessage';
-import { TodoWithUser } from '../../types/TodoWithUser';
+
+import { getUser } from '../../api';
+
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  selectedTodoWithUser: TodoWithUser | null;
-  isTodoWithUserLoading: boolean;
-  hasTodoWithUserLoadingError: boolean;
-  onTodoWithUserUnselect: () => void;
+  selectedTodo: Todo;
+  onTodoUnselect: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodoWithUser,
-  isTodoWithUserLoading,
-  hasTodoWithUserLoadingError,
-  onTodoWithUserUnselect,
-}) => {
-  const {
+  selectedTodo: {
     id,
     title,
     completed,
-    user,
-  } = selectedTodoWithUser ?? {};
+    userId,
+  },
+  onTodoUnselect: onUserUnselect,
+}) => {
+  const [user, setUser] = useState<null | User>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
-  const {
-    name,
-    email,
-  } = user ?? {};
+  useEffect(() => {
+    setHasLoadingError(false);
+    setIsLoading(true);
+
+    getUser(userId)
+      .then(setUser)
+      .catch(() => setHasLoadingError(true))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isTodoWithUserLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+
+      {!isLoading && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -49,7 +57,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onTodoWithUserUnselect}
+              onClick={onUserUnselect}
             />
           </header>
 
@@ -58,29 +66,28 @@ export const TodoModal: React.FC<Props> = ({
               {title}
             </p>
 
-            <section className="block" data-cy="modal-user">
-              <strong
-                className={completed ? 'has-text-success' : 'has-text-danger'}
-              >
-                {completed ? 'Done' : 'Planned'}
-              </strong>
+            {hasLoadingError ? (
+              <ErrorMessage message="error" />
+            ) : (
+              <section className="block" data-cy="modal-user">
+                <strong
+                  className={classNames(
+                    {
+                      'has-text-success': completed,
+                      'has-text-danger': !completed,
+                    },
+                  )}
+                >
+                  {completed ? 'Done' : 'Planned'}
+                </strong>
 
-              {hasTodoWithUserLoadingError
-                ? (
-                  <ErrorMessage
-                    message={`Sorry, we couldn't retrieve user information
-                    due to a server error`}
-                  />
-                ) : (
-                  <>
-                    {' by '}
+                {' by '}
 
-                    <a href={`mailto:${email}`}>
-                      {name}
-                    </a>
-                  </>
-                )}
-            </section>
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              </section>
+            )}
           </div>
         </div>
       )}
