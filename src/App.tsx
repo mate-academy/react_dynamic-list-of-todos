@@ -77,7 +77,9 @@ export const App: React.FC = () => {
                   An error occured while todos loading
                 </h2>
               )}
-              {isLoading && <Loader />}
+
+              {isLoading
+                && <Loader />}
 
               {!hasError && !isLoading && (
                 <TodoList
