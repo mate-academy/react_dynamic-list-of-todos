@@ -13,12 +13,11 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [arrOfTodos, setTodos] = useState<Todo[]>([]);
-  const [sortParam, setSortParam] = useState({
+  const [sortParams, setSortParam] = useState({
     sortSelect: '',
     sortInput: '',
   });
-  const [userId, setUserId] = useState(0);
-  const [todoId, setTodoId] = useState(0);
+  const [selectedTodo, setTodo] = useState<Todo | null>(null);
 
   const setFilterParam = (select: string, input: string) => {
     setSortParam({
@@ -27,12 +26,8 @@ export const App: React.FC = () => {
     });
   };
 
-  const changeUserId = (id: number) => {
-    setUserId(id);
-  };
-
-  const changeTodoId = (id: number) => {
-    setTodoId(id);
+  const setSelectedTodo = (todo: Todo | null) => {
+    setTodo(todo);
   };
 
   useEffect(() => {
@@ -62,9 +57,9 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={arrOfTodos}
-                  filter={sortParam}
-                  selectUser={changeUserId}
-                  selectTodo={changeTodoId}
+                  filter={sortParams}
+                  onChangeTodo={setSelectedTodo}
+                  currentTodo={selectedTodo}
                 />
               )}
             </div>
@@ -72,7 +67,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {userId !== 0 && <TodoModal userId={userId} todos={arrOfTodos} selectUser={changeUserId} currentTodo={todoId} />}
+      {selectedTodo !== null
+      && (
+        <TodoModal
+          currentTodo={selectedTodo}
+          onChangeTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };

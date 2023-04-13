@@ -6,28 +6,27 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  userId: number
-  currentTodo: number
-  todos: Todo[]
-  selectUser: (id: number) => void
+  currentTodo: Todo | null
+  onChangeTodo: (todo: Todo | null) => void
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId, todos, selectUser, currentTodo,
+  currentTodo,
+  onChangeTodo,
 }) => {
   const [currentUser, setCurrUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (userId !== 0) {
+    if (currentTodo !== null) {
       const fetchData = async () => {
-        const arrayUsersFromServer = await getUser(userId);
+        const arrayUsersFromServer = await getUser(currentTodo?.userId);
 
         setCurrUser(arrayUsersFromServer);
       };
 
       fetchData();
     }
-  }, [userId]);
+  }, [currentTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -42,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${currentTodo}`}
+              {`Todo #${currentTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -50,17 +49,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => selectUser(0)}
+              onClick={() => onChangeTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todos.find(todo => todo.id === currentTodo)?.title}
+              {currentTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todos.find(todo => todo.id === currentTodo)?.completed
+              {currentTodo?.completed
                 ? (<strong className="has-text-success">Done</strong>)
                 : (<strong className="has-text-danger">Planned</strong>)}
 
