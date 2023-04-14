@@ -21,21 +21,22 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const { sortSelect, sortInput } = filter;
 
-  const visibleTodos = todos
-    .filter(todo => todo.title.includes(sortInput.toLowerCase()))
-    .filter(todo => {
-      const { completed } = todo;
+  const visibleTodos = todos.filter(todo => {
+    const { completed, title } = todo;
 
-      if (sortSelect === 'active') {
+    if (!title.includes(sortInput.toLowerCase())) {
+      return false;
+    }
+
+    switch (sortSelect) {
+      case 'active':
         return !completed;
-      }
-
-      if (sortSelect === 'completed') {
+      case 'completed':
         return completed;
-      }
-
-      return todos;
-    });
+      default:
+        return true;
+    }
+  });
 
   return (
     <table className="table is-narrow is-fullwidth">

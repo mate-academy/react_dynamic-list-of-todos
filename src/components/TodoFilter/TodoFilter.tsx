@@ -23,6 +23,11 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
     onFilter(select, value);
   };
 
+  const clearSearchField = () => {
+    setField('');
+    onFilter(select, '');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -59,10 +64,7 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setField('');
-                onFilter(select, '');
-              }}
+              onClick={clearSearchField}
             />
           </span>
         )}

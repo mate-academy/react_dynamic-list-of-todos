@@ -18,6 +18,7 @@ export const App: React.FC = () => {
     sortInput: '',
   });
   const [selectedTodo, setTodo] = useState<Todo | null>(null);
+  const [errors, setError] = useState<string>('');
 
   const setFilterParam = (select: string, input: string) => {
     setSortParam({
@@ -26,15 +27,15 @@ export const App: React.FC = () => {
     });
   };
 
-  const setSelectedTodo = (todo: Todo | null) => {
-    setTodo(todo);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      const arrayTodosFromServer = await getTodos();
+      try {
+        const arrayTodosFromServer = await getTodos();
 
-      setTodos(arrayTodosFromServer);
+        setTodos(arrayTodosFromServer);
+      } catch {
+        setError('Error: Something wrong, try latter');
+      }
     };
 
     fetchData();
@@ -52,17 +53,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {arrOfTodos.length === 0 ? (
+              {arrOfTodos.length === 0 && !errors && (
                 <Loader />
-              ) : (
+              )}
+              {errors && (
+                <p>{errors}</p>
+              )}
+              {arrOfTodos.length !== 0 && !errors && (
                 <TodoList
                   todos={arrOfTodos}
                   filter={sortParams}
-                  onChangeTodo={setSelectedTodo}
+                  onChangeTodo={setTodo}
                   currentTodo={selectedTodo}
                 />
               )}
             </div>
+
           </div>
         </div>
       </div>
@@ -71,7 +77,7 @@ export const App: React.FC = () => {
       && (
         <TodoModal
           currentTodo={selectedTodo}
-          onChangeTodo={setSelectedTodo}
+          onChangeTodo={setTodo}
         />
       )}
     </>
