@@ -53,13 +53,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {arrOfTodos.length === 0 && !errors && (
+              {!arrOfTodos.length && !errors && (
                 <Loader />
               )}
               {errors && (
                 <p>{errors}</p>
               )}
-              {arrOfTodos.length !== 0 && !errors && (
+              {!!arrOfTodos.length && !errors && (
                 <TodoList
                   todos={arrOfTodos}
                   filter={sortParams}

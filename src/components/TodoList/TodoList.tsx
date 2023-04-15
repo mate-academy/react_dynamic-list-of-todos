@@ -13,6 +13,11 @@ type Props = {
   onChangeTodo: (todo: Todo) => void
 };
 
+enum SortList {
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoList: React.FC<Props> = ({
   todos,
   filter,
@@ -29,9 +34,9 @@ export const TodoList: React.FC<Props> = ({
     }
 
     switch (sortSelect) {
-      case 'active':
+      case SortList.Active:
         return !completed;
-      case 'completed':
+      case SortList.Completed:
         return completed;
       default:
         return true;

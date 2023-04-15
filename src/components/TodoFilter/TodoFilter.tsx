@@ -57,7 +57,7 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {searchField.length > 0 && (
+        {!searchField.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
