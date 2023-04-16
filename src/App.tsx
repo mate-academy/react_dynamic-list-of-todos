@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,69 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
+import { getTodos } from './api';
+
+const filterTodos = (todos: Todo[], inputQuery: string, filterType: FilterType) => {
+  let currentTodos = [...todos];
+
+  if (inputQuery) {
+    const query = inputQuery.trim().toLowerCase();
+
+    currentTodos = currentTodos.filter(todo => todo.title.toLowerCase().includes(query));
+  }
+
+  switch (filterType) {
+    case FilterType.ACTIVE:
+      currentTodos = currentTodos.filter(todo => !todo.completed);
+      break;
+
+    case FilterType.COMPLETED:
+      currentTodos = currentTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      throw new Error(`Unrecognized filter type: ${filterType}`);
+  }
+
+  return currentTodos;
+};
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [query, setQuery] = useState<string>('');
+  const [filterType, setFilterType] = useState(FilterType.ALL);
+
+  const visibleTodos = filterTodos(todos, query, filterType);
+
+  const fetchTodos = async () => {
+    try {
+      const data = await getTodos();
+
+      setTodos(data);
+      setIsDataLoading(false);
+      setIsDataLoading(false);
+    } catch {
+      setIsError(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const openTodo = useCallback((todo: Todo) => {
+    setSelectedTodo(todo);
+  }, [selectedTodo]);
+
+  const closeTodo = useCallback(() => {
+    setSelectedTodo(null);
+  }, [selectedTodo]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +79,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                filterType={filterType}
+                onQueryChange={setQuery}
+                onFilterTypeChange={setFilterType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isDataLoading && <Loader />}
+              {isError
+                ? <p>Error of loading data</p>
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    openTodo={openTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          closeTodo={closeTodo}
+        />
+      )}
     </>
   );
 };
