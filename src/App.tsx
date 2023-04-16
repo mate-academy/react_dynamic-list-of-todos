@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 import { getTodos } from './api';
 
-const filteredTodos = (todos: Todo[], inputQuery: string, filterType: FilterType) => {
+const filterTodos = (todos: Todo[], inputQuery: string, filterType: FilterType) => {
   let currentTodos = [...todos];
 
   if (inputQuery) {
@@ -25,11 +25,13 @@ const filteredTodos = (todos: Todo[], inputQuery: string, filterType: FilterType
     case FilterType.ACTIVE:
       currentTodos = currentTodos.filter(todo => !todo.completed);
       break;
+
     case FilterType.COMPLETED:
       currentTodos = currentTodos.filter(todo => todo.completed);
       break;
+
     default:
-      break;
+      throw new Error(`Unrecognized filter type: ${filterType}`);
   }
 
   return currentTodos;
@@ -38,12 +40,12 @@ const filteredTodos = (todos: Todo[], inputQuery: string, filterType: FilterType
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [query, setQuery] = useState<string>('');
   const [filterType, setFilterType] = useState(FilterType.ALL);
 
-  const visibleTodos = filteredTodos(todos, query, filterType);
+  const visibleTodos = filterTodos(todos, query, filterType);
 
   const fetchTodos = async () => {
     try {
@@ -53,7 +55,7 @@ export const App: React.FC = () => {
       setIsDataLoading(false);
       setIsDataLoading(false);
     } catch {
-      setIsLoadingError(true);
+      setIsError(true);
     }
   };
 
@@ -87,7 +89,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isDataLoading && <Loader />}
-              {isLoadingError
+              {isError
                 ? <p>Error of loading data</p>
                 : (
                   <TodoList
@@ -101,8 +103,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-      && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           closeTodo={closeTodo}
