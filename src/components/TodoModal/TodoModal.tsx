@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Loader } from '../Loader';
-import { LoadingError } from '../LoaderError/LoaderError';
+import { LoadingError } from '../LoaderError/LoadingError';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
@@ -26,23 +26,23 @@ export const TodoModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
-  const loadUserInfo = async (userID: number) => {
-    setIsLoading(true);
-
-    try {
-      const loadedUser = await getUser(userID);
-
-      setUser(loadedUser);
-    } catch (error) {
-      setHasLoadingError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadUserInfo = async (userID: number) => {
+      setIsLoading(true);
+
+      try {
+        const loadedUser = await getUser(userID);
+
+        setUser(loadedUser);
+      } catch (error) {
+        setHasLoadingError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     loadUserInfo(userId);
-  }, []);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">

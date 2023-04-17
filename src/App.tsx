@@ -11,7 +11,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { LoadingError } from './components/LoaderError/LoaderError';
+import { LoadingError } from './components/LoaderError/LoadingError';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,21 +21,21 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
-  const loadTodos = async () => {
-    setLoading(true);
-
-    try {
-      const todosFromServer = await getTodos();
-
-      setTodos(todosFromServer);
-    } catch (error) {
-      setHasLoadingError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadTodos = async () => {
+      setLoading(true);
+
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch (error) {
+        setHasLoadingError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadTodos();
   }, []);
 
