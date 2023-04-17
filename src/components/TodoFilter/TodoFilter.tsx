@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
-  const [searchField, setField] = useState('');
+  const [searchField, setSearchField] = useState('');
   const [select, setSelect] = useState('all');
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -19,12 +19,12 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
   = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    setField(value);
+    setSearchField(value);
     onFilter(select, value);
   };
 
   const clearSearchField = () => {
-    setField('');
+    setSearchField('');
     onFilter(select, '');
   };
 
@@ -57,7 +57,7 @@ export const TodoFilter:React.FC<Props> = ({ onFilter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {!searchField.length && (
+        {!!searchField.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

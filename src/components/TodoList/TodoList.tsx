@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
   const visibleTodos = todos.filter(todo => {
     const { completed, title } = todo;
 
-    if (!title.includes(sortInput.toLowerCase())) {
+    if (!title.toLowerCase().includes(sortInput.toLowerCase())) {
       return false;
     }
 

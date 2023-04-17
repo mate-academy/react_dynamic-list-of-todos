@@ -10,10 +10,11 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SortParams } from './types/SortParams';
 
 export const App: React.FC = () => {
-  const [arrOfTodos, setTodos] = useState<Todo[]>([]);
-  const [sortParams, setSortParam] = useState({
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [sortParams, setSortParam] = useState<SortParams>({
     sortSelect: '',
     sortInput: '',
   });
@@ -53,15 +54,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!arrOfTodos.length && !errors && (
+              {!todos.length && !errors && (
                 <Loader />
               )}
               {errors && (
                 <p>{errors}</p>
               )}
-              {!!arrOfTodos.length && !errors && (
+              {!!todos.length && !errors && (
                 <TodoList
-                  todos={arrOfTodos}
+                  todos={todos}
                   filter={sortParams}
                   onChangeTodo={setTodo}
                   currentTodo={selectedTodo}
@@ -74,12 +75,12 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo !== null
-      && (
-        <TodoModal
-          currentTodo={selectedTodo}
-          onChangeTodo={setTodo}
-        />
-      )}
+        && (
+          <TodoModal
+            currentTodo={selectedTodo}
+            onChangeTodo={setTodo}
+          />
+        )}
     </>
   );
 };
