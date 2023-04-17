@@ -10,22 +10,34 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { findTodoById } from './helpers/findTodoById';
+import { getFilteredTodos } from './helpers/getFilteredTodos';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [filterType, setFilterType] = useState(FilterType.All);
+  const [query, setQuery] = useState('');
+  const [hasError, setHasError] = useState(false);
 
+  const visibleTodos = getFilteredTodos(todos, filterType, query);
   const selectedTodo = findTodoById(selectedTodoId, visibleTodos);
 
+  const fetchTodos = async () => {
+    try {
+      const apiTodos = await getTodos();
+
+      setTodos(apiTodos);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    getTodos()
-      .then(apiTodos => {
-        setTodos(apiTodos);
-        setVisibleTodos(apiTodos);
-        setIsLoading(false);
-      });
+    fetchTodos();
   }, []);
 
   return (
@@ -37,34 +49,37 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                onFilter={setVisibleTodos}
+                query={query}
+                setQuery={setQuery}
+                filterType={filterType}
+                setFilterType={setFilterType}
               />
             </div>
 
             <div className="block">
-              {isLoading
-                ? (<Loader />)
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodoId={selectedTodoId}
-                    onSelect={setSelectedTodoId}
-                  />
-                )}
+              {isLoading && <Loader />}
+              {!isLoading && !hasError && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  onSelect={setSelectedTodoId}
+                />
+              )}
+              {hasError && (
+                <h1>Something went wrong</h1>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {
-        selectedTodo !== null
-          && (
-            <TodoModal
-              todo={selectedTodo}
-              deselectTodo={() => setSelectedTodoId(0)}
-            />
-          )
+        selectedTodo && (
+          <TodoModal
+            todo={selectedTodo}
+            deselectTodo={() => setSelectedTodoId(0)}
+          />
+        )
       }
     </>
   );

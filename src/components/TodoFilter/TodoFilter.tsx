@@ -1,44 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React from 'react';
+import { FilterType } from '../../types/FilterType';
 
 interface Props {
-  todos: Todo[];
-  onFilter: React.Dispatch<React.SetStateAction<Todo[]>>;
+  query: string,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  filterType: FilterType,
+  setFilterType: React.Dispatch<React.SetStateAction<FilterType>>,
 }
 
-export const TodoFilter: React.FC<Props> = ({ todos, onFilter }) => {
-  const [query, setQuery] = useState('');
-  const [selectedFilter, setSelected] = useState('all');
-
-  useEffect(() => {
-    const filteredTodos = todos
-      .filter(todo => {
-        const lowecasedQuery = query.toLocaleLowerCase();
-        const lowercasedTitle = todo.title.toLocaleLowerCase();
-        const fitsQuery = lowercasedTitle.includes(lowecasedQuery);
-
-        switch (selectedFilter) {
-          case 'active':
-            return !todo.completed && fitsQuery;
-          case 'completed':
-            return todo.completed && fitsQuery;
-          default:
-            return fitsQuery;
-        }
-      });
-
-    onFilter(filteredTodos);
-  }, [query, selectedFilter]);
-
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  setQuery,
+  filterType,
+  setFilterType,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedFilter}
+            value={filterType}
             onChange={(event) => {
-              setSelected(event.target.value);
+              setFilterType(event.target.value as FilterType);
             }}
           >
             <option value="all">All</option>
