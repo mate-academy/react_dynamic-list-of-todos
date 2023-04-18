@@ -24,14 +24,4 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-// export const getUser = (userId: number) => {
-//   return get<User[]>('/users')
-//     .then((users) => {
-//       // eslint-disable-next-line no-console
-//       console.log(users, userId);
-
-//       return users.find((user) => user.id === userId);
-//     });
-// };
-
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);

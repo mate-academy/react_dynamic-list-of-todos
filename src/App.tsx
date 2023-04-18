@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -45,6 +45,7 @@ const filterTodosBySearchQuery = (query: string, todosArr: Todo[]) => {
 
 export const App: React.FC = () => {
   const [loadingTodoList, setLoadingTodoList] = useState(true);
+  const [loadingError, setLoadingError] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -58,16 +59,22 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then((todosFromServer) => {
-        if (todosFromServer) {
-          setTodos([...todosFromServer]);
-          setLoadingTodoList(false);
-        }
+        setTodos([...todosFromServer]);
+        setLoadingTodoList(false);
+      })
+      .catch(() => {
+        setLoadingTodoList(false);
+        setLoadingError(true);
       });
   }, []);
 
-  const filteredByStatus = filterTodoByStatus(filterType, todos);
+  const filteredByStatus = useMemo(() => {
+    return filterTodoByStatus(filterType, todos);
+  }, [filterType, todos]);
 
-  const todosToShow = filterTodosBySearchQuery(searchQuery, filteredByStatus);
+  const todosToShow = useMemo(() => {
+    return filterTodosBySearchQuery(searchQuery, filteredByStatus);
+  }, [searchQuery, filteredByStatus]);
 
   const selectedTodo = getTodoById(selectedTodoId, todos);
 
@@ -88,15 +95,29 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodoList
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={todosToShow}
-                    selectedTodoId={selectedTodoId}
-                    onSelect={onSelect}
+              {loadingTodoList && !loadingError && <Loader />}
+
+              {!loadingTodoList && !loadingError && (
+                <TodoList
+                  todos={todosToShow}
+                  selectedTodoId={selectedTodoId}
+                  onSelect={onSelect}
+                />
+              )}
+
+              {!loadingTodoList && loadingError && (
+                <div className="notification is-danger is-light">
+                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                  <button
+                    type="button"
+                    className="delete"
+                    // eslint-disable-next-line no-restricted-globals
+                    onClick={() => location.reload()}
                   />
-                )}
+                  Error occurred: loading is unsuccess because of some reason.
+                  Try to reload page, or close this massage to auto-reload.
+                </div>
+              )}
             </div>
           </div>
         </div>
