@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -19,12 +20,17 @@ const getVisibleTodos = (
 ): Todo[] => {
   let visibleTodos: Todo[] = [...todos];
 
-  if (sortType === FilterType.ACTIVE) {
-    visibleTodos = todos.filter(todo => !todo.completed);
-  }
+  switch (sortType) {
+    case FilterType.ACTIVE:
+      visibleTodos = todos.filter(todo => !todo.completed);
+      break;
 
-  if (sortType === FilterType.COMPLETED) {
-    visibleTodos = todos.filter(todo => todo.completed);
+    case FilterType.COMPLETED:
+      visibleTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
   }
 
   const handleFilterTodos = (value: string, searchQuery: string) => {
@@ -33,10 +39,10 @@ const getVisibleTodos = (
     );
   };
 
-  return visibleTodos.filter(({ title }) => (
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useMemo(() => visibleTodos.filter(({ title }) => (
     handleFilterTodos(title, query)
-
-  ));
+  )), [visibleTodos, query]);
 };
 
 export const App: React.FC = () => {
@@ -48,10 +54,19 @@ export const App: React.FC = () => {
   const [hasLoadingPageError, setHasLoadingPageError] = useState(false);
 
   useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(() => setHasLoadingPageError(true))
-      .finally(() => setIsLoadingPage(true));
+    async function fetchData() {
+      try {
+        const fetchedTodos = await getTodos();
+
+        setTodos(fetchedTodos);
+      } catch (error) {
+        setHasLoadingPageError(true);
+      } finally {
+        setIsLoadingPage(true);
+      }
+    }
+
+    fetchData();
   }, []);
 
   const visibleTodos = getVisibleTodos(todos, selectedType, query);
