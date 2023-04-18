@@ -83,8 +83,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onQueryChange={setQuery}
-                filterBy={filterBy}
-                onFilterChange={setFilterBy}
+                statusFilter={filterBy}
+                onStatusFilterChange={setFilterBy}
               />
             </div>
 

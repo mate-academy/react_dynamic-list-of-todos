@@ -7,18 +7,18 @@ const filterByOptions = Object.values(FilterBy);
 type Props = {
   query: string;
   onQueryChange: (newQuery: string) => void;
-  filterBy: string;
-  onFilterChange: (newFilterBy: FilterBy) => void;
+  statusFilter: FilterBy;
+  onStatusFilterChange: (newFilterBy: FilterBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  filterBy,
+  statusFilter,
   onQueryChange,
-  onFilterChange,
+  onStatusFilterChange,
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.currentTarget.value as FilterBy);
+    onStatusFilterChange(event.currentTarget.value as FilterBy);
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filterBy}
+            value={statusFilter}
             onChange={handleFilterChange}
           >
             <option value={filterByOptions[0]}>All</option>

@@ -4,21 +4,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  id: number;
-  title: string;
-  completed: boolean;
   isSelectedTodo: boolean;
   onTodoSelected: (todo: Todo) => void;
 };
 
 export const TodoComponent: React.FC<Props> = ({
   todo,
-  id,
-  title,
-  completed,
   isSelectedTodo,
   onTodoSelected,
 }) => {
+  const { id, title, completed } = todo;
+
   return (
     <tr
       key={id}

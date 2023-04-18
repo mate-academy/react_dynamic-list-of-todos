@@ -29,18 +29,13 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => {
-        const { id, title, completed } = todo;
         const isSelectedTodo = selectedTodo === todo;
 
         return (
           <TodoComponent
             todo={todo}
-            id={id}
-            title={title}
-            completed={completed}
             isSelectedTodo={isSelectedTodo}
             onTodoSelected={onTodoSelected}
-            key={id}
           />
         );
       })}
