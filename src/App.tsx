@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect, useMemo, useState, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -39,16 +41,20 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    let filteredTodos = [...todos];
+  const filterTodos = useCallback((
+    todosArg: Todo[],
+    queryArg: string,
+    filterByArg: FilterBy,
+  ) => {
+    let filteredTodos = [...todosArg];
 
-    if (query) {
+    if (queryArg) {
       filteredTodos = filteredTodos.filter(todo => (
-        todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+        todo.title.toLocaleLowerCase().includes(queryArg.toLocaleLowerCase())
       ));
     }
 
-    switch (filterBy) {
+    switch (filterByArg) {
       case FilterBy.Completed:
         filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
@@ -62,7 +68,9 @@ export const App: React.FC = () => {
     }
 
     return filteredTodos;
-  }, [query, filterBy, loading]);
+  }, []);
+
+  const visibleTodos = useMemo(() => filterTodos(todos, query, filterBy), [todos, query, filterBy]);
 
   const handleSelectedTodo = (todo: Todo) => {
     setSelectedTodo(todo);
