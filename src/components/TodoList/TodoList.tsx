@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -60,9 +61,15 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => handleClick(todo)}
                 >
                   <span className="icon">
-                    {currentTodoId === todo.id && onClosedTodo
-                      ? <i className="far fa-eye-slash" />
-                      : <i className="far fa-eye" />}
+                    <i className={
+                      classNames('far',
+                        {
+                          'fa-eye': true,
+                          'fa-eye-slash': currentTodoId === todo.id
+                            && onClosedTodo,
+                        })
+                    }
+                    />
                   </span>
                 </button>
               </td>

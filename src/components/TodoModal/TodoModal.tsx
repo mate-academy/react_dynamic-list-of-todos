@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo | null;
-  onResetTodo: (boolean: null) => void;
+  onResetTodo: (Todo: null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     fetchUser();
-  }, []);
+  }, [todo]);
 
   const handleReset = () => {
     onResetTodo(null);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -9,37 +9,24 @@ interface Props {
 enum Todos {
   All = 'all',
   Active = 'active',
-  Completed = 'completed ',
+  Completed = 'completed',
 }
 
-const filteredTodos = (todos: Todo[], filter: Todos) => {
-  switch (filter) {
-    case Todos.Active:
-      return todos.filter((todo) => !todo.completed);
-    case Todos.Completed:
-      return todos.filter((todo) => todo.completed);
-    default:
-      return todos;
-  }
-};
-
-const filteredTodoByQuery = (query: string, todos: Todo[]) => {
+const filterTodos = (todos: Todo[], filter: Todos, query: string) => {
   return todos.filter((todo) => {
     const fixedTitle = todo.title.toLocaleLowerCase();
     const fixedQuery = query.toLocaleLowerCase();
 
-    return fixedTitle.includes(fixedQuery);
+    const isActive = filter === Todos.Active && !todo.completed;
+    const isCompleted = filter === Todos.Completed && todo.completed;
+
+    if (query === '') {
+      return (filter === Todos.All || isActive || isCompleted);
+    }
+
+    return (filter === Todos.All || isActive || isCompleted)
+      && fixedTitle.includes(fixedQuery);
   });
-};
-
-const filteredTodosByInputAndStatus = (
-  todos: Todo[],
-  filter: Todos,
-  query: string,
-) => {
-  const filteredByStatus = filteredTodos(todos, filter);
-
-  return filteredTodoByQuery(query, filteredByStatus);
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -53,35 +40,25 @@ export const TodoFilter: React.FC<Props> = ({
     const newFilter = event.target.value as Todos;
 
     setFilter(newFilter);
-
-    const newTodos = filteredTodosByInputAndStatus(
-      onUploadedTodos,
-      newFilter,
-      query,
-    );
-
-    onCurrentTodos(newTodos);
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = event.target.value;
 
     setQuery(newQuery);
-
-    const newTodos = filteredTodosByInputAndStatus(
-      onUploadedTodos,
-      filter,
-      newQuery,
-    );
-
-    onCurrentTodos(newTodos);
   };
 
   const handleReset = () => {
     setQuery('');
-    setFilter(Todos.All);
-    onCurrentTodos(onUploadedTodos);
   };
+
+  const filteredTodos = useMemo(() => {
+    return filterTodos(onUploadedTodos, filter, query);
+  }, [onUploadedTodos, filter, query]);
+
+  useEffect(() => {
+    onCurrentTodos(filteredTodos);
+  }, [filteredTodos]);
 
   return (
     <form className="field has-addons">
