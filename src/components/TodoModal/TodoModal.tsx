@@ -22,8 +22,6 @@ export const TodoModal: React.FC<Props> = (
     getUser(userId).then(foundUser => setUser(foundUser));
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log('render Modal');
 
   return (
     <div className="modal is-active" data-cy="modal">
