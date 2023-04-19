@@ -1,33 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
+import { filterTodos } from '../helpers';
+import { Todos } from '../../enums/Todos';
 
 interface Props {
   onUploadedTodos: Todo[];
   onCurrentTodos: (todos: Todo[]) => void;
 }
-
-enum Todos {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-const filterTodos = (todos: Todo[], filter: Todos, query: string) => {
-  return todos.filter((todo) => {
-    const fixedTitle = todo.title.toLocaleLowerCase();
-    const fixedQuery = query.toLocaleLowerCase();
-
-    const isActive = filter === Todos.Active && !todo.completed;
-    const isCompleted = filter === Todos.Completed && todo.completed;
-
-    if (query === '') {
-      return (filter === Todos.All || isActive || isCompleted);
-    }
-
-    return (filter === Todos.All || isActive || isCompleted)
-      && fixedTitle.includes(fixedQuery);
-  });
-};
 
 export const TodoFilter: React.FC<Props> = ({
   onUploadedTodos,
@@ -36,21 +20,25 @@ export const TodoFilter: React.FC<Props> = ({
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(Todos.All);
 
-  const handleStatusSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilter = event.target.value as Todos;
+  const handleStatusSelect = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const newFilter = event.target.value as Todos;
 
-    setFilter(newFilter);
-  };
+      setFilter(newFilter);
+    }, [setFilter],
+  );
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = event.target.value;
+  const handleInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuery = event.target.value;
 
-    setQuery(newQuery);
-  };
+      setQuery(newQuery);
+    }, [setQuery],
+  );
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setQuery('');
-  };
+  }, [setQuery]);
 
   const filteredTodos = useMemo(() => {
     return filterTodos(onUploadedTodos, filter, query);
@@ -86,16 +74,15 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query
-           && (
-             // eslint-disable-next-line jsx-a11y/control-has-associated-label
-             <button
-               data-cy="clearSearchButton"
-               type="button"
-               className="delete"
-               onClick={handleReset}
-             />
-           )}
+          {query && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="Delete"
+              onClick={handleReset}
+            />
+          )}
         </span>
       </p>
     </form>

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -38,6 +37,14 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
+  const todoList = !hasError && (
+    <TodoList
+      todos={filteredTodos}
+      onSelectTodo={handleTodo}
+      onClosedTodo={selectedTodo}
+    />
+  );
+
   return (
     <>
       <div className="section">
@@ -53,29 +60,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {hasError
-                && <span>Error 404. Please try later.</span>}
+              {hasError && <span>Something went wrong. Please try later.</span>}
+
               {isLoaded
-                ? !hasError && (
-                  <TodoList
-                    todos={filteredTodos}
-                    onSelectTodo={handleTodo}
-                    onClosedTodo={selectedTodo}
-                  />
-                )
+                ? todoList
                 : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo
-        && (
-          <TodoModal
-            todo={selectedTodo}
-            onResetTodo={setSelectedTodo}
-          />
-        )}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onResetTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
