@@ -6,22 +6,22 @@ export const getVisibleTodos = (
   value: string,
   filter: FilterBy,
 ) => {
-  let filtered = todos;
+  let copy = [...todos];
 
   switch (filter) {
     case FilterBy.Active:
-      filtered = todos.filter(todo => !todo.completed);
+      copy = todos.filter(todo => !todo.completed);
       break;
 
     case FilterBy.Completed:
-      filtered = todos.filter(todo => todo.completed);
+      copy = todos.filter(todo => todo.completed);
       break;
 
     default:
       break;
   }
 
-  return filtered.filter(todo => (
+  return copy.filter(todo => (
     todo.title.toLowerCase().includes(value.toLowerCase())
   ));
 };

@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -45,9 +44,7 @@ export const App: React.FC = () => {
     setshownTodoId(id);
   }, []);
 
-  const activeTodo = useMemo(() => (
-    todos.find(({ id }) => id === shownTodoId)
-  ), [shownTodoId]);
+  const activeTodo = todos.find(({ id }) => id === shownTodoId);
 
   const visibleTodos = getVisibleTodos(todos, query, filterBy);
 
@@ -59,21 +56,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                query={query}
-                onSetQuery={setQuery}
-                onChangeFilterBy={setFilterBy}
-              />
+              {
+                !isLoading
+                && !isError
+                && (
+                  <TodoFilter
+                    query={query}
+                    onSetQuery={setQuery}
+                    onChangeFilterBy={setFilterBy}
+                  />
+                )
+              }
             </div>
 
             <div className="block">
-              {isLoading && !isError
-                && (<Loader />)}
-              <TodoList
-                todos={visibleTodos}
-                onSelectTodo={changeShownTodo}
-                selectedTodo={shownTodoId}
-              />
+              {
+                isLoading
+                && !isError
+                && (<Loader />)
+              }
+              {
+                !isLoading
+                && !isError
+                && todos.length > 0
+                && (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSelectTodo={changeShownTodo}
+                    selectedTodo={shownTodoId}
+                  />
+                )
+              }
             </div>
           </div>
         </div>

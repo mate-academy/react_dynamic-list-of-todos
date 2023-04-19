@@ -44,8 +44,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading
-      && <Loader />}
+      {isLoading && (
+        <Loader />
+      ) }
       { displayModal ? (
         <div className={classNames(
           'modal-card',

@@ -35,6 +35,14 @@ export const TodoFilter: React.FC<Props> = (
     }, [],
   );
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSetQuery(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    onSetQuery('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -59,7 +67,7 @@ export const TodoFilter: React.FC<Props> = (
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onSetQuery(event.target.value)}
+          onChange={handleSearch}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -67,13 +75,14 @@ export const TodoFilter: React.FC<Props> = (
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onSetQuery('')}
-            />
+              onClick={handleClearSearch}
+            >
+              {}
+            </button>
           </span>
         )}
       </p>
