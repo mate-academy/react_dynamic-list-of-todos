@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { Loader } from '../Loader';
 
 type Props = {
   closeModal: () => void;
-  todo?: Todo;
+  todo: Todo;
 };
 
-export const TodoModal: React.FC<Props> = (props) => {
-  const { closeModal, todo } = props;
-
+export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
   const [user, setUsers] = useState<User>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    if (todo?.userId) {
-      getUser(todo?.userId)
-        .then(setUsers)
-        .finally(() => setLoading(false));
-    }
+
+    getUser(todo.userId)
+      .then(setUsers)
+      .catch(() => setLoading(true))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -40,9 +39,9 @@ export const TodoModal: React.FC<Props> = (props) => {
                 {`Todo #${todo?.id}`}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 type="button"
+                aria-label="close modal"
                 className="delete"
                 data-cy="modal-close"
                 onClick={closeModal}
@@ -56,10 +55,17 @@ export const TodoModal: React.FC<Props> = (props) => {
 
               {user && (
                 <p className="block" data-cy="modal-user">
-                  {todo?.completed
-                    ? (<strong className="has-text-success">Done</strong>)
-                    : (<strong className="has-text-danger">Planned</strong>)}
-
+                  <strong className={classNames(
+                    {
+                      'has-text-danger': !todo.completed,
+                      'has-text-success': todo.completed,
+                    },
+                  )}
+                  >
+                    {todo?.completed
+                      ? 'Done'
+                      : 'Planned'}
+                  </strong>
                   {' by '}
 
                   <a href={`mailto:${user?.email}`}>

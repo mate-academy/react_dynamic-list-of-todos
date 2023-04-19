@@ -1,33 +1,48 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { TodosFilterType } from '../../types/TodosFilterType';
 
 type Props = {
-  changeSortBy: Dispatch<SetStateAction<string>>;
+  changeFilterBy: Dispatch<SetStateAction<TodosFilterType>>;
   query: string;
   changeQuery: Dispatch<SetStateAction<string>>;
+  onClearField: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
-    changeSortBy,
+    changeFilterBy,
     query,
     changeQuery,
+    onClearField,
   } = props;
+
+  const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    changeQuery(event.target.value.trim());
+  };
+
+  const handleChangeFilterType = (event: ChangeEvent<HTMLSelectElement>) => {
+    changeFilterBy(event.target.value as TodosFilterType);
+  };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            onChange={(event) => changeSortBy(event.target.value)}
+            onChange={handleChangeFilterType}
             data-cy="statusSelect"
           >
-            <option value="all">All</option>
-            <option
-              value="active"
-            >
-              Active
+            <option value="all">
+              {TodosFilterType.Default}
             </option>
-            <option value="completed">Completed</option>
+
+            <option value="active">
+              {TodosFilterType.Active}
+            </option>
+
+            <option value="completed">
+              {TodosFilterType.Completed}
+            </option>
           </select>
         </span>
       </p>
@@ -39,7 +54,7 @@ export const TodoFilter: React.FC<Props> = (props) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => changeQuery(event.target.value)}
+          onChange={handleTextChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -47,12 +62,12 @@ export const TodoFilter: React.FC<Props> = (props) => {
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
+              aria-label="clear field"
               type="button"
               className="delete"
-              onClick={() => changeQuery('')}
+              onClick={onClearField}
             />
           </span>
         )}

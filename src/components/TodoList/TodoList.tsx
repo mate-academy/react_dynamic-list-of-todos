@@ -11,12 +11,16 @@ type Props = {
   setSelectedTodoId: (todoId: number) => void;
 };
 
-export const TodoList: React.FC<Props> = props => {
+export const TodoList: React.FC<Props> = (props) => {
   const {
     todos,
     selectedTodoId,
     setSelectedTodoId,
   } = props;
+
+  const isSelectedTodoId = (todoId: number) => {
+    return selectedTodoId !== todoId;
+  };
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -59,18 +63,14 @@ export const TodoList: React.FC<Props> = props => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  return selectedTodoId === id
-                    ? setSelectedTodoId(0)
-                    : setSelectedTodoId(id);
-                }}
+                onClick={() => setSelectedTodoId(id)}
               >
                 <span className="icon">
                   <i className={classNames(
                     'far',
                     {
-                      'fa-eye': selectedTodoId !== id,
-                      'fa-eye-slash': selectedTodoId === id,
+                      'fa-eye': isSelectedTodoId(id),
+                      'fa-eye-slash': !isSelectedTodoId(id),
                     },
                   )}
                   />

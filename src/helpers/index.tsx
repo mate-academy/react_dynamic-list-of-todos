@@ -13,7 +13,7 @@ export function filterByTodoStatus(todos: Todo[], sortBy: string) {
       case 'completed':
         return todo.completed;
       default:
-        return 'all';
+        return todo;
     }
   });
 }

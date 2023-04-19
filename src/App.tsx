@@ -10,31 +10,38 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { filterByTitle, filterByTodoStatus } from './helpers';
 import { Loader } from './components/Loader';
+import { LoadError } from './types/ErrorType';
+import { LoadingError } from './components/LoadingError/LoadingError';
+import { TodosFilterType } from './types/TodosFilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [showTodoModal, setShowTodoModal] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [sortBy, setSortBy] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterBy, setFilterBy] = useState(TodosFilterType.Default);
   const [query, setQuery] = useState('');
-
-  const [loading, setLoading] = useState(false);
+  const [isLoading, isSetLoading] = useState(false);
+  const [isLoadingError, isSetLoadingError] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    isSetLoading(true);
+
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .catch(() => isSetLoadingError(true))
+      .finally(() => isSetLoading(false));
   }, []);
 
-  let visiableTodos = filterByTodoStatus(todos, sortBy);
+  let visibleTodos = filterByTodoStatus(todos, filterBy);
 
-  visiableTodos = filterByTitle(visiableTodos, query);
-
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  visibleTodos = filterByTitle(visibleTodos, query);
 
   useEffect(() => {
-    if (selectedTodoId) {
+    const selectTodo = visibleTodos.find(todo => todo.id === selectedTodoId);
+
+    if (selectTodo) {
+      setSelectedTodo(selectTodo);
       setShowTodoModal(true);
     }
   }, [selectedTodoId]);
@@ -43,6 +50,12 @@ export const App: React.FC = () => {
     setSelectedTodoId(0);
     setShowTodoModal(false);
   };
+
+  const handleClearField = () => {
+    setQuery('');
+  };
+
+  const shouldShowTodoModal = selectedTodo && showTodoModal;
 
   return (
     <>
@@ -53,34 +66,40 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                changeSortBy={setSortBy}
+                changeFilterBy={setFilterBy}
                 query={query}
                 changeQuery={setQuery}
+                onClearField={handleClearField}
               />
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? (<Loader />)
                 : (
-                  <TodoList
-                    todos={visiableTodos}
-                    selectedTodoId={selectedTodoId}
-                    setSelectedTodoId={setSelectedTodoId}
-                  />
+                  <>
+                    {isLoadingError
+                      ? <LoadingError text={LoadError.LoadingError} />
+                      : (
+                        <TodoList
+                          todos={visibleTodos}
+                          selectedTodoId={selectedTodoId}
+                          setSelectedTodoId={setSelectedTodoId}
+                        />
+                      )}
+                  </>
                 )}
             </div>
           </div>
         </div>
       </div>
 
-      {showTodoModal
-        && (
-          <TodoModal
-            closeModal={closeTodoModal}
-            todo={selectedTodo}
-          />
-        )}
+      {shouldShowTodoModal && (
+        <TodoModal
+          closeModal={closeTodoModal}
+          todo={selectedTodo}
+        />
+      )}
     </>
   );
 };
