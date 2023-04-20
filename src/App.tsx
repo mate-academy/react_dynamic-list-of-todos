@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -30,24 +30,29 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  let visibleTodos: Todo[] = [...todos];
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const visibleTodos = useMemo(() => {
+    let todosCopy = [...todos];
 
-  if (filterType === 'active') {
-    visibleTodos = visibleTodos.filter(todo => !todo.completed);
-  }
+    if (filterType === 'active') {
+      todosCopy = todosCopy.filter(todo => !todo.completed);
+    }
 
-  if (filterType === 'completed') {
-    visibleTodos = visibleTodos.filter(todo => todo.completed);
-  }
+    if (filterType === 'completed') {
+      todosCopy = todosCopy.filter(todo => todo.completed);
+    }
 
-  visibleTodos = visibleTodos
-    .filter(todo => todo.title.toLowerCase()
+    todosCopy = todosCopy.filter(todo => todo.title
+      .toLowerCase()
       .includes(query.trim().toLowerCase()));
+
+    return todosCopy;
+  }, [todos, filterType, query]);
+
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   const renderedList = visibleTodos.length === 0
     ? (
-      <h2>Users not found!</h2>
+      <h2>Todos not found!</h2>
     )
     : (
       <TodoList
@@ -66,8 +71,6 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setTodos={setTodos}
                 query={query}
                 setQuery={setQuery}
                 filterType={filterType}

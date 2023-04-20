@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import { Todo } from '../../types/Todo';
+import React from 'react';
 
 type Props = {
-  todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   query: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
   filterType: string,
@@ -11,17 +8,11 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos,
-  setTodos,
   query,
   setQuery,
   filterType,
   setFilterType,
 }) => {
-  useEffect(() => {
-    setTodos(todos);
-  }, [query, filterType]);
-
   return (
     <form className="field has-addons">
       <p className="control">
