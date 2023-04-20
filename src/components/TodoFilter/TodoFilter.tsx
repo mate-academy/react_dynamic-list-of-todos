@@ -1,30 +1,30 @@
 import React, { useCallback } from 'react';
-import { SortBy } from '../../types/SortOption';
+import { FilterBy } from '../../types/Filter';
 
 type Props = {
   query: string;
   onChangeQuery: (query: string) => void
-  onChangeSort: (sortByOption: SortBy) => void
+  onChangeFilter: (filterByOption: FilterBy) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onChangeQuery,
-  onChangeSort,
+  onChangeFilter,
 }) => {
   const selectOption = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       switch (event.target.value) {
-        case SortBy.All:
-          onChangeSort(SortBy.All);
+        case FilterBy.All:
+          onChangeFilter(FilterBy.All);
           break;
 
-        case SortBy.Completed:
-          onChangeSort(SortBy.Completed);
+        case FilterBy.Completed:
+          onChangeFilter(FilterBy.Completed);
           break;
 
-        case SortBy.Active:
-          onChangeSort(SortBy.Active);
+        case FilterBy.Active:
+          onChangeFilter(FilterBy.Active);
           break;
 
         default:
@@ -41,7 +41,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={selectOption}
           >
-            {Object.values(SortBy).map(currentType => (
+            {Object.values(FilterBy).map(currentType => (
               <option value={currentType}>
                 {`${currentType[0].toUpperCase() + currentType.slice(1)}`}
               </option>

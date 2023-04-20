@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
@@ -11,9 +11,9 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
   const [user, setUser] = useState<User>();
-  const [error, setError] = useState(false);
+  const [isError, setisError] = useState(false);
 
   const {
     id,
@@ -22,41 +22,41 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     title,
   } = todo;
 
-  useEffect(() => {
-    const getUsersFromServer = async () => {
-      try {
-        const usersFromServer = await getUser(userId);
+  const getUsersFromServer = useCallback(async () => {
+    try {
+      const usersFromServer = await getUser(userId);
 
-        setUser(usersFromServer);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getUsersFromServer();
+      setUser(usersFromServer);
+    } catch {
+      setisError(true);
+    } finally {
+      setisLoading(false);
+    }
   }, []);
 
-  const dispayError = (!user || error) && !loading;
-  const displayModal = (!loading || !error) && user;
+  useEffect(() => {
+    getUsersFromServer();
+  }, [getUsersFromServer]);
+
+  const dispayisError = (!user || isError) && !isLoading;
+  const displayModal = (!isLoading || !isError) && user;
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && (
+      {isLoading && (
         <Loader />
       )}
 
-      {dispayError && (
+      {dispayisError && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Error
+              isError
             </div>
 
             <button

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, {
   useCallback,
-  useEffect, useMemo,
+  useEffect,
   useState,
 } from 'react';
 import 'bulma/css/bulma.css';
@@ -12,46 +12,46 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { SortBy } from './types/SortOption';
+import { FilterBy } from './types/Filter';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [sortOption, setSortOption] = useState(SortBy.All);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [FilterOption, setFilterOption] = useState(FilterBy.All);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [activeTodoId, setActiveTodoId] = useState(0);
 
-  useEffect(() => {
-    const getTodosFromServer = async () => {
-      try {
-        const todosFromServer = await getTodos();
+  const getTodosFromServer = useCallback(async () => {
+    try {
+      const todosFromServer = await getTodos();
 
-        setTodos(todosFromServer);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getTodosFromServer();
+      setTodos(todosFromServer);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, [getTodosFromServer]);
 
   const getVisibleTodos = (
     todosFilter: Todo[],
-    sortOptionFilter: SortBy,
+    FilterOptionFilter: FilterBy,
     queryFilter: string,
   ): Todo[] => {
     let filteredTodos = todos;
 
-    switch (sortOptionFilter) {
-      case SortBy.Active:
+    switch (FilterOptionFilter) {
+      case FilterBy.Active:
         filteredTodos = todosFilter.filter(todo => !todo.completed);
         break;
 
-      case SortBy.Completed:
+      case FilterBy.Completed:
         filteredTodos = todosFilter.filter(todo => todo.completed);
         break;
 
@@ -64,16 +64,14 @@ export const App: React.FC = () => {
     ));
   };
 
-  const activeTodo = useMemo(() => (
-    todos.find(todo => todo.id === activeTodoId)
-  ), [activeTodoId]);
+  const activeTodo = todos.find(todo => todo.id === activeTodoId);
 
   const changeActiveTodo = useCallback((id: number) => {
     setActiveTodoId(id);
-  }, []);
+  }, [activeTodoId]);
 
-  const visibleTodos = getVisibleTodos(todos, sortOption, query);
-  const displayTodoList = todos.length > 0 && !error && !loading;
+  const visibleTodos = getVisibleTodos(todos, FilterOption, query);
+  const displayTodoList = todos.length > 0 && !isError && !isLoading;
 
   return (
     <>
@@ -86,16 +84,16 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onChangeQuery={setQuery}
-                onChangeSort={setSortOption}
+                onChangeFilter={setFilterOption}
               />
             </div>
 
             <div className="block">
-              {loading && !error && (
+              {isLoading && !isError && (
                 <Loader />
               )}
 
-              {error && !loading && (
+              {isError && !isLoading && (
                 <p>Something went wrong...</p>
               )}
 
