@@ -44,7 +44,7 @@ export const App: React.FC = () => {
     FilterOptionFilter: FilterBy,
     queryFilter: string,
   ): Todo[] => {
-    let filteredTodos = todos;
+    let filteredTodos = [...todos];
 
     switch (FilterOptionFilter) {
       case FilterBy.Active:
