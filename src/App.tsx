@@ -94,7 +94,7 @@ export const App: React.FC = () => {
               )}
 
               {isError && !isLoading && (
-                <p>Something went wrong...</p>
+                <p>Something went wrong....</p>
               )}
 
               {displayTodoList && (
