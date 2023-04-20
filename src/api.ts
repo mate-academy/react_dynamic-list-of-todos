@@ -24,4 +24,10 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = async (userId: number) => {
+  try {
+    return await get<User>(`/users/${userId}`);
+  } catch (error) {
+    throw Error(`Oops: ${error}`);
+  }
+};
