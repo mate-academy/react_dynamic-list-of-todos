@@ -1,8 +1,9 @@
 import React, { ChangeEvent } from 'react';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
   query: string,
-  filter: string,
+  filter: FilterStatus,
   handleChange(event: ChangeEvent<HTMLInputElement>): void,
   handleReset(): void,
   handleFilterChange(event: ChangeEvent<HTMLSelectElement>): void,

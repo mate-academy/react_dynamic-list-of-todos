@@ -4,11 +4,12 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { FilterStatus } from './types/FilterStatus';
+import { TodoFilter } from './components/TodoFilter';
 import * as api from './api';
 
 type State = {
@@ -19,12 +20,6 @@ type State = {
   selectedTodoId: number | null,
   selectedUserId: number | null,
 };
-
-enum FilterStatus {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
-}
 
 export class App extends React.Component<{}, State> {
   state = {
@@ -72,7 +67,7 @@ export class App extends React.Component<{}, State> {
     };
 
     const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-      return this.setState({ filter: event.target.value as FilterStatus});
+      return this.setState({ filter: event.target.value as FilterStatus });
     };
 
     const changeTodo = (todoId: number | null) => {
