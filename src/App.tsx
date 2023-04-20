@@ -15,17 +15,23 @@ type State = {
   todos: Todo[],
   user: User | null,
   query: string,
-  filter: string,
+  filter: FilterStatus,
   selectedTodoId: number | null,
   selectedUserId: number | null,
 };
+
+enum FilterStatus {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
 
 export class App extends React.Component<{}, State> {
   state = {
     todos: [],
     user: null,
     query: '',
-    filter: 'all',
+    filter: FilterStatus.all,
     selectedTodoId: null,
     selectedUserId: null,
   };
@@ -66,7 +72,7 @@ export class App extends React.Component<{}, State> {
     };
 
     const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-      return this.setState({ filter: event.target.value });
+      return this.setState({ filter: event.target.value as FilterStatus});
     };
 
     const changeTodo = (todoId: number | null) => {
@@ -85,13 +91,13 @@ export class App extends React.Component<{}, State> {
       this.setState({ query: '' });
     }
 
-    if (filter === 'active') {
+    if (filter === FilterStatus.active) {
       visibleTodos = todos.filter(
         (todo: Todo) => todo.completed === false,
       );
     }
 
-    if (filter === 'completed') {
+    if (filter === FilterStatus.completed) {
       visibleTodos = todos.filter(
         (todo: Todo) => todo.completed === true,
       );
