@@ -13,7 +13,7 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  if (todos.length === 0) {
+  if (!todos.length) {
     return <h2>No todos found</h2>;
   }
 

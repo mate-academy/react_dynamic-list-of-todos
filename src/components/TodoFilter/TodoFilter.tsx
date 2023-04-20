@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { StatusToFilterBy } from '../../types/Todo';
+import { FilterType } from '../../types/Todo';
 
 interface Props {
-  statusToFilterBy: StatusToFilterBy;
-  setStatusToFilterBy: (status: StatusToFilterBy) => void;
+  statusToFilterBy: FilterType;
+  setStatusToFilterBy: (status: FilterType) => void;
   filterQuery: string;
   setFilterQuery: (query: string) => void;
 }
@@ -14,7 +14,7 @@ export const TodoFilter: FC<Props> = ({
   filterQuery,
   setFilterQuery,
 }) => {
-  const filterByOption = Object.entries(StatusToFilterBy);
+  const filterByOption = Object.entries(FilterType);
 
   return (
     <form className="field has-addons">
@@ -24,7 +24,7 @@ export const TodoFilter: FC<Props> = ({
             data-cy="statusSelect"
             value={statusToFilterBy}
             onChange={(event) => setStatusToFilterBy(
-              event.target.value as StatusToFilterBy,
+              event.target.value as FilterType,
             )}
           >
             {filterByOption.map(([label, value]) => {

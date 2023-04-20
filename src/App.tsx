@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { StatusToFilterBy, Todo } from './types/Todo';
+import { FilterType, Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [statusToFilterBy, setStatusToFilterBy] = useState(StatusToFilterBy.All);
+  const [filterType, setFilterType] = useState(FilterType.All);
   const [filterQuery, setFilterQuery] = useState('');
 
   const getTodosFromServer = async () => {
@@ -36,26 +36,28 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    let isStatusCorrect = true;
-    const lowerCasedTitle = todo.title.toLowerCase();
-    const lowerCasedQuery = filterQuery.toLowerCase();
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      let isStatusCorrect = true;
+      const lowerCasedTitle = todo.title.toLowerCase();
+      const lowerCasedQuery = filterQuery.toLowerCase();
 
-    switch (statusToFilterBy) {
-      case StatusToFilterBy.Active:
-        isStatusCorrect = !todo.completed;
-        break;
+      switch (filterType) {
+        case FilterType.Active:
+          isStatusCorrect = !todo.completed;
+          break;
 
-      case StatusToFilterBy.Completed:
-        isStatusCorrect = todo.completed;
-        break;
+        case FilterType.Completed:
+          isStatusCorrect = todo.completed;
+          break;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
 
-    return isStatusCorrect && lowerCasedTitle.includes(lowerCasedQuery);
-  });
+      return isStatusCorrect && lowerCasedTitle.includes(lowerCasedQuery);
+    });
+  }, [todos, filterQuery, filterType]);
 
   return (
     <>
@@ -66,8 +68,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                statusToFilterBy={statusToFilterBy}
-                setStatusToFilterBy={setStatusToFilterBy}
+                statusToFilterBy={filterType}
+                setStatusToFilterBy={setFilterType}
                 filterQuery={filterQuery}
                 setFilterQuery={setFilterQuery}
               />
