@@ -11,17 +11,15 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [selectedTodoId, setSelectTodoId] = useState(0);
+  const [selectedTodoId, setSelectTodoId] = useState<null | number>(null);
+  const [filteredTodoTitle, setFilteredTodoTitle] = useState('');
+  const [selectVisibleTodo, setSelectVisibleTodo] = useState('all');
 
   useEffect(() => {
     getTodos().then(todosFromServer => {
       setTodos(todosFromServer);
     });
   }, []);
-
-  const [filteredTodoTitle, setFilteredTodoTitle] = useState('');
-  const [selectVisibleTodo, setSelectVisibleTodo] = useState('all');
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -39,10 +37,6 @@ export const App: React.FC = () => {
       }
     });
   }, [todos, filteredTodoTitle, selectVisibleTodo]);
-
-  if (!todos.length) {
-    return <Loader />;
-  }
 
   return (
     <>
@@ -67,14 +61,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                todos={visibleTodos}
-                selectedTodoId={selectedTodoId}
-                selectTodo={(todoIDfromServer:
-                React.SetStateAction<number>) => {
-                  setSelectTodoId(todoIDfromServer);
-                }}
-              />
+              {!todos.length ? <Loader /> : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  selectTodo={(todoIDfromServer:
+                  React.SetStateAction<number | null>) => {
+                    setSelectTodoId(todoIDfromServer);
+                  }}
+                />
+              )}
+
             </div>
           </div>
         </div>
@@ -83,7 +80,7 @@ export const App: React.FC = () => {
         <TodoModal
           todos={todos}
           selectedTodoId={selectedTodoId}
-          closeModal={() => setSelectTodoId(0)}
+          closeModal={() => setSelectTodoId(null)}
         />
       )}
     </>
