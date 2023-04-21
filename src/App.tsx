@@ -14,36 +14,36 @@ import { Loader } from './components/Loader';
 
 const getVisibleTodos = (
   todos: Todo[],
-  sortType: string,
+  filterType: string,
   query: string,
 ): Todo[] => {
   let visibleTodos: Todo[] = [...todos];
 
-  if (sortType === FilterType.ACTIVE) {
-    visibleTodos = todos.filter(todo => !todo.completed);
+  switch (filterType) {
+    case FilterType.ACTIVE:
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
+      break;
+
+    case FilterType.COMPLETED:
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
   }
 
-  if (sortType === FilterType.COMPLETED) {
-    visibleTodos = todos.filter(todo => todo.completed);
-  }
-
-  const handleFilterTodos = (value: string, searchQuery: string) => {
-    return (
-      value.toLowerCase().includes(searchQuery.toLowerCase().trim())
-    );
-  };
-
-  return visibleTodos.filter(({ title }) => (
-    handleFilterTodos(title, query)
-
-  ));
+  return visibleTodos.filter(
+    todo => todo.title.toLowerCase().includes(
+      query.toLowerCase(),
+    ),
+  );
 };
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedModal, setSelectedModal] = useState<Todo | null>(null);
-  const [isLodingPage, setIsLoadingPage] = useState(false);
+  const [isLoding, setIsLoading] = useState(false);
   const [selectedType, setSelectedType] = useState(FilterType.ALL);
   const [hasLoadingPageError, setHasLoadingPageError] = useState(false);
 
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => setHasLoadingPageError(true))
-      .finally(() => setIsLoadingPage(true));
+      .finally(() => setIsLoading(true));
   }, []);
 
   const visibleTodos = getVisibleTodos(todos, selectedType, query);
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
               )
               : (
                 <div className="block">
-                  {isLodingPage
+                  {isLoding
                     ? (
                       <TodoList
                         todos={visibleTodos}
