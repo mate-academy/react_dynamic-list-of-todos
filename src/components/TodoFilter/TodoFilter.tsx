@@ -1,12 +1,14 @@
+import { SelectButtons } from '../../utils/enum/SelectButtons';
+
 type Props = {
   searchValue: string;
-  setFilterBy: (value: string) => void;
+  setFilterType: (value: string) => void;
   setSearchValue: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   searchValue,
-  setFilterBy,
+  setFilterType,
   setSearchValue,
 }) => {
   const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -14,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
       target: { value },
     } = event;
 
-    setFilterBy(value);
+    setFilterType(value);
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,11 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleChangeSelect}>
-            <option value="all">All</option>
-
-            <option value="active">Active</option>
-
-            <option value="completed">Completed</option>
+            {Object.keys(SelectButtons).map((key) => (
+              <option value={SelectButtons[key]} key={key}>{key}</option>
+            ))}
           </select>
         </span>
       </p>

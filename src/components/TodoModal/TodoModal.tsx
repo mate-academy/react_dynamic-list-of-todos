@@ -19,12 +19,10 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   } = todo;
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setIsLoading(true);
-
     const fetchUser = async () => {
       try {
         const user = await getUser(userId);

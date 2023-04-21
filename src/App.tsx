@@ -8,36 +8,51 @@ import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
-import { filterTodos } from './components/Helpers/FilterTodos';
-import { getErrorMessage } from './components/Helpers/GetErrorMessage';
+import { filterTodos } from './Helpers/FilterTodos';
+import { getErrorMessage } from './Helpers/GetErrorMessage';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [sortBy, setFilterBy] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [searchValue, setSearchValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const visibleTodos = filterTodos(todosList, sortBy, searchValue);
+  const visibleTodos = filterTodos(todosList, filterType, searchValue);
 
   const fetchTodos = async () => {
     try {
+      setIsLoading(true);
+
       const todos = await getTodos();
 
       setTodosList(todos);
     } catch (error) {
       setErrorMessage(getErrorMessage(error));
     } finally {
-      setIsLoaded(false);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setIsLoaded(true);
     fetchTodos();
   }, []);
+
+  const checkVisibleTodosLength = (visibleTodosLength: number) => {
+    if (visibleTodosLength) {
+      return (
+        <TodoList
+          todos={visibleTodos}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      );
+    }
+
+    return <p>{errorMessage}</p>;
+  };
 
   return (
     <>
@@ -49,27 +64,15 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchValue={searchValue}
-                setFilterBy={setFilterBy}
+                setFilterType={setFilterType}
                 setSearchValue={setSearchValue}
               />
             </div>
 
             <div className="block">
-              {isLoaded ? (
-                <Loader />
-              ) : (
-                <>
-                  {visibleTodos.length ? (
-                    <TodoList
-                      todos={visibleTodos}
-                      selectedTodo={selectedTodo}
-                      setSelectedTodo={setSelectedTodo}
-                    />
-                  ) : (
-                    <p>{errorMessage}</p>
-                  )}
-                </>
-              )}
+              {isLoading
+                ? <Loader />
+                : checkVisibleTodosLength(visibleTodos.length)}
             </div>
           </div>
         </div>
