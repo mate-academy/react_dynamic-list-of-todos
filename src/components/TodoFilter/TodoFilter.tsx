@@ -1,14 +1,26 @@
+enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 type Props = {
   query: string
   setQuery: (queryText: string) => void,
-  setSelectedFilter: (option: string) => void,
+  setSelectedFilter: (option: Filter) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  setSelectedFilter, query, setQuery,
+  setSelectedFilter,
+  query,
+  setQuery,
 }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFilter(event.target.value as Filter);
   };
 
   return (
@@ -17,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setSelectedFilter(event.target.value)}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -33,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

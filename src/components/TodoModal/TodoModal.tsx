@@ -14,7 +14,10 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const {
-    id, title, completed, userId,
+    id,
+    title,
+    completed,
+    userId,
   } = selectedTodo;
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user || !selectedTodo ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
