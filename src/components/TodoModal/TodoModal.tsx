@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(!user || hasError)
+      {!user
         ? (
           <Loader />
         )
@@ -52,25 +52,30 @@ export const TodoModal: React.FC<Props> = ({
             </header>
 
             <div className="modal-card-body">
-              <p className="block" data-cy="modal-title">
-                {selectedTodo.title}
-              </p>
+              {hasError
+                ? (
+                  <div className="has-text-danger">Can&apos;t load todo</div>
+                )
+                : (
+                  <>
+                    <p className="block" data-cy="modal-title">
+                      {selectedTodo.title}
+                    </p>
 
-              <p className="block" data-cy="modal-user">
-                {selectedTodo.completed
-                  ? (
-                    <strong className="has-text-success">Done</strong>
-                  )
-                  : (
-                    <strong className="has-text-danger">Planned</strong>
-                  )}
+                    <p className="block" data-cy="modal-user">
 
-                {' by '}
+                      <strong className={`has-text-${selectedTodo.completed ? 'success' : 'danger'}`}>
+                        {selectedTodo.completed ? 'Done' : 'Planned'}
+                      </strong>
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
-                </a>
-              </p>
+                      {' by '}
+
+                      <a href={`mailto:${user.email}`}>
+                        {user.name}
+                      </a>
+                    </p>
+                  </>
+                )}
             </div>
           </div>
         )}

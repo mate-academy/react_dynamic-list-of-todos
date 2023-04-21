@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,6 +9,7 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoCompletionFilter } from './types/TodoCompletionTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,11 +33,11 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     let todosCopy = [...todos];
 
-    if (filterType === 'active') {
+    if (filterType === TodoCompletionFilter.Active) {
       todosCopy = todosCopy.filter(todo => !todo.completed);
     }
 
-    if (filterType === 'completed') {
+    if (filterType === TodoCompletionFilter.Completed) {
       todosCopy = todosCopy.filter(todo => todo.completed);
     }
 
@@ -48,9 +48,9 @@ export const App: React.FC = () => {
     return todosCopy;
   }, [todos, filterType, query]);
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId);
 
-  const renderedList = visibleTodos.length === 0
+  const renderedList = (visibleTodos.length === 0 || hasError)
     ? (
       <h2>Todos not found!</h2>
     )
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading || hasError
+              {isLoading
                 ? (
                   <Loader />
                 )
