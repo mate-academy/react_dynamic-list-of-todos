@@ -103,50 +103,48 @@ export class App extends React.Component<{}, State> {
     );
 
     return (
-      <>
-        <div className="section">
-          <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-              <div className="block">
-                <TodoFilter
-                  query={query}
-                  filter={filter}
-                  handleChange={handleChangeQuery}
-                  handleReset={handleQueryReset}
-                  handleFilterChange={handleFilterChange}
-                />
-              </div>
-
-              <div className="block">
-                {todos.length < 1 && (
-                  <Loader />
-                )}
-                {todos.length > 0 && (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodoId={selectedTodoId}
-                    changeTodo={changeTodo}
-                    changeUser={changeUser}
-                  />
-                )}
-              </div>
-            </div>
-            {selectedUserId !== null && (
-              <TodoModal
-                todos={visibleTodos}
-                selectedUser={user}
-                selectedTodoId={selectedTodoId}
-                changeTodo={changeTodo}
-                changeUser={changeUser}
-                loadUser={this.loadUser}
-                resetUser={resetUser}
+            <div className="block">
+              <TodoFilter
+                query={query}
+                filter={filter}
+                handleChange={handleChangeQuery}
+                handleReset={handleQueryReset}
+                handleFilterChange={handleFilterChange}
               />
-            )}
+            </div>
+
+            <div className="block">
+              {todos.length < 1 && (
+                <Loader />
+              )}
+              {todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  changeTodo={changeTodo}
+                  changeUser={changeUser}
+                />
+              )}
+            </div>
           </div>
+          {selectedUserId !== null && (
+            <TodoModal
+              todos={visibleTodos}
+              selectedUser={user}
+              selectedTodoId={selectedTodoId}
+              changeTodo={changeTodo}
+              changeUser={changeUser}
+              loadUser={this.loadUser}
+              resetUser={resetUser}
+            />
+          )}
         </div>
-      </>
+      </div>
     );
   }
 }

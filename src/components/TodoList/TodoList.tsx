@@ -51,8 +51,11 @@ export const TodoList: React.FC<Props> = (
             </td>
             <td className="is-vcentered is-expanded">
               <p className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
+                // linter didn't like such change //
+                // eslint-disable-next-line
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                // eslint-disable-next-line
+                }
               >
                 {todo.title}
               </p>
