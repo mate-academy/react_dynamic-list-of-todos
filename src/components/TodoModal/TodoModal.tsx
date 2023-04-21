@@ -15,16 +15,22 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User>();
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [hasUserError, setHasError] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (todo) {
-        const currentUser = await getUser(todo.userId);
+      try {
+        if (todo) {
+          const currentUser = await getUser(todo.userId);
 
-        setUser(currentUser);
+          setUser(currentUser);
+        }
+
+        setIsUserLoaded(true);
+      } catch {
+        setHasError(true);
+        setIsUserLoaded(true);
       }
-
-      setIsUserLoaded(true);
     };
 
     fetchUser();
@@ -39,7 +45,6 @@ export const TodoModal: React.FC<Props> = ({
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
       {!isUserLoaded ? (
         <Loader />
       ) : (
@@ -62,21 +67,27 @@ export const TodoModal: React.FC<Props> = ({
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {title}
-            </p>
+            {hasUserError ? (
+              <div className="has-text-danger">Error loading todo</div>
+            ) : (
+              <>
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
 
-            <p className="block" data-cy="modal-user">
-              <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
-                {completed ? 'Done' : 'Planned'}
-              </strong>
+                <p className="block" data-cy="modal-user">
+                  <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
+                    {completed ? 'Done' : 'Planned'}
+                  </strong>
 
-              {' by '}
+                  {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                {user && user.name}
-              </a>
-            </p>
+                  <a href="mailto:Sincere@april.biz">
+                    {user && user.name}
+                  </a>
+                </p>
+              </>
+            )}
           </div>
         </div>
       )}
