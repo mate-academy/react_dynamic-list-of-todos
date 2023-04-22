@@ -119,10 +119,10 @@ export class App extends React.Component<{}, State> {
             </div>
 
             <div className="block">
-              {todos.length < 1 && (
+              {!todos.length && (
                 <Loader />
               )}
-              {todos.length > 0 && (
+              {todos.length && (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={selectedTodoId}
