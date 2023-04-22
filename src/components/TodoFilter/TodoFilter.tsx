@@ -1,8 +1,22 @@
-export const TodoFilter = () => (
+import React, { ChangeEvent } from 'react';
+
+type Props = {
+  query: string,
+  onFilterChange: (event: ChangeEvent<HTMLSelectElement>) => void,
+  onSearchChange: (event: ChangeEvent<HTMLInputElement>) => void,
+  onReset: () => void,
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onFilterChange,
+  onSearchChange,
+  onReset,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select data-cy="statusSelect" onChange={onFilterChange}>
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -14,21 +28,26 @@ export const TodoFilter = () => (
       <input
         data-cy="searchInput"
         type="text"
+        value={query}
         className="input"
         placeholder="Search..."
+        onChange={onSearchChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            aria-label="delete"
+            className="delete"
+            onClick={onReset}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
