@@ -13,41 +13,60 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { SortType } from './types/SortType';
 
-const getVisibleTodos = (filterCase: string, todos: Todo[], searchQuery: string) => {
-  const searchedTodo = todos.filter(todo => todo.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+const getVisibleTodos = (filterCase: SortType, todos: Todo[], searchQuery: string) => {
+  let searchedTodo;
+
+  if (searchQuery.trim()) {
+    searchedTodo = todos.filter(todo => todo.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+  }
 
   switch (filterCase) {
     case SortType.ACTIVE:
-      return searchedTodo.filter(todo => !todo.completed);
+      return searchedTodo === undefined
+        ? todos.filter(todo => !todo.completed)
+        : searchedTodo.filter(todo => !todo.completed);
 
     case SortType.COMPLETED:
-      return searchedTodo.filter(todo => todo.completed);
+      return searchedTodo === undefined
+        ? todos.filter(todo => todo.completed)
+        : searchedTodo.filter(todo => todo.completed);
 
     default:
-      return searchedTodo;
+      return searchedTodo === undefined ? todos : searchedTodo;
   }
 };
 
 export const App: React.FC = () => {
   const [allTodos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(SortType.ALL);
   const [query, setQuery] = useState('');
   const [modalInfo, setModalInfo] = useState<Todo | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then(todos => {
       setTodos(todos);
-      setIsInitialized(true);
+      setIsLoading(true);
     });
+    setIsLoading(false);
   }, []);
 
-  const getModalInfo = (todo: Todo | null = null) => {
+  const handleChangeModalInfo = (todo: Todo | null) => {
     setModalInfo(todo);
   };
 
   const filterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
+    if (event.target.value === 'all') {
+      setFilter(SortType.ALL);
+    }
+
+    if (event.target.value === 'active') {
+      setFilter(SortType.ACTIVE);
+    }
+
+    if (event.target.value === 'completed') {
+      setFilter(SortType.COMPLETED);
+    }
   };
 
   const searchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -77,12 +96,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isInitialized ? (
+              {!isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  onBtnClick={getModalInfo}
+                  onBtnClick={handleChangeModalInfo}
                 />
               )}
             </div>
@@ -93,7 +112,7 @@ export const App: React.FC = () => {
       {modalInfo && (
         <TodoModal
           modalInfo={modalInfo}
-          onClick={getModalInfo}
+          onClick={handleChangeModalInfo}
         />
       )}
     </>

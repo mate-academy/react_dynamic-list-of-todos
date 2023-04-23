@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   modalInfo: Todo,
-  onClick: () => void,
+  onClick: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({ modalInfo, onClick }) => {
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ modalInfo, onClick }) => {
               className="delete"
               aria-label="delete"
               data-cy="modal-close"
-              onClick={() => onClick()}
+              onClick={() => onClick(null)}
             />
           </header>
 

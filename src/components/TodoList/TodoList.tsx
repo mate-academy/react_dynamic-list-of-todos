@@ -1,4 +1,4 @@
-import React, { FocusEvent } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,18 +8,14 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos, onBtnClick }) => {
-  const getIcon = (target: HTMLButtonElement) => target.children[0].children[0];
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
-  const handleOnFocus = (event: FocusEvent<HTMLButtonElement>) => {
-    const icon = getIcon(event.target);
-
-    icon.className = 'far fa-eye-slash';
+  const handleOnFocus = (todoId: number) => {
+    setSelectedTodoId(todoId);
   };
 
-  const handleOnBlur = (event: FocusEvent<HTMLButtonElement>) => {
-    const icon = getIcon(event.target);
-
-    icon.className = 'far fa-eye';
+  const handleOnBlur = () => {
+    setSelectedTodoId(0);
   };
 
   return (
@@ -39,7 +35,13 @@ export const TodoList: React.FC<Props> = ({ todos, onBtnClick }) => {
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
+          <tr
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': selectedTodoId === todo.id,
+            })}
+            key={todo.id}
+          >
             <td className="is-vcentered">
               {todo.id}
             </td>
@@ -71,11 +73,15 @@ export const TodoList: React.FC<Props> = ({ todos, onBtnClick }) => {
                 onClick={() => {
                   onBtnClick(todo);
                 }}
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
+                onFocus={() => handleOnFocus(todo.id)}
+                onBlur={() => handleOnBlur()}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames('far', {
+                    'fa-eye-slash': selectedTodoId === todo.id,
+                    'fa-eye': selectedTodoId !== todo.id,
+                  })}
+                  />
                 </span>
               </button>
             </td>
