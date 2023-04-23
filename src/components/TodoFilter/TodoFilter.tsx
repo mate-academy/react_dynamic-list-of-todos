@@ -27,13 +27,11 @@ export const TodoFilter: FC<Props> = ({
               event.target.value as FilterType,
             )}
           >
-            {filterByOption.map(([label, value]) => {
-              return (
-                <option value={value} key={value}>
-                  {label}
-                </option>
-              );
-            })}
+            {filterByOption.map(([label, value]) => (
+              <option value={value} key={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -53,11 +51,11 @@ export const TodoFilter: FC<Props> = ({
 
         {filterQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="Clear Search Button"
               onClick={() => setFilterQuery('')}
             />
           </span>

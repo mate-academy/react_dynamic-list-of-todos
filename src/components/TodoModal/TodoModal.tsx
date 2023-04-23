@@ -60,11 +60,11 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="Delete Todo"
               onClick={() => setSelectedTodo(null)}
             />
           </header>
