@@ -14,26 +14,27 @@ import { Todo } from './types/Todo';
 import { SortType } from './types/SortType';
 
 const getVisibleTodos = (filterCase: SortType, todos: Todo[], searchQuery: string) => {
-  let searchedTodo;
-
-  if (searchQuery.trim()) {
-    searchedTodo = todos.filter(todo => todo.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
-  }
+  let filteredTodos;
 
   switch (filterCase) {
     case SortType.ACTIVE:
-      return searchedTodo === undefined
-        ? todos.filter(todo => !todo.completed)
-        : searchedTodo.filter(todo => !todo.completed);
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
 
     case SortType.COMPLETED:
-      return searchedTodo === undefined
-        ? todos.filter(todo => todo.completed)
-        : searchedTodo.filter(todo => todo.completed);
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
 
     default:
-      return searchedTodo === undefined ? todos : searchedTodo;
+      filteredTodos = todos;
+      break;
   }
+
+  if (searchQuery.trim()) {
+    return filteredTodos.filter(todo => todo.title.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+  }
+
+  return filteredTodos;
 };
 
 export const App: React.FC = () => {
@@ -56,16 +57,17 @@ export const App: React.FC = () => {
   };
 
   const filterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === 'all') {
-      setFilter(SortType.ALL);
-    }
+    switch (event.target.value) {
+      case SortType.ACTIVE:
+        setFilter(SortType.ACTIVE);
+        break;
 
-    if (event.target.value === 'active') {
-      setFilter(SortType.ACTIVE);
-    }
+      case SortType.COMPLETED:
+        setFilter(SortType.COMPLETED);
+        break;
 
-    if (event.target.value === 'completed') {
-      setFilter(SortType.COMPLETED);
+      default:
+        setFilter(SortType.ALL);
     }
   };
 
