@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +7,52 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { Todo } from './types/Todo';
+import { Filter } from './enums/Filter';
+
+import { getTodos } from './api';
+import { debounce } from './helpers/debounce';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [userId, setUserId] = useState(0);
+  const [filterValue, setFilterValue] = useState(Filter.All);
+  const [todo, setTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
+
+  const applyQuery = useCallback(debounce(setAppliedQuery, 500), []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getTodos()
+        .then(todoList => todoList
+          .filter(todoItem => {
+            switch (filterValue) {
+              case Filter.Active:
+                return !todoItem.completed;
+
+              case Filter.Completed:
+                return todoItem.completed;
+
+              default:
+                return todoItem;
+            }
+          }))
+        .then(result => setTodos(result));
+    };
+
+    fetchData();
+  }, [filterValue]);
+
+  const handleSelectUser = (id: number) => {
+    setUserId(id);
+  };
+
+  if (!todos.length) {
+    return <Loader />;
+  }
+
   return (
     <>
       <div className="section">
@@ -17,18 +61,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onSetQuery={setQuery}
+                onApplyQuery={applyQuery}
+                filterValue={filterValue}
+                onSelectFilter={setFilterValue}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              <TodoList
+                selectedTodo={todo}
+                appliedQuery={appliedQuery}
+                todos={todos}
+                onSelectUser={handleSelectUser}
+                onSelectTodo={setTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {userId > 0 && (
+        <TodoModal
+          userId={userId}
+          todo={todo}
+          onSelectUser={handleSelectUser}
+          onSelectTodo={setTodo}
+        />
+      )}
     </>
   );
 };
