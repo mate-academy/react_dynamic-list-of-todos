@@ -119,10 +119,9 @@ export class App extends React.Component<{}, State> {
             </div>
 
             <div className="block">
-              {!todos.length && (
+              {!todos.length ? (
                 <Loader />
-              )}
-              {todos.length && (
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={selectedTodoId}
@@ -132,7 +131,7 @@ export class App extends React.Component<{}, State> {
               )}
             </div>
           </div>
-          {selectedUserId !== null && (
+          {selectedUserId && (
             <TodoModal
               todos={visibleTodos}
               selectedUser={user}
