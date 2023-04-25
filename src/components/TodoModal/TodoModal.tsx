@@ -10,17 +10,17 @@ type Props = {
   user: User | null;
   todo: Todo | null;
   closeModal: () => void;
-  loadStatus: string;
+  isError: boolean;
 };
 
 export const TodoModal: React.FC<Props> = React.memo(({
-  user, todo, closeModal, loadStatus,
+  user, todo, closeModal, isError,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadStatus === 'isLoading' && <Loader />}
+      {!user && !isError && <Loader />}
 
       <div className="modal-card">
         <header className="modal-card-head">
@@ -31,17 +31,17 @@ export const TodoModal: React.FC<Props> = React.memo(({
             Todo #{todo!.id}
           </div>
 
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             type="button"
             className="delete"
             data-cy="modal-close"
             onClick={closeModal}
+            aria-label="modal-close"
           />
         </header>
 
         <div className="modal-card-body">
-          {loadStatus === 'loaded' && (
+          {user && !isError && (
             <>
               <p className="block" data-cy="modal-title">
                 {todo!.title}
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
                     : (<strong className="has-text-danger">Planned</strong>)
                 }
 
-                {' by '}
+                <span> by </span>
 
                 <a href={user?.email}>
                   {user?.name}
@@ -63,7 +63,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
             </>
           )}
 
-          {loadStatus === 'error' && (
+          {isError && (
             <p>Error. Data not loaded</p>
           )}
 

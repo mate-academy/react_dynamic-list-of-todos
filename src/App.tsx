@@ -20,24 +20,31 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [todo, setTodo] = useState<Todo | null>(null);
   const [isModalShown, setModalShown] = useState(false);
-  const [isDataLoaded, setDataLoaded] = useState('isLoading');
-  const [isTodoLoaded, setTodoLoaded] = useState('isLoading');
+  const [isDataLoading, setDataLoading] = useState(true);
+  const [isLoadedError, setLoadedError] = useState(false);
 
   const loadTodos = async () => {
-    setDataLoaded('isLoading');
+    setDataLoading(true);
     try {
       const todos = await getTodos();
 
       setAllTodos(todos);
-      setDataLoaded('loaded');
+      setDataLoading(false);
     } catch (err) {
-      setDataLoaded('error');
+      setDataLoading(false);
+      setLoadedError(true);
     }
   };
 
   useEffect(() => {
     loadTodos();
   }, []);
+
+  useEffect(() => {
+    if (searchValue === '') {
+      setDeleteButtonAval(false);
+    }
+  }, [searchValue]);
 
   const selectHandler = (event: React.FormEvent<HTMLSelectElement>) => {
     setFilteredBy(event.currentTarget.value);
@@ -60,17 +67,16 @@ export const App: React.FC = () => {
     getUser(selectedTodo.userId)
       .then(currUser => {
         setUser(currUser);
-        setTodoLoaded('loaded');
       })
       .catch(() => {
-        setTodoLoaded('error');
+        setLoadedError(true);
       });
   };
 
   const closeModal = () => {
     setTodo(null);
     setModalShown(false);
-    setTodoLoaded('isLoading');
+    setLoadedError(false);
   };
 
   return (
@@ -92,8 +98,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isDataLoaded === 'isLoading' && <Loader />}
-              {isDataLoaded === 'loaded' && (
+              {isDataLoading && <Loader />}
+
+              {!isDataLoading && (!isLoadedError || isModalShown) && (
                 <TodoList
                   todos={allTodos}
                   filteredBy={filteredBy}
@@ -102,8 +109,8 @@ export const App: React.FC = () => {
                   todoId={todo?.id || null}
                 />
               )}
-              {isDataLoaded === 'error' && (
-                // eslint-disable-next-line react/jsx-one-expression-per-line
+
+              {isLoadedError && (
                 <p>Error. Data not loaded</p>
               )}
             </div>
@@ -116,7 +123,7 @@ export const App: React.FC = () => {
           user={user}
           todo={todo}
           closeModal={closeModal}
-          loadStatus={isTodoLoaded}
+          isError={isLoadedError}
         />
       )}
     </>
