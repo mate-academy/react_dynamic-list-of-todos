@@ -12,27 +12,25 @@ type Props = {
 export const TodoList: React.FC<Props> = React.memo(({
   todos, filteredBy, searchQuery, getTodoInfo, todoId,
 }) => {
-  let visibleTodos = [...todos];
-
-  visibleTodos = useMemo(() => {
+  const visibleTodos = useMemo(() => {
     if (filteredBy === 'all' && searchQuery !== '') {
-      return visibleTodos.filter(todo => todo.title.includes(searchQuery));
+      return todos.filter(todo => todo.title.includes(searchQuery));
     }
 
     if (filteredBy === 'completed') {
-      return visibleTodos.filter(todo => {
+      return todos.filter(todo => {
         return todo.completed === true && todo.title.includes(searchQuery);
       });
     }
 
     if (filteredBy === 'active') {
-      return visibleTodos.filter(todo => {
+      return todos.filter(todo => {
         return todo.completed === false && todo.title.includes(searchQuery);
       });
     }
 
-    return visibleTodos;
-  }, [searchQuery, filteredBy, visibleTodos]);
+    return todos;
+  }, [searchQuery, filteredBy, todos]);
 
   return (
     <table className="table is-narrow is-fullwidth">

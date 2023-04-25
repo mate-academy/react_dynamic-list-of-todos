@@ -5,14 +5,17 @@ type Props = {
   selectHandler: (event: React.FormEvent<HTMLSelectElement>) => void;
   searchValue: string;
   inputHandler: (event: React.FormEvent<HTMLInputElement>) => void;
-  isDeleteButtonAval: boolean;
+  isDeleteButtonAvailable: boolean;
   clearInput: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filteredBy, selectHandler,
-  searchValue, inputHandler,
-  isDeleteButtonAval, clearInput,
+  filteredBy,
+  selectHandler,
+  searchValue,
+  inputHandler,
+  isDeleteButtonAvailable,
+  clearInput,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -42,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {isDeleteButtonAval
+      {isDeleteButtonAvailable
         && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button

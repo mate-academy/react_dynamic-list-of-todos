@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filteredBy, setFilteredBy] = useState('all');
   const [searchValue, setSearchValue] = useState('');
-  const [isDeleteButtonAval, setDeleteButtonAval] = useState(false);
+  const [isDeleteButtonAvailable, setDeleteButtonAvailable] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [todo, setTodo] = useState<Todo | null>(null);
   const [isModalShown, setModalShown] = useState(false);
@@ -29,20 +29,16 @@ export const App: React.FC = () => {
       const todos = await getTodos();
 
       setAllTodos(todos);
-      setDataLoading(false);
     } catch (err) {
-      setDataLoading(false);
       setLoadedError(true);
+    } finally {
+      setDataLoading(false);
     }
   };
 
   useEffect(() => {
-    loadTodos();
-  }, []);
-
-  useEffect(() => {
     if (searchValue === '') {
-      setDeleteButtonAval(false);
+      setDeleteButtonAvailable(false);
     }
   }, [searchValue]);
 
@@ -52,12 +48,12 @@ export const App: React.FC = () => {
 
   const inputHandler = (event: React.FormEvent<HTMLInputElement>) => {
     setSearchValue(event.currentTarget.value);
-    setDeleteButtonAval(true);
+    setDeleteButtonAvailable(true);
   };
 
   const clearInput = () => {
     setSearchValue('');
-    setDeleteButtonAval(false);
+    setDeleteButtonAvailable(false);
   };
 
   const getTodoInfo = (selectedTodo: Todo) => {
@@ -79,6 +75,10 @@ export const App: React.FC = () => {
     setLoadedError(false);
   };
 
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
                 selectHandler={selectHandler}
                 searchValue={searchValue}
                 inputHandler={inputHandler}
-                isDeleteButtonAval={isDeleteButtonAval}
+                isDeleteButtonAvailable={isDeleteButtonAvailable}
                 clearInput={clearInput}
               />
             </div>
