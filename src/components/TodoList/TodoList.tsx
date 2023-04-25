@@ -29,7 +29,6 @@ export const TodoList: React.FC<Props> = React.memo(
           {todos.map(todo => (
             <tr
               data-cy="todo"
-              className=""
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>

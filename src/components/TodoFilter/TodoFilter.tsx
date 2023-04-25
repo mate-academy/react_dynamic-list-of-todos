@@ -24,7 +24,7 @@ export const TodoFilter: React.FC<Props> = React.memo(
       onQueryChange(event.target.value);
     };
 
-    const clearButton = () => {
+    const handleClearButton = () => {
       onQueryChange('');
     };
 
@@ -64,7 +64,7 @@ export const TodoFilter: React.FC<Props> = React.memo(
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={clearButton}
+                onClick={handleClearButton}
               />
             </span>
           )}
