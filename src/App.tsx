@@ -127,11 +127,11 @@ export class App extends React.Component<{}, State> {
             <div className="block">
               {todos.length ? (
                 <TodoList
-                todos={this.updateTodos()}
-                selectedTodoId={selectedTodoId}
-                changeTodo={this.changeTodo}
-                changeUser={this.changeUser}
-              />
+                  todos={this.updateTodos()}
+                  selectedTodoId={selectedTodoId}
+                  changeTodo={this.changeTodo}
+                  changeUser={this.changeUser}
+                />
               ) : (
                 <Loader />
               )}
