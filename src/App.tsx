@@ -37,6 +37,12 @@ export class App extends React.Component<{}, State> {
     this.setState({ todos });
   }
 
+  componentDidUpdate() {
+    if (this.state.query[0] === ' ') {
+      this.setState({ query: '' });
+    }
+  }
+
   loadUser = async () => {
     if (this.state.selectedUserId !== null) {
       // eslint-disable-next-line
@@ -44,6 +50,52 @@ export class App extends React.Component<{}, State> {
 
       this.setState({ user });
     }
+  };
+
+  handleChangeQuery = (event: ChangeEvent<HTMLInputElement>) => {
+    return this.setState({ query: event.target.value });
+  };
+
+  handleQueryReset = () => {
+    return this.setState({ query: '' });
+  };
+
+  handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    return this.setState({ filter: event.target.value as FilterStatus });
+  };
+
+  changeTodo = (todoId: number | null) => {
+    this.setState({ selectedTodoId: todoId });
+  };
+
+  changeUser = (userId: number | null) => {
+    this.setState({ selectedUserId: userId });
+  };
+
+  resetUser = () => {
+    this.setState({ user: null });
+  };
+
+  updateTodos = () => {
+    let visibleTodos = [...this.state.todos];
+
+    if (this.state.filter === FilterStatus.active) {
+      visibleTodos = this.state.todos.filter(
+        (todo: Todo) => todo.completed === false,
+      );
+    }
+
+    if (this.state.filter === FilterStatus.completed) {
+      visibleTodos = this.state.todos.filter(
+        (todo: Todo) => todo.completed === true,
+      );
+    }
+
+    visibleTodos = visibleTodos.filter(
+      (todo: Todo) => todo.title.toLocaleLowerCase().includes(this.state.query.toLowerCase().trim()),
+    );
+
+    return visibleTodos;
   };
 
   render() {
@@ -55,52 +107,6 @@ export class App extends React.Component<{}, State> {
       selectedTodoId,
       selectedUserId,
     } = this.state;
-    const lowQuery = query.toLowerCase().trim();
-    let visibleTodos = [...todos];
-
-    const handleChangeQuery = (event: ChangeEvent<HTMLInputElement>) => {
-      return this.setState({ query: event.target.value });
-    };
-
-    const handleQueryReset = () => {
-      return this.setState({ query: '' });
-    };
-
-    const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-      return this.setState({ filter: event.target.value as FilterStatus });
-    };
-
-    const changeTodo = (todoId: number | null) => {
-      this.setState({ selectedTodoId: todoId });
-    };
-
-    const changeUser = (userId: number | null) => {
-      this.setState({ selectedUserId: userId });
-    };
-
-    const resetUser = () => {
-      this.setState({ user: null });
-    };
-
-    if (query[0] === ' ') {
-      this.setState({ query: '' });
-    }
-
-    if (filter === FilterStatus.active) {
-      visibleTodos = todos.filter(
-        (todo: Todo) => todo.completed === false,
-      );
-    }
-
-    if (filter === FilterStatus.completed) {
-      visibleTodos = todos.filter(
-        (todo: Todo) => todo.completed === true,
-      );
-    }
-
-    visibleTodos = visibleTodos.filter(
-      (todo: Todo) => todo.title.toLocaleLowerCase().includes(lowQuery),
-    );
 
     return (
       <div className="section">
@@ -112,34 +118,34 @@ export class App extends React.Component<{}, State> {
               <TodoFilter
                 query={query}
                 filter={filter}
-                handleChange={handleChangeQuery}
-                handleReset={handleQueryReset}
-                handleFilterChange={handleFilterChange}
+                handleChange={this.handleChangeQuery}
+                handleReset={this.handleQueryReset}
+                handleFilterChange={this.handleFilterChange}
               />
             </div>
 
             <div className="block">
-              {!todos.length ? (
-                <Loader />
-              ) : (
+              {todos.length ? (
                 <TodoList
-                  todos={visibleTodos}
-                  selectedTodoId={selectedTodoId}
-                  changeTodo={changeTodo}
-                  changeUser={changeUser}
-                />
+                todos={this.updateTodos()}
+                selectedTodoId={selectedTodoId}
+                changeTodo={this.changeTodo}
+                changeUser={this.changeUser}
+              />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
           {selectedUserId && (
             <TodoModal
-              todos={visibleTodos}
+              todos={this.updateTodos()}
               selectedUser={user}
               selectedTodoId={selectedTodoId}
-              changeTodo={changeTodo}
-              changeUser={changeUser}
+              changeTodo={this.changeTodo}
+              changeUser={this.changeUser}
               loadUser={this.loadUser}
-              resetUser={resetUser}
+              resetUser={this.resetUser}
             />
           )}
         </div>
