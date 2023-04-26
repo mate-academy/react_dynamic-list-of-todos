@@ -1,14 +1,13 @@
 type Props = {
-  handleSearch: (search: string) => void;
+  onSearchWordChange: (word: string) => void;
   onFilterChange: (filterOption: string) => void;
-  searchPara: string;
-  setSearchWord: (word: string) => void;
+  searchWord: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  handleSearch,
+  onSearchWordChange,
   onFilterChange,
-  searchPara,
+  searchWord,
 }) => {
   return (
     <form className="field has-addons">
@@ -31,20 +30,24 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchPara}
-          onChange={(event) => handleSearch(event.target.value)}
+          value={searchWord}
+          onChange={(event) => onSearchWordChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {searchPara && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        {searchWord && (
+          <span
+            className="icon is-right"
+            style={{ pointerEvents: 'all' }}
+            id="button-label"
+          >
             <button
               data-cy="clearSearchButton"
+              aria-labelledby="button-label"
               type="button"
               className="delete"
-              onClick={() => handleSearch('')}
+              onClick={() => onSearchWordChange('')}
             />
           </span>
         )}

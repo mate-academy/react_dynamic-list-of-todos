@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilteredBy } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -23,12 +24,12 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     return todoList.filter(todo => {
       switch (filterOption) {
-        case 'all':
+        case FilteredBy.ALL:
           return todo.title.includes(searchWord);
-        case 'active':
+        case FilteredBy.ACTIVE:
           return !todo.completed && todo.title.includes(searchWord);
           break;
-        case 'completed':
+        case FilteredBy.COMPLETED:
           return todo.completed && todo.title.includes(searchWord);
           break;
         default:
@@ -46,15 +47,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleSearch={setSearchWord}
+                onSearchWordChange={setSearchWord}
                 onFilterChange={setFilterOption}
-                searchPara={searchWord}
-                setSearchWord={setSearchWord}
+                searchWord={searchWord}
               />
             </div>
 
             <div className="block">
-              {todoList.length === 0
+              {!todoList.length
                 ? (<Loader />) : (
                   <TodoList
                     todos={filteredTodos}

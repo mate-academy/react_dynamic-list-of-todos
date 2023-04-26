@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed === true ? (
+              {todo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
