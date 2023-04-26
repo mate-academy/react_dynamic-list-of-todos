@@ -14,7 +14,7 @@ import { FilteredBy } from './types/Filter';
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [searchWord, setSearchWord] = useState('');
-  const [filterOption, setFilterOption] = useState('all');
+  const [filterOption, setFilterOption] = useState(FilteredBy.ALL);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -25,12 +25,12 @@ export const App: React.FC = () => {
     return todoList.filter(todo => {
       switch (filterOption) {
         case FilteredBy.ALL:
-          return todo.title.includes(searchWord);
+          return todo.title.includes(searchWord.toLowerCase().trim());
         case FilteredBy.ACTIVE:
-          return !todo.completed && todo.title.includes(searchWord);
+          return !todo.completed && todo.title.includes(searchWord.toLowerCase().trim());
           break;
         case FilteredBy.COMPLETED:
-          return todo.completed && todo.title.includes(searchWord);
+          return todo.completed && todo.title.includes(searchWord.toLowerCase().trim());
           break;
         default:
           return true;

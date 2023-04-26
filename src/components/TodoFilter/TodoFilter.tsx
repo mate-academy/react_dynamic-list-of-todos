@@ -1,6 +1,8 @@
+import { FilteredBy } from '../../types/Filter';
+
 type Props = {
   onSearchWordChange: (word: string) => void;
-  onFilterChange: (filterOption: string) => void;
+  onFilterChange: (filterOption: FilteredBy) => void;
   searchWord: string;
 };
 
@@ -15,7 +17,9 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => onFilterChange(event.target.value)}
+            onChange={
+              (event) => onFilterChange(event.target.value as FilteredBy)
+            }
           >
             <option value="all">All</option>
             <option value="active">Active</option>
