@@ -46,7 +46,7 @@ export const App: React.FC = () => {
       }
     });
 
-  visibleTodos = visibleTodos.filter(todo => todo.title.includes(query));
+  visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   function getTodosfromServer() {
     getTodos().then((result: Todo[]) => {

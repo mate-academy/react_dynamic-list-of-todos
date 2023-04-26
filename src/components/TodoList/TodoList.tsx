@@ -81,7 +81,14 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => selectUser(todo.userId, todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames(
+                    'far',
+                    {
+                      'fa-eye': selectedTodo?.id !== todo.id,
+                      'fa-eye-slash': selectedTodo?.id === todo.id,
+                    },
+                  )}
+                  />
                 </span>
               </button>
             </td>
