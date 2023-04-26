@@ -1,11 +1,36 @@
-export const TodoFilter = () => (
+// eslint-disable-next-line import/no-cycle
+import { FilterValues } from '../../App';
+
+type Props = {
+  selectValue: string,
+  onChangeSelect(value: string): void,
+  inputValue: string,
+  onChangeInput(value: string): void,
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  selectValue,
+  onChangeSelect,
+  inputValue,
+  onChangeInput,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={selectValue}
+          onChange={(e) => onChangeSelect(e.target.value)}
+        >
+          <option value={FilterValues.All.toLowerCase()}>
+            {FilterValues.All}
+          </option>
+          <option value={FilterValues.Active.toLowerCase()}>
+            {FilterValues.Active}
+          </option>
+          <option value={FilterValues.Completed.toLowerCase()}>
+            {FilterValues.Completed}
+          </option>
         </select>
       </span>
     </p>
@@ -16,6 +41,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={inputValue}
+        onChange={(e) => onChangeInput(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
