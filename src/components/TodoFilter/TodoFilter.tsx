@@ -1,3 +1,5 @@
+import { SortTypes } from '../../types/SortTypes';
+
 type TodoFilterProps = {
   query: string,
   onChangeQuery: (value: string) => void;
@@ -18,9 +20,13 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             data-cy="statusSelect"
             onChange={(event) => onSelectStatus(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.entries(SortTypes).map(([key, value]) => (
+              <option
+                value={value}
+              >
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -40,8 +46,8 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
+              aria-label="delete button"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

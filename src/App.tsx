@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Error } from './components/Error';
+import { SortTypes } from './types/SortTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -41,17 +42,18 @@ export const App: React.FC = () => {
     }
 
     switch (selectedStatus) {
-      case ('active'): {
+      case (SortTypes.Active): {
         searchedTodos = searchedTodos.filter(todo => !todo.completed);
         break;
       }
 
-      case ('completed'): {
+      case (SortTypes.Completed): {
         searchedTodos = searchedTodos.filter(todo => todo.completed);
         break;
       }
 
-      default: break;
+      default:
+        break;
     }
 
     return searchedTodos;
@@ -80,11 +82,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                todos={visibleTodos}
-                onSelectTodo={handleSelectTodo}
-                selectedId={selectedTodo?.id}
-              />
+              {todos.length && (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelectTodo={handleSelectTodo}
+                  selectedId={selectedTodo?.id}
+                />
+              )}
               {!todos.length && <Loader />}
             </div>
           </div>
@@ -93,10 +97,19 @@ export const App: React.FC = () => {
 
       {hasError
         && (
-          <Error hasError={hasError} onModalClose={() => setSelectedTodo(undefined)} />
+          <Error
+            hasError={hasError}
+            onModalClose={() => setSelectedTodo(undefined)}
+          />
         )}
 
-      {selectedTodo && <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(undefined)} />}
+      {selectedTodo
+        && (
+          <TodoModal
+            todo={selectedTodo}
+            onClose={() => setSelectedTodo(undefined)}
+          />
+        )}
     </>
   );
 };

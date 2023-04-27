@@ -12,8 +12,8 @@ export const Error: React.FC<ErrorProps> = ({ hasError, onModalClose }) => (
       {`Error: ${hasError}`}
     </div>
 
-    {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
     <button
+      aria-label="modal-close"
       type="button"
       className="button is-danger"
       data-cy="modal-close"
