@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos().then(setTodoList);
-  }, []);
+  }, [currentTodo?.userId]);
 
   const filteredTodos = useMemo(() => {
     return todoList.filter(todo => {
@@ -28,10 +28,8 @@ export const App: React.FC = () => {
           return todo.title.includes(searchWord.toLowerCase().trim());
         case FilteredBy.ACTIVE:
           return !todo.completed && todo.title.includes(searchWord.toLowerCase().trim());
-          break;
         case FilteredBy.COMPLETED:
           return todo.completed && todo.title.includes(searchWord.toLowerCase().trim());
-          break;
         default:
           return true;
       }
