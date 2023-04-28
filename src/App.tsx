@@ -42,15 +42,15 @@ const getVisibleTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedModal, setSelectedModal] = useState<Todo | null>(null);
-  const [isLoding, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedType, setSelectedType] = useState(FilterType.ALL);
-  const [hasLoadingPageError, setHasLoadingPageError] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setHasLoadingPageError(true))
+      .catch(() => setHasError(true))
       .finally(() => setIsLoading(true));
   }, []);
 
@@ -64,10 +64,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              {!hasLoadingPageError && (
+              {isLoading && !hasError && (
                 <TodoFilter
                   query={query}
-                  onQuery={setQuery}
+                  onQueryChange={setQuery}
                   selectedType={selectedType}
                   onSelectedType={setSelectedType}
                 />
@@ -75,36 +75,34 @@ export const App: React.FC = () => {
 
             </div>
 
-            {hasLoadingPageError
-              ? (
-                <div className="notification is-danger">
-                  An error occured when loading data!
-                </div>
-              )
-              : (
-                <div className="block">
-                  {isLoding
-                    ? (
-                      <TodoList
-                        todos={visibleTodos}
-                        selectedModal={selectedModal}
-                        onSelectedModal={setSelectedModal}
-                      />
-                    )
-                    : (
-                      <Loader />
-                    )}
-                </div>
-              )}
+            {hasError && (
+              <div className="notification is-danger">
+                An error occured when loading data!
+              </div>
+            )}
+
+            <div className="block">
+              {isLoading
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedModal={selectedTodo}
+                    onSelectedModal={setSelectedTodo}
+                  />
+                )
+                : (
+                  <Loader />
+                )}
+            </div>
 
           </div>
         </div>
       </div>
 
-      {selectedModal && (
+      {selectedTodo && (
         <TodoModal
-          selectedModal={selectedModal}
-          onSelectedModal={setSelectedModal}
+          selectedModal={selectedTodo}
+          onSelectedModal={setSelectedTodo}
         />
       )}
     </>

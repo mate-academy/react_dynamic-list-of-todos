@@ -1,25 +1,26 @@
 import React, { ChangeEvent } from 'react';
 import { FilterType } from '../../types/FilterTypes';
+import './TodoFilter.scss';
 
 type Props = {
   query: string;
-  onQuery: (query: string) => void;
+  onQueryChange: (query: string) => void;
   selectedType: string;
   onSelectedType: (filter: FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQuery,
+  onQueryChange,
   selectedType,
   onSelectedType,
 }) => {
   const handleQuery = (event: ChangeEvent<HTMLInputElement>) => {
-    onQuery(event.target.value);
+    onQueryChange(event.target.value);
   };
 
   const resetQuery = () => {
-    onQuery('');
+    onQueryChange('');
   };
 
   return (
@@ -27,14 +28,20 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select
+            className="select-type"
             data-cy="statusSelect"
             value={selectedType}
-            onChange={(event) => (
-              onSelectedType(event.target.value as FilterType))}
+            onChange={event => {
+              const target = event.target.value;
+
+              return (
+                onSelectedType(target as FilterType)
+              );
+            }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(FilterType).map((filterType) => (
+              <option key={filterType} value={filterType}>{filterType}</option>
+            ))}
           </select>
         </span>
       </p>
@@ -54,7 +61,6 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-
             <button
               data-cy="clearSearchButton"
               aria-label="Mute volume"

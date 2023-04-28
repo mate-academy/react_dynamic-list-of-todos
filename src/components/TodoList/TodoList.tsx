@@ -72,12 +72,11 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => onSelectedModal(todo)}
                 >
                   <span className="icon">
-                    {selectedModal?.id !== id
-                      ? (
-                        <i className="far fa-eye" />
-                      ) : (
-                        <i className="far fa-eye-slash" />
-                      )}
+                    <i className={classNames('far', {
+                      'fa-eye': !selectedModal,
+                      'fa-eye-slash': selectedModal,
+                    })}
+                    />
                   </span>
                 </button>
               </td>
