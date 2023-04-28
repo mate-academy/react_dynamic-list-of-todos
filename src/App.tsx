@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 import { getTodos } from './api';
 
 const getLowerString = (str: string) => {
@@ -17,7 +18,7 @@ const getLowerString = (str: string) => {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [filterTodos, setFilterTodos] = useState('all');
+  const [filterTodos, setFilterTodos] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleChangeFilter = (value: string) => {
-    setFilterTodos(value);
+    setFilterTodos(value as Filter);
   };
 
   const handleChangeQuery = (value: string) => {
@@ -46,11 +47,11 @@ export const App: React.FC = () => {
   const getFilteredTodos = () => {
     let newTodos = [...todos];
 
-    if (filterTodos === 'active') {
+    if (filterTodos === Filter.Active) {
       newTodos = newTodos.filter(todo => !todo.completed);
     }
 
-    if (filterTodos === 'completed') {
+    if (filterTodos === Filter.Completed) {
       newTodos = newTodos.filter(todo => todo.completed);
     }
 

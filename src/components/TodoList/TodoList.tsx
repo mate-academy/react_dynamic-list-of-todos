@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -33,7 +34,9 @@ export const TodoList: React.FC<Props> = ({
         return (
           <tr
             data-cy="todo"
-            className={isSelected ? 'has-background-info-light' : ''}
+            className={classNames({
+              'has-background-info-light': isSelected,
+            })}
             key={id}
           >
             <td className="is-vcentered">
@@ -47,7 +50,12 @@ export const TodoList: React.FC<Props> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={completed ? 'has-text-success' : 'has-text-danger'}>
+              <p
+                className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+              >
                 {title}
               </p>
             </td>
@@ -59,14 +67,21 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleSelectedTodo(id)}
               >
                 <span className="icon">
-                  <i className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`} />
+                  <i
+                    className={classNames(
+                      'far',
+                      {
+                        'fa-eye-slash': isSelected,
+                        'fa-eye': !isSelected,
+                      },
+                    )}
+                  />
                 </span>
               </button>
             </td>
           </tr>
         );
       })}
-
     </tbody>
   </table>
 );
