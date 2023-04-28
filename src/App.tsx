@@ -55,7 +55,7 @@ export const App: React.FC = () => {
       newTodos = newTodos.filter(todo => todo.completed);
     }
 
-    if (query.trim() !== '') {
+    if (query.trim()) {
       newTodos = newTodos.filter(({ title }) => {
         const lowerTitle = getLowerString(title);
         const lowerQuery = getLowerString(query).trim();
