@@ -1,8 +1,28 @@
-export const TodoFilter = () => (
+import React, { ChangeEvent } from 'react';
+
+interface Props {
+  status: string,
+  onStatusChanged: (event: ChangeEvent<HTMLSelectElement>) => void,
+  query: string,
+  onQueryChanged: (event: ChangeEvent<HTMLInputElement>) => void,
+  onClearInput: () => void,
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  status,
+  query,
+  onStatusChanged,
+  onQueryChanged,
+  onClearInput,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={status}
+          onChange={onStatusChanged}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,19 +36,25 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={onQueryChanged}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {query
+        && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={onClearInput}
+            />
+          </span>
+        )}
     </p>
   </form>
 );
