@@ -78,10 +78,6 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <span className="icon">
-                  {/* <i className={`far ${
-                    selectedTodo?.id !== todo.id ? ('fa-eye')
-                      : ('fa-eye-slash')
-                  }`} */}
                   <i className={classNames(
                     'far', {
                       'fa-eye': selectedTodo?.id !== todo.id,
