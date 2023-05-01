@@ -1,5 +1,10 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -19,6 +24,7 @@ export const App: React.FC = () => {
     SelectFilter.ALL,
   );
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const fetchTodos = useCallback(async () => {
     setIsLoading(true);
@@ -28,7 +34,7 @@ export const App: React.FC = () => {
 
       setTodos(responseTodos);
     } catch (error) {
-      throw new Error('Something went wrong...');
+      setErrorMessage('Something went wrong...');
     } finally {
       setIsLoading(false);
     }
@@ -52,29 +58,27 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find((todo) => todo.id === selectedTodoId) || null;
 
-  const makeLowercase = (text: string) => {
-    return text.toLocaleLowerCase();
-  };
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      const checkIsInclude = todo.title.toLocaleLowerCase().includes(
+        searchQuery.toLocaleLowerCase(),
+      );
 
-  const visibleTodos = todos.filter((todo) => {
-    const checkIsInclude = makeLowercase(todo.title).includes(
-      makeLowercase(searchQuery),
-    );
+      switch (selectFilter) {
+        case SelectFilter.ALL:
+          return checkIsInclude;
 
-    switch (selectFilter) {
-      case SelectFilter.ALL:
-        return checkIsInclude;
+        case SelectFilter.ACTIVE:
+          return !todo.completed && checkIsInclude;
 
-      case SelectFilter.ACTIVE:
-        return !todo.completed && checkIsInclude;
+        case SelectFilter.COMPLETED:
+          return todo.completed && checkIsInclude;
 
-      case SelectFilter.COMPLETED:
-        return todo.completed && checkIsInclude;
-
-      default:
-        throw new Error('Invalid filter query');
-    }
-  });
+        default:
+          throw new Error('Invalid filter query');
+      }
+    });
+  }, [todos, searchQuery, selectFilter]);
 
   return (
     <>
@@ -94,6 +98,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {errorMessage && <div>{errorMessage}</div>}
               {isLoading ? (
                 <Loader />
               ) : (
@@ -107,7 +112,13 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoId && <TodoModal todo={selectedTodo} onClose={hideModal} />}
+
+      {selectedTodoId && (
+        <TodoModal
+          todo={selectedTodo}
+          onClose={hideModal}
+        />
+      )}
     </>
   );
 };
