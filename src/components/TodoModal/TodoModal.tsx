@@ -12,6 +12,7 @@ interface Props {
 export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodoId }) => {
   const [user, setUser] = useState<User>();
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getActiveUser = async () => {
@@ -21,19 +22,53 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodoId }) => {
         setUser(userFromServer);
       } catch {
         setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     getActiveUser();
   }, []);
 
+  const errorTodoModal = (!user || isError) && !isLoading;
+  const shouldDisplayModal = !isLoading && !isError && user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(!user || isError) ? (
+      {isLoading && (
         <Loader />
-      ) : (
+      )}
+
+      {errorTodoModal && (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              {`Todo #${activeTodo.id}`}
+            </div>
+
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              aria-label="close"
+              onClick={() => setActiveTodoId(0)}
+            />
+          </header>
+
+          <article className="modal-card-body">
+            <p className="block has-text-dark has-text-weight-medium">
+              Somthing went wrong
+            </p>
+          </article>
+        </div>
+      )}
+
+      {shouldDisplayModal && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

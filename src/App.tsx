@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
   const [sortType, setSortType] = useState(SortType.All);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [query, setQuery] = useState('');
   const [activeTodoId, setActiveTodoId] = useState(0);
@@ -26,27 +27,31 @@ export const App: React.FC = () => {
       setTodos(await promise);
     } catch {
       setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  let VisibleTodos = todos;
+  let visibleTodos = todos;
 
   switch (sortType) {
     case SortType.Active:
-      VisibleTodos = VisibleTodos.filter(todo => !todo.completed);
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
       break;
 
     case SortType.Completed:
-      VisibleTodos = VisibleTodos.filter(todo => todo.completed);
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
       break;
 
     default:
       break;
   }
 
-  VisibleTodos = VisibleTodos
+  visibleTodos = visibleTodos
     .filter(todo => todo.title.toLocaleLowerCase()
       .includes(query.toLocaleLowerCase()));
+
+  const errorTodoList = todos.length > 0 && !isError && !isLoading;
 
   useEffect(() => {
     getTodosList(getTodos());
@@ -70,11 +75,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(!todos.length || isError) ? (
+              {isLoading && !isError && (
                 <Loader />
-              ) : (
+              )}
+
+              {isError && !isLoading && (
+                <p>Unable to load todos</p>
+              )}
+
+              {errorTodoList && (
                 <TodoList
-                  todos={VisibleTodos}
+                  todos={visibleTodos}
                   activeTodoId={activeTodoId}
                   setActiveTodoId={setActiveTodoId}
                 />
