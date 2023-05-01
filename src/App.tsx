@@ -14,18 +14,16 @@ import { Select } from './types/Select';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
-  const [selectedTodo, setTodoModal] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [user, setUser] = useState<User | null>(null);
-  const [inicializationModal, setInicModal] = useState(false);
+  const [inicializationModal, setInicializationModal] = useState(false);
   const [filterSelect, setFilterSelect] = useState<Select | string>(Select.all);
   const [inputSelect, setInputSelect] = useState<string>('');
   const [filteringList, setFilteringList] = useState<Todo[] | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(array => {
-        setTodoList(array);
-      });
+      .then(setTodoList);
   }, []);
 
   useEffect(() => {
@@ -33,9 +31,9 @@ export const App: React.FC = () => {
       const filteringArray = [...todoList].filter(todo => {
         switch (filterSelect) {
           case Select.active:
-            return todo.completed === false;
+            return !todo.completed;
           case Select.completed:
-            return todo.completed === true;
+            return todo.completed;
           default:
             return true;
         }
@@ -67,11 +65,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todoList === null ? (<Loader />) : (
+              {!todoList ? (<Loader />) : (
                 <TodoList
                   todos={filteringList}
-                  setInicializationModal={setInicModal}
-                  setTodoModal={setTodoModal}
+                  setInicializationModal={setInicializationModal}
+                  setTodoModal={setSelectedTodo}
                   selectedTodo={selectedTodo}
                   setUser={setUser}
                 />
@@ -85,8 +83,8 @@ export const App: React.FC = () => {
       {inicializationModal && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setInicializationModal={setInicModal}
-          setTodoModal={setTodoModal}
+          setInicializationModal={setInicializationModal}
+          setTodoModal={setSelectedTodo}
           setUser={setUser}
           user={user}
         />
