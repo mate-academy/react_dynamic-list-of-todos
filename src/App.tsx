@@ -9,13 +9,14 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { SortType } from './types/sortType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
+  const [sortType, setSortType] = useState(SortType.All);
 
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
   const [activeTodoId, setActiveTodoId] = useState(0);
 
   const activeTodo = todos.find(todo => todo.id === activeTodoId);
@@ -30,12 +31,17 @@ export const App: React.FC = () => {
 
   let VisibleTodos = todos;
 
-  if (selectFilter === 'active') {
-    VisibleTodos = VisibleTodos.filter(todo => !todo.completed);
-  }
+  switch (sortType) {
+    case SortType.Active:
+      VisibleTodos = VisibleTodos.filter(todo => !todo.completed);
+      break;
 
-  if (selectFilter === 'completed') {
-    VisibleTodos = VisibleTodos.filter(todo => todo.completed);
+    case SortType.Completed:
+      VisibleTodos = VisibleTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
   }
 
   VisibleTodos = VisibleTodos
@@ -59,8 +65,7 @@ export const App: React.FC = () => {
                 setTodos={setTodos}
                 query={query}
                 setQuery={setQuery}
-                selectFilter={selectFilter}
-                setSelectFilter={setSelectFilter}
+                setSortType={setSortType}
               />
             </div>
 

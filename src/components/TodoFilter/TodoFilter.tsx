@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { Todo } from '../../types/Todo';
+import { SortType } from '../../types/sortType';
 
 interface Props {
   todos: Todo[];
   query: string;
-  selectFilter: string;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
-  setSelectFilter: React.Dispatch<React.SetStateAction<string>>;
+  setSortType: React.Dispatch<React.SetStateAction<SortType>>;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,12 +15,30 @@ export const TodoFilter: React.FC<Props> = ({
   setTodos,
   query,
   setQuery,
-  selectFilter,
-  setSelectFilter,
+  setSortType,
 }) => {
   useEffect(() => {
     setTodos(todos);
-  }, [query, selectFilter]);
+  }, [query]);
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case SortType.All:
+        setSortType(SortType.All);
+        break;
+
+      case SortType.Active:
+        setSortType(SortType.Active);
+        break;
+
+      case SortType.Completed:
+        setSortType(SortType.Completed);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <form className="field has-addons">
@@ -28,12 +46,13 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectFilter}
-            onChange={(event) => setSelectFilter(event.target.value)}
+            onChange={handleSelectChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(SortType).map(current => (
+              <option value={current}>
+                {`${current[0].toUpperCase() + current.slice(1)}`}
+              </option>
+            ))}
           </select>
         </span>
       </p>
