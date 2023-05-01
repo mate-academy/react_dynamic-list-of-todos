@@ -8,13 +8,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [visibleTodo, setVisibleTodo] = useState<Todo | null>(null);
-  const [value, setValue] = useState('');
+  const [filterBy, setFilterBy] = useState<Filter | string>(Filter.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -30,18 +31,18 @@ export const App: React.FC = () => {
       const filterByQuery
         = title.toLowerCase().includes(preparedQuery);
 
-      switch (value) {
-        case 'active':
+      switch (filterBy) {
+        case Filter.ACTIVE:
           return !completed && filterByQuery;
 
-        case 'completed':
+        case Filter.COMPLETED:
           return completed && filterByQuery;
 
         default:
           return filterByQuery;
       }
     });
-  }, [query, visibleTodos, value]);
+  }, [query, visibleTodos, filterBy]);
 
   return (
     <>
@@ -52,7 +53,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setValue={setValue}
+                setFilterBy={setFilterBy}
                 query={query}
                 setQuery={setQuery}
               />

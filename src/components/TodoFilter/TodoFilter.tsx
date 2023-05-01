@@ -1,12 +1,14 @@
 import React from 'react';
 
+import { Filter } from '../../types/Filter';
+
 interface Props {
-  setValue: (value: string) => void;
+  setFilterBy: (value: Filter | string) => void;
   setQuery: (query: string) => void;
   query: string;
 }
 
-export const TodoFilter: React.FC<Props> = ({ setValue, query, setQuery }) => {
+export const TodoFilter: React.FC<Props> = ({ setFilterBy: setValue, query, setQuery }) => {
   return (
     <form className="field has-addons">
       <p className="control">
