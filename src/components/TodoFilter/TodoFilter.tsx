@@ -8,7 +8,10 @@ interface Props {
   query: string;
 }
 
-export const TodoFilter: React.FC<Props> = ({ setFilterBy: setValue, query, setQuery }) => {
+export const TodoFilter: React.FC<Props> = ({
+  setFilterBy: setValue,
+  query, setQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
