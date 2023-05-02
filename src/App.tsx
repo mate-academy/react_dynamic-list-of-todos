@@ -4,15 +4,22 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
+// eslint-disable-next-line import/no-cycle
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getUser } from './api';
 import { Todo } from './types/Todo';
+
+export enum FilterBy {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+  QUERY = 'byQuery',
+}
 
 export const App: React.FC = () => {
   const [todoIsLoaded, setTodoisLoaded] = useState(false);
-  const [modalIsOpened, setModalIsOpened] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(0);
   const [currentTodo, setCurrentTodo] = useState<Todo>({
     id: 0,
@@ -20,18 +27,18 @@ export const App: React.FC = () => {
     completed: false,
     userId: 0,
   });
-  const [filterTodoBy, setFilterTodoBy] = useState('all');
+  const [filterTodoBy, setFilterTodoBy] = useState(FilterBy.ALL);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filterCallback = () => {
     switch (filterTodoBy) {
-      case 'active':
+      case FilterBy.ACTIVE:
         return (todo: Todo) => !todo.completed;
 
-      case 'completed':
+      case FilterBy.COMPLETED:
         return (todo: Todo) => todo.completed;
 
-      case 'byQuery':
+      case FilterBy.QUERY:
         return (todo: Todo) => todo.title.includes(searchQuery);
 
       default:
@@ -58,10 +65,8 @@ export const App: React.FC = () => {
             <div className="block">
               {!todoIsLoaded && <Loader />}
               <TodoList
-                todos={getTodos}
                 isLoaded={todoIsLoaded}
                 setIsLoaded={setTodoisLoaded}
-                setModalIsOpened={setModalIsOpened}
                 setCurrentUserId={setCurrentUserId}
                 setCurrentTodo={setCurrentTodo}
                 filterCallback={filterCallback()}
@@ -71,13 +76,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalIsOpened
+      {currentTodo.id !== 0
         && (
           <TodoModal
-            setModalIsOpened={setModalIsOpened}
             currentUserId={currentUserId}
             getUser={getUser}
             currentTodo={currentTodo}
+            setCurrentTodo={setCurrentTodo}
           />
         )}
     </>

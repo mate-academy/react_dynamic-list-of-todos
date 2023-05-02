@@ -1,8 +1,10 @@
-import { SetStateAction } from 'react';
+/* eslint-disable import/no-cycle */
+import React, { ChangeEvent } from 'react';
+import { FilterBy } from '../../App';
 
 interface Props {
-  setFilterTodoBy: React.Dispatch<React.SetStateAction<string>>,
-  filterTodoBy: string,
+  setFilterTodoBy: React.Dispatch<React.SetStateAction<FilterBy>>,
+  filterTodoBy: FilterBy,
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>,
   searchQuery: string,
 }
@@ -11,8 +13,22 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterTodoBy, filterTodoBy, setSearchQuery, searchQuery,
 }) => {
   const handleColorChange
-  = (event: { target: { value: SetStateAction<string>; }; }) => {
-    setFilterTodoBy(event.target.value);
+  = (event: ChangeEvent<HTMLSelectElement>) => {
+    const filterType = event.target.value;
+
+    switch (filterType) {
+      case FilterBy.ACTIVE:
+        setFilterTodoBy(FilterBy.ACTIVE);
+        break;
+
+      case FilterBy.COMPLETED:
+        setFilterTodoBy(FilterBy.COMPLETED);
+        break;
+
+      default:
+        setFilterTodoBy(FilterBy.ALL);
+        break;
+    }
   };
 
   return (
@@ -40,7 +56,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={searchQuery}
           onChange={(event) => {
             setSearchQuery(event.currentTarget.value);
-            setFilterTodoBy('byQuery');
+            setFilterTodoBy(FilterBy.QUERY);
           }}
         />
         <span className="icon is-left">

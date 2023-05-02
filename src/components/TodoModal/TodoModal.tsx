@@ -4,14 +4,14 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  setModalIsOpened: React.Dispatch<React.SetStateAction<boolean>>,
   currentUserId: number,
   getUser: (userId: number) => Promise<User>
   currentTodo: Todo,
+  setCurrentTodo: React.Dispatch<React.SetStateAction<Todo>>,
 }
 
 export const TodoModal: React.FC<Props> = ({
-  setModalIsOpened, currentUserId, getUser, currentTodo,
+  currentUserId, getUser, currentTodo, setCurrentTodo,
 }) => {
   const [currentUser, setCurrentUser] = useState<User>({
     id: 0,
@@ -53,7 +53,12 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModalIsOpened(false)}
+              onClick={() => setCurrentTodo({
+                id: 0,
+                title: '',
+                completed: false,
+                userId: 0,
+              })}
             />
           </header>
 

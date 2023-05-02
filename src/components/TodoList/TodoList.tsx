@@ -1,37 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { getTodos } from '../../api';
 
 interface Props {
-  todos: Promise<Todo[]>,
   isLoaded: boolean,
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>,
-  setModalIsOpened: React.Dispatch<React.SetStateAction<boolean>>,
   setCurrentUserId: React.Dispatch<React.SetStateAction<number>>,
   setCurrentTodo: React.Dispatch<React.SetStateAction<Todo>>,
   filterCallback: (todo: Todo) => boolean,
 }
 
 export const TodoList: React.FC<Props> = ({
-  todos,
   isLoaded,
   setIsLoaded,
-  setModalIsOpened,
   setCurrentUserId,
   setCurrentTodo,
   filterCallback,
 }) => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
-  const getTodo = async () => {
-    const todo = await todos;
-
-    setVisibleTodos(todo);
-
+  useEffect(() => {
+    getTodos().then(todos => setVisibleTodos(todos));
     setIsLoaded(true);
-  };
-
-  getTodo();
+  }, []);
 
   return (
     <>
@@ -79,7 +71,6 @@ export const TodoList: React.FC<Props> = ({
                     type="button"
                     onClick={() => {
                       setCurrentUserId(visibleTodo.userId);
-                      setModalIsOpened(true);
                       setCurrentTodo(visibleTodo);
                     }}
                   >
