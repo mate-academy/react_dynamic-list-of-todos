@@ -14,10 +14,8 @@ export const getTodosFilteredByStatus = (
         return completed;
 
       default:
-        break;
+        return true;
     }
-
-    return true;
   });
 };
 

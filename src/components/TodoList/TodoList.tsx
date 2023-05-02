@@ -9,13 +9,11 @@ type Props = {
   setSelectedTodo: (todo: Todo) => void,
 };
 
-export const TodoList: React.FC<Props> = (
-  {
-    todos,
-    setSelectedTodo,
-    selectedTodo,
-  },
-) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedTodo,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>

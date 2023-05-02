@@ -20,10 +20,16 @@ export const TodoModal: React.FC<Props> = ({
       .then(setUser);
   }, []);
 
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div
         className="modal-background"
+        onClick={handleCloseModal}
+        aria-hidden="true"
       />
 
       {!user ? (
@@ -43,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={handleCloseModal}
             />
           </header>
 

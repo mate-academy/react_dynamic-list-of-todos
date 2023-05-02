@@ -24,7 +24,7 @@ function get<T>(url: string): Promise<T> {
         return res.json();
       }
 
-      throw new Error();
+      throw new Error(`Error fetching data: ${res.statusText}`);
     });
 }
 

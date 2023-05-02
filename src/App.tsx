@@ -18,23 +18,22 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasErrors, setHasErrors] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setHasErrors(true))
+      .catch(({ message }) => setError(message))
       .finally(() => setIsLoading(false));
-    // console.log(todos);
   }, []);
 
   const todosFilteredByStatus = useMemo(() => {
     return getTodosFilteredByStatus(todos, filteringOption);
-  }, [filteringOption, isLoading]);
+  }, [todos, filteringOption]);
 
   const todosIncludeSearchQuery = useMemo(() => {
     return getTodosIncludeSearchQuery(todosFilteredByStatus, searchQuery);
-  }, [filteringOption, searchQuery, isLoading]);
+  }, [todosFilteredByStatus, searchQuery]);
 
   return (
     <>
@@ -54,8 +53,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              {hasErrors && <p>Something went wrong try again later!</p>}
-              {!isLoading && !hasErrors
+              {error && <p>{error}</p>}
+              {!isLoading && !error
                 && (
                   <TodoList
                     todos={todosIncludeSearchQuery}
