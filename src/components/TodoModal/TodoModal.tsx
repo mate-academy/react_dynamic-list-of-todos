@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  setModalIsOpened: React.Dispatch<React.SetStateAction<boolean>>,
+  currentUserId: number,
+  getUser: (userId: number) => Promise<User>
+  currentTodo: Todo,
+}
+
+export const TodoModal: React.FC<Props> = ({
+  setModalIsOpened, currentUserId, getUser, currentTodo,
+}) => {
+  const [currentUser, setCurrentUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [modalIsLoaded, setModalIsLoaded] = useState(false);
+  const user = async () => {
+    const curUser = await getUser(currentUserId);
+
+    setCurrentUser(curUser);
+
+    setModalIsLoaded(true);
+  };
+
+  if (currentUserId !== currentUser.id) {
+    user();
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!modalIsLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +45,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${currentTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,12 +53,13 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => setModalIsOpened(false)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {currentTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -37,8 +68,8 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${currentUser.email}`}>
+                {currentUser.name}
               </a>
             </p>
           </div>
