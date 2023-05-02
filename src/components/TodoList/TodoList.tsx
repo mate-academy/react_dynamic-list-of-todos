@@ -1,24 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
-import { User } from '../../types/User';
 
 type Props = {
   todos: Todo[] | null;
-  setInicializationModal: (inicializationModal: boolean) => void;
-  setTodoModal: (selectedTodo: Todo | undefined) => void;
-  selectedTodo: Todo | undefined;
-  setUser: (user: User) => void;
+  setTodoModal: (selectedTodo: Todo | null) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setInicializationModal,
   setTodoModal,
-  setUser,
   selectedTodo,
 }) => {
+  const buttonEye: (todo: Todo) => void = (todo) => {
+    setTodoModal(todo);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -69,12 +67,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  setInicializationModal(true);
-                  setTodoModal(todos.find(elem => elem.id === todo.id));
-                  getUser(todo.userId)
-                    .then(userInData => {
-                      setUser(userInData);
-                    });
+                  buttonEye(todo);
                 }}
               >
                 <span className="icon">

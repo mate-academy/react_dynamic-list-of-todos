@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,45 +9,37 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { Select } from './types/Select';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [user, setUser] = useState<User | null>(null);
-  const [inicializationModal, setInicializationModal] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterSelect, setFilterSelect] = useState<Select | string>(Select.all);
   const [inputSelect, setInputSelect] = useState<string>('');
-  const [filteringList, setFilteringList] = useState<Todo[] | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(setTodoList);
   }, []);
 
-  useEffect(() => {
-    if (todoList) {
-      const filteringArray = [...todoList].filter(todo => {
-        switch (filterSelect) {
-          case Select.active:
-            return !todo.completed;
-          case Select.completed:
-            return todo.completed;
-          default:
-            return true;
-        }
-      });
+  const filter = () => {
+    const filteringArray = todoList && [...todoList].filter(todo => {
+      const lowerCase = todo.title.toLowerCase();
 
-      const filterInput = [...filteringArray].filter(todo => {
-        const lowerCase = todo.title.toLowerCase();
+      switch (filterSelect) {
+        case Select.active:
+          return !todo.completed && lowerCase.includes(inputSelect.toLowerCase());
+        case Select.completed:
+          return todo.completed && lowerCase.includes(inputSelect.toLowerCase());
+        default:
+          return true && lowerCase.includes(inputSelect.toLowerCase());
+      }
+    });
 
-        return lowerCase.includes(inputSelect.toLowerCase());
-      });
+    return filteringArray;
+  };
 
-      setFilteringList(filterInput);
-    }
-  }, [todoList, filterSelect, inputSelect]);
+  const getFilteringList = useMemo(filter, [todoList, filterSelect, inputSelect]);
 
   return (
     <>
@@ -65,13 +57,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todoList ? (<Loader />) : (
+              {!todoList ? (
+                <Loader />
+              ) : (
                 <TodoList
-                  todos={filteringList}
-                  setInicializationModal={setInicializationModal}
+                  todos={getFilteringList}
                   setTodoModal={setSelectedTodo}
                   selectedTodo={selectedTodo}
-                  setUser={setUser}
                 />
               )}
 
@@ -80,13 +72,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {inicializationModal && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setInicializationModal={setInicializationModal}
           setTodoModal={setSelectedTodo}
-          setUser={setUser}
-          user={user}
         />
       )}
     </>
