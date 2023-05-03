@@ -9,16 +9,17 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, selectTodo] = useState<Todo | null>(null);
 
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
 
   useEffect(() => {
-    getTodos().then(result => setTodos(result));
+    getTodos().then(setTodos);
   }, []);
 
   const getVisibleTodos = () => {

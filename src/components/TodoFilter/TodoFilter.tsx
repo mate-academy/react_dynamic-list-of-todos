@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { Filter } from '../../types/Filter';
+
 type Props = {
   query: string
   setQuery: (event: string) => void
-  setFilter: (event: string) => void
+  setFilter: (value: Filter) => void
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(({
@@ -17,7 +19,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setFilter(event.target.value)}
+            onChange={(event) => setFilter(event.target.value as Filter)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
