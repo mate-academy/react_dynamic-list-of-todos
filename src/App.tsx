@@ -24,12 +24,12 @@ export const App: React.FC = () => {
 
   const getVisibleTodos = () => {
     switch (filter) {
-      case 'active':
+      case Filter.active:
         return todos.filter(todo => !todo.completed && todo.title
           .toLowerCase()
           .includes(query.toLowerCase()));
 
-      case 'completed':
+      case Filter.completed:
         return todos.filter(todo => todo.completed && todo.title
           .toLowerCase()
           .includes(query.toLowerCase()));
