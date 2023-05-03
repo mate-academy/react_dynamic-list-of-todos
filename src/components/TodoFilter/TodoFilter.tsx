@@ -3,7 +3,7 @@ import { TodosType } from '../../types/TodosType';
 type Props = {
   query: string;
   onChangeQuery: (value: string) => void;
-  onChangeTypeOfLoad: (value: TodosType) => void;
+  onChangeTypeOfLoad: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -11,32 +11,14 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeQuery,
   onChangeTypeOfLoad,
 }) => {
-  const handleChangeOnSelect = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    switch (event.target.value) {
-      case TodosType.All:
-        onChangeTypeOfLoad(TodosType.All);
-        break;
-
-      case TodosType.Completed:
-        onChangeTypeOfLoad(TodosType.Completed);
-        break;
-
-      case TodosType.Active:
-        onChangeTypeOfLoad(TodosType.Active);
-        break;
-
-      default:
-        break;
-    }
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleChangeOnSelect}>
+          <select
+            data-cy="statusSelect"
+            onChange={(e) => onChangeTypeOfLoad(e.target.value)}
+          >
 
             {Object.values(TodosType).map(current => (
               <option value={current}>
@@ -62,7 +44,10 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span
+            className="icon is-right"
+            style={{ pointerEvents: TodosType.All }}
+          >
             <button
               aria-label="reset"
               data-cy="clearSearchButton"

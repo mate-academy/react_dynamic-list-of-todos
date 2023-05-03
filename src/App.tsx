@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [query, setQuery] = useState('');
-  const [typeOfLoad, setTypeOfLoad] = useState(TodosType.All);
+  const [typeOfLoad, setTypeOfLoad] = useState<TodosType | string>(TodosType.All);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
@@ -37,26 +37,24 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    let isStatusCorrect = true;
-    const lowerCasedTitle = todo.title.toLowerCase();
-    const lowerCasedQuery = query.toLowerCase();
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const lowerCased = todo.title.toLowerCase().includes(query.toLowerCase());
 
-    switch (typeOfLoad) {
-      case TodosType.Active:
-        isStatusCorrect = !todo.completed;
-        break;
+      switch (typeOfLoad) {
+        case TodosType.Active:
+          return !todo.completed && lowerCased;
 
-      case TodosType.Completed:
-        isStatusCorrect = todo.completed;
-        break;
+        case TodosType.Completed:
+          return todo.completed && lowerCased;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
 
-    return isStatusCorrect && lowerCasedTitle.includes(lowerCasedQuery);
-  });
+      return lowerCased;
+    });
+  }, [typeOfLoad, query, todos]);
 
   const selectedTodo = useMemo(() => (
     todos.find(todo => todo.id === selectedTodoId)
@@ -86,16 +84,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && !isError
-                ? (
-                  <Loader />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodoId={selectedTodoId}
-                    handleSelectTodo={handleSelectTodo}
-                  />
-                )}
+              {isLoading && !isError ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  handleSelectTodo={handleSelectTodo}
+                />
+              )}
             </div>
           </div>
         </div>
