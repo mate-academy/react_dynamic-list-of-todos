@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-// import { getTodos } from '../../api';
 
 interface Props {
   todos: Todo[];
@@ -10,19 +9,13 @@ interface Props {
   selectedInfoWindowId: number | null;
 }
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  onWindowOpen,
-  isInfoWindowOpen,
-  selectedInfoWindowId,
-}) => {
-  // const [todos, setTodos] = useState<Todo[]>([]);
-
-  // useEffect(() => {
-  //   getTodos().then(setTodos);
-  // }, []);
-
-  return (
+export const TodoList: React.FC<Props> = React.memo(
+  ({
+    todos,
+    onWindowOpen,
+    isInfoWindowOpen,
+    selectedInfoWindowId,
+  }) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -84,5 +77,5 @@ export const TodoList: React.FC<Props> = ({
         })}
       </tbody>
     </table>
-  );
-};
+  ),
+);
