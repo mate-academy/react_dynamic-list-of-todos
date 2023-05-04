@@ -38,22 +38,24 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const lowerCased = todo.title.toLowerCase().includes(query.toLowerCase());
-
-      switch (typeOfLoad) {
-        case TodosType.Active:
-          return !todo.completed && lowerCased;
-
-        case TodosType.Completed:
-          return todo.completed && lowerCased;
-
-        default:
-          break;
-      }
-
-      return lowerCased;
+    let filteredTodos = todos.filter(todo => {
+      return todo.title.toLowerCase().includes(query.toLowerCase());
     });
+
+    switch (typeOfLoad) {
+      case TodosType.Active:
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+
+      case TodosType.Completed:
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+
+      default:
+        break;
+    }
+
+    return filteredTodos;
   }, [typeOfLoad, query, todos]);
 
   const selectedTodo = useMemo(() => (
