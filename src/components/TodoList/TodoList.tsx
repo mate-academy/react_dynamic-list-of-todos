@@ -5,9 +5,17 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  onWindowOpen: (id: number) => void;
+  isInfoWindowOpen: boolean;
+  selectedInfoWindowId: number | null;
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onWindowOpen,
+  isInfoWindowOpen,
+  selectedInfoWindowId,
+}) => {
   // const [todos, setTodos] = useState<Todo[]>([]);
 
   // useEffect(() => {
@@ -37,6 +45,11 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             'has-text-success': completed,
           });
 
+          const buttonStatusClass = classNames('far', {
+            'fa-eye': !isInfoWindowOpen || id !== selectedInfoWindowId,
+            'fa-eye-slash': isInfoWindowOpen && id === selectedInfoWindowId,
+          });
+
           return (
             <tr key={todo.id} data-cy="todo" className="">
               <td className="is-vcentered">{id}</td>
@@ -55,9 +68,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                <button data-cy="selectButton" className="button" type="button">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => onWindowOpen(id)}
+                >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={buttonStatusClass} />
                   </span>
                 </button>
               </td>

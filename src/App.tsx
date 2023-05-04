@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
@@ -13,6 +13,17 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isInfoWindowOpen, setIsInfoWindowOpen] = useState<boolean>(false);
+  const [selectedInfoWindowId, setSelectedInfoWindowId] = useState<number | null>(null);
+
+  const handleWindowOpen = (id: number) => {
+    setIsInfoWindowOpen(true);
+    setSelectedInfoWindowId(id);
+  };
+
+  const handleWindowClose = () => {
+    setIsInfoWindowOpen(false);
+  };
 
   useEffect(() => {
     getTodos()
@@ -21,6 +32,8 @@ export const App: React.FC = () => {
         setIsLoading(false);
       });
   }, []);
+
+  const openTodo = todos.find(todo => todo.id === selectedInfoWindowId);
 
   return (
     <>
@@ -37,14 +50,24 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} />
+                <TodoList
+                  todos={todos}
+                  onWindowOpen={handleWindowOpen}
+                  isInfoWindowOpen={isInfoWindowOpen}
+                  selectedInfoWindowId={selectedInfoWindowId}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {isInfoWindowOpen && openTodo && (
+        <TodoModal
+          todo={openTodo}
+          onWindowClose={handleWindowClose}
+        />
+      )}
     </>
   );
 };
