@@ -1,8 +1,20 @@
-export const TodoFilter = () => (
+interface Props {
+  onSortConditionChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  sortCondition: string;
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  onSortConditionChange,
+  sortCondition,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={sortCondition}
+          onChange={onSortConditionChange}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>

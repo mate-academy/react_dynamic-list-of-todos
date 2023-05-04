@@ -15,6 +15,11 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isInfoWindowOpen, setIsInfoWindowOpen] = useState<boolean>(false);
   const [selectedInfoWindowId, setSelectedInfoWindowId] = useState<number | null>(null);
+  const [sortCondition, setSortCondition] = useState('all');
+
+  const handleSortConditionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCondition(event.target.value);
+  };
 
   const handleWindowOpen = (id: number) => {
     setIsInfoWindowOpen(true);
@@ -24,6 +29,22 @@ export const App: React.FC = () => {
   const handleWindowClose = () => {
     setIsInfoWindowOpen(false);
   };
+
+  const getVisibleTodos = () => {
+    let visibleTodos = todos;
+
+    if (sortCondition === 'active') {
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
+    }
+
+    if (sortCondition === 'completed') {
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+    }
+
+    return visibleTodos;
+  };
+
+  const visibleTodos = getVisibleTodos();
 
   useEffect(() => {
     getTodos()
@@ -43,7 +64,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                onSortConditionChange={handleSortConditionChange}
+                sortCondition={sortCondition}
+              />
             </div>
 
             <div className="block">
@@ -51,7 +75,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={visibleTodos}
                   onWindowOpen={handleWindowOpen}
                   isInfoWindowOpen={isInfoWindowOpen}
                   selectedInfoWindowId={selectedInfoWindowId}
