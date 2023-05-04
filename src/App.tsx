@@ -43,7 +43,7 @@ export const App: React.FC = () => {
   }, []);
 
   const getVisibleTodos = () => {
-    let visibleTodos = todos;
+    let visibleTodos = [...todos];
 
     if (sortCondition === 'active') {
       visibleTodos = visibleTodos.filter(todo => !todo.completed);
