@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, {
-  ChangeEvent, useEffect, useMemo, useState,
+  ChangeEvent, useEffect, useState, useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,47 +10,47 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { SelectValue } from './types/SelectValues';
-import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState(SelectValue.All);
   const [modal, setModal] = useState<boolean>(false);
-  const [checkedUserId, setCheckedUserId] = useState<number>(0);
-  const [user, setUser] = useState<User | undefined>();
+  const [todoId, setTodoId] = useState<number>(0);
   const [todoSelected, setTodoSelected] = useState<Todo>();
 
   const filterSelectedTodos = () => {
     switch (selectedValue) {
-      case SelectValue.All:
-        return todos;
       case SelectValue.Completed:
         return todos.filter((todo) => todo.completed);
       case SelectValue.Active:
         return todos.filter((todo) => !todo.completed);
       default:
-        return [];
+        return todos;
     }
   };
 
   const todosFilter = (todosFromServer: Todo[], query: string) => {
     const queryLower = query.toLowerCase().trim();
 
-    return todosFromServer.filter((todo:Todo) => todo.title.includes(queryLower));
+    if (queryLower === '') {
+      return todosFromServer;
+    }
+
+    return todosFromServer.filter((todo:Todo) => todo.title
+      .toLowerCase()
+      .includes(queryLower));
   };
 
-  const visibleTodos = todosFilter(filterSelectedTodos(), searchQuery);
+  const visibleTodos = useMemo(() => {
+    return todosFilter(filterSelectedTodos(), searchQuery);
+  }, [todos, searchQuery, selectedValue]);
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
-
-  useMemo(() => {
-    getUser(checkedUserId).then(setUser);
-  }, [checkedUserId]);
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(e.target.value as SelectValue);
@@ -66,11 +66,12 @@ export const App: React.FC = () => {
 
   const resetModal = () => {
     setModal(false);
+    setTodoId(0);
   };
 
   const handleModal = (todo: Todo) => () => {
     setModal(true);
-    setCheckedUserId(todo.userId);
+    setTodoId(todo.id);
     setTodoSelected(todo);
   };
 
@@ -98,15 +99,15 @@ export const App: React.FC = () => {
               <TodoList
                 todos={visibleTodos}
                 handleModal={handleModal}
-                selectedUserId={checkedUserId}
+                todoId={todoId}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {modal && todoSelected && user && (
-        <TodoModal user={user} todoSelected={todoSelected} resetModal={resetModal} />
+      {modal && todoSelected && (
+        <TodoModal todoSelected={todoSelected} resetModal={resetModal} />
       )}
     </>
   );

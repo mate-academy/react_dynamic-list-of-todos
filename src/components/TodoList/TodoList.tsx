@@ -5,14 +5,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[],
   handleModal: (todo: Todo) => () => void,
-  selectedUserId: number
+  todoId: number
 };
 
 export const TodoList: React.FC<Props> = (
   {
     todos,
     handleModal,
-    selectedUserId,
+    todoId,
   },
 ) => (
   <table className="table is-narrow is-fullwidth">
@@ -32,7 +32,13 @@ export const TodoList: React.FC<Props> = (
     <tbody>
       {todos.map(todo => (
         // <tr key={todo.id} data-cy="todo" className="has-background-info-light">
-        <tr key={todo.id} data-cy="todo" className="">
+        <tr
+          key={todo.id}
+          data-cy="todo"
+          className={classNames({
+            'has-background-info-light': todoId === todo.id,
+          })}
+        >
           <td className="is-vcentered">{todo.id}</td>
           {todo.completed ? (
             <td className="is-vcentered">
@@ -43,7 +49,6 @@ export const TodoList: React.FC<Props> = (
           ) : (
             <td className="is-vcentered" />
           )}
-          {/* <td className="is-vcentered" /> */}
           <td className="is-vcentered is-expanded">
             <p className={classNames({
               'has-text-success': todo.completed,
@@ -63,8 +68,8 @@ export const TodoList: React.FC<Props> = (
             >
               <span className="icon">
                 <i className={classNames('far', {
-                  'fa-eye-slash': selectedUserId === todo.userId,
-                  'fa-eye': selectedUserId !== todo.userId,
+                  'fa-eye-slash': todoId === todo.id,
+                  'fa-eye': todoId !== todo.id,
                 })}
                 />
               </span>

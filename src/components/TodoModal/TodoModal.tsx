@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
-  user: User
   todoSelected: Todo
   resetModal: () => void
 };
 
 export const TodoModal: React.FC<Props> = (
   {
-    user,
     todoSelected,
     resetModal,
   },
 ) => {
-  const { name, email } = user;
+  const [user, setUser] = useState<User>();
+  const [checkedUserId, setCheckedUserId] = useState<number>(
+    todoSelected.userId,
+  );
+
+  useMemo(() => {
+    getUser(checkedUserId).then(setUser);
+  }, [checkedUserId]);
+
+  useMemo(() => {
+    setCheckedUserId(todoSelected.userId);
+  }, [todoSelected]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -35,8 +45,8 @@ export const TodoModal: React.FC<Props> = (
               {`Todo #${todoSelected.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Close button"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -68,8 +78,8 @@ export const TodoModal: React.FC<Props> = (
               )}
               {' by '}
 
-              <a href={`mailto:${email}`}>
-                {name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
