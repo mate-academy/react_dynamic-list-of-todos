@@ -16,7 +16,10 @@ function get<T>(url: string): Promise<T> {
 
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(response => (response.ok
+      ? response.json()
+      : Promise.reject(new Error(`${response.status}: ${response.statusText}`))
+    ));
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

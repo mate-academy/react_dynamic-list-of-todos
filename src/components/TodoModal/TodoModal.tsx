@@ -13,11 +13,16 @@ export const TodoModal: React.FC<Props> = React.memo(
   ({ todo, onWindowClose }) => {
     const [user, setUser] = useState<User>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
       getUser(todo.userId)
         .then(userFromServer => {
           setUser(userFromServer);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setErrorMessage(error.message);
           setIsLoading(false);
         });
     }, []);
@@ -61,9 +66,13 @@ export const TodoModal: React.FC<Props> = React.memo(
 
                 {' by '}
 
-                <a href={`mailto:${user?.email}`}>
-                  {user?.name}
-                </a>
+                {errorMessage ? (
+                  <span style={{ color: 'red' }}>No user yet</span>
+                ) : (
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
+                  </a>
+                )}
               </p>
             </div>
           </div>

@@ -23,6 +23,7 @@ export const App: React.FC = () => {
   const [selectedInfoWindowId, setSelectedInfoWindowId] = useState<number | null>(null);
   const [sortCondition, setSortCondition] = useState('all');
   const [appliedQuery, setAppliedQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const applyQuery = useCallback(
     debounce(setAppliedQuery, 1000),
@@ -72,6 +73,10 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
         setIsLoading(false);
+      })
+      .catch(error => {
+        setErrorMessage(error.message);
+        setIsLoading(false);
       });
   }, []);
 
@@ -94,11 +99,17 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {isLoading ? (
+            {isLoading && (
               <div className="block">
                 <Loader />
               </div>
-            ) : (
+            )}
+
+            {!isLoading && errorMessage && (
+              <p style={{ color: 'red' }}>Todo list is empty</p>
+            )}
+
+            {!isLoading && !errorMessage && (
               <div className="block">
                 <TodoList
                   todos={visibleTodos}
