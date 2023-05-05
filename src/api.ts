@@ -17,9 +17,13 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see now the laoder works
-  return wait(300)
+  return wait(1000)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => (res.ok
+      ? res.json()
+      : Promise.reject(
+        new Error(`Cannot load data: ${res.status} ${res.statusText}`),
+      )));
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
