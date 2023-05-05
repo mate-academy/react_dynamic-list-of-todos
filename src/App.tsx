@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -24,24 +24,24 @@ export const App: React.FC = () => {
     getTodos().then(todos => setTodos(todos));
   }, []);
 
-  const resetUser = () => {
+  const resetUser = useCallback(() => {
     setSelectedTodo(null);
     setTodoId(0);
-  };
+  }, []);
 
-  const handleSearch = (search: string) => {
+  const handleSearch = useCallback((search: string) => {
     setSearchedTodos(search);
-  };
+  }, []);
 
-  const handleFilter = (category: string) => {
+  const handleFilter = useCallback((category: string) => {
     setTodoCategory(category);
-  };
+  }, []);
 
-  const handleTodoStatus = (status: boolean) => {
+  const handleTodoStatus = useCallback((status: boolean) => {
     setTodoStatus(status);
-  };
+  }, []);
 
-  const filterTodos = (search: string, category: string) => {
+  const filterTodos = useCallback((search: string, category: string) => {
     let categoryStatus: boolean | null = null;
 
     switch (category) {
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
 
       return formattedTitle.includes(formattedSearch);
     });
-  };
+  }, [searchedTodo, todoCategory, visibleTodos]);
 
   const filteredTodos = filterTodos(searchedTodo, todoCategory);
 

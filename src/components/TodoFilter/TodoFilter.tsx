@@ -6,7 +6,7 @@ interface Props {
   search: string;
   searchTodo: CallableFunction;
 }
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   search,
   searchTodo,
   filter,
@@ -55,4 +55,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

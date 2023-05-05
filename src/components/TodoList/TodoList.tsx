@@ -10,7 +10,7 @@ interface Props {
   setStatus: (status: boolean) => void;
   selectTodo: (todo: Todo) => void
 }
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectTodoId,
   selectedTodoId,
@@ -86,4 +86,4 @@ export const TodoList: React.FC<Props> = ({
       ))}
     </tbody>
   </table>
-);
+));
