@@ -82,7 +82,7 @@ export const App: React.FC = () => {
                 filter={todoCategory}
                 onFilter={handleFilter}
                 search={searchedTodo}
-                searchTodo={handleSearch}
+                onSearchTodo={handleSearch}
               />
             </div>
 
@@ -93,8 +93,8 @@ export const App: React.FC = () => {
                 selectTodoId={(id: number) => setTodoId(id)}
                 selectUserId={(id: number) => setUserId((id))}
                 todos={filteredTodos}
-                setStatus={(status: boolean) => handleTodoStatus(status)}
-                selectTodo={(todo: Todo) => setSelectedTodo(todo)}
+                onSetStatus={(status: boolean) => handleTodoStatus(status)}
+                onSelectTodo={(todo: Todo) => setSelectedTodo(todo)}
               />
             </div>
           </div>

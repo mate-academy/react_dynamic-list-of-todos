@@ -7,16 +7,16 @@ interface Props {
   selectTodoId: (id :number) => void;
   selectUserId: (id: number) => void;
   todos: Todo[];
-  setStatus: (status: boolean) => void;
-  selectTodo: (todo: Todo) => void
+  onSetStatus: (status: boolean) => void;
+  onSelectTodo: (todo: Todo) => void
 }
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectTodoId,
   selectedTodoId,
   selectUserId,
-  setStatus,
-  selectTodo,
+  onSetStatus,
+  onSelectTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -72,8 +72,8 @@ export const TodoList: React.FC<Props> = React.memo(({
                 onClick={() => {
                   selectUserId(todo.userId);
                   selectTodoId(todo.id);
-                  setStatus(todo.completed);
-                  selectTodo(todo);
+                  onSetStatus(todo.completed);
+                  onSelectTodo(todo);
                 }}
               >
                 <span className="icon">

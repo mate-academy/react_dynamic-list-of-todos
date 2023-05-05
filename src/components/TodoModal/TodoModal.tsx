@@ -19,12 +19,12 @@ export const TodoModal: React.FC<Props> = React.memo(
     onReset,
     userId,
   }) => {
-    const [selectedUser, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-      getUser(userId).then(user => {
-        setUser(user);
+      getUser(userId).then(userFromServer => {
+        setUser(userFromServer);
         setIsLoading(true);
       });
     }, []);
@@ -72,8 +72,8 @@ export const TodoModal: React.FC<Props> = React.memo(
 
                 {' by '}
 
-                <a href={`mailto:${selectedUser?.email}`}>
-                  {selectedUser?.name}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>

@@ -2,13 +2,13 @@ import React from 'react';
 
 interface Props {
   filter: string;
-  onFilter: CallableFunction;
+  onFilter: (category: string) => void;
   search: string;
-  searchTodo: CallableFunction;
+  onSearchTodo: (search: string) => void;
 }
 export const TodoFilter: React.FC<Props> = React.memo(({
   search,
-  searchTodo,
+  onSearchTodo,
   filter,
   onFilter,
 }) => {
@@ -34,7 +34,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           type="text"
           className="input"
           value={search}
-          onChange={(event) => searchTodo(event.target.value)}
+          onChange={(event) => onSearchTodo(event.target.value)}
           placeholder="Search..."
         />
         <span className="icon is-left">
@@ -48,7 +48,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => searchTodo('')}
+              onClick={() => onSearchTodo('')}
             />
           )}
         </span>
