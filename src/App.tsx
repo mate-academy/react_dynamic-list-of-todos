@@ -17,20 +17,26 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  enum Filter {
+    All = 'all',
+    Completed = 'completed',
+    Incomplete = 'incomplete',
+  }
+
   const filterTodos = () => {
     let filteredTodos: Todo[] = [...listOfTodos];
 
-    if (filter !== 'all') {
+    if (filter !== Filter.All) {
       filteredTodos = filteredTodos.filter(todo => {
         return (
-          filter === 'completed'
+          filter === Filter.Completed
             ? todo.completed
             : !todo.completed
         );
       });
     }
 
-    if (serchQuery.trim() !== '') {
+    if (!serchQuery.trim()) {
       filteredTodos = filteredTodos.filter(todo => (
         todo.title.toLowerCase().includes(serchQuery.toLowerCase())
       ));
