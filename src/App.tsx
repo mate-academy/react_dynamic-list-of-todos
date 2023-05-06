@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -23,11 +22,11 @@ export const App: React.FC = () => {
     Incomplete = 'incomplete',
   }
 
-  const filterTodos = () => {
-    let filteredTodos: Todo[] = [...listOfTodos];
+  const filteredTodos = useMemo(() => {
+    let todosToFilter: Todo[] = [...listOfTodos];
 
     if (filter !== Filter.All) {
-      filteredTodos = filteredTodos.filter(todo => {
+      todosToFilter = todosToFilter.filter(todo => {
         return (
           filter === Filter.Completed
             ? todo.completed
@@ -37,13 +36,13 @@ export const App: React.FC = () => {
     }
 
     if (!serchQuery.trim()) {
-      filteredTodos = filteredTodos.filter(todo => (
+      todosToFilter = todosToFilter.filter(todo => (
         todo.title.toLowerCase().includes(serchQuery.toLowerCase())
       ));
     }
 
-    return filteredTodos;
-  };
+    return todosToFilter;
+  }, [listOfTodos, filter, serchQuery]);
 
   const getTodoList = async () => {
     const newTodoList = await getTodos();
@@ -83,7 +82,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  listOfTodos={filterTodos()}
+                  listOfTodos={filteredTodos}
                   selectedTodo={selectedTodo}
                   selectTodo={selectTodo}
                 />
