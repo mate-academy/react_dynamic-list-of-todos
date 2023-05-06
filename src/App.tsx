@@ -37,24 +37,18 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = todos.filter(todo => {
-    let isStatusCorrect = true;
     const lowerCasedTitle = todo.title.toLowerCase();
     const lowerCasedQuery = filterQuery.toLowerCase();
 
-    switch (filterStatus) {
-      case FilterStatus.Active:
-        isStatusCorrect = !todo.completed;
-        break;
-
-      case FilterStatus.Completed:
-        isStatusCorrect = todo.completed;
-        break;
-
-      default:
-        break;
+    if (filterStatus === FilterStatus.Active && todo.completed) {
+      return false;
     }
 
-    return isStatusCorrect && lowerCasedTitle.includes(lowerCasedQuery);
+    if (filterStatus === FilterStatus.Completed && !todo.completed) {
+      return false;
+    }
+
+    return lowerCasedTitle.includes(lowerCasedQuery);
   });
 
   return (

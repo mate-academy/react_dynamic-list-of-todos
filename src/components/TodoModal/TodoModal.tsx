@@ -34,6 +34,8 @@ export const TodoModal: React.FC<Props> = ({
       setUser(userFromServer);
     } catch {
       setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
 
     setIsLoading(false);
@@ -58,12 +60,11 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #
-              {id}
+              {`Todo # ${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Delete"
               type="button"
               className="delete"
               data-cy="modal-close"

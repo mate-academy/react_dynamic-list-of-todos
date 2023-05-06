@@ -50,7 +50,7 @@ export const TodoFilter: FC<Props> = ({
           placeholder="Search..."
           value={filterQuery}
           onChange={(event) => (
-            setFilterQuery(event.target.value)
+            setFilterQuery(event.target.value.trim().replace(/\s+/g, ' '))
           )}
         />
         <span className="icon is-left">
@@ -59,8 +59,8 @@ export const TodoFilter: FC<Props> = ({
 
         {filterQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Delete"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
