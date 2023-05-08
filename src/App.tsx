@@ -73,11 +73,13 @@ export const App: React.FC = () => {
             <div className="block">
               {!areTodosLoaded && <Loader />}
 
-              <TodoList
-                todos={visibleTodos}
-                selectedTodo={selectedTodo}
-                onTodoSelect={setSelectedTodo}
-              />
+              {areTodosLoaded && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  onTodoSelect={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
