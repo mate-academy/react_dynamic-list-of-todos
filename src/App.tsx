@@ -27,15 +27,13 @@ export const App: React.FC = () => {
     const result = title.toLowerCase().includes(query.toLowerCase().trim());
 
     switch (option) {
-      case 'all':
-        return result;
       case 'active':
         return result && !completed;
       case 'completed':
         return result && completed;
 
       default:
-        throw new Error(`Errod: ${option} don't find`);
+        return result;
     }
   });
 
