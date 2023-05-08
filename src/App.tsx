@@ -35,7 +35,7 @@ export const App: React.FC = () => {
         return result && completed;
 
       default:
-        throw new Error('');
+        throw new Error(`Errod: ${option} don't find`);
     }
   });
 
