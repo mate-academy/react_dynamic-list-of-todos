@@ -71,14 +71,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!areTodosLoaded && <Loader />}
-
-              {areTodosLoaded && (
+              {areTodosLoaded ? (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
                   onTodoSelect={setSelectedTodo}
                 />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
