@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-// import { User } from '../../types/User';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>
@@ -10,6 +11,14 @@ type Props = {
 
 export const TodoModal: React.FC<Props>
   = ({ setSelectedTodo, selectedTodo }) => {
+    const [user, setUser] = useState<User | null >();
+
+    useEffect(() => {
+      if (selectedTodo) {
+        getUser(selectedTodo?.userId).then(response => setUser(response));
+      }
+    }, []);
+
     return (
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
@@ -46,8 +55,10 @@ export const TodoModal: React.FC<Props>
 
                   {' by '}
 
-                  <a href="mailto:Sincere@april.biz">
-                    {/* {users.name} */}
+                  <a
+                    href={`mailto:${user?.email}`}
+                  >
+                    {user?.name}
                   </a>
                 </p>
               </div>

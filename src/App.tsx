@@ -6,7 +6,6 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
@@ -33,7 +32,7 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
-  const getFilteringTodos = ():Todo[] => {
+  const getFilteredTodos = ():Todo[] => {
     let visibleTodos = [...todos];
 
     switch (filterValue) {
@@ -68,7 +67,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList todos={getFilteringTodos()} setSelectedTodo={setSelectedTodo} />
+              <TodoList
+                todos={getFilteredTodos()}
+                setSelectedTodo={setSelectedTodo}
+              />
             </div>
           </div>
         </div>

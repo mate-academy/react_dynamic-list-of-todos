@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import './TodoList.scss';
 
@@ -25,12 +26,16 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedTodo }) => {
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className={`has-background-info-light ${todo.completed ? 'completed' : ''}`}>
+          <tr
+            data-cy="todo"
+            className={classNames(`has-background-info-light ${todo.completed ? 'completed' : ''}`)}
+            key={todo.id}
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered" />
             <td className="is-vcentered is-expanded">
               <p
-                className={!todo.completed ? 'has-text-danger ' : ''}
+                className={classNames(`${!todo.completed ? 'has-text-danger ' : ''}`)}
               >
                 {todo.title}
               </p>
