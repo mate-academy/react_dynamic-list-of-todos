@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useState, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,24 +28,26 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getTodos()
-        .then(todoList => todoList
-          .filter(todoItem => {
-            switch (filterValue) {
-              case Filter.Active:
-                return !todoItem.completed;
-
-              case Filter.Completed:
-                return todoItem.completed;
-
-              default:
-                return todoItem;
-            }
-          }))
         .then(result => setTodos(result));
     };
 
     fetchData();
-  }, [filterValue]);
+  }, []);
+
+  const filteredTodos = useMemo(() => (
+    todos.filter(todoItem => {
+      switch (filterValue) {
+        case Filter.Active:
+          return !todoItem.completed;
+
+        case Filter.Completed:
+          return todoItem.completed;
+
+        default:
+          return todoItem;
+      }
+    })
+  ), [todos, filterValue]);
 
   const handleSelectUser = (id: number) => {
     setUserId(id);
@@ -74,7 +78,7 @@ export const App: React.FC = () => {
               <TodoList
                 selectedTodo={todo}
                 appliedQuery={appliedQuery}
-                todos={todos}
+                todos={filteredTodos}
                 onSelectUser={handleSelectUser}
                 onSelectTodo={setTodo}
               />
