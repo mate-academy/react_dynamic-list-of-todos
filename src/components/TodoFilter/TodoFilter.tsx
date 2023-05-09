@@ -1,34 +1,65 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import { ChangeEvent, FC, memo } from 'react';
+import { CompletedStatus } from '../../types/CompletedStatus';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface Props {
+  onChangeInput: (event: ChangeEvent<HTMLInputElement> | string) => void;
+  query: string;
+  onClearInput: () => void;
+  onSelectedStatus: (completedStatus: CompletedStatus) => void;
+  selectedOption: string;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+export const TodoFilter: FC<Props> = memo(({
+  query,
+  onChangeInput,
+  onClearInput,
+  onSelectedStatus,
+  selectedOption,
+}) => {
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={selectedOption}
+            onChange={event => onSelectedStatus(
+              event.target.value as CompletedStatus,
+            )}
+          >
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={event => onChangeInput(event)}
         />
-      </span>
-    </p>
-  </form>
-);
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={onClearInput}
+            />
+          </span>
+        )}
+
+      </p>
+    </form>
+  );
+});
