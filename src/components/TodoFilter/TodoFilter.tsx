@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
         >
           {Object.values(TodoStatus).map((status) => (
             <option key={status} value={status}>
-              {status}
+              {status[0].toUpperCase() + status.slice(1)}
             </option>
           ))}
         </select>

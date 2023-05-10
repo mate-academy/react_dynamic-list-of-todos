@@ -15,12 +15,17 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [todoStatusFilter, setTodoStatusFilter] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
+  const [error, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const onTodoModalClose = () => {
     setSelectedTodoId(0);
   };
 
   useEffect(() => {
+    setError(false);
+    setLoading(true);
+
     getTodos().then(todos => {
       let filteredTodos = todos;
 
@@ -47,7 +52,9 @@ export const App: React.FC = () => {
       }
 
       setVisibleTodos(filteredTodos);
-    });
+    })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, [todoStatusFilter, query]);
 
   const selectedTodo = selectedTodoId
@@ -71,7 +78,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length
+              {error && 'Error on loading data from server'}
+
+              {!isLoading && !error
                 ? (
                   <TodoList
                     todos={visibleTodos}
