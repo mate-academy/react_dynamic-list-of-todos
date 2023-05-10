@@ -7,7 +7,7 @@ import { Todo } from './types/Todo';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [hasError, setHasError] = useState(false);
-  // const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const loadTodos = async () => {
     try {
@@ -43,13 +43,13 @@ export const App: React.FC = () => {
     setFilter(selectedFilter);
   };
 
-  // const handleModalClose = () => {
-  //   setSelectedTodoId(0);
-  // };
+  const handleModalClose = () => {
+    setSelectedTodo(null);
+  };
 
-  // const handleTodoSelect = (newId: number) => {
-  //   setSelectedTodoId(newId);
-  // };
+  const handleTodoSelect = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
 
   const visibleTodos = todos.filter((todo) => {
     switch (filter) {
@@ -87,19 +87,31 @@ export const App: React.FC = () => {
                         filter={filter}
                         onQueryChange={handleQueryChange}
                         onFilterChange={handleFilterChange}
+
                       />
                     </div>
 
                     <div className="block">
                       {isLoading
                         ? <Loader />
-                        : <TodoList visibleTodos={visibleTodos} />}
+                        : (
+                          <TodoList
+                            visibleTodos={visibleTodos}
+                            selectedTodo={selectedTodo}
+                            onTodoSelect={handleTodoSelect}
+                          />
+                        )}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* <TodoModal /> */}
+              {selectedTodo && (
+                <TodoModal
+                  selectedTodo={selectedTodo}
+                  onClose={handleModalClose}
+                />
+              )}
             </>
           )
       }
