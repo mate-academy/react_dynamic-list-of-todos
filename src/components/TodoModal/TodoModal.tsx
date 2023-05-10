@@ -1,32 +1,56 @@
-import React, { memo, useEffect } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  onClickModal: (click: boolean) => void;
   todo: Todo | null;
+  setClickedTodoId: (id: number) => void;
+  clickedTodoId: number;
 }
 
-export const TodoModal: React.FC<Props> = memo(({ todo, onClickModal }) => {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [isLoaded, setIsLoaded] = React.useState(false);
+export const TodoModal: React.FC<Props> = memo(({
+  todo,
+  setClickedTodoId,
+  clickedTodoId,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  // const [isShowLoader, setIsShowLoader] = useState(true);
+
+  const loadedUser = useCallback(
+    async () => {
+      try {
+        const userFromServer = await getUser(clickedTodoId);
+
+        setUser(userFromServer);
+      } catch (error) {
+        throw new Error(`Error: ${error}`);
+      }
+    }, [],
+  );
+
+  const handleModalClose = () => {
+    setClickedTodoId(0);
+  };
 
   useEffect(() => {
-    if (todo !== null) {
-      setIsLoaded(true);
-      getUser(todo.userId).then(fetchedUser => setUser(fetchedUser));
-
-      setIsLoaded(false);
-    }
-  }, [todo?.userId]);
+    loadedUser();
+    // setIsShowLoader(false);
+  }, [user]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoaded ? (
+      {/* {isShowLoader ? ( */}
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -43,7 +67,7 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onClickModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClickModal(false)}
+              onClick={handleModalClose}
             />
           </header>
 
@@ -53,9 +77,13 @@ export const TodoModal: React.FC<Props> = memo(({ todo, onClickModal }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo?.completed
-                ? (<strong className="has-text-success">Done</strong>)
-                : (<strong className="has-text-danger">Planned</strong>)}
+              <strong className={cn(
+                { 'has-text-success': todo?.completed },
+                { 'has-text-danger': !todo?.completed },
+              )}
+              >
+                {todo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

@@ -18,16 +18,14 @@ import { Todo } from './types/Todo';
 import { CompletedStatus } from './types/CompletedStatus';
 
 export const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<CompletedStatus>(CompletedStatus.All);
-  const [isClickedTodoInfo, setIsClickedTodoInfo] = useState(false);
+  const [clickedTodoId, setClickedTodoId] = useState(0);
   const [userTodo, setUserTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    const resultPromise = getTodos();
-
-    resultPromise.then(result => {
+    getTodos().then(result => {
       setTodos(result);
     });
   }, []);
@@ -40,29 +38,26 @@ export const App: FC = () => {
 
   const handleClearInput = useCallback(() => setQuery(''), []);
 
-  const handleUserInfo = useCallback((isClicked: boolean, todo: Todo) => {
-    setIsClickedTodoInfo(isClicked);
+  const handleUserInfo = useCallback((todo: Todo) => {
     setUserTodo(todo);
+    setClickedTodoId(todo.id);
   }, []);
 
-  let vissibleTodos = [...todos];
-
-  if (query) {
+  let vissibleTodos = todos.filter(todo => {
     const lowerQuery = query.toLowerCase().trim();
+    const lowerTitle = todo.title.toLowerCase();
 
-    vissibleTodos = vissibleTodos.filter(todo => (
-      todo.title.toLowerCase().includes(lowerQuery)
-    ));
-  }
+    return lowerTitle.includes(lowerQuery);
+  });
 
   if (selectedStatus !== CompletedStatus.All) {
-    vissibleTodos = vissibleTodos.filter(todo => {
+    vissibleTodos = vissibleTodos.filter(({ completed }) => {
       switch (selectedStatus) {
         case CompletedStatus.Active:
-          return todo.completed === false;
+          return !completed;
 
         case CompletedStatus.Completed:
-          return todo.completed === true;
+          return completed;
 
         default: return null;
       }
@@ -87,24 +82,22 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {todos.length
-                ? (
-                  <TodoList
-                    todos={vissibleTodos}
-                    onClickUser={handleUserInfo}
-                    isClickedTodoInfo={isClickedTodoInfo}
-                  />
-                )
-                : <Loader />}
+              {!todos.length && <Loader />}
+              <TodoList
+                todos={vissibleTodos}
+                onClickTodo={handleUserInfo}
+                clickedTodoId={clickedTodoId}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {isClickedTodoInfo && (
+      {clickedTodoId && (
         <TodoModal
-          onClickModal={setIsClickedTodoInfo}
           todo={userTodo}
+          setClickedTodoId={setClickedTodoId}
+          clickedTodoId={clickedTodoId}
         />
       )}
     </>

@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  onClickUser: (isClicked: boolean, todo: Todo) => void;
-  isClickedTodoInfo: boolean;
+  onClickTodo: (todo: Todo) => void;
+  clickedTodoId: number;
 }
 
 export const TodoList: FC<Props> = memo(({
   todos,
-  onClickUser,
-  isClickedTodoInfo,
+  onClickTodo,
+  clickedTodoId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -34,7 +34,7 @@ export const TodoList: FC<Props> = memo(({
             <tr
               data-cy="todo"
               className={cn('', {
-                'has-background-info-light': isClickedTodoInfo,
+                'has-background-info-light': clickedTodoId,
               })}
               key={todo.id}
             >
@@ -62,10 +62,13 @@ export const TodoList: FC<Props> = memo(({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onClickUser(!isClickedTodoInfo, todo)}
+                  onClick={() => onClickTodo(todo)}
                 >
                   <span className="icon">
-                    <i className={cn('far fa-eye')} />
+                    <i className={cn('far',
+                      { 'fa-eye': clickedTodoId !== todo.id },
+                      { 'fa-eye-slash': clickedTodoId === todo.id })}
+                    />
                   </span>
                 </button>
               </td>

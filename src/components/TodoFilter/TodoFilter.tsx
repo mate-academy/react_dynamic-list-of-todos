@@ -27,9 +27,13 @@ export const TodoFilter: FC<Props> = memo(({
               event.target.value as CompletedStatus,
             )}
           >
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
+            <option value={CompletedStatus.All}>All</option>
+            <option value={CompletedStatus.Active}>
+              Active
+            </option>
+            <option value={CompletedStatus.Completed}>
+              Completed
+            </option>
           </select>
         </span>
       </p>
