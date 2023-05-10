@@ -1,34 +1,34 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { FilterBy } from '../enums/FilterBy';
 
 type Props = {
   todos: Todo[];
   setFilteredTodos: (newTodos: Todo[]) => void;
 };
 
-enum FilterBy {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
+export const TodoFilter: React.FC<Props> = memo(({
+  todos,
+  setFilteredTodos,
+}) => {
   const [completedFilter, setCompletedFilter] = useState(FilterBy.All);
   const [query, setQuery] = useState('');
 
+  const getFilteredTodosBySelect = () => {
+    switch (completedFilter) {
+      case FilterBy.Active:
+        return todos.filter(({ completed }) => !completed);
+
+      case FilterBy.Completed:
+        return todos.filter(({ completed }) => completed);
+
+      default:
+        return todos;
+    }
+  };
+
   useEffect(() => {
-    const filteredTodosBySelect = (() => {
-      switch (completedFilter) {
-        case FilterBy.Active:
-          return todos.filter(({ completed }) => !completed);
-
-        case FilterBy.Completed:
-          return todos.filter(({ completed }) => completed);
-
-        default:
-          return todos;
-      }
-    })();
+    const filteredTodosBySelect = getFilteredTodosBySelect();
 
     const normalizedQuery = query.toLowerCase().trim();
 
@@ -104,4 +104,4 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
       </p>
     </form>
   );
-};
+});

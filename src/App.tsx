@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,25 +14,34 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+  const getTodosFromServer = async () => {
+    setIsLoading(true);
+
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
+    setVisibleTodos(todosFromServer);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
-        setIsLoading(false);
-      });
+    getTodosFromServer();
   }, []);
 
-  const handleSelect = (todo: Todo) => {
+  const handleSelect = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const resetSelectedTodo = () => {
+  const resetSelectedTodo = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
+
+  const setFilteredTodos = useCallback((filteredTodos: Todo[]) => {
+    setVisibleTodos(filteredTodos);
+  }, []);
 
   return (
     <>
@@ -42,7 +51,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} setFilteredTodos={setVisibleTodos} />
+              <TodoFilter todos={todos} setFilteredTodos={setFilteredTodos} />
             </div>
 
             <div className="block">
@@ -60,7 +69,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onCloseButtonClick={resetSelectedTodo}

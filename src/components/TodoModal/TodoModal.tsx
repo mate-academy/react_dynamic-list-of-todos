@@ -9,7 +9,10 @@ type Props = {
   onCloseButtonClick: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onCloseButtonClick }) => {
+export const TodoModal: React.FC<Props> = React.memo(({
+  todo,
+  onCloseButtonClick,
+}) => {
   const {
     id,
     title,
@@ -19,10 +22,15 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseButtonClick }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    getUser(userId).then(foundUser => setUser(foundUser));
+  const getFoundUser = async () => {
+    const foundUser = await getUser(userId);
 
-    setTimeout(() => setIsLoading(false), 300);
+    setUser(foundUser);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getFoundUser();
   }, []);
 
   return (
@@ -71,4 +79,4 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseButtonClick }) => {
       )}
     </div>
   );
-};
+});
