@@ -22,7 +22,6 @@ export const TodoModal: React.FC<Props> = memo(({
   clickedTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  // const [isShowLoader, setIsShowLoader] = useState(true);
 
   const loadedUser = useCallback(
     async () => {
@@ -42,14 +41,12 @@ export const TodoModal: React.FC<Props> = memo(({
 
   useEffect(() => {
     loadedUser();
-    // setIsShowLoader(false);
-  }, [user]);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {/* {isShowLoader ? ( */}
       {!user ? (
         <Loader />
       ) : (

@@ -30,11 +30,11 @@ export const App: FC = () => {
     });
   }, []);
 
-  const handleInput = (event: ChangeEvent<HTMLInputElement> | string) => {
+  const handleInput = useCallback((event: ChangeEvent<HTMLInputElement> | string) => {
     if (typeof event !== 'string') {
       setQuery(event.target.value);
     }
-  };
+  }, []);
 
   const handleClearInput = useCallback(() => setQuery(''), []);
 
