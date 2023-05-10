@@ -24,12 +24,13 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loadedTodos, setLoadedTodos] = useState(false);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [loadedModal, setLoadedModal] = useState(false);
+  const [isModalLoaded, setIsModalLoaded] = useState(false);
   const [filterValue, setFilterValue] = useState(FilterValues.All.toLowerCase());
   const [query, setQuery] = useState('');
   const [hasLoadingError, setHasLoadingError] = useState(false);
+  const [loadAgain, setLoadAgain] = useState(1);
 
   let visibleTodos = filterValue === FilterValues.All.toLowerCase()
     ? todos
@@ -51,20 +52,20 @@ export const App: React.FC = () => {
   function getTodosfromServer() {
     getTodos().then((result: Todo[]) => {
       setTodos(result);
-      setLoadedTodos(true);
     }).catch(() => {
-      setLoadedTodos(true);
       setHasLoadingError(true);
+    }).finally(() => {
+      setIsTodosLoaded(true);
     });
   }
 
   useEffect(() => {
     getTodosfromServer();
-  }, []);
+  }, [loadAgain]);
 
-  const hangleLoadAgain = () => {
-    getTodosfromServer();
-    setLoadedTodos(false);
+  const handleLoadAgain = () => {
+    setIsTodosLoaded(false);
+    setLoadAgain((prevState) => prevState + 1);
   };
 
   useEffect(() => {
@@ -72,11 +73,11 @@ export const App: React.FC = () => {
       getUser(selectedUserId)
         .then((user: User) => {
           setSelectedUser(user);
-          setLoadedModal(true);
+          setIsModalLoaded(true);
         });
     }
 
-    setLoadedModal(false);
+    setIsModalLoaded(false);
   }, [selectedUserId]);
 
   const handleSelectUser = (userId: number, todo: Todo | null) => {
@@ -109,14 +110,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!loadedTodos
+              {!isTodosLoaded
                 ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
                     selectUser={handleSelectUser}
                     hasLoadingError={hasLoadingError}
-                    onAgain={hangleLoadAgain}
+                    onAgain={handleLoadAgain}
                     selectedTodo={selectedTodo}
                   />
                 )}
@@ -130,7 +131,7 @@ export const App: React.FC = () => {
           user={selectedUser}
           todo={selectedTodo}
           onClose={handleSelectUser}
-          loadModal={loadedModal}
+          loadModal={isModalLoaded}
         />
       )}
     </>

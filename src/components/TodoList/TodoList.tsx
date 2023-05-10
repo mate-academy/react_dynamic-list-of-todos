@@ -19,7 +19,13 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   if (hasLoadingError) {
     return (
-      <button type="button" onClick={() => onAgain()}>
+      <button type="button"
+        onClick={() => {
+          onAgain();
+          console.log('work');
+
+        }}
+      >
         Try again
       </button>
     );
