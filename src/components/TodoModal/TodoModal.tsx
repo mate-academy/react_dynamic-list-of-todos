@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 interface Props {
-  selectedTodo: Todo | undefined;
+  selectedTodo: Todo | null;
   onCloseModal: () => void,
 }
 
@@ -17,7 +17,11 @@ export const TodoModal: React.FC<Props> = ({
 
   const loadUser = () => {
     if (selectedTodo?.id) {
-      getUser(selectedTodo.userId).then(setSelectedUser);
+      getUser(selectedTodo.userId)
+        .then(setSelectedUser)
+        .catch(error => {
+          throw new Error(error);
+        });
     }
   };
 

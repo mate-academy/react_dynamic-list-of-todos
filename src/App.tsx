@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const selectedTodo = todos.find(({ id }) => id === selectedTodoId);
+  const selectedTodo = todos.find(({ id }) => id === selectedTodoId) || null;
 
   const closeModalWindow = () => {
     setSelectedTodoId(0);
