@@ -17,15 +17,15 @@ const filteredTodos = (todos: Todo[], query: string, filterBy: FilterBy) => {
   if (query) {
     const preparedQuery = query.trim().toLowerCase();
 
-    preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(preparedQuery));
+    preparedTodos = preparedTodos.filter(({ title }) => title.toLowerCase().includes(preparedQuery));
   }
 
   switch (filterBy) {
     case FilterBy.ACTIVE:
-      preparedTodos = preparedTodos.filter(todo => !todo.completed);
+      preparedTodos = preparedTodos.filter(({ completed }) => !completed);
       break;
     case FilterBy.COMPLETED:
-      preparedTodos = preparedTodos.filter(todo => todo.completed);
+      preparedTodos = preparedTodos.filter(({ completed }) => completed);
       break;
     case FilterBy.ALL:
     default:
@@ -41,11 +41,13 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [isLoadingError, setIsLoadingError] = useState(false);
-  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(false);
 
   const visibleTodos = filteredTodos(todos, query, filterBy);
 
   const fetchData = async () => {
+    setIsDataLoading(true);
+
     try {
       const data = await getTodos();
 
@@ -65,7 +67,7 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }, [selectedTodo]);
 
-  const oncCloseTodo = useCallback(() => {
+  const handleClose = useCallback(() => {
     setSelectedTodo(null);
   }, [selectedTodo]);
 
@@ -87,6 +89,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isDataLoading && <Loader />}
+
               {isLoadingError
                 ? <p>Error, server is unavailable</p>
                 : (
@@ -102,7 +105,7 @@ export const App: React.FC = () => {
       </div>
       {selectedTodo && (
         <TodoModal
-          oncCloseTodo={oncCloseTodo}
+          handleClose={handleClose}
           selectedTodo={selectedTodo}
         />
       )}
