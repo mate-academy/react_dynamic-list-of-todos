@@ -17,7 +17,11 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    getTodos().then(result => setVisibleTodos(result));
+    getTodos()
+      .then(result => setVisibleTodos(result))
+      .catch(error => {
+        throw new Error(`Something was wrong ${error.mesaage}`);
+      });
   }, []);
 
   const filteredTodos = visibleTodos

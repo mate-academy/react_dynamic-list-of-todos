@@ -17,7 +17,11 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo?.userId).then(response => setUser(response));
+      getUser(selectedTodo?.userId)
+        .then(response => setUser(response))
+        .catch(error => {
+          throw new Error(`Something was wrong ${error.message}`);
+        });
     }
   }, []);
 
