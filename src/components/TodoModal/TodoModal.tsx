@@ -6,12 +6,12 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   selectedTodoCard: Todo;
-  setSelectedTodoCard: (todo: Todo | null) => void;
+  onSelectTodoCard: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodoCard,
-  setSelectedTodoCard,
+  onSelectTodoCard,
 }) => {
   const [user, setUser] = React.useState<User | null>(null);
   const {
@@ -48,7 +48,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodoCard(null)}
+              onClick={() => onSelectTodoCard(null)}
             />
           </header>
 

@@ -1,17 +1,18 @@
-import React from 'react';
-import classNames from 'classnames';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import { FC } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoInfo } from '../TodoInfo';
 
 interface Props {
   todos: Todo[];
   selectedTodoCard: Todo | null;
-  setSelectedTodoCard: (todoCard: Todo) => void;
+  onSelectTodoCard: (todoCard: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: FC<Props> = ({
   todos,
   selectedTodoCard,
-  setSelectedTodoCard,
+  onSelectTodoCard,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -24,58 +25,16 @@ export const TodoList: React.FC<Props> = ({
             </span>
           </th>
           <th>Title</th>
-          <th>  </th>
+          <th />
         </tr>
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <tr
-            data-cy="todo"
-            className=""
-            key={todo.id}
-          >
-            <td className="is-vcentered">
-              {todo.id}
-            </td>
-            <td className="is-vcentered">
-              {todo.completed
-                && (
-                  <>
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-
-                  </>
-                )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
-              })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => setSelectedTodoCard(todo)}
-              >
-                <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye-slash': selectedTodoCard?.id === todo.id,
-                    'fa-eye': selectedTodoCard?.id !== todo.id,
-                  })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
-        ))}
+        <TodoInfo
+          todos={todos}
+          selectedTodoCard={selectedTodoCard}
+          onSelectTodoCard={onSelectTodoCard}
+        />
       </tbody>
     </table>
   );

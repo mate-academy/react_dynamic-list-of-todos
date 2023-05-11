@@ -1,17 +1,18 @@
 import React from 'react';
+import { FilterOption } from '../../types/FilterOption';
 
 interface Props {
   filterOption: string;
-  setFilterOption: (filterOption: string) => void;
   query: string;
-  setQuery: (query: string) => void;
+  onSelectOption: (filterOption: FilterOption) => void;
+  onChange: (query: string) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   filterOption,
-  setFilterOption,
   query,
-  setQuery,
+  onSelectOption,
+  onChange,
 }) => {
   return (
     <form className="field has-addons">
@@ -20,16 +21,18 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterOption}
-            onChange={(event) => setFilterOption(event.target.value)}
+            onChange={
+              (event) => onSelectOption(event.target.value as FilterOption)
+            }
           >
-            <option value="all">
-              All
+            <option value={FilterOption.All}>
+              {FilterOption.All}
             </option>
-            <option value="active">
-              Active
+            <option value={FilterOption.Active}>
+              {FilterOption.Active}
             </option>
-            <option value="completed">
-              Completed
+            <option value={FilterOption.Completed}>
+              {FilterOption.Completed}
             </option>
           </select>
         </span>
@@ -42,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -55,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => onChange('')}
             />
           </span>
         )}

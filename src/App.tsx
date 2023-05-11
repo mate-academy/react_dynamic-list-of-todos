@@ -1,38 +1,50 @@
-import React, { useEffect, useMemo } from 'react';
+import {
+  useEffect,
+  FC,
+  useState,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
+import { FilterOption } from './types/FilterOption';
 
-export const App: React.FC = () => {
-  const [todos, setTodos] = React.useState<Todo[]>([]);
+export const App: FC = () => {
+  const [
+    todos,
+    setTodos,
+  ] = useState<Todo[]>([]);
   const [
     selectedTodoCard,
     setSelectedTodoCard,
-  ] = React.useState<Todo | null>(null);
-  const [filterOption, setfilterOption] = React.useState<string>('all');
-  const [query, setQuery] = React.useState<string>('');
+  ] = useState<Todo | null>(null);
+  const [
+    filterOption,
+    setfilterOption,
+  ] = useState<FilterOption>(FilterOption.All);
+  const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
     getTodos().then(response => setTodos(response));
   }, []);
 
-  const filterTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       const todoTitle = todo.title
         .toLowerCase()
         .includes(query.toLowerCase().trim());
 
       switch (filterOption) {
-        case 'active':
+        case FilterOption.Active:
           return !todo.completed && todoTitle;
-        case 'completed':
+        case FilterOption.Completed:
           return todo.completed && todoTitle;
+        case FilterOption.All:
         default:
           return todoTitle;
       }
@@ -49,19 +61,19 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterOption={filterOption}
-                setFilterOption={setfilterOption}
                 query={query}
-                setQuery={setQuery}
+                onSelectOption={setfilterOption}
+                onChange={setQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos.length
                 ? (
                   <TodoList
-                    todos={filterTodos}
+                    todos={filteredTodos}
                     selectedTodoCard={selectedTodoCard}
-                    setSelectedTodoCard={setSelectedTodoCard}
+                    onSelectTodoCard={setSelectedTodoCard}
                   />
                 ) : (
                   <Loader />
@@ -74,7 +86,7 @@ export const App: React.FC = () => {
       {selectedTodoCard && (
         <TodoModal
           selectedTodoCard={selectedTodoCard}
-          setSelectedTodoCard={setSelectedTodoCard}
+          onSelectTodoCard={setSelectedTodoCard}
         />
       )}
     </>
