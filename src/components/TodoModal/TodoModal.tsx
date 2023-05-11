@@ -14,9 +14,10 @@ export const TodoModal: React.FC<Props> = ({
   onClose,
 }) => {
   const [user, setUser] = React.useState<User | null>(null);
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
 
   const loadUser = async () => {
+    setIsLoadingUser(true);
     try {
       if (selectedTodo) {
         const newUser = await getUser(selectedTodo.userId);
