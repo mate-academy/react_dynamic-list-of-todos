@@ -2,16 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
-import { Todo } from '../../types/Todo';
 
 interface Props {
   setButton: (trueOrFalse: boolean) => (void)
-  todoObj: Todo,
+  setListButton: (trueOrFalse: boolean) => (void)
+  title: string,
+  completed: boolean,
+  userId: number,
+  id: number,
 }
 
 export const TodoModal: React.FC<Props> = ({
   setButton,
-  todoObj,
+  title,
+  setListButton,
+  completed,
+  userId,
+  id,
 }) => {
   const [user, setUser]
   = useState<User>({
@@ -20,11 +27,11 @@ export const TodoModal: React.FC<Props> = ({
     email: '',
     phone: '',
   });
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getTodo() {
-      const fetchedData = await getUser(todoObj.userId);
+      const fetchedData = await getUser(userId);
 
       setUser(fetchedData);
       setLoading(false);
@@ -46,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({
                 data-cy="modal-header"
               >
                 Todo #
-                {todoObj.id}
+                {id}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -54,22 +61,25 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setButton(false)}
+                onClick={() => {
+                  setButton(false);
+                  setListButton(false);
+                }}
               />
             </header>
 
             <div className="modal-card-body">
               <p
-                className={todoObj.completed
+                className={completed
                   ? 'has-text-success block'
                   : 'has-text-danger block'}
                 data-cy="modal-title"
               >
-                {todoObj.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                {todoObj.completed
+                {completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
 

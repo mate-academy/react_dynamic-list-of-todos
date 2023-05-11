@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,22 +11,32 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum SortType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
-  const [todos, setTodos]
-   = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setLoading] = useState(true);
   const [cases, setCase] = useState('');
   const [query, setQuery] = useState('');
   const [button, setButton] = useState(false);
-  const [todoObj, setTodoObj] = useState(todos[0]);
-  let array = todos;
+  const [todo, setTodo] = useState(todos[0]);
+  const [listButton, setListButton] = useState(false);
 
   useEffect(() => {
     async function getTodo() {
-      const fetchedData = await getTodos();
+      try {
+        const fetchedData = await getTodos();
 
-      setTodos(fetchedData);
-      setLoading(false);
+        setTodos(fetchedData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error occurred:', error);
+        throw error;
+      }
     }
 
     getTodo();
@@ -39,38 +50,32 @@ export const App: React.FC = () => {
     setQuery(currentQuery);
   };
 
-  switch (cases) {
-    case 'all':
-      array = todos.filter((todo) => {
-        return todo.title.toLowerCase().includes(query.toLowerCase().trim());
-      });
-      break;
-    case 'active':
-      array = todos.filter((todo) => {
-        return (
-          query.length === 0
-            ? todo.completed === false
-            : todo.completed === false
-             && todo.title.toLowerCase().includes(query.toLowerCase().trim())
-        );
-      });
-      break;
-    case 'completed':
-      array = todos.filter((todo) => {
-        return (
-          query.length === 0
-            ? todo.completed === true
-            : todo.completed === true
-             && todo.title.toLowerCase().includes(query.toLowerCase().trim())
-        );
-      });
-      break;
-    default:
-      array = todos.filter((todo) => {
-        return todo.title.toLowerCase().includes(query.toLowerCase().trim());
-      });
-      break;
-  }
+  const visibleTodos: Todo[] = useMemo(
+    () => todos.filter((element) => {
+      switch (cases) {
+        case SortType.All:
+          return element.title.toLowerCase().includes(query.toLowerCase().trim());
+        case SortType.Active:
+          return (
+            query.length === 0
+              ? element.completed === false
+              : element.completed === false
+               && element.title.toLowerCase().includes(query.toLowerCase().trim())
+          );
+        case SortType.Completed:
+          return (
+            query.length === 0
+              ? element.completed === true
+              : element.completed === true
+               && element.title.toLowerCase().includes(query.toLowerCase().trim())
+          );
+        default:
+
+          return element.title.toLowerCase().includes(query.toLowerCase().trim());
+      }
+    }),
+    [todos, query, cases],
+  );
 
   return (
     <>
@@ -92,9 +97,11 @@ export const App: React.FC = () => {
                 ? (<Loader />)
                 : (
                   <TodoList
-                    todos={array}
+                    todos={visibleTodos}
                     setButton={setButton}
-                    setTodoObj={setTodoObj}
+                    setTodo={setTodo}
+                    listButton={listButton}
+                    setListButton={setListButton}
                   />
                 )}
 
@@ -105,7 +112,11 @@ export const App: React.FC = () => {
       {button && (
         <TodoModal
           setButton={setButton}
-          todoObj={todoObj}
+          title={todo.title}
+          completed={todo.completed}
+          userId={todo.userId}
+          id={todo.id}
+          setListButton={setListButton}
         />
       )}
     </>

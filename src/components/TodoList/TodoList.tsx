@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import './todo.list.scss';
 
 interface Props {
   todos: Todo[];
 
   setButton: (trueOrFalse: boolean) => (void),
 
-  setTodoObj: (obj: Todo) => (void)
+  setTodo: (obj: Todo) => (void),
+
+  setListButton: (trueOrFalse: boolean) => (void),
+
+  listButton: boolean,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos = [],
   setButton,
-  setTodoObj,
+  setTodo,
+  listButton,
+  setListButton,
 }) => {
+  const [localTodo, setLocalTodo] = useState('');
+
+  const setVariables = (todo: Todo, title: string) => {
+    setButton(true);
+    setTodo(todo);
+    setListButton(true);
+    setLocalTodo(title);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -35,9 +51,6 @@ export const TodoList: React.FC<Props> = ({
             <tr
               key={todo.id}
               data-cy="todo"
-              className={todo.completed
-                ? ''
-                : 'has-background-info-light'}
             >
               <td className="is-vcentered">
                 {todo.id}
@@ -67,12 +80,15 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    setButton(true);
-                    setTodoObj(todo);
+                    setVariables(todo, todo.title);
                   }}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    {listButton && localTodo === todo.title ? (
+                      <i className="far fa-signal" />
+                    ) : (
+                      <i className="far fa-eye" />
+                    )}
                   </span>
                 </button>
               </td>
