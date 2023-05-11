@@ -1,32 +1,24 @@
-import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
+  user: User,
   handleClosing: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
   todo,
+  user,
   handleClosing,
 }) => {
-  const [todoUser, setTodoUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    getUser(todo.userId).then(user => {
-      setTodoUser(user);
-    });
-  }, []);
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todoUser ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -67,7 +59,7 @@ export const TodoModal: React.FC<Props> = ({
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                {todoUser.name}
+                {user.name}
               </a>
             </p>
           </div>
