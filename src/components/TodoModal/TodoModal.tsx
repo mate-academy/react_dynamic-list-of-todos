@@ -6,14 +6,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  selectedTodoUser: User | null;
-  onTodoReset: () => void;
+  selectedUser: User | null;
+  onReset: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  selectedTodoUser,
-  onTodoReset,
+  selectedUser,
+  onReset,
 }) => {
   const {
     id,
@@ -25,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedTodoUser
+      {!selectedUser
         ? (
           <Loader />
         ) : (
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => onTodoReset()}
+                onClick={onReset}
               />
             </header>
 
@@ -66,9 +66,9 @@ export const TodoModal: React.FC<Props> = ({
 
                 {' by '}
 
-                <a href={selectedTodoUser && selectedTodoUser.email}>
-                  {selectedTodoUser
-                    ? selectedTodoUser.name
+                <a href={selectedUser && selectedUser.email}>
+                  {selectedUser
+                    ? selectedUser.name
                     : 'Unknown user'}
                 </a>
               </p>

@@ -1,4 +1,9 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  ChangeEvent,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
@@ -46,29 +51,20 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedTodoUser, setSelectedTodoUser] = useState<User | null>(null);
 
-  const preparedTodos = handleTodosPrepare(todos, filterType, query);
+  const preparedTodos = useMemo(
+    () => handleTodosPrepare(todos, filterType, query),
+    [todos, filterType, query],
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const todoList = await getTodos();
-
-      setTodos(todoList);
-    };
-
-    fetchData();
-  }, [preparedTodos]);
+    getTodos().then(todosData => setTodos(todosData));
+  }, []);
 
   useEffect(() => {
     if (selectedTodo) {
       const { userId } = selectedTodo;
 
-      const fetchData = async () => {
-        const user = await getUser(userId);
-
-        setSelectedTodoUser(user);
-      };
-
-      fetchData();
+      getUser(userId).then(userData => setSelectedTodoUser(userData));
     }
   }, [selectedTodo]);
 
@@ -92,6 +88,7 @@ export const App: React.FC = () => {
 
   const handleTodoReset = () => {
     setSelectedTodo(null);
+    setSelectedTodoUser(null);
   };
 
   return (
@@ -125,14 +122,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-        && (
-          <TodoModal
-            todo={selectedTodo}
-            selectedTodoUser={selectedTodoUser}
-            onTodoReset={handleTodoReset}
-          />
-        )}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          selectedUser={selectedTodoUser}
+          onReset={handleTodoReset}
+        />
+      )}
     </>
   );
 };
