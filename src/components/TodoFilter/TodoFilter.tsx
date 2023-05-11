@@ -1,34 +1,72 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React from 'react';
+import { FilterOption } from '../../types/FilterOption';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface Props {
+  filterOption: string;
+  query: string;
+  onSelectOption: (filterOption: FilterOption) => void;
+  onChange: (query: string) => void;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+export const TodoFilter: React.FC<Props> = ({
+  filterOption,
+  query,
+  onSelectOption,
+  onChange,
+}) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  return (
+    <form className="field has-addons" onSubmit={handleSubmit}>
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterOption}
+            onChange={(event) => (
+              onSelectOption(event.target.value as FilterOption)
+            )}
+          >
+            <option value={FilterOption.All}>
+              {FilterOption.All}
+            </option>
+            <option value={FilterOption.Active}>
+              {FilterOption.Active}
+            </option>
+            <option value={FilterOption.Completed}>
+              {FilterOption.Completed}
+            </option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={(event) => onChange(event.target.value)}
         />
-      </span>
-    </p>
-  </form>
-);
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => onChange('')}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
