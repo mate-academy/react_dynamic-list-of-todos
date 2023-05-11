@@ -3,8 +3,8 @@ import React from 'react';
 interface Props {
   query: string;
   filter: string;
-  onQueryChange: (newQuery: string) => void;
-  onFilterChange: (selectedFilter: string) => void;
+  onQueryChange: (value: string) => void;
+  onFilterChange: (value: string) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filter}
-          onChange={(e) => onFilterChange(e.target.value)}
+          onChange={(event) => onFilterChange(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,6 +34,8 @@ export const TodoFilter: React.FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => onQueryChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
