@@ -13,7 +13,10 @@ export const TodoModal: React.FC<Props> = ({ resetTodo, todo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const {
-    id, title, completed, userId,
+    id,
+    title,
+    completed,
+    userId,
   } = todo;
 
   useEffect(() => {

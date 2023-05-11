@@ -11,6 +11,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Select } from './types/Select';
 
 import { getTodos } from './api';
 
@@ -18,7 +19,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingTodos, setIsLoadigTodos] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [select, setSelect] = useState('all');
+  const [select, setSelect] = useState(Select.All);
   const [input, setInput] = useState('');
 
   const handleSelectingTodo = useCallback((todo: Todo) => {
@@ -39,23 +40,22 @@ export const App: React.FC = () => {
   useEffect(
     () => {
       loadTodos();
-    },
-    [],
+    }, [],
   );
 
   const handleSelectedTodos = useMemo(() => {
     let visibleTodos: Todo[] = [...todos];
 
     switch (select) {
-      case 'active':
+      case Select.Active:
         visibleTodos = visibleTodos.filter(todo => todo.completed === false);
         break;
 
-      case 'completed':
+      case Select.Completed:
         visibleTodos = visibleTodos.filter(todo => todo.completed === true);
         break;
 
-      case 'all':
+      case Select.All:
       default:
         break;
     }
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onSelect={setSelect} onInput={setInput} />
+              <TodoFilter onSelect={setSelect} onChange={setInput} />
             </div>
 
             <div className="block">
@@ -91,8 +91,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-      && (
+      {selectedTodo && (
         <TodoModal
           resetTodo={() => setSelectedTodo(null)}
           todo={selectedTodo}
