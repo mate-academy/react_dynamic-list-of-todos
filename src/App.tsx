@@ -5,6 +5,7 @@ import {
   FC,
   ChangeEvent,
   useCallback,
+  useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -21,16 +22,10 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<CompletedStatus>(CompletedStatus.All);
-  const [clickedTodoId, setClickedTodoId] = useState(0);
-  const [userTodo, setUserTodo] = useState<Todo | null>(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [todo, setTodo] = useState<Todo | null>(null);
 
-  useEffect(() => {
-    getTodos().then(result => {
-      setTodos(result);
-    });
-  }, []);
-
-  const handleInput = useCallback((event: ChangeEvent<HTMLInputElement> | string) => {
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement> | string) => {
     if (typeof event !== 'string') {
       setQuery(event.target.value);
     }
@@ -38,17 +33,22 @@ export const App: FC = () => {
 
   const handleClearInput = useCallback(() => setQuery(''), []);
 
-  const handleUserInfo = useCallback((todo: Todo) => {
-    setUserTodo(todo);
-    setClickedTodoId(todo.id);
+  const handleUserInfo = useCallback((inputedTodo: Todo) => {
+    setTodo(todo);
+    setSelectedTodoId(inputedTodo.id);
   }, []);
 
-  let vissibleTodos = todos.filter(todo => {
+  const handleCloseModal = () => {
+    setSelectedTodoId(0);
+    setTodo(null);
+  };
+
+  let vissibleTodos = useMemo(() => todos.filter(todoItem => {
     const lowerQuery = query.toLowerCase().trim();
-    const lowerTitle = todo.title.toLowerCase();
+    const lowerTitle = todoItem.title.toLowerCase();
 
     return lowerTitle.includes(lowerQuery);
-  });
+  }), [todos, query]);
 
   if (selectedStatus !== CompletedStatus.All) {
     vissibleTodos = vissibleTodos.filter(({ completed }) => {
@@ -64,6 +64,12 @@ export const App: FC = () => {
     });
   }
 
+  useEffect(() => {
+    getTodos().then(data => {
+      setTodos(data);
+    });
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -73,7 +79,7 @@ export const App: FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeInput={handleInput}
+                onChangeInput={handleChange}
                 query={query}
                 onClearInput={handleClearInput}
                 selectedOption={selectedStatus}
@@ -85,19 +91,18 @@ export const App: FC = () => {
               {!todos.length && <Loader />}
               <TodoList
                 todos={vissibleTodos}
-                onClickTodo={handleUserInfo}
-                clickedTodoId={clickedTodoId}
+                onSelectTodo={handleUserInfo}
+                clickedTodoId={selectedTodoId}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {clickedTodoId && (
+      {selectedTodoId && (
         <TodoModal
-          todo={userTodo}
-          setClickedTodoId={setClickedTodoId}
-          clickedTodoId={clickedTodoId}
+          todo={todo}
+          onClose={handleCloseModal}
         />
       )}
     </>

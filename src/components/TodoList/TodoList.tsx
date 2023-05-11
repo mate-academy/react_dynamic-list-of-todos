@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   todos: Todo[];
@@ -33,45 +34,16 @@ export const TodoList: FC<Props> = memo(({
           return (
             <tr
               data-cy="todo"
-              className={cn('', {
+              className={cn({
                 'has-background-info-light': clickedTodoId === todo.id,
               })}
               key={todo.id}
             >
-              <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered">
-                {
-                  todo.completed && (
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  )
-                }
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p className={cn({
-                  'has-text-danger': !todo.completed,
-                  'has-text-success': todo.completed,
-                })}
-                >
-                  {todo.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => onSelectTodo(todo)}
-                >
-                  <span className="icon">
-                    <i className={clickedTodoId === todo.id
-                      ? 'fas fa-eye-slash'
-                      : 'fas fa-eye'}
-                    />
-                  </span>
-                </button>
-              </td>
+              <TodoItem
+                todo={todo}
+                onSelectedTodo={onSelectTodo}
+                clickedTodoId={clickedTodoId}
+              />
             </tr>
           );
         })}
