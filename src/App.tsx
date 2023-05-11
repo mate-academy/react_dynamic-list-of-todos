@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { TodoContext } from './contexts/TodoContext';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
@@ -16,16 +17,6 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [search, setSearch] = useState<string>('');
   const [select, setSelect] = useState<string>('all');
-
-  useEffect(() => {
-    getTodos().then((data) => setTodos(data));
-  }, []);
-
-  useEffect(() => {
-    if (selectedTodo) {
-      getUser(selectedTodo.userId).then((data) => setUser(data));
-    }
-  }, [selectedTodo]);
 
   const resetSelectedTodo = useCallback(() => {
     setSelectedTodo(null);
@@ -67,6 +58,16 @@ export const App: React.FC = () => {
 
   const visibleTodos = filteredTodos(select, search);
 
+  useEffect(() => {
+    getTodos().then((data) => setTodos(data));
+  }, []);
+
+  useEffect(() => {
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then((data) => setUser(data));
+    }
+  }, [selectedTodo]);
+
   return (
     <>
       <div className="section">
@@ -84,15 +85,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length > 0 ? (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  onSelect={setSelectedTodo}
-                />
-              ) : (
-                <Loader />
-              )}
+              {visibleTodos.length
+                ? (
+                  <TodoContext.Provider value={{
+                    selectedTodo,
+                    setSelectedTodo,
+                  }}
+                  >
+                    <TodoList
+                      todos={visibleTodos}
+                    />
+                  </TodoContext.Provider>
+                ) : (
+                  <Loader />
+                )}
 
             </div>
           </div>

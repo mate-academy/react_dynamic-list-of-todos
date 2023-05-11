@@ -18,7 +18,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user ? (
+      {user && todo ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
