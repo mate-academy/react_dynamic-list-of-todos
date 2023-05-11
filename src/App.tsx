@@ -27,7 +27,7 @@ const prepareTodos = (todos: Todo[], query: string, filter: Filter) => {
 };
 
 export const App: React.FC = () => {
-  const [query] = useState('');
+  const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.all);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -55,6 +55,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 filter={filter}
                 onSelect={handleSelect}
+                onChangeQuery={setQuery}
+                query={query}
               />
             </div>
 

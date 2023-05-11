@@ -2,11 +2,18 @@
 import { Filter } from '../../types/enums';
 
 type Props = {
-  filter: Filter
+  query: string,
+  onChangeQuery: (query: string) => void,
+  filter: Filter,
   onSelect: (value: Filter) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, onSelect }) => (
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  onSelect,
+  query,
+  onChangeQuery,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -28,6 +35,8 @@ export const TodoFilter: React.FC<Props> = ({ filter, onSelect }) => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={event => onChangeQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
