@@ -1,6 +1,6 @@
 import React from 'react';
-import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   visibleTodos: Todo[];
@@ -28,57 +28,14 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {visibleTodos.map((todo) => {
-        const isSelected = selectedTodo && selectedTodo.id === todo.id;
-
-        return (
-          <tr
-            data-cy="todo"
-            className={cn({
-              'has-background-info-light': isSelected,
-            })}
-            key={todo.id}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            {todo.completed
-              ? (
-                <>
-                  <td className="is-vcentered">
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  </td>
-                  <td className="is-vcentered is-expanded">
-                    <p className="has-text-success">{todo.title}</p>
-                  </td>
-                </>
-              )
-              : (
-                <>
-                  <td className="is-vcentered" />
-                  <td className="is-vcentered is-expanded">
-                    <p className="has-text-danger">{todo.title}</p>
-                  </td>
-                </>
-              )}
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onTodoSelect(todo)}
-              >
-                <span className="icon">
-                  <i className={cn('far', {
-                    'fa-eye': !isSelected, 'fa-eye-slash': isSelected,
-                  })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
-        );
-      })}
+      {visibleTodos.map((todo) => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          selectedTodo={selectedTodo}
+          onTodoSelect={onTodoSelect}
+        />
+      ))}
     </tbody>
   </table>
 );

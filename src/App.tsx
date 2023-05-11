@@ -1,17 +1,24 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+enum FilterBy {
+  All = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
@@ -19,6 +26,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const loadTodos = async () => {
+    setIsLoading(true);
     try {
       const response = await getTodos();
 
@@ -35,39 +43,41 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const handleQueryChange = (newQuery: string) => {
+  const handleQueryChange = useCallback((newQuery: string) => {
     setQuery(newQuery);
-  };
+  }, []);
 
-  const handleFilterChange = (selectedFilter: string) => {
+  const handleFilterChange = useCallback((selectedFilter: string) => {
     setFilter(selectedFilter);
-  };
+  }, []);
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const handleTodoSelect = (todo: Todo) => {
+  const handleTodoSelect = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (filter) {
-      case 'all':
-        return true;
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return false;
-    }
-  }).filter((todo) => {
-    const title = todo.title.toLowerCase();
-    const formattedQuery = query.toLowerCase();
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      switch (filter) {
+        case FilterBy.All:
+          return true;
+        case FilterBy.ACTIVE:
+          return !todo.completed;
+        case FilterBy.COMPLETED:
+          return todo.completed;
+        default:
+          return false;
+      }
+    }).filter((todo) => {
+      const title = todo.title.toLowerCase();
+      const formattedQuery = query.toLowerCase();
 
-    return title.includes(formattedQuery);
-  });
+      return title.includes(formattedQuery);
+    });
+  }, [todos, query, filter]);
 
   return (
     <>
