@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useCallback,
   useEffect,
@@ -15,13 +14,17 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FILTERS } from './constants/filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isInfoWindowOpen, setIsInfoWindowOpen] = useState<boolean>(false);
-  const [selectedInfoWindowId, setSelectedInfoWindowId] = useState<number | null>(null);
-  const [sortCondition, setSortCondition] = useState('all');
+  const [
+    selectedInfoWindowId,
+    setSelectedInfoWindowId,
+  ] = useState<number | null>(null);
+  const [sortCondition, setSortCondition] = useState(FILTERS.ALL);
   const [appliedQuery, setAppliedQuery] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -30,8 +33,10 @@ export const App: React.FC = () => {
     [],
   );
 
-  const handleSortConditionChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortCondition(event.target.value);
+  const handleSortConditionChange = useCallback((
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setSortCondition(event.target.value as FILTERS);
   }, []);
 
   const handleWindowOpen = useCallback((id: number) => {
@@ -46,15 +51,15 @@ export const App: React.FC = () => {
   const getVisibleTodos = () => {
     let visibleTodos = [...todos];
 
-    if (sortCondition === 'active') {
+    if (sortCondition === FILTERS.ACTIVE) {
       visibleTodos = visibleTodos.filter(todo => !todo.completed);
     }
 
-    if (sortCondition === 'completed') {
+    if (sortCondition === FILTERS.COMPLETED) {
       visibleTodos = visibleTodos.filter(todo => todo.completed);
     }
 
-    if (appliedQuery !== '') {
+    if (appliedQuery) {
       visibleTodos = visibleTodos.filter(todo => (
         todo.title.toLowerCase().includes(appliedQuery.toLowerCase().trim())
       ));
@@ -113,9 +118,9 @@ export const App: React.FC = () => {
               <div className="block">
                 <TodoList
                   todos={visibleTodos}
-                  onWindowOpen={handleWindowOpen}
-                  isInfoWindowOpen={isInfoWindowOpen}
-                  selectedInfoWindowId={selectedInfoWindowId}
+                  onOpen={handleWindowOpen}
+                  isOpen={isInfoWindowOpen}
+                  selectedId={selectedInfoWindowId}
                 />
               </div>
             )}
@@ -126,7 +131,7 @@ export const App: React.FC = () => {
       {isInfoWindowOpen && openTodo && (
         <TodoModal
           todo={openTodo}
-          onWindowClose={handleWindowClose}
+          onClose={handleWindowClose}
         />
       )}
     </>

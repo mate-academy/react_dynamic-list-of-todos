@@ -6,12 +6,12 @@ import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
-  onWindowClose: () => void;
+  onClose: () => void;
 }
 
 export const TodoModal: React.FC<Props> = React.memo(
-  ({ todo, onWindowClose }) => {
-    const [user, setUser] = useState<User>();
+  ({ todo, onClose }) => {
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -48,7 +48,7 @@ export const TodoModal: React.FC<Props> = React.memo(
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={onWindowClose}
+                onClick={onClose}
               />
             </header>
 
