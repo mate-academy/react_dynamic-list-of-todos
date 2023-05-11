@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,41 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const getTodosFromServer = async () => {
+    setIsLoading(true);
+
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
+    setVisibleTodos(todosFromServer);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const handleSelect = useCallback((todo: Todo) => {
+    setSelectedTodo(todo);
+  }, []);
+
+  const resetSelectedTodo = useCallback(() => {
+    setSelectedTodo(null);
+  }, []);
+
+  const setFilteredTodos = useCallback((filteredTodos: Todo[]) => {
+    setVisibleTodos(filteredTodos);
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +51,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter todos={todos} setFilteredTodos={setFilteredTodos} />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    onButtonClick={handleSelect}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onCloseButtonClick={resetSelectedTodo}
+        />
+      )}
     </>
   );
 };
