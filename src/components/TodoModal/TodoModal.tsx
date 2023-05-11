@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
@@ -15,13 +16,15 @@ export const TodoModal: React.FC<Props> = ({
   todosList,
   setTodo,
 }) => {
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = useState<User>();
 
   const todo = todosList.filter((todoItem) => todoItem.id === selectedTodo);
 
   useEffect(() => {
     getUser(todo[0].userId).then((person) => setUser(person));
   }, []);
+
+  const { id, completed, title } = todo[0];
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo[0].id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -50,17 +53,17 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo[0].title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
-                className={
-                  todo[0].completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
               >
-                {todo[0].completed ? 'Done' : 'Planned'}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

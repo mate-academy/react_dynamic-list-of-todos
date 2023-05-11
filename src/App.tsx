@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,9 +11,9 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todosList, setTodosList] = React.useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = React.useState<number>(0);
-  const [selectFilter, setSelectFilter] = React.useState<boolean | null>(null);
+  const [todosList, setTodosList] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<number>(0);
+  const [selectFilter, setSelectFilter] = useState<boolean | null>(null);
 
   const [query, setQuery] = React.useState<string>('');
 
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     return todo.title.toLowerCase().includes(query.toLowerCase());
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     getTodos().then((todos) => setTodosList(todos));
   }, []);
 
