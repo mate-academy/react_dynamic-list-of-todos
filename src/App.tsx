@@ -14,6 +14,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+  const [filter, setFilter] = useState('all');
+
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
@@ -21,6 +23,14 @@ export const App: React.FC = () => {
   const handleTodo = useCallback((todo: Todo | null) => {
     setSelectedTodo(todo);
   }, []);
+
+  const filteredTodos = filter === 'all' ? todos : todos.filter((todo) => {
+    if (filter === 'active') {
+      return !todo.completed;
+    }
+
+    return todo.completed;
+  });
 
   return (
     <>
@@ -30,7 +40,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter onFilter={setFilter} />
             </div>
 
             <div className="block">
@@ -38,7 +48,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={todos}
+                    todos={filteredTodos}
                     selectedTodo={selectedTodo?.id}
                     onSelectedTodo={handleTodo}
                   />
