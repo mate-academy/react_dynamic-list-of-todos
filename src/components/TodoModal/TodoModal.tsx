@@ -7,14 +7,12 @@ import { Loader } from '../Loader';
 
 type TodoModalProps = {
   todo: Todo | null;
-  todoId: number | null;
-  setModalTodoId: (todoId: number | null) => void;
+  setTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   todo,
-  todoId,
-  setModalTodoId,
+  setTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -31,7 +29,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   }, []);
 
   const handleCloseModal = () => {
-    setModalTodoId(null);
+    setTodo(null);
   };
 
   return (
@@ -46,7 +44,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todoId}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

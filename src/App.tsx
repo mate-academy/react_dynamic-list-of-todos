@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,71 +10,47 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-const todosFilter = (todos: Todo[], filter: string) => {
-  switch (filter) {
-    case 'active':
-      return todos.filter((todo) => !todo.completed);
-
-    case 'completed':
-      return todos.filter((todo) => todo.completed);
-
-    default:
-      return todos;
-  }
-};
-
-const todoFinder = (todos: Todo[], todoId: number) => {
-  return todos.find((todo) => todo.id === todoId) || null;
-};
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [modalTodoId, setModalTodoId] = useState<number | null>(null);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<string>('All');
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
     getTodos()
       .then((data) => {
         setTodos(data);
-        setVisibleTodos(data);
       });
   }, []);
 
-  const handleSelectFilter = (filterValue: string) => {
+  const filteredTodos = useMemo(() => todos
+    .filter(({ title }) => (
+      title.toLowerCase().includes(search.toLowerCase())
+    )), [todos, search]);
+
+  const visibleTodos = filteredTodos.filter(({ completed }) => {
+    switch (filter) {
+      case 'completed':
+        return completed;
+
+      case 'active':
+        return !completed;
+
+      default:
+        return true;
+    }
+  });
+
+  const handleFilterSelect = (filterValue: string) => {
     setFilter(filterValue);
-    setVisibleTodos(todosFilter(todos, filterValue));
   };
 
   const handleSearch = (searchValue: string) => {
     setSearch(searchValue);
-    setVisibleTodos(
-      todosFilter(
-        todos.filter((toDo) => {
-          const lowerSearchValue = searchValue.toLowerCase().trim();
-          const lowerTitle = toDo.title.toLowerCase();
-
-          return (lowerTitle.includes(lowerSearchValue));
-        }),
-        filter,
-      ),
-    );
   };
 
-  const handleClearSearch = () => {
-    const filteredTodos = todosFilter(todos, filter);
-
-    setSearch('');
-    setVisibleTodos(filteredTodos);
-  };
-
-  const handleOpenModal = (todoId: number) => {
-    const foundTodo = todoFinder(visibleTodos, todoId);
-
-    setModalTodoId(todoId);
-    setTodo(foundTodo);
+  const handleModalOpen = (selectedTodo: Todo) => {
+    setTodo(selectedTodo);
   };
 
   return (
@@ -86,9 +62,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelectFilter={handleSelectFilter}
-                onChangeSearch={handleSearch}
-                onClearSearch={handleClearSearch}
+                onFilterSelect={handleFilterSelect}
+                onSearchChange={handleSearch}
                 search={search}
                 filter={filter}
               />
@@ -100,8 +75,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    todoModalId={modalTodoId}
-                    onOpenModal={handleOpenModal}
+                    todoId={todo?.id}
+                    onOpenModal={handleModalOpen}
                   />
                 )}
             </div>
@@ -109,11 +84,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalTodoId && (
+      {todo && (
         <TodoModal
           todo={todo}
-          todoId={modalTodoId}
-          setModalTodoId={setModalTodoId}
+          setTodo={setTodo}
         />
       )}
     </>

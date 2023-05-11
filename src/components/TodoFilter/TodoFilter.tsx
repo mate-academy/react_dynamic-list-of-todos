@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 type TodoFilterProps = {
-  onSelectFilter: (filter: string) => void;
-  onChangeSearch: (search: string) => void;
-  onClearSearch: () => void;
+  onFilterSelect: (filter: string) => void;
+  onSearchChange: (search: string) => void;
   search: string;
   filter: string;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
-  onSelectFilter,
-  onChangeSearch,
-  onClearSearch,
+  onFilterSelect: onSelectFilter,
+  onSearchChange: onChangeSearch,
   search,
   filter,
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeSearch(e.target.value);
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChangeSearch(e.target.value);
+    }, [onChangeSearch],
+  );
+
+  const handleSearchClear = useCallback(() => {
+    onChangeSearch('');
+  }, [onChangeSearch]);
 
   return (
     <form className="field has-addons">
@@ -42,7 +46,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
           className="input"
           placeholder="Search..."
           value={search}
-          onChange={handleChange}
+          onChange={handleSearchChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -55,7 +59,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={onClearSearch}
+              onClick={handleSearchClear}
             />
           </span>
         )}

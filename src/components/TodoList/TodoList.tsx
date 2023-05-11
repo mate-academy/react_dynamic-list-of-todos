@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
   todos: Todo[];
-  todoModalId: number | null;
-  onOpenModal: (todoId: number) => void;
+  todoId?: number;
+  onOpenModal: (selectedTodo: Todo) => void;
 };
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  todoModalId,
+  todoId,
   onOpenModal,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -29,10 +29,16 @@ export const TodoList: React.FC<TodoListProps> = ({
 
     <tbody>
       {todos.map((todo) => {
-        const isTodoModalOpen = todoModalId === todo.id;
+        const isTodoModalOpen = todoId === todo.id;
 
         return (
-          <tr key={todo.id} data-cy="todo" className="">
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': isTodoModalOpen,
+            })}
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {
@@ -61,7 +67,7 @@ export const TodoList: React.FC<TodoListProps> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onOpenModal(todo.id)}
+                onClick={() => onOpenModal(todo)}
               >
                 <span className="icon">
                   <i className={classNames('far', {
