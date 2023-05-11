@@ -16,16 +16,16 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 enum FilterBy {
-  All = 'All',
-  COMPLETED = 'Completed',
-  ACTIVE = 'Active',
+  All = 'all',
+  COMPLETED = 'completed',
+  ACTIVE = 'active',
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<string>('');
-  const [filter, setFilter] = useState<FilterBy>(FilterBy.All);
+  const [filter, setFilter] = useState('all');
   const [hasError, setHasError] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
 
       return title.includes(queryLower);
     });
-  }, [todos, filter, query]);
+  }, [todos, query, filter]);
 
   return (
     <>
