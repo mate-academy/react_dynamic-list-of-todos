@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -24,13 +25,19 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }, []);
 
-  const filteredTodos = filter === 'all' ? todos : todos.filter((todo) => {
-    if (filter === 'active') {
-      return !todo.completed;
-    }
+  const isInclude = (todo: string) => {
+    return todo.toLowerCase().includes(query.toLowerCase().trim());
+  };
 
-    return todo.completed;
-  });
+  const filteredTodos = filter === 'all'
+    ? todos.filter(todo => isInclude(todo.title))
+    : todos.filter((todo) => {
+      if (filter === 'active') {
+        return !todo.completed && isInclude(todo.title);
+      }
+
+      return todo.completed && isInclude(todo.title);
+    });
 
   return (
     <>
@@ -40,7 +47,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilter={setFilter} />
+              <TodoFilter
+                onFilter={setFilter}
+                query={query}
+                onSetQuery={setQuery}
+              />
             </div>
 
             <div className="block">
