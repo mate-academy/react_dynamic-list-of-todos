@@ -11,39 +11,42 @@ import { TodoModal } from './components/TodoModal';
 import { TodoStatus } from './types/TodoStatus';
 import { User } from './types/User';
 
-const getFilteredTodos = (filter: TodoStatus, query: string) => {
-  return getTodos().then(todos => {
-    let filteredTodos = todos;
+const getFilteredTodos = (
+  todos: Todo[],
+  filter: TodoStatus,
+  query: string,
+): Todo[] => {
+  let filteredTodos: Todo[] = [];
 
-    switch (filter) {
-      case TodoStatus.All:
-        break;
+  switch (filter) {
+    case TodoStatus.All:
+      filteredTodos = todos;
+      break;
 
-      case TodoStatus.Active:
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
-        break;
+    case TodoStatus.Active:
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
 
-      case TodoStatus.Complited:
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
-        break;
+    case TodoStatus.Complited:
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
 
-      default: throw new Error('Wrong todo status');
-    }
+    default: throw new Error('Wrong todo status');
+  }
 
-    if (query) {
-      const lowerQuery = query.toLowerCase().trim();
+  if (query) {
+    const lowerQuery = query.toLowerCase().trim();
 
-      filteredTodos = filteredTodos.filter(({ title }) => (
-        title.toLowerCase().includes(lowerQuery)
-      ));
-    }
+    filteredTodos = filteredTodos.filter(({ title }) => (
+      title.toLowerCase().includes(lowerQuery)
+    ));
+  }
 
-    return filteredTodos;
-  });
+  return filteredTodos;
 };
 
 export const App: React.FC = () => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [modalUser, setModalUser] = useState<User | null>(null);
   const [todoStatusFilter, setTodoStatusFilter] = useState(TodoStatus.All);
@@ -59,14 +62,16 @@ export const App: React.FC = () => {
     setError(false);
     setLoading(true);
 
-    getFilteredTodos(todoStatusFilter, query)
-      .then(todos => setVisibleTodos(todos))
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [todoStatusFilter, query]);
+  }, []);
 
   useEffect(() => {
-    const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId);
+    const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
     if (selectedTodo) {
       getUser(selectedTodo.userId)
@@ -76,8 +81,10 @@ export const App: React.FC = () => {
     }
   }, [selectedTodoId]);
 
+  const filteredTodos = getFilteredTodos(todos, todoStatusFilter, query);
+
   const selectedTodo = selectedTodoId
-    ? visibleTodos.find(todo => todo.id === selectedTodoId)
+    ? filteredTodos.find(todo => todo.id === selectedTodoId)
     : null;
 
   return (
@@ -102,9 +109,9 @@ export const App: React.FC = () => {
               {!isLoading && !error
                 ? (
                   <TodoList
-                    todos={visibleTodos}
+                    todos={filteredTodos}
                     selectedTodoId={selectedTodoId}
-                    setSelectedTodoId={setSelectedTodoId}
+                    onSelect={setSelectedTodoId}
                   />
                 )
                 : <Loader /> }
@@ -116,7 +123,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           user={modalUser}
-          handleClosing={onTodoModalClose}
+          onClose={onTodoModalClose}
         />
       )}
     </>
