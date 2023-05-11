@@ -60,7 +60,7 @@ export const App: React.FC = () => {
         break;
     }
 
-    visibleTodos = visibleTodos.filter(({ title }) => title.includes(input.toLowerCase()));
+    visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(input.toLowerCase()));
 
     return visibleTodos;
   }, [select, todos, input]);
