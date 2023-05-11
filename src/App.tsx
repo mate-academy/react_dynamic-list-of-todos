@@ -21,7 +21,19 @@ const prepareTodos = (todos: Todo[], query: string, filter: Filter) => {
     preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(searchQuery));
   }
 
-  console.log(query, filter);
+  switch (filter) {
+    case Filter.active:
+      preparedTodos = preparedTodos.filter((todo) => !todo.completed);
+      break;
+
+    case Filter.completed:
+      preparedTodos = preparedTodos.filter((todo) => todo.completed);
+      break;
+
+    case Filter.all:
+    default:
+      break;
+  }
 
   return preparedTodos;
 };
