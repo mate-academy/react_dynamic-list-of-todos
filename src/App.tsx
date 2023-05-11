@@ -13,6 +13,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -22,6 +23,16 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }, []);
 
+  const handleQuery = useCallback((userQuery: string) => {
+    setQuery(userQuery);
+  }, []);
+
+  let visibleTodos = [...todos];
+
+  if (query) {
+    visibleTodos = visibleTodos.filter(({ title }) => title.includes(query));
+  }
+
   return (
     <>
       <div className="section">
@@ -30,14 +41,17 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onQuery={handleQuery}
+              />
             </div>
 
             <div className="block">
               {todos.length > 0
                 ? (
                   <TodoList
-                    todos={todos}
+                    todos={visibleTodos}
                     selectedTodoId={selectedTodo?.id}
                     onSelectedTodo={handleSelectingTodo}
                   />
