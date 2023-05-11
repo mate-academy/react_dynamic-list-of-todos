@@ -1,11 +1,23 @@
-export const TodoFilter = () => (
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import { Filter } from '../../types/enums';
+
+type Props = {
+  filter: Filter
+  onSelect: (value: Filter) => void,
+};
+
+export const TodoFilter: React.FC<Props> = ({ filter, onSelect }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          value={filter}
+          data-cy="statusSelect"
+          onChange={(event) => onSelect(event.target.value as Filter)}
+        >
+          <option value={Filter.all}>All</option>
+          <option value={Filter.active}>Active</option>
+          <option value={Filter.completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -22,7 +34,6 @@ export const TodoFilter = () => (
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           data-cy="clearSearchButton"
           type="button"
