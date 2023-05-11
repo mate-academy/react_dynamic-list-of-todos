@@ -5,11 +5,11 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  handleClose: () => void;
-  selectedTodo: Todo | null;
+  onClose: () => void;
+  selectedTodo: Todo;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, handleClose }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const fetchData = async () => {
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, handleClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleClose}
+              onClick={onClose}
             />
           </header>
 

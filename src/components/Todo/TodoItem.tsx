@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
   onShowTodo: (todo: Todo) => void;
-  isTodoSelected: (id: number) => boolean;
+  isTodoSelected: boolean;
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -41,7 +41,7 @@ export const TodoItem: React.FC<Props> = ({
       </td>
 
       <td className="has-text-right is-vcentered">
-        {isTodoSelected(id) ? (
+        {isTodoSelected ? (
           <button
             data-cy="selectButton"
             className="button"

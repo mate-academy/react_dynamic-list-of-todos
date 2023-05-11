@@ -4,14 +4,14 @@ type Props = {
   query: string;
   onQueryChange: (query: string) => void;
   filterBy: FilterBy;
-  setFilterBy: (filteBy: FilterBy) => void;
+  onSelect: (filteBy: FilterBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onQueryChange,
   filterBy,
-  setFilterBy,
+  onSelect,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           value={filterBy}
           onChange={({ target }) => {
-            setFilterBy(target.value as FilterBy);
+            onSelect(target.value as FilterBy);
           }}
         >
           <option value={FilterBy.ALL}>{FilterBy.ALL}</option>

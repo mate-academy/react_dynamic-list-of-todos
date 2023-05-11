@@ -83,7 +83,7 @@ export const App: React.FC = () => {
                 query={query}
                 onQueryChange={setQuery}
                 filterBy={filterBy}
-                setFilterBy={setFilterBy}
+                onSelect={setFilterBy}
               />
             </div>
 
@@ -105,7 +105,7 @@ export const App: React.FC = () => {
       </div>
       {selectedTodo && (
         <TodoModal
-          handleClose={handleClose}
+          onClose={handleClose}
           selectedTodo={selectedTodo}
         />
       )}
