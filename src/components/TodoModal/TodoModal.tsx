@@ -4,16 +4,16 @@ import { TodoWithUser } from '../../types/Todo';
 
 interface Props {
   todo: TodoWithUser | null;
-  setTodo: (todo: TodoWithUser | null) => void;
-  setIsTodoModal: (isTodoModal: false) => void;
+  onChange: (todo: TodoWithUser | null) => void;
+  onClose: (isTodoModal: false) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  todo, setTodo, setIsTodoModal,
+  todo, onChange, onClose,
 }) => {
   const handleDetailsClose = () => {
-    setIsTodoModal(false);
-    setTodo(null);
+    onClose(false);
+    onChange(null);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo, TodoWithUser } from './types/Todo';
+import { FILTERS } from './types/FILTERS';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,26 +22,39 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       });
-  }, [JSON.stringify(getTodos())]);
+  }, []);
 
-  const filteredTodos = todos.filter(({ title, completed }) => {
-    const result = title.toLowerCase().includes(query.toLowerCase().trim());
+  const onQueryChange = (text: string) => {
+    setQuery(text);
+  };
+
+  const onOptionChange = (text: string) => {
+    setOption(text);
+  };
+
+  const onChange = (visibleTodo: TodoWithUser | null) => {
+    setTodo(visibleTodo);
+  };
+
+  const onClose = (isClosing: boolean) => {
+    setIsTodoModal(isClosing);
+  };
+
+  const visibleTodos = todos.filter(({ title, completed }) => {
+    const lowerTitle = title.toLowerCase();
+    const lowerQuery = query.toLowerCase().trim();
+    const result = lowerTitle.includes(lowerQuery);
 
     switch (option) {
-      case 'active':
+      case FILTERS.active:
         return result && !completed;
-      case 'completed':
+      case FILTERS.completed:
         return result && completed;
 
       default:
         return result;
     }
   });
-
-  const visibleTodos = useMemo(
-    () => filteredTodos,
-    [JSON.stringify(filteredTodos)],
-  );
 
   return (
     <>
@@ -52,20 +66,23 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                onQueryChange={onQueryChange}
                 option={option}
-                setOption={setOption}
+                onOptionChange={onOptionChange}
               />
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                setTodo={setTodo}
-                isTodoModal={isTodoModal}
-                setIsTodoModal={setIsTodoModal}
-              />
+              {todos.length > 0
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    onChange={onChange}
+                    isTodoModal={isTodoModal}
+                    onClose={onClose}
+                  />
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
@@ -74,8 +91,8 @@ export const App: React.FC = () => {
       {isTodoModal && (
         <TodoModal
           todo={todo}
-          setTodo={setTodo}
-          setIsTodoModal={setIsTodoModal}
+          onChange={onChange}
+          onClose={onClose}
         />
       )}
     </>

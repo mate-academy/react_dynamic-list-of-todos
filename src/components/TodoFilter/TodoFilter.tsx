@@ -2,16 +2,16 @@ import React from 'react';
 
 interface Props {
   query: string,
-  setQuery: (query: string) => void,
+  onQueryChange: (query: string) => void,
   option: string,
-  setOption: (option: string) => void,
+  onOptionChange: (option: string) => void,
 }
 
 export const TodoFilter: React.FC<Props> = React.memo(({
   query,
-  setQuery,
+  onQueryChange,
   option,
-  setOption,
+  onOptionChange,
 }) => {
   return (
     <form className="field has-addons">
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           <select
             data-cy="statusSelect"
             value={option}
-            onChange={(event) => setOption(event.target.value)}
+            onChange={(event) => onOptionChange(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -36,7 +36,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onQueryChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -49,7 +49,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => onQueryChange('')}
             />
           )}
         </span>
