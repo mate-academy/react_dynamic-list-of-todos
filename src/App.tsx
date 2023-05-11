@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     setIsTodoModal(isClosing);
   };
 
-  const visibleTodos = todos.filter(({ title, completed }) => {
+  const visibleTodos = useMemo(() => todos.filter(({ title, completed }) => {
     const lowerTitle = title.toLowerCase();
     const lowerQuery = query.toLowerCase().trim();
     const result = lowerTitle.includes(lowerQuery);
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
       default:
         return result;
     }
-  });
+  }), [todos, option, query]);
 
   return (
     <>
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos.length
                 ? (
                   <TodoList
                     todos={visibleTodos}

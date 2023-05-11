@@ -11,7 +11,7 @@ interface Props {
 export const TodoModal: React.FC<Props> = ({
   todo, onChange, onClose,
 }) => {
-  const handleDetailsClose = () => {
+  const handleClose = () => {
     onClose(false);
     onChange(null);
   };
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleDetailsClose}
+              onClick={handleClose}
             />
           </header>
 
