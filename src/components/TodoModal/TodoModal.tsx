@@ -1,10 +1,8 @@
 import React, {
   memo,
-  useCallback,
   useEffect,
   useState,
 } from 'react';
-import cn from 'classnames';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -12,31 +10,25 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo | null;
-  setClickedTodoId: (id: number) => void;
-  clickedTodoId: number;
+  onClose: () => void;
 }
 
 export const TodoModal: React.FC<Props> = memo(({
   todo,
-  setClickedTodoId,
-  clickedTodoId,
+  onClose,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const loadedUser = useCallback(
-    async () => {
+  const loadedUser = async () => {
+    if (todo?.userId) {
       try {
-        const userFromServer = await getUser(clickedTodoId);
+        const userFromServer = await getUser(todo?.userId);
 
         setUser(userFromServer);
       } catch (error) {
         throw new Error(`Error: ${error}`);
       }
-    }, [],
-  );
-
-  const handleModalClose = () => {
-    setClickedTodoId(0);
+    }
   };
 
   useEffect(() => {
@@ -64,7 +56,7 @@ export const TodoModal: React.FC<Props> = memo(({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleModalClose}
+              onClick={onClose}
             />
           </header>
 
@@ -74,13 +66,9 @@ export const TodoModal: React.FC<Props> = memo(({
             </p>
 
             <p className="block" data-cy="modal-user">
-              <strong className={cn(
-                { 'has-text-success': todo?.completed },
-                { 'has-text-danger': !todo?.completed },
-              )}
-              >
-                {todo?.completed ? 'Done' : 'Planned'}
-              </strong>
+              {todo?.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
