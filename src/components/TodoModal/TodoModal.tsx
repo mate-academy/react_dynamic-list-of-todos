@@ -1,4 +1,3 @@
-/* eslint-disable no-constant-condition */
 import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';

@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,27 +16,19 @@ import { getTodos, getUser } from './api';
 import { TodoModal } from './components/TodoModal';
 import { User } from './types/User';
 
+const FilterStatus = {
+  ALL: 'all',
+  COMPLETED: 'completed',
+  ACTIVE: 'active',
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [query, setQuery] = useState<string>('');
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    getTodos()
-      .then((todo) => {
-        setTodos(todo);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        throw new Error(error);
-      });
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.ALL);
+  const [query, setQuery] = useState('');
 
   const handleTodoClick = (todo: Todo) => {
     setIsLoading(true);
@@ -48,15 +45,18 @@ export const App: React.FC = () => {
       });
   };
 
-  const filteredTodos = () => {
+  const filteredTodos = useMemo(() => {
     let filteredTodosArr = [...todos];
 
-    if (filterStatus === 'completed') {
-      filteredTodosArr = filteredTodosArr.filter((todo) => todo.completed);
-    }
-
-    if (filterStatus === 'active') {
-      filteredTodosArr = filteredTodosArr.filter((todo) => !todo.completed);
+    switch (filterStatus) {
+      case FilterStatus.COMPLETED:
+        filteredTodosArr = filteredTodosArr.filter((todo) => todo.completed);
+        break;
+      case FilterStatus.ACTIVE:
+        filteredTodosArr = filteredTodosArr.filter((todo) => !todo.completed);
+        break;
+      default:
+        break;
     }
 
     if (query) {
@@ -66,11 +66,11 @@ export const App: React.FC = () => {
     }
 
     return filteredTodosArr;
-  };
+  }, [todos, filterStatus, query]);
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, [setSelectedTodo]);
 
   const handleFilterSelect = (filter: string) => {
     setFilterStatus(filter);
@@ -83,6 +83,20 @@ export const App: React.FC = () => {
   const handleQueryReset = () => {
     setQuery('');
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    getTodos()
+      .then((todo) => {
+        setTodos(todo);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        throw new Error(error);
+      });
+  }, []);
 
   return (
     <>
@@ -106,7 +120,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos()}
+                    todos={filteredTodos}
                     onTodoClick={handleTodoClick}
                     selectedTodo={selectedTodo}
                   />
