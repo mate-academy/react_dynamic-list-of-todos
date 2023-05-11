@@ -14,16 +14,20 @@ export const TodoFilter: React.FC<Props> = ({
   onSelectOption,
   onChange,
 }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <form className="field has-addons">
+    <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
             value={filterOption}
-            onChange={
-              (event) => onSelectOption(event.target.value as FilterOption)
-            }
+            onChange={(event) => (
+              onSelectOption(event.target.value as FilterOption)
+            )}
           >
             <option value={FilterOption.All}>
               {FilterOption.All}

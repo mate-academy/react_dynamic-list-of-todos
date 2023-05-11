@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { FC } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo';
@@ -25,6 +24,7 @@ export const TodoList: FC<Props> = ({
             </span>
           </th>
           <th>Title</th>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <th />
         </tr>
       </thead>

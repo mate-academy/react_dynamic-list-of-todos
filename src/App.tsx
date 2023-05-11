@@ -15,10 +15,7 @@ import { Loader } from './components/Loader';
 import { FilterOption } from './types/FilterOption';
 
 export const App: FC = () => {
-  const [
-    todos,
-    setTodos,
-  ] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [
     selectedTodoCard,
     setSelectedTodoCard,

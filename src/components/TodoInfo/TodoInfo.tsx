@@ -15,35 +15,37 @@ export const TodoInfo: FC<Props> = ({
 }) => {
   return (
     <>
-      {todos.map(todo => {
-        const isCardSelected = selectedTodoCard?.id === todo.id;
+      {todos.map(({
+        id,
+        completed,
+        title,
+        userId,
+      }) => {
+        const isCardSelected = selectedTodoCard?.id === id;
 
         return (
           <tr
-            key={todo.id}
+            key={id}
             data-cy="todo"
             className=""
           >
             <td className="is-vcentered">
-              {todo.id}
+              {id}
             </td>
             <td className="is-vcentered">
-              {todo.completed
-                && (
-                  <>
-                    <span className="icon" data-cy="iconCompleted">
-                      <i className="fas fa-check" />
-                    </span>
-                  </>
-                )}
+              {completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
+                'has-text-danger': !completed,
+                'has-text-success': completed,
               })}
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -51,7 +53,14 @@ export const TodoInfo: FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onSelectTodoCard(todo)}
+                onClick={() => (
+                  onSelectTodoCard({
+                    id,
+                    completed,
+                    title,
+                    userId,
+                  })
+                )}
               >
                 <span className="icon">
                   <i className={classNames('far', {
