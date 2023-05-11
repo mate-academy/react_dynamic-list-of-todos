@@ -18,7 +18,6 @@ import { User } from './types/User';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
@@ -30,7 +29,6 @@ export const App: FC = () => {
     try {
       const todosFromServer = await getTodos();
 
-      setIsLoading(false);
       setTodos(todosFromServer);
     } catch {
       setHasError(true);
@@ -91,20 +89,20 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && hasError && (
+              {hasError && (
                 <p className="has-text-danger">
                   Loading error, try again
                 </p>
               )}
-              {!isLoading && !hasError
-                && (
+              {(todos.length > 0)
+                ? (
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={selectedTodo}
                     showModal={handleShowModal}
                   />
-                )}
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
@@ -115,7 +113,6 @@ export const App: FC = () => {
           selectedTodo={selectedTodo}
           selectedUser={selectedUser}
           hideModal={handleHideModal}
-          isLoading={isLoading}
         />
       )}
     </>

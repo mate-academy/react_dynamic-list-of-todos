@@ -46,13 +46,11 @@ export const TodoList: FC<Props> = memo(({
           >
             <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                <i className={classNames('fas', {
-                  'fa-check has-text-success': completed,
-                  'fa-times has-text-danger': !completed,
-                })}
-                />
-              </span>
+              {completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check has-text-success" />
+                </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames({

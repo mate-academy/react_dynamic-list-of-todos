@@ -7,20 +7,18 @@ interface Props {
   selectedUser: User | null;
   selectedTodo: Todo | null;
   hideModal: () => void;
-  isLoading: boolean;
 }
 
 export const TodoModal: FC<Props> = ({
   selectedUser,
   selectedTodo,
   hideModal,
-  isLoading,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {(!selectedTodo || !selectedUser) ? (
         <Loader />
       ) : (
         <div className="modal-card">
