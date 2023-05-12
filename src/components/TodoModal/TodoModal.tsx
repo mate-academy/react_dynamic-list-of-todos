@@ -6,10 +6,10 @@ import { Loader } from '../Loader';
 
 interface Props {
   todo: Todo;
-  onModalClose: () => void;
+  onClose: () => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onModalClose}
+              onClick={onClose}
             />
           </header>
 
@@ -61,7 +61,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
 
               {' by '}
 
-              <a href={user?.email}>{user?.name}</a>
+              {user ? (
+                <a href={user.email}>{user.name}</a>
+              ) : (
+                <p>The user is not found</p>
+              )}
             </p>
           </div>
         </div>

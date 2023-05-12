@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,27 +20,29 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState<Statuses>(Statuses.ALL);
   const [query, setQuery] = useState('');
 
-  const visibleTodos = todos.filter(({ title, completed }: Todo) => {
-    const lowerCasedQuery = query.toLowerCase().trim();
-    const lowerCasedTodoTitle = title.toLowerCase();
+  const visibleTodos = useMemo(() => {
+    return todos.filter(({ title, completed }: Todo) => {
+      const lowerCasedQuery = query.toLowerCase().trim();
+      const lowerCasedTodoTitle = title.toLowerCase();
 
-    let isCorrectStatus;
+      let isCorrectStatus;
 
-    switch (status) {
-      case Statuses.ACTIVE:
-        isCorrectStatus = !completed;
-        break;
+      switch (status) {
+        case Statuses.ACTIVE:
+          isCorrectStatus = !completed;
+          break;
 
-      case Statuses.COMPLETED:
-        isCorrectStatus = completed;
-        break;
+        case Statuses.COMPLETED:
+          isCorrectStatus = completed;
+          break;
 
-      default:
-        isCorrectStatus = true;
-    }
+        default:
+          isCorrectStatus = true;
+      }
 
-    return lowerCasedTodoTitle.includes(lowerCasedQuery) && isCorrectStatus;
-  });
+      return lowerCasedTodoTitle.includes(lowerCasedQuery) && isCorrectStatus;
+    });
+  }, [todos, status, query]);
 
   const handleModalClose = () => {
     setSelectedTodo(null);
@@ -86,7 +88,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onModalClose={handleModalClose} />
+        <TodoModal todo={selectedTodo} onClose={handleModalClose} />
       )}
     </>
   );
