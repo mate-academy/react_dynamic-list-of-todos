@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
@@ -60,7 +59,9 @@ export const App: React.FC = () => {
         break;
     }
 
-    visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(input.toLowerCase()));
+    visibleTodos = visibleTodos.filter(({ title }) => (
+      title.toLowerCase().includes(input.toLowerCase())
+    ));
 
     return visibleTodos;
   }, [select, todos, input]);
@@ -93,7 +94,7 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          resetTodo={() => setSelectedTodo(null)}
+          onReset={() => setSelectedTodo(null)}
           todo={selectedTodo}
         />
       )}

@@ -5,11 +5,11 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface Props {
-  resetTodo: () => void;
+  onReset: () => void;
   todo: Todo;
 }
 
-export const TodoModal: React.FC<Props> = ({ resetTodo, todo }) => {
+export const TodoModal: React.FC<Props> = ({ onReset, todo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const {
@@ -47,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({ resetTodo, todo }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={resetTodo}
+                onClick={onReset}
               />
             </header>
 
