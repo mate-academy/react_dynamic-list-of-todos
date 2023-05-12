@@ -3,23 +3,24 @@ import {
   FC,
   memo,
 } from 'react';
+import { Filter } from '../../types/FilterEnum';
 
 interface TodoFilterProps {
   changeQuery: (query: string) => void;
-  changeOption: (option: string) => void;
+  changeFilter: (filter: Filter) => void;
   selectedOption: string,
   query: string,
 }
 
 export const TodoFilter: FC<TodoFilterProps> = memo(({
-  changeQuery, changeOption, selectedOption, query,
+  changeQuery, changeFilter: changeOption, selectedOption, query,
 }) => {
   const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
     changeQuery(event.target.value);
   };
 
   const handleChangeStatus = ((event: ChangeEvent<HTMLSelectElement>) => {
-    changeOption(event.target.value);
+    changeOption(event.target.value as Filter);
   });
 
   const handleChangeClearButton = () => {
@@ -35,9 +36,9 @@ export const TodoFilter: FC<TodoFilterProps> = memo(({
             value={selectedOption}
             onChange={handleChangeStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.ALL}>All</option>
+            <option value={Filter.ACTIVE}>Active</option>
+            <option value={Filter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -56,7 +57,7 @@ export const TodoFilter: FC<TodoFilterProps> = memo(({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          { query !== ''
+          { query
             && (
               // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button

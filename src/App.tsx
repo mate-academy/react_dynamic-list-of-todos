@@ -15,10 +15,11 @@ import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/FilterEnum';
 
 export const App: FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState('All');
+  const [selectedOption, setSelectedOption] = useState(Filter.ALL);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
 
@@ -29,24 +30,25 @@ export const App: FC = () => {
   }, []);
 
   const changeQuery = useCallback((str: string) => {
-    setQuery(str);
+    setQuery(str.trimStart());
   }, []);
 
-  const changeOption = useCallback((option: string) => {
-    setSelectedOption(option);
+  const changeFilter = useCallback((filter: Filter) => {
+    setSelectedOption(filter);
   }, []);
 
-  const filterTodosByRequirments = (str: string, option: string) => {
+  const filterTodosByRequirments = (str: string, filter: Filter) => {
     let todos = visibleTodos;
 
-    // eslint-disable-next-line default-case
-    switch (option) {
-      case 'completed':
+    switch (filter) {
+      case Filter.COMPLETED:
         todos = visibleTodos.filter(({ completed }) => completed);
         break;
-      case 'active':
+      case Filter.ACTIVE:
         todos = visibleTodos.filter(({ completed }) => !completed);
         break;
+      default:
+        todos = visibleTodos;
     }
 
     return todos.filter(({ title }) => title.toLowerCase().includes(str.toLowerCase()));
@@ -76,14 +78,13 @@ export const App: FC = () => {
             <div className="block">
               <TodoFilter
                 changeQuery={changeQuery}
-                changeOption={changeOption}
+                changeFilter={changeFilter}
                 selectedOption={selectedOption}
                 query={query}
               />
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
               {(filteredTodos.length === 0 && query === '')
                 ? <Loader />
                 : (
@@ -98,7 +99,9 @@ export const App: FC = () => {
         </div>
       </div>
       {
-        currentTodo && <TodoModal todo={currentTodo} clearTodo={clearTodo} />
+        currentTodo && (
+          <TodoModal todo={currentTodo} clearTodo={clearTodo} />
+        )
       }
     </>
   );
