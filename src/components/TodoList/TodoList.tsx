@@ -85,7 +85,7 @@ export const TodoList: React.FC<Props> = ({
                 >
                   <span className="icon">
                     {listButton && localTodo === todo.title ? (
-                      <i className="far fa-signal" />
+                      <i className="far fa-eye-slash" />
                     ) : (
                       <i className="far fa-eye" />
                     )}

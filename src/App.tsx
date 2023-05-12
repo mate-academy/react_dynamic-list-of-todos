@@ -20,7 +20,7 @@ enum SortType {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const [cases, setCase] = useState('');
+  const [cases, setCase] = useState<SortType>(SortType.All);
   const [query, setQuery] = useState('');
   const [button, setButton] = useState(false);
   const [todo, setTodo] = useState(todos[0]);
@@ -42,8 +42,10 @@ export const App: React.FC = () => {
     getTodo();
   }, []);
 
-  const setCurrentCase = (currentCase: string) => {
-    setCase(currentCase);
+  const setCurrentCase = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const sortType = event.target.value;
+
+    setCase(sortType as SortType);
   };
 
   const setCurrentQuery = (currentQuery: string) => {
@@ -52,26 +54,26 @@ export const App: React.FC = () => {
 
   const visibleTodos: Todo[] = useMemo(
     () => todos.filter((element) => {
+      const functionality = element.title.toLowerCase().includes(query.toLowerCase().trim());
+
       switch (cases) {
         case SortType.All:
-          return element.title.toLowerCase().includes(query.toLowerCase().trim());
+        default:
+          return functionality;
         case SortType.Active:
           return (
-            query.length === 0
-              ? element.completed === false
-              : element.completed === false
-               && element.title.toLowerCase().includes(query.toLowerCase().trim())
+            !query.length
+              ? !element.completed
+              : !element.completed
+               && functionality
           );
         case SortType.Completed:
           return (
-            query.length === 0
-              ? element.completed === true
-              : element.completed === true
-               && element.title.toLowerCase().includes(query.toLowerCase().trim())
+            !query.length
+              ? element.completed
+              : element.completed
+               && functionality
           );
-        default:
-
-          return element.title.toLowerCase().includes(query.toLowerCase().trim());
       }
     }),
     [todos, query, cases],

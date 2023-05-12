@@ -1,10 +1,16 @@
 import React from 'react';
 
 interface Props {
-  setCurrentCase: (tabId: string)=> void,
+  setCurrentCase: (tabId: React.ChangeEvent<HTMLSelectElement>)=> void,
   setCurrentQuery: (tabId: string)=> void,
   cases: string,
   query: string,
+}
+
+enum SortType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,13 +26,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             value={cases}
             data-cy="statusSelect"
-            onChange={(event) => {
-              setCurrentCase(event.target.value);
-            }}
+            onChange={setCurrentCase}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortType.All}>All</option>
+            <option value={SortType.Active}>Active</option>
+            <option value={SortType.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -47,13 +51,16 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setCurrentQuery('')}
-          />
+          {query.length > 0 && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setCurrentQuery('')}
+              aria-label="Username"
+            />
+          )}
+
         </span>
       </p>
     </form>

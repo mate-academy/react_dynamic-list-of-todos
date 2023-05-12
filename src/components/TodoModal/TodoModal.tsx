@@ -6,10 +6,10 @@ import { User } from '../../types/User';
 interface Props {
   setButton: (trueOrFalse: boolean) => (void)
   setListButton: (trueOrFalse: boolean) => (void)
-  title: string,
-  completed: boolean,
-  userId: number,
-  id: number,
+  title: string | undefined,
+  completed: boolean | undefined,
+  userId: number | undefined,
+  id: number | undefined,
 }
 
 export const TodoModal: React.FC<Props> = ({
@@ -55,12 +55,11 @@ export const TodoModal: React.FC<Props> = ({
                 Todo #
                 {id}
               </div>
-
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 type="button"
                 className="delete"
                 data-cy="modal-close"
+                aria-label="Username"
                 onClick={() => {
                   setButton(false);
                   setListButton(false);
