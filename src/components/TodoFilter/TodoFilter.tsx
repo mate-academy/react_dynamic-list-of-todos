@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<Props> = ({ handleSearchQuery, handleSelectQue
   const [selectQuery, setSelectQuery] = useState('All');
 
   const getSearchQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleSearchQuery(event.target.value);
+    handleSearchQuery(event.target.value.toLocaleLowerCase());
     setSearchQuery(event.target.value);
   };
 
