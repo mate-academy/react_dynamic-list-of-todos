@@ -24,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
             setFilterBy(target.value as FilterBy);
           }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterBy.All}>{FilterBy.All}</option>
+          <option value={FilterBy.ACTIVE}>{FilterBy.ACTIVE}</option>
+          <option value={FilterBy.COMPLETED}>{FilterBy.COMPLETED}</option>
         </select>
       </span>
     </p>

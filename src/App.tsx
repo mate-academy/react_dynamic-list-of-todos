@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -44,7 +44,10 @@ export const App: React.FC = () => {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  const visibleTodos = filteredTodos(todos, query, filterBy);
+  const visibleTodos = useMemo(
+    () => filteredTodos(todos, query, filterBy),
+    [todos, query, filterBy],
+  );
 
   const fetchData = async () => {
     try {

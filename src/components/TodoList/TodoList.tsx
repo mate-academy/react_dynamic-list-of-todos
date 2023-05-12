@@ -75,6 +75,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
+                  onClick={() => onShowTodo(todo)}
                 >
                   <span className="icon">
                     <i className="far fa-eye" />
