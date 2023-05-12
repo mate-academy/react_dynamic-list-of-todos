@@ -18,8 +18,20 @@ function get<T>(url: string): Promise<T> {
 
   // we add some delay to see how the loader works
   return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(async () => {
+      const response = await fetch(fullURL);
+      const {
+        ok,
+        status,
+        statusText,
+      } = response;
+
+      if (!ok) {
+        throw new Error(`${status} - ${statusText}`);
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
