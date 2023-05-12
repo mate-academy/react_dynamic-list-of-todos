@@ -1,18 +1,21 @@
 import React from 'react';
+import { FilterBy } from '../../types/typedefs';
 
 interface Props {
   query: string;
-  filterTodos: string;
-  onQuery: (query: string) => void;
-  onfilterTodos: (filterTodos: string) => void;
+  todos: string;
+  onChange: (query: string) => void;
+  onSelect: (filterTodos: FilterBy) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  filterTodos,
-  onQuery,
-  onfilterTodos,
+  todos: filterTodos,
+  onChange: onQuery,
+  onSelect: onfilterTodos,
 }) => {
+  const arrayFilterBy = [FilterBy.ALL, FilterBy.ACTIVE, FilterBy.COMPLETED];
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -20,11 +23,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterTodos}
-            onChange={(event) => onfilterTodos(event.target.value)}
+            onChange={(event) => onfilterTodos(event.target.value as FilterBy)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {arrayFilterBy.map(item => (
+              <option key={item} value={item}>{item}</option>
+            ))}
           </select>
         </span>
       </p>

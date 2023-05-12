@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,16 +14,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterBy } from './types/typedefs';
+import { getTodosByFilter } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filterTodos, setFilterTodos] = useState('All');
-
-  useEffect(() => {
-    getTodos().then(setTodos);
-  }, []);
+  const [filterTodos, setFilterTodos] = useState(FilterBy.ALL);
 
   const handleSelectingTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
@@ -28,23 +31,27 @@ export const App: React.FC = () => {
     setQuery(userQuery);
   }, []);
 
-  const handlefilterTodos = useCallback((userFilter: string) => {
+  const handleFilterTodos = useCallback((userFilter) => {
     setFilterTodos(userFilter);
   }, []);
 
-  let visibleTodos = [...todos];
+  const prepareTodos = useMemo(() => {
+    let visibleTodos = [...todos];
 
-  if (filterTodos === 'active') {
-    visibleTodos = visibleTodos.filter(({ completed }) => completed === false);
-  }
+    if (filterTodos) {
+      visibleTodos = getTodosByFilter(visibleTodos, filterTodos);
+    }
 
-  if (filterTodos === 'completed') {
-    visibleTodos = visibleTodos.filter(({ completed }) => completed === true);
-  }
+    if (query) {
+      visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(query.toLowerCase()));
+    }
 
-  if (query) {
-    visibleTodos = visibleTodos.filter(({ title }) => title.includes(query));
-  }
+    return visibleTodos;
+  }, [filterTodos, query, todos]);
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
 
   return (
     <>
@@ -56,17 +63,17 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                filterTodos={filterTodos}
-                onQuery={handleQuery}
-                onfilterTodos={handlefilterTodos}
+                todos={filterTodos}
+                onChange={handleQuery}
+                onSelect={handleFilterTodos}
               />
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos.length
                 ? (
                   <TodoList
-                    todos={visibleTodos}
+                    todos={prepareTodos}
                     selectedTodoId={selectedTodo?.id}
                     onSelectedTodo={handleSelectingTodo}
                   />
