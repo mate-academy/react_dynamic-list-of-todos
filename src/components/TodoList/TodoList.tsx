@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
-  selectedTodoId: number | undefined;
+  selectedTodoId: number | null;
 }
 
 export const TodoList: React.FC<Props> = ({

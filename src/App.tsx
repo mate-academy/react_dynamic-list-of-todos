@@ -84,7 +84,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={handleSelectedTodos}
                     onSelectTodo={handleSelectingTodo}
-                    selectedTodoId={selectedTodo?.id}
+                    selectedTodoId={selectedTodo ? selectedTodo.id : null}
                   />
                 )}
             </div>
