@@ -42,11 +42,12 @@ export const TodoItem: FC<Props> = ({
           onClick={() => onSelectedTodo(todo)}
         >
           <span className="icon">
-            {
-              selectedTodoId === todo.id
-                ? <i className="fas fa-eye-slash" />
-                : <i className="fas fa-eye" />
-            }
+            <i className={cn('fas',
+              {
+                'fa-eye-slash': selectedTodoId === todo.id,
+                'fa-eye': selectedTodoId !== todo.id,
+              })}
+            />
           </span>
         </button>
       </td>
