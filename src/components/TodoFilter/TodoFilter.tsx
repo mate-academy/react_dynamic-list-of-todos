@@ -1,16 +1,16 @@
 import React from 'react';
 
 type Props = {
-  handleSetFilter: (event:React.ChangeEvent<HTMLSelectElement>) => void;
+  onSetFilter: (event:React.ChangeEvent<HTMLSelectElement>) => void;
   query: string;
-  handleSetQuery: (event:React.ChangeEvent<HTMLInputElement>) => void;
+  onSetQuery: (event:React.ChangeEvent<HTMLInputElement>) => void;
   resetQuery: () => void;
 };
 
 export const TodoFilter:React.FC<Props> = ({
-  handleSetFilter,
+  onSetFilter,
   query,
-  handleSetQuery,
+  onSetQuery,
   resetQuery,
 }) => (
   <form className="field has-addons">
@@ -18,7 +18,7 @@ export const TodoFilter:React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => handleSetFilter(event)}
+          onChange={(event) => onSetFilter(event)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,7 +34,7 @@ export const TodoFilter:React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => handleSetQuery(event)}
+        onChange={event => onSetQuery(event)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />

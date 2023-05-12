@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  modalActiveTodo: Todo | null;
-  handleResetUser: () => void;
+  todo: Todo | null;
+  onClose: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  modalActiveTodo,
-  handleResetUser,
+  todo,
+  onClose,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -20,23 +20,21 @@ export const TodoModal: React.FC<Props> = ({
     id,
     title,
     completed,
-  } = modalActiveTodo || {};
+  } = todo || {};
 
-  if (!userId) {
-    throw new Error('userId is not defined');
-  }
+  const loadUser = useCallback(
+    async () => {
+      const userFromServer = userId ? await getUser(userId) : null;
 
-  const loadUser = async () => {
-    const userFromServer = await getUser(userId);
-
-    setUser(userFromServer);
-  };
+      setUser(userFromServer);
+    }, [userId],
+  );
 
   useEffect(
     () => {
       loadUser();
     },
-    [],
+    [loadUser],
   );
 
   return (
@@ -60,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleResetUser}
+              onClick={onClose}
             />
           </header>
 

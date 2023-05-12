@@ -1,17 +1,17 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoComponent } from '../Todo/TodoComponent';
 
 type Props = {
   todos: Todo[];
-  handleSetModalTodo: (todo:Todo) => void;
-  modalActiveTodo: Todo | null;
+  onSelect: (todo:Todo) => void;
+  activeTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  handleSetModalTodo,
-  modalActiveTodo,
+  onSelect,
+  activeTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -28,53 +28,13 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(todo => {
-        const {
-          id,
-          title,
-          completed,
-        } = todo;
-
-        return (
-          <tr
-            key={id}
-            data-cy="todo"
-            className={classNames({
-              'has-background-info-light': modalActiveTodo,
-            })}
-          >
-            <td className="is-vcentered">{id}</td>
-            <td className="is-vcentered" />
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames({
-                  'has-text-success': completed,
-                  'has-text-danger': !completed,
-                })}
-              >
-                {title}
-              </p>
-            </td>
-
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => handleSetModalTodo(todo)}
-              >
-                <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye': modalActiveTodo?.id !== id,
-                    'fa-eye-slash': modalActiveTodo?.id === id,
-                  })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
-        );
-      })}
+      {todos.map(todo => (
+        <TodoComponent
+          todo={todo}
+          activeTodo={activeTodo}
+          onSelect={onSelect}
+        />
+      ))}
     </tbody>
   </table>
 );

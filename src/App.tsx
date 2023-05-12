@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,58 +11,77 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { ActiveTodo } from './types/ActiveTodo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [todoActiveFilter, setTodoActiveFilter] = useState('');
+  const [todoActiveFilter, setTodoActiveFilter] = useState<ActiveTodo>(ActiveTodo.All);
   const [modalActiveTodo, setModalActiveTodo] = useState<Todo | null>(null);
 
-  const handleResetUser = () => {
+  const handleResetUser = useCallback(() => {
     setModalActiveTodo(null);
-  };
+  }, []);
 
-  const handleSetFilter = (event:React.ChangeEvent<HTMLSelectElement>) => {
-    setTodoActiveFilter(event.target.value);
-  };
-
-  const handleSetQuery = (event:React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const resetQuery = () => {
-    setQuery('');
-  };
-
-  const handleSetModalTodo = (todo: Todo) => {
-    setModalActiveTodo(todo);
-  };
-
-  const loadTodos = async () => {
-    const todosFromServer = await getTodos();
-
-    setTodos(todosFromServer);
-  };
-
-  useEffect(
-    () => {
-      loadTodos();
-    },
-    [],
+  const handleSetFilter = useCallback(
+    (event:React.ChangeEvent<HTMLSelectElement>) => {
+      switch (event.target.value) {
+        case 'active':
+          setTodoActiveFilter(ActiveTodo.Active);
+          break;
+        case 'completed':
+          setTodoActiveFilter(ActiveTodo.Completed);
+          break;
+        case 'all':
+          setTodoActiveFilter(ActiveTodo.All);
+          break;
+        default:
+          throw new Error('Unknown filter');
+      }
+    }, [],
   );
+
+  const handleSetQuery = useCallback(
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value.toLowerCase());
+    }, [],
+  );
+
+  const resetQuery = useCallback(
+    () => {
+      setQuery('');
+    }, [],
+  );
+
+  const handleSetModalTodo = useCallback(
+    (todo: Todo) => {
+      setModalActiveTodo(todo);
+    }, [],
+  );
+
+  const loadTodos = useCallback(
+    async () => {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+    }, [],
+  );
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   let preparedTodos = todos;
 
   useMemo(() => {
     switch (todoActiveFilter) {
-      case 'active':
+      case ActiveTodo.Active:
         preparedTodos = preparedTodos.filter(todo => !todo.completed);
         break;
-      case 'completed':
+      case ActiveTodo.Completed:
         preparedTodos = preparedTodos.filter(todo => todo.completed);
         break;
-      case 'all':
-        setTodoActiveFilter('');
+      case ActiveTodo.All:
         break;
       default:
         break;
@@ -80,21 +101,21 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleSetFilter={handleSetFilter}
+                onSetFilter={handleSetFilter}
                 query={query}
-                handleSetQuery={handleSetQuery}
+                onSetQuery={handleSetQuery}
                 resetQuery={resetQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList
                     todos={preparedTodos}
-                    handleSetModalTodo={handleSetModalTodo}
-                    modalActiveTodo={modalActiveTodo}
+                    onSelect={handleSetModalTodo}
+                    activeTodo={modalActiveTodo}
                   />
                 )}
             </div>
@@ -105,8 +126,8 @@ export const App: React.FC = () => {
       {modalActiveTodo
         && (
           <TodoModal
-            modalActiveTodo={modalActiveTodo}
-            handleResetUser={handleResetUser}
+            todo={modalActiveTodo}
+            onClose={handleResetUser}
           />
         )}
     </>
