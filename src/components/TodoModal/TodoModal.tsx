@@ -12,10 +12,10 @@ import { getUser } from '../../api';
 
 interface TodoModalProps {
   todo: Todo;
-  clearTodo: () => void;
+  onReset: () => void;
 }
 
-export const TodoModal: FC<TodoModalProps> = ({ todo, clearTodo }) => {
+export const TodoModal: FC<TodoModalProps> = ({ todo, onReset: clearTodo }) => {
   const {
     id,
     title,

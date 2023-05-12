@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   FC,
   useCallback,
@@ -37,22 +36,25 @@ export const App: FC = () => {
     setSelectedOption(filter);
   }, []);
 
-  const filterTodosByRequirments = (str: string, filter: Filter) => {
-    let todos = visibleTodos;
+  const filterTodosByRequirments = useCallback(
+    (str: string, filter: Filter, todos: Todo[]) => {
+      let copyTodos = todos;
 
-    switch (filter) {
-      case Filter.COMPLETED:
-        todos = visibleTodos.filter(({ completed }) => completed);
-        break;
-      case Filter.ACTIVE:
-        todos = visibleTodos.filter(({ completed }) => !completed);
-        break;
-      default:
-        todos = visibleTodos;
-    }
+      switch (filter) {
+        case Filter.COMPLETED:
+          copyTodos = todos.filter(({ completed }) => completed);
+          break;
+        case Filter.ACTIVE:
+          copyTodos = todos.filter(({ completed }) => !completed);
+          break;
+        default:
+          copyTodos = todos;
+      }
 
-    return todos.filter(({ title }) => title.toLowerCase().includes(str.toLowerCase()));
-  };
+      return copyTodos.filter(({ title }) => (
+        title.toLowerCase().includes(str.toLowerCase())));
+    }, [],
+  );
 
   const chooseTodo = (todo: Todo) => {
     setCurrentTodo(todo);
@@ -62,7 +64,9 @@ export const App: FC = () => {
     setCurrentTodo(null);
   };
 
-  const filteredTodos = filterTodosByRequirments(query, selectedOption);
+  const filteredTodos = filterTodosByRequirments(
+    query, selectedOption, visibleTodos,
+  );
 
   useEffect(() => {
     loadTodosFromApi();
@@ -85,7 +89,7 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {(filteredTodos.length === 0 && query === '')
+              {(!filteredTodos.length && !query)
                 ? <Loader />
                 : (
                   <TodoList
@@ -100,7 +104,7 @@ export const App: FC = () => {
       </div>
       {
         currentTodo && (
-          <TodoModal todo={currentTodo} clearTodo={clearTodo} />
+          <TodoModal todo={currentTodo} onReset={clearTodo} />
         )
       }
     </>
