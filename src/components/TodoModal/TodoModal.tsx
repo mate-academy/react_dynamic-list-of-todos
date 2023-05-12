@@ -22,7 +22,7 @@ export const TodoModal: React.FC<Props> = memo(({
   const loadedUser = async () => {
     if (todo?.userId) {
       try {
-        const userFromServer = await getUser(todo?.userId);
+        const userFromServer = await getUser(todo.userId);
 
         setUser(userFromServer);
       } catch (error) {
@@ -48,7 +48,7 @@ export const TodoModal: React.FC<Props> = memo(({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${user?.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

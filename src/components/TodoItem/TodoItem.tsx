@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todo: Todo;
   onSelectedTodo: (todo: Todo) => void;
-  clickedTodoId: number;
+  selectedTodoId?: number;
 }
 
 export const TodoItem: FC<Props> = ({
   todo,
   onSelectedTodo,
-  clickedTodoId,
+  selectedTodoId,
 }: Props) => {
   return (
     <>
@@ -42,11 +42,11 @@ export const TodoItem: FC<Props> = ({
           onClick={() => onSelectedTodo(todo)}
         >
           <span className="icon">
-            <i className={cn(
-              { 'fas fa-eye': clickedTodoId !== todo.id },
-              { 'fas fa-eye-slash': clickedTodoId === todo.id },
-            )}
-            />
+            {
+              selectedTodoId === todo.id
+                ? <i className="fas fa-eye-slash" />
+                : <i className="fas fa-eye" />
+            }
           </span>
         </button>
       </td>

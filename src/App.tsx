@@ -22,8 +22,7 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<CompletedStatus>(CompletedStatus.All);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement> | string) => {
     if (typeof event !== 'string') {
@@ -33,14 +32,12 @@ export const App: FC = () => {
 
   const handleClearInput = useCallback(() => setQuery(''), []);
 
-  const handleUserInfo = useCallback((inputedTodo: Todo) => {
-    setTodo(todo);
-    setSelectedTodoId(inputedTodo.id);
+  const handleSelectingTodo = useCallback((inputedTodo: Todo) => {
+    setSelectedTodo(inputedTodo);
   }, []);
 
   const handleCloseModal = () => {
-    setSelectedTodoId(0);
-    setTodo(null);
+    setSelectedTodo(null);
   };
 
   let vissibleTodos = useMemo(() => todos.filter(todoItem => {
@@ -88,20 +85,23 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
-              <TodoList
-                todos={vissibleTodos}
-                onSelectTodo={handleUserInfo}
-                clickedTodoId={selectedTodoId}
-              />
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={vissibleTodos}
+                    selectedTodoId={selectedTodo?.id}
+                    onSelectTodo={handleSelectingTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodoId && (
+      {selectedTodo && (
         <TodoModal
-          todo={todo}
+          todo={selectedTodo}
           onClose={handleCloseModal}
         />
       )}

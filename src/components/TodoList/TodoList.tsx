@@ -6,13 +6,13 @@ import { TodoItem } from '../TodoItem/TodoItem';
 interface Props {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
-  clickedTodoId: number;
+  selectedTodoId?: number;
 }
 
 export const TodoList: FC<Props> = memo(({
   todos,
   onSelectTodo,
-  clickedTodoId,
+  selectedTodoId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -35,14 +35,14 @@ export const TodoList: FC<Props> = memo(({
             <tr
               data-cy="todo"
               className={cn({
-                'has-background-info-light': clickedTodoId === todo.id,
+                'has-background-info-light': selectedTodoId === todo.id,
               })}
               key={todo.id}
             >
               <TodoItem
                 todo={todo}
                 onSelectedTodo={onSelectTodo}
-                clickedTodoId={clickedTodoId}
+                selectedTodoId={selectedTodoId}
               />
             </tr>
           );
