@@ -53,7 +53,7 @@ export const App: React.FC = () => {
           return 0;
       }
     });
-  }, []);
+  }, [todos]);
 
   visibleTodos = visibleTodos.filter(todo => {
     const lowerTodoTitle = todo.title.toLowerCase();
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
+              {todos.length === 0 && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 selectedTodoId={selectedTodoId}
@@ -88,7 +88,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoId && (
+      {selectedTodoId
+      && (
         <TodoModal
           selectedTodo={selectedTodo}
           onClose={handleClose}

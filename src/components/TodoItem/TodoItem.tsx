@@ -27,7 +27,6 @@ export const TodoItem: React.FC<Props> = ({
       className={cn({
         'has-background-info-light': isSelected,
       })}
-      key={id}
     >
       <td className="is-vcentered">{id}</td>
       {completed
