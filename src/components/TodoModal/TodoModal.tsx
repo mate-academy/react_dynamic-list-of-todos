@@ -6,12 +6,12 @@ import { getUser } from '../../api';
 
 interface Props {
   selectedTodo: Todo | null;
-  onCloseModal: () => void,
+  onClose: () => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  onCloseModal,
+  onClose,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -25,12 +25,9 @@ export const TodoModal: React.FC<Props> = ({
     }
   };
 
-  useEffect(
-    () => {
-      loadUser();
-    },
-    [selectedUser],
-  );
+  useEffect(() => {
+    loadUser();
+  }, [selectedUser]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -53,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onCloseModal}
+              onClick={onClose}
             />
           </header>
 

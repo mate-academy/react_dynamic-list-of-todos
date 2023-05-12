@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find(({ id }) => id === selectedTodoId) || null;
 
-  const closeModalWindow = () => {
+  const handleClose = () => {
     setSelectedTodoId(0);
   };
 
@@ -37,21 +37,23 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  let visibleTodos = todos.filter(todo => {
-    switch (selectedFilter) {
-      case 'all':
-        return true;
+  let visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (selectedFilter) {
+        case 'all':
+          return true;
 
-      case 'active':
-        return !todo.completed;
+        case 'active':
+          return !todo.completed;
 
-      case 'completed':
-        return todo.completed;
+        case 'completed':
+          return todo.completed;
 
-      default:
-        return 0;
-    }
-  });
+        default:
+          return 0;
+      }
+    });
+  }, []);
 
   visibleTodos = visibleTodos.filter(todo => {
     const lowerTodoTitle = todo.title.toLowerCase();
@@ -76,7 +78,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
+              {!todos.length && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 selectedTodoId={selectedTodoId}
@@ -86,11 +88,10 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoId
-      && (
+      {selectedTodoId && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onCloseModal={closeModalWindow}
+          onClose={handleClose}
         />
       )}
     </>
