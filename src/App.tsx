@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,23 +9,30 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum Category {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
   const [visibleTodos, setTodos] = useState<Todo[]>([]);
   const [searchedTodo, setSearchedTodos] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [todoCategory, setTodoCategory] = useState('All');
-  const [todoId, setTodoId] = useState(0);
-  const [userId, setUserId] = useState(1);
-  const [todoStatus, setTodoStatus] = useState(false);
+  const [todoCategory, setTodoCategory] = useState('all');
 
-  // eslint-disable-next-line no-console
-  useEffect(() => {
-    getTodos().then(todos => setTodos(todos));
+  const loadTodos = useCallback(async () => {
+    const todosFromServer = await getTodos();
+
+    setTodos(todosFromServer);
   }, []);
 
-  const resetUser = useCallback(() => {
+  useEffect(() => {
+    loadTodos();
+  }, [todoCategory]);
+
+  const handleReset = useCallback(() => {
     setSelectedTodo(null);
-    setTodoId(0);
   }, []);
 
   const handleSearch = useCallback((search: string) => {
@@ -37,34 +43,33 @@ export const App: React.FC = () => {
     setTodoCategory(category);
   }, []);
 
-  const handleTodoStatus = useCallback((status: boolean) => {
-    setTodoStatus(status);
-  }, []);
-
   const filterTodos = useCallback((search: string, category: string) => {
     let categoryStatus: boolean | null = null;
 
     switch (category) {
-      case 'active':
+      case Category.ACTIVE:
         categoryStatus = false;
         break;
-      case 'completed':
+      case Category.COMPLETED:
         categoryStatus = true;
         break;
-      default:
+      case Category.ALL:
         categoryStatus = null;
+        break;
+      default:
+        categoryStatus = false;
     }
 
     return visibleTodos.filter(todo => {
       const formattedTitle = todo.title.toLowerCase();
       const formattedSearch = search.toLowerCase();
 
-      if (categoryStatus !== null) {
-        return formattedTitle.includes(formattedSearch)
-          && todo.completed === categoryStatus;
+      if (category === 'all') {
+        return formattedTitle.includes(formattedSearch);
       }
 
-      return formattedTitle.includes(formattedSearch);
+      return formattedTitle.includes(formattedSearch)
+        && (todo.completed === categoryStatus);
     });
   }, [searchedTodo, todoCategory, visibleTodos]);
 
@@ -87,14 +92,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length > 0 || <Loader />}
+              {visibleTodos.length || <Loader />}
               <TodoList
-                selectedTodoId={todoId}
-                selectTodoId={(id: number) => setTodoId(id)}
-                selectUserId={(id: number) => setUserId((id))}
                 todos={filteredTodos}
-                onSetStatus={(status: boolean) => handleTodoStatus(status)}
-                onSelectTodo={(todo: Todo) => setSelectedTodo(todo)}
+                selectedTodo={selectedTodo}
+                onSelectTodo={(todo: Todo | null) => setSelectedTodo(todo)}
               />
             </div>
           </div>
@@ -103,10 +105,7 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          selectedTodoId={todoId}
-          status={todoStatus}
-          onReset={resetUser}
-          userId={userId}
+          onReset={handleReset}
           todo={selectedTodo}
         />
       )}

@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  selectedTodoId: number;
-  todo: Todo | null;
-  status: boolean;
+  todo: Todo;
   onReset: () => void;
-  userId: number;
 }
 export const TodoModal: React.FC<Props> = React.memo(
   ({
-    selectedTodoId,
     todo,
-    status,
     onReset,
-    userId,
   }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const loadUser = useCallback(async () => {
+      const userFromServer = await getUser(todo.userId);
+
+      setUser(userFromServer);
+      setIsLoading(true);
+    }, []);
+
     useEffect(() => {
-      getUser(userId).then(userFromServer => {
-        setUser(userFromServer);
-        setIsLoading(true);
-      });
+      loadUser();
     }, []);
 
     return (
@@ -45,7 +43,7 @@ export const TodoModal: React.FC<Props> = React.memo(
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodoId}`}
+                {`Todo #${todo.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -63,8 +61,7 @@ export const TodoModal: React.FC<Props> = React.memo(
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
-                {status ? (
+                {todo.completed ? (
                   <strong className="has-text-success">Done</strong>
                 ) : (
                   <strong className="has-text-danger">Planned</strong>

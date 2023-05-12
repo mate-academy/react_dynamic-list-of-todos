@@ -1,21 +1,15 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
 interface Props {
-  selectedTodoId: number;
-  selectTodoId: (id :number) => void;
-  selectUserId: (id: number) => void;
   todos: Todo[];
-  onSetStatus: (status: boolean) => void;
-  onSelectTodo: (todo: Todo) => void
+  selectedTodo: Todo | null;
+  onSelectTodo: (todo: Todo | null) => void
 }
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
-  selectTodoId,
-  selectedTodoId,
-  selectUserId,
-  onSetStatus,
+  selectedTodo,
   onSelectTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -34,55 +28,12 @@ export const TodoList: React.FC<Props> = React.memo(({
 
     <tbody>
       {todos.map(todo => (
-        <tr data-cy="todo" className="" key={todo.id}>
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={classNames({
-              'has-text-danger': !todo.completed,
-              'has-text-success': todo.completed,
-            })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            {selectedTodoId === todo.id ? (
-              <button
-                data-cy="selectButton"
-                className="button is-link"
-                type="button"
-                onClick={() => selectTodoId(0)}
-              >
-                <span className="icon">
-                  <i className="far fa-eye-slash" />
-                </span>
-              </button>
-            ) : (
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => {
-                  selectUserId(todo.userId);
-                  selectTodoId(todo.id);
-                  onSetStatus(todo.completed);
-                  onSelectTodo(todo);
-                }}
-              >
-                <span className="icon">
-                  <i className="far fa-eye" />
-                </span>
-              </button>
-            )}
-          </td>
-        </tr>
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          selectedTodo={selectedTodo}
+          onSelect={onSelectTodo}
+        />
       ))}
     </tbody>
   </table>
