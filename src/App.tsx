@@ -14,18 +14,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-enum FilterBy {
-  All = 'all',
-  COMPLETED = 'completed',
-  ACTIVE = 'active',
-}
+import { FilterBy } from './types/Filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>('');
-  const [filter, setFilter] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(FilterBy.All);
   const [hasError, setHasError] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -42,10 +37,6 @@ export const App: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    loadTodos();
-  }, []);
 
   const handleQueryChange = useCallback((newQuery: string) => {
     setQuery(newQuery);
@@ -82,6 +73,10 @@ export const App: React.FC = () => {
       return title.includes(queryLower);
     });
   }, [todos, query, filter]);
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   return (
     <>

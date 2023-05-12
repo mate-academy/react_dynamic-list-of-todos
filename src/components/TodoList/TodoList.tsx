@@ -1,6 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoComponents } from '../TodoComponents/TodoComponents';
+import { TodoItems } from '../TodoItems/TodoItems';
 
 interface Props {
   visibleTodos: Todo[];
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {visibleTodos.map((todo) => (
-        <TodoComponents
+        <TodoItems
           key={todo.id}
           todo={todo}
           onSelectedTodo={onSelectedTodo}

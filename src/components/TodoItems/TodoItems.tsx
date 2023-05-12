@@ -8,7 +8,7 @@ interface Props {
   selectedTodo: Todo | null;
 }
 
-export const TodoComponents: React.FC<Props> = ({
+export const TodoItems: React.FC<Props> = ({
   todo,
   onSelectedTodo,
   selectedTodo,
