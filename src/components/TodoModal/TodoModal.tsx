@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 interface Props {
-  closeModal: () => void;
+  handleClose: () => void;
   user: User | null;
   todo: Todo | null;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  closeModal,
+  handleClose,
   user,
   todo,
 }) => (
@@ -34,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({
             type="button"
             className="delete"
             data-cy="modal-close"
-            onClick={closeModal}
+            onClick={handleClose}
           />
         </header>
 
