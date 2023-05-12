@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Todo } from '../../types/Todo';
-import { OneTodo } from '../Todo/OneTodo';
+import { TodoItem } from '../Todo/TodoItem';
 
 interface TodoListProps {
   todos: Todo[];
@@ -8,9 +8,11 @@ interface TodoListProps {
   currentTodo: Todo | null;
 }
 
-export const TodoList: FC<TodoListProps> = (
-  { todos, chooseTodo, currentTodo },
-) => (
+export const TodoList: FC<TodoListProps> = ({
+  todos,
+  chooseTodo,
+  currentTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -27,9 +29,9 @@ export const TodoList: FC<TodoListProps> = (
 
     <tbody>
       {todos.map(todo => (
-        <OneTodo
+        <TodoItem
           todo={todo}
-          chooseTodo={chooseTodo}
+          onChange={chooseTodo}
           currentTodo={currentTodo}
         />
       ))}

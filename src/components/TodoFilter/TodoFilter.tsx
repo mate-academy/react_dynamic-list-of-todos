@@ -6,25 +6,25 @@ import {
 import { Filter } from '../../types/FilterEnum';
 
 interface TodoFilterProps {
-  changeQuery: (query: string) => void;
-  changeFilter: (filter: Filter) => void;
+  onChangeQuery: (query: string) => void;
+  onChangeFilter: (filter: Filter) => void;
   selectedOption: string,
   query: string,
 }
 
 export const TodoFilter: FC<TodoFilterProps> = memo(({
-  changeQuery, changeFilter: changeOption, selectedOption, query,
+  onChangeQuery, onChangeFilter, selectedOption, query,
 }) => {
   const handleChangeSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
-    changeQuery(event.target.value);
+    onChangeQuery(event.target.value);
   };
 
   const handleChangeStatus = ((event: ChangeEvent<HTMLSelectElement>) => {
-    changeOption(event.target.value as Filter);
+    onChangeFilter(event.target.value as Filter);
   });
 
   const handleChangeClearButton = () => {
-    changeQuery('');
+    onChangeQuery('');
   };
 
   return (

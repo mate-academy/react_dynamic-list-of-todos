@@ -28,11 +28,11 @@ export const App: FC = () => {
     setVisibleTodos(todos);
   }, []);
 
-  const changeQuery = useCallback((str: string) => {
+  const handleChangeQuery = useCallback((str: string) => {
     setQuery(str.trimStart());
   }, []);
 
-  const changeFilter = useCallback((filter: Filter) => {
+  const onChangeFilter = useCallback((filter: Filter) => {
     setSelectedOption(filter);
   }, []);
 
@@ -81,8 +81,8 @@ export const App: FC = () => {
 
             <div className="block">
               <TodoFilter
-                changeQuery={changeQuery}
-                changeFilter={changeFilter}
+                onChangeQuery={handleChangeQuery}
+                onChangeFilter={onChangeFilter}
                 selectedOption={selectedOption}
                 query={query}
               />

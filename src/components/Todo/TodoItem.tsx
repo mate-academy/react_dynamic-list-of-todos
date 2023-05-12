@@ -2,14 +2,14 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-interface OneTodoProps {
+interface TodoItemProps {
   todo: Todo;
-  chooseTodo: (todo: Todo) => void;
+  onChange: (todo: Todo) => void;
   currentTodo: Todo | null;
 }
 
-export const OneTodo: FC<OneTodoProps> = (
-  { todo, chooseTodo, currentTodo },
+export const TodoItem: FC<TodoItemProps> = (
+  { todo, onChange, currentTodo },
 ) => {
   const {
     id,
@@ -21,6 +21,7 @@ export const OneTodo: FC<OneTodoProps> = (
     (
       <tr data-cy="todo" key={id}>
         <td className="is-vcentered">{id}</td>
+
         <td className="is-vcentered">
           {completed
             && (
@@ -29,6 +30,7 @@ export const OneTodo: FC<OneTodoProps> = (
               </span>
             )}
         </td>
+
         <td className="is-vcentered is-expanded">
           <p className={classNames({
             'has-text-danger': !completed,
@@ -38,12 +40,13 @@ export const OneTodo: FC<OneTodoProps> = (
             {title}
           </p>
         </td>
+
         <td className="has-text-right is-vcentered">
           <button
             data-cy="selectButton"
             className="button"
             type="button"
-            onClick={() => chooseTodo(todo)}
+            onClick={() => onChange(todo)}
           >
             <span className="icon">
               <i className={classNames('far', {
