@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
-/* eslint-disable no-console */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useState, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,36 +19,38 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
 
-  useEffect(() => {
-    getTodos()
-      .then(setTodos);
-  }, []);
-
   const handleSelectingTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
   }, []);
 
-  const visibleTodos = todos.filter(({ title, completed }: Todo) => {
-    const prepsredQuery = query.toLowerCase().trim();
-    const preparedTitle = title.toLowerCase();
+  const visibleTodos = useMemo(() => {
+    return todos.filter(({ title, completed }: Todo) => {
+      const prepsredQuery = query.toLowerCase().trim();
+      const preparedTitle = title.toLowerCase();
 
-    let isCompleted;
+      let isCompleted;
 
-    switch (filterBy) {
-      case FilterBy.ACTIVE:
-        isCompleted = !completed;
-        break;
+      switch (filterBy) {
+        case FilterBy.ACTIVE:
+          isCompleted = !completed;
+          break;
 
-      case FilterBy.COMPLETED:
-        isCompleted = completed;
-        break;
+        case FilterBy.COMPLETED:
+          isCompleted = completed;
+          break;
 
-      default:
-        isCompleted = true;
-    }
+        default:
+          isCompleted = true;
+      }
 
-    return preparedTitle.includes(prepsredQuery) && isCompleted;
-  });
+      return preparedTitle.includes(prepsredQuery) && isCompleted;
+    });
+  }, [todos, query, filterBy]);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos);
+  }, []);
 
   return (
     <>
@@ -66,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {todos.length
                 ? (
                   <TodoList
                     todos={visibleTodos}
