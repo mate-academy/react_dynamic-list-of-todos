@@ -7,25 +7,48 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getLookingForTodos } from './api';
+import { getTodos } from './api';
+import { Statuses } from './types/Statuses';
 
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [searchedTodo, setSearchedTodo] = useState('');
-  const [selectedStatusOfTodo, setSelectedStatusOfTodo] = useState('all');
+  const [searchedQuery, setSearchedQuery] = useState('');
+  const [selectedStatusOfTodo, setSelectedStatusOfTodo] = useState<Statuses>(Statuses.All);
 
   const fetchData = async () => {
-    const todosFromServer = await getLookingForTodos(searchedTodo, selectedStatusOfTodo);
+    const todosFromServer = await getTodos();
 
     setTodos(todosFromServer);
   };
 
   useEffect(() => {
     fetchData();
-  }, [searchedTodo, selectedStatusOfTodo]);
+  }, []);
+
+  function searchAndSort() {
+    let filteredTodos: Todo[] = JSON.parse(JSON.stringify(todos));
+
+    const isCompleted = selectedStatusOfTodo === Statuses.Completed;
+
+    if (selectedStatusOfTodo === Statuses.Active || selectedStatusOfTodo === Statuses.Completed) {
+      filteredTodos = filteredTodos
+        .filter(todo => todo.completed === isCompleted);
+    }
+
+    if (searchedQuery) {
+      filteredTodos = filteredTodos
+        .filter(todo => {
+          return todo.title.toLowerCase().includes(searchedQuery.toLowerCase());
+        });
+    }
+
+    return filteredTodos;
+  }
+
+  const visibleTodos: Todo[] = searchAndSort();
 
   return (
     <>
@@ -36,8 +59,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                searchedTodo={searchedTodo}
-                setSearchedTodo={setSearchedTodo}
+                searchedQuery={searchedQuery}
+                setSearchedQuery={setSearchedQuery}
                 selectedStatusOfTodo={selectedStatusOfTodo}
                 setSelectedStatusOfTodo={setSelectedStatusOfTodo}
               />
@@ -45,10 +68,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                todos.length > 0
+                visibleTodos.length
                   ? (
                     <TodoList
-                      todos={todos}
+                      todos={visibleTodos}
                       setSelectedTodo={setSelectedTodo}
                       selectedTodo={selectedTodo}
                     />
@@ -59,7 +82,12 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} resetSelectedTodo={setSelectedTodo} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          resetSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };

@@ -1,15 +1,16 @@
 import { FC } from 'react';
+import { Statuses } from '../../types/Statuses';
 
 interface Props {
-  searchedTodo: string;
-  setSearchedTodo: (value: string) => void;
-  selectedStatusOfTodo: string;
-  setSelectedStatusOfTodo: (value: string) => void;
+  searchedQuery: string;
+  setSearchedQuery: (value: string) => void;
+  selectedStatusOfTodo: Statuses;
+  setSelectedStatusOfTodo: (value: Statuses) => void;
 }
 
 export const TodoFilter: FC<Props> = ({
-  searchedTodo,
-  setSearchedTodo,
+  searchedQuery,
+  setSearchedQuery,
   selectedStatusOfTodo,
   setSelectedStatusOfTodo,
 }) => {
@@ -20,11 +21,13 @@ export const TodoFilter: FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedStatusOfTodo}
-            onChange={(event) => setSelectedStatusOfTodo(event.target.value)}
+            onChange={(event) => {
+              setSelectedStatusOfTodo(Number(event.target.value));
+            }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Statuses.All}>All</option>
+            <option value={Statuses.Active}>Active</option>
+            <option value={Statuses.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -35,21 +38,21 @@ export const TodoFilter: FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchedTodo}
-          onChange={(event) => setSearchedTodo(event.target.value)}
+          value={searchedQuery}
+          onChange={(event) => setSearchedQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {searchedTodo !== '' && (
+        {searchedQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setSearchedTodo('')}
+              onClick={() => setSearchedQuery('')}
             />
           </span>
         )}

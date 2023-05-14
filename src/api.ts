@@ -22,29 +22,8 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-function searchAndSort(todos: Todo[], searchedPhrase: string, status: string) {
-  let filteredTodos: Todo[] = JSON.parse(JSON.stringify(todos));
-
-  const isCompleted = status === 'completed';
-
-  if (status === 'active' || status === 'completed') {
-    filteredTodos = filteredTodos
-      .filter(todo => todo.completed === isCompleted);
-  }
-
-  return filteredTodos
-    .filter(todo => {
-      return todo.title.toLowerCase().includes(searchedPhrase.toLowerCase());
-    });
-}
-
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const geTodo = (todoId: number) => get<Todo>(`todos/${todoId}`);
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
-
-export const getLookingForTodos = (searchedPhrase: string, status: string) => {
-  return get<Todo[]>('/todos')
-    .then(todos => searchAndSort(todos, searchedPhrase, status));
-};
