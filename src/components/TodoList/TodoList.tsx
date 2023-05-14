@@ -1,19 +1,16 @@
 import { FC, memo } from 'react';
-import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoElement } from '../TodoElement/TodoElement';
 
 interface Props {
   todos: Todo[];
   userId: number | null;
-  onChangeSelectedTodo: (todo: Todo) => void;
+  onSelect: (todo: Todo) => void;
 }
 
 export const TodoList: FC<Props> = memo((
-  { todos, onChangeSelectedTodo, userId },
+  { todos, onSelect, userId },
 ) => {
-  // eslint-disable-next-line no-console
-  console.log('TodoList');
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -31,49 +28,16 @@ export const TodoList: FC<Props> = memo((
 
       <tbody>
         {todos.map(todo => {
-          const { id, title, completed } = todo;
+          const { id } = todo;
           const isSelected = userId === id;
 
           return (
-            <tr
-              data-cy="todo"
-              className={cn({ 'has-background-info-light': isSelected })}
+            <TodoElement
+              todo={todo}
+              onSelect={onSelect}
+              isSelected={isSelected}
               key={id}
-            >
-              <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p className={cn({
-                  'has-text-danger': !completed,
-                  'has-text-success': completed,
-                })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => onChangeSelectedTodo(todo)}
-                >
-                  <span className="icon">
-                    <i className={cn('far', {
-                      'fa-eye': !isSelected,
-                      'fa-eye-slash': isSelected,
-                    })}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
+            />
           );
         })}
       </tbody>

@@ -10,6 +10,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
+import { FilterBy } from './types/FilterBy';
 
 const findQueryInTheString = (query: string, title: string) => {
   const queryToLower = query.toLowerCase().trim();
@@ -18,23 +19,39 @@ const findQueryInTheString = (query: string, title: string) => {
   return titleToLower.includes(queryToLower);
 };
 
+const debounce = (f: (string: string) => void, delay: number) => {
+  let timerId: any;
+
+  return (...args: any) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(f, delay, ...args);
+  };
+};
+
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingTodos, setIsLoadingTodos] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState('all');
+  const [appliedQuery, setAppliedQuery] = useState('');
+  const [option, setOption] = useState<FilterBy>(FilterBy.all);
 
-  let visibleTodos = useMemo(() => {
-    return [...todos];
-  }, [todos]);
+  // eslint-disable-next-line no-console
+  console.log(option, appliedQuery);
+
+  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
   const handleSelectedTodo = useCallback((todo: Todo) => (
-    setSelectedTodo(todo)), []);
+    setSelectedTodo(todo)
+  ), []);
+
   const handleClearSelectedTodo = useCallback(() => setSelectedTodo(null), []);
+
   const handleChangeQuery = useCallback((value: string) => setQuery(value), []);
-  const handleChangeOption = useCallback((value: string) => (
-    setOption(value)), []);
+
+  const handleChangeOption = useCallback((value: FilterBy) => (
+    setOption(value)
+  ), []);
 
   useEffect(
     () => {
@@ -44,25 +61,22 @@ export const App: FC = () => {
         .catch(error => {
           throw new Error(`${error} Error`);
         });
-    },
-    [],
-  );
+    }, []);
 
-  if (query) {
-    visibleTodos = visibleTodos.filter(todo => (
-      findQueryInTheString(query, todo.title)));
-  }
+  let visibleTodos = useMemo(() => todos.filter(({ title }) => (
+    findQueryInTheString(appliedQuery, title))), [appliedQuery, todos]);
 
-  if (option !== 'all') {
-    switch (option) {
-      case 'completed':
-        visibleTodos = visibleTodos.filter(todo => todo.completed === true);
-        break;
-      case 'active':
-        visibleTodos = visibleTodos.filter(todo => todo.completed === false);
-        break;
-      default:
-    }
+  if (option !== FilterBy.all) {
+    visibleTodos = visibleTodos.filter(({ completed }) => {
+      switch (option) {
+        case FilterBy.completed:
+          return completed;
+        case FilterBy.active:
+          return !completed;
+        default:
+          return true;
+      }
+    });
   }
 
   return (
@@ -77,6 +91,7 @@ export const App: FC = () => {
                 query={query}
                 onChangeQuery={handleChangeQuery}
                 onChangeOption={handleChangeOption}
+                onChangeApplyQuery={applyQuery}
               />
             </div>
 
@@ -85,14 +100,14 @@ export const App: FC = () => {
                 <Loader />
               ) : (
                 <>
-                  {visibleTodos.length === 0
+                  {!visibleTodos.length
                     ? (
                       <h1>Todos not found...</h1>
                     ) : (
                       <TodoList
                         todos={visibleTodos}
                         userId={selectedTodo?.id || null}
-                        onChangeSelectedTodo={handleSelectedTodo}
+                        onSelect={handleSelectedTodo}
                       />
                     )}
                 </>
@@ -102,10 +117,10 @@ export const App: FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onClearUserId={handleClearSelectedTodo}
+          onClose={handleClearSelectedTodo}
         />
       )}
     </>

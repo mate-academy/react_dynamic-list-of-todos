@@ -1,13 +1,20 @@
 import { FC, memo } from 'react';
+import { FilterBy } from '../../types/FilterBy';
 
 interface Props {
   query: string;
   onChangeQuery: (event: string) => void;
-  onChangeOption: (event: string) => void;
+  onChangeApplyQuery : (event: string) => void;
+  onChangeOption: (event: FilterBy) => void;
 }
 
 export const TodoFilter: FC<Props> = memo((
-  { query, onChangeOption, onChangeQuery },
+  {
+    query,
+    onChangeOption,
+    onChangeQuery,
+    onChangeApplyQuery,
+  },
 ) => {
   const handleClearQuery = () => onChangeQuery('');
 
@@ -17,7 +24,20 @@ export const TodoFilter: FC<Props> = memo((
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => onChangeOption(event.target.value)}
+            onChange={({ target }) => {
+              switch (target.value) {
+                case 'all':
+                  onChangeOption(FilterBy.all);
+                  break;
+                case 'active':
+                  onChangeOption(FilterBy.active);
+                  break;
+                case 'completed':
+                  onChangeOption(FilterBy.completed);
+                  break;
+                default:
+              }
+            }}
           >
             <option value="all">
               All
@@ -39,7 +59,10 @@ export const TodoFilter: FC<Props> = memo((
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onChangeQuery(event.target.value)}
+          onChange={(event) => {
+            onChangeQuery(event.target.value);
+            onChangeApplyQuery(event.target.value);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

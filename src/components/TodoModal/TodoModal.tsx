@@ -8,10 +8,10 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
-  onClearUserId: () => void;
+  onClose: () => void;
 }
 
-export const TodoModal: FC<Props> = memo(({ todo, onClearUserId }) => {
+export const TodoModal: FC<Props> = memo(({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(
@@ -47,7 +47,7 @@ export const TodoModal: FC<Props> = memo(({ todo, onClearUserId }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onClearUserId();
+                onClose();
                 setUser(null);
               }}
             />
