@@ -15,7 +15,7 @@ import { FilterBy } from './types/FilterBy';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState(FilterBy.ALL);
   const [query, setQuery] = useState('');
 
   const loadTodos = useCallback(async () => {
@@ -28,10 +28,6 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    loadTodos();
-  }, []);
-
   const handleSelectingTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
   }, []);
@@ -40,7 +36,7 @@ export const App: React.FC = () => {
     setQuery(string);
   }, []);
 
-  const handleCloseModal = () => setSelectedTodo(null);
+  const handleCloseModal = useCallback(() => setSelectedTodo(null), []);
 
   const handleReset = () => {
     setQuery('');
@@ -76,6 +72,10 @@ export const App: React.FC = () => {
     return visibleTodos;
   }, [selectedStatus, query, todos]);
 
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -86,10 +86,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 status={selectedStatus}
-                handleSetStatus={setSelectedStatus}
+                onSetStatus={setSelectedStatus}
                 query={query}
-                handleSetQuery={handleSetQuery}
-                handleReset={handleReset}
+                onSetQuery={handleSetQuery}
+                onReset={handleReset}
               />
             </div>
 
@@ -97,7 +97,7 @@ export const App: React.FC = () => {
               {preparedTodos.length
                 ? (
                   <TodoList
-                    visibleTodos={preparedTodos}
+                    todos={preparedTodos}
                     selectedTodoId={selectedTodo?.id}
                     onSelectTodo={handleSelectingTodo}
                   />

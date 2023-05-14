@@ -17,7 +17,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       const usersFromServer = await getUser(todo.userId);
 
       setUser(usersFromServer);
-    } catch (console) {
+    } catch (error) {
+      // eslint-disable-next-line
       throw new Error();
     }
   };
