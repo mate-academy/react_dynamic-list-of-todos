@@ -1,10 +1,11 @@
 import React from 'react';
+import { Filter } from '../../types/FilterTodo';
 
 interface TodoFilterProps {
   query: string;
   changeInput: (query: string) => void;
   selectedOption: string;
-  changeOption: (option: string) => void;
+  changeOption: (option: Filter) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
@@ -18,7 +19,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   };
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeOption(event.target.value);
+    changeOption(event.target.value as Filter);
   };
 
   const handleButtonReset = () => {
@@ -34,9 +35,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             value={selectedOption}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.ACTIVE}>Active</option>
+            <option value={Filter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

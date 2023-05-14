@@ -7,10 +7,10 @@ import { getUser } from '../../api';
 
 interface TodoModalProps {
   todo: Todo;
-  closeModal: () => void;
+  onClose: () => void;
 }
 
-export const TodoModal: React.FC<TodoModalProps> = ({ todo, closeModal }) => {
+export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   const {
     id,
     title,
@@ -51,7 +51,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, closeModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={closeModal}
+              onClick={onClose}
             />
           </header>
 
