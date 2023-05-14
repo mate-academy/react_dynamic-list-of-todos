@@ -33,6 +33,7 @@ export const TodoList: React.FC<Props> = ({
           todo={todo}
           selectedTodo={selectedTodo}
           onTodoSelection={onTodoSelection}
+          key={todo.id}
         />
       ))}
     </tbody>

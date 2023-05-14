@@ -51,10 +51,9 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedTodoUser, setSelectedTodoUser] = useState<User | null>(null);
 
-  const preparedTodos = useMemo(
-    () => handleTodosPrepare(todos, filterType, query),
-    [todos, filterType, query],
-  );
+  const preparedTodos = useMemo(() => (
+    handleTodosPrepare(todos, filterType, query)
+  ), [todos, filterType, query]);
 
   useEffect(() => {
     getTodos().then(todosData => setTodos(todosData));
