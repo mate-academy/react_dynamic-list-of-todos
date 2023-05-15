@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
@@ -8,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FiterTodo } from './types/FilterTodo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -34,28 +35,34 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    try {
-      getTodos().then(setTodos);
-    } catch (error) {
-      throw new Error(`Error: ${error}`);
-    }
+    const fetchData = async () => {
+      try {
+        const todo = await getTodos();
+
+        setTodos(todo);
+      } catch (error) {
+        throw new Error(`Error: ${error}`);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  let visibleTodos = todos.filter(todo => {
+  let visibleTodos = useMemo(() => {
     switch (selectedFilter) {
-      case 'all':
-        return true;
+      case FiterTodo.ALL:
+        return todos;
 
-      case 'active':
-        return !todo.completed;
+      case FiterTodo.ACTIVE:
+        return todos.filter(todo => !todo.completed);
 
-      case 'completed':
-        return todo.completed;
+      case FiterTodo.COMPLETED:
+        return todos.filter(todo => todo.completed);
 
       default:
-        return 0;
+        return [];
     }
-  });
+  }, [todos, selectedFilter]);
 
   visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -68,9 +75,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelectionCategory={handleSelectFilter}
+                onSelect={handleSelectFilter}
                 searchQuery={searchQuery}
-                onQueryChange={handleQuery}
+                onChange={handleQuery}
               />
             </div>
 
@@ -86,13 +93,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodoId
-        && (
-          <TodoModal
-            selectedTodo={selectedTodo}
-            handleCloseModal={closeModalWindow}
-          />
-        )}
+      {selectedTodoId && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handleCloseModal={closeModalWindow}
+        />
+      )}
     </>
   );
 };

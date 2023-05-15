@@ -1,22 +1,22 @@
 import React from 'react';
 
 interface Props {
-  onSelectionCategory: (value: string) => void;
+  onSelect: (value: string) => void;
   searchQuery: string;
-  onQueryChange: (value: string) => void;
+  onChange: (value: string) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  onSelectionCategory,
+  onSelect,
   searchQuery,
-  onQueryChange,
+  onChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => onSelectionCategory(event.target.value)}
+          onChange={(event) => onSelect(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={searchQuery}
-        onChange={(event) => onQueryChange(event.target.value)}
+        onChange={(event) => onChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -50,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => onQueryChange('')}
+            onClick={() => onChange('')}
           />
         </span>
       )}

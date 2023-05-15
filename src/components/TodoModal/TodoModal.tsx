@@ -25,12 +25,9 @@ export const TodoModal: React.FC<Props> = ({
     }
   };
 
-  useEffect(
-    () => {
-      loadUser();
-    },
-    [selectedUser],
-  );
+  useEffect(() => {
+    loadUser();
+  }, [selectedUser]);
 
   return (
     <div className="modal is-active" data-cy="modal">
