@@ -8,9 +8,11 @@ interface TodoItemProps {
   onSelect: (todo: Todo) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = (
-  { todo, currentTodo, onSelect },
-) => {
+export const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  currentTodo,
+  onSelect,
+}) => {
   const {
     id,
     title,

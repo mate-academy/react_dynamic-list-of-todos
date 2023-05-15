@@ -3,27 +3,27 @@ import { Filter } from '../../types/FilterTodo';
 
 interface TodoFilterProps {
   query: string;
-  changeInput: (query: string) => void;
+  onChange: (query: string) => void;
   selectedOption: string;
-  changeOption: (option: Filter) => void;
+  onSelectOption: (option: Filter) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   query,
-  changeInput,
+  onChange,
   selectedOption,
-  changeOption,
+  onSelectOption,
 }) => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeInput(event.target.value);
+    onChange(event.target.value);
   };
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeOption(event.target.value as Filter);
+    onSelectOption(event.target.value as Filter);
   };
 
   const handleButtonReset = () => {
-    changeInput('');
+    onChange('');
   };
 
   return (

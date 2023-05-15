@@ -1,6 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoItem } from '../TodoItem/TodoItem';
+import { TodoItem } from '../TodoItem';
 
 interface TodoListProps {
   todos: Todo[];
@@ -32,6 +32,7 @@ export const TodoList: React.FC<TodoListProps> = (
     <tbody>
       {todos.map((todo) => (
         <TodoItem
+          key={todo.id}
           todo={todo}
           currentTodo={currentTodo}
           onSelect={onSelect}
