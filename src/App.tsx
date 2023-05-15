@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,35 +19,33 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(FilterBy.All);
   const [search, setSearch] = useState('');
 
-  const filteredTodos = useMemo(() => todos
+  const visibleTodos = useMemo(() => todos
     .filter(({ title }) => (
       title.toLowerCase().includes(search.toLowerCase())
-    )), [todos, search]);
+    )).filter(({ completed }) => {
+      switch (filter) {
+        case FilterBy.Completed:
+          return completed;
 
-  const visibleTodos = filteredTodos.filter(({ completed }) => {
-    switch (filter) {
-      case FilterBy.Completed:
-        return completed;
+        case FilterBy.Active:
+          return !completed;
 
-      case FilterBy.Active:
-        return !completed;
+        default:
+          return true;
+      }
+    }), [todos, filter, search]);
 
-      default:
-        return true;
-    }
-  });
-
-  const handleFilterSelect = (filterValue: FilterBy) => {
+  const handleFilterSelect = useCallback((filterValue: FilterBy) => {
     setFilter(filterValue);
-  };
+  }, []);
 
-  const handleSearch = (searchValue: string) => {
+  const handleSearch = useCallback((searchValue: string) => {
     setSearch(searchValue);
-  };
+  }, []);
 
-  const handleModalOpen = (selectedTodo: Todo) => {
+  const handleModalOpen = useCallback((selectedTodo: Todo) => {
     setTodo(selectedTodo);
-  };
+  }, []);
 
   useEffect(() => {
     getTodos()

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -28,9 +28,9 @@ export const TodoModal: React.FC<TodoModalProps> = ({
     }
   }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     onClose(null);
-  };
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

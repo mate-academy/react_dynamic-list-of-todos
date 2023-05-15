@@ -32,14 +32,12 @@ export const TodoList: React.FC<TodoListProps> = ({
         const isTodoModalOpen = todoId === todo.id;
 
         return (
-          <>
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              isTodoModalOpen={isTodoModalOpen}
-              onOpenModal={onOpenModal}
-            />
-          </>
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isTodoModalOpen={isTodoModalOpen}
+            onOpenModal={onOpenModal}
+          />
         );
       })}
     </tbody>

@@ -17,12 +17,12 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChangeSearch(e.target.value);
-    }, [onChangeSearch],
+    }, [],
   );
 
   const handleSearchClear = useCallback(() => {
     onChangeSearch('');
-  }, [onChangeSearch]);
+  }, []);
 
   return (
     <form className="field has-addons">
