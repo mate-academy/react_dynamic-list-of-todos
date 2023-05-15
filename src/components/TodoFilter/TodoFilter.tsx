@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
+import { FilterBy } from '../../extends/Enums';
 
 type TodoFilterProps = {
-  onFilterSelect: (filter: string) => void;
+  onFilterSelect: (filter: FilterBy) => void;
   onSearchChange: (search: string) => void;
   search: string;
-  filter: string;
+  filter: FilterBy;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
@@ -30,11 +31,11 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={(e) => onSelectFilter(e.target.value)}
+            onChange={(e) => onSelectFilter(e.target.value as FilterBy)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterBy.All}>All</option>
+            <option value={FilterBy.Active}>Active</option>
+            <option value={FilterBy.Completed}>Completed</option>
           </select>
         </span>
       </p>

@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type TodoListProps = {
   todos: Todo[];
@@ -32,53 +32,14 @@ export const TodoList: React.FC<TodoListProps> = ({
         const isTodoModalOpen = todoId === todo.id;
 
         return (
-          <tr
-            key={todo.id}
-            data-cy="todo"
-            className={classNames({
-              'has-background-info-light': isTodoModalOpen,
-            })}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {
-                todo.completed && (
-                  <span
-                    className="icon"
-                    data-cy="iconCompleted"
-                  >
-                    <i className="fas fa-check" />
-                  </span>
-                )
-              }
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames('block', {
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onOpenModal(todo)}
-              >
-                <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye': !isTodoModalOpen,
-                    'fa-eye-slash': isTodoModalOpen,
-                  })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+          <>
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              isTodoModalOpen={isTodoModalOpen}
+              onOpenModal={onOpenModal}
+            />
+          </>
         );
       })}
     </tbody>

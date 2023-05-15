@@ -7,12 +7,12 @@ import { Loader } from '../Loader';
 
 type TodoModalProps = {
   todo: Todo | null;
-  setTodo: (todo: Todo | null) => void;
+  onClose: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   todo,
-  setTodo,
+  onClose,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -29,7 +29,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   }, []);
 
   const handleCloseModal = () => {
-    setTodo(null);
+    onClose(null);
   };
 
   return (
