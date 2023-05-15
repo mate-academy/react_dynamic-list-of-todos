@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     try {
       getTodos().then(setTodos);
     } catch (error) {
-      alert(`Произошла ошибка: ${error}`);
+      throw new Error(`Error: ${error}`);
     }
   }, []);
 
