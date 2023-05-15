@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,32 +22,29 @@ export const App: React.FC = () => {
 
   const selectedTodo = todos.find(({ id }) => id === selectedTodoId) || null;
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
-  const handleSelectionFilter = (value: string) => {
+  const handleSelectionFilter = useCallback((value: string) => {
     setSelectedFilter(value);
-  };
+  }, []);
 
-  const handleQuery = (value: string) => {
+  const handleQuery = useCallback((value: string) => {
     setSearchQuery(value);
-  };
+  }, []);
 
-  const handleSelectionTodo = (value: number) => {
+  const handleSelectionTodo = useCallback((value: number) => {
     setSelectedTodoId(value);
-  };
+  }, []);
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
 
-  let visibleTodos = useMemo(() => {
+  const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (selectedFilter) {
-        case 'all':
-          return true;
-
         case 'active':
           return !todo.completed;
 
@@ -50,17 +52,15 @@ export const App: React.FC = () => {
           return todo.completed;
 
         default:
-          return 0;
+          return true;
       }
+    }).filter(todo => {
+      const lowerTodoTitle = todo.title.toLowerCase();
+      const lowerQuery = searchQuery.toLowerCase();
+
+      return lowerTodoTitle.includes(lowerQuery);
     });
-  }, [todos]);
-
-  visibleTodos = visibleTodos.filter(todo => {
-    const lowerTodoTitle = todo.title.toLowerCase();
-    const lowerQuery = searchQuery.toLowerCase();
-
-    return lowerTodoTitle.includes(lowerQuery);
-  });
+  }, [searchQuery, selectedFilter, todos]);
 
   return (
     <>
@@ -88,8 +88,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoId
-      && (
+      {selectedTodoId && (
         <TodoModal
           selectedTodo={selectedTodo}
           onClose={handleClose}

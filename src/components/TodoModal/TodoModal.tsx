@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -15,7 +15,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const loadUser = () => {
+  const loadUser = useCallback(() => {
     if (selectedTodo?.id) {
       getUser(selectedTodo.userId)
         .then(setSelectedUser)
@@ -23,7 +23,7 @@ export const TodoModal: React.FC<Props> = ({
           throw new Error(error);
         });
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadUser();

@@ -29,6 +29,7 @@ export const TodoItem: React.FC<Props> = ({
       })}
     >
       <td className="is-vcentered">{id}</td>
+
       {completed
         ? (
           <td className="is-vcentered">
@@ -41,6 +42,7 @@ export const TodoItem: React.FC<Props> = ({
         : (
           <td className="is-vcentered" />
         )}
+
       <td className="is-vcentered is-expanded">
         <p className={cn(
           { 'has-text-danger': !completed },
@@ -50,6 +52,7 @@ export const TodoItem: React.FC<Props> = ({
           {title}
         </p>
       </td>
+
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"
