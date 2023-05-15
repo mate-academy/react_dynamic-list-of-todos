@@ -1,5 +1,9 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +11,43 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { FilterBy } from './types/FIlterBy';
+import { getVisibleTodos } from './helpers';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [shownTodoId, setshownTodoId] = useState(0);
+  const [query, setQuery] = useState('');
+  const [filterBy, setFilterBy] = useState(FilterBy.All);
+
+  const getTodosFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const changeShownTodo = useCallback((id: number) => {
+    setshownTodoId(id);
+  }, []);
+
+  const activeTodo = todos.find(({ id }) => id === shownTodoId);
+
+  const visibleTodos = getVisibleTodos(todos, query, filterBy);
+
   return (
     <>
       <div className="section">
@@ -17,18 +56,49 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              {
+                !isLoading
+                && !isError
+                && (
+                  <TodoFilter
+                    query={query}
+                    onSetQuery={setQuery}
+                    onChangeFilterBy={setFilterBy}
+                  />
+                )
+              }
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                isLoading
+                && !isError
+                && (<Loader />)
+              }
+              {
+                !isLoading
+                && !isError
+                && todos.length > 0
+                && (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSelectTodo={changeShownTodo}
+                    selectedTodo={shownTodoId}
+                  />
+                )
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {activeTodo
+        && (
+          <TodoModal
+            todo={activeTodo}
+            onHide={() => changeShownTodo(0)}
+          />
+        )}
     </>
   );
 };
