@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  todo: Todo;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
+
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  const loadUser = useCallback(async (userById: number) => {
+    const user = await getUser(userById);
+
+    setCurrentUser(user);
+  }, []);
+
+  useEffect(() => {
+    loadUser(userId);
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!currentUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +43,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +51,29 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={classNames({
+                'has-text-success': completed,
+                'has-text-danger': !completed,
+              })}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${currentUser?.email}`}>
+                {currentUser?.name}
               </a>
             </p>
           </div>
