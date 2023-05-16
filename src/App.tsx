@@ -17,32 +17,27 @@ export const App: React.FC = () => {
   const [sort, setSort] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<PrepaparedTodo | null>(null);
   const [todoModal, setTodoModal] = useState(false);
-  //  const [selectedTodosName, setSelecetedTodosName] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
       });
-  }, [JSON.stringify(getTodos())]);
+  }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    const filtered = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+  const filteredTodos = useMemo(() => (
+    todos.filter(todo => {
+      const filtered = todo.title.toLowerCase().includes(query.toLowerCase().trim());
 
-    switch (sort) {
-      case 'active':
-        return filtered && !todo.completed;
-      case 'completed':
-        return filtered && todo.completed;
-      default:
-        return filtered;
-    }
-  });
-
-  const visibleTodos = useMemo(
-    () => filteredTodos,
-    [JSON.stringify(filteredTodos)],
-  );
+      switch (sort) {
+        case 'active':
+          return filtered && !todo.completed;
+        case 'completed':
+          return filtered && todo.completed;
+        default:
+          return filtered;
+      }
+    })), [todos, sort, query]);
 
   return (
     <>
@@ -54,16 +49,17 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
-                sort={sort}
-                setSort={setSort}
+                onChange={setQuery}
+                sortValue={sort}
+                onSort={setSort}
               />
             </div>
 
             <div className="block">
               {!todos.length && <Loader />}
+
               <TodoList
-                todos={visibleTodos}
+                todos={filteredTodos}
                 setTodo={setSelectedTodo}
                 todoModal={todoModal}
                 setTodoModal={setTodoModal}

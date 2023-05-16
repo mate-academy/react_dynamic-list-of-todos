@@ -2,24 +2,24 @@ import React from 'react';
 
 type Props = {
   query: string;
-  setQuery: (query: string) => void;
-  sort: string;
-  setSort: (sort: string) => void;
+  onChange: (query: string) => void;
+  sortValue: string;
+  onSort: (sort: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  setQuery,
-  sort,
-  setSort,
+  onChange,
+  sortValue,
+  onSort,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={sort}
-          onChange={(event) => setSort(event.target.value)}
+          value={sortValue}
+          onChange={(event) => onSort(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -35,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => onChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -49,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => onChange('')}
             />
           )
         }
