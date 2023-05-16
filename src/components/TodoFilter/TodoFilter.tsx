@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-cycle
-import { FilterValues } from '../../App';
+import { FilterValues } from '../../types/FilterValues';
 
 type Props = {
   selectValue: string,
@@ -22,14 +21,14 @@ export const TodoFilter: React.FC<Props> = ({
           value={selectValue}
           onChange={(e) => onChangeSelect(e.target.value)}
         >
-          <option value={FilterValues.All.toLowerCase()}>
-            {FilterValues.All}
+          <option value={FilterValues.All}>
+            All
           </option>
-          <option value={FilterValues.Active.toLowerCase()}>
-            {FilterValues.Active}
+          <option value={FilterValues.Active}>
+            Active
           </option>
-          <option value={FilterValues.Completed.toLowerCase()}>
-            {FilterValues.Completed}
+          <option value={FilterValues.Completed}>
+            Completed
           </option>
         </select>
       </span>

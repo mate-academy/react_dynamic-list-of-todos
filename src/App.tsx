@@ -1,24 +1,22 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-// eslint-disable-next-line import/no-cycle
-import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodoFilter } from './components/TodoFilter';
+import { FilterValues } from './types/FilterValues';
 
 import { getTodos, getUser } from './api';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
-
-export enum FilterValues {
-  All = 'All',
-  Active = 'active',
-  Completed = 'completed',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -27,29 +25,39 @@ export const App: React.FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [isModalLoaded, setIsModalLoaded] = useState(false);
-  const [filterValue, setFilterValue] = useState(FilterValues.All.toLowerCase());
+  const [filterValue, setFilterValue]
+    = useState(FilterValues.All);
   const [query, setQuery] = useState('');
   const [hasLoadingError, setHasLoadingError] = useState(false);
-  const [loadAgain, setLoadAgain] = useState(1);
 
-  let visibleTodos = filterValue === FilterValues.All.toLowerCase()
-    ? todos
-    : todos.filter(todo => {
-      switch (filterValue) {
-        case FilterValues.Active.toLowerCase():
-          return todo.completed === false;
+  const filterTodos = () => {
+    switch (filterValue) {
+      case FilterValues.All:
+        return todos;
 
-        case FilterValues.Completed.toLowerCase():
-          return todo.completed === true;
+      case FilterValues.Active:
+        return todos.filter(todo => todo.completed);
 
-        default:
-          return todo;
-      }
-    });
+      case FilterValues.Completed:
+        return todos.filter(todo => !todo.completed);
 
-  visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+      default:
+        return todos;
+    }
+  };
 
-  function getTodosfromServer() {
+  const getVisibleTodos = () => {
+    return filterTodos().filter(
+      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  };
+
+  const visibleTodos = useMemo(
+    getVisibleTodos,
+    [todos, filterValue, query],
+  );
+
+  const getTodosfromServer = useCallback(() => {
     getTodos().then((result: Todo[]) => {
       setTodos(result);
     }).catch(() => {
@@ -57,19 +65,14 @@ export const App: React.FC = () => {
     }).finally(() => {
       setIsTodosLoaded(true);
     });
-  }
+  }, []);
 
-  useEffect(() => {
-    getTodosfromServer();
-  }, [loadAgain]);
-
-  const handleLoadAgain = () => {
+  const handleLoadAgain = useCallback(() => {
     setIsTodosLoaded(false);
-    setLoadAgain((prevState) => prevState + 1);
-  };
+  }, []);
 
   useEffect(() => {
-    if (selectedUserId !== 0) {
+    if (selectedUserId) {
       getUser(selectedUserId)
         .then((user: User) => {
           setSelectedUser(user);
@@ -85,13 +88,17 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
-  const handleFilterValue = (value: string) => {
+  const handleFilterValue = (value: FilterValues) => {
     setFilterValue(value);
   };
 
   const handleInputValue = (value: string) => {
     setQuery(value);
   };
+
+  useEffect(() => {
+    getTodosfromServer();
+  }, []);
 
   return (
     <>
@@ -115,7 +122,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectUser={handleSelectUser}
+                    onSelect={handleSelectUser}
                     hasLoadingError={hasLoadingError}
                     onAgain={handleLoadAgain}
                     selectedTodo={selectedTodo}
