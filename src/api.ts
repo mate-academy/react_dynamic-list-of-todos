@@ -25,3 +25,33 @@ function get<T>(url: string): Promise<T> {
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+
+export const getVisibleTodos = (
+  todos: Todo[],
+  selectedValue: string,
+  query: string,
+) => {
+  let visibleTodos = todos;
+
+  switch (selectedValue) {
+    case 'active':
+      visibleTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case 'completed':
+      visibleTodos = todos.filter(todo => todo.completed);
+      break;
+
+    case 'all':
+    default:
+      break;
+  }
+
+  if (query) {
+    const normalizedQuery = query.toLowerCase().trim();
+
+    return visibleTodos.filter(todo => todo.title.includes(normalizedQuery));
+  }
+
+  return visibleTodos;
+};

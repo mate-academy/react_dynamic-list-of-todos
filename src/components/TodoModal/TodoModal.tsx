@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUser } from '../../api';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todoModal: Todo | null;
+  onCloseModalButtonClick: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  todoModal,
+  onCloseModalButtonClick,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUserFromAPI = async () => {
+      try {
+        if (todoModal !== null) {
+          setUser(await getUser(todoModal.userId));
+        }
+      } catch (error) {
+        throw new Error('Error fetching user');
+      }
+    };
+
+    fetchUserFromAPI();
+  }, [todoModal]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!todoModal || !user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +42,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todoModal.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +50,26 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onCloseModalButtonClick()}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todoModal.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todoModal.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
