@@ -1,25 +1,37 @@
 import React from 'react';
+import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
   query: string;
   onChange: (query: string) => void;
-  sortValue: string;
-  onSort: (sort: string) => void;
+  selectValue: FilterBy;
+  onSelect: (sort: FilterBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onChange,
-  sortValue,
-  onSort,
+  selectValue,
+  onSelect,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={sortValue}
-          onChange={(event) => onSort(event.target.value)}
+          value={selectValue}
+          onChange={(event) => {
+            switch (event.target.value) {
+              case 'all':
+                return onSelect(FilterBy.ALL);
+              case 'completed':
+                return onSelect(FilterBy.COMPLETED);
+              case 'active':
+                return onSelect(FilterBy.ACTIVE);
+              default:
+                return onSelect(FilterBy.ALL);
+            }
+          }}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

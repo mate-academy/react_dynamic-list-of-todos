@@ -4,20 +4,13 @@ import { PrepaparedTodo } from '../../types/PreparedTodo';
 
 type Props = {
   selectedTodo: PrepaparedTodo | null;
-  setSelectedTodo: (selectedTodo: PrepaparedTodo | null) => void;
-  setTodoModal: (todoModal: boolean) => void;
+  handleCloseModal: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodo,
-  setTodoModal,
+  handleCloseModal,
 }) => {
-  const handleCloseModal = () => {
-    setTodoModal(false);
-    setSelectedTodo(null);
-  };
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

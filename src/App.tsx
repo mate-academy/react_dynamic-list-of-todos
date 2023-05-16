@@ -10,13 +10,19 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { PrepaparedTodo } from './types/PreparedTodo';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState('all');
+  const [filterBy, setFilterBy] = useState(FilterBy.ALL);
   const [selectedTodo, setSelectedTodo] = useState<PrepaparedTodo | null>(null);
-  const [todoModal, setTodoModal] = useState(false);
+  const [isModalOpen, setIsOpenModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+    setIsOpenModal(false);
+  };
 
   useEffect(() => {
     getTodos()
@@ -29,15 +35,15 @@ export const App: React.FC = () => {
     todos.filter(todo => {
       const filtered = todo.title.toLowerCase().includes(query.toLowerCase().trim());
 
-      switch (sort) {
-        case 'active':
+      switch (filterBy) {
+        case FilterBy.ACTIVE:
           return filtered && !todo.completed;
-        case 'completed':
+        case FilterBy.COMPLETED:
           return filtered && todo.completed;
         default:
           return filtered;
       }
-    })), [todos, sort, query]);
+    })), [todos, filterBy, query]);
 
   return (
     <>
@@ -50,8 +56,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onChange={setQuery}
-                sortValue={sort}
-                onSort={setSort}
+                selectValue={filterBy}
+                onSelect={setFilterBy}
               />
             </div>
 
@@ -61,19 +67,18 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 setTodo={setSelectedTodo}
-                todoModal={todoModal}
-                setTodoModal={setTodoModal}
+                isOpen={isModalOpen}
+                onOpen={setIsOpenModal}
               />
             </div>
           </div>
         </div>
       </div>
       {
-        todoModal && (
+        isModalOpen && (
           <TodoModal
             selectedTodo={selectedTodo}
-            setSelectedTodo={setSelectedTodo}
-            setTodoModal={setTodoModal}
+            handleCloseModal={handleCloseModal}
           />
         )
       }

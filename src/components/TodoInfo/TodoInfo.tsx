@@ -19,8 +19,7 @@ export const TodoInfo: React.FC<Props> = ({
     <tr data-cy="todo">
       <td className="is-vcentered">{todo.id}</td>
       <td className="is-vcentered">
-        {isSuccess
-        && (
+        {isSuccess && (
           <span className="icon" data-cy="iconCompleted">
             <i className="fas fa-check" />
           </span>

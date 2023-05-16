@@ -7,18 +7,18 @@ import { TodoInfo } from '../TodoInfo';
 type Props = {
   todos: Todo[];
   setTodo: (todo: PrepaparedTodo | null) => void;
-  todoModal: boolean;
-  setTodoModal: (todoModal: boolean) => void;
+  isOpen: boolean;
+  onOpen: (todoModal: boolean) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setTodo,
-  todoModal,
-  setTodoModal,
+  isOpen,
+  onOpen,
 }) => {
   const handleTodoOpen = (todo: Todo) => {
-    setTodoModal(true);
+    onOpen(true);
     getUser(todo.userId).then(user => setTodo({
       ...todo,
       user,
@@ -45,7 +45,7 @@ export const TodoList: React.FC<Props> = ({
           <TodoInfo
             key={todo.id}
             todo={todo}
-            todoModal={todoModal}
+            todoModal={isOpen}
             handleTodoOpen={handleTodoOpen}
           />
         ))}
