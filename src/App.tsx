@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -40,6 +40,18 @@ export const App: React.FC = () => {
     }
   });
 
+  const handleOption = useCallback((selectedFilter: string) => {
+    setOption(selectedFilter);
+  }, []);
+
+  const handleInputChange = useCallback((query: string) => {
+    setInputValue(query);
+  }, []);
+
+  const handleTodoSelect = useCallback((todo: Todo) => {
+    setSelectedTodo(todo);
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -49,10 +61,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setInputValue={setInputValue}
+                onInputChange={handleInputChange}
                 inputValue={inputValue}
                 option={option}
-                setOption={setOption}
+                onFilterChange={handleOption}
               />
             </div>
 
@@ -61,7 +73,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={visibleTodos}
                 selectedTodo={selectedTodo}
-                onTodoSelect={setSelectedTodo}
+                onTodoSelect={handleTodoSelect}
               />
             </div>
           </div>
