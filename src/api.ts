@@ -1,4 +1,5 @@
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 import { User } from './types/User';
 
 // eslint-disable-next-line max-len
@@ -25,3 +26,33 @@ function get<T>(url: string): Promise<T> {
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+
+export const getVisibleTodos = (
+  todos: Todo[],
+  selectedValue: string,
+  query: string,
+) => {
+  let visibleTodos = todos;
+
+  switch (selectedValue) {
+    case TodoStatus.Active:
+      visibleTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case TodoStatus.Completed:
+      visibleTodos = todos.filter(todo => todo.completed);
+      break;
+
+    case TodoStatus.All:
+    default:
+      break;
+  }
+
+  if (query) {
+    const normalizedQuery = query.toLowerCase().trim();
+
+    return visibleTodos.filter(todo => todo.title.includes(normalizedQuery));
+  }
+
+  return visibleTodos;
+};
