@@ -22,20 +22,15 @@ export const TodoModal: React.FC<Props> = ({
     completed,
   } = todo || {};
 
-  const loadUser = useCallback(
-    async () => {
+  const loadUser = useCallback(async () => {
       const userFromServer = userId ? await getUser(userId) : null;
 
       setUser(userFromServer);
-    }, [userId],
-  );
+    }, [userId],);
 
-  useEffect(
-    () => {
+  useEffect(() => {
       loadUser();
-    },
-    [loadUser],
-  );
+    }, [loadUser]);
 
   return (
     <div className="modal is-active" data-cy="modal">

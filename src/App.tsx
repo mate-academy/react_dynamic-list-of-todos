@@ -38,59 +38,49 @@ export const App: React.FC = () => {
         default:
           throw new Error('Unknown filter');
       }
-    }, [],
-  );
+    }, []);
 
   const handleSetQuery = useCallback(
     (event:React.ChangeEvent<HTMLInputElement>) => {
       setQuery(event.target.value.toLowerCase());
-    }, [],
-  );
+  }, []);
 
-  const resetQuery = useCallback(
-    () => {
-      setQuery('');
-    }, [],
-  );
+  const resetQuery = useCallback(() => {
+    setQuery('');
+  }, []);
 
-  const handleSetModalTodo = useCallback(
-    (todo: Todo) => {
-      setModalActiveTodo(todo);
-    }, [],
-  );
+  const handleSetModalTodo = useCallback((todo: Todo) => {
+    setModalActiveTodo(todo);
+  }, []);
 
-  const loadTodos = useCallback(
-    async () => {
-      const todosFromServer = await getTodos();
+  const loadTodos = useCallback(async () => {
+    const todosFromServer = await getTodos();
 
-      setTodos(todosFromServer);
-    }, [],
-  );
+    setTodos(todosFromServer);
+  }, []);
 
   useEffect(() => {
     loadTodos();
   }, []);
 
-  let preparedTodos = todos;
+  let preparedTodos = useMemo(() => todos, [todos]);
 
-  useMemo(() => {
-    switch (todoActiveFilter) {
-      case ActiveTodo.Active:
-        preparedTodos = preparedTodos.filter(todo => !todo.completed);
-        break;
-      case ActiveTodo.Completed:
-        preparedTodos = preparedTodos.filter(todo => todo.completed);
-        break;
-      case ActiveTodo.All:
-        break;
-      default:
-        break;
-    }
+  switch (todoActiveFilter) {
+    case ActiveTodo.Active:
+      preparedTodos = preparedTodos.filter(todo => !todo.completed);
+      break;
+    case ActiveTodo.Completed:
+      preparedTodos = preparedTodos.filter(todo => todo.completed);
+      break;
+    case ActiveTodo.All:
+      break;
+    default:
+      break;
+  }
 
-    if (query) {
-      preparedTodos = preparedTodos.filter(todo => todo.title.includes(query));
-    }
-  }, [todoActiveFilter, query]);
+  if (query) {
+    preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(query));
+  }
 
   return (
     <>
@@ -123,8 +113,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalActiveTodo
-        && (
+      {modalActiveTodo && (
           <TodoModal
             todo={modalActiveTodo}
             onClose={handleResetUser}
