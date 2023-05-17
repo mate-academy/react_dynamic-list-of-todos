@@ -78,7 +78,7 @@ export const App: React.FC = () => {
         isModalOpen && (
           <TodoModal
             selectedTodo={selectedTodo}
-            handleCloseModal={handleCloseModal}
+            onClose={handleCloseModal}
           />
         )
       }
