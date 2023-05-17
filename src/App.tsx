@@ -7,8 +7,8 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -19,9 +19,8 @@ export const App: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    setIsLoading(true);
-
-    (async () => {
+    const fetchTodos = async () => {
+      setIsLoading(true);
       try {
         const todosFromServer = await getTodos();
 
@@ -31,7 +30,9 @@ export const App: React.FC = () => {
       }
 
       setIsLoading(false);
-    })();
+    };
+
+    fetchTodos();
   }, []);
 
   const todosFilter = (
