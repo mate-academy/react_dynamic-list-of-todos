@@ -1,4 +1,5 @@
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 import { User } from './types/User';
 
 // eslint-disable-next-line max-len
@@ -34,15 +35,15 @@ export const getVisibleTodos = (
   let visibleTodos = todos;
 
   switch (selectedValue) {
-    case 'active':
+    case TodoStatus.Active:
       visibleTodos = todos.filter(todo => !todo.completed);
       break;
 
-    case 'completed':
+    case TodoStatus.Completed:
       visibleTodos = todos.filter(todo => todo.completed);
       break;
 
-    case 'all':
+    case TodoStatus.All:
     default:
       break;
   }

@@ -9,10 +9,11 @@ import { getTodos, getVisibleTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedValue, setSelectedValue] = useState('all');
+  const [selectedValue, setSelectedValue] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
   const [todoModal, setTodoModal] = useState<Todo | null>(null);
   const [isModalButtonClicked, setIsModalButtonClicked] = useState(false);
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = getVisibleTodos(todos, selectedValue, query);
 
-  const onSelectClick = (value: string) => {
+  const onSelectClick = (value: TodoStatus) => {
     setSelectedValue(value);
   };
 
