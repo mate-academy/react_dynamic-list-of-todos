@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -16,6 +16,22 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
+  const filteredTodos = useMemo(() => {
+    return visibleTodos
+      .filter(({ title }) => title.toLowerCase().includes(query.toLowerCase()))
+      .filter(({ completed }) => {
+        if (filter === 'active') {
+          return completed === false;
+        }
+
+        if (filter === 'completed') {
+          return completed === true;
+        }
+
+        return true;
+      });
+  }, [visibleTodos, query, filter]);
+
   useEffect(() => {
     getTodos()
       .then(result => setVisibleTodos(result))
@@ -23,20 +39,6 @@ export const App: React.FC = () => {
         throw new Error(`Something was wrong ${error.mesaage}`);
       });
   }, []);
-
-  const filteredTodos = visibleTodos
-    .filter(({ title }) => title.toLowerCase().includes(query.toLowerCase()))
-    .filter(({ completed }) => {
-      if (filter === 'active') {
-        return completed === false;
-      }
-
-      if (filter === 'completed') {
-        return completed === true;
-      }
-
-      return true;
-    });
 
   return (
     <>
@@ -48,9 +50,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={((chars) => setQuery(chars))}
+                onChange={((chars) => setQuery(chars))}
                 filter={filter}
-                setFilter={(category) => setFilter(category)}
+                onSelect={setFilter}
               />
             </div>
 

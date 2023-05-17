@@ -2,16 +2,16 @@ import { FC } from 'react';
 
 interface Props {
   query: string;
-  setQuery: (chars: string) => void;
+  onChange: (chars: string) => void;
   filter: string;
-  setFilter: (category: string) => void;
+  onSelect: (category: string) => void;
 }
 
 export const TodoFilter:FC<Props> = ({
   query,
-  setQuery,
+  onChange,
   filter,
-  setFilter,
+  onSelect,
 }) => {
   return (
     <form className="field has-addons">
@@ -20,7 +20,7 @@ export const TodoFilter:FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={(event) => setFilter(event.target.value)}
+            onChange={(event) => onSelect(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -36,7 +36,7 @@ export const TodoFilter:FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -49,7 +49,7 @@ export const TodoFilter:FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => onChange('')}
             />
           </span>
         )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 import { Todo } from '../../types/Todo';
 
@@ -31,67 +31,14 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
 
-        {visibleTodos.map(todo => {
-          const { id, title, completed } = todo;
-
-          return (
-            <tr
-              data-cy="todo"
-              className=""
-              key={id}
-            >
-              <td className="is-vcentered">
-                {id}
-              </td>
-              <td className="is-vcentered" />
-
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-
-              <td className="is-vcentered is-expanded">
-                <p className={classNames({
-                  'has-text-success': completed,
-                  'has-text-danger': !completed,
-                })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                {selectedTodo?.id === id
-                  ? (
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={() => setSelectedTodo(null)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye-slash" />
-                      </span>
-                    </button>
-                  )
-                  : (
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={() => setSelectedTodo(todo)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye" />
-                      </span>
-                    </button>
-                  )}
-              </td>
-            </tr>
-          );
-        })}
+        {visibleTodos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            setSelectedTodo={setSelectedTodo}
+            selectedTodo={selectedTodo}
+          />
+        ))}
       </tbody>
     </table>
   );
