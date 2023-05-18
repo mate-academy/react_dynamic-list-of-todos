@@ -5,7 +5,6 @@ type Props = {
   setSelectedFilterValue: (completed: string) => void,
   setSearchValue: (completed: string) => void,
   searchValue: string,
-  clear: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,7 +12,6 @@ export const TodoFilter: React.FC<Props> = ({
   setSelectedFilterValue,
   setSearchValue,
   searchValue,
-  clear,
 }) => {
   const handlerChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilterValue(event.target.value);
@@ -21,6 +19,10 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handlerChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue('');
   };
 
   return (
@@ -62,7 +64,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => clear()}
+              onClick={handleClearSearch}
             />
           </span>
         )}

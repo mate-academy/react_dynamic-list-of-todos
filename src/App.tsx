@@ -17,16 +17,6 @@ export const App: React.FC = () => {
   const [selectedFilterValue, setSelectedFilterValue] = useState('all');
   const [searchValue, setSearchValue] = useState('');
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    getTodos()
-      .then(todos => {
-        setTodosFromServer(todos);
-        setIsLoaded(true);
-      })
-      .catch(errorMessage => setError(`smth happens - ${errorMessage}`))
-      .finally(() => setIsLoaded(true));
-  }, []);
   const getActiveTodo = (todo: Todo) => {
     setSelectedTodo(todo);
   };
@@ -43,9 +33,15 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const clearSearch = () => {
-    setSearchValue('');
-  };
+  useEffect(() => {
+    getTodos()
+      .then(todos => {
+        setTodosFromServer(todos);
+        setIsLoaded(true);
+      })
+      .catch(errorMessage => setError(`smth happens - ${errorMessage}`))
+      .finally(() => setIsLoaded(true));
+  }, []);
 
   return (
     <>
@@ -60,7 +56,6 @@ export const App: React.FC = () => {
                 setSelectedFilterValue={setSelectedFilterValue}
                 setSearchValue={setSearchValue}
                 searchValue={searchValue}
-                clear={clearSearch}
               />
             </div>
 
