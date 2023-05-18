@@ -4,6 +4,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -15,14 +16,15 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
 import { User } from './types/User';
+import { Filter } from './types/Filter';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [isModalShown, setIsModalShown] = useState<boolean>(false);
-  const [filterBy, setFilterBy] = useState<string>('all');
+  const [hasError, setHasError] = useState(false);
+  const [isModalShown, setIsModalShown] = useState(false);
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState<string>('');
 
   const loadTodos = useCallback(async () => {
@@ -33,10 +35,6 @@ export const App: FC = () => {
     } catch {
       setHasError(true);
     }
-  }, []);
-
-  useEffect(() => {
-    loadTodos();
   }, []);
 
   const handleShowModal = (userId: number, todo: Todo) => {
@@ -53,24 +51,28 @@ export const App: FC = () => {
     setSelectedTodo(null);
   };
 
-  const filterTodos = todos.filter(todo => {
-    const formattedQuery = query.trim().toLowerCase();
-    const matchesQuery = todo.title.toLowerCase().includes(formattedQuery);
+  const filterTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const formattedQuery = query.trim().toLowerCase();
+      const matchesQuery = todo.title.toLowerCase().includes(formattedQuery);
 
-    switch (filterBy) {
-      case 'completed':
-        return matchesQuery && todo.completed;
+      switch (filterBy) {
+        case Filter.Completed:
+          return matchesQuery && todo.completed;
 
-      case 'active':
-        return matchesQuery && !todo.completed;
+        case Filter.Active:
+          return matchesQuery && !todo.completed;
 
-      case 'all':
-      default:
-        return matchesQuery;
-    }
-  });
+        case Filter.All:
+        default:
+          return matchesQuery;
+      }
+    });
+  }, [todos, filterBy, query]);
 
-  const visibleTodos = filterTodos;
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   return (
     <>
@@ -82,9 +84,9 @@ export const App: FC = () => {
             <div className="block">
               <TodoFilter
                 filterBy={filterBy}
-                setFilterBy={setFilterBy}
+                onSelect={setFilterBy}
                 query={query}
-                setQuery={setQuery}
+                onChange={setQuery}
               />
             </div>
 
@@ -97,7 +99,7 @@ export const App: FC = () => {
               {(todos.length > 0)
                 ? (
                   <TodoList
-                    todos={visibleTodos}
+                    todos={filterTodos}
                     selectedTodo={selectedTodo}
                     showModal={handleShowModal}
                   />
@@ -112,7 +114,7 @@ export const App: FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           selectedUser={selectedUser}
-          hideModal={handleHideModal}
+          onClose={handleHideModal}
         />
       )}
     </>

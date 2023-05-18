@@ -1,17 +1,18 @@
 import { FC } from 'react';
+import { Filter } from '../../types/Filter';
 
 interface Props {
-  filterBy: string;
-  setFilterBy: (filterBy: string) => void;
+  filterBy: Filter;
+  onSelect: (filterBy: Filter) => void;
   query: string;
-  setQuery: (query: string) => void;
+  onChange: (query: string) => void;
 }
 
 export const TodoFilter: FC<Props> = ({
   filterBy,
-  setFilterBy,
+  onSelect,
   query,
-  setQuery,
+  onChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -19,11 +20,11 @@ export const TodoFilter: FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filterBy}
-          onChange={(event) => setFilterBy(event.target.value)}
+          onChange={(event) => onSelect(event.target.value as Filter)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Filter.All}>{Filter.All}</option>
+          <option value={Filter.Active}>{Filter.Active}</option>
+          <option value={Filter.Completed}>{Filter.Completed}</option>
         </select>
       </span>
     </p>
@@ -35,7 +36,7 @@ export const TodoFilter: FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => onChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -48,7 +49,7 @@ export const TodoFilter: FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={() => onChange('')}
           />
         )}
       </span>

@@ -6,13 +6,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   selectedUser: User | null;
   selectedTodo: Todo | null;
-  hideModal: () => void;
+  onClose: () => void;
 }
 
 export const TodoModal: FC<Props> = ({
   selectedUser,
   selectedTodo,
-  hideModal,
+  onClose,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -35,7 +35,7 @@ export const TodoModal: FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={hideModal}
+              onClick={onClose}
             />
           </header>
 
