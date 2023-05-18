@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
 import { User } from './types/User';
+import { Sort } from './utils/enums';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,7 +24,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, sethasError] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const loadTodos = useCallback(async () => {
     try {
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
       setIsLoading(false);
       setTodos(todoList);
     } catch {
-      sethasError(true);
+      setHasError(true);
     }
   }, []);
 
@@ -53,12 +54,12 @@ export const App: React.FC = () => {
   };
 
   const filterTodos = todos.filter(todo => {
-    const intutFilter = todo.title.toLowerCase().includes(query.trim().toLowerCase());
+    const inputFilter = todo.title.toLowerCase().includes(query.trim().toLowerCase());
 
     switch (sort) {
-      case 'active': return intutFilter && !todo.completed;
-      case 'completed': return intutFilter && todo.completed;
-      default: return intutFilter;
+      case Sort.Active: return inputFilter && !todo.completed;
+      case Sort.Completed: return inputFilter && todo.completed;
+      default: return inputFilter;
     }
   });
 
