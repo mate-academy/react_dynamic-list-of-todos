@@ -1,8 +1,9 @@
 import React from 'react';
+import { SelectValues } from '../../types/SelectValues';
 
 type Props = {
   selectedFilterValue: string,
-  setSelectedFilterValue: (completed: string) => void,
+  setSelectedFilterValue: (value: SelectValues) => void,
   setSearchValue: (completed: string) => void,
   searchValue: string,
 };
@@ -14,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   searchValue,
 }) => {
   const handlerChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFilterValue(event.target.value);
+    setSelectedFilterValue(event.target.value as SelectValues);
   };
 
   const handlerChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,9 +35,16 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedFilterValue}
             onChange={handlerChangeSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {
+              Object.entries(SelectValues).map(([key, value]) => (
+                <option
+                  key={key}
+                  value={value}
+                >
+                  {key}
+                </option>
+              ))
+            }
           </select>
         </span>
       </p>

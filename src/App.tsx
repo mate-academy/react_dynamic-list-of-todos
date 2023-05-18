@@ -9,12 +9,14 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { filteringBySearch, filteringBySelect } from './utils/todosFiltering';
+import { SelectValues } from './types/SelectValues';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedFilterValue, setSelectedFilterValue] = useState('all');
+  const [selectedFilterValue,
+    setSelectedFilterValue] = useState(SelectValues.All);
   const [searchValue, setSearchValue] = useState('');
   const [error, setError] = useState('');
   const getActiveTodo = (todo: Todo) => {

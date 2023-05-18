@@ -1,11 +1,12 @@
 import { Todo } from '../types/Todo';
+import { SelectValues } from '../types/SelectValues';
 
 export const filteringBySelect = (todos: Todo[], value: string) => {
   return todos.filter(todo => {
-    switch (value) {
-      case 'completed':
+    switch (value as SelectValues) {
+      case SelectValues.Completed:
         return todo.completed;
-      case 'active':
+      case SelectValues.Active:
         return !todo.completed;
       default:
         return true;
