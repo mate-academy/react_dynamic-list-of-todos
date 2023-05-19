@@ -9,11 +9,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterOption } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<FilterOption>(FilterOption.All);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -44,10 +45,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
-                setFilter={setFilter}
                 value={query}
                 setValue={setQuery}
+                onChangeOption={setFilter}
               />
             </div>
 

@@ -17,8 +17,10 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     getUser(currentTodo.userId)
-      .then((currentUser: any) => setUser(currentUser));
+      .then((currentUser) => setUser(currentUser));
   });
+
+  const { id, title, completed } = currentTodo;
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -33,11 +35,11 @@ export const TodoModal: React.FC<Props> = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${currentTodo.id}`}
+                {`Todo #${id}`}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
+                aria-label="delete"
                 type="button"
                 className="delete"
                 data-cy="modal-close"
@@ -47,11 +49,11 @@ export const TodoModal: React.FC<Props> = ({
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {currentTodo.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                {currentTodo.completed
+                {completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
 
