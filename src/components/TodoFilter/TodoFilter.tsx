@@ -1,10 +1,11 @@
 import React from 'react';
+import { Option } from '../../types/Option';
 
 type Props = {
   onInputChange: (inputValue: string) => void;
   inputValue: string;
   option: string;
-  onFilterChange: (option: string) => void;
+  onFilterChange: (option: Option) => void;
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(
@@ -20,7 +21,7 @@ export const TodoFilter: React.FC<Props> = React.memo(
           <select
             data-cy="statusSelect"
             value={option}
-            onChange={(event) => onFilterChange(event.target.value)}
+            onChange={(event) => onFilterChange(event.target.value as Option)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

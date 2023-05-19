@@ -1,9 +1,12 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useState, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Option } from './types/Option';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -12,35 +15,30 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [option, setOption] = useState('all');
+  const [option, setOption] = useState(Option.All);
 
-  useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(error => `${error} error in TODO's data`)
-      .finally(() => setIsLoading(false));
+  const handleModalClose = useCallback(() => {
+    setSelectedTodo(null);
   }, []);
 
-  const handleModalClose = () => {
-    setSelectedTodo(null);
-  };
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const input = todo.title.toLowerCase().includes(inputValue.toLowerCase().trim());
 
-  const visibleTodos = todos.filter(todo => {
-    const input = todo.title.toLowerCase().includes(inputValue.toLowerCase().trim());
+      switch (option) {
+        case Option.Active:
+          return input && !todo.completed;
+        case Option.Complited:
+          return input && todo.completed;
+        default:
+          return input;
+      }
+    });
+  }, [todos, option, inputValue]);
 
-    switch (option) {
-      case 'active':
-        return input && !todo.completed;
-      case 'completed':
-        return input && todo.completed;
-      default:
-        return input;
-    }
-  });
-
-  const handleOption = useCallback((selectedFilter: string) => {
+  const handleOption = useCallback((selectedFilter: Option) => {
     setOption(selectedFilter);
   }, []);
 
@@ -50,6 +48,13 @@ export const App: React.FC = () => {
 
   const handleTodoSelect = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
+  }, []);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .catch(error => `${error} error in TODO's data`)
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -70,6 +75,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
+
               <TodoList
                 todos={visibleTodos}
                 selectedTodo={selectedTodo}
@@ -81,7 +87,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} handleModalClose={handleModalClose} />
+        <TodoModal selectedTodo={selectedTodo} onClose={handleModalClose} />
       )}
     </>
   );
