@@ -29,8 +29,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeDetails }) => {
       .then(user => {
         setSelectedUser(user);
         setIsLoaded(true);
-      })
-      .catch(error => `${error}`);
+      });
   }, [userId]);
 
   return (
@@ -56,9 +55,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeDetails }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => {
-                  closeDetails();
-                }}
+                onClick={closeDetails}
               />
             </header>
 
@@ -73,7 +70,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeDetails }) => {
                   : <strong className="has-text-danger">Planned</strong>}
                 {' by '}
 
-                <a href={selectedUser.email}>
+                <a href={`mailto: ${selectedUser.email}`}>
                   {selectedUser.name}
                 </a>
               </p>
