@@ -1,12 +1,14 @@
+import { SELECT } from '../../types/SELECT';
+
 type Props = {
-  onChangeSelect: (value: string) => void,
+  onChangeSelect: (value: SELECT) => void,
   value: string,
-  onChangeSearchValue: (value: string) => void,
+  onSearchValue: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onChangeSelect,
-  onChangeSearchValue,
+  onSearchValue,
   value,
 }) => (
   <form className="field has-addons">
@@ -14,11 +16,13 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(e) => onChangeSelect(e.target.value)}
+          onChange={(e) => {
+            onChangeSelect(SELECT[e.target.value as keyof typeof SELECT]);
+          }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.entries(SELECT).map(item => {
+            return <option value={item[0]}>{item[1]}</option>;
+          })}
         </select>
       </span>
     </p>
@@ -30,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={value}
-        onChange={(e) => onChangeSearchValue(e.target.value)}
+        onChange={(e) => onSearchValue(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -43,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => onChangeSearchValue('')}
+            onClick={() => onSearchValue('')}
           />
         </span>
       )}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -12,7 +12,7 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ currentTodo, resetTodo }) => {
   const [user, setUser] = useState<User>();
 
-  useMemo(() => {
+  useEffect(() => {
     if (currentTodo) {
       getUser(currentTodo.userId).then((item) => setUser(item));
     }
@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({ currentTodo, resetTodo }) => {
 
                 {' by '}
 
-                <a href={user?.email}>
+                <a href={`mailto:${user?.email}`}>
                   {user?.name}
                 </a>
               </p>

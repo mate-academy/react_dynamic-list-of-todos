@@ -8,24 +8,27 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { SELECT } from './types/SELECT';
 import { getTodos } from './api';
 
+const { ALL, ACTIVE } = SELECT;
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [searchValue, setSearchValue] = useState('');
-  const [selectValue, setSelectValue] = useState('all');
+  const [selectValue, setSelectValue] = useState(ALL);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
-  const todoFilter = (): Todo[] | void => {
-    const result = selectValue === 'all'
+  const todoFilter = (): Todo[] | [] => {
+    const result = selectValue === ALL
       ? todos
       : todos?.filter(todo => {
-        return selectValue === 'active' ? !todo.completed : todo.completed;
+        return selectValue === ACTIVE ? !todo.completed : todo.completed;
       });
 
     return result ? result.filter(todo => todo.title.replace(' ', '').toLowerCase()
       .includes(searchValue.toLowerCase().trim()))
-      : undefined;
+      : [];
   };
 
   useEffect(() => {
@@ -33,8 +36,11 @@ export const App: React.FC = () => {
   }, []);
 
   const todoFilterList = todoFilter();
-  const onChangeSelect = (value: string) => setSelectValue(value);
-  const onChangeSearchValue = (value: string) => setSearchValue(value);
+  const handleChangeSelect = (value: SELECT) => {
+    setSelectValue(value);
+  };
+
+  const handleSearchValue = (value: string) => setSearchValue(value);
 
   return (
     <>
@@ -45,14 +51,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeSelect={onChangeSelect}
+                onChangeSelect={handleChangeSelect}
                 value={searchValue}
-                onChangeSearchValue={onChangeSearchValue}
+                onSearchValue={handleSearchValue}
               />
             </div>
 
             <div className="block">
-              {!todoFilterList
+              {!todoFilterList.length
                 ? <Loader />
                 : (
                   <TodoList
