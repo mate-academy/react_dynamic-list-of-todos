@@ -1,22 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
+import cn from 'classnames';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+interface PropsTodoList {
+  todos: Todo[];
+  openModal(todo: Todo): void;
+  reset: Todo | null;
+}
 
-    <tbody>
-      <tr data-cy="todo" className="">
+export const TodoList: React.FC<PropsTodoList> = ({
+  todos,
+  openModal,
+  reset,
+}) => {
+  const [selectedId, setSelectedId] = useState(0);
+
+  const handleClickEyeButton = (todo: Todo) => {
+    setSelectedId(todo.id);
+
+    openModal(todo);
+  };
+
+  if (selectedId !== 0 && reset === null) {
+    setSelectedId(0);
+  }
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {todos.map(todo => (
+          <tr
+            data-cy="todo"
+            className={
+              cn({ 'has-background-info-light': selectedId === todo.id })
+            }
+            key={todo.id}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              <span className="icon" data-cy="iconCompleted">
+                <i className={cn({
+                  'fas fa-check': todo.completed,
+                })}
+                />
+              </span>
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p className={cn({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => handleClickEyeButton(todo)}
+              >
+                <span
+                  className="icon"
+                >
+                  <i className="far fa-eye" />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
+        {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -75,26 +142,8 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+      </tr> */}
+      </tbody>
+    </table>
+  );
+};
