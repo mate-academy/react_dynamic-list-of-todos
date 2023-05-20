@@ -17,7 +17,6 @@ export const TodoModal: React.FC<PropsTodoModal> = ({
 
   const handleClose = () => {
     setTodoWithUser(null);
-
     resetTodoModal(null);
   };
 
