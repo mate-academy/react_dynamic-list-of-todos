@@ -60,7 +60,7 @@ export const App: React.FC = () => {
     }
 
     return newTodo;
-  }, [todos, selectCompleted]);
+  }, [todos, selectCompleted, query]);
 
   return (
     <>
