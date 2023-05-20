@@ -53,9 +53,7 @@ export const App: React.FC = () => {
       newTodo = newTodo.filter(todo => Boolean(todo.completed));
     }
 
-    const queryTrimed = query.trim()
-      .split(' ').filter(Boolean).join(' ')
-      .toLowerCase();
+    const queryTrimed = query.trim().toLowerCase();
 
     if (query) {
       newTodo = newTodo.filter(todo => todo.title.toLowerCase().includes(queryTrimed));
