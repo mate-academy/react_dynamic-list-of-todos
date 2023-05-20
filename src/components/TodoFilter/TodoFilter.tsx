@@ -13,6 +13,11 @@ export const TodoFilter = ({ handleSelect, searchQuery }: PropsTodoFilter) => {
     setInputValue(word);
   };
 
+  const handleResetInput = () => {
+    searchQuery('');
+    setInputValue('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -42,12 +47,15 @@ export const TodoFilter = ({ handleSelect, searchQuery }: PropsTodoFilter) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {inputValue && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleResetInput}
+            />
+          )}
         </span>
       </p>
     </form>

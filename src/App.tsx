@@ -53,10 +53,12 @@ export const App: React.FC = () => {
       newTodo = newTodo.filter(todo => Boolean(todo.completed));
     }
 
-    const queryTrimed = query.trim().split('').filter(Boolean).join('');
+    const queryTrimed = query.trim()
+      .split(' ').filter(Boolean).join(' ')
+      .toLowerCase();
 
     if (query) {
-      newTodo = newTodo.filter(todo => todo.title.includes(queryTrimed));
+      newTodo = newTodo.filter(todo => todo.title.toLowerCase().includes(queryTrimed));
     }
 
     return newTodo;
