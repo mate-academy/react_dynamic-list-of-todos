@@ -51,11 +51,13 @@ export const TodoList: React.FC<PropsTodoList> = ({
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                {todo.completed && (
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  (
                   <i className="fas fa-check" />
-                )}
-              </span>
+                  )
+                </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p className={cn({
