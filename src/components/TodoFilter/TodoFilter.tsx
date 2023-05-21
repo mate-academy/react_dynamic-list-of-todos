@@ -1,11 +1,29 @@
-export const TodoFilter = () => (
+import { SortEnum } from '../../types/sort';
+
+type TodoFilterProprs = {
+  select:SortEnum;
+  setSelect:React.Dispatch<React.SetStateAction<SortEnum>>;
+  search:string;
+  setSearch:React.Dispatch<React.SetStateAction<string>>;
+};
+
+export const TodoFilter: React.FC<TodoFilterProprs> = ({
+  select,
+  setSelect,
+  search,
+  setSearch,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={select}
+          onChange={(e) => setSelect(e.target.value as SortEnum)}
+        >
+          <option value={SortEnum.ALL}>All</option>
+          <option value={SortEnum.ACTIVE}>Active</option>
+          <option value={SortEnum.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,19 +34,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {search && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setSearch('')}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
