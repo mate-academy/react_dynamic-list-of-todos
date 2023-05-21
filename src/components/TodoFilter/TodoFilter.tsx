@@ -2,7 +2,7 @@ import { ChangeEvent, FC, memo } from 'react';
 import { CompletedStatus } from '../../types/CompletedStatus';
 
 interface Props {
-  onChangeInput: (event: ChangeEvent<HTMLInputElement> | string) => void;
+  onChangeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   query: string;
   onClearInput: () => void;
   onSelectedStatus: (completedStatus: CompletedStatus) => void;

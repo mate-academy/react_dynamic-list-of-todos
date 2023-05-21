@@ -12,7 +12,7 @@ export const TodoItem: FC<Props> = ({
   todo,
   onSelectedTodo,
   selectedTodoId,
-}: Props) => {
+}) => {
   return (
     <>
       <td className="is-vcentered">{todo.id}</td>

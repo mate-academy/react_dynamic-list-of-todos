@@ -24,10 +24,8 @@ export const App: FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<CompletedStatus>(CompletedStatus.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement> | string) => {
-    if (typeof event !== 'string') {
-      setQuery(event.target.value);
-    }
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
   }, []);
 
   const handleClearInput = useCallback(() => setQuery(''), []);
@@ -36,30 +34,29 @@ export const App: FC = () => {
     setSelectedTodo(inputedTodo);
   }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  let vissibleTodos = useMemo(() => todos.filter(todoItem => {
+  const vissibleTodos = useMemo(() => todos.filter(({ completed }) => {
+    switch (selectedStatus) {
+      case CompletedStatus.Active:
+        return !completed;
+
+      case CompletedStatus.Completed:
+        return completed;
+
+      case CompletedStatus.All:
+        return true;
+
+      default: return false;
+    }
+  }).filter(todo => {
     const lowerQuery = query.toLowerCase().trim();
-    const lowerTitle = todoItem.title.toLowerCase();
+    const lowerTitle = todo.title.toLowerCase();
 
     return lowerTitle.includes(lowerQuery);
-  }), [todos, query]);
-
-  if (selectedStatus !== CompletedStatus.All) {
-    vissibleTodos = vissibleTodos.filter(({ completed }) => {
-      switch (selectedStatus) {
-        case CompletedStatus.Active:
-          return !completed;
-
-        case CompletedStatus.Completed:
-          return completed;
-
-        default: return null;
-      }
-    });
-  }
+  }), [todos, query, selectedStatus]);
 
   useEffect(() => {
     getTodos().then(data => {
