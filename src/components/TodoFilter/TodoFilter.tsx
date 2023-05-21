@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   handleSearchQuery: (query: string) => void
@@ -8,10 +8,10 @@ interface Props {
 
 export const TodoFilter: React.FC<Props> = ({ handleSearchQuery, handleSelectQuery }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectQuery, setSelectQuery] = useState('All');
+  const [selectQuery, setSelectQuery] = useState('all');
 
   const getSearchQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleSearchQuery(event.target.value.toLocaleLowerCase());
+    handleSearchQuery(event.target.value.toLowerCase());
     setSearchQuery(event.target.value);
   };
 

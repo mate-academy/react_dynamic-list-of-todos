@@ -22,7 +22,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, handleClose }) => {
     () => {
       loadUser();
     },
-    [],
+    [selectedTodo],
   );
 
   return (

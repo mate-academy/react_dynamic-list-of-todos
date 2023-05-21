@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,6 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -34,11 +34,11 @@ export const App: React.FC = () => {
 
   const todosFilter = (currentTodos: Todo[]) => {
     switch (selectQuery) {
-      case 'all':
+      case Filter.All:
         return currentTodos;
-      case 'active':
+      case Filter.Active:
         return currentTodos.filter(todo => !todo.completed);
-      case 'completed':
+      case Filter.Completed:
         return currentTodos.filter(todo => todo.completed);
       default:
         return currentTodos;
@@ -69,18 +69,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter handleSearchQuery={handleSearchQuery} handleSelectQuery={handleSelecthQuery} />
+              <TodoFilter
+                handleSearchQuery={handleSearchQuery}
+                handleSelectQuery={handleSelecthQuery}
+              />
             </div>
 
             <div className="block">
               {todos.length < 1 ? <Loader />
-                : <TodoList selectedTodoId={selectedTodoId} todos={filteredTodos} handleSelectTodo={handleSelectTodoId} />}
+                : (
+                  <TodoList
+                    selectedTodoId={selectedTodoId}
+                    todos={filteredTodos}
+                    handleSelectTodo={handleSelectTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} handleClose={handleClose} />}
+      {selectedTodo
+        && (
+          <TodoModal
+            selectedTodo={selectedTodo}
+            handleClose={handleClose}
+          />
+        )}
     </>
   );
 };
