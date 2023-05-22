@@ -15,7 +15,6 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isTodoSelected, setIsTodoSelected] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -26,21 +25,17 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  const handleSelectTodo = (todoId: number) => {
-    setSelectedTodoId(todoId);
+  const handleSelectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
     setIsTodoSelected(true);
-    const foundTodo = todos.find(todo => todo.id === todoId) || null;
 
-    setSelectedTodo(foundTodo);
-
-    const userId = todos.find(todo => todo.id === todoId)?.userId || 0;
+    const userId = todos.find(todoToFind => todoToFind.id === todo.id)?.userId || 0;
 
     getUser(userId).then(setUser);
   };
 
   const handleCloseModal = useCallback(() => {
     setIsTodoSelected(false);
-    setSelectedTodoId(null);
     setUser(null);
     setSelectedTodo(null);
   }, []);
@@ -89,7 +84,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     selectTodo={handleSelectTodo}
-                    selectedTodoId={selectedTodoId}
+                    selectedTodo={selectedTodo}
                   />
                 )}
             </div>
