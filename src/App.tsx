@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,21 +28,21 @@ export const App: React.FC = () => {
     loadGoods();
   }, [todos]);
 
-  const openModal = (todo: Todo) => {
+  const openModal = useCallback((todo: Todo) => {
     setTodoModal(todo);
-  };
+  }, []);
 
-  const resetTodoModal = (reset: null) => {
+  const resetTodoModal = useCallback((reset: null) => {
     setTodoModal(reset);
-  };
+  }, []);
 
-  const handleSelect = (e: string) => {
+  const handleSelect = useCallback((e: string) => {
     setSelectCompleted(e);
-  };
+  }, []);
 
-  const searchQuery = (word: string) => {
+  const searchQuery = useCallback((word: string) => {
     setQuery(word);
-  };
+  }, []);
 
   const filteredTodos = useMemo(() => {
     let newTodo = todos;

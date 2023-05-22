@@ -7,9 +7,6 @@ export interface Todo {
   userId: number;
 }
 
-export interface TodoWithUser {
-  id: number;
-  title: string;
-  completed: boolean;
+export interface TodoWithUser extends Omit<Todo, 'userId'>{
   user: User | null;
 }
