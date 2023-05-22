@@ -1,14 +1,78 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [search, setSearch] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedModal, setSeletedModal] = useState<number>(0);
+
+  useEffect(() => {
+    // eslint-disable-next-line max-len
+    fetch('https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json')
+      .then(response => response.json())
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (search.length === 0 && selectedFilter.length === 0) {
+      setFilteredTodos(todos);
+    } else {
+      setFilteredTodos(todos.filter(todo => {
+        const titleMatch = todo.title.toLowerCase().includes(search.toLowerCase());
+        const filterMatch = selectedFilter.length === 0
+          || (selectedFilter === 'active' && todo.completed === false)
+          || (selectedFilter === 'completed' && todo.completed === true)
+          || (selectedFilter === 'all' && true);
+
+        return titleMatch && filterMatch;
+      }));
+    }
+  }, [search, selectedFilter]);
+
+  const showModal = (todo: Todo) => {
+    setIsModalOpen(true);
+    setSelectedTodo(todo);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSeletedModal(0);
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setSearch(value);
+  };
+
+  const handleSearchClear = () => {
+    setSearch('');
+  };
+
+  const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const option = event.target.value;
+
+    setSelectedFilter(option);
+  };
+
+  const handleHide = (id: number) => {
+    setSeletedModal(id);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +81,28 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                select={handleSelectFilter}
+                search={handleSearch}
+                value={search}
+                clearSearch={handleSearchClear}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0 && <Loader />}
+              <TodoList
+                todos={filteredTodos}
+                showModal={showModal}
+                handleHide={handleHide}
+                selectedModal={selectedModal}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isModalOpen && <TodoModal todo={selectedTodo} closeModal={closeModal} />}
     </>
   );
 };
