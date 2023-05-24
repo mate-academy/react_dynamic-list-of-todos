@@ -1,12 +1,30 @@
-import React from 'react';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+import { Todo } from '../../types/Todo';
+
+import { useUser } from '../../hooks/useUser';
+
+type TodoModalProps = {
+  todo: Todo;
+  onClose: () => void;
+};
+
+export const TodoModal = ({
+  todo: {
+    id,
+    title,
+    completed,
+    userId,
+  },
+  onClose,
+}: TodoModalProps) => {
+  const user = useUser(userId);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +33,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +41,26 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {
+                completed
+                  ? <strong className="has-text-success">Done</strong>
+                  : <strong className="has-text-danger">Planned</strong>
+              }
 
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user?.name}
               </a>
             </p>
           </div>
