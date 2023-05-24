@@ -1,43 +1,44 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoItem } from '../TodoItem/TodoItem';
+import { TodoComponent } from '../TodoComponent/TodoComponent';
 
 type Props = {
-  todos: Todo[],
+  todos: Todo[];
   selectedTodo: Todo | null;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onTodoSelected: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
-  setSelectedTodo,
-}) => {
-  return (
-    <table className="table is-narrow is-fullwidth">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>
-            <span className="icon">
-              <i className="fas fa-check" />
-            </span>
-          </th>
-          <th>Title</th>
-          <th> </th>
-        </tr>
-      </thead>
+  onTodoSelected,
+}) => (
+  <table className="table is-narrow is-fullwidth">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>
+          <span className="icon">
+            <i className="fas fa-check" />
+          </span>
+        </th>
+        <th>Title</th>
+        <th> </th>
+      </tr>
+    </thead>
 
-      <tbody>
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
+    <tbody>
+      {todos.map(todo => {
+        const isSelectedTodo = selectedTodo === todo;
+
+        return (
+          <TodoComponent
             todo={todo}
-            selectedTodo={selectedTodo}
-            setSelectedTodo={setSelectedTodo}
+            isSelectedTodo={isSelectedTodo}
+            onTodoSelected={onTodoSelected}
           />
-        ))}
-      </tbody>
-    </table>
-  );
-};
+        );
+      })}
+    </tbody>
+  </table>
+);
