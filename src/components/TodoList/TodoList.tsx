@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   selectedTodo: Todo | null;
-  openModal: (todo: Todo, userId: number) => void;
+  onOpen: (todo: Todo, userId: number) => void;
 }
 
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
   selectedTodo,
-  openModal,
+  onOpen,
 }) => {
   return (
     <div className="block">
@@ -35,7 +35,7 @@ export const TodoList: React.FC<Props> = React.memo(({
               key={todo.id}
               todo={todo}
               selectedTodo={selectedTodo}
-              openModal={openModal}
+              onOpen={onOpen}
             />
           ))}
         </tbody>

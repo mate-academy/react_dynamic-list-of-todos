@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todo: Todo;
   selectedTodo: Todo | null;
-  openModal: (todo: Todo, userId: number) => void;
+  onOpen: (todo: Todo, userId: number) => void;
 }
 
 export const TodoString: React.FC<Props> = ({
   todo,
   selectedTodo,
-  openModal,
+  onOpen,
 }) => {
   const {
     id,
@@ -49,7 +49,7 @@ export const TodoString: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => openModal(todo, userId)}
+          onClick={() => onOpen(todo, userId)}
         >
           <span className="icon">
             <i className={cn(selectedTodo

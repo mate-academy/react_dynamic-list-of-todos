@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,11 +23,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState(TodosFilter.ALL);
-  const [query, setQuery] = useState<string>('');
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [query, setQuery] = useState('');
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadTodos = useCallback(async () => {
     try {
@@ -38,30 +44,32 @@ export const App: React.FC = () => {
     loadTodos();
   }, [loadTodos]);
 
-  const openModal = useCallback((todo: Todo, userId: number) => {
+  const handleOpen = useCallback((todo: Todo, userId: number) => {
     setIsModalOpen(true);
     getUser(userId).then((user) => setSelectedUser(user));
     setSelectedTodo(todo);
   }, []);
 
-  const closeModal = useCallback(() => {
+  const handleClose = useCallback(() => {
     setIsModalOpen(false);
     setSelectedTodo(null);
     setSelectedUser(null);
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    const inputFilter = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const inputFilter = todo.title.toLowerCase().includes(query.toLowerCase().trim());
 
-    switch (filter) {
-      case TodosFilter.COMPLETED:
-        return todo.completed && inputFilter;
-      case TodosFilter.ACTIVE:
-        return !todo.completed && inputFilter;
-      default:
-        return inputFilter;
-    }
-  });
+      switch (filter) {
+        case TodosFilter.COMPLETED:
+          return todo.completed && inputFilter;
+        case TodosFilter.ACTIVE:
+          return !todo.completed && inputFilter;
+        default:
+          return inputFilter;
+      }
+    });
+  }, [todos, query, filter]);
 
   return (
     <>
@@ -84,7 +92,7 @@ export const App: React.FC = () => {
             { !isLoading && !isError && (
               <TodoList
                 todos={filteredTodos}
-                openModal={openModal}
+                onOpen={handleOpen}
                 selectedTodo={selectedTodo}
               />
             )}
@@ -96,7 +104,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           user={selectedUser}
-          closeModal={closeModal}
+          onClose={handleClose}
         />
       )}
     </>
