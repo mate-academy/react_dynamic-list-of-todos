@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 import React, {
   useEffect,
   useState,
@@ -58,7 +56,9 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
-      const inputFilter = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+      const inputFilter = todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase().trim());
 
       switch (filter) {
         case TodosFilter.COMPLETED:
@@ -81,14 +81,16 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                onChange={setQuery}
                 filter={filter}
-                setFilter={setFilter}
+                onSelect={setFilter}
               />
             </div>
 
             { isLoading && <Loader /> }
-            { isError && <p className="has-text-danger">Something went wrong...</p> }
+            { isError && (
+              <p className="has-text-danger">Something went wrong...</p>
+            ) }
             { !isLoading && !isError && (
               <TodoList
                 todos={filteredTodos}

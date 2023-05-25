@@ -29,6 +29,7 @@ export const TodoString: React.FC<Props> = ({
       })}
     >
       <td className="is-vcentered">{id}</td>
+
       <td className="is-vcentered">
         {completed && (
           <span className="icon" data-cy="iconCompleted">
@@ -36,6 +37,7 @@ export const TodoString: React.FC<Props> = ({
           </span>
         )}
       </td>
+
       <td className="is-vcentered is-expanded">
         <p className={cn(completed
           ? 'has-text-success'
@@ -44,6 +46,7 @@ export const TodoString: React.FC<Props> = ({
           {title}
         </p>
       </td>
+
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"
