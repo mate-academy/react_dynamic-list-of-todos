@@ -1,14 +1,14 @@
 import { CompletedFilter } from '../../types/CompletedFilter';
 
 interface P {
-  handleCompletedFilter: (complete: CompletedFilter)=> void;
-  handleSearchQuery: (newQuery: string)=> void;
+  onSelect: (complete: CompletedFilter) => void;
+  onChange: (newQuery: string) => void;
   query: string;
 }
 
 export const TodoFilter: React.FC<P> = ({
-  handleCompletedFilter,
-  handleSearchQuery,
+  onSelect: handleCompletedFilter,
+  onChange: handleSearchQuery,
   query,
 }) => (
   <form className="field has-addons">

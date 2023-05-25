@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,19 +12,16 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedFilter, setCompletedFilter] = useState<CompletedFilter>('all');
+  const [completedFilter, setCompletedFilter]
+    = useState<CompletedFilter>('all');
   const [query, setQuery] = useState('');
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-
-  useEffect(() => {
-    getTodos().then(setTodos);
-  }, []);
 
   const handleCompletedFilter = (complete: CompletedFilter): void => {
     setCompletedFilter(complete);
   };
 
-  const handleSearchQuery = (newQuery: string): void => {
+  const handleSearchQuery = (newQuery: string) => {
     setQuery(newQuery);
   };
 
@@ -37,7 +33,7 @@ export const App: React.FC = () => {
     setCurrentTodo(null);
   };
 
-  const visibleTodos = todos.filter(todo => {
+  const visibleTodos = useMemo(() => (todos.filter(todo => {
     if (!todo.title.toLowerCase().includes(query.toLowerCase())) {
       return false;
     }
@@ -52,7 +48,11 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  })), [todos, completedFilter, query]);
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
 
   return (
     <>
@@ -63,22 +63,22 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleCompletedFilter={handleCompletedFilter}
-                handleSearchQuery={handleSearchQuery}
+                onSelect={handleCompletedFilter}
+                onChange={handleSearchQuery}
                 query={query}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0
-                ? <Loader />
-                : (
+              {todos.length
+                ? (
                   <TodoList
                     todos={visibleTodos}
                     choosenId={currentTodo?.id || null}
                     handleChooseTodoEye={handleChooseTodoEye}
                   />
-                )}
+                )
+                : <Loader />}
 
             </div>
           </div>
