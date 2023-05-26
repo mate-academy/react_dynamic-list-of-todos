@@ -1,45 +1,53 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type TodoModalProps = {
+  todo: Todo;
+  onCloseModal: () => void; // Add onCloseModal prop
+  userLoading: boolean; // Add userLoading prop
+};
+
+export const TodoModal: React.FC<
+TodoModalProps> = ({ todo, onCloseModal, userLoading }) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <button
+        type="button"
+        className="delete"
+        data-cy="modal-close"
+        onClick={onCloseModal}
+        aria-label="Close Modal"
+        tabIndex={0}
+      />
 
-      {true ? (
+      {userLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
+
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {todo.title}
             </div>
-
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onCloseModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
+              {todo.description}
               <strong className="has-text-danger">Planned</strong>
-
               {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              <a href={`mailto:${todo.email}`}>{todo.username}</a>
             </p>
           </div>
         </div>
