@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
-import { SetTodoModalType } from '../../types/TodoModal';
+import { TodoModalType } from '../../types/TodoModal';
 
 interface TodoListProps {
   todos: Todo[];
-  setTodoModal: Dispatch<SetStateAction<SetTodoModalType>>;
+  setTodoModal: Dispatch<SetStateAction<TodoModalType>>;
   isClicked: boolean;
   setIsClicked: Dispatch<SetStateAction<boolean>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
@@ -15,7 +15,11 @@ interface TodoListProps {
 
 export const TodoList: React.FC<TodoListProps> = (
   {
-    todos, setTodoModal, isClicked, setIsClicked, setIsLoading,
+    todos,
+    setTodoModal,
+    isClicked,
+    setIsClicked,
+    setIsLoading,
   },
 ) => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null >(null);
@@ -33,8 +37,8 @@ export const TodoList: React.FC<TodoListProps> = (
 
       setSelectedTodoId(todo.id);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      // eslint-disable-next-line no-alert
+      alert('Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +61,7 @@ export const TodoList: React.FC<TodoListProps> = (
 
       <tbody>
         {todos.map((todo, index) => (
-          <tr key={todo.id} data-cy="todo" className="">
+          <tr key={todo.id} data-cy="todo">
 
             <td className="is-vcentered">{index + 1}</td>
             <td className="is-vcentered">

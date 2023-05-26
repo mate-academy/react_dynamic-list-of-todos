@@ -1,5 +1,8 @@
 import {
-  Dispatch, SetStateAction, FC, ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  FC,
+  ChangeEvent,
 } from 'react';
 
 interface TodoFilterProps {
@@ -9,7 +12,11 @@ interface TodoFilterProps {
 }
 
 export const TodoFilter: FC<TodoFilterProps>
-  = ({ searchInput, setSearchInput, setFilterMode }) => {
+  = ({
+    searchInput,
+    setSearchInput,
+    setFilterMode,
+  }) => {
     const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
       setSearchInput(e.target.value);
     };

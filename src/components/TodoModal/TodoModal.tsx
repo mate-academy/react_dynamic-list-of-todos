@@ -1,20 +1,22 @@
+import classNames from 'classnames';
 import React, { Dispatch, SetStateAction } from 'react';
-import { SetTodoModalType } from '../../types/TodoModal';
+import { TodoModalType } from '../../types/TodoModal';
 import { Loader } from '../Loader';
 
 interface TodoModalProps {
-  todoModal: SetTodoModalType;
+  todoModal: TodoModalType;
   setIsClicked: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }
 
-export const TodoModal: React.FC<TodoModalProps>
-= ({
+export const TodoModal: React.FC<TodoModalProps> = ({
   todoModal,
   setIsClicked,
   isLoading,
 }) => {
   const { todo, user } = todoModal;
+  const todoStatus = todo.completed ? 'Done' : 'Planned';
+
   const handleModalClosure = () => {
     setIsClicked(false);
   };
@@ -51,8 +53,14 @@ export const TodoModal: React.FC<TodoModalProps>
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={classNames({
+                'has-text-danger': !todo.completed,
+                'has-text-success': todo.completed,
+              })}
+              >
+                {todoStatus}
+
+              </strong>
 
               {' by '}
 

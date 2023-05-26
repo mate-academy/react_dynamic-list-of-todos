@@ -9,11 +9,11 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
-import { SetTodoModalType } from './types/TodoModal';
+import { TodoModalType } from './types/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoModal, setTodoModal] = useState<SetTodoModalType>({
+  const [todoModal, setTodoModal] = useState<TodoModalType>({
     todo: {
       completed: false,
       id: 0,
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   const [filterMode, setFilterMode] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(false);
 
-  const extractTodos = async () => {
+  const fetchTodos = async () => {
     try {
       const data = await getTodos();
 
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    extractTodos();
+    fetchTodos();
   }, []);
 
   const filteredTodosArr = useMemo(() => {
@@ -62,7 +62,7 @@ export const App: React.FC = () => {
 
       return isSearched;
     });
-  }, [searchInput, todos, filterMode]); // when we initialize setTodos somewhere, the link to the array changes (after re-render)
+  }, [searchInput, todos, filterMode]);
 
   useEffect(() => {
     setFilteredTodos(filteredTodosArr);
@@ -100,8 +100,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isClicked
-      && (
+      {isClicked && (
         <TodoModal
           todoModal={todoModal}
           setIsClicked={setIsClicked}
