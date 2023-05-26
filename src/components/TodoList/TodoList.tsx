@@ -1,6 +1,13 @@
 import React from 'react';
+import cn from 'classnames';
 
-export const TodoList: React.FC = () => (
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[];
+};
+
+export const TodoList: React.FC<Props> = ({ todos }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,6 +23,36 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
+      {todos.map((todo, index) => (
+        <tr data-cy="todo" className="" key={todo.id}>
+          <td className="is-vcentered">{index + 1}</td>
+          <td className="is-vcentered">
+            {!todo.completed && (
+              <span className="icon" data-cy="iconCompleted">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
+          <td className="is-vcentered is-expanded">
+            <p className={
+              cn(
+                'has-text-success',
+                { 'has-text-danger': todo.completed },
+              )
+            }
+            >
+              {todo.title}
+            </p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button data-cy="selectButton" className="button" type="button">
+              <span className="icon">
+                <i className="far fa-eye" />
+              </span>
+            </button>
+          </td>
+        </tr>
+      ))}
       <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
