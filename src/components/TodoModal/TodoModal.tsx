@@ -12,26 +12,18 @@ export const TodoModal: React.FC<
 TodoModalProps> = ({ todo, onCloseModal, userLoading }) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <button
-        type="button"
-        className="delete"
-        data-cy="modal-close"
-        onClick={onCloseModal}
-        aria-label="Close Modal"
-        tabIndex={0}
-      />
-
+      <div className="modal-background" />
       {userLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
-
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {todo.title}
+              Todo #
+              {todo.id}
             </div>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
@@ -44,10 +36,12 @@ TodoModalProps> = ({ todo, onCloseModal, userLoading }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.description}
+              {todo.title}
+            </p>
+            <p>
               <strong className="has-text-danger">Planned</strong>
               {' by '}
-              <a href={`mailto:${todo.email}`}>{todo.username}</a>
+              {todo.username}
             </p>
           </div>
         </div>

@@ -38,6 +38,9 @@ export const TodoList: React.FC<{
               {todo.title}
             </p>
           </td>
+          <td className="is-vcentered">
+            {todo.username}
+          </td>
           <td className="has-text-right is-vcentered">
             <button
               data-cy="selectButton"
