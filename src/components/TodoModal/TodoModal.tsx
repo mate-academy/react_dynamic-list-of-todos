@@ -16,6 +16,7 @@ export const TodoModal: FC<Props> = ({ todo, onClose }) => {
     completed,
     userId,
   } = todo;
+  
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
