@@ -23,12 +23,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const todosData = await getTodos(); // Assuming getTodos returns the list of todos
+        const todosData = await getTodos();
 
         setTodos(todosData);
         setLoading(false);
       } catch (error) {
-        console.log('Error fetching todos:', error);
+        throw new Error('Error fetching todos');
       }
     };
 
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
       setUser(userData);
       setUserLoading(false);
     } catch (error) {
-      console.log('Error fetching user details:', error);
+      throw new Error('Error fetching user details:');
     }
   };
 
@@ -94,7 +94,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           onCloseModal={handleCloseModal}
-          userLoading={userLoading} // Pass the userLoading prop
+          userLoading={userLoading}
         />
       )}
 
@@ -110,7 +110,6 @@ export const App: React.FC = () => {
             Email:
             {user.email}
           </p>
-          {/* Render other user details as needed */}
         </div>
       )}
     </>

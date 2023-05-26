@@ -4,8 +4,8 @@ import { Loader } from '../Loader';
 
 type TodoModalProps = {
   todo: Todo;
-  onCloseModal: () => void; // Add onCloseModal prop
-  userLoading: boolean; // Add userLoading prop
+  onCloseModal: () => void;
+  userLoading: boolean;
 };
 
 export const TodoModal: React.FC<
