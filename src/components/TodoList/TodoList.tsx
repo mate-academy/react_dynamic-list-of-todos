@@ -23,15 +23,20 @@ export const TodoList: React.FC<TodoListProps> = (
   const extractUser = async (todo: Todo) => {
     setIsClicked(true);
     setIsLoading(true);
-    const user = await getUser(todo.userId);
+    try {
+      const user = await getUser(todo.userId);
 
-    setTodoModal({
-      user,
-      todo,
-    });
+      setTodoModal({
+        user,
+        todo,
+      });
 
-    setSelectedTodoId(todo.id);
-    setIsLoading(false);
+      setSelectedTodoId(todo.id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

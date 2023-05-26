@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -34,17 +34,21 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const extractTodos = async () => {
-    const data = await getTodos();
+    try {
+      const data = await getTodos();
 
-    setTodos(data);
+      setTodos(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     extractTodos();
   }, []);
 
-  useEffect(() => {
-    const filtered = todos.filter((todo) => {
+  const filteredTodosArr = useMemo(() => {
+    return todos.filter((todo) => {
       const isSearched = todo.title.toLowerCase().includes(searchInput.toLowerCase());
 
       if (filterMode === 'active') {
@@ -57,9 +61,11 @@ export const App: React.FC = () => {
 
       return isSearched;
     });
+  }, [searchInput, todos, filterMode]); // when we initialize setTodos somewhere, the link to the array changes (after re-render)
 
-    setFilteredTodos(filtered);
-  }, [searchInput, todos, filterMode]);
+  useEffect(() => {
+    setFilteredTodos(filteredTodosArr);
+  }, [filteredTodosArr]);
 
   return (
     <>
