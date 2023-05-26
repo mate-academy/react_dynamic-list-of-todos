@@ -33,6 +33,7 @@ export const TodoList: React.FC<TodoListProps> = (
 
       setSelectedTodoId(todo.id);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     } finally {
       setIsLoading(false);
