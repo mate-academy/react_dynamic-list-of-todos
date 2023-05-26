@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import { FC, useState, useEffect } from 'react';
+import {
+  FC,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
@@ -14,27 +19,29 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [areTodosLoaded, setAreTodosLoaded] = useState<boolean>(false);
-  const [status, setStatus] = useState<Statuses>('all');
+  const [status, setStatus] = useState(Statuses.All);
   const [query, setQuery] = useState<string>('');
 
-  const filteredTodos = todos.filter(({ title }) => (
-    title
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  ));
+  const visibleTodos = useMemo(() => {
+    const filteredTodos = todos.filter(({ title }) => (
+      title
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    ));
 
-  const visibleTodos = filteredTodos.filter(({ completed }) => {
-    switch (status) {
-      case 'active':
-        return !completed;
+    return filteredTodos.filter(({ completed }) => {
+      switch (status) {
+        case Statuses.Active:
+          return !completed;
 
-      case 'completed':
-        return completed;
+        case Statuses.Completed:
+          return completed;
 
-      default:
-        return true;
-    }
-  });
+        default:
+          return true;
+      }
+    });
+  }, [todos, status, query]);
 
   const handleModalClose = () => {
     setSelectedTodo(null);
@@ -68,7 +75,7 @@ export const App: FC = () => {
               {!areTodosLoaded && <Loader />}
 
               {areTodosLoaded && (
-                visibleTodos.length > 0
+                visibleTodos.length
                   ? (
                     <TodoList
                       todos={visibleTodos}
@@ -90,7 +97,7 @@ export const App: FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onModalClose={handleModalClose}
+          onClose={handleModalClose}
         />
       )}
     </>
