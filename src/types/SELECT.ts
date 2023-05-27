@@ -1,5 +1,5 @@
-export enum SELECT {
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
+export enum Select {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
 }
