@@ -9,6 +9,7 @@ type Props = {
   onSetUser: React.Dispatch<React.SetStateAction<User | null>>,
   onSelectUserId: (id: number) => void,
   onSelectTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
+  isLoading: boolean,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const TodoModal: React.FC<Props> = ({
   onSetUser,
   onSelectUserId,
   onSelectTodo,
+  isLoading,
 }) => {
   function handleSelect() {
     onSetUser(null);
@@ -28,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -63,10 +65,11 @@ export const TodoModal: React.FC<Props> = ({
               )}
 
               {' by '}
-
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              {user !== null && (
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              )}
             </p>
           </div>
         </div>

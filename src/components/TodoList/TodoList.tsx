@@ -8,6 +8,7 @@ type Props = {
   onSelectUserId: (id: number) => void,
   selectedUserId: number | null,
   onSelectTodo: (todo: Todo) => void,
+  onIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -15,10 +16,12 @@ export const TodoList: React.FC<Props> = ({
   selectedUserId,
   onSelectUserId,
   onSelectTodo,
+  onIsLoading,
 }) => {
   function handleSelect(todo: Todo) {
     onSelectUserId(todo.userId);
     onSelectTodo(todo);
+    onIsLoading(true);
   }
 
   return (

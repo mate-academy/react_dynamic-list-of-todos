@@ -17,6 +17,7 @@ export const App: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGetTodo = async (loadTodoFunction: () => Promise<Todo[]>) => {
     const todos = await loadTodoFunction();
@@ -33,11 +34,11 @@ export const App: React.FC = () => {
           return todo.completed;
         case 'all':
         default:
-          return todo;
+          return true;
       }
     }
 
-    return null;
+    return false;
   });
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export const App: React.FC = () => {
     const loadedUser = await loadUserFunc(userId);
 
     setUser(loadedUser);
+    setIsLoading(false); // *stop spinners in TodoModal component
   }
 
   useEffect(() => {
@@ -101,6 +103,7 @@ export const App: React.FC = () => {
                     onSelectUserId={setUserId}
                     selectedUserId={userId}
                     onSelectTodo={setSelectedTodo}
+                    onIsLoading={setIsLoading}
                   />
                 ) : (
                   <Loader />
@@ -119,6 +122,7 @@ export const App: React.FC = () => {
             onSetUser={setUser}
             onSelectUserId={setUserId}
             onSelectTodo={setSelectedTodo}
+            isLoading={isLoading}
           />
         )}
     </>
