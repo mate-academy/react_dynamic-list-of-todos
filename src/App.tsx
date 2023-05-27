@@ -8,26 +8,26 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { SELECT } from './types/SELECT';
+import { Select } from './types/Select';
 import { getTodos } from './api';
 
-const { ALL, ACTIVE, COMPLETED } = SELECT;
+const { all, active, completed } = Select;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchValue, setSearchValue] = useState('');
-  const [selectValue, setSelectValue] = useState(ALL);
+  const [selectValue, setSelectValue] = useState(all);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   const todoFilter = (): Todo[] | [] => {
     let result;
 
     switch (selectValue) {
-      case COMPLETED:
+      case completed:
         result = todos?.filter(todo => todo.completed);
         break;
 
-      case ACTIVE:
+      case active:
         result = todos?.filter(todo => !todo.completed);
         break;
 
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
 
   const todoFilterList = useMemo(() => todoFilter(), [searchValue, selectValue, todos.length]);
 
-  const handleChangeSelect = (value: SELECT) => {
+  const handleChangeSelect = (value: Select) => {
     setSelectValue(value);
   };
 
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeSelect={handleChangeSelect}
+                handleChangeSelect={handleChangeSelect}
                 value={searchValue}
                 onSearchValue={handleSearchValue}
               />
