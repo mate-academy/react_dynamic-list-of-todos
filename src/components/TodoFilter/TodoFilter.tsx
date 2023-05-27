@@ -1,56 +1,67 @@
-import { SELECT } from '../../types/SELECT';
+import { Select } from '../../types/Select';
 
 type Props = {
-  onChangeSelect: (value: SELECT) => void,
+  handleChangeSelect: (value: Select) => void,
   value: string,
   onSearchValue: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onChangeSelect,
+  handleChangeSelect,
   onSearchValue,
   value,
-}) => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          onChange={(e) => {
-            onChangeSelect(SELECT[e.target.value as keyof typeof SELECT]);
-          }}
-        >
-          {Object.entries(SELECT).map(item => {
-            return <option value={item[0]}>{item[1]}</option>;
-          })}
-        </select>
-      </span>
-    </p>
+}) => {
+  function onChangeSelect(selectValue: string) {
+    handleChangeSelect(Select[selectValue as keyof typeof Select]);
+  }
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={value}
-        onChange={(e) => onSearchValue(e.target.value)}
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
-
-      {value && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => onSearchValue('')}
-          />
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            onChange={(e) => onChangeSelect(e.target.value)}
+          >
+            {Object.entries(Select).map((item) => {
+              return (
+                <option
+                  key={item[0].toUpperCase()}
+                  value={item[0]}
+                >
+                  {item[1]}
+                </option>
+              );
+            })}
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={value}
+          onChange={(e) => onSearchValue(e.target.value)}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {value && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => onSearchValue('')}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
