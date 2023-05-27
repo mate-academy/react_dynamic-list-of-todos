@@ -1,4 +1,4 @@
-import { Select } from '../../types/Select';
+import { Select } from '../../types/SELECT';
 
 type Props = {
   handleChangeSelect: (value: Select) => void,
