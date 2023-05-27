@@ -18,25 +18,27 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const handleGetTodo = async (f: () => Promise<Todo[]>) => {
-    const todos = await f();
+  const handleGetTodo = async (loadTodoFunction: () => Promise<Todo[]>) => {
+    const todos = await loadTodoFunction();
 
     setData(todos);
   };
 
-  let visibleTodos = data.filter((todo) => {
-    switch (status) {
-      case 'completed':
-        return !todo.completed;
-      case 'active':
-        return todo.completed;
-      case 'all':
-      default:
-        return todo;
+  const visibleTodos = data.filter((todo) => {
+    if (todo.title.includes(input)) {
+      switch (status) {
+        case 'completed':
+          return !todo.completed;
+        case 'active':
+          return todo.completed;
+        case 'all':
+        default:
+          return todo;
+      }
     }
-  });
 
-  visibleTodos = visibleTodos.filter((todo) => (todo.title.includes(input)));
+    return null;
+  });
 
   useEffect(() => {
     handleGetTodo(getTodos);
@@ -58,12 +60,14 @@ export const App: React.FC = () => {
     setInput(value);
   };
 
-  async function handleUserLoad(f: (userId: number) => Promise<User>) {
+  async function handleUserLoad(
+    loadUserFunc: (userId: number) => Promise<User>,
+  ) {
     if (userId === null || userId === 0) {
       return;
     }
 
-    const loadedUser = await f(userId);
+    const loadedUser = await loadUserFunc(userId);
 
     setUser(loadedUser);
   }
@@ -71,14 +75,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     handleUserLoad(getUser);
   }, [userId]);
-
-  const handleSelectUserId = (id: number | null) => {
-    setUserId(id);
-  };
-
-  const handleSelectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
 
   return (
     <>
@@ -98,13 +94,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {data.length > 0
+              {data.length
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    onSelectUserId={handleSelectUserId}
+                    onSelectUserId={setUserId}
                     selectedUserId={userId}
-                    onSelectTodo={handleSelectTodo}
+                    onSelectTodo={setSelectedTodo}
                   />
                 ) : (
                   <Loader />
@@ -115,13 +111,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null
+      {!!selectedTodo
         && (
           <TodoModal
             todo={selectedTodo}
             user={user}
             onSetUser={setUser}
-            onSelectUserId={handleSelectUserId}
+            onSelectUserId={setUserId}
             onSelectTodo={setSelectedTodo}
           />
         )}

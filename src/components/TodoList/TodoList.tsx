@@ -16,6 +16,11 @@ export const TodoList: React.FC<Props> = ({
   onSelectUserId,
   onSelectTodo,
 }) => {
+  function handleSelect(todo: Todo) {
+    onSelectUserId(todo.userId);
+    onSelectTodo(todo);
+  }
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -58,21 +63,18 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  onSelectUserId(todo.userId);
-                  onSelectTodo(todo);
-                }}
+                onClick={() => handleSelect(todo)}
               >
-                {todo.userId === selectedUserId ? (
-                  <span className="icon">
-                    <i className="far fa-eye-slash" />
-                  </span>
-                ) : (
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                )}
-
+                <span className="icon">
+                  <i className={
+                    cn(
+                      'far',
+                      { 'fa-eye-slash': todo.userId === selectedUserId },
+                      { 'fa-eye': todo.userId !== selectedUserId },
+                    )
+                  }
+                  />
+                </span>
               </button>
             </td>
           </tr>
