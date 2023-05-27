@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { Select } from './types/Select';
+import { Select } from './types/SELECT';
 import { getTodos } from './api';
 
 const { all, active, completed } = Select;
