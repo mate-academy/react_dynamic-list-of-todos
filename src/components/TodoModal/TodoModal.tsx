@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -11,20 +12,15 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, closeTodo }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
 
   const fetchData = async () => {
     try {
       const currentUser = await getUser(selectedTodo?.userId || 0);
 
       setUser(currentUser);
-    } catch (error) {
-      if (error instanceof Error) {
-        // eslint-disable-next-line no-console
-        console.warn(error.message);
-      } else {
-        // eslint-disable-next-line no-console
-        console.warn('Unexpected error');
-      }
+    } catch {
+      setIsError(true);
     }
   };
 
@@ -63,7 +59,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeTodo }) => {
               <p className="block" data-cy="modal-title">
                 {selectedTodo?.title}
               </p>
-
+              {isError && (
+                <h2 style={{ color: 'red' }}>
+                  An error occured while user loading
+                </h2>
+              )}
               <p className="block" data-cy="modal-user">
                 {selectedTodo?.completed
                   ? <strong className="has-text-success">Done</strong>

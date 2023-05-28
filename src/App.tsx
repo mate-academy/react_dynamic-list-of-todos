@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterBy } from './types/Filter';
 
-const filteredTodos = (todos: Todo[], query: string, filterBy: FilterBy) => {
+const getFilteredTodos = (todos: Todo[], query: string, filterBy: FilterBy) => {
   let newTodos = [...todos];
 
   if (query) {
@@ -42,7 +42,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
 
-  const [load, setLoad] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const getTodosServer = async () => {
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
       const arrayTodos = await getTodos();
 
       setTodos(arrayTodos);
-      setLoad(false);
+      setisLoading(false);
       setError(false);
     } catch {
       setError(true);
@@ -61,15 +61,11 @@ export const App: React.FC = () => {
     getTodosServer();
   }, []);
 
-  const visibleTodos = filteredTodos(todos, query, filterBy);
-
-  const showTodo = useCallback((todo: Todo) => {
-    setSelectedTodo(todo);
-  }, [selectedTodo]);
+  const visibleTodos = getFilteredTodos(todos, query, filterBy);
 
   const closeTodo = useCallback(() => {
     setSelectedTodo(null);
-  }, [selectedTodo]);
+  }, []);
 
   return (
     <>
@@ -81,20 +77,20 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onQueryChange={setQuery}
+                setQuery={setQuery}
                 filterBy={filterBy}
                 setFilterBy={setFilterBy}
               />
             </div>
 
             <div className="block">
-              {load && <Loader />}
+              {isLoading && <Loader />}
               {error
                 ? <p>Error, server is unavailable</p>
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    showTodo={showTodo}
+                    showTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
                 )}

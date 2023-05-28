@@ -3,62 +3,67 @@ import { FilterBy } from '../../types/Filter';
 
 type Props = {
   query: string,
-  onQueryChange: (query: string) => void,
+  setQuery: (query: string) => void,
   filterBy: FilterBy,
   setFilterBy: (filterBy: FilterBy) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQueryChange,
+  setQuery,
   filterBy,
   setFilterBy,
-}) => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={filterBy}
-          onChange={({ target }) => {
-            setFilterBy(target.value as FilterBy);
-          }}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+}) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={(event) => {
-          onQueryChange(event.target.value);
-        }}
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterBy(event.target.value as FilterBy);
+  };
 
-      {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => {
-              onQueryChange('');
-            }}
-          />
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+
+          <select
+            data-cy="statusSelect"
+            value={filterBy}
+            onChange={handleSelectChange}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={handleInputChange}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setQuery('')}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
