@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api';
 import 'bulma/css/bulma.css';
@@ -50,7 +49,8 @@ export const App: React.FC = () => {
 
   const filteredTodosArr = useMemo(() => {
     return todos.filter((todo) => {
-      const isSearched = todo.title.toLowerCase().includes(searchInput.toLowerCase());
+      const isSearched
+      = todo.title.toLowerCase().includes(searchInput.toLowerCase());
 
       if (filterMode === 'active') {
         return !todo.completed && isSearched;

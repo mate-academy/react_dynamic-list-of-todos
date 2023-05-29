@@ -60,45 +60,49 @@ export const TodoList: React.FC<TodoListProps> = (
       </thead>
 
       <tbody>
-        {todos.map((todo, index) => (
-          <tr key={todo.id} data-cy="todo">
+        {todos.map((todo, index) => {
+          const { id, completed, title } = todo;
 
-            <td className="is-vcentered">{index + 1}</td>
-            <td className="is-vcentered">
-              {todo.completed
-                && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p className={classNames({
-                'has-text-success': todo.completed,
-                'has-text-danger': !todo.completed,
-              })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => extractUser(todo)}
-              >
-                <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye-slash': isClicked && selectedTodoId === todo.id,
-                    'fa-eye': !isClicked || selectedTodoId !== todo.id,
-                  })}
-                  />
+          return (
+            <tr key={id} data-cy="todo">
+
+              <td className="is-vcentered">{index + 1}</td>
+              <td className="is-vcentered">
+                {completed
+              && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
                 </span>
-              </button>
-            </td>
-          </tr>
-        ))}
+              )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+                >
+                  {title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => extractUser(todo)}
+                >
+                  <span className="icon">
+                    <i className={classNames('far', {
+                      'fa-eye-slash': isClicked && selectedTodoId === id,
+                      'fa-eye': !isClicked || selectedTodoId !== id,
+                    })}
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
 
     </table>
