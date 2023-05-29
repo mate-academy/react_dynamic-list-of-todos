@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { SearchBy, TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
@@ -14,50 +14,56 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [searchType, setSearchType] = useState('all');
+  const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.all);
   const [query, setQuery] = useState('');
+  const [error, setError] = useState(false);
+  const [todosLoading, setTodosLoading] = useState(true);
 
-  const formattedQuery = query.trim().toLowerCase();
+  const filter = (
+    todos: Todo[],
+    filterBy: SearchBy,
+  ) => {
+    let findTodos = [...todos];
 
-  const filter = (type: string) => {
-    const findQuery = (queryToSearch: string, todos: Todo[]) => {
-      return todos.filter((todo) => (
-        todo.title.toLowerCase().includes(queryToSearch)
-      ));
-    };
+    if (query) {
+      const searchQuery = query.toLowerCase().trim();
 
-    switch (type) {
-      case 'all':
-        return findQuery(formattedQuery, initialTodos);
-
-      case 'active': {
-        const activeTodos = initialTodos.filter((todo) => !todo.completed);
-
-        return findQuery(formattedQuery, activeTodos);
-      }
-
-      case 'completed': {
-        const completedTodos = initialTodos.filter((todo) => todo.completed);
-
-        return findQuery(formattedQuery, completedTodos);
-      }
-
-      default: return initialTodos;
+      findTodos = findTodos.filter((todo) => todo.title.toLowerCase().includes(searchQuery));
     }
+
+    findTodos = findTodos.filter(todo => {
+      switch (filterBy) {
+        case SearchBy.active:
+          return !todo.completed;
+        case SearchBy.completed:
+          return todo.completed;
+        case SearchBy.all:
+        default:
+          return todo;
+      }
+    });
+
+    return findTodos;
   };
 
   const fetchGoods = () => (
     getTodos()
-      .then((todo) => setInitialTodos(todo))
-      .catch(() => 'An error occured when loading todos'));
+      .then((todo) => {
+        setInitialTodos(todo);
+        setTodosLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setTodosLoading(false);
+      }));
 
   useEffect(() => {
     fetchGoods();
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return filter(searchType);
-  }, [searchType, initialTodos, query]);
+    return filter(initialTodos, searchBy);
+  }, [searchBy, initialTodos, query]);
 
   return (
     <>
@@ -68,13 +74,20 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setSearchType={setSearchType}
+                searchBy={searchBy}
+                setSearchBy={setSearchBy}
                 setQuery={setQuery}
                 query={query}
               />
             </div>
 
-            {initialTodos.length > 0 ? (
+            {todosLoading && <Loader />}
+
+            {error ? (
+              <p className="has-text-danger">
+                An error occured when loading todos
+              </p>
+            ) : (
               <div className="block">
                 <TodoList
                   todos={filteredTodos}
@@ -82,12 +95,12 @@ export const App: React.FC = () => {
                   setSelectedTodo={setSelectedTodo}
                 />
               </div>
-            ) : (<Loader />)}
+            )}
           </div>
         </div>
       </div>
 
-      {!!selectedTodo && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}

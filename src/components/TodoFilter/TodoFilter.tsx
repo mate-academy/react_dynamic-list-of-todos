@@ -1,11 +1,19 @@
 type Props = {
-  setSearchType: (type: string) => void
+  searchBy: SearchBy,
+  setSearchBy: (type: SearchBy) => void
   setQuery: (query: string) => void
   query: string
 };
 
+export enum SearchBy {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({
-  setSearchType,
+  searchBy,
+  setSearchBy,
   setQuery,
   query,
 }) => (
@@ -14,12 +22,12 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          defaultValue="all"
-          onChange={event => setSearchType(event.target.value)}
+          value={searchBy}
+          onChange={(event) => setSearchBy(event.target.value as SearchBy)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SearchBy.all}>All</option>
+          <option value={SearchBy.active}>Active</option>
+          <option value={SearchBy.completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -38,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {!!query.length && (
+        {query.length && (
           // eslint-disable-next-line jsx-a11y/control-has-associated-label
           <button
             data-cy="clearSearchButton"
