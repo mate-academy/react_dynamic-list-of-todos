@@ -15,7 +15,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoModal, setTodoModal] = useState<Todo | null>(null);
-  const [selectCompleted, setSelectCompleted] = useState('');
+  const [selectCompleted, setSelectCompleted] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -52,6 +52,9 @@ export const App: React.FC = () => {
         break;
 
       case 'completed': newTodo = newTodo.filter(todo => Boolean(todo.completed));
+        break;
+
+      case 'all': newTodo = newTodo.filter(todo => todo);
         break;
       default: throw new Error('Wrong selection!');
     }
