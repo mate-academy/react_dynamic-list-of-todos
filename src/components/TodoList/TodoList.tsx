@@ -26,11 +26,21 @@ export const TodoList: React.FC<Props> = ({
         <th> </th>
       </tr>
     </thead>
+    <tbody>
+      {todos.map(({ id, title, completed }) => {
+        const isSelected = selectedTodoId === id;
 
-    <TodoItem
-      todos={todos}
-      selectedTodoId={selectedTodoId}
-      onTodoSelection={onTodoSelection}
-    />
+        return (
+          <TodoItem
+            key={id}
+            id={id}
+            title={title}
+            completed={completed}
+            isSelected={isSelected}
+            onTodoSelection={onTodoSelection}
+          />
+        );
+      })}
+    </tbody>
   </table>
 );

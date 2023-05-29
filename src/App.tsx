@@ -55,23 +55,25 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  let visibleTodos = useMemo(() => {
+  const visibleTodos = useMemo(() => {
     switch (selectedFilter) {
       case FiterTodo.ALL:
-        return todos;
+        return todos.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase()));
 
       case FiterTodo.ACTIVE:
-        return todos.filter(todo => !todo.completed);
+        return todos.filter(
+          (todo) => !todo.completed && todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
 
       case FiterTodo.COMPLETED:
-        return todos.filter(todo => todo.completed);
+        return todos.filter(
+          (todo) => todo.completed && todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
 
       default:
         return [];
     }
-  }, [todos, selectedFilter]);
-
-  visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [todos, selectedFilter, searchQuery]);
 
   return (
     <>
