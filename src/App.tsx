@@ -16,14 +16,17 @@ export const App: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
   const [selectedModal, setSeletedModal] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     // eslint-disable-next-line max-len
     fetch('https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json')
       .then(response => response.json())
       .then(todosFromServer => {
         setTodos(todosFromServer);
         setFilteredTodos(todosFromServer);
+        setIsLoading(false);
       });
   }, []);
 
@@ -103,7 +106,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={filteredTodos}
                 showModal={showModal}
