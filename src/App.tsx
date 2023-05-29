@@ -1,14 +1,73 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { getTodos } from './api';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { TodoModal } from './components/TodoModal';
+import { TodoModalType } from './types/TodoModal';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoModal, setTodoModal] = useState<TodoModalType>({
+    todo: {
+      completed: false,
+      id: 0,
+      title: '',
+      userId: 0,
+    },
+    user: {
+      email: '',
+      id: 0,
+      name: '',
+      phone: '',
+    },
+  });
+  const [isClicked, setIsClicked] = useState(false);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [filterMode, setFilterMode] = useState<string>('All');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchTodos = async () => {
+    try {
+      const data = await getTodos();
+
+      setTodos(data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const filteredTodosArr = useMemo(() => {
+    return todos.filter((todo) => {
+      const isSearched
+      = todo.title.toLowerCase().includes(searchInput.toLowerCase());
+
+      if (filterMode === 'active') {
+        return !todo.completed && isSearched;
+      }
+
+      if (filterMode === 'completed') {
+        return todo.completed && isSearched;
+      }
+
+      return isSearched;
+    });
+  }, [searchInput, todos, filterMode]);
+
+  useEffect(() => {
+    setFilteredTodos(filteredTodosArr);
+  }, [filteredTodosArr]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +76,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                setFilterMode={setFilterMode}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!todos.length
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    setTodoModal={setTodoModal}
+                    isClicked={isClicked}
+                    setIsClicked={setIsClicked}
+                    setIsLoading={setIsLoading}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isClicked && (
+        <TodoModal
+          todoModal={todoModal}
+          setIsClicked={setIsClicked}
+          isLoading={isLoading}
+        />
+      )}
     </>
   );
 };
