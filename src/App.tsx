@@ -33,10 +33,23 @@ export const App: React.FC = () => {
     } else {
       setFilteredTodos(todos.filter(todo => {
         const titleMatch = todo.title.toLowerCase().includes(search.toLowerCase());
-        const filterMatch = selectedFilter.length === 0
-          || (selectedFilter === 'active' && todo.completed === false)
-          || (selectedFilter === 'completed' && todo.completed === true)
-          || (selectedFilter === 'all' && true);
+        let filterMatch = false;
+
+        switch (selectedFilter) {
+          case '':
+            filterMatch = true;
+            break;
+          case 'active':
+            filterMatch = !todo.completed;
+            break;
+          case 'completed':
+            filterMatch = todo.completed;
+            break;
+          case 'all':
+            filterMatch = true;
+            break;
+          default: filterMatch = false;
+        }
 
         return titleMatch && filterMatch;
       }));
