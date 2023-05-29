@@ -47,12 +47,13 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     let newTodo = todos;
 
-    if (selectCompleted === 'active') {
-      newTodo = newTodo.filter(todo => !todo.completed);
-    }
+    switch (selectCompleted) {
+      case 'active': newTodo = newTodo.filter(todo => !todo.completed);
+        break;
 
-    if (selectCompleted === 'completed') {
-      newTodo = newTodo.filter(todo => Boolean(todo.completed));
+      case 'completed': newTodo = newTodo.filter(todo => Boolean(todo.completed));
+        break;
+      default: throw new Error('Wrong selection!');
     }
 
     const queryTrimed = query.trim().toLowerCase();
@@ -83,7 +84,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 openModal={openModal}
-                reset={todoModal}
+                onReset={todoModal}
               />
             </div>
           </div>

@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 interface PropsTodoList {
   todos: Todo[];
   openModal(todo: Todo): void;
-  reset: Todo | null;
+  onReset: Todo | null;
 }
 
 export const TodoList: React.FC<PropsTodoList> = ({
   todos,
   openModal,
-  reset,
+  onReset,
 }) => {
   const [selectedId, setSelectedId] = useState(0);
 
@@ -21,7 +21,7 @@ export const TodoList: React.FC<PropsTodoList> = ({
     openModal(todo);
   };
 
-  if (selectedId !== 0 && reset === null) {
+  if (selectedId !== 0 && !onReset) {
     setSelectedId(0);
   }
 
