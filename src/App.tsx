@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
@@ -13,26 +18,28 @@ import { FiterTodo } from './types/FilterTodo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<string>(FiterTodo.ALL);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const selectedTodo = todos.find(({ id }) => id === selectedTodoId) || null;
+  const selectedTodo = useMemo(() => {
+    return todos.find(({ id }) => id === selectedTodoId) || null;
+  }, [todos, selectedTodoId]);
 
-  const closeModalWindow = () => {
+  const closeModalWindow = useCallback(() => {
     setSelectedTodoId(0);
-  };
+  }, []);
 
-  const handleSelectFilter = (value: string) => {
+  const handleSelectFilter = useCallback((value: string) => {
     setSelectedFilter(value);
-  };
+  }, []);
 
-  const handleQuery = (value: string) => {
+  const handleQuery = useCallback((value: string) => {
     setSearchQuery(value);
-  };
+  }, []);
 
-  const handleSelectTodo = (value: number) => {
+  const handleSelectTodo = useCallback((value: number) => {
     setSelectedTodoId(value);
-  };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,7 +103,7 @@ export const App: React.FC = () => {
       {selectedTodoId && (
         <TodoModal
           selectedTodo={selectedTodo}
-          handleCloseModal={closeModalWindow}
+          onClose={closeModalWindow}
         />
       )}
     </>

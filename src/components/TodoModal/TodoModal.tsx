@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -6,16 +6,16 @@ import { getUser } from '../../api';
 
 interface Props {
   selectedTodo: Todo | null;
-  handleCloseModal: () => void,
+  onClose: () => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  handleCloseModal,
+  onClose,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const loadUser = () => {
+  const loadUser = useCallback(() => {
     if (selectedTodo?.id) {
       getUser(selectedTodo.userId)
         .then(setSelectedUser)
@@ -23,7 +23,7 @@ export const TodoModal: React.FC<Props> = ({
           throw new Error(error);
         });
     }
-  };
+  }, [selectedTodo?.id, selectedTodo?.userId]);
 
   useEffect(() => {
     loadUser();
@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleCloseModal}
+              onClick={onClose}
             />
           </header>
 
