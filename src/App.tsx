@@ -43,12 +43,18 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     let filteredTodos = todos;
 
-    if (selectValue === 'completed') {
-      filteredTodos = filteredTodos.filter(todo => todo.completed);
-    } else if (selectValue === 'active') {
-      filteredTodos = filteredTodos.filter(todo => !todo.completed);
-    } else if (selectValue === 'all') {
-      filteredTodos = todos;
+    switch (selectValue) {
+      case 'completed':
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+      case 'active':
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+      case 'all':
+        filteredTodos = todos;
+        break;
+      default:
+        break;
     }
 
     if (query) {
