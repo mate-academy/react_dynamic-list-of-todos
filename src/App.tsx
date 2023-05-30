@@ -14,15 +14,22 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodo, setCurrentTodo] = useState<number>(0);
-  const [hideTodoModal, setHideTodoModal] = useState(false);
+  const [showTodoModal, setHideTodoModal] = useState(false);
+  const [showTodo, setShowTodo] = useState(true);
 
   const [selectOption, setSelectOption] = useState('All');
   const [inputValue, setInputValue] = useState('');
 
-  const filterTodo = () => {
-    const notCompleted = todos.filter(todo => !todo.completed);
-    const completed = todos.filter(todo => todo.completed);
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const filterByCompletion = (todos: Todo[], value: string, completed: boolean) => {
+    const filteredTodos = todos.filter((todo: Todo) => todo.completed === completed);
 
+    return !value
+      ? filteredTodos
+      : filteredTodos.filter((todo: Todo) => todo.title.includes(value.toLocaleLowerCase().trim()));
+  };
+
+  const filterTodo = () => {
     switch (selectOption) {
       case 'All':
         return !inputValue
@@ -30,14 +37,10 @@ export const App: React.FC = () => {
           : todos?.filter((todo: Todo) => todo.title.includes(inputValue.toLocaleLowerCase().trim()));
 
       case 'active':
-        return !inputValue
-          ? notCompleted
-          : notCompleted?.filter((todo: Todo) => todo.title.includes(inputValue.toLocaleLowerCase().trim()));
+        return filterByCompletion(todos, inputValue, false);
 
       case 'completed':
-        return !inputValue
-          ? completed
-          : completed?.filter((todo: Todo) => todo.title.includes(inputValue.toLocaleLowerCase().trim()));
+        return filterByCompletion(todos, inputValue, true);
 
       default:
         return todos;
@@ -49,7 +52,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todo => setTodos(todo));
+      .then(todo => {
+        setTodos(todo);
+        setShowTodo(false);
+      });
   }, []);
 
   return (
@@ -69,7 +75,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {showTodo
                 ? <Loader />
                 : (
                   <TodoList
@@ -84,7 +90,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {hideTodoModal
+      {showTodoModal
         && (
           <TodoModal
             setHideTodoModal={setHideTodoModal}
