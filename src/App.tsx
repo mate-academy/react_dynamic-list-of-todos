@@ -32,21 +32,26 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let currentCategory: boolean | null;
+    let filteredTodos = todos;
 
-    if (todoCategory === 'completed') {
-      currentCategory = false;
-    } else if (todoCategory === 'active') {
-      currentCategory = true;
-    } else {
-      currentCategory = null;
+    switch (todoCategory) {
+      case 'completed':
+        filteredTodos = todos.filter(todo => todo.completed);
+        break;
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
+        break;
+      default:
     }
 
-    setVisibleTodos(todos.filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
-      && todo.completed !== currentCategory
-    )));
-  }, [query, todoCategory]);
+    if (query) {
+      const queryToLowerCase = query.toLowerCase();
+
+      filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(queryToLowerCase));
+    }
+
+    setVisibleTodos(filteredTodos);
+  }, [query, todoCategory, todos]);
 
   const toggleTodoModal = (todo: null | Todo) => {
     if (openedTodo) {
