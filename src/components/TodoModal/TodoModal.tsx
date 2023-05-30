@@ -4,14 +4,14 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
-interface TodoProps {
+interface TodoModalProps {
   todo: Todo;
   closeModal: () => void;
 }
-export const TodoModal: React.FC<TodoProps> = ({
+export const TodoModal: React.FC<TodoModalProps> = ({
   todo,
   closeModal,
-}: TodoProps) => {
+}: TodoModalProps) => {
   const [loading, setLoading] = useState(Boolean);
   const [user, setUser] = useState<User>();
 
@@ -23,7 +23,7 @@ export const TodoModal: React.FC<TodoProps> = ({
         setUser(foundUser);
         setLoading(false);
       });
-  },[]);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

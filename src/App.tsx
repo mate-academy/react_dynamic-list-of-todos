@@ -25,14 +25,16 @@ export const App: React.FC = () => {
   const filterTodos = () => {
     const cleanQuery = query.trim().toLowerCase();
 
-    switch (filterType) {
-      case 'active':
-        return todos.filter(todo => !todo.completed && todo.title.toLowerCase().includes(cleanQuery));
-      case 'completed':
-        return todos.filter(todo => todo.completed && todo.title.toLowerCase().includes(cleanQuery));
-      default:
-        return todos.filter(todo => todo.title.toLowerCase().includes(cleanQuery));
-    }
+    return todos.filter(todo => {
+      switch (filterType) {
+        case 'active':
+          return !todo.completed && todo.title.toLowerCase().includes(cleanQuery);
+        case 'completed':
+          return todo.completed && todo.title.toLowerCase().includes(cleanQuery);
+        default:
+          return todo.title.toLowerCase().includes(cleanQuery);
+      }
+    });
   };
 
   useEffect(() => {
