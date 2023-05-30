@@ -10,13 +10,17 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // eslint-disable-next-line max-len
     fetch(`https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${todo?.userId}.json`)
       .then(response => response.json())
       .then(userFromServer => {
-        setUser(userFromServer);
+        setTimeout(() => {
+          setUser(userFromServer);
+          setIsLoading(false);
+        }, 10);
       });
   }, [user]);
 
@@ -24,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -57,8 +61,8 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
