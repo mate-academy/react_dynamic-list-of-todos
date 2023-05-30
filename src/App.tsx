@@ -53,7 +53,7 @@ export const App: React.FC = () => {
     setVisibleTodos(filteredTodos);
   }, [query, todoCategory, todos]);
 
-  const toggleTodoModal = (todo: null | Todo) => {
+  const handleTodoModalToggle = (todo: null | Todo) => {
     if (openedTodo) {
       setOpenedTodo(null);
     } else {
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    handleOpenTodo={toggleTodoModal}
+                    handleOpenTodo={handleTodoModalToggle}
                     selectedTodo={openedTodo}
                   />
                 )}
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {openedTodo && <TodoModal todo={openedTodo} handleCloseTodo={toggleTodoModal} />}
+      {openedTodo && <TodoModal todo={openedTodo} handleCloseTodo={handleTodoModalToggle} />}
     </>
   );
 };
