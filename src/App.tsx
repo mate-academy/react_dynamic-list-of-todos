@@ -45,16 +45,16 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    let newTodo = todos;
+    let newTodos = todos;
 
     switch (selectCompleted) {
-      case 'active': newTodo = newTodo.filter(todo => !todo.completed);
+      case 'active': newTodos = newTodos.filter(todo => !todo.completed);
         break;
 
-      case 'completed': newTodo = newTodo.filter(todo => Boolean(todo.completed));
+      case 'completed': newTodos = newTodos.filter(todo => Boolean(todo.completed));
         break;
 
-      case 'all': newTodo = newTodo.filter(todo => todo);
+      case 'all': newTodos = todos;
         break;
       default: throw new Error('Wrong selection!');
     }
@@ -62,10 +62,14 @@ export const App: React.FC = () => {
     const queryTrimed = query.trim().toLowerCase();
 
     if (query) {
-      newTodo = newTodo.filter(todo => todo.title.toLowerCase().includes(queryTrimed));
+      newTodos = newTodos.filter(todo => {
+        const { title } = todo;
+
+        return title.toLowerCase().includes(queryTrimed);
+      });
     }
 
-    return newTodo;
+    return newTodos;
   }, [todos, selectCompleted, query]);
 
   return (
