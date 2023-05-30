@@ -1,48 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+import { TodoModalList } from './TodoModalList';
+import { getUser } from '../../api';
+
+interface PropsUser {
+  todos: Todo[];
+  isModalClosed: (event: boolean) => void;
+  clickedValue: number;
+}
+
+export const TodoModal: React.FC<PropsUser> = (
+  { todos, isModalClosed, clickedValue },
+) => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [combineData, setCombineData] = useState<User[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const userData = await getUser(clickedValue);
+
+      setUsers([userData]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const updatedUsers = users.map((user) => {
+      const findData = todos.find((todo) => todo.id === clickedValue);
+
+      return {
+        ...user,
+        more: findData ? [findData] : [],
+      };
+    });
+
+    setCombineData(updatedUsers);
+  }, [users, todos, clickedValue]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {users.length === 0 ? (
         <Loader />
       ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
-          </div>
-        </div>
+        combineData.map((user) => (
+          <TodoModalList
+            user={user}
+            isModalClosed={isModalClosed}
+            key={user.id}
+          />
+        ))
       )}
     </div>
   );
