@@ -1,13 +1,13 @@
 import { Todo } from '../../types/Todo';
 
-interface Props {
+interface TodoListProps {
   todos: Todo[],
   showModal: (todo: Todo) => void,
   handleHide: (id: number) => void,
   selectedModal: number,
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<TodoListProps> = ({
   todos,
   showModal,
   handleHide,

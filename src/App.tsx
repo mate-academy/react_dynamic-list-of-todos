@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [search, setSearch] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [selectedModal, setSeletedModal] = useState<number>(0);
+  const [selectedModal, setSelectedModal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (search.length === 0 && selectedFilter.length === 0) {
+    if (!search.length && !selectedFilter.length) {
       setFilteredTodos(todos);
     } else {
       setFilteredTodos(todos.filter(todo => {
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSeletedModal(0);
+    setSelectedModal(0);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +85,8 @@ export const App: React.FC = () => {
     setSelectedFilter(option);
   };
 
-  const handleHide = (id: number) => {
-    setSeletedModal(id);
+  const handleHideModal = (id: number) => {
+    setSelectedModal(id);
   };
 
   return (
@@ -110,7 +110,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 showModal={showModal}
-                handleHide={handleHide}
+                handleHide={handleHideModal}
                 selectedModal={selectedModal}
               />
             </div>

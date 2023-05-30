@@ -3,12 +3,12 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
-interface Props {
+interface TodoModalProps {
   todo: Todo | undefined,
   closeModal: () => void
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
+export const TodoModal: React.FC<TodoModalProps> = ({ todo, closeModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
