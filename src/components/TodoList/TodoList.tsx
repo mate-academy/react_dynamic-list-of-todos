@@ -8,7 +8,7 @@ interface TodoListProps {
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  handleOpenTodo = () => { },
+  handleOpenTodo,
   selectedTodo,
 }) => {
   return (

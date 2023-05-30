@@ -6,12 +6,12 @@ interface TodoFilterProps {
 
 export const TodoFilter = ({
   query,
-  setQuery = () => { },
-  setTodosCategory = () => { },
+  setQuery,
+  setTodosCategory,
 }: TodoFilterProps) => {
   return (
     <form className="field has-addons">
-      <p className="control">
+      <div className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
@@ -23,9 +23,9 @@ export const TodoFilter = ({
             <option value="completed">Completed</option>
           </select>
         </span>
-      </p>
+      </div>
 
-      <p className="control is-expanded has-icons-left has-icons-right">
+      <div className="control is-expanded has-icons-left has-icons-right">
         <input
           data-cy="searchInput"
           type="text"
@@ -49,7 +49,7 @@ export const TodoFilter = ({
             />
           </span>
         )}
-      </p>
+      </div>
     </form>
   );
 };
