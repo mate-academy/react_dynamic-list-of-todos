@@ -30,15 +30,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const newFilteredTodos = todos.filter(todo => {
-      if (filterStatus === 'active') {
-        return !todo.completed;
-      }
+      const { completed } = todo;
 
-      if (filterStatus === 'completed') {
-        return todo.completed;
+      switch (filterStatus) {
+        case 'active':
+          return !completed;
+        case 'completed':
+          return completed;
+        default:
+          return true;
       }
-
-      return true;
     }).filter(todo => {
       return todo.title.toLowerCase().includes(searchText.toLowerCase());
     });
