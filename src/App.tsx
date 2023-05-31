@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     const cleanQuery = query.trim().toLowerCase();
 
     const handleToDoTitle = () => {
-      return todo.title.toLowerCase().includes(cleanQuery);
+      return todos.filter(todo => todo.title.toLowerCase().includes(cleanQuery));
     };
 
     return todos.filter(todo => {
