@@ -2,19 +2,21 @@ import { useState } from 'react';
 
 interface PropsTodoFilter {
   handleSelect(e: string): void;
-  searchQuery(word: string) : void;
+  handleSearchQuery(word: string): void;
 }
 
-export const TodoFilter = ({ handleSelect, searchQuery }: PropsTodoFilter) => {
+export const TodoFilter = ({
+  handleSelect, handleSearchQuery,
+}: PropsTodoFilter) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleQuery = (word: string) => {
-    searchQuery(word);
+    handleSearchQuery(word);
     setInputValue(word);
   };
 
   const handleResetInput = () => {
-    searchQuery('');
+    handleSearchQuery('');
     setInputValue('');
   };
 

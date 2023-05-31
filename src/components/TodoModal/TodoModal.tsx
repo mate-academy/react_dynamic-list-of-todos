@@ -6,18 +6,18 @@ import { Loader } from '../Loader';
 
 interface PropsTodoModal {
   todoModal: Todo;
-  resetTodoModal(reset: null): void;
+  handleResetTodoModal(reset: null): void;
 }
 
 export const TodoModal: React.FC<PropsTodoModal> = ({
   todoModal,
-  resetTodoModal,
+  handleResetTodoModal,
 }) => {
   const [todoWithUser, setTodoWithUser] = useState<TodoWithUser | null>(null);
 
   const handleClose = () => {
     setTodoWithUser(null);
-    resetTodoModal(null);
+    handleResetTodoModal(null);
   };
 
   useEffect(() => {
@@ -34,6 +34,12 @@ export const TodoModal: React.FC<PropsTodoModal> = ({
     loadUser();
   }, []);
 
+  const {
+    id, title, completed,
+  } = todoWithUser || todoModal;
+
+  const user = todoWithUser?.user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -45,7 +51,7 @@ export const TodoModal: React.FC<PropsTodoModal> = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${todoWithUser?.id}`}
+                {`Todo #${id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -59,18 +65,18 @@ export const TodoModal: React.FC<PropsTodoModal> = ({
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {todoWithUser?.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                {todoWithUser?.completed
+                {completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>}
 
                 {' by '}
 
-                <a href={todoWithUser?.user ? todoWithUser.user.email : ''}>
-                  {todoWithUser?.user && todoWithUser.user.name}
+                <a href={user ? user.email : ''}>
+                  {user && user.name}
                 </a>
               </p>
             </div>

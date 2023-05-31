@@ -28,11 +28,11 @@ export const App: React.FC = () => {
     loadGoods();
   }, [todos]);
 
-  const openModal = useCallback((todo: Todo) => {
+  const handleOpenModal = useCallback((todo: Todo) => {
     setTodoModal(todo);
   }, []);
 
-  const resetTodoModal = useCallback((reset: null) => {
+  const handleResetTodoModal = useCallback((reset: null) => {
     setTodoModal(reset);
   }, []);
 
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     setSelectCompleted(e);
   }, []);
 
-  const searchQuery = useCallback((word: string) => {
+  const handleSearchQuery = useCallback((word: string) => {
     setQuery(word);
   }, []);
 
@@ -48,10 +48,18 @@ export const App: React.FC = () => {
     let newTodos = todos;
 
     switch (selectCompleted) {
-      case 'active': newTodos = newTodos.filter(todo => !todo.completed);
+      case 'active': newTodos = newTodos.filter(todo => {
+        const { completed } = todo;
+
+        return !completed;
+      });
         break;
 
-      case 'completed': newTodos = newTodos.filter(todo => Boolean(todo.completed));
+      case 'completed': newTodos = newTodos.filter(todo => {
+        const { completed } = todo;
+
+        return completed;
+      });
         break;
 
       case 'all': newTodos = todos;
@@ -82,7 +90,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 handleSelect={handleSelect}
-                searchQuery={searchQuery}
+                handleSearchQuery={handleSearchQuery}
               />
             </div>
 
@@ -90,14 +98,14 @@ export const App: React.FC = () => {
               {!todos.length && <Loader />}
               <TodoList
                 todos={filteredTodos}
-                openModal={openModal}
+                handleOpenModal={handleOpenModal}
                 onReset={todoModal}
               />
             </div>
           </div>
         </div>
       </div>
-      {todoModal !== null && <TodoModal todoModal={todoModal} resetTodoModal={resetTodoModal} />}
+      {todoModal !== null && <TodoModal todoModal={todoModal} handleResetTodoModal={handleResetTodoModal} />}
     </>
   );
 };

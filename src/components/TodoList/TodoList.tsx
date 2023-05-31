@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 interface PropsTodoList {
   todos: Todo[];
-  openModal(todo: Todo): void;
+  handleOpenModal(todo: Todo): void;
   onReset: Todo | null;
 }
 
 export const TodoList: React.FC<PropsTodoList> = ({
   todos,
-  openModal,
+  handleOpenModal,
   onReset,
 }) => {
   const [selectedId, setSelectedId] = useState(0);
@@ -18,7 +18,7 @@ export const TodoList: React.FC<PropsTodoList> = ({
   const handleClickEyeButton = (todo: Todo) => {
     setSelectedId(todo.id);
 
-    openModal(todo);
+    handleOpenModal(todo);
   };
 
   if (selectedId !== 0 && !onReset) {
