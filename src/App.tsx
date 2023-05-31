@@ -18,18 +18,8 @@ export const App: React.FC = () => {
   const [clickedValue, setClickedValue] = useState(0);
   const [isModal, setIsModal] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const todoData = await getTodos();
-
-      setTodos(todoData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    getTodos().then(setTodos);
   }, []);
 
   let copyTodo = todos;
@@ -39,35 +29,45 @@ export const App: React.FC = () => {
   };
 
   if (inputValue.length > 0) {
-    copyTodo = todos.filter((todo) => todo.title.toLowerCase().includes(inputValue.toLowerCase()));
+    copyTodo = todos.filter((todo) => todo.title.toLowerCase()
+      .includes(inputValue
+        .toLowerCase()));
   }
 
   if (selectValue.length > 0) {
-    if (selectValue === 'all') {
-      setInputValue('');
-      setSelectValue('');
-    }
+    switch (selectValue) {
+      case 'all':
+        setInputValue('');
+        setSelectValue('');
+        break;
+      case 'completed':
+        if (inputValue.length === 0) {
+          copyTodo = todos.filter((todo) => todo.completed);
+        } else {
+          copyTodo = todos.filter(
+            (todo) => todo.completed
+              && todo.title.toLowerCase()
+                .includes(inputValue.toLowerCase()),
+          );
+        }
 
-    if (selectValue === 'completed') {
-      if (inputValue.length === 0) {
-        copyTodo = todos.filter((todo) => todo.completed);
-      } else {
-        copyTodo = todos.filter(
-          (todo) => todo.completed
-            && todo.title.toLowerCase().includes(inputValue.toLowerCase()),
-        );
-      }
-    }
+        break;
 
-    if (selectValue === 'active') {
-      if (inputValue.length === 0) {
-        copyTodo = todos.filter((todo) => !todo.completed);
-      } else {
-        copyTodo = todos.filter(
-          (todo) => !todo.completed
-            && todo.title.toLowerCase().includes(inputValue.toLowerCase()),
-        );
-      }
+      case 'active':
+        if (inputValue.length === 0) {
+          copyTodo = todos.filter((todo) => !todo.completed);
+        } else {
+          copyTodo = todos.filter(
+            (todo) => !todo.completed
+              && todo.title.toLowerCase()
+                .includes(inputValue.toLowerCase()),
+          );
+        }
+
+        break;
+
+      default:
+        break;
     }
   }
 

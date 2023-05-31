@@ -8,7 +8,8 @@ interface PropsTodoList {
   getClickedDataFromTable: (value: number) => void;
 }
 
-export const TodoList: React.FC<PropsTodoList> = ({ todos, getClickedDataFromTable }) => {
+export const TodoList: React.FC<PropsTodoList>
+= ({ todos, getClickedDataFromTable }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>

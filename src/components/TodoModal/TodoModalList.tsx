@@ -30,7 +30,9 @@ export const TodoModalList: React.FC<Props> = ({ isModalClosed, user }) => {
           className="delete"
           data-cy="modal-close"
           onClick={() => closeModal(false)}
+          aria-label="Close Modal"
         />
+
       </header>
 
       <div className="modal-card-body">

@@ -19,18 +19,26 @@ export const TodoModal: React.FC<PropsUser> = (
   const [combineData, setCombineData] = useState<User[]>([]);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const userData = await getUser(clickedValue);
+
+        if (isMounted) {
+          setUsers([userData]);
+        }
+      } catch (error) {
+        console.warn(error); // eslint-disable-line no-console
+      }
+    };
+
     fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    try {
-      const userData = await getUser(clickedValue);
-
-      setUsers([userData]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    return () => {
+      isMounted = false;
+    };
+  }, [clickedValue]);
 
   useEffect(() => {
     const updatedUsers = users.map((user) => {

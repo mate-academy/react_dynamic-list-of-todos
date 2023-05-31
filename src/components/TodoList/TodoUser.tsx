@@ -7,11 +7,12 @@ interface PropsTodoUser {
   getClickedDataFromTable: (value: number) => void;
 }
 
-export const TodoUser: React.FC<PropsTodoUser> = ({ todo, getClickedDataFromTable }) => {
+export const TodoUser: React.FC<PropsTodoUser>
+= ({ todo, getClickedDataFromTable }) => {
   const { id, title, completed } = todo;
 
-  const getClickedValue = (id: number) => {
-    getClickedDataFromTable(id);
+  const getClickedValue = (userId: number) => {
+    getClickedDataFromTable(userId);
   };
 
   return (
