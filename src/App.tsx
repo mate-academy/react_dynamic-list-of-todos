@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,55 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [filterType, setFilterType] = useState('all');
+
+  const selectTodo = (todoId: number) => {
+    setSelectedTodo(todos.find(todo => todo.id === todoId) || null);
+  };
+
+  const closeModal = () => setSelectedTodo(null);
+
+  const filterTodos = () => {
+    const cleanQuery = query.trim().toLowerCase();
+
+    return todos.filter(todo => {
+      const handleToDoTitle = () => {
+        return todo.title.toLowerCase().includes(cleanQuery);
+      };
+
+      switch (filterType) {
+        case 'active':
+          return !todo.completed && handleToDoTitle();
+        case 'completed':
+          return todo.completed && handleToDoTitle();
+        default:
+          return handleToDoTitle();
+      }
+    });
+  };
+
+  useEffect(() => {
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      });
+  }, []);
+
+  const todoList = (
+    <TodoList
+      selectedTodo={selectedTodo?.id || 0}
+      onSelect={selectTodo}
+      todos={filterTodos()}
+    />
+  );
+
   return (
     <>
       <div className="section">
@@ -17,18 +64,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                filterType={filterType}
+                setQuery={setQuery}
+                setFilterType={setFilterType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                todos.length
+                  ? todoList
+                  : <Loader />
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };
