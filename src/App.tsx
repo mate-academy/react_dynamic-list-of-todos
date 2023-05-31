@@ -35,7 +35,7 @@ export const App: React.FC = () => {
           return filterTitle;
       }
     });
-  }, [todos, input, setFilterType]);
+  }, [todos, input, filterType]);
 
   return (
     <>
