@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SortEnum } from './types/sort';
 
 export const App: React.FC = () => {
   const [visibleToDos, setVisibleToDos] = useState<Todo[]>([]);
@@ -21,10 +22,13 @@ export const App: React.FC = () => {
   const getSelectedTodos = (todos: Todo[]) => {
     const filteredTodos = todos.filter(({ completed, title }) => {
       switch (select) {
-        case 'active':
+        case SortEnum.ACTIVE:
           return !completed && getQuery(title);
 
-        case 'completed':
+        case SortEnum.ALL:
+          return getQuery(title);
+
+        case SortEnum.COMPLETED:
           return completed && getQuery(title);
 
         default:
