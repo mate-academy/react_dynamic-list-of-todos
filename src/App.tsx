@@ -30,6 +30,12 @@ const debounce = (callback: Dispatch<string>, delay: number) => {
   };
 };
 
+enum FilterStatus {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -52,13 +58,13 @@ export const App: React.FC = () => {
   const todosFilteredByStatus = useMemo(() => {
     return todos.filter(todo => {
       switch (filterStatus) {
-        case 'active':
+        case FilterStatus.active:
           return !todo.completed;
 
-        case 'completed':
+        case FilterStatus.completed:
           return todo.completed;
 
-        case 'all':
+        case FilterStatus.all:
         default:
           return true;
       }
