@@ -13,7 +13,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const [currUser, setCurrUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const {
     id, title, completed, userId,
@@ -21,14 +21,14 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
   useEffect(() => {
     getUser(userId)
-      .then((user) => setCurrUser(user));
+      .then((user) => setCurrentUser(user));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!currUser || !selectedTodo ? (
+      {!currentUser || !selectedTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -65,7 +65,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
               {' by '}
 
-              <a href={`mailto:${currUser.email}`}>{currUser.name}</a>
+              <a href={`mailto:${currentUser.email}`}>{currentUser.name}</a>
             </p>
           </div>
         </div>

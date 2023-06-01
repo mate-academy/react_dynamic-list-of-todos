@@ -24,7 +24,7 @@ export const App: React.FC = () => {
       .then((todos) => setVisibleTodos(todos));
   }, []);
 
-  const filteredTodos = useMemo(() => {
+  const handleFilterTodos = useMemo(() => {
     return visibleTodos.filter((todo) => {
       const filteredByQuery = todo.title
         .toLowerCase()
@@ -46,13 +46,13 @@ export const App: React.FC = () => {
     });
   }, [status, visibleTodos, query]);
 
-  const onChangeQuery = useCallback(
+  const handleQueryChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setQuery(event.target.value);
     }, [],
   );
 
-  const reset = useCallback(() => {
+  const handleQueryReset = useCallback(() => {
     setQuery('');
   }, []);
 
@@ -68,8 +68,8 @@ export const App: React.FC = () => {
                 query={query}
                 status={status}
                 setStatus={setStatus}
-                onChangeQuery={onChangeQuery}
-                resetQuery={reset}
+                onQueryChange={handleQueryChange}
+                onQueryReset={handleQueryReset}
               />
             </div>
 
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredTodos}
+                  onFilterTodos={handleFilterTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />

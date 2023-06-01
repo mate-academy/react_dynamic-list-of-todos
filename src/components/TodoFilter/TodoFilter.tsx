@@ -4,16 +4,16 @@ interface TodoFilterProps {
   query: string;
   status: string;
   setStatus: (value: string) => void;
-  onChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  resetQuery: () => void;
+  onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onQueryReset: () => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   query,
   status,
   setStatus,
-  onChangeQuery,
-  resetQuery,
+  onQueryChange,
+  onQueryReset,
 }) => {
   return (
     <form className="field has-addons">
@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={onChangeQuery}
+          onChange={onQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +53,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetQuery}
+              onClick={onQueryReset}
             />
           </span>
         )}
