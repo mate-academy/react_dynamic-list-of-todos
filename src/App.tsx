@@ -27,32 +27,34 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((todo) => setTodosFromServer(todo));
+      .then(setTodosFromServer);
   }, []);
 
-  const getFilteredTodos = () => {
+  const getVisibleTodos = () => {
     switch (filter) {
       case 'active':
-        return todosFromServer.filter(todo => !todo.completed);
+        return todosFromServer.filter(todo => !todo.completed && normalizeTitle(todo.title));
 
       case 'completed':
-        return todosFromServer.filter(todo => todo.completed);
+        return todosFromServer.filter(todo => todo.completed && normalizeTitle(todo.title));
 
       default:
-        return todosFromServer;
+        return todosFromServer.filter(todo => normalizeTitle(todo.title));
     }
   };
 
-  const filteredTodos = useMemo(
-    getFilteredTodos,
-    [filter, todosFromServer],
+  const visibleTodos = useMemo(
+    getVisibleTodos,
+    [filter, todosFromServer, searchValue],
   );
 
-  const getVisibleTodos = () => {
-    return filteredTodos.filter(todo => normalizeTitle(todo.title));
+  const searchHandler = (value: string) => {
+    setSearchValue(value);
   };
 
-  const visibleTodos = getVisibleTodos();
+  const selectHandler = (value: string) => {
+    setFilter(value);
+  };
 
   return (
     <>
@@ -65,9 +67,9 @@ export const App: React.FC = () => {
               <TodoFilter
                 options={filterOptions}
                 filter={filter}
-                setFilter={setFilter}
+                onSelect={selectHandler}
                 searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                onChange={searchHandler}
               />
             </div>
 

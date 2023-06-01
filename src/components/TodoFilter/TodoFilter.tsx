@@ -3,17 +3,17 @@ import React from 'react';
 interface Props {
   options: string[];
   filter: string;
-  setFilter: (value: string) => void
+  onSelect: (value: string) => void
   searchValue: string;
-  setSearchValue: (value: string) => void
+  onChange: (value: string) => void
 }
 
 export const TodoFilter: React.FC<Props> = ({
   options,
   filter,
-  setFilter,
+  onSelect,
   searchValue,
-  setSearchValue,
+  onChange,
 }) => {
   return (
     <form className="field has-addons">
@@ -23,7 +23,7 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             data-cy="statusSelect"
             onChange={(event) => {
-              setFilter(event.target.value);
+              onSelect(event.target.value);
             }}
           >
             {options.map(option => (
@@ -46,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
           placeholder="Search..."
           value={searchValue}
           onChange={(event) => {
-            setSearchValue(event.target.value);
+            onChange(event.target.value);
           }}
         />
         <span className="icon is-left">
@@ -62,7 +62,7 @@ export const TodoFilter: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 onClick={() => {
-                  setSearchValue('');
+                  onChange('');
                 }}
               />
             </label>
