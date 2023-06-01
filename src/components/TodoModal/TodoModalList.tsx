@@ -37,11 +37,11 @@ export const TodoModalList: React.FC<Props> = ({ isModalClosed, user }) => {
 
       <div className="modal-card-body">
         <p className="block" data-cy="modal-title">
-          {user.more[0].title}
+          {user.additionalTodos[0].title}
         </p>
 
         <p className="block" data-cy="modal-user">
-          {!user.more[0].completed ? (
+          {!user.additionalTodos[0].completed ? (
             <strong className="has-text-danger">Planned</strong>
           ) : (
             <strong className="has-text-success">Done</strong>

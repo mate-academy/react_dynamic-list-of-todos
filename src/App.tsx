@@ -16,22 +16,29 @@ export const App: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [selectValue, setSelectValue] = useState('');
   const [clickedValue, setClickedValue] = useState(0);
-  const [isModal, setIsModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
 
-  let copyTodo = todos;
+  let filteredTodos = todos;
 
-  const filterList = (search: string) => {
+  const doesTodoTitleIncludeInput = (todo: Todo, input: string) => {
+    const lowercaseTitle = todo.title.toLowerCase();
+    const lowercaseInput = input.toLowerCase();
+
+    return lowercaseTitle.includes(lowercaseInput);
+  };
+
+  const handleFilterList = (search: string) => {
     setInputValue(search.toLowerCase());
   };
 
-  if (inputValue.length > 0) {
-    copyTodo = todos.filter((todo) => todo.title.toLowerCase()
-      .includes(inputValue
-        .toLowerCase()));
+  if (inputValue.length) {
+    filteredTodos
+    = todos
+        .filter((todo) => doesTodoTitleIncludeInput(todo, inputValue));
   }
 
   if (selectValue.length > 0) {
@@ -41,27 +48,24 @@ export const App: React.FC = () => {
         setSelectValue('');
         break;
       case 'completed':
-        if (inputValue.length === 0) {
-          copyTodo = todos.filter((todo) => todo.completed);
+        if (!inputValue.length) {
+          filteredTodos = todos.filter((todo) => todo.completed);
         } else {
-          copyTodo = todos.filter(
-            (todo) => todo.completed
-              && todo.title.toLowerCase()
-                .includes(inputValue.toLowerCase()),
-          );
+          filteredTodos
+          = todos
+              .filter((todo) => todo.completed
+              && doesTodoTitleIncludeInput(todo, inputValue));
         }
 
         break;
 
       case 'active':
-        if (inputValue.length === 0) {
-          copyTodo = todos.filter((todo) => !todo.completed);
+        if (!inputValue.length) {
+          filteredTodos = todos.filter((todo) => !todo.completed);
         } else {
-          copyTodo = todos.filter(
-            (todo) => !todo.completed
-              && todo.title.toLowerCase()
-                .includes(inputValue.toLowerCase()),
-          );
+          filteredTodos
+           = todos.filter((todo) => !todo.completed
+           && doesTodoTitleIncludeInput(todo, inputValue));
         }
 
         break;
@@ -71,16 +75,16 @@ export const App: React.FC = () => {
     }
   }
 
-  const filterlistBySelectElem = (search: string) => {
+  const handleFilterBySelectElem = (search: string) => {
     setSelectValue(search);
   };
 
-  const getClickedDataFromTable = (value: number) => {
+  const handleGetClickedDataFromTable = (value: number) => {
     setClickedValue(value);
   };
 
-  const isModalClosed = (modal: boolean) => {
-    setIsModal(modal);
+  const handleCloseModal = (modal: boolean) => {
+    setIsModalOpen(modal);
     setClickedValue(0);
   };
 
@@ -93,28 +97,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterList={filterList}
-                filterlistBySelectElem={filterlistBySelectElem}
+                filterList={handleFilterList}
+                filterlistBySelectElem={handleFilterBySelectElem}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {!todos.length ? (
                 <Loader />
               ) : (
                 <TodoList
-                  todos={copyTodo}
-                  getClickedDataFromTable={getClickedDataFromTable}
+                  todos={filteredTodos}
+                  getClickedDataFromTable={handleGetClickedDataFromTable}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {isModal || clickedValue > 0 ? (
+      {isModalOpen || clickedValue ? (
         <TodoModal
           todos={todos}
-          isModalClosed={isModalClosed}
+          isModalClosed={handleCloseModal}
           clickedValue={clickedValue}
         />
       ) : null}

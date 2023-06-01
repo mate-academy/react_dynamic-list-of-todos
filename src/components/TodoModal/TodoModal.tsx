@@ -29,7 +29,7 @@ export const TodoModal: React.FC<PropsUser> = (
           setUsers([userData]);
         }
       } catch (error) {
-        console.warn(error); // eslint-disable-line no-console
+        throw new Error('error');
       }
     };
 
@@ -46,7 +46,7 @@ export const TodoModal: React.FC<PropsUser> = (
 
       return {
         ...user,
-        more: findData ? [findData] : [],
+        additionalTodos: findData ? [findData] : [],
       };
     });
 
