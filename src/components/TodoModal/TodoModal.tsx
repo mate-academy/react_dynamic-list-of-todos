@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+import { getUser } from '../../api';
+
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+
+type Props = {
+  todo: Todo;
+  onCloseModal: () => void;
+};
+
+type TodoWithUser = Todo & { user: User };
+
+export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
+  const [todoWithUser, setTodoWithUser] = useState<TodoWithUser | null>(null);
+
+  const loadUserAndSetTodo = async () => {
+    const user = await getUser(todo.userId);
+
+    setTodoWithUser({
+      ...todo,
+      user,
+    });
+  };
+
+  useEffect(() => {
+    loadUserAndSetTodo();
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!todoWithUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +42,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todoWithUser.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +50,24 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onCloseModal()}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todoWithUser.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todoWithUser.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${todoWithUser.user.email}`}>
+                {todoWithUser.user.name}
               </a>
             </p>
           </div>
