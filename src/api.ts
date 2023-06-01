@@ -17,7 +17,7 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see how the loader works
-  return wait(300)
+  return wait(900)
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }

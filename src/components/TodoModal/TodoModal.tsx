@@ -1,12 +1,18 @@
-import React from 'react';
+// import { Dispatch, SetStateAction } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+export type TodoM = {
+  list: Todo[],
+  onCross: () => void,
+};
+
+export const TodoModal: React.FC<TodoM> = ({ list, onCross }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {list.length === 0 ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -23,6 +29,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onCross()}
             />
           </header>
 
