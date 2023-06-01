@@ -12,15 +12,8 @@ interface TodoModalProps {
 export const TodoModal = ({
   selectedUser, selectedTodo, reset, isSelectedLoading,
 }:TodoModalProps) => {
-  // const [selectedUser, setSelectedUser] = useState<User>();
-  // const [selectedTodo, setSelectedTodo] = useState<Todo>();
-
-  // useEffect(() => {
-  //   setSelectedTodo(todos.find(todo => todo.id === selectedId));
-  //   getUser(selectedTodo.userId).then(setSelectedUser);
-  //     // eslint-disable-next-line no-console
-  //     console.log('user', selectedUser);
-  // }, []);
+  const { name, email } = selectedUser || {};
+  const { id, title, completed } = selectedTodo || {};
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -35,7 +28,7 @@ export const TodoModal = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo?.id}`}
+                {`Todo #${id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -49,18 +42,18 @@ export const TodoModal = ({
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {selectedTodo?.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                <strong className={`has-text-${selectedTodo?.completed ? 'success' : 'danger'}`}>
-                  {selectedTodo?.completed ? 'Done' : 'Planned'}
+                <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
+                  {completed ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}
 
-                <a href={`mailto:${selectedUser?.email}`}>
-                  {selectedUser?.name}
+                <a href={`mailto:${email}`}>
+                  {name}
                 </a>
               </p>
             </div>

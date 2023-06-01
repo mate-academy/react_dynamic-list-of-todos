@@ -32,7 +32,7 @@ export const TodoFilter = ({ filterTodos, todos }: TodoFilterProps) => {
     });
   };
 
-  const reset = () => {
+  const handleReset = () => {
     setQuery('');
     filterTodos(filteredTodos(selectedFilter, ''));
   };
@@ -83,7 +83,7 @@ export const TodoFilter = ({ filterTodos, todos }: TodoFilterProps) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => reset()}
+              onClick={() => handleReset()}
             />
           </span>
         )}

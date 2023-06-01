@@ -25,25 +25,25 @@ export const App: React.FC = () => {
     getTodos().then(setFilteredTodos).finally(() => setIsLoading(false));
   }, []);
 
-  const filterTodos = (newTodos: Todo[]) => {
+  const handleTodosFilter = (newTodos: Todo[]) => {
     setFilteredTodos(newTodos);
   };
 
-  const selectTodoId = (todoId: number) => {
+  const handleTodoIdSelect = (todoId: number) => {
     setSelectedId(todoId);
   };
 
-  const selectUser = (userId: number) => {
+  const handleUserSelect = (userId: number) => {
     setIsSelectedLoading(true);
     getUser(userId).then(setSelectedUser).finally(() => setIsSelectedLoading(false));
   };
 
-  const selectTodo = (todo: Todo) => {
+  const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
-    selectUser(todo.userId);
+    handleUserSelect(todo.userId);
   };
 
-  const reset = () => {
+  const handleReset = () => {
     setSelectedId(0);
     setSelectedTodo(undefined);
     setSelectedUser(undefined);
@@ -58,21 +58,21 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterTodos={filterTodos}
+                filterTodos={handleTodosFilter}
                 todos={todos}
               />
             </div>
 
             <div className="block">
               {isLoading ? <Loader /> : (
-                <TodoList todos={filteredTodos} selectedId={selectedId} selectTodoId={selectTodoId} selectTodo={selectTodo} />
+                <TodoList todos={filteredTodos} selectedId={selectedId} selectTodoId={handleTodoIdSelect} selectTodo={handleTodoSelect} />
               )}
             </div>
           </div>
         </div>
       </div>
       {selectedId && (
-        <TodoModal selectedUser={selectedUser} selectedTodo={selectedTodo} reset={reset} isSelectedLoading={isSelectedLoading} />
+        <TodoModal selectedUser={selectedUser} selectedTodo={selectedTodo} reset={handleReset} isSelectedLoading={isSelectedLoading} />
       )}
     </>
   );
