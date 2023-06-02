@@ -1,4 +1,5 @@
 type TodoFilterProps = {
+  filterType: string,
   setFilterType: (arg: string) => void,
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handleQueryDelete: () => void,
@@ -7,6 +8,7 @@ type TodoFilterProps = {
 
 export const TodoFilter = (
   {
+    filterType,
     setFilterType,
     handleInputChange,
     handleQueryDelete,
@@ -18,25 +20,14 @@ export const TodoFilter = (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
-            <option
-              value="all"
-              onClick={() => setFilterType('all')}
-            >
-              All
-            </option>
-            <option
-              value="active"
-              onClick={() => setFilterType('active')}
-            >
-              Active
-            </option>
-            <option
-              value="completed"
-              onClick={() => setFilterType('completed')}
-            >
-              Completed
-            </option>
+          <select
+            data-cy="statusSelect"
+            value={filterType}
+            onChange={(event) => setFilterType(event?.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>

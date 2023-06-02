@@ -41,10 +41,10 @@ export const App: React.FC = () => {
         filteredTodos = todos;
         break;
       case 'completed':
-        filteredTodos = todos.filter(todo => todo.completed === true);
+        filteredTodos = todos.filter(todo => todo.completed);
         break;
       case 'active':
-        filteredTodos = todos.filter(todo => todo.completed === false);
+        filteredTodos = todos.filter(todo => !todo.completed);
         break;
       default:
         break;
@@ -78,6 +78,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                filterType={filterType}
                 setFilterType={setFilterType}
                 query={query}
                 handleInputChange={handleInputChange}
