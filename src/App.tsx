@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -23,8 +23,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader loading={isLoading} />
-              <TodoList />
+              {isLoading && <Loader />}
+              <TodoList setIsLoading={setIsLoading} />
             </div>
           </div>
         </div>

@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => {
+interface Props {
+  setIsLoading: (arg0: boolean) => void;
+}
+
+export const TodoList: React.FC<Props> = ({ setIsLoading }) => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(fetchedTodos => setTodos(fetchedTodos));
+      .then(fetchedTodos => setTodos(fetchedTodos))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
