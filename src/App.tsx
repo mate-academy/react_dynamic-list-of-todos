@@ -23,7 +23,7 @@ export const App: React.FC = () => {
   };
 
   const handleCross = () => {
-    setSelectedTodo(undefined);
+    setSelectedTodo(null);
   };
 
   return (
@@ -55,6 +55,7 @@ export const App: React.FC = () => {
         <TodoModal
           list={todos}
           onCross={handleCross}
+          todo={selectedTodo}
         />
       )}
     </>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type TodosList = {
   list: Todo[],
@@ -28,7 +29,16 @@ export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered" />
             <td className="is-vcentered is-expanded">
-              <p className="has-text-danger">{todo.title}</p>
+              <p
+                className={classNames(
+                  {
+                    'has-text-danger': !todo.completed,
+                    'has-text-success': todo.completed,
+                  },
+                )}
+              >
+                {todo.title}
+              </p>
             </td>
             <td className="has-text-right is-vcentered">
               <button
