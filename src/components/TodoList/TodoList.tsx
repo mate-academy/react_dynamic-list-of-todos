@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 interface TodoListProps {
   todos: Todo[],
   isEyeOpenFor: number | null,
-  setDetails: (arg0: Todo)=> void,
+  setDetails: (todo: Todo)=> void,
   queryFilter: string,
   statusFilter: string,
 }
