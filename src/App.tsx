@@ -12,21 +12,18 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>();
-  const [isSelected, setIsSelected] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>();
 
   useEffect(() => {
     getTodos().then(data => setTodos(data));
-  }, [todos]);
+  }, []);
 
   const handleSelectBtn = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsSelected(true);
   };
 
   const handleCross = () => {
     setSelectedTodo(undefined);
-    setIsSelected(false);
   };
 
   return (
@@ -54,13 +51,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isSelected && (
+      {selectedTodo && (
         <TodoModal
           list={todos}
           onCross={handleCross}
         />
       )}
-
     </>
   );
 };
