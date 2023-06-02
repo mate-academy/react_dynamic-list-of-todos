@@ -64,7 +64,7 @@ export const TodoModal: React.FC<TodoM> = ({ list, onCross, todo }) => {
               )}
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${userData?.email}`}>
                 {userData?.name || <Loader />}
               </a>
             </p>
