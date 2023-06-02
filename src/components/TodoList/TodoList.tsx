@@ -29,14 +29,13 @@ export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed
-                ? (
+                && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
-                ) : (
-                  <td className="is-vcentered" />
                 )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames(
@@ -49,6 +48,7 @@ export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
                 {todo.title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
