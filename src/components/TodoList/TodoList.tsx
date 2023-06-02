@@ -1,6 +1,6 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 type TodosList = {
   list: Todo[],
@@ -27,7 +27,16 @@ export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
         {list.map(todo => (
           <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered" />
+            <td className="is-vcentered">
+              {todo.completed
+                ? (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                ) : (
+                  <td className="is-vcentered" />
+                )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames(

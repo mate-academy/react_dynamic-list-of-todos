@@ -1,14 +1,30 @@
 // import { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 export type TodoM = {
   list: Todo[],
   onCross: () => void,
   todo: Todo,
+  getUser: (userId: number) => void,
 };
 
 export const TodoModal: React.FC<TodoM> = ({ list, onCross, todo }) => {
+  const [userData, setUserData] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser(todo.userId);
+
+      setUserData(user);
+    };
+
+    fetchUser();
+  }, [todo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -45,12 +61,11 @@ export const TodoModal: React.FC<TodoM> = ({ list, onCross, todo }) => {
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
-              )
-              }
+              )}
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {userData?.name || <Loader />}
               </a>
             </p>
           </div>
