@@ -1,13 +1,40 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { SortBy } from '../../types/SortBy';
 
-type TodosList = {
-  list: Todo[],
+type ListOfTodos = {
+  listOfTodos: Todo[],
   onSelect: (todo: Todo) => void;
+  sortBy: SortBy,
+  query: string,
 };
 
-export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
+export const TodoList: React.FC<ListOfTodos> = ({
+  listOfTodos,
+  onSelect,
+  sortBy,
+  query,
+}) => {
+  let visibleListOfTodos = listOfTodos.filter(el => el.title.includes(query));
+
+  switch (sortBy) {
+    case SortBy.active:
+      visibleListOfTodos = visibleListOfTodos.filter(
+        el => el.completed === false,
+      );
+      break;
+
+    case SortBy.completed:
+      visibleListOfTodos = visibleListOfTodos.filter(
+        el => el.completed === true,
+      );
+      break;
+
+    default:
+      break;
+  }
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -24,7 +51,7 @@ export const TodoList: React.FC<TodosList> = ({ list, onSelect }) => {
       </thead>
 
       <tbody>
-        {list.map(todo => (
+        {visibleListOfTodos.map(todo => (
           <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
