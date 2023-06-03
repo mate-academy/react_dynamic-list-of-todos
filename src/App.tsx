@@ -40,7 +40,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodos();
-  }, [loadTodos]);
+  }, []);
 
   const handleOpen = useCallback((todo: Todo, userId: number) => {
     setIsModalOpen(true);
@@ -56,9 +56,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
-      const inputFilter = todo.title
-        .toLowerCase()
-        .includes(query.toLowerCase().trim());
+      const inputFilter = todo.title.includes(query.toLowerCase().trim());
 
       switch (filter) {
         case TodosFilter.COMPLETED:
