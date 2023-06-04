@@ -7,10 +7,13 @@ interface Props {
   setIsLoading: (arg0: boolean) => void;
   setInspectedTodo: (arg0: Todo | null) => void;
   filteringMode: string;
+  searchQuery: string;
 }
 
 export const TodoList: React.FC<Props>
-  = ({ setIsLoading, setInspectedTodo, filteringMode }) => {
+  = ({
+    setIsLoading, setInspectedTodo, filteringMode, searchQuery,
+  }) => {
     const [todos, setTodos] = useState<Todo[] | null>(null);
 
     useEffect(() => {
@@ -20,15 +23,26 @@ export const TodoList: React.FC<Props>
     }, []);
 
     const handleFiltering = (todosArg: Todo[] | null) => {
+      let filteredTodos: Todo[] = [];
+
+      if (todosArg === null) {
+        return null;
+      }
+
       switch (filteringMode) {
         case 'active':
-          return todosArg?.filter(todo => todo.completed);
+          filteredTodos = todosArg?.filter(todo => todo.completed);
+          break;
         case 'completed':
-          return todosArg?.filter(todo => !todo.completed);
+          filteredTodos = todosArg?.filter(todo => !todo.completed);
+          break;
         case 'all':
+          filteredTodos = todosArg;
+          break;
         default:
-          return todosArg;
       }
+
+      return filteredTodos.filter(todo => todo.title.includes(searchQuery));
     };
 
     return (
