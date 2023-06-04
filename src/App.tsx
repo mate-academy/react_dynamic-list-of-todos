@@ -39,7 +39,6 @@ export const App: React.FC = () => {
 
   const handleClearInputBtn = () => {
     setQuery('');
-    console.log(query);
   };
 
   return (
