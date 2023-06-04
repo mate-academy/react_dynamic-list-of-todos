@@ -8,11 +8,12 @@ interface Props {
   setInspectedTodo: (arg0: Todo | null) => void;
   filteringMode: string;
   searchQuery: string;
+  inspectedTodo: Todo | null;
 }
 
 export const TodoList: React.FC<Props>
   = ({
-    setIsLoading, setInspectedTodo, filteringMode, searchQuery,
+    setIsLoading, setInspectedTodo, filteringMode, searchQuery, inspectedTodo,
   }) => {
     const [todos, setTodos] = useState<Todo[] | null>(null);
 
@@ -42,7 +43,8 @@ export const TodoList: React.FC<Props>
         default:
       }
 
-      return filteredTodos.filter(todo => todo.title.includes(searchQuery));
+      return filteredTodos.filter(todo => todo.title.toLocaleLowerCase()
+        .includes(searchQuery.toLocaleLowerCase()));
     };
 
     return (
@@ -64,38 +66,42 @@ export const TodoList: React.FC<Props>
         <tbody>
           {handleFiltering(todos)?.map((todo: Todo) => {
             return (
-              <>
-                <tr data-cy="todo" className="">
-                  <td className="is-vcentered">{todo.id}</td>
-                  <td className="is-vcentered">
-                    <span className="icon">
-                      {todo.completed && <i className="fas fa-check" />}
-                    </span>
-                  </td>
-                  <td className="is-vcentered is-expanded">
-                    <p className={classNames({
-                      'has-text-danger': !todo.completed,
-                      'has-text-success': todo.completed,
-                    })}
-                    >
-                      {todo.title}
+              <tr data-cy="todo" key={todo.id}>
+                <td className="is-vcentered">{todo.id}</td>
+                <td className="is-vcentered">
+                  <span className="icon">
+                    {todo.completed
+                    && <i data-cy="iconCompleted" className="fas fa-check" />}
+                  </span>
+                </td>
+                <td className="is-vcentered is-expanded">
+                  <p className={classNames({
+                    'has-text-danger': !todo.completed,
+                    'has-text-success': todo.completed,
+                  })}
+                  >
+                    {todo.title}
 
-                    </p>
-                  </td>
-                  <td className="has-text-right is-vcentered">
-                    <button
-                      data-cy="selectButton"
-                      className="button"
-                      type="button"
-                      onClick={() => setInspectedTodo(todo)}
-                    >
-                      <span className="icon">
-                        <i className="far fa-eye" />
-                      </span>
-                    </button>
-                  </td>
-                </tr>
-              </>
+                  </p>
+                </td>
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => setInspectedTodo(todo)}
+                  >
+                    <span className="icon">
+                      <i className={classNames({
+                        far: true,
+                        'fa-eye-slash': inspectedTodo?.id === todo.id,
+                        'fa-eye': !(inspectedTodo?.id === todo.id),
+                      })}
+                      />
+                    </span>
+                  </button>
+                </td>
+              </tr>
             );
           })}
         </tbody>

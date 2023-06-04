@@ -33,8 +33,7 @@ export const TodoModal: React.FC<Props>
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                Todo
-                {' '}
+                Todo #
                 {inspectedTodo.id}
               </div>
 
@@ -49,7 +48,7 @@ export const TodoModal: React.FC<Props>
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                quis ut nam facilis et officia qui
+                {inspectedTodo.title}
               </p>
 
               <p className="block" data-cy="modal-user">

@@ -36,6 +36,7 @@ export const App: React.FC = () => {
                 setInspectedTodo={setInspectedTodo}
                 filteringMode={filteringMode}
                 searchQuery={searchQuery}
+                inspectedTodo={inspectedTodo}
               />
             </div>
           </div>
