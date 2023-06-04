@@ -11,6 +11,8 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [inspectedTodo, setInspectedTodo] = useState<null | Todo>(null);
+  const [filteringMode, setFilteringMode]
+    = useState<string>('all');
 
   return (
     <>
@@ -20,7 +22,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter setFilteringMode={setFilteringMode} />
             </div>
 
             <div className="block">
@@ -28,6 +30,7 @@ export const App: React.FC = () => {
               <TodoList
                 setIsLoading={setIsLoading}
                 setInspectedTodo={setInspectedTodo}
+                filteringMode={filteringMode}
               />
             </div>
           </div>
