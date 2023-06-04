@@ -5,9 +5,11 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   setIsLoading: (arg0: boolean) => void;
+  setInspectedTodoId: (arg0: number | null) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ setIsLoading }) => {
+export const TodoList: React.FC<Props>
+= ({ setIsLoading, setInspectedTodoId }) => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {

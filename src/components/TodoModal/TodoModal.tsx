@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
-  const [isLoading, _setIsLoading] = useState(true);
+  const [isLoading] = useState(true);
 
   return (
     <div className="modal is-active" data-cy="modal">
