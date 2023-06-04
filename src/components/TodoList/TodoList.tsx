@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
 
@@ -37,9 +38,20 @@ export const TodoList: React.FC<Props> = ({ setIsLoading }) => {
             <>
               <tr data-cy="todo" className="">
                 <td className="is-vcentered">{todo.id}</td>
-                <td className="is-vcentered" />
+                <td className="is-vcentered">
+                  <span className="icon">
+                    {todo.completed && <i className="fas fa-check" />}
+                  </span>
+                </td>
                 <td className="is-vcentered is-expanded">
-                  <p className="has-text-danger">{todo.title}</p>
+                  <p className={classNames({
+                    'has-text-danger': !todo.completed,
+                    'has-text-success': todo.completed,
+                  })}
+                  >
+                    {todo.title}
+
+                  </p>
                 </td>
                 <td className="has-text-right is-vcentered">
                   <button

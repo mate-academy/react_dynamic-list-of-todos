@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
+  const [isLoading, _setIsLoading] = useState(true);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
       {/* eslint-disable-next-line no-constant-condition */}
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
