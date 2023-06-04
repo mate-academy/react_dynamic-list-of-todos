@@ -24,7 +24,6 @@ export const TodoModal: React.FC<Props>
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {/* eslint-disable-next-line no-constant-condition */}
       {isLoading ? (
         <Loader />
       ) : (

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -26,14 +25,22 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList setIsLoading={setIsLoading} setInspectedTodo={setInspectedTodo} />
+              <TodoList
+                setIsLoading={setIsLoading}
+                setInspectedTodo={setInspectedTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {inspectedTodo && <TodoModal inspectedTodo={inspectedTodo} setInspectedTodo={setInspectedTodo} />}
-      {/* ENABLE LATER */}
+      {inspectedTodo
+      && (
+        <TodoModal
+          inspectedTodo={inspectedTodo}
+          setInspectedTodo={setInspectedTodo}
+        />
+      )}
     </>
   );
 };
