@@ -7,10 +7,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [inspectedTodoId, setInspectedTodoId] = useState(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [inspectedTodo, setInspectedTodo] = useState<null | Todo>(null);
 
   return (
     <>
@@ -25,13 +26,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList setIsLoading={setIsLoading} setInspectedTodoId={setInspectedTodoId} />
+              <TodoList setIsLoading={setIsLoading} setInspectedTodo={setInspectedTodo} />
             </div>
           </div>
         </div>
       </div>
 
-      {inspectedTodoId && <TodoModal />}
+      {inspectedTodo && <TodoModal inspectedTodo={inspectedTodo} setInspectedTodo={setInspectedTodo} />}
       {/* ENABLE LATER */}
     </>
   );

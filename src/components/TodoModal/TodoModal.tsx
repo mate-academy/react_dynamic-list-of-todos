@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
-  const [isLoading] = useState(true);
+interface Props {
+  inspectedTodo: Todo,
+  setInspectedTodo: (arg0: Todo | null) => void;
+}
+
+export const TodoModal: React.FC<Props>
+= ({ inspectedTodo, setInspectedTodo }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState<null | User>(null);
+
+  useEffect(() => {
+    getUser(inspectedTodo.userId)
+      .then(fetchedUser => setUserInfo(fetchedUser))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -26,6 +42,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => setInspectedTodo(null)}
             />
           </header>
 
@@ -35,13 +52,14 @@ export const TodoModal: React.FC = () => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {inspectedTodo.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${userInfo?.email}`}>
+                {userInfo?.name}
               </a>
             </p>
           </div>

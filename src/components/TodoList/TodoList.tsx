@@ -5,11 +5,11 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   setIsLoading: (arg0: boolean) => void;
-  setInspectedTodoId: (arg0: number | null) => void;
+  setInspectedTodo: (arg0: Todo | null) => void;
 }
 
 export const TodoList: React.FC<Props>
-= ({ setIsLoading, setInspectedTodoId }) => {
+= ({ setIsLoading, setInspectedTodo }) => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
@@ -60,6 +60,7 @@ export const TodoList: React.FC<Props>
                     data-cy="selectButton"
                     className="button"
                     type="button"
+                    onClick={() => setInspectedTodo(todo)}
                   >
                     <span className="icon">
                       <i className="far fa-eye" />
