@@ -19,7 +19,7 @@ export const App: React.FC = () => {
     getTodos().then(visibleTodos => setTodos(visibleTodos));
   }, []);
 
-  const visibleTodos = useMemo(() => {
+  const filterTodos = useMemo(() => {
     return todos.filter(todo => {
       const filterTitle = todo.title
         .toLowerCase()
@@ -53,11 +53,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {!todos.length ? (
                 <Loader />
               ) : (
                 <TodoList
-                  todos={visibleTodos}
+                  todos={filterTodos}
                   selectedTodo={selectedTodo}
                   handleTodoSelection={setSelectedTodo}
                 />
