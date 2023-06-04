@@ -31,10 +31,10 @@ export const TodoList: React.FC<Props>
 
       switch (filteringMode) {
         case 'active':
-          filteredTodos = todosArg?.filter(todo => todo.completed);
+          filteredTodos = todosArg?.filter(todo => !todo.completed);
           break;
         case 'completed':
-          filteredTodos = todosArg?.filter(todo => !todo.completed);
+          filteredTodos = todosArg?.filter(todo => todo.completed);
           break;
         case 'all':
           filteredTodos = todosArg;

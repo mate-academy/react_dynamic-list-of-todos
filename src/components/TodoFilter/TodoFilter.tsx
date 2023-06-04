@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 interface Props {
   setFilteringMode: (arg0: string) => void;
   setSearchQuery: (arg0: string) => void,
@@ -35,12 +36,14 @@ export const TodoFilter: React.FC<Props>
           </span>
 
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-            />
+            {searchQuery && (
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={() => setSearchQuery('')}
+              />
+            )}
           </span>
         </p>
       </form>
