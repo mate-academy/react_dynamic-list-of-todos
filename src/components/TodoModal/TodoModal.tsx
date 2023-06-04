@@ -5,27 +5,26 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 interface TodoModalProps {
-  todo: Todo,
-  setTodoId: (todo: Todo | null) => void
+  todo: Todo;
+  setTodo: (todo: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<TodoModalProps> = ({ todo, setTodoId }) => {
-  const [user, setUserId] = useState<User | null>(null);
+export const TodoModal: React.FC<TodoModalProps>
+= ({ todo, setTodo }) => {
+  const [fetchedUser, setFetchedUser] = useState<User | null>(null);
   const {
     id, title, completed, userId,
   } = todo;
 
   useEffect(() => {
-    getUser(userId).then(userFound => setUserId(userFound));
+    getUser(userId).then(userFound => setFetchedUser(userFound));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user || !todo ? (
-        <Loader />
-      ) : (
+      {(fetchedUser && todo) ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -35,12 +34,12 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, setTodoId }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setTodoId(null)}
+              onClick={() => setTodo(null)}
+              aria-label="close"
             />
           </header>
 
@@ -50,18 +49,18 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, setTodoId }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
-
+              {completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
-
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              <a href={`mailto:${fetchedUser.email}`}>{fetchedUser.name}</a>
             </p>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );

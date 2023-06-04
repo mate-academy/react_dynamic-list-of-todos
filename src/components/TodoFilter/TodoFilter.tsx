@@ -1,15 +1,15 @@
 import React from 'react';
 
 interface TodoFilterProps {
-  filterType: string,
-  setFilterType: (option: string) => void,
+  filterType: string;
+  onFilterTypeChange: (option: string) => void;
   inputValue: string;
-  setInputValue: (query: string) => void,
+  onInputValueChange: (input: string) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = React.memo((
   {
-    filterType, setFilterType, inputValue, setInputValue,
+    filterType, onFilterTypeChange, inputValue, onInputValueChange,
   },
 ) => (
   <form className="field has-addons">
@@ -18,7 +18,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = React.memo((
         <select
           data-cy="statusSelect"
           value={filterType}
-          onChange={(event) => setFilterType(event.target.value)}
+          onChange={(event) => onFilterTypeChange(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,7 +34,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = React.memo((
         className="input"
         placeholder="Search..."
         value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
+        onChange={(event) => onInputValueChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = React.memo((
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setInputValue('')}
+            onClick={() => onInputValueChange('')}
           />
         </span>
       )}

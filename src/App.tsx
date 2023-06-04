@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -47,22 +46,22 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterType={filterType}
-                setFilterType={setFilterType}
+                onFilterTypeChange={setFilterType}
                 inputValue={input}
-                setInputValue={setInput}
+                onInputValueChange={setInput}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-                  />
-                )}
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  handleTodoSelection={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -70,7 +69,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          setTodoId={setSelectedTodo}
+          setTodo={setSelectedTodo}
         />
       )}
     </>
