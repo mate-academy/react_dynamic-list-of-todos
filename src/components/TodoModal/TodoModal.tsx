@@ -1,12 +1,26 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  currentTodo: Todo,
+  currentUser: User | undefined,
+  handleCloseModal: () => void,
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  currentTodo,
+  currentUser,
+  handleCloseModal,
+}) => {
+  const { id, title, completed } = currentTodo;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!currentUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +29,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +37,26 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleCloseModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={`has-text-${completed ? 'success' : 'danger'}`}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${currentUser.email}`}>
+                {currentUser.name}
               </a>
             </p>
           </div>
