@@ -1,4 +1,3 @@
-// import { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
