@@ -1,40 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-// import { SortBy } from '../../types/SortBy';
 
 type ListOfTodos = {
   listOfTodos: Todo[],
   onSelect: (todo: Todo) => void;
-  // sortBy: SortBy,
-  // query: string,
 };
 
 export const TodoList: React.FC<ListOfTodos> = ({
   listOfTodos,
   onSelect,
-  // sortBy,
-  // query,
 }) => {
-  // let visibleListOfTodos = listOfTodos.filter(el => el.title.includes(query));
-
-  // switch (sortBy) {
-  //   case SortBy.active:
-  //     visibleListOfTodos = visibleListOfTodos.filter(
-  //       el => el.completed === false,
-  //     );
-  //     break;
-
-  //   case SortBy.completed:
-  //     visibleListOfTodos = visibleListOfTodos.filter(
-  //       el => el.completed === true,
-  //     );
-  //     break;
-
-  //   default:
-  //     break;
-  // }
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>

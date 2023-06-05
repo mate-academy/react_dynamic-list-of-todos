@@ -6,14 +6,14 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 export type TodoM = {
-  onCross: () => void,
+  onCloseModal: () => void,
   todo: Todo,
   getUser: (userId: number) => void,
   loading: boolean,
 };
 
 export const TodoModal: React.FC<TodoM> = ({
-  onCross,
+  onCloseModal: onCross,
   todo,
   loading,
 }) => {

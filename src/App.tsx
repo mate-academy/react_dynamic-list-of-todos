@@ -16,12 +16,12 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>();
   const [sortBy, setSortBy] = useState(SortBy.all);
   const [query, setQuery] = useState('');
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then(data => {
       setTodos(data);
-      setIsloading(false);
+      setIsLoading(false);
     });
   }, []);
 
@@ -96,7 +96,7 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          onCross={handleClickCross}
+          onCloseModal={handleClickCross}
           todo={selectedTodo}
           getUser={getUser}
           loading={isLoading}
