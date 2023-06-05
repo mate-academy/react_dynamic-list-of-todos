@@ -6,13 +6,17 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 export type TodoM = {
-  list: Todo[],
   onCross: () => void,
   todo: Todo,
   getUser: (userId: number) => void,
+  loading: boolean,
 };
 
-export const TodoModal: React.FC<TodoM> = ({ list, onCross, todo }) => {
+export const TodoModal: React.FC<TodoM> = ({
+  onCross,
+  todo,
+  loading,
+}) => {
   const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
@@ -29,7 +33,7 @@ export const TodoModal: React.FC<TodoM> = ({ list, onCross, todo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {list.length === 0 ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">

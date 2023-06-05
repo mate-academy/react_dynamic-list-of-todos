@@ -1,24 +1,33 @@
+import { ChangeEvent } from 'react';
 import { SortBy } from '../../types/SortBy';
 
 type FilterTodo = {
   onSelect: (value: SortBy) => void,
   onInput: (value: string) => void,
   query: string,
-  onCross: (value: string) => void,
+  onClickClearButton: () => void,
 };
 
 export const TodoFilter: React.FC<FilterTodo> = ({
   onSelect,
   onInput,
   query,
-  onCross,
+  onClickClearButton,
 }) => {
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    onInput(e.target.value);
+  };
+
+  const hadleSelectInput = (e: ChangeEvent<HTMLSelectElement>) => {
+    onSelect(e.target.value as SortBy);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            onChange={(e) => onSelect(e.target.value as unknown as SortBy)}
+            onChange={hadleSelectInput}
             data-cy="statusSelect"
           >
             <option value={SortBy.all}>All</option>
@@ -35,20 +44,22 @@ export const TodoFilter: React.FC<FilterTodo> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(e) => onInput(e.target.value)}
+          onChange={handleChangeInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => onCross(query)}
-          />
+          {query && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => onClickClearButton()}
+            />
+          )}
         </span>
       </p>
     </form>

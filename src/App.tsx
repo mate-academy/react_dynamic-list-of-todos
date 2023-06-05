@@ -16,16 +16,20 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>();
   const [sortBy, setSortBy] = useState(SortBy.all);
   const [query, setQuery] = useState('');
+  const [isLoading, setIsloading] = useState(true);
 
   useEffect(() => {
-    getTodos().then(data => setTodos(data));
+    getTodos().then(data => {
+      setTodos(data);
+      setIsloading(false);
+    });
   }, []);
 
   const handleSelectBtn = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  const handleCross = () => {
+  const handleClickCross = () => {
     setSelectedTodo(null);
   };
 
@@ -41,6 +45,25 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
+  let visibleListOfTodos = todos.filter(el => el.title.includes(query));
+
+  switch (sortBy) {
+    case SortBy.active:
+      visibleListOfTodos = visibleListOfTodos.filter(
+        el => el.completed === false,
+      );
+      break;
+
+    case SortBy.completed:
+      visibleListOfTodos = todos.filter(
+        el => el.completed === true,
+      );
+      break;
+
+    default:
+      break;
+  }
+
   return (
     <>
       <div className="section">
@@ -53,19 +76,17 @@ export const App: React.FC = () => {
                 onSelect={handleSelectFilter}
                 onInput={handleInputFilter}
                 query={query}
-                onCross={handleClearInputBtn}
+                onClickClearButton={handleClearInputBtn}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
-                  listOfTodos={todos}
+                  listOfTodos={visibleListOfTodos}
                   onSelect={handleSelectBtn}
-                  sortBy={sortBy}
-                  query={query}
                 />
               )}
             </div>
@@ -75,10 +96,10 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          list={todos}
-          onCross={handleCross}
+          onCross={handleClickCross}
           todo={selectedTodo}
           getUser={getUser}
+          loading={isLoading}
         />
       )}
     </>
