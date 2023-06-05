@@ -14,15 +14,17 @@ export type TodoM = {
 export const TodoModal: React.FC<TodoM> = ({
   onCloseModal: onCross,
   todo,
-  loading,
+  // loading,
 }) => {
   const [userData, setUserData] = useState<User | null>(null);
+  const [isUserLoaded, setIsUserLoade] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       const user = await getUser(todo.userId);
 
       setUserData(user);
+      setIsUserLoade(true);
     };
 
     fetchUser();
@@ -32,7 +34,7 @@ export const TodoModal: React.FC<TodoM> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {!isUserLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -68,7 +70,7 @@ export const TodoModal: React.FC<TodoM> = ({
               {' by '}
 
               <a href={`mailto:${userData?.email}`}>
-                {userData?.name || <Loader />}
+                {userData?.name}
               </a>
             </p>
           </div>

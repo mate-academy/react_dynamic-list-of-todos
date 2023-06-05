@@ -47,15 +47,15 @@ export const App: React.FC = () => {
   let visibleListOfTodos = todos.filter(el => el.title.includes(query));
 
   switch (sortBy) {
-    case SortBy.active:
+    case SortBy.completed:
       visibleListOfTodos = visibleListOfTodos.filter(
-        el => el.completed === false,
+        el => el.completed === true,
       );
       break;
 
-    case SortBy.completed:
-      visibleListOfTodos = todos.filter(
-        el => el.completed === true,
+    case SortBy.active:
+      visibleListOfTodos = visibleListOfTodos.filter(
+        el => el.completed === false,
       );
       break;
 
