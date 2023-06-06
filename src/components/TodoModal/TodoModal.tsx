@@ -14,7 +14,6 @@ export type TodoM = {
 export const TodoModal: React.FC<TodoM> = ({
   onCloseModal: onCross,
   todo,
-  // loading,
 }) => {
   const [userData, setUserData] = useState<User | null>(null);
   const [isUserLoaded, setIsUserLoade] = useState(false);
