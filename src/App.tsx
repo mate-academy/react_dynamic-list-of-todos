@@ -20,11 +20,13 @@ export const App: React.FC = () => {
   const [filteredBy, setFilteredBy] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  // const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     getTodos()
-      .then((todosFromServer) => setTodos(todosFromServer));
+      .then((todosFromServer) => setTodos(todosFromServer))
+      .catch((error) => {
+        throw new Error(error);
+      });
   }, []);
 
   const handleFilteredByChange = useMemo(() => {
