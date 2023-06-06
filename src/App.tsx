@@ -15,8 +15,8 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [currentTodo, setCurrentTodo] = useState<Todo | undefined>();
-  const [currentUser, setCurrentUser] = useState<User | undefined>();
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>();
+  const [currentUser, setCurrentUser] = useState<User | null>();
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -33,12 +33,8 @@ export const App: React.FC = () => {
       currentTodos = currentTodos.filter((todo) => {
         const { completed } = todo;
 
-        if ((filterType === 'completed' && completed)
-          || (filterType === 'active' && !completed)) {
-          return true;
-        }
-
-        return false;
+        return ((filterType === 'completed' && completed)
+          || (filterType === 'active' && !completed));
       });
     }
 
@@ -56,8 +52,8 @@ export const App: React.FC = () => {
   };
 
   const handleCloseModal = useCallback(() => {
-    setCurrentTodo(undefined);
-    setCurrentUser(undefined);
+    setCurrentTodo(null);
+    setCurrentUser(null);
   }, []);
 
   return (
@@ -71,8 +67,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 filterType={filterType}
                 query={query}
-                setFilterType={setFilterType}
-                setQuery={setQuery}
+                onChooseFilter={setFilterType}
+                onQuery={setQuery}
               />
             </div>
 
@@ -81,7 +77,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 currentTodo={currentTodo}
-                setCurrentTodo={handleSelectTodo}
+                onSelectTodo={handleSelectTodo}
               />
             </div>
           </div>
@@ -92,7 +88,7 @@ export const App: React.FC = () => {
         <TodoModal
           currentTodo={currentTodo}
           currentUser={currentUser}
-          handleCloseModal={handleCloseModal}
+          onCloseModal={handleCloseModal}
         />
       )}
     </>

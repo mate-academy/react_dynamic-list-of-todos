@@ -4,15 +4,15 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface TodoModalProps {
-  currentTodo: Todo,
-  currentUser: User | undefined,
-  handleCloseModal: () => void,
+  currentTodo: Todo;
+  currentUser: User | null | undefined;
+  onCloseModal: () => void;
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   currentTodo,
   currentUser,
-  handleCloseModal,
+  onCloseModal,
 }) => {
   const { id, title, completed } = currentTodo;
 
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleCloseModal}
+              onClick={onCloseModal}
             />
           </header>
 

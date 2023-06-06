@@ -1,15 +1,15 @@
 interface TodoFilterProps {
-  filterType: string,
-  query: string,
-  setFilterType: (type: string) => void,
-  setQuery: (text: string) => void,
+  filterType: string;
+  query: string;
+  onChooseFilter: (type: string) => void;
+  onQuery: (text: string) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   filterType,
   query,
-  setFilterType,
-  setQuery,
+  onChooseFilter,
+  onQuery,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         <select
           data-cy="statusSelect"
           value={filterType}
-          onChange={(event) => setFilterType(event.target.value)}
+          onChange={(event) => onChooseFilter(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => (setQuery(event.target.value))}
+        onChange={(event) => (onQuery(event.target.value))}
       />
 
       <span className="icon is-left">
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={() => onQuery('')}
           />
         </span>
       )}

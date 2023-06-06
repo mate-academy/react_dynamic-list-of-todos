@@ -2,15 +2,15 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
-  todos: Todo[],
-  currentTodo: Todo | undefined,
-  setCurrentTodo: (todo: Todo) => void,
+  todos: Todo[];
+  currentTodo: Todo | null | undefined;
+  onSelectTodo: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
   currentTodo,
-  setCurrentTodo,
+  onSelectTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -31,7 +31,7 @@ export const TodoList: React.FC<TodoListProps> = ({
         const { id, title, completed } = todo;
 
         return (
-          <tr key={id} data-cy="todo" className="">
+          <tr key={id} data-cy="todo">
             <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
               {completed && (
@@ -52,7 +52,7 @@ export const TodoList: React.FC<TodoListProps> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setCurrentTodo(todo)}
+                onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
                   <i
