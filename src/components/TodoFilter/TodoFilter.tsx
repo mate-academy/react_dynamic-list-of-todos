@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props>
             <select
               data-cy="statusSelect"
               onChange={change => setFilteringMode(
-                Number(change.target.value) as unknown as FilteringMode,
+                change.target.value as FilteringMode,
               )}
             >
               <option value={FilteringMode.All}>All</option>

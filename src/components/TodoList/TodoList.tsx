@@ -34,23 +34,15 @@ export const TodoList: React.FC<Props>
       switch (filteringMode) {
         case FilteringMode.Active:
           filteredTodos = todosArg?.filter(todo => !todo.completed);
-          console.log('filtering undone!');
           break;
         case FilteringMode.Completed:
           filteredTodos = todosArg?.filter(todo => todo.completed);
-          console.log('filtering done!');
           break;
         case FilteringMode.All:
           filteredTodos = todosArg;
-          console.log('not filtering!');
           break;
         default:
       }
-
-      console.log(filteringMode);
-      console.log(todos);
-      console.log(filteredTodos);
-      console.log(typeof filteringMode);
 
       return filteredTodos.filter(todo => todo.title.toLocaleLowerCase()
         .includes(searchQuery.toLocaleLowerCase()));

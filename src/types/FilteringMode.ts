@@ -1,5 +1,5 @@
 export enum FilteringMode {
-  All,
-  Completed,
-  Active,
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
 }
