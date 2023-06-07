@@ -7,11 +7,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilteringMode } from './types/FilteringMode';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [inspectedTodo, setInspectedTodo] = useState<null | Todo>(null);
-  const [filteringMode, setFilteringMode] = useState<string>('all');
+  const [filteringMode, setFilteringMode]
+    = useState<FilteringMode>(FilteringMode.All);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   return (
@@ -53,3 +55,5 @@ export const App: React.FC = () => {
     </>
   );
 };
+
+export { FilteringMode };

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
+import { FilteringMode } from '../../types/FilteringMode';
 
 interface Props {
   setIsLoading: (arg0: boolean) => void;
   setInspectedTodo: (arg0: Todo | null) => void;
-  filteringMode: string;
+  filteringMode: FilteringMode;
   searchQuery: string;
   inspectedTodo: Todo | null;
 }
@@ -31,37 +32,47 @@ export const TodoList: React.FC<Props>
       }
 
       switch (filteringMode) {
-        case 'active':
+        case FilteringMode.Active:
           filteredTodos = todosArg?.filter(todo => !todo.completed);
+          console.log('filtering undone!');
           break;
-        case 'completed':
+        case FilteringMode.Completed:
           filteredTodos = todosArg?.filter(todo => todo.completed);
+          console.log('filtering done!');
           break;
-        case 'all':
+        case FilteringMode.All:
           filteredTodos = todosArg;
+          console.log('not filtering!');
           break;
         default:
       }
+
+      console.log(filteringMode);
+      console.log(todos);
+      console.log(filteredTodos);
+      console.log(typeof filteringMode);
 
       return filteredTodos.filter(todo => todo.title.toLocaleLowerCase()
         .includes(searchQuery.toLocaleLowerCase()));
     };
 
     return (
-
       <table className="table is-narrow is-fullwidth">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>
-              <span className="icon">
-                <i className="fas fa-check" />
-              </span>
-            </th>
-            <th>Title</th>
-            <th> </th>
-          </tr>
-        </thead>
+
+        {todos && (
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>
+                <span className="icon">
+                  <i className="fas fa-check" />
+                </span>
+              </th>
+              <th>Title</th>
+              <th> </th>
+            </tr>
+          </thead>
+        )}
 
         <tbody>
           {handleFiltering(todos)?.map((todo: Todo) => {

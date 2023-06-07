@@ -1,6 +1,8 @@
+import { FilteringMode } from '../../types/FilteringMode';
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
 interface Props {
-  setFilteringMode: (arg0: string) => void;
+  setFilteringMode: (arg0: FilteringMode) => void;
   setSearchQuery: (arg0: string) => void,
   searchQuery: string,
 }
@@ -13,11 +15,13 @@ export const TodoFilter: React.FC<Props>
           <span className="select">
             <select
               data-cy="statusSelect"
-              onChange={change => setFilteringMode(change.target.value)}
+              onChange={change => setFilteringMode(
+                Number(change.target.value) as unknown as FilteringMode,
+              )}
             >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
+              <option value={FilteringMode.All}>All</option>
+              <option value={FilteringMode.Active}>Active</option>
+              <option value={FilteringMode.Completed}>Completed</option>
             </select>
           </span>
         </p>
