@@ -12,7 +12,6 @@ import { Todo } from './types/Todo';
 
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-// import { User } from './types/User';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const debounce = (f: Function, delay: number) => {
@@ -78,15 +77,6 @@ export const App: React.FC = () => {
   };
 
   const onClickTodo = (currentTodo: Todo) => setModalTodo(currentTodo);
-
-  // const modalUser = useMemo(() => {
-  //   if (modalTodo) {
-  //     return getUser(modalTodo?.userId).then(user => user.name);
-  //   }
-  // }, [modalTodo]);
-
-  // console.log(modalTodo?.userId);
-  // console.log(modalUser);
 
   return (
     <>
