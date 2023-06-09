@@ -15,8 +15,8 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [currentTodo, setCurrentTodo] = useState<Todo | null>();
-  const [currentUser, setCurrentUser] = useState<User | null>();
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -26,16 +26,18 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    let currentTodos = todos;
+    let currentTodos;
     const formatedQuery = query.trim().toLowerCase();
 
     if (filterType !== 'all') {
-      currentTodos = currentTodos.filter((todo) => {
+      currentTodos = todos.filter((todo) => {
         const { completed } = todo;
 
         return ((filterType === 'completed' && completed)
           || (filterType === 'active' && !completed));
       });
+    } else {
+      currentTodos = todos;
     }
 
     if (formatedQuery) {

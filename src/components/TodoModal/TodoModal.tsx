@@ -5,7 +5,7 @@ import { Loader } from '../Loader';
 
 interface TodoModalProps {
   currentTodo: Todo;
-  currentUser: User | null | undefined;
+  currentUser: User | null;
   onCloseModal: () => void;
 }
 

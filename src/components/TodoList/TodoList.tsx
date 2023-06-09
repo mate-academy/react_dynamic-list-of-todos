@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos: Todo[];
-  currentTodo: Todo | null | undefined;
+  currentTodo: Todo | null;
   onSelectTodo: (todo: Todo) => void;
 }
 
