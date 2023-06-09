@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter, FilterTypes } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
@@ -28,13 +28,19 @@ export const App: React.FC = () => {
   const [modalTodo, setModalTodo] = useState<Todo>();
   const [query, setQuery] = useState<string>('');
   const [appliedQuery, setAppliedQuery] = useState<string>('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(FilterTypes.All);
+  const [isLoader, setIsLoader] = useState<boolean>(true);
 
   useEffect(() => {
+    setIsLoader(true);
+
     getTodos()
-      .then(fatchTodos => setTodos(appliedQuery ? fatchTodos
-        .filter(todo => todo.title.toLowerCase()
-          .includes(appliedQuery.toLowerCase())) : fatchTodos));
+      .then(fatchTodos => {
+        setIsLoader(false);
+        setTodos(appliedQuery ? fatchTodos
+          .filter(todo => todo.title.toLowerCase()
+            .includes(appliedQuery.toLowerCase())) : fatchTodos);
+      });
   }, [appliedQuery]);
 
   const applyQuery = useCallback(
@@ -59,11 +65,11 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter((todo) => {
-    if (filter === 'completed') {
+    if (filter === FilterTypes.Completed) {
       return todo.completed;
     }
 
-    if (filter === 'active') {
+    if (filter === FilterTypes.Active) {
       return !todo.completed;
     }
 
@@ -73,7 +79,7 @@ export const App: React.FC = () => {
   const handleFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value as FilterTypes);
   };
 
   const onClickTodo = (currentTodo: Todo) => setModalTodo(currentTodo);
@@ -96,7 +102,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {isLoader
                 ? <Loader />
                 : (
                   <TodoList
@@ -111,13 +117,12 @@ export const App: React.FC = () => {
       </div>
 
       {modalTodo
-        ? (
+        && (
           <TodoModal
             modalTodo={modalTodo}
             сloseModal={closeModal}
           />
-        )
-        : ''}
+        )}
 
     </>
   );

@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[]
   onClickTodo: (todo: Todo) => void;
-  modal: {} | undefined
+  modal: Todo | undefined
 };
 
 export const TodoList: React.FC<Props> = ({

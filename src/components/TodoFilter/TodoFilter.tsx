@@ -1,9 +1,15 @@
+export enum FilterTypes {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
 type Props = {
   query: string;
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClearSearch: () => void;
   onFilter: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  filter: string
+  filter: 'all' | 'completed' | 'active'
 };
 
 export const TodoFilter: React.FunctionComponent<Props> = ({
@@ -21,9 +27,9 @@ export const TodoFilter: React.FunctionComponent<Props> = ({
           value={filter}
           onChange={onFilter}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterTypes.All}>All</option>
+          <option value={FilterTypes.Active}>Active</option>
+          <option value={FilterTypes.Completed}>Completed</option>
         </select>
       </span>
     </p>
