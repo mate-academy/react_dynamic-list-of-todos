@@ -1,11 +1,35 @@
-export const TodoFilter = () => (
+export enum FilterTypes {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
+type Props = {
+  query: string;
+  onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClearSearch: () => void;
+  onFilter: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  filter: 'all' | 'completed' | 'active'
+};
+
+export const TodoFilter: React.FunctionComponent<Props> = ({
+  query,
+  onSearch,
+  onClearSearch,
+  onFilter,
+  filter,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={onFilter}
+        >
+          <option value={FilterTypes.All}>All</option>
+          <option value={FilterTypes.Active}>Active</option>
+          <option value={FilterTypes.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,6 +40,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={onSearch}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -27,6 +53,7 @@ export const TodoFilter = () => (
           data-cy="clearSearchButton"
           type="button"
           className="delete"
+          onClick={onClearSearch}
         />
       </span>
     </p>
