@@ -35,11 +35,11 @@ export const App: React.FC = () => {
     setIsLoader(true);
 
     getTodos()
-      .then(fatchTodos => {
+      .then(fetchTodos => {
         setIsLoader(false);
-        setTodos(appliedQuery ? fatchTodos
+        setTodos(appliedQuery ? fetchTodos
           .filter(todo => todo.title.toLowerCase()
-            .includes(appliedQuery.toLowerCase())) : fatchTodos);
+            .includes(appliedQuery.toLowerCase())) : fetchTodos);
       });
   }, [appliedQuery]);
 
@@ -64,16 +64,12 @@ export const App: React.FC = () => {
     setModalTodo(undefined);
   };
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = filter === FilterTypes.All ? todos : todos.filter((todo) => {
     if (filter === FilterTypes.Completed) {
       return todo.completed;
     }
 
-    if (filter === FilterTypes.Active) {
-      return !todo.completed;
-    }
-
-    return true;
+    return !todo.completed;
   });
 
   const handleFilterChange = (

@@ -59,7 +59,11 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onClickTodo(todo)}
               >
                 <span className="icon">
-                  <i className={!modal ? 'far fa-eye' : 'far fa-eye-slash'} />
+                  <i
+                    className={
+                      modal?.id === todo.id ? 'far fa-eye-slash' : 'far fa-eye'
+                    }
+                  />
                 </span>
               </button>
             </td>
