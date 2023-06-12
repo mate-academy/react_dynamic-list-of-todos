@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -13,9 +13,7 @@ export const TodoList: React.FC<Props> = React.memo(({
   selectedTodo,
   onSelect,
 }) => {
-  const isTodoSelected = useCallback((todoId: number) => (
-    todoId === selectedTodo?.id
-  ), []);
+  const isTodoSelected = (todoId: number) => todoId === selectedTodo?.id;
 
   return (
     <table className="table is-narrow is-fullwidth">
