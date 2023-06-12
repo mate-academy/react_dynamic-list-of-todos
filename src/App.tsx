@@ -33,7 +33,7 @@ export const App: React.FC = () => {
 
   const selectTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  }, [selectedTodo]);
+  }, []);
 
   const clearSelectedTodo = useCallback(() => {
     setSelectedTodo(null);
@@ -41,11 +41,11 @@ export const App: React.FC = () => {
 
   const filterQuery = useCallback((value: string) => {
     setQuery(value);
-  }, [query]);
+  }, []);
 
   const selectStatus = useCallback((value: string) => {
     setStatus(value);
-  }, [status]);
+  }, []);
 
   const visibleTodos = useMemo(() => {
     return todos.filter((todo) => {
@@ -71,7 +71,7 @@ export const App: React.FC = () => {
 
       return isTodoIncluded && isStatusMatch;
     });
-  }, [query, todos]);
+  }, [query, status, todos]);
 
   return (
     <>
