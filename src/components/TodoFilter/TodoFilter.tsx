@@ -7,7 +7,7 @@ interface Props {
   onSelectStatus: (value: string) => void;
 }
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   query,
   status,
   onFilter,
@@ -70,4 +70,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -29,45 +31,47 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const selectTodo = (todo: Todo) => {
+  const selectTodo = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const clearSelectedTodo = () => {
+  const clearSelectedTodo = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const filterQuery = (value: string) => {
+  const filterQuery = useCallback((value: string) => {
     setQuery(value);
-  };
+  }, []);
 
-  const selectStatus = (value: string) => {
+  const selectStatus = useCallback((value: string) => {
     setStatus(value);
-  };
+  }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    const normalizedQuery = normalize(query);
-    const normalizedTodo = normalize(todo.title);
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      const normalizedQuery = normalize(query);
+      const normalizedTodo = normalize(todo.title);
 
-    const isTodoIncluded = normalizedTodo.includes(normalizedQuery);
+      const isTodoIncluded = normalizedTodo.includes(normalizedQuery);
 
-    let isStatusMatch: boolean;
+      let isStatusMatch: boolean;
 
-    switch (status) {
-      case 'active':
-        isStatusMatch = !todo.completed;
-        break;
+      switch (status) {
+        case 'active':
+          isStatusMatch = !todo.completed;
+          break;
 
-      case 'completed':
-        isStatusMatch = todo.completed;
-        break;
+        case 'completed':
+          isStatusMatch = todo.completed;
+          break;
 
-      default:
-        isStatusMatch = true;
-    }
+        default:
+          isStatusMatch = true;
+      }
 
-    return isTodoIncluded && isStatusMatch;
-  });
+      return isTodoIncluded && isStatusMatch;
+    });
+  }, [query, todos]);
 
   return (
     <>
