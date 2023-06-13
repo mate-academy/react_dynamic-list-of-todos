@@ -16,18 +16,26 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(filterOptions[0]);
   const [searchValue, setSearchValue] = useState('');
-
-  const validValue = searchValue.toLowerCase().trimStart();
-
-  const normalizeTitle = (item: string) => item
-    .toLowerCase().includes(validValue);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
-      .then(setTodosFromServer);
+      .then((todos) => {
+        setTodosFromServer(todos);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const getVisibleTodos = () => {
+    const validValue = searchValue.toLowerCase().trimStart();
+
+    const normalizeTitle = (item: string) => item
+      .toLowerCase().includes(validValue);
+
     switch (filter) {
       case 'active':
         return todosFromServer.filter(todo => !todo.completed && normalizeTitle(todo.title));
@@ -71,18 +79,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosFromServer.length > 0
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-
-                  />
-                )
-                : (
-                  <Loader />
-                )}
+              {isLoading && <Loader />}
+              {!isLoading && todosFromServer.length > 0 ? (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              ) : (
+                !isLoading && <p>No todos found.</p>
+              )}
             </div>
           </div>
         </div>
