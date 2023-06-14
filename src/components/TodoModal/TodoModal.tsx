@@ -6,12 +6,12 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   selectedTodo: Todo;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onSelect: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodo,
+  onSelect,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const {
@@ -50,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setSelectedTodo(null);
+                onSelect(null);
               }}
             />
           </header>

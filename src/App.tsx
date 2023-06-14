@@ -9,6 +9,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
+enum SomeEnum {
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const filterOptions = ['all', 'active', 'completed'];
 
 export const App: React.FC = () => {
@@ -21,37 +26,36 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getTodos()
-      .then((todos) => {
+    const fetchData = async () => {
+      try {
+        const todos = await getTodos();
+
         setTodosFromServer(todos);
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const getVisibleTodos = () => {
+  const getVisibleTodos = useMemo(() => {
     const validValue = searchValue.toLowerCase().trimStart();
 
     const normalizeTitle = (item: string) => item
       .toLowerCase().includes(validValue);
 
     switch (filter) {
-      case 'active':
+      case SomeEnum.Active:
         return todosFromServer.filter(todo => !todo.completed && normalizeTitle(todo.title));
 
-      case 'completed':
+      case SomeEnum.Completed:
         return todosFromServer.filter(todo => todo.completed && normalizeTitle(todo.title));
 
       default:
         return todosFromServer.filter(todo => normalizeTitle(todo.title));
     }
-  };
-
-  const visibleTodos = useMemo(
-    getVisibleTodos,
-    [filter, todosFromServer, searchValue],
-  );
+  }, [filter, todosFromServer, searchValue]);
 
   const searchHandler = (value: string) => {
     setSearchValue(value);
@@ -82,9 +86,9 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               {!isLoading && todosFromServer.length > 0 ? (
                 <TodoList
-                  todos={visibleTodos}
+                  todos={getVisibleTodos}
                   selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  onSelect={setSelectedTodo}
                 />
               ) : (
                 !isLoading && <p>No todos found.</p>
@@ -97,7 +101,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          onSelect={setSelectedTodo}
         />
       )}
     </>

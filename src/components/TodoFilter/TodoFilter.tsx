@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 interface Props {
   options: string[];
@@ -8,7 +8,7 @@ interface Props {
   onChange: (value: string) => void
 }
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: FC<Props> = ({
   options,
   filter,
   onSelect,
