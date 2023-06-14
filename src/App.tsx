@@ -9,7 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
-enum SomeEnum {
+enum StateOfAffairs {
   Active = 'active',
   Completed = 'completed',
 }
@@ -46,10 +46,10 @@ export const App: React.FC = () => {
       .toLowerCase().includes(validValue);
 
     switch (filter) {
-      case SomeEnum.Active:
+      case StateOfAffairs.Active:
         return todosFromServer.filter(todo => !todo.completed && normalizeTitle(todo.title));
 
-      case SomeEnum.Completed:
+      case StateOfAffairs.Completed:
         return todosFromServer.filter(todo => todo.completed && normalizeTitle(todo.title));
 
       default:
