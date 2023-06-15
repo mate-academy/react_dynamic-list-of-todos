@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
@@ -9,7 +9,7 @@ interface Props {
   onSelect: (todo: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal: FC<Props> = ({
   selectedTodo,
   onSelect,
 }) => {
@@ -66,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({
                 ? <strong className="has-text-danger">Planned</strong>
                 : <strong className="has-text-success">Done</strong>}
 
-              {' by '}
+              <span>{' by '}</span>
 
               <a href={user?.email}>
                 {user?.name}
