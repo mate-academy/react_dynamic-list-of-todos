@@ -66,7 +66,7 @@ export const TodoModal: FC<Props> = ({
                 ? <strong className="has-text-danger">Planned</strong>
                 : <strong className="has-text-success">Done</strong>}
 
-              <span>{' by '}</span>
+              <span>{'\u00A0by\u00A0'}</span>
 
               <a href={user?.email}>
                 {user?.name}
