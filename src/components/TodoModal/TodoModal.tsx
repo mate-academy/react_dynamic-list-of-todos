@@ -61,7 +61,6 @@ export const TodoModal: FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {!completed
                 ? <strong className="has-text-danger">Planned</strong>
                 : <strong className="has-text-success">Done</strong>}
