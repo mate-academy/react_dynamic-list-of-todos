@@ -4,7 +4,7 @@ const page = {
   mockUser2: () => cy.intercept('**/users/2.json', { fixture: 'userTwo' }).as('user2'),
 
   todos: () => cy.byDataCy('todo'),
-  modal: () => cy.byDataCy('modal'),
+  modalIsOpen: () => cy.byDataCy('modalIsOpen'),
   loader: () => cy.byDataCy('loader'),
   searchInput: () => cy.byDataCy('searchInput'),
   statusSelect: () => cy.byDataCy('statusSelect'),
@@ -95,29 +95,29 @@ describe('Page', () => {
     });
   });
 
-  describe('Modal', () => {
+  describe('modalIsOpen', () => {
     beforeEach(() => {
       page.mockTodos();
       cy.visit('/');
     });
 
     it('should not be visible by default', () => {
-      page.modal().should('not.exist');
+      page.modalIsOpen().should('not.exist');
     });
 
     it('should appear when todo is selected', () => {
       page.mockUser1();
       page.selectTodo(1);
 
-      page.modal().should('exist');
+      page.modalIsOpen().should('exist');
     });
 
     it('should show loader when loading a user', () => {
       page.mockUser1();
       cy.clock();
       page.selectTodo(1);
-  
-      page.modal().byDataCy('loader').should('exist');
+
+      page.modalIsOpen().byDataCy('loader').should('exist');
     });
 
     it('should hide loader when user is loaded', () => {
@@ -126,48 +126,48 @@ describe('Page', () => {
 
       cy.wait('@user1');
       cy.wait(10);
-  
-      page.modal().byDataCy('loader').should('not.exist');
+
+      page.modalIsOpen().byDataCy('loader').should('not.exist');
     });
 
     it('should show correct data for a not completed todo', () => {
       page.mockUser1();
       page.selectTodo(0);
-  
-      cy.byDataCy('modal-header')
+
+      cy.byDataCy('modalIsOpen-header')
         .should('have.text', 'Todo #1');
-  
-      cy.byDataCy('modal-title')
+
+      cy.byDataCy('modalIsOpen-title')
         .should('have.text', 'Delectus aut autem');
-  
-      cy.byDataCy('modal-user')
+
+      cy.byDataCy('modalIsOpen-user')
         .should('have.text', 'Planned by Leanne Graham');
     });
-  
+
     it('should show correct data for a completed todo', () => {
       page.mockUser2();
       page.selectTodo(4);
-  
-      cy.byDataCy('modal-header')
+
+      cy.byDataCy('modalIsOpen-header')
         .should('have.text', 'Todo #22');
-  
-      cy.byDataCy('modal-title')
+
+      cy.byDataCy('modalIsOpen-title')
         .should('have.text', 'Distinctio vitae autem nihil ut molestias quo');
-  
-      cy.byDataCy('modal-user')
+
+      cy.byDataCy('modalIsOpen-user')
         .should('have.text', 'Done by Ervin Howell');
     });
-  
+
     it('should closes with close button', () => {
       page.mockUser2();
       page.selectTodo(4);
-  
-      cy.byDataCy('modal-close')
+
+      cy.byDataCy('modalIsOpen-close')
         .click();
-  
-      page.modal()
+
+      page.modalIsOpen()
         .should('not.exist');
-  
+
       cy.get('.fa-eye-slash')
         .should('have.length', 0);
     });

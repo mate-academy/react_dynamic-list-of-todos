@@ -12,7 +12,7 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasLoadingError, setHasIsLoadingError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const {
     id,
@@ -27,11 +27,10 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
         const loadedUser = await getUser(userId);
 
         setUser(loadedUser);
-        setIsLoading(true);
-        setHasIsLoadingError(false);
       } catch (error) {
-        setIsLoading(true);
-        setHasIsLoadingError(true);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -39,15 +38,15 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
   }, [userId]);
 
   return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+    <div className="modalIsOpen is-active" data-cy="modalIsOpen">
+      <div className="modalIsOpen-background" />
 
-      {(isLoading && todo) ? (
-        <div className="modal-card">
-          <header className="modal-card-head">
+      {(!isLoading && todo) ? (
+        <div className="modalIsOpen-card">
+          <header className="modalIsOpen-card-head">
             <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
+              className="modalIsOpen-card-title has-text-weight-medium"
+              data-cy="modalIsOpen-header"
             >
               {`Todo #${id}`}
             </div>
@@ -56,18 +55,18 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
             <button
               type="button"
               className="delete"
-              data-cy="modal-close"
+              data-cy="modalIsOpen-close"
               onClick={clickModal}
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
+          <div className="modalIsOpen-card-body">
+            <p className="block" data-cy="modalIsOpen-title">
               {title}
             </p>
 
-            {(!hasLoadingError && user) ? (
-              <p className="block" data-cy="modal-user">
+            {(!isError && user) ? (
+              <p className="block" data-cy="modalIsOpen-user">
                 {completed ? (
                   <strong className="has-text-success">Done</strong>
                 ) : (

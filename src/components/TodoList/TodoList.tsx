@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  selectTodo: Todo | null,
+  selectedTodo: Todo | null,
   clickModal: (numberId: number) => void,
   filteredTodos: Todo[]
 };
 export const TodoList: React.FC<Props> = ({
-  selectTodo, clickModal, filteredTodos,
+  selectedTodo, clickModal, filteredTodos,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -51,7 +51,7 @@ export const TodoList: React.FC<Props> = ({
               type="button"
               onClick={() => clickModal(todo.id)}
             >
-              {selectTodo && selectTodo.id === todo.id ? (
+              {selectedTodo && selectedTodo.id === todo.id ? (
                 <span className="icon">
                   <i className="far fa-eye-slash" />
                 </span>

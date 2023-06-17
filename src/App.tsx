@@ -14,14 +14,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTodoId, setSelectedTodoId] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedType, setSelectedType] = useState('All');
-  const [modal, setModal] = useState(false);
-  const [hasLoadingError, setHasIsLoadingError] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
-      const visibleTitle = todo.title.toLowerCase().includes(query.toLowerCase());
+      const visibleTitle = todo.title.toLowerCase().includes(query.toLowerCase().trim());
 
       switch (selectedType) {
         case 'active':
@@ -38,12 +38,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     const loadTodos = async () => {
       try {
-        setIsLoading(false);
         const loadedTodos = await getTodos();
 
         setTodos(loadedTodos);
       } catch (error) {
-        setHasIsLoadingError(true);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -51,17 +52,17 @@ export const App: React.FC = () => {
   }, []);
 
   const showModal = (numberId: number) => {
-    setModal(true);
+    setModalIsOpen(true);
     const searchedTodo = todos.find(todo => numberId === todo.id);
 
     if (searchedTodo) {
-      setSelectedTodoId(searchedTodo);
+      setSelectedTodo(searchedTodo);
     }
   };
 
   const closeModal = () => {
-    setModal(false);
-    setSelectedTodoId(null);
+    setModalIsOpen(false);
+    setSelectedTodo(null);
   };
 
   return (
@@ -84,7 +85,7 @@ export const App: React.FC = () => {
               <div className="block">
                 <TodoList
                   filteredTodos={visibleTodos}
-                  selectTodo={selectedTodoId}
+                  selectedTodo={selectedTodo}
                   clickModal={showModal}
                 />
               </div>
@@ -92,14 +93,14 @@ export const App: React.FC = () => {
               <Loader />
             )}
 
-            {(hasLoadingError && !todos.length)
-              && <p>A server error occurred while uploading the data from server!</p>}
+            {(isError && !todos.length)
+              && <p>A server error occurred while uploading the data from server</p>}
           </div>
         </div>
       </div>
 
-      {modal && selectedTodoId
-        && <TodoModal todo={selectedTodoId} clickModal={closeModal} />}
+      {!modalIsOpen && selectedTodo
+        && <TodoModal todo={selectedTodo} clickModal={closeModal} />}
     </>
   );
 };
