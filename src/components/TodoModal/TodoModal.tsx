@@ -24,6 +24,7 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
+        setIsLoading(true);
         const loadedUser = await getUser(userId);
 
         setUser(loadedUser);

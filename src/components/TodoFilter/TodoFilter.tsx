@@ -1,8 +1,8 @@
 type Props = {
   inputValue: string,
-  onChangeInput: (inputValue: string) => void;
+  onChangeInput: (inputValue: string) => void,
   selectValue: string,
-  onChangeSelect: (selectValue: string) => void;
+  onChangeSelect: (selectValue: string) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({

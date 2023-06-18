@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   selectedTodo: Todo | null,
-  clickModal: (numberId: number) => void,
+  clickModal: (todoId: number) => void,
   filteredTodos: Todo[]
 };
 export const TodoList: React.FC<Props> = ({

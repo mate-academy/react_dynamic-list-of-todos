@@ -51,9 +51,9 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const showModal = (numberId: number) => {
+  const showModal = (todoId: number) => {
     setModalIsOpen(true);
-    const searchedTodo = todos.find(todo => numberId === todo.id);
+    const searchedTodo = todos.find(todo => todoId === todo.id);
 
     if (searchedTodo) {
       setSelectedTodo(searchedTodo);
@@ -99,7 +99,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {!modalIsOpen && selectedTodo
+      {modalIsOpen && selectedTodo
         && <TodoModal todo={selectedTodo} clickModal={closeModal} />}
     </>
   );
