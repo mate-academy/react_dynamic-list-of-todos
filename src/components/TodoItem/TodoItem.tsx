@@ -18,10 +18,15 @@ export const TodoItem: React.FC<Props> = ({
     className={classNames({
       'has-background-info-light': selectedTodo?.id === todo.id,
     })}
-    key={todo.id}
   >
     <td className="is-vcentered">{todo.id}</td>
-    <td className="is-vcentered" />
+    <td className="is-vcentered">
+      {todo.completed && (
+        <span className="icon" data-cy="iconCompleted">
+          <i className="fas fa-check" />
+        </span>
+      )}
+    </td>
     <td className="is-vcentered is-expanded">
       <p
         className={classNames({

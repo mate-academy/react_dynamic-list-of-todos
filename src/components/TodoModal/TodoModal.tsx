@@ -16,8 +16,18 @@ export const TodoModal: React.FC<Props> = ({
   const [currUser, setCurrUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedTodo.userId)
-      .then((user) => setCurrUser(user));
+    const fetchUser = async () => {
+      try {
+        const user = await getUser(selectedTodo.userId);
+
+        setCurrUser(user);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('User is not found', error);
+      }
+    };
+
+    fetchUser();
   }, [selectedTodo.userId]);
 
   return (

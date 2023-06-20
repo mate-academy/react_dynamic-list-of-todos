@@ -30,7 +30,8 @@ export const App: React.FC = () => {
 
         setTodos(newTodos);
       } catch (error) {
-        Error('Can not load todos');
+        // eslint-disable-next-line no-console
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
