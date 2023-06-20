@@ -17,7 +17,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState(FilterType.ALL);
@@ -25,7 +25,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
         const newTodos = await getTodos();
 
         setTodos(newTodos);
@@ -52,10 +51,11 @@ export const App: React.FC = () => {
     return todos.filter(todo => {
       const todosFilter = todo.title.toLowerCase().includes(query.toLowerCase());
 
-      switch (filterType) {
-        case FilterType.ALL:
-          return todosFilter;
+      if (filterType === FilterType.ALL) {
+        return todosFilter;
+      }
 
+      switch (filterType) {
         case FilterType.COMPLETED:
           return todo.completed && todosFilter;
 
