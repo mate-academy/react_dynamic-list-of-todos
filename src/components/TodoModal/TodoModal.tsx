@@ -39,15 +39,15 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
   }, [userId]);
 
   return (
-    <div className="modalIsOpen is-active" data-cy="modalIsOpen">
-      <div className="modalIsOpen-background" />
+    <div className="modal is-active" data-cy="modal">
+      <div className="modal-background" />
 
       {(!isLoading && todo) ? (
-        <div className="modalIsOpen-card">
-          <header className="modalIsOpen-card-head">
+        <div className="modal-card">
+          <header className="modal-card-head">
             <div
-              className="modalIsOpen-card-title has-text-weight-medium"
-              data-cy="modalIsOpen-header"
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
             >
               {`Todo #${id}`}
             </div>
@@ -56,18 +56,18 @@ export const TodoModal: React.FC<Props> = ({ todo, clickModal }) => {
             <button
               type="button"
               className="delete"
-              data-cy="modalIsOpen-close"
+              data-cy="modal-close"
               onClick={clickModal}
             />
           </header>
 
-          <div className="modalIsOpen-card-body">
-            <p className="block" data-cy="modalIsOpen-title">
+          <div className="modal-card-body">
+            <p className="block" data-cy="modal-title">
               {title}
             </p>
 
             {(!isError && user) ? (
-              <p className="block" data-cy="modalIsOpen-user">
+              <p className="block" data-cy="modal-user">
                 {completed ? (
                   <strong className="has-text-success">Done</strong>
                 ) : (
