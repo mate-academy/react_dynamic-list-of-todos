@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
-  selectedTodoId: number | null,
-  saveTodoId: (id: number | null) => void,
+  currentTodoId: number | null,
+  setCurrentTodoId: (id: number | null) => void,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
-  saveTodoId,
+  currentTodoId,
+  setCurrentTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -35,7 +35,7 @@ export const TodoList: React.FC<Props> = ({
           title,
         } = todo;
 
-        const isSelected = id === selectedTodoId;
+        const isSelected = id === currentTodoId;
 
         return (
           <tr
@@ -71,12 +71,11 @@ export const TodoList: React.FC<Props> = ({
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => saveTodoId(
+                onClick={() => setCurrentTodoId(
                   isSelected ? null : todo.id,
                 )}
               >

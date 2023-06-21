@@ -10,12 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { StatusFilter } from './types/StatusFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodoId, setCurrentTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
-  const [filterToDo, setFilterToDo] = useState('all');
+  const [todoFilter, setTodoFilter] = useState<StatusFilter>(StatusFilter.All);
 
   useEffect(() => {
     getTodos().then(todo => {
@@ -23,33 +24,27 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const saveFilterForTodo = (select: React.SetStateAction<string>) => {
-    setFilterToDo(select);
-  };
-
-  const saveQuery = (input: React.SetStateAction<string>) => {
-    setQuery(input);
-  };
-
-  const saveTodoId = (id: number | null) => {
-    setCurrentTodoId(id);
-  };
-
   const visibleTodos = todos.filter(todo => {
-    const isActive = filterToDo === 'active';
-    const isCompleted = filterToDo === 'completed';
-    const isAll = filterToDo === 'all';
-
     const matchesQuery = todo.title.toLowerCase().trim()
       .includes(query.toLowerCase().trim());
 
-    return (isActive && !todo.completed && matchesQuery)
-      || (isCompleted && todo.completed && matchesQuery)
-      || (isAll && matchesQuery);
+    switch (todoFilter) {
+      case StatusFilter.All:
+        return todo && matchesQuery;
+
+      case StatusFilter.COMPLETED:
+        return todo.completed && matchesQuery;
+
+      case StatusFilter.ACTIVE:
+        return !todo.completed && matchesQuery;
+
+      default:
+        throw new Error(`Wrong filter, ${todoFilter} is not defined`);
+    }
   });
 
-  const getCurrentTodo = (curId: number) => {
-    return visibleTodos.find(todo => todo.id === curId) || null;
+  const getCurrentTodo = (id: number) => {
+    return visibleTodos.find(todo => todo.id === id) || null;
   };
 
   return (
@@ -61,9 +56,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                input={query}
-                filterForQuery={saveFilterForTodo}
-                query={saveQuery}
+                query={query}
+                setQuery={setQuery}
+                setTodoFilter={setTodoFilter}
               />
             </div>
 
@@ -72,8 +67,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodoId={currentTodoId}
-                    saveTodoId={saveTodoId}
+                    currentTodoId={currentTodoId}
+                    setCurrentTodoId={setCurrentTodoId}
                   />
                 ) : (
                   <Loader />
@@ -86,7 +81,7 @@ export const App: React.FC = () => {
       {currentTodoId && (
         <TodoModal
           currentTodo={getCurrentTodo(currentTodoId)}
-          saveTodoId={saveTodoId}
+          setCurrentTodoId={setCurrentTodoId}
         />
       )}
 

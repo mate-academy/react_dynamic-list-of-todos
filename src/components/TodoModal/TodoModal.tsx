@@ -6,12 +6,12 @@ import { getUser } from '../../api';
 
 interface Props {
   currentTodo: Todo | null,
-  saveTodoId: (id: number | null) => void,
+  setCurrentTodoId: (id: number | null) => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   currentTodo,
-  saveTodoId,
+  setCurrentTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 setUser(null);
-                saveTodoId(null);
+                setCurrentTodoId(null);
               }}
             />
           </header>

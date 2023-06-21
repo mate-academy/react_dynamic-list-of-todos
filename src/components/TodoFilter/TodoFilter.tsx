@@ -1,21 +1,25 @@
 import { ChangeEvent } from 'react';
+import { StatusFilter } from '../../types/StatusFilter';
 
 interface Props {
-  input: string,
-  filterForQuery: (select: string) => void,
-  query: (input: string) => void,
+  query: string,
+  setQuery: (input: React.SetStateAction<string>) => void,
+  setTodoFilter: (status: React.SetStateAction<StatusFilter>) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  input,
-  filterForQuery,
   query,
+  setQuery,
+  setTodoFilter,
 }) => {
-  const handleOnChange = (
-    saveTo: (event: string) => void,
-    event: ChangeEvent<HTMLSelectElement | HTMLInputElement>,
-  ) => {
-    saveTo(event.target.value);
+  const changeQuery = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const clearQuery = () => setQuery('');
+
+  const changeFilter = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTodoFilter(event.target.value as StatusFilter);
   };
 
   return (
@@ -24,13 +28,11 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => {
-              handleOnChange(filterForQuery, event);
-            }}
+            onChange={changeFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={StatusFilter.All}>All</option>
+            <option value={StatusFilter.ACTIVE}>Active</option>
+            <option value={StatusFilter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -41,23 +43,21 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={input}
-          onChange={(event) => {
-            handleOnChange(query, event);
-          }}
+          value={query}
+          onChange={changeQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {input && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => query('')}
+              onClick={clearQuery}
             />
           </span>
         )}
