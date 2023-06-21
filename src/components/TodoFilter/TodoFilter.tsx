@@ -1,8 +1,10 @@
+import { Type } from '../../types/Type';
+
 type Props = {
   inputValue: string,
   onChangeInput: (inputValue: string) => void,
-  selectValue: string,
-  onChangeSelect: (selectValue: string) => void
+  selectValue: Type,
+  onChangeSelect: (selectValue: Type) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,9 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={selectValue}
-          onChange={event => {
-            onChangeSelect(event.target.value);
-          }}
+          onChange={event => onChangeSelect(event.target.value as Type)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

@@ -9,31 +9,16 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Type } from './types/Type';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedType, setSelectedType] = useState('All');
+  const [selectedType, setSelectedType] = useState(Type.All);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const visibleTitle = todo.title.toLowerCase().includes(query.toLowerCase().trim());
-
-      switch (selectedType) {
-        case 'active':
-          return !todo.completed && visibleTitle;
-        case 'completed':
-          return todo.completed && visibleTitle;
-
-        default:
-          return visibleTitle;
-      }
-    });
-  }, [todos, query, selectedType]);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -50,6 +35,22 @@ export const App: React.FC = () => {
 
     loadTodos();
   }, []);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const visibleTitle = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+
+      switch (selectedType) {
+        case Type.ACTIVE:
+          return !todo.completed && visibleTitle;
+        case Type.COMPLETED:
+          return todo.completed && visibleTitle;
+
+        default:
+          return visibleTitle;
+      }
+    });
+  }, [todos, query, selectedType]);
 
   const showModal = (todoId: number) => {
     setModalIsOpen(true);
