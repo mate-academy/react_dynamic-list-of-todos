@@ -1,4 +1,6 @@
 import React from 'react';
+import { TodoStatus } from '../../types/TodoStatus';
+import { capitalize } from '../../helpers/capitalize';
 
 interface Props {
   query: string;
@@ -13,6 +15,10 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   onFilter,
   onSelectStatus,
 }) => {
+  const handleFormOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   const handleQueryOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -28,7 +34,10 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   const handleClearButtonOnClick = () => onFilter('');
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={handleFormOnSubmit}
+    >
       <p className="control">
         <span className="select">
           <select
@@ -36,9 +45,11 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             value={status}
             onChange={handleStatusSelectOnChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(TodoStatus).map((todoStatus) => (
+              <option key={todoStatus} value={todoStatus}>
+                {capitalize(todoStatus)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
