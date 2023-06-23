@@ -4,7 +4,7 @@ type Props = {
   inputValue: string,
   onChangeInput: (inputValue: string) => void,
   selectValue: Type,
-  onChangeSelect: (selectValue: Type) => void
+  onChangeSelect: React.Dispatch<React.SetStateAction<Type>>
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -18,9 +18,9 @@ export const TodoFilter: React.FC<Props> = ({
           value={selectValue}
           onChange={event => onChangeSelect(event.target.value as Type)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Type.All}>All</option>
+          <option value={Type.ACTIVE}>Active</option>
+          <option value={Type.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>

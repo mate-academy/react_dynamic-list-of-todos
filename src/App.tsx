@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedType, setSelectedType] = useState(Type.All);
+  const [selectedType, setSelectedType] = useState<Type>(Type.All);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
