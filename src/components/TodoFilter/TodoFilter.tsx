@@ -1,11 +1,26 @@
-export const TodoFilter = () => (
+import { Type } from '../../types/Type';
+
+type Props = {
+  inputValue: string,
+  onChangeInput: (inputValue: string) => void,
+  selectValue: Type,
+  onChangeSelect: React.Dispatch<React.SetStateAction<Type>>
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  inputValue, onChangeInput, selectValue, onChangeSelect,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={selectValue}
+          onChange={event => onChangeSelect(event.target.value as Type)}
+        >
+          <option value={Type.All}>All</option>
+          <option value={Type.ACTIVE}>Active</option>
+          <option value={Type.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,19 +31,26 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={inputValue}
+        onChange={event => {
+          onChangeInput(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {inputValue && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onChangeInput('')}
+          />
+        </span>
+      )}
     </p>
   </form>
 );

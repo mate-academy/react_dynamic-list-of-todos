@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,65 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { Type } from './types/Type';
 
 export const App: React.FC = () => {
+  const [query, setQuery] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedType, setSelectedType] = useState<Type>(Type.All);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const loadedTodos = await getTodos();
+
+        setTodos(loadedTodos);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTodos();
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const visibleTitle = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+
+      switch (selectedType) {
+        case Type.ACTIVE:
+          return !todo.completed && visibleTitle;
+        case Type.COMPLETED:
+          return todo.completed && visibleTitle;
+
+        default:
+          return visibleTitle;
+      }
+    });
+  }, [todos, query, selectedType]);
+
+  const showModal = (todoId: number) => {
+    setModalIsOpen(true);
+    const searchedTodo = todos.find(todo => todoId === todo.id);
+
+    if (searchedTodo) {
+      setSelectedTodo(searchedTodo);
+    }
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +74,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                inputValue={query}
+                onChangeInput={setQuery}
+                selectValue={selectedType}
+                onChangeSelect={setSelectedType}
+              />
             </div>
 
-            <div className="block">
+            {(!isLoading && todos.length) ? (
+              <div className="block">
+                <TodoList
+                  filteredTodos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  clickModal={showModal}
+                />
+              </div>
+            ) : (
               <Loader />
-              <TodoList />
-            </div>
+            )}
+
+            {(isError && !todos.length)
+              && <p>A server error occurred while uploading the data from server</p>}
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {modalIsOpen && selectedTodo
+        && <TodoModal todo={selectedTodo} clickModal={closeModal} />}
     </>
   );
 };
