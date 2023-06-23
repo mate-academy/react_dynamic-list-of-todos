@@ -6,10 +6,10 @@ interface Props {
   query: string;
   status: string;
   onFilter: (value: string) => void;
-  onSelectStatus: (value: string) => void;
+  onSelectStatus: (todoStatus: TodoStatus) => void;
 }
 
-export const TodoFilter: React.FC<Props> = React.memo(({
+export const TodoFilter: React.FC<Props> = ({
   query,
   status,
   onFilter,
@@ -28,7 +28,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   const handleStatusSelectOnChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    onSelectStatus(event.target.value);
+    onSelectStatus(event.target.value as TodoStatus);
   };
 
   const handleClearButtonOnClick = () => onFilter('');
@@ -69,11 +69,11 @@ export const TodoFilter: React.FC<Props> = React.memo(({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="clear"
               onClick={handleClearButtonOnClick}
             />
           )}
@@ -81,4 +81,4 @@ export const TodoFilter: React.FC<Props> = React.memo(({
       </p>
     </form>
   );
-});
+};
