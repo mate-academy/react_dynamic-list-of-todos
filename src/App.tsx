@@ -14,14 +14,20 @@ import { StatusFilter } from './types/StatusFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentTodoId, setCurrentTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
   const [todoFilter, setTodoFilter] = useState<StatusFilter>(StatusFilter.All);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos().then(todo => {
       setTodos(todo);
-    });
+    })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const visibleTodos = todos.filter(todo => {
@@ -63,15 +69,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length > 0
+              {isLoading
                 ? (
+                  <Loader />
+                ) : (
                   <TodoList
                     todos={visibleTodos}
                     currentTodoId={currentTodoId}
                     setCurrentTodoId={setCurrentTodoId}
                   />
-                ) : (
-                  <Loader />
                 )}
             </div>
           </div>
@@ -84,7 +90,6 @@ export const App: React.FC = () => {
           setCurrentTodoId={setCurrentTodoId}
         />
       )}
-
     </>
   );
 };
