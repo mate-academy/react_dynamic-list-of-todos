@@ -1,12 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todo: Todo;
+  handleClick: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({ todo, handleClick }) => {
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
+
+  const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('User not found');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const responce = await getUser(userId);
+
+        setUser(responce);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        }
+
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +53,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,24 +61,30 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleClick}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
+            {errorMessage !== 'User not found' || !user
+              ? <p>{errorMessage}</p>
+              : (
+                <p className="block" data-cy="modal-user">
+                  {completed
+                    ? <strong className="has-text-success">Done</strong>
+                    : <strong className="has-text-danger">Planned</strong>}
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+                  {' by '}
 
-              {' by '}
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                </p>
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+              )}
           </div>
         </div>
       )}
