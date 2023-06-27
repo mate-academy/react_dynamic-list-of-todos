@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
+import { TodoStatus } from './types/TodoStatus';
 
 import { getTodos } from './api';
 
@@ -23,13 +24,10 @@ const getFilteredTodos = (todos: Todo[], query: string, filterBy: FilterBy) => {
   }
 
   switch (filterBy) {
-    case 'active':
-      newTodos = newTodos.filter(todo => !todo.completed);
-      break;
-    case 'completed':
-      newTodos = newTodos.filter(todo => todo.completed);
-      break;
-    case 'all':
+    case TodoStatus.Active:
+      return newTodos.filter(todo => !todo.completed);
+    case TodoStatus.Completed:
+      return newTodos.filter(todo => todo.completed);
     default:
       break;
   }
@@ -84,8 +82,6 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-
               {!error
                 ? (
                   <TodoList
@@ -96,6 +92,8 @@ export const App: React.FC = () => {
                 ) : (
                   <span>Error while loading data from server</span>
                 )}
+
+              {isLoading && <Loader />}
             </div>
           </div>
         </div>

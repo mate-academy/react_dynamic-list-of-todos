@@ -26,7 +26,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, closeTodo }) => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedTodo]);
 
   const isCompleted = selectedTodo?.completed
     ? 'Done'

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { capitalize } from '../../helpers/capitalize';
+import { TodoStatus } from '../../types/TodoStatus';
 import { FilterBy } from '../../types/FilterBy';
 
 interface Props {
@@ -23,12 +25,19 @@ export const TodoFilter: React.FC<Props> = ({
     setFilterBy(event.target.value as FilterBy);
   };
 
+  const handleFormOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   const handleClickClear = () => {
     setQuery('');
   };
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={handleFormOnSubmit}
+    >
       <p className="control">
         <span className="select">
           <select
@@ -36,9 +45,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterBy}
             onChange={handleSelectChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(TodoStatus).map((todoStatus) => (
+              <option key={todoStatus} value={todoStatus}>
+                {capitalize(todoStatus)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -59,11 +70,11 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="clear"
               onClick={handleClickClear}
             />
           </span>

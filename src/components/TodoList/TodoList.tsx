@@ -59,29 +59,20 @@ export const TodoList: React.FC<Props> = ({
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              {isTodoSelected(todo.id)
-                ? (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => openTodo(todo)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  </button>
-                )}
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => openTodo(todo)}
+              >
+                <span className="icon">
+                  <i className={cn('far', {
+                    'fa-eye': !isTodoSelected(todo.id),
+                    'fa-eye-slash': isTodoSelected(todo.id),
+                  })}
+                  />
+                </span>
+              </button>
             </td>
           </tr>
         ))}
