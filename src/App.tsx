@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -13,6 +13,7 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [isTodosLoad, setIsTodosLoad] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,14 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
+  const preparedTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const regex = new RegExp(query.trim(), 'gi');
+
+      return regex.test(todo.title);
+    });
+  }, [todos, query]);
+
   return (
     <>
       <div className="section">
@@ -31,12 +40,15 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
               {isTodosLoad
-                ? <TodoList todos={todos} />
+                ? <TodoList todos={preparedTodos} />
                 : <Loader />}
             </div>
           </div>
