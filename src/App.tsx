@@ -4,26 +4,25 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodosFilter } from './types/TodosFilterEnum';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [hasError, sethasError] = useState(false);
-  const [todosFilter, setTodosFilter] = useState<'completed' | 'active' | null>(null);
+  const [todosFilter, setTodosFilter] = useState<TodosFilter | string>(
+    TodosFilter.all,
+  );
   const [loading, setLoading] = useState<boolean>(true);
 
   const onClosed = () => {
     setSelectedTodo(null);
-  };
-
-  const showAllTodos = () => {
-    setTodosFilter(null);
   };
 
   useEffect(() => {
@@ -37,30 +36,19 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const showActive = () => {
-    setTodosFilter('active');
-  };
+  const filterTodos = todos
+    .filter((todo) => {
+      if (todosFilter === TodosFilter.completed) {
+        return todo.completed;
+      }
 
-  const showCompleted = () => {
-    setTodosFilter('completed');
-  };
+      if (todosFilter === TodosFilter.active) {
+        return !todo.completed;
+      }
 
-  const filterTodos = todos.filter(todo => {
-    if (todosFilter === null) {
       return true;
-    }
-
-    if (todosFilter === 'completed') {
-      return todo.completed;
-    }
-
-    if (todosFilter === 'active') {
-      return !todo.completed;
-    }
-
-    return true;
-  })
-    .filter(todo => todo.title.includes(query));
+    })
+    .filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   if (hasError) {
     return (
@@ -68,7 +56,8 @@ export const App: React.FC = () => {
         <span className="icon is-centered">
           <i className="fa fa-exclamation-triangle" />
         </span>
-        ---Catch error message from 404 response with axios or fetch in JavaScript---
+        ---Catch error message from 404 response with axios or fetch in
+        JavaScript---
       </div>
     );
   }
@@ -84,9 +73,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onQueryChange={setQuery}
-                showCompleted={showCompleted}
-                showActive={showActive}
-                shawAllTodos={showAllTodos}
+                shawAllTodos={setTodosFilter}
               />
             </div>
 
@@ -105,12 +92,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          onClosed={onClosed}
-        />
-      )}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClosed={onClosed} />}
     </>
   );
 };

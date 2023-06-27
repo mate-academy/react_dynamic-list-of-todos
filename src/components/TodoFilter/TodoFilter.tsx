@@ -1,28 +1,16 @@
 interface Props {
   query: string;
   onQueryChange: (str: string) => void;
-  showActive: () => void;
-  shawAllTodos: () => void;
-  showCompleted: () => void;
+  shawAllTodos: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onQueryChange,
-  showActive,
   shawAllTodos,
-  showCompleted,
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-
-    if (selectedValue === 'active') {
-      showActive();
-    } else if (selectedValue === 'all') {
-      shawAllTodos();
-    } else if (selectedValue === 'completed') {
-      showCompleted();
-    }
+    shawAllTodos(event.target.value);
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,12 +48,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={handleClearQuery}
+              aria-label="clear search"
             />
           )}
         </span>
