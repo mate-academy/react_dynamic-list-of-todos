@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [isTodosLoad, setIsTodosLoad] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,13 +25,29 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
+  const checkStatus = (
+    todoCompleted: boolean,
+    filterStage: string,
+  ) => {
+    switch (filterStage) {
+      case 'completed':
+        return todoCompleted === true;
+      case 'active':
+        return todoCompleted === false;
+      default:
+        return true;
+    }
+  };
+
   const preparedTodos = useMemo(() => {
     return todos.filter(todo => {
       const regex = new RegExp(query.trim(), 'gi');
 
-      return regex.test(todo.title);
+      const isStatusMatch = checkStatus(todo.completed, filterStatus);
+
+      return regex.test(todo.title) && isStatusMatch;
     });
-  }, [todos, query]);
+  }, [todos, query, filterStatus]);
 
   return (
     <>
@@ -43,6 +60,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
               />
             </div>
 
