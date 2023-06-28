@@ -13,6 +13,7 @@ export const TodoModal: React.FC<TodoModalProps> = memo(({
   todo,
   setSelectedTodoId,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const {
     id,
@@ -23,7 +24,10 @@ export const TodoModal: React.FC<TodoModalProps> = memo(({
 
   useEffect(() => {
     getUser(userId)
-      .then(userById => setUser(userById))
+      .then(userById => {
+        setUser(userById);
+        setIsLoading(false);
+      })
       .catch(error => new Error('Error fetching user:', error));
   }, []);
 
@@ -36,7 +40,7 @@ export const TodoModal: React.FC<TodoModalProps> = memo(({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user
+      {isLoading
         ? (
           <Loader />
         ) : (
@@ -73,8 +77,8 @@ export const TodoModal: React.FC<TodoModalProps> = memo(({
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz">
-                  {user.name}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>

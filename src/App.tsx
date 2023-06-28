@@ -23,8 +23,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
-  const [selectionType, setSelectionType] = useState(Selection.all);
-  const [query, setQuery] = useState('');
+  const [selectionStatus, setSelectionStatus] = useState(Selection.all);
   const [appliedQuery, setAppliedQuery] = useState('');
 
   useEffect(() => {
@@ -39,11 +38,19 @@ export const App: React.FC = () => {
   const applyQuery = useCallback(debounce(setAppliedQuery, 500), []);
 
   const visibleTodos = useMemo(
-    () => getFilteredTodos(todos, selectionType, appliedQuery),
-    [todos, selectionType, appliedQuery],
+    () => getFilteredTodos(todos, selectionStatus, appliedQuery),
+    [todos, selectionStatus, appliedQuery],
   );
 
   const selectedTodo = getTodoById(selectedTodoId, todos);
+
+  const selectStatus = (selection: Selection) => {
+    setSelectionStatus(selection);
+  };
+
+  const selectTodoId = (id: number) => {
+    setSelectedTodoId(id);
+  };
 
   return (
     <>
@@ -54,11 +61,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                selectionType={selectionType}
-                setQuery={setQuery}
-                setSelectionType={setSelectionType}
-                applyQuery={applyQuery}
+                selectionStatus={selectionStatus}
+                onSelectStatus={selectStatus}
+                onApplyQuery={applyQuery}
               />
             </div>
 
@@ -69,7 +74,8 @@ export const App: React.FC = () => {
                 ) : (
                   <TodoList
                     todos={visibleTodos}
-                    setSelectedTodoId={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
+                    onSelectTodoId={selectTodoId}
                   />
                 )}
             </div>

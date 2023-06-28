@@ -1,38 +1,37 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Selection } from '../../types/Selection';
 
 interface TodoFilterProps {
-  query: string;
-  selectionType: Selection
-  setQuery: React.Dispatch<React.SetStateAction<string>>
-  setSelectionType: React.Dispatch<React.SetStateAction<Selection>>;
-  applyQuery: (query: string) => void;
+  selectionStatus: Selection
+  onSelectStatus: (selection: Selection) => void;
+  onApplyQuery: (query: string) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = memo(({
-  selectionType,
-  setSelectionType,
-  query,
-  setQuery,
-  applyQuery,
+  selectionStatus,
+  onSelectStatus,
+  onApplyQuery,
 }) => {
+  const [query, setQuery] = useState('');
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectionType(event.target.value as Selection);
+    onSelectStatus(event.target.value as Selection);
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     setQuery(value);
-    applyQuery(value);
+    onApplyQuery(value);
   };
 
-  const handleResetQuery = () => {
+  const handleQueryReset = () => {
     setQuery('');
+    onApplyQuery('');
   };
 
   return (
@@ -44,7 +43,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectionType}
+            value={selectionStatus}
             onChange={handleSelectChange}
           >
             <option value={Selection.all}>All</option>
@@ -74,7 +73,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = memo(({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleResetQuery}
+              onClick={handleQueryReset}
             />
           )}
         </span>
