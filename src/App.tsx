@@ -20,23 +20,27 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
-  const [selectedType, setSelectedType] = useState(Selection.all);
+  const [selectionType, setSelectionType] = useState(Selection.all);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer))
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setIsLoading(false);
+      })
       .catch(error => new Error('Error fetching todos:', error));
   }, []);
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 500), []);
 
   const visibleTodos = useMemo(
-    () => getFilteredTodos(todos, selectedType, appliedQuery),
-    [todos, selectedType, appliedQuery],
+    () => getFilteredTodos(todos, selectionType, appliedQuery),
+    [todos, selectionType, appliedQuery],
   );
 
   const selectedTodo = getTodoById(selectedTodoId, todos);
@@ -50,23 +54,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectedType={selectedType}
-                setSelectedType={setSelectedType}
                 query={query}
+                selectionType={selectionType}
                 setQuery={setQuery}
+                setSelectionType={setSelectionType}
                 applyQuery={applyQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length
+              {isLoading
                 ? (
+                  <Loader />
+                ) : (
                   <TodoList
                     todos={visibleTodos}
                     setSelectedTodoId={setSelectedTodoId}
                   />
-                ) : (
-                  <Loader />
                 )}
             </div>
           </div>

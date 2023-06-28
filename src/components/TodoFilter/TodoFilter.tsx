@@ -2,22 +2,26 @@ import React, { memo } from 'react';
 import { Selection } from '../../types/Selection';
 
 interface TodoFilterProps {
-  selectedType: Selection
-  setSelectedType: React.Dispatch<React.SetStateAction<Selection>>;
   query: string;
+  selectionType: Selection
   setQuery: React.Dispatch<React.SetStateAction<string>>
+  setSelectionType: React.Dispatch<React.SetStateAction<Selection>>;
   applyQuery: (query: string) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = memo(({
-  selectedType,
-  setSelectedType,
+  selectionType,
+  setSelectionType,
   query,
   setQuery,
   applyQuery,
 }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedType(event.target.value as Selection);
+    setSelectionType(event.target.value as Selection);
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +36,15 @@ export const TodoFilter: React.FC<TodoFilterProps> = memo(({
   };
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={handleSubmit}
+    >
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectedType}
+            value={selectionType}
             onChange={handleSelectChange}
           >
             <option value={Selection.all}>All</option>

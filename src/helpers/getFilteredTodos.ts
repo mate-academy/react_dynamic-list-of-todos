@@ -3,31 +3,29 @@ import { Todo } from '../types/Todo';
 
 export const getFilteredTodos = (
   todos: Todo[],
-  selectedType: Selection,
+  selectionType: Selection,
   query: string,
 ) => {
-  let filteredTodos;
+  const filteredTodos = todos.filter((todo: Todo) => {
+    switch (selectionType) {
+      case Selection.completed:
+        return todo.completed;
 
-  switch (selectedType) {
-    case Selection.completed:
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
+      case Selection.active:
+        return !todo.completed;
 
-    case Selection.active:
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
+      default:
+        return todo;
+    }
+  });
 
-    default:
-      filteredTodos = todos;
+  if (query) {
+    return filteredTodos;
   }
 
   const formattedQuery = query
     .toLowerCase()
     .replace(/\s{2,}/, ' ');
 
-  if (formattedQuery) {
-    return filteredTodos.filter(todo => todo.title.includes(formattedQuery));
-  }
-
-  return filteredTodos;
+  return filteredTodos.filter(todo => todo.title.includes(formattedQuery));
 };
