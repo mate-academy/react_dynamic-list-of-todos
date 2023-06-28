@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { filterTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,22 +26,9 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = todosFromServer
-    .filter(todo => {
-      switch (filter) {
-        case 'all':
-          return todo;
-        case 'completed':
-          return todo.completed;
-        case 'active':
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    })
-    .filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase().trim())
-    ));
+  const visibleTodos = filter !== 'all' || query
+    ? filterTodos(todosFromServer, filter, query)
+    : todosFromServer;
 
   const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
 
