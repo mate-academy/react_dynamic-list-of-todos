@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -26,7 +31,7 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const checkStatus = (
+  const checkStatus = useCallback((
     todoCompleted: boolean,
     filterStage: string,
   ) => {
@@ -38,7 +43,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  };
+  }, []);
 
   const preparedTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -48,7 +53,7 @@ export const App: React.FC = () => {
 
       return regex.test(todo.title) && isStatusMatch;
     });
-  }, [todos, query, filterStatus]);
+  }, [todos, query, checkStatus, filterStatus]);
 
   return (
     <>
