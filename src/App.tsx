@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './App.scss';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [todoFilter, setTodoFilter] = useState<StatusFilter>(StatusFilter.All);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   const visibleTodos = todos.filter(todo => {
     const matchesQuery = todo.title.toLowerCase().trim()
@@ -47,6 +49,10 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const getSelectedTodo = (id: number | null) => {
+    return visibleTodos.find(todo => todo.id === id) || null;
+  };
+
   return (
     <>
       <div className="section">
@@ -65,13 +71,22 @@ export const App: React.FC = () => {
             <div className="block">
               {loader
                 ? <Loader />
-                : <TodoList todos={visibleTodos} />}
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      <TodoModal
+        selectedTodo={getSelectedTodo(selectedTodoId)}
+        setSelectedTodoId={setSelectedTodoId}
+      />
     </>
   );
 };
