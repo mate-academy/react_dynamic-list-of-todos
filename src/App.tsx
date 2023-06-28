@@ -5,16 +5,17 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [isTodosLoad, setIsTodosLoad] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,14 +68,24 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isTodosLoad
-                ? <TodoList todos={preparedTodos} />
-                : <Loader />}
+                ? (
+                  <TodoList
+                    todos={preparedTodos}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                ) : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {selectedTodo
+      && (
+        <TodoModal
+          todo={selectedTodo}
+          onSelectTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };

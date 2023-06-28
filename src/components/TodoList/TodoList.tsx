@@ -4,9 +4,13 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -25,11 +29,19 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       <tbody>
         {todos.map(todo => {
           const { id, title, completed } = todo;
+          // const isSelected = selectedUserId === id;
 
           return (
             <tr key={id} data-cy="todo" className="">
               <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered" />
+              <td className="is-vcentered">
+                {completed
+                && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
               <td className="is-vcentered is-expanded">
                 <p className={cn({
                   'has-text-success': completed,
@@ -40,7 +52,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                <button data-cy="selectButton" className="button" type="button">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => setSelectedTodo(todo)}
+                >
                   <span className="icon">
                     <i className="far fa-eye" />
                   </span>
