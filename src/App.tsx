@@ -4,16 +4,17 @@ import './App.scss';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [filter, setFilter] = useState('');
   // const [isLoadingError, setIsLoadingError] = useState(false);
   const loadTodos = async () => {
     try {
@@ -27,6 +28,16 @@ export const App: React.FC = () => {
   };
 
   loadTodos();
+  const filteredTodos = todos.filter(todo => {
+    switch (filter) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
 
   return (
     <>
@@ -36,12 +47,15 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setFilter={setFilter}
+                filter={filter}
+              />
             </div>
 
             <div className="block">
               {isLoaded
-                ? <TodoList todos={todos} />
+                ? <TodoList todos={filteredTodos} />
                 : <Loader />}
               {/* <Loader /> */}
 

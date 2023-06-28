@@ -1,6 +1,6 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
@@ -28,8 +28,8 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
           <td className="is-vcentered" />
           <td className="is-vcentered is-expanded">
             <p className={classNames({
-              'has-text-danger': todo.completed,
-              'has-text-success': !todo.completed,
+              'has-text-danger': !todo.completed,
+              'has-text-success': todo.completed,
             })}
             >
               {todo.title}
