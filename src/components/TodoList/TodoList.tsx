@@ -5,11 +5,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
+  selectedTodoId: number | undefined;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setSelectedTodo,
+  selectedTodoId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -29,10 +31,14 @@ export const TodoList: React.FC<Props> = ({
       <tbody>
         {todos.map(todo => {
           const { id, title, completed } = todo;
-          // const isSelected = selectedUserId === id;
+          const isSelected = selectedTodoId === id;
 
           return (
-            <tr key={id} data-cy="todo" className="">
+            <tr
+              key={id}
+              data-cy="todo"
+              className={cn({ 'has-background-info-light': isSelected })}
+            >
               <td className="is-vcentered">{id}</td>
               <td className="is-vcentered">
                 {completed
@@ -59,7 +65,11 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => setSelectedTodo(todo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={cn('far', {
+                      'fa-eye': !isSelected,
+                      'fa-eye-slash': isSelected,
+                    })}
+                    />
                   </span>
                 </button>
               </td>

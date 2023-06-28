@@ -72,6 +72,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={preparedTodos}
                     setSelectedTodo={setSelectedTodo}
+                    selectedTodoId={selectedTodo?.id}
                   />
                 ) : <Loader />}
             </div>
