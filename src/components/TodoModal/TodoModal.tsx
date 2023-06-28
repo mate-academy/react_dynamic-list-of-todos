@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({
   const [todoOwner, setTodoOwner] = useState<User | null>(null);
 
   const loadUser = useCallback(async () => {
-    const user = await getUser(selectedTodo.id);
+    const user = await getUser(selectedTodo.userId);
 
     setTodoOwner(user);
   }, []);
