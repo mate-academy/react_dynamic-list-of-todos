@@ -15,12 +15,14 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getUser(todo.userId);
+      try {
+        const result = await getUser(todo.userId);
 
-      setUser(result);
-      setIsLoad(false);
-
-      return result;
+        setUser(result);
+        setIsLoad(false);
+      } catch (error) {
+        throw new Error('Something went wrong: Could load data');
+      }
     };
 
     fetchData();

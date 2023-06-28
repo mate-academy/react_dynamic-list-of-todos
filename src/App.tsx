@@ -24,8 +24,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setTodos(await getTodos());
-      setIsTodosLoad(true);
+      try {
+        setTodos(await getTodos());
+        setIsTodosLoad(true);
+      } catch (error) {
+        throw new Error('Something went wrong: Could load data');
+      }
     };
 
     fetchData();
