@@ -9,7 +9,7 @@ interface Props {
   onSelect: (todo: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = React.memo(({
+export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
   onSelect,
@@ -39,4 +39,4 @@ export const TodoList: React.FC<Props> = React.memo(({
       ))}
     </tbody>
   </table>
-));
+);
