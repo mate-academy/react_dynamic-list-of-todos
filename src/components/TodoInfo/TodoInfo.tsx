@@ -28,6 +28,7 @@ export const TodoInfo: FC<Props> = ({
           </span>
         )}
       </td>
+
       <td className="is-vcentered is-expanded">
         <p className={cn({ 'has-text-danger': !todo.completed },
           { 'has-text-success': todo.completed })}
@@ -35,6 +36,7 @@ export const TodoInfo: FC<Props> = ({
           {todo.title}
         </p>
       </td>
+
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"

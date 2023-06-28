@@ -63,7 +63,6 @@ export const App: React.FC = () => {
                 searchQuery={searchQuery}
                 onSearch={filteredSearchInput}
                 onSelectStatus={setSelectorStatus}
-
               />
             </div>
 

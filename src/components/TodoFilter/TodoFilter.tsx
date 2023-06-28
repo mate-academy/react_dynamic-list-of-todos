@@ -23,6 +23,10 @@ export const TodoFilter: FC<Props> = ({
     onSearch(event.target.value);
   };
 
+  const handleClearSearch = () => {
+    onSearch('');
+  };
+
   return (
     <form
       className="field has-addons"
@@ -55,14 +59,13 @@ export const TodoFilter: FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {searchQuery && (
             <button
               aria-label="clearSearch"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onSearch('')}
+              onClick={handleClearSearch}
             />
           )}
         </span>
