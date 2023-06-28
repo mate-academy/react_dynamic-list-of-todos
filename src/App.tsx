@@ -52,6 +52,10 @@ export const App: React.FC = () => {
     setSelectedTodoId(id);
   };
 
+  const closeModal = () => {
+    setSelectedTodoId(0);
+  };
+
   return (
     <>
       <div className="section">
@@ -86,7 +90,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          setSelectedTodoId={setSelectedTodoId}
+          onCloseModal={closeModal}
         />
       )}
     </>

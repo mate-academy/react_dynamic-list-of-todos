@@ -6,12 +6,12 @@ import { Loader } from '../Loader';
 
 interface TodoModalProps {
   todo: Todo;
-  setSelectedTodoId: React.Dispatch<React.SetStateAction<number>>;
+  onCloseModal: () => void;
 }
 
 export const TodoModal: React.FC<TodoModalProps> = memo(({
   todo,
-  setSelectedTodoId,
+  onCloseModal,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
@@ -32,8 +32,7 @@ export const TodoModal: React.FC<TodoModalProps> = memo(({
   }, []);
 
   const handleModalClose = () => {
-    setUser(null);
-    setSelectedTodoId(0);
+    onCloseModal();
   };
 
   return (
