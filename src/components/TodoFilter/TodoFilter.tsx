@@ -1,9 +1,16 @@
 interface Props {
   setFilter: (arg: string) => void,
   filter: string,
+  setQuery: (arg: string) => void,
+  query: string,
 }
 
-export const TodoFilter:React.FC<Props> = ({ setFilter, filter }) => (
+export const TodoFilter:React.FC<Props> = ({
+  setFilter,
+  filter,
+  setQuery,
+  query,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -27,6 +34,10 @@ export const TodoFilter:React.FC<Props> = ({ setFilter, filter }) => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setQuery(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -38,6 +49,9 @@ export const TodoFilter:React.FC<Props> = ({ setFilter, filter }) => (
           data-cy="clearSearchButton"
           type="button"
           className="delete"
+          onClick={() => {
+            setQuery('');
+          }}
         />
       </span>
     </p>

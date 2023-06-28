@@ -14,7 +14,9 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  // const [isLoadedUsers, setIsLoadedUsers] = useState(false);
   const [filter, setFilter] = useState('');
+  const [query, setQuery] = useState('');
   // const [isLoadingError, setIsLoadingError] = useState(false);
   const loadTodos = async () => {
     try {
@@ -37,7 +39,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <>
@@ -50,6 +52,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 setFilter={setFilter}
                 filter={filter}
+                query={query}
+                setQuery={setQuery}
               />
             </div>
 

@@ -24,8 +24,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
     <tbody>
       {todos.map(todo => (
         <tr data-cy="todo" className="">
-          <td className="is-vcentered">1</td>
-          <td className="is-vcentered" />
+          <td className="is-vcentered">{todo.id}</td>
+          <td className="is-vcentered">
+            {todo.completed && (
+              <span className="icon">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
           <td className="is-vcentered is-expanded">
             <p className={classNames({
               'has-text-danger': !todo.completed,
@@ -36,7 +42,11 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            <button data-cy="selectButton" className="button" type="button">
+            <button
+              data-cy="selectButton"
+              className="button"
+              type="button"
+            >
               <span className="icon">
                 <i className="far fa-eye" />
               </span>
