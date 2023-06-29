@@ -1,18 +1,18 @@
+import { FilterBy } from '../../types/FilterBy';
+
 type Props = {
   inputValue: string,
   selectedFilter: string,
   onChangeInput: (newValue: string) => void,
-  onSelectStatus: (newValue: string) => void
+  onSelectStatus: (filter: FilterBy) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
   inputValue,
   selectedFilter,
-  onSelectStatus = () => { },
-  onChangeInput = () => { },
+  onSelectStatus,
+  onChangeInput,
 }) => {
-  const statuses = ['All', 'Active', 'Completed'];
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeInput(event.target.value);
   };
@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSelectStatus(event.target.value);
+    onSelectStatus(event.target.value as FilterBy);
   };
 
   return (
@@ -34,12 +34,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedFilter}
             onChange={handleSelect}
           >
-            {statuses.map(status => (
-              <option
-                value={status.toLowerCase()}
-                key={status}
-              >
-                {status}
+            {Object.values(FilterBy).map((filter) => (
+              <option key={filter} value={filter}>
+                {filter}
               </option>
             ))}
           </select>

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './components/App.scss';
@@ -10,12 +10,13 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState<FilterBy>(FilterBy.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -27,20 +28,20 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  const filterTodos = (initialTodos: Todo[]) => {
-    return initialTodos.filter(actualTodo => {
+  const filteredTodos = useMemo(() => {
+    return todos.filter(actualTodo => {
       switch (selectFilter) {
-        case 'all':
+        case FilterBy.All:
           return actualTodo.title.includes(query);
-        case 'completed':
+        case FilterBy.Completed:
           return actualTodo.title.includes(query) && actualTodo.completed;
-        case 'active':
+        case FilterBy.Active:
           return actualTodo.title.includes(query) && !actualTodo.completed;
         default:
-          return initialTodos;
+          return todos;
       }
     });
-  };
+  }, [query, todos, selectFilter]);
 
   const findTodo = (todoId: number) => {
     const foundTodo = todos.find(possibleTodo => todoId === possibleTodo.id);
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
                   <TodoList
                     onSelectedTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
-                    todos={filterTodos(todos)}
+                    todos={filteredTodos}
                     onFind={findTodo}
                   />
                 ) : <Loader />}
