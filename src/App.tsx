@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './App.scss';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -13,37 +13,42 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoadedTodos, setIsLoadedTodos] = useState(false);
   const [isTodoInfoRequested, setIsTodoInfoRequested] = useState(false);
-  const [filter, setFilter] = useState('');
+  const [filterCondition, setFilterCondition] = useState('');
   const [query, setQuery] = useState('');
   const [userId, setUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const loadTodos = async () => {
-    try {
-      const loadedTodos = await getTodos();
-
-      setIsLoaded(true);
-      setTodos(loadedTodos);
-    } catch (error) {
-      // setIsLoadingError(true)
-    }
-  };
+  const [isLoadingError, setIsLoadingError] = useState(false);
 
   useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const loadedTodos = await getTodos();
+
+        setIsLoadedTodos(true);
+        setTodos(loadedTodos);
+      } catch (error) {
+        setIsLoadedTodos(true);
+        setIsLoadingError(true);
+      }
+    };
+
     loadTodos();
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    switch (filter) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return true;
-    }
-  }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterCondition) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  }, [todos, filterCondition, query]);
 
   return (
     <>
@@ -54,25 +59,31 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={setFilter}
-                filter={filter}
-                query={query}
-                setQuery={setQuery}
+                onFilterChange={setFilterCondition}
+                currentFilter={filterCondition}
+                onQueryChange={setQuery}
+                currentQuery={query}
               />
             </div>
 
+            {!isLoadedTodos && <Loader />}
+
             <div className="block">
-              {isLoaded
+              {!isLoadingError
                 ? (
                   <TodoList
                     todos={filteredTodos}
-                    setIsTodoInfoRequested={setIsTodoInfoRequested}
-                    setUserId={setUserId}
-                    setSelectedTodo={setSelectedTodo}
+                    onTodoInfoRequest={setIsTodoInfoRequested}
+                    onUserIdChange={setUserId}
+                    onSelectedTodoChange={setSelectedTodo}
                     isTodoInfoRequested={isTodoInfoRequested}
                   />
                 )
-                : <Loader />}
+                : (
+                  <div className="message p-2 my-4 is-danger">
+                    <p className="message-body">Error loading goods</p>
+                  </div>
+                )}
 
             </div>
           </div>
@@ -81,8 +92,8 @@ export const App: React.FC = () => {
 
       {isTodoInfoRequested && (
         <TodoModal
-          setIsTodoInfoRequested={setIsTodoInfoRequested}
-          userId={userId}
+          onTodoInfoRequestedChange={setIsTodoInfoRequested}
+          currntUserId={userId}
           selectedTodo={selectedTodo}
         />
       )}
