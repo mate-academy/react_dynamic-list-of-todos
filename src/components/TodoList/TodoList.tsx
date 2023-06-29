@@ -1,6 +1,6 @@
-import cn from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from './TodoItem';
 
 interface Props {
   todos: Todo[];
@@ -30,49 +30,15 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => {
-          const { id, title, completed } = todo;
-          const isSelected = selectedTodoId === id;
+          const isSelected = selectedTodoId === todo.id;
 
           return (
-            <tr
-              key={id}
-              data-cy="todo"
-              className={cn({ 'has-background-info-light': isSelected })}
-            >
-              <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p className={cn({
-                  'has-text-success': completed,
-                  'has-text-danger': !completed,
-                })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => setSelectedTodo(todo)}
-                >
-                  <span className="icon">
-                    <i className={cn('far', {
-                      'fa-eye': !isSelected,
-                      'fa-eye-slash': isSelected,
-                    })}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              setSelectedTodo={setSelectedTodo}
+              isSelectedTodo={isSelected}
+            />
           );
         })}
 
