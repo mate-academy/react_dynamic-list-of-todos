@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
-  const [isLoad, setIsLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
         const result = await getUser(todo.userId);
 
         setUser(result);
-        setIsLoad(false);
+        setIsLoading(false);
       } catch (error) {
         throw new Error('Something went wrong: Could load data');
       }
@@ -36,7 +36,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoad ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -15,8 +14,22 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
+const checkStatus = (
+  todoCompleted: boolean,
+  filterStage: string,
+) => {
+  switch (filterStage) {
+    case 'completed':
+      return todoCompleted === true;
+    case 'active':
+      return todoCompleted === false;
+    default:
+      return true;
+  }
+};
+
 export const App: React.FC = () => {
-  const [isTodosLoad, setIsTodosLoad] = useState(false);
+  const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -26,27 +39,13 @@ export const App: React.FC = () => {
     const fetchData = async () => {
       try {
         setTodos(await getTodos());
-        setIsTodosLoad(true);
+        setIsTodosLoaded(true);
       } catch (error) {
         throw new Error('Something went wrong: Could load data');
       }
     };
 
     fetchData();
-  }, []);
-
-  const checkStatus = useCallback((
-    todoCompleted: boolean,
-    filterStage: string,
-  ) => {
-    switch (filterStage) {
-      case 'completed':
-        return todoCompleted === true;
-      case 'active':
-        return todoCompleted === false;
-      default:
-        return true;
-    }
   }, []);
 
   const preparedTodos = useMemo(() => {
@@ -57,7 +56,7 @@ export const App: React.FC = () => {
 
       return regex.test(todo.title) && isStatusMatch;
     });
-  }, [todos, query, checkStatus, filterStatus]);
+  }, [todos, query, filterStatus]);
 
   return (
     <>
@@ -76,7 +75,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodosLoad
+              {isTodosLoaded
                 ? (
                   <TodoList
                     todos={preparedTodos}
