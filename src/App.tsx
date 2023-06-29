@@ -13,6 +13,7 @@ import { StatusSelector } from './types/StatusSelector';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectorStatus, setSelectorStatus] = useState(StatusSelector.ALL);
@@ -21,7 +22,9 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-      });
+        setIsLoading(false);
+      })
+      .catch(error => new Error('Error fetching todos:', error.message));
   }, []);
 
   const visibleTodos = todos.filter(todo => {
@@ -67,7 +70,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0
+              {!isLoading
                 ? (
                   <TodoList
                     todos={visibleTodos}

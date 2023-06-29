@@ -5,34 +5,33 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todo: Todo | null;
+  todo: Todo;
   onClose: () => void;
 }
 
 export const TodoModal: FC<Props> = React.memo(({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const {
+    userId,
+    title,
+    id,
+    completed,
+  } = todo;
 
   useEffect(() => {
-    if (todo) {
-      const { userId } = todo;
-
-      getUser(userId)
-        .then(userFromServer => {
-          setUser(userFromServer);
-        });
-    }
-  }, [todo]);
-
-  if (!todo) {
-    return null;
-  }
-
-  const { title, id, completed } = todo;
+    getUser(userId)
+      .then(userById => {
+        setUser(userById);
+        setIsLoading(false);
+      })
+      .catch(error => new Error('Error fetching user:', error.message));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      {!user
+      {isLoading
         ? (<Loader />)
         : (
           <div className="modal-card">
@@ -65,8 +64,8 @@ export const TodoModal: FC<Props> = React.memo(({ todo, onClose }) => {
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>
