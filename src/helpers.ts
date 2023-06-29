@@ -6,21 +6,6 @@ export const getFilteredTodos = (
   query: string,
   status: TodoStatus,
 ): Todo[] => {
-  // const filteredTodos = [...todos];
-
-  // if (query.trim()) {
-  //   const loweredQuery = query.toLowerCase();
-
-  //   filteredTodos = filteredTodos.filter(todo => (
-  //     todo.title.toLowerCase().includes(loweredQuery)));
-  // }
-
-  // switch (status) {
-  //   case TodoStatus.Active:
-  //     return filteredTodos.filter()
-  //   default:
-  //     break;
-  // }
   const loweredQuery = query.trim().toLowerCase();
   let todoFilterStatus = true;
 

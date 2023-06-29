@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo/TodoInfo';
 
@@ -8,7 +8,7 @@ type Props = {
   selectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = memo(({
   todos,
   onSelectTodo,
   selectedTodo,
@@ -31,6 +31,7 @@ export const TodoList: React.FC<Props> = ({
       <tbody>
         {todos.map(todo => (
           <TodoInfo
+            key={todo.id}
             todo={todo}
             onSelectTodo={onSelectTodo}
             selectedTodo={selectedTodo}
@@ -39,4 +40,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-};
+});

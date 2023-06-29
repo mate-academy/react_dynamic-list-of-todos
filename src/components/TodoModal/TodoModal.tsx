@@ -16,6 +16,9 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClearForm }) => {
     getUser(selectedTodo.userId)
       .then(userFromServer => {
         setUser(userFromServer);
+      })
+      .catch((error) => {
+        throw new Error(`Error fetching user from server: ${error}`);
       });
   }, []);
 

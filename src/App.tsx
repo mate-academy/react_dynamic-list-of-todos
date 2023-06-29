@@ -23,6 +23,9 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+      })
+      .catch((error) => {
+        throw new Error(`Error fetching todos from server: ${error}`);
       });
   }, []);
 
