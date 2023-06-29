@@ -16,13 +16,12 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState('all');
-  const [openModal, setOpenModal] = useState(false);
   const [todo, setTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
       setTodos(await getTodos());
-      setIsLoaded(!isLoaded);
+      setIsLoaded(true);
     };
 
     fetchTodos();
@@ -61,14 +60,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoaded ? <Loader /> : ''}
-              {isLoaded && (<TodoList opened={openModal} onOpen={setOpenModal} todos={filterTodos(todos)} onFind={findTodo} />)}
+              {!isLoaded && <Loader />}
+              {isLoaded && (<TodoList onSelectedTodo={setTodo} selectedTodo={todo} todos={filterTodos(todos)} onFind={findTodo} />)}
             </div>
           </div>
         </div>
       </div>
 
-      {(openModal && todo) && (<TodoModal onOpen={setOpenModal} todo={todo} />)}
+      {(todo) && (<TodoModal closeModal={setTodo} todo={todo} />)}
     </>
   );
 };

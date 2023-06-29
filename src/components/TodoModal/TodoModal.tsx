@@ -6,18 +6,18 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  onOpen: (val: boolean) => void,
+  closeModal: (val: Todo | null) => void,
   todo: Todo,
 };
 
-export const TodoModal: React.FC<Props> = ({ onOpen, todo }) => {
+export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
   const [user, setUser] = useState<User>();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
       setUser(await getUser(todo.userId));
-      setIsLoaded(!isLoaded);
+      setIsLoaded(true);
     };
 
     fetchTodos();
@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({ onOpen, todo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onOpen(false)}
+              onClick={() => closeModal(null)}
             />
           </header>
 

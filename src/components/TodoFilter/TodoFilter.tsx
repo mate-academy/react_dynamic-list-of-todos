@@ -11,6 +11,8 @@ export const TodoFilter: React.FC<Props> = ({
   onSelect = () => { },
   onChange = () => { },
 }) => {
+  const statuses = ['All', 'Active', 'Completed'];
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -20,9 +22,14 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectValue}
             onChange={event => onSelect(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {statuses.map(status => (
+              <option
+                value={status.toLowerCase()}
+                key={status}
+              >
+                {status}
+              </option>
+            ))}
           </select>
         </span>
       </p>
