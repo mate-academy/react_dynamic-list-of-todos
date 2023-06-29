@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -28,9 +28,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
     fetchData();
   }, [todo.userId]);
 
-  const handleCloseButton = useCallback(() => {
+  const handleCloseButton = () => {
     onSelectTodo(null);
-  }, [onSelectTodo]);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">

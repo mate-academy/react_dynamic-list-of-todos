@@ -18,6 +18,7 @@ export const TodoFilter:FC<Props> = ({
   const handleQueryChange = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
+    event.preventDefault();
     setQuery(event.target.value);
   };
 
@@ -56,10 +57,10 @@ export const TodoFilter:FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
+              aria-label="clear search button"
               className="delete"
               onClick={resetQuery}
             />
