@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './app.scss';
@@ -10,13 +10,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { getFilteretTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [todoStatus, setTodoStatus] = useState('all');
-  const [todoModalId, setTodoModalId] = useState<null | number>(null);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
   useEffect(() => {
@@ -25,24 +25,13 @@ export const App: React.FC = () => {
       .finally(() => (setIsLoading(false)));
   }, []);
 
-  let visibleTodos = todos;
+  const clearSelectedTodo = () => {
+    setSelectedTodo(null);
+  };
 
-  switch (todoStatus) {
-    case 'active':
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-      break;
-
-    case 'completed':
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  if (searchQuery) {
-    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  }
+  const visibleTodos = useMemo(() => (
+    getFilteretTodos(todos, searchQuery, todoStatus)
+  ), [todoStatus, todos, searchQuery]);
 
   return (
     <>
@@ -67,9 +56,8 @@ export const App: React.FC = () => {
               {!isLoading && (
                 <TodoList
                   todos={visibleTodos}
-                  setTodoModalId={setTodoModalId}
                   setSelectedTodo={setSelectedTodo}
-                  todoModalId={todoModalId}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -77,11 +65,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoModalId && (
+      {selectedTodo && (
         <TodoModal
-          userId={todoModalId}
+          userId={selectedTodo.userId}
           selectedTodo={selectedTodo}
-          setTodoModalId={setTodoModalId}
+          clearSelectedTodo={clearSelectedTodo}
         />
       )}
     </>
