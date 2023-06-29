@@ -1,17 +1,29 @@
 type Props = {
-  value: string,
-  selectValue: string,
-  onChange: (newValue: string) => void,
-  onSelect: (newValue: string) => void
+  inputValue: string,
+  selectedFilter: string,
+  onChangeInput: (newValue: string) => void,
+  onSelectStatus: (newValue: string) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  value,
-  selectValue,
-  onSelect = () => { },
-  onChange = () => { },
+  inputValue,
+  selectedFilter,
+  onSelectStatus = () => { },
+  onChangeInput = () => { },
 }) => {
   const statuses = ['All', 'Active', 'Completed'];
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeInput(event.target.value);
+  };
+
+  const handleClearButton = () => {
+    onChangeInput('');
+  };
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelectStatus(event.target.value);
+  };
 
   return (
     <form className="field has-addons">
@@ -19,8 +31,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectValue}
-            onChange={event => onSelect(event.target.value)}
+            value={selectedFilter}
+            onChange={handleSelect}
           >
             {statuses.map(status => (
               <option
@@ -40,8 +52,8 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={value}
-          onChange={event => onChange(event.target.value)}
+          value={inputValue}
+          onChange={handleSearch}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +65,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => onChange('')}
+            onClick={handleClearButton}
           />
         </span>
       </p>

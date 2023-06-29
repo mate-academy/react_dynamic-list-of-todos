@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [selectFilter, setSelectFilter] = useState('all');
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -28,23 +28,25 @@ export const App: React.FC = () => {
   }, []);
 
   const filterTodos = (initialTodos: Todo[]) => {
-    switch (selectFilter) {
-      case 'all':
-        return initialTodos.filter(actualTodo => actualTodo.title.includes(query));
-      case 'completed':
-        return initialTodos.filter(actualTodo => actualTodo.title.includes(query) && actualTodo.completed);
-      case 'active':
-        return initialTodos.filter(actualTodo => actualTodo.title.includes(query) && !actualTodo.completed);
-      default:
-        return initialTodos;
-    }
+    return initialTodos.filter(actualTodo => {
+      switch (selectFilter) {
+        case 'all':
+          return actualTodo.title.includes(query);
+        case 'completed':
+          return actualTodo.title.includes(query) && actualTodo.completed;
+        case 'active':
+          return actualTodo.title.includes(query) && !actualTodo.completed;
+        default:
+          return initialTodos;
+      }
+    });
   };
 
   const findTodo = (todoId: number) => {
     const foundTodo = todos.find(possibleTodo => todoId === possibleTodo.id);
 
     if (foundTodo !== undefined) {
-      setTodo(foundTodo);
+      setSelectedTodo(foundTodo);
     }
   };
 
@@ -56,18 +58,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter value={query} selectValue={selectFilter} onSelect={setSelectFilter} onChange={setQuery} />
+              <TodoFilter
+                inputValue={query}
+                selectedFilter={selectFilter}
+                onSelectStatus={setSelectFilter}
+                onChangeInput={setQuery}
+              />
             </div>
 
             <div className="block">
-              {!isLoaded && <Loader />}
-              {isLoaded && (<TodoList onSelectedTodo={setTodo} selectedTodo={todo} todos={filterTodos(todos)} onFind={findTodo} />)}
+              {isLoaded
+                ? (
+                  <TodoList
+                    onSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                    todos={filterTodos(todos)}
+                    onFind={findTodo}
+                  />
+                ) : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {(todo) && (<TodoModal closeModal={setTodo} todo={todo} />)}
+      {selectedTodo && <TodoModal closeModal={setSelectedTodo} todo={selectedTodo} />}
     </>
   );
 };
