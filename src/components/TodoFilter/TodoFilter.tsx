@@ -4,7 +4,13 @@ interface Props {
   query: string,
   filterStatus: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
-  setFilterStatus: React.Dispatch<React.SetStateAction<string>>,
+  setFilterStatus: React.Dispatch<React.SetStateAction<TodoFilterMode>>,
+}
+
+export enum TodoFilterMode {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
 }
 
 export const TodoFilter:FC<Props> = ({
@@ -23,7 +29,7 @@ export const TodoFilter:FC<Props> = ({
   };
 
   const handleFilterMode = (event:ChangeEvent<HTMLSelectElement>) => {
-    setFilterStatus(event.target.value);
+    setFilterStatus(event.target.value as TodoFilterMode);
   };
 
   return (
@@ -35,9 +41,18 @@ export const TodoFilter:FC<Props> = ({
             value={filterStatus}
             onChange={handleFilterMode}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.entries(TodoFilterMode).map(([key, value]) => {
+              const filterTypeName = value[0].toUpperCase() + value.slice(1);
+
+              return (
+                <option
+                  key={key}
+                  value={value}
+                >
+                  {filterTypeName}
+                </option>
+              );
+            })}
           </select>
         </span>
       </p>

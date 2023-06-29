@@ -8,7 +8,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter, TodoFilterMode } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -19,9 +19,9 @@ const checkStatus = (
   filterStage: string,
 ) => {
   switch (filterStage) {
-    case 'completed':
+    case TodoFilterMode.COMPLETED:
       return todoCompleted === true;
-    case 'active':
+    case TodoFilterMode.ACTIVE:
       return todoCompleted === false;
     default:
       return true;
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState<TodoFilterMode>(TodoFilterMode.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
