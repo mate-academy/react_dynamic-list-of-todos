@@ -10,29 +10,30 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
-import { FilterTodoState } from './types/FilterTodoState';
-import { filterTodoByStatus, filterTodoByTitle } from './helpers/todoFilters';
-import { getFilteredBy } from './helpers/getFilteredBy';
+import { FilterOptions } from './types/filterOptions';
+import { getFilteredTodos } from './helpers/getFilteredTodos';
 
-const initialFormState: FilterTodoState = {
+const initialFormState: FilterOptions = {
   todoStatus: TodoStatus.All,
   searchQuery: '',
 };
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo []>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [filterState, setFilterState] = useState<FilterTodoState>(initialFormState);
-
+  const [filterState, setFilterState] = useState<FilterOptions>(initialFormState);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const { searchQuery, todoStatus } = filterState;
 
   useEffect(() => {
-    setLoading(true);
-    getTodos().then(responce => {
-      setTodos(responce);
-      setLoading(false);
-    });
+    setIsLoading(true);
+    getTodos()
+      .then(responce => {
+        setTodos(responce);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const updateFormState = (key: string, value: string | TodoStatus) => {
@@ -42,20 +43,13 @@ export const App: React.FC = () => {
     }));
   };
 
-  const selectedTodo = todos
-    .find(todo => todo.id === selectedTodoId);
+  const closeModal = () => {
+    setSelectedTodo(null);
+  };
 
-  const filters = [];
-
-  if (searchQuery) {
-    filters.push(filterTodoByTitle(searchQuery));
-  }
-
-  if (todoStatus !== TodoStatus.All) {
-    filters.push(filterTodoByStatus(todoStatus));
-  }
-
-  const visibleTodos = getFilteredBy(todos, ...filters);
+  const visibleTodos = getFilteredTodos(todos, {
+    todoStatus, searchQuery,
+  });
 
   return (
     <>
@@ -72,12 +66,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todos.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && todos.length && (
                 <TodoList
                   todos={visibleTodos}
-                  selectedTodoId={selectedTodoId}
-                  onSelectTodoId={(id) => setSelectedTodoId(id)}
+                  selectedTodo={selectedTodo}
+                  onSelectTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -88,7 +82,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onClose={(id) => setSelectedTodoId(id)}
+          onClose={closeModal}
         />
       )}
     </>

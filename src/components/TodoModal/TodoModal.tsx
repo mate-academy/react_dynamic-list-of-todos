@@ -7,7 +7,7 @@ import { User } from '../../types/User';
 
 interface TodoModalProps {
   todo: Todo,
-  onClose: (id: number | null) => void
+  onClose: () => void
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
@@ -44,7 +44,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClose(null)}
+              onClick={onClose}
             />
           </header>
 

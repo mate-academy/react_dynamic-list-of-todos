@@ -1,6 +1,6 @@
 import { TodoStatus } from './TodoStatus';
 
-export interface FilterTodoState {
+export interface FilterOptions {
   todoStatus: TodoStatus,
   searchQuery: string,
 }

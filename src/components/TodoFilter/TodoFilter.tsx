@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { FilterTodoState } from '../../types/FilterTodoState';
 import { TodoStatus } from '../../types/TodoStatus';
 import { getEnumKeys } from '../../helpers/getEnumKeys';
+import { FilterOptions } from '../../types/filterOptions';
 
 interface TodoFilterProps {
   onChangeFormState: (key: string, value: string | TodoStatus) => void,
-  formState: FilterTodoState
+  formState: FilterOptions
 }
 
 export const TodoFilter: FC<TodoFilterProps> = (props) => {
