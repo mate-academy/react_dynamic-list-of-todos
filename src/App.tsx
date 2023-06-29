@@ -34,23 +34,21 @@ export const App: FC = () => {
     }
   }
 
-  const filteredTodos = todos.filter(todo => {
+  const visibleTodos = todos.filter(todo => {
     const title = todo.title.toLowerCase();
     const search = searchQuery.toLowerCase().trim();
 
-    return title.includes(search);
-  });
+    const foundTodo = title.includes(search);
 
-  const filteredTodosByOption = filteredTodos.filter(todo => {
     switch (selectedOption) {
       case 'all':
-        return todo;
+        return foundTodo;
       case 'active':
-        return !todo.completed;
+        return !todo.completed && foundTodo;
       case 'completed':
-        return todo.completed;
+        return todo.completed && foundTodo;
       default:
-        return todo;
+        return foundTodo;
     }
   });
 
@@ -89,7 +87,7 @@ export const App: FC = () => {
                   />
                 ) : (
                   <TodoList
-                    todos={filteredTodosByOption}
+                    todos={visibleTodos}
                     setSelectedTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                   />
