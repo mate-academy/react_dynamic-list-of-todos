@@ -8,11 +8,12 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter, TodoFilterMode } from './components/TodoFilter';
+import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { TodoFilterMode } from './Enums';
 
 const checkStatus = (
   todoCompleted: boolean,

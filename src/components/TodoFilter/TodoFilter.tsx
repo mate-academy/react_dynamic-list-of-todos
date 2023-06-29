@@ -1,16 +1,11 @@
 import { ChangeEvent, FC } from 'react';
+import { TodoFilterMode } from '../../Enums';
 
 interface Props {
   query: string,
   filterStatus: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
   setFilterStatus: React.Dispatch<React.SetStateAction<TodoFilterMode>>,
-}
-
-export enum TodoFilterMode {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
 }
 
 export const TodoFilter:FC<Props> = ({
@@ -41,18 +36,11 @@ export const TodoFilter:FC<Props> = ({
             value={filterStatus}
             onChange={handleFilterMode}
           >
-            {Object.entries(TodoFilterMode).map(([key, value]) => {
-              const filterTypeName = value[0].toUpperCase() + value.slice(1);
-
-              return (
-                <option
-                  key={key}
-                  value={value}
-                >
-                  {filterTypeName}
-                </option>
-              );
-            })}
+            {Object.entries(TodoFilterMode).map(([key, value]) => (
+              <option key={key} value={value}>
+                {value[0].toUpperCase() + value.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>

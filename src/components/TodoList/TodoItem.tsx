@@ -5,15 +5,16 @@ import { Todo } from '../../types/Todo';
 interface Props{
   todo: Todo;
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
-  isSelectedTodo: boolean;
+  selectedTodoId?: number
 }
 
 export const TodoItem:FC<Props> = ({
   todo,
   setSelectedTodo,
-  isSelectedTodo,
+  selectedTodoId,
 }) => {
   const { title, id, completed } = todo;
+  const isSelectedTodo = selectedTodoId === id;
 
   return (
     <tr

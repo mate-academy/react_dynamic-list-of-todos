@@ -5,7 +5,7 @@ import { TodoItem } from './TodoItem';
 interface Props {
   todos: Todo[];
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
-  selectedTodoId: number | undefined;
+  selectedTodoId?: number;
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -29,18 +29,14 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => {
-          const isSelected = selectedTodoId === todo.id;
-
-          return (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              setSelectedTodo={setSelectedTodo}
-              isSelectedTodo={isSelected}
-            />
-          );
-        })}
+        {todos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            setSelectedTodo={setSelectedTodo}
+            selectedTodoId={selectedTodoId}
+          />
+        ))}
 
       </tbody>
     </table>
