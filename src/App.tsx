@@ -32,8 +32,11 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const handleReset = useCallback(() => {
+  const handleEraseInput = useCallback(() => {
     setQuery('');
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
     setSelectedTodo(null);
   }, []);
 
@@ -80,7 +83,7 @@ export const App: React.FC = () => {
                 query={query}
                 handleQuery={handleQuery}
                 handleStatus={handleStatus}
-                handleReset={handleReset}
+                handleEraseInput={handleEraseInput}
               />
             </div>
 
@@ -101,7 +104,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          handleReset={handleReset}
+          handleCloseModal={handleCloseModal}
         />
       )}
     </>

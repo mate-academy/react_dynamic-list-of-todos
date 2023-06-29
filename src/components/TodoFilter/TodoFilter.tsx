@@ -2,14 +2,14 @@ type Props = {
   query: string,
   handleQuery: (search: string) => void,
   handleStatus: (status: string) => void,
-  handleReset: () => void,
+  handleEraseInput: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   handleQuery,
   handleStatus,
-  handleReset,
+  handleEraseInput,
 }) => {
   return (
     <form className="field has-addons">
@@ -46,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleReset}
+              onClick={handleEraseInput}
             />
           </span>
         )}
