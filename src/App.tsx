@@ -22,7 +22,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     getTodos().then(setAllTodos)
-
       .finally(() => {
         setIsLoading(false);
       });
@@ -65,15 +64,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectTodos}
-                  isSelected={setSelectTodos}
-                />
-              )}
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectTodos}
+                    isSelected={setSelectTodos}
+                  />
+                )}
             </div>
           </div>
         </div>
