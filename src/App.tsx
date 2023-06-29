@@ -20,8 +20,10 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   const visibleTodos = todos.filter(todo => {
-    const matchesQuery = todo.title.toLowerCase().trim()
-      .includes(inputValue.toLowerCase().trim());
+    const formattedTitle = todo.title.toLowerCase().trim();
+    const formattedInputValue = inputValue.toLowerCase().trim();
+
+    const matchesQuery = formattedTitle.includes(formattedInputValue);
 
     switch (todoFilter) {
       case StatusFilter.All:
@@ -41,9 +43,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoader(true);
 
-    getTodos().then(todo => {
-      setTodos(todo);
-    })
+    getTodos()
+      .then(todo => {
+        setTodos(todo);
+      })
       .finally(() => {
         setLoader(false);
       });

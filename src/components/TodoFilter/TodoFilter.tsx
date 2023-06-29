@@ -16,6 +16,10 @@ export const TodoFilter: React.FC<Props> = ({
     setInputValue('');
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
   const changeFilter = (event: ChangeEvent<HTMLSelectElement>) => {
     setTodoFilter(event.target.value as StatusFilter);
   };
@@ -41,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
+          onChange={handleInputChange}
           placeholder="Search..."
         />
         <span className="icon is-left">
@@ -49,10 +53,9 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {inputValue && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
+              aria-label="Close"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
