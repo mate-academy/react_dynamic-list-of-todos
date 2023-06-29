@@ -6,6 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoStatusOptions } from './enums/TodoStatusOptions';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -15,7 +16,8 @@ import { LoadingError } from './components/LoadingError';
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedOption, setSelectedOption] = useState<string>('all');
+  // const [selectedOption, setSelectedOption] = useState<string>('all');
+  const [selectedOption, setSelectedOption] = useState<string>(TodoStatusOptions.all);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasLoadingError, setHasLoadingError] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -41,11 +43,11 @@ export const App: FC = () => {
     const foundTodo = title.includes(search);
 
     switch (selectedOption) {
-      case 'all':
+      case TodoStatusOptions.all:
         return foundTodo;
-      case 'active':
+      case TodoStatusOptions.active:
         return !todo.completed && foundTodo;
-      case 'completed':
+      case TodoStatusOptions.completed:
         return todo.completed && foundTodo;
       default:
         return foundTodo;

@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { TodoStatusOptions } from '../../enums/TodoStatusOptions';
 
 interface Props {
   searchQuery: string;
@@ -34,9 +35,9 @@ export const TodoFilter: FC<Props> = ({
             value={selectedOption}
             onChange={selectOption}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatusOptions.all}>All</option>
+            <option value={TodoStatusOptions.active}>Active</option>
+            <option value={TodoStatusOptions.completed}>Completed</option>
           </select>
         </span>
       </p>
