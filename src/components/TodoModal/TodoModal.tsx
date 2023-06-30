@@ -6,21 +6,25 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  closeModal: (val: Todo | null) => void,
+  setSelectedTodo: (val: Todo | null) => void,
   todo: Todo,
 };
 
-export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
+export const TodoModal: React.FC<Props> = ({ setSelectedTodo, todo }) => {
   const [user, setUser] = useState<User>();
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
+
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchUser = async () => {
       setUser(await getUser(todo.userId));
       setIsLoaded(true);
     };
 
-    fetchTodos();
+    fetchUser();
   }, []);
 
   return (
@@ -40,12 +44,12 @@ export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
               {todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
+              aria-label="close"
               data-cy="modal-close"
-              onClick={() => closeModal(null)}
+              onClick={handleCloseModal}
             />
           </header>
 

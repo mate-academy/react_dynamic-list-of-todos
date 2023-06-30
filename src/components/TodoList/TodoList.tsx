@@ -15,7 +15,7 @@ export const TodoList: React.FC<Props> = ({
   onFind,
   selectedTodo,
 }) => {
-  const openModal = (todo: Todo) => {
+  const selectTodo = (todo: Todo) => {
     onSelectedTodo(todo);
     onFind(todo.id);
   };
@@ -63,7 +63,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  openModal(todo);
+                  selectTodo(todo);
                 }}
               >
                 <span className="icon">
