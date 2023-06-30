@@ -16,7 +16,6 @@ import { LoadingError } from './components/LoadingError';
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  // const [selectedOption, setSelectedOption] = useState<string>('all');
   const [selectedOption, setSelectedOption] = useState<string>(TodoStatusOptions.all);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasLoadingError, setHasLoadingError] = useState<boolean>(false);
