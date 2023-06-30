@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -18,13 +23,12 @@ export const App: React.FC = () => {
   const [loader, setLoader] = useState(true);
   const [modalOpened, setModalOpened] = useState(false);
 
-  const getfilteredTodos = useCallback(() => {
+  const visibleTodos = useMemo(() => {
     const normQuery = query.toLowerCase().trim();
     let filteredTodos = [...todos];
 
     if (normQuery) {
-      filteredTodos = filteredTodos
-        .filter(todo => todo.title.toLowerCase().includes(normQuery));
+      filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(normQuery));
     }
 
     switch (selectedFilter) {
@@ -38,8 +42,6 @@ export const App: React.FC = () => {
         return filteredTodos;
     }
   }, [query, selectedFilter, todos]);
-
-  const visibleTodos = getfilteredTodos();
 
   const getTodo = useCallback(async () => {
     try {
