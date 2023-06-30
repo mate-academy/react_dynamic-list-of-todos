@@ -31,7 +31,9 @@ export const TodoList: React.FC<Props> = React.memo(({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className=""
+          className={cn({
+            'has-background-info-light': selectedTodo?.id === todo.id,
+          })}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>

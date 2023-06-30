@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -15,14 +15,9 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [todoOwner, setTodoOwner] = useState<User | null>(null);
 
-  const loadUser = useCallback(async () => {
-    const user = await getUser(selectedTodo.userId);
-
-    setTodoOwner(user);
-  }, []);
-
   useEffect(() => {
-    loadUser();
+    getUser(selectedTodo.userId)
+      .then(user => setTodoOwner(user));
   }, []);
 
   return (
