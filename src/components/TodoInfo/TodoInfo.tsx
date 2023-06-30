@@ -13,6 +13,9 @@ export const TodoInfo: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const isTodoSelected = todo.id === selectedTodo?.id;
+  const selectTodo = () => (
+    onSelectTodo(todo)
+  );
 
   return (
     <tr data-cy="todo" className="">
@@ -38,7 +41,7 @@ export const TodoInfo: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => onSelectTodo(todo)}
+          onClick={selectTodo}
         >
           <span className="icon">
             <i className={cn('far', {
@@ -52,4 +55,3 @@ export const TodoInfo: React.FC<Props> = ({
     </tr>
   );
 };
-// cn({'far fa-eye', 'slash': isTodoSelected})

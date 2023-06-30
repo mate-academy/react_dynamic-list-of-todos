@@ -17,12 +17,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [status, setStatus] = useState<TodoStatus>(TodoStatus.All);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+        setIsLoading(false);
       })
       .catch((error) => {
         throw new Error(`Error fetching todos from server: ${error}`);
@@ -66,7 +68,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {isLoading
                 ? <Loader />
                 : (
 
