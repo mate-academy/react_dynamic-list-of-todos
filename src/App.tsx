@@ -71,7 +71,7 @@ export const App: React.FC = () => {
               {isLoaded
                 ? (
                   <TodoList
-                    onSelectedTodo={setSelectedTodo}
+                    onSelectTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
                     todos={filteredTodos}
                     onFind={findTodo}

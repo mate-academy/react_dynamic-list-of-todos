@@ -3,20 +3,20 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  onSelectedTodo: (val: Todo) => void,
+  onSelectTodo: (val: Todo) => void,
   todos: Todo[],
   onFind: (id: number) => void,
   selectedTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
-  onSelectedTodo,
+  onSelectTodo,
   todos,
   onFind,
   selectedTodo,
 }) => {
   const selectTodo = (todo: Todo) => {
-    onSelectedTodo(todo);
+    onSelectTodo(todo);
     onFind(todo.id);
   };
 
