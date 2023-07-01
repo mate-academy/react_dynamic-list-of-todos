@@ -47,7 +47,6 @@ export const TodoFilter: React.FC<Props> = ({
             type="button"
             className="delete"
             onClick={() => {
-              setTodoStatus('all');
               setSearchQuery('');
             }}
           />

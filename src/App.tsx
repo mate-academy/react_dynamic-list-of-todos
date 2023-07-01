@@ -52,8 +52,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? (<Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   setSelectedTodo={setSelectedTodo}
