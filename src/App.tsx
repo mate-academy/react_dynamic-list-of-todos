@@ -11,62 +11,63 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import './App.scss';
+import { FilterTodos } from './types/FilterTodos';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('All');
-
-  const loadTodos = useCallback(async () => {
-    try {
-      const todos = await getTodos();
-
-      setVisibleTodos(todos);
-    } catch (error) {
-      throw new Error();
-    }
-  }, []);
+  const [status, setStatus] = useState(FilterTodos.ALL);
 
   useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const todos = await getTodos();
+
+        setVisibleTodos(todos);
+      } catch (error) {
+        throw new Error();
+      }
+    };
+
     loadTodos();
   }, []);
 
-  const handleEraseInput = useCallback(() => {
+  const handleEraseInput = () => {
     setQuery('');
-  }, []);
+  };
 
-  const handleCloseModal = useCallback(() => {
+  const handleCloseModal = () => {
     setSelectedTodo(null);
-  }, []);
+  };
 
   const handleSelected = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
-  const handleQuery = useCallback((search: string) => {
+  const handleQuery = (search: string) => {
     setQuery(search);
-  }, []);
+  };
 
-  const handleStatus = useCallback((todoStatus: string) => {
+  const handleStatus = useCallback((todoStatus: FilterTodos) => {
     setStatus(todoStatus);
   }, []);
 
   const filterTodos = useCallback((search: string, todoStatus: string) => {
-    if (todoStatus === 'completed') {
-      return visibleTodos.filter(todo => (
-        todo.completed && todo.title.toLowerCase().includes(search.toLowerCase())
-      ));
-    }
+    return visibleTodos.filter(todo => {
+      const formattedQuery = search.toLowerCase();
+      const formattedTitle = todo.title.toLowerCase();
 
-    if (todoStatus === 'active') {
-      return visibleTodos.filter(todo => (
-        !todo.completed && todo.title.toLowerCase().includes(search.toLowerCase())
-      ));
-    }
+      if (todoStatus === FilterTodos.ACTIVE) {
+        return !todo.completed && formattedTitle.includes(formattedQuery);
+      }
 
-    return visibleTodos.filter(todo => (
-      todo.title.toLowerCase().includes(search.toLowerCase())));
+      if (todoStatus === FilterTodos.COMPLETED) {
+        return todo.completed && formattedTitle.includes(formattedQuery);
+      }
+
+      return formattedTitle.includes(formattedQuery);
+    });
   }, [query, status, visibleTodos]);
 
   const filteredTodos = filterTodos(query, status);

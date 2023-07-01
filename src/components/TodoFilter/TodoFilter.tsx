@@ -1,7 +1,10 @@
+import { ChangeEvent } from 'react';
+import { FilterTodos } from '../../types/FilterTodos';
+
 type Props = {
   query: string,
   handleQuery: (search: string) => void,
-  handleStatus: (status: string) => void,
+  handleStatus: (status: FilterTodos) => void,
   handleEraseInput: () => void,
 };
 
@@ -11,17 +14,24 @@ export const TodoFilter: React.FC<Props> = ({
   handleStatus,
   handleEraseInput,
 }) => {
+  const handleSelectStatus = (e:ChangeEvent<HTMLSelectElement>) => {
+    handleStatus(e.target.value as FilterTodos);
+  };
+
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => handleStatus(e.target.value)}
+            onChange={handleSelectStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterTodos.ALL}>All</option>
+            <option value={FilterTodos.ACTIVE}>Active</option>
+            <option value={FilterTodos.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -41,12 +51,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={handleEraseInput}
+              aria-label="delete"
             />
           </span>
         )}
