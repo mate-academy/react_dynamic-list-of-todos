@@ -6,14 +6,14 @@ import { User } from '../../types/User';
 
 interface Props {
   selectedTodo: Todo
-  isSelected: boolean,
-  setIsSelected: (value: boolean) => void,
+  isTodoSelected: boolean,
+  setIsTodoSelected: (value: boolean) => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  isSelected,
-  setIsSelected,
+  isTodoSelected,
+  setIsTodoSelected,
 }) => {
   const [user, setUser] = useState<User>();
 
@@ -22,9 +22,9 @@ export const TodoModal: React.FC<Props> = ({
       .then(setUser)
       // eslint-disable-next-line no-console
       .catch((error) => console.log(error));
-  });
+  }, []);
 
-  if (isSelected) {
+  if (isTodoSelected) {
     return (
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
@@ -46,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setIsSelected(false)}
+                onClick={() => setIsTodoSelected(false)}
               />
             </header>
 

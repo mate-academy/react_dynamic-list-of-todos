@@ -1,18 +1,21 @@
 import React from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[]
-  setIsSelected: (value: boolean) => void;
-  isSelected: boolean,
+  setIsTodoSelected: (value: boolean) => void;
+  isTodoSelected: boolean,
   setSelectedTodo: (value: Todo) => void,
+  selectedTodo: Todo,
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setIsSelected,
-  isSelected,
+  setIsTodoSelected,
+  isTodoSelected,
   setSelectedTodo,
+  selectedTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -61,12 +64,21 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  setIsSelected(!isSelected);
+                  setIsTodoSelected(!isTodoSelected);
                   setSelectedTodo(todo);
                 }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={cn('far',
+                    {
+                      'fa-eye': todo !== selectedTodo
+                        || !isTodoSelected,
+                    },
+                    {
+                      'fa-eye-slash': todo === selectedTodo
+                      && isTodoSelected,
+                    })}
+                  />
                 </span>
               </button>
             </td>

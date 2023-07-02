@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [isSelected, setIsSelected] = useState(false);
+  const [isTodoSelected, setIsTodoSelected] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectStatus, setSelectStatus] = useState('all');
@@ -32,8 +32,8 @@ export const App: React.FC = () => {
 
   const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0]);
 
-  let visibleTodos = todos.filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase().trim())));
+  let visibleTodos = useMemo(() => todos.filter(todo => (
+    todo.title.toLowerCase().includes(query.toLowerCase().trim()))), [query, todos]);
 
   switch (selectStatus) {
     case 'active':
@@ -72,9 +72,10 @@ export const App: React.FC = () => {
                 <div className="block">
                   <TodoList
                     todos={visibleTodos}
-                    setIsSelected={setIsSelected}
-                    isSelected={isSelected}
+                    setIsTodoSelected={setIsTodoSelected}
+                    isTodoSelected={isTodoSelected}
                     setSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
                   />
                 </div>
               )}
@@ -82,11 +83,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isSelected && (
+      {isTodoSelected && (
         <TodoModal
           selectedTodo={selectedTodo}
-          isSelected={isSelected}
-          setIsSelected={setIsSelected}
+          isTodoSelected={isTodoSelected}
+          setIsTodoSelected={setIsTodoSelected}
         />
       )}
     </>
