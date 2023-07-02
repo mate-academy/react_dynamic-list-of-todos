@@ -14,12 +14,15 @@ import { filterTodosByStatus } from './types/Helpers/helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState('');
   const [isTodoCompleted, setIsTodoComlpeted] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(allTodos => setTodos(allTodos));
+    getTodos()
+      .then(allTodos => setTodos(allTodos))
+      .finally(() => setIsLoading(false));
   }, []);
 
   let visibleTodos = [...todos];
@@ -53,7 +56,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
+              {isLoading && <Loader />}
 
               <TodoList
                 todos={visibleTodos}
