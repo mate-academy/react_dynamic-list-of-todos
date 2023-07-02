@@ -5,34 +5,34 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 interface TodoModalProps {
-  chosenTodo: Todo,
+  selectedTodo: Todo,
   nonExistedTodo: Todo,
-  setChosenTodo: (todo: Todo) => void,
+  setSelectedTodo: (todo: Todo) => void,
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({
-  chosenTodo,
+  selectedTodo,
   nonExistedTodo,
-  setChosenTodo,
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
   const [isShowTodoModal, setIsShowTodoModal] = useState(true);
 
   const handleDeleteTodoModal = () => {
-    setChosenTodo(nonExistedTodo);
+    setSelectedTodo(nonExistedTodo);
   };
 
   useEffect(() => {
-    getUser(chosenTodo.userId)
+    getUser(selectedTodo.userId)
       .then(setUser)
-      .then(() => setShowTodoModal(false));
+      .then(() => setIsShowTodoModal(false));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {showTodoModal ? (
+      {isShowTodoModal ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -41,7 +41,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${chosenTodo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -55,11 +55,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {chosenTodo.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {chosenTodo.completed
+              {selectedTodo.completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 

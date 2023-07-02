@@ -4,17 +4,17 @@ import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos: Todo[],
-  chosenTodo: Todo,
-  setChosenTodo: (todo: Todo) => void,
+  selectedTodo: Todo,
+  setSelectedTodo: (todo: Todo) => void,
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  chosenTodo,
-  setChosenTodo,
+  selectedTodo,
+  setSelectedTodo,
 }) => {
   const handleClick = (todo: Todo) => {
-    setChosenTodo(todo);
+    setSelectedTodo(todo);
   };
 
   return (
@@ -37,7 +37,7 @@ export const TodoList: React.FC<TodoListProps> = ({
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': chosenTodo.id === todo.id,
+              'has-background-info-light': selectedTodo.id === todo.id,
             })}
             key={todo.id}
           >
@@ -50,7 +50,12 @@ export const TodoList: React.FC<TodoListProps> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={`has-text-${todo.completed ? 'success' : 'danger'}`}>
+              <p
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
                 {todo.title}
               </p>
             </td>
@@ -62,7 +67,12 @@ export const TodoList: React.FC<TodoListProps> = ({
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  <i className={`far fa-eye${todo.id === chosenTodo.id ? '-slash' : ''}`} />
+                  <i
+                    className={classNames({
+                      'far fa-eye-slash': todo.id === selectedTodo.id,
+                      'far fa-eye': todo.id !== selectedTodo.id,
+                    })}
+                  />
                 </span>
               </button>
             </td>

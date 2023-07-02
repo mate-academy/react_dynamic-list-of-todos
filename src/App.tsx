@@ -48,8 +48,8 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={todos}
-                    chosenTodo={chosenTodo}
-                    setChosenTodo={setChosenTodo}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )
                 : <Loader />}
@@ -58,11 +58,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {chosenTodo.id > 0 && (
+      {selectedTodo.id > 0 && (
         <TodoModal
-          chosenTodo={chosenTodo}
+          selectedTodo={selectedTodo}
           nonExistedTodo={nonExistedTodo}
-          setChosenTodo={setChosenTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
