@@ -10,12 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { filterTodos } from './helpers';
+import { Filters } from './types/Filters';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [filter, setFilter] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState<Filters>(Filters.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -26,26 +27,32 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = filter !== 'all' || query
+  const visibleTodos = filter !== Filters.All || query
     ? filterTodos(todosFromServer, filter, query)
     : todosFromServer;
 
-  const selectedTodo = visibleTodos.find(todo => todo.id === selectedTodoId) || null;
-
-  const handleTodoSelect = (id: number) => {
-    setSelectedTodoId(id);
+  const handleTodoSelect = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
-  const handleFilterChange = (value: string) => {
-    setFilter(value);
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value === Filters.All
+      || event.target.value === Filters.Completed
+      || event.target.value === Filters.Active) {
+      setFilter(event.target.value);
+    }
   };
 
   const handleCloseModal = () => {
-    setSelectedTodoId(0);
+    setSelectedTodo(null);
   };
 
-  const handleQueryChange = (value: string) => {
-    setQuery(value);
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleQueryClear = () => {
+    setQuery('');
   };
 
   return (
@@ -59,6 +66,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onFilterChange={handleFilterChange}
                 onQueryChange={handleQueryChange}
+                onQueryClear={handleQueryClear}
                 query={query}
               />
             </div>
@@ -69,8 +77,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    onChoose={handleTodoSelect}
-                    selectedTodoId={selectedTodoId}
+                    onTodoSelect={handleTodoSelect}
+                    selectedTodoId={selectedTodo?.id || null}
                   />
                 )}
             </div>
@@ -78,10 +86,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal
-        selectedTodo={selectedTodo}
-        onClose={handleCloseModal}
-      />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 };

@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   onClose: () => void;
 };
 
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
     setIsLoading(true);
   };
 
-  return (selectedTodo && (
+  return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
@@ -76,5 +76,5 @@ export const TodoModal: React.FC<Props> = ({
         </div>
       )}
     </div>
-  ));
+  );
 };
