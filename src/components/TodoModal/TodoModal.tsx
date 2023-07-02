@@ -16,7 +16,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   setChosenTodo,
 }) => {
   const [user, setUser] = useState<User>();
-  const [showTodoModal, setShowTodoModal] = useState(true);
+  const [isShowTodoModal, setIsShowTodoModal] = useState(true);
 
   const handleDeleteTodoModal = () => {
     setChosenTodo(nonExistedTodo);
