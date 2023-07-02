@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 type Props = {
   query: string;
   setQuery: (searchQuery: string) => void;
+  applyQuery: (searchQuery: string) => void;
   isTodoCompleted: string;
   setIsTodoComlpeted: (status: string) => void;
 };
@@ -10,13 +11,15 @@ type Props = {
 export const TodoFilter: React.FC<Props> = memo(({
   query,
   setQuery,
+  applyQuery,
   isTodoCompleted,
   setIsTodoComlpeted,
 }) => {
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     const normalizedQuery = event.target.value.toLowerCase().trim();
 
-    setQuery(normalizedQuery);
+    setQuery(event.target.value);
+    applyQuery(normalizedQuery);
   };
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
