@@ -20,7 +20,7 @@ const nonExistedTodo: Todo = {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [chosenTodo, setChosenTodo] = useState<Todo>(nonExistedTodo);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>(nonExistedTodo);
 
   useEffect(() => {
     getTodos().then((todosFromServer) => {
