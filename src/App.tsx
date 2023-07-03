@@ -39,15 +39,17 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
+      const queriedTodo = todo.title.toLowerCase().includes(query.toLowerCase());
+
       switch (filterCondition) {
         case 'active':
-          return !todo.completed;
+          return queriedTodo && !todo.completed;
         case 'completed':
-          return todo.completed;
+          return queriedTodo && todo.completed;
         default:
-          return true;
+          return queriedTodo;
       }
-    }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    });
   }, [todos, filterCondition, query]);
 
   return (
