@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-
-enum SortType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { SortType } from '../../types/SortType';
 
 type Props = {
   filterChange: (methodSort: SortType) => void;

@@ -9,12 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-enum SortType {
-  ALL,
-  ACTIVE,
-  COMPLETED,
-}
+import { SortType } from './types/SortType';
 
 type DataSort = {
   sortType: SortType;
@@ -22,30 +17,29 @@ type DataSort = {
 };
 
 export function filterTodos(todos: Todo[], { sortType, query }: DataSort) {
-  let newTodos = [...todos];
+  let filteredTodos;
 
-  newTodos = newTodos.filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase())
-  ));
+  switch (sortType) {
+    case SortType.ACTIVE:
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
 
-  if (sortType === SortType.ALL) {
-    return newTodos;
+    case SortType.COMPLETED:
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      filteredTodos = todos;
+      break;
   }
 
-  newTodos = newTodos.filter(todo => {
-    switch (sortType) {
-      case SortType.ACTIVE:
-        return !todo.completed;
+  if (query) {
+    return filteredTodos.filter(todo => (
+      todo.title.toLowerCase().includes(query.toLowerCase())
+    ));
+  }
 
-      case SortType.COMPLETED:
-        return todo.completed;
-
-      default:
-        return true;
-    }
-  });
-
-  return newTodos;
+  return filteredTodos;
 }
 
 const debounce = (f: (...args: string[]) => void, delay: number) => {
