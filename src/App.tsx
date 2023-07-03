@@ -10,12 +10,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilterStatus } from './helper';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadedTodos, setIsLoadedTodos] = useState(false);
   const [isTodoInfoRequested, setIsTodoInfoRequested] = useState(false);
-  const [filterCondition, setFilterCondition] = useState('');
+  const [filterCondition, setFilterCondition] = useState(FilterStatus.ALL);
   const [query, setQuery] = useState('');
   const [userId, setUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -42,12 +43,14 @@ export const App: React.FC = () => {
       const queriedTodo = todo.title.toLowerCase().includes(query.toLowerCase());
 
       switch (filterCondition) {
-        case 'active':
+        case FilterStatus.ALL:
+          return queriedTodo;
+        case FilterStatus.ACTIVE:
           return queriedTodo && !todo.completed;
-        case 'completed':
+        case FilterStatus.COMPLETED:
           return queriedTodo && todo.completed;
         default:
-          return queriedTodo;
+          return 0;
       }
     });
   }, [todos, filterCondition, query]);

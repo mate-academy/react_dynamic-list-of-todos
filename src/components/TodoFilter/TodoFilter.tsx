@@ -1,6 +1,8 @@
+import { FilterStatus } from '../../helper';
+
 interface Props {
-  onFilterChange: (arg: string) => void,
-  currentFilter: string,
+  onFilterChange: (arg: FilterStatus) => void,
+  currentFilter: FilterStatus,
   onQueryChange: (arg: string) => void,
   currentQuery: string,
 }
@@ -12,7 +14,7 @@ export const TodoFilter:React.FC<Props> = ({
   currentQuery,
 }) => {
   const hanldeFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.target.value);
+    onFilterChange(event.target.value as FilterStatus);
   };
 
   const hanldeQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,9 +30,9 @@ export const TodoFilter:React.FC<Props> = ({
             value={currentFilter}
             onChange={hanldeFilterChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterStatus.ALL}>All</option>
+            <option value={FilterStatus.ACTIVE}>Active</option>
+            <option value={FilterStatus.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
