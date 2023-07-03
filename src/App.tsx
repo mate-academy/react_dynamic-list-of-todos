@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -27,32 +27,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = filter !== Filters.All || query
-    ? filterTodos(todosFromServer, filter, query)
-    : todosFromServer;
+  const visibleTodos = useMemo(() => (
+    filter !== Filters.All || query
+      ? filterTodos(todosFromServer, filter, query)
+      : todosFromServer
+  ), [query, filter, todosFromServer]);
 
   const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === Filters.All
-      || event.target.value === Filters.Completed
-      || event.target.value === Filters.Active) {
-      setFilter(event.target.value);
-    }
-  };
-
   const handleCloseModal = () => {
     setSelectedTodo(null);
-  };
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const handleQueryClear = () => {
-    setQuery('');
   };
 
   return (
@@ -64,9 +50,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilterChange={handleFilterChange}
-                onQueryChange={handleQueryChange}
-                onQueryClear={handleQueryClear}
+                onFilterChange={setFilter}
+                onQueryChange={setQuery}
                 query={query}
               />
             </div>

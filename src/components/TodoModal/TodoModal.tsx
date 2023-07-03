@@ -17,13 +17,11 @@ export const TodoModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (selectedTodo) {
-      getUser(selectedTodo.userId)
-        .then(result => {
-          setSelectedTodoUser(result || null);
-          setIsLoading(false);
-        });
-    }
+    getUser(selectedTodo.userId)
+      .then(result => {
+        setSelectedTodoUser(result || null);
+        setIsLoading(false);
+      });
   }, [selectedTodo]);
 
   const handleCloseClick = () => {

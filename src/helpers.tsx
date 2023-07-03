@@ -1,3 +1,4 @@
+import { Filters } from './types/Filters';
 import { Todo } from './types/Todo';
 
 export const filterTodos = (
@@ -5,17 +6,21 @@ export const filterTodos = (
   filter: string,
   query: string,
 ) => {
+  const optimizedQuery = query.toLowerCase().trim();
+
   return todos.filter(todo => {
     switch (filter) {
-      case 'completed':
+      case Filters.All:
+        return todo;
+      case Filters.Completed:
         return todo.completed;
-      case 'active':
+      case Filters.Active:
         return !todo.completed;
       default:
         return todo;
     }
   })
     .filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase().trim())
+      todo.title.toLowerCase().includes(optimizedQuery)
     ));
 };
