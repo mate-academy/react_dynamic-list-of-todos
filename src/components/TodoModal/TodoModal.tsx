@@ -41,6 +41,8 @@ export const TodoModal: React.FC<Props> = ({
     onTodoInfoRequestedChange(false);
   };
 
+  const shouldDisplayModal = userUploaded && selectedTodo && user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -53,11 +55,8 @@ export const TodoModal: React.FC<Props> = ({
         </div>
       )}
 
-      {!userUploaded || !selectedTodo || !user
+      {shouldDisplayModal
         ? (
-          <Loader />
-        )
-        : (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -88,13 +87,17 @@ export const TodoModal: React.FC<Props> = ({
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz">
+                <a href={`mailto:${user.email}`}>
                   {user.name}
                 </a>
               </p>
             </div>
           </div>
+        )
+        : (
+          <Loader />
         )}
+
     </div>
   );
 };
