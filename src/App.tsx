@@ -2,7 +2,6 @@
 import React,
 {
   useState,
-  useCallback,
   useEffect,
   useMemo,
 } from 'react';
@@ -15,7 +14,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
-import { getTodos, getVisibleTodos } from './api';
+import { getTodos } from './api';
+import { getVisibleTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -43,13 +43,15 @@ export const App: React.FC = () => {
 
   const visibleTodos = getVisibleTodos(todos, query, filterBy);
 
-  const changeSelectedTodo = useCallback((id: number) => {
+  const changeSelectedTodo = (id: number) => {
     setSelectedTodoId(id);
-  }, []);
+  };
 
   const activeTodo = useMemo(() => (
-    todos.find(({ id }) => id === selectedTodoId)
+    todos.find((todo) => todo.id === selectedTodoId)
   ), [selectedTodoId]);
+
+  const handleClearSelectedTodo = () => changeSelectedTodo(0);
 
   return (
     <>
@@ -71,11 +73,13 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              <TodoList
-                todos={visibleTodos}
-                onSelectedTodo={changeSelectedTodo}
-                selectedTodo={selectedTodoId}
-              />
+              {!isLoading && !isError && (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelectedTodo={changeSelectedTodo}
+                  selectedTodo={selectedTodoId}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -84,7 +88,7 @@ export const App: React.FC = () => {
       {activeTodo && (
         <TodoModal
           todo={activeTodo}
-          onHide={() => changeSelectedTodo(0)}
+          onHide={handleClearSelectedTodo}
         />
       )}
 

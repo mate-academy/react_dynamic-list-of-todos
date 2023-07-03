@@ -51,7 +51,7 @@ export const TodoList: React.FC<Props> = (
               <p
                 className={cn({
                   'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed
+                  'has-text-danger': !todo.completed,
                 })}
               >
                 {todo.title}
@@ -66,7 +66,7 @@ export const TodoList: React.FC<Props> = (
               >
                 <span className="icon">
                   <i
-                    className={cn('far',{
+                    className={cn('far', {
                       'fa-eye': selectedTodo !== todo.id,
                       'fa-eye-slash': selectedTodo === todo.id,
                     })}

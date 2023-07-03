@@ -1,6 +1,5 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
-import { FilterBy } from './types/FilterBy';
 
 // eslint-disable-next-line max-len
 const BASE_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
@@ -26,28 +25,3 @@ function get<T>(url: string): Promise<T> {
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
-
-export const getVisibleTodos = (
-  todos: Todo[],
-  query: string,
-  filter: FilterBy,
-) => {
-  let todosToFilter = todos;
-
-  switch (filter) {
-    case FilterBy.Active:
-      todosToFilter = todos.filter(todo => !todo.completed);
-      break;
-
-    case FilterBy.Completed:
-      todosToFilter = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  return todosToFilter.filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase())
-  ));
-};

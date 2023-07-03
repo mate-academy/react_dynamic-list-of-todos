@@ -48,14 +48,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
         <Loader />)}
       {displayModal && (
         <div
-          className={cn(
-            'modal-card',
-            'notification',
-            {
-              'is-success': completed,
-              'is-danger': !completed,
-            },
-          )}
+          className={cn('modal-card', 'notification', {
+            'is-success': completed,
+            'is-danger': !completed,
+          })}
         >
           <header className="modal-card-head">
             <div
@@ -65,8 +61,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -90,10 +86,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
                 {completed ? 'Done' : 'Planned'}
               </strong>
 
-              {' by '}
+              <span className="has-text-dark">{' by '}</span>
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a className="has-text-success" href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
