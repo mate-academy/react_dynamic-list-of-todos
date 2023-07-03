@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,30 +17,32 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import './App.scss';
 import { FilterTodos } from './types/FilterTodos';
+import { filter } from './helpers/FilterTodos';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [status, setStatus] = useState(FilterTodos.ALL);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadTodos = async () => {
       try {
+        setIsLoading(true);
+
         const todos = await getTodos();
 
         setVisibleTodos(todos);
       } catch (error) {
         throw new Error();
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadTodos();
   }, []);
-
-  const handleEraseInput = () => {
-    setQuery('');
-  };
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
@@ -45,32 +52,23 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
-  const handleQuery = (search: string) => {
-    setQuery(search);
-  };
-
   const handleStatus = useCallback((todoStatus: FilterTodos) => {
     setStatus(todoStatus);
   }, []);
 
-  const filterTodos = useCallback((search: string, todoStatus: string) => {
-    return visibleTodos.filter(todo => {
-      const formattedQuery = search.toLowerCase();
-      const formattedTitle = todo.title.toLowerCase();
+  const filterTodos = (search: string, todoStatus: FilterTodos) => {
+    const formattedQuery = search.toLowerCase();
 
-      if (todoStatus === FilterTodos.ACTIVE) {
-        return !todo.completed && formattedTitle.includes(formattedQuery);
-      }
+    return filter(
+      visibleTodos,
+      todoStatus,
+      formattedQuery,
+    );
+  };
 
-      if (todoStatus === FilterTodos.COMPLETED) {
-        return todo.completed && formattedTitle.includes(formattedQuery);
-      }
-
-      return formattedTitle.includes(formattedQuery);
-    });
-  }, [query, status, visibleTodos]);
-
-  const filteredTodos = filterTodos(query, status);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(query, status);
+  }, [visibleTodos, query, status]);
 
   return (
     <>
@@ -82,14 +80,13 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                handleQuery={handleQuery}
+                setQuery={setQuery}
                 handleStatus={handleStatus}
-                handleEraseInput={handleEraseInput}
               />
             </div>
 
             <div className="block">
-              {filteredTodos.length
+              {!isLoading
                 ? (
                   <TodoList
                     todos={filteredTodos}

@@ -3,25 +3,35 @@ import { FilterTodos } from '../../types/FilterTodos';
 
 type Props = {
   query: string,
-  handleQuery: (search: string) => void,
+  setQuery: (search: string) => void,
   handleStatus: (status: FilterTodos) => void,
-  handleEraseInput: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  handleQuery,
+  setQuery,
   handleStatus,
-  handleEraseInput,
 }) => {
   const handleSelectStatus = (e:ChangeEvent<HTMLSelectElement>) => {
     handleStatus(e.target.value as FilterTodos);
   };
 
+  const handleQuery = (search: string) => {
+    setQuery(search);
+  };
+
+  const handleEraseInput = () => {
+    setQuery('');
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <form
       className="field has-addons"
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={handleSubmit}
     >
       <p className="control">
         <span className="select">

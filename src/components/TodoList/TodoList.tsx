@@ -1,6 +1,6 @@
 import React from 'react';
-import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoInfo } from '../TodoInfo/TodoInfo';
 
 type Props = {
   todos: Todo[],
@@ -29,58 +29,12 @@ export const TodoList: React.FC<Props> = React.memo(({
 
     <tbody>
       {todos.map(todo => (
-        <tr
-          data-cy="todo"
-          className={cn({
-            'has-background-info-light': selectedTodo?.id === todo.id,
-          })}
+        <TodoInfo
           key={todo.id}
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={cn({
-              'has-text-danger': !todo.completed,
-              'has-text-success': todo.completed,
-            })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            {selectedTodo?.id === todo.id
-              ? (
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => handleSelected(null)}
-                >
-                  <span className="icon">
-                    <i className="far fa-eye-slash" />
-                  </span>
-                </button>
-              )
-              : (
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => handleSelected(todo)}
-                >
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                </button>
-              )}
-          </td>
-        </tr>
+          todo={todo}
+          selectedTodo={selectedTodo}
+          handleSelected={handleSelected}
+        />
       ))}
     </tbody>
   </table>

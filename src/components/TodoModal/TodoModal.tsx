@@ -13,21 +13,21 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   handleCloseModal,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [todoOwner, setTodoOwner] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(selectedTodo.userId)
-      .then(user => setTodoOwner(user));
+      .then((user) => setTodoOwner(user))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todoOwner
-        ? (
-          <Loader />
-        )
+      {isLoading
+        ? <Loader />
         : (
           <div className="modal-card">
             <header className="modal-card-head">
@@ -38,11 +38,11 @@ export const TodoModal: React.FC<Props> = ({
                 {`Todo #${selectedTodo.id}`}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 type="button"
                 className="delete"
                 data-cy="modal-close"
+                aria-label="delete"
                 onClick={handleCloseModal}
               />
             </header>
