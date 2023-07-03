@@ -80,6 +80,7 @@ export const App: React.FC = () => {
                     todos={filteredTodos}
                     onTodoInfoRequest={setIsTodoInfoRequested}
                     onUserIdChange={setUserId}
+                    selectedTodo={selectedTodo}
                     onSelectedTodoChange={setSelectedTodo}
                     isTodoInfoRequested={isTodoInfoRequested}
                   />

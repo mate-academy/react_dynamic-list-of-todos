@@ -4,6 +4,7 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
+  selectedTodo: Todo | null,
   isTodoInfoRequested: boolean,
   onTodoInfoRequest: (arg: boolean) => void,
   onUserIdChange: (arg: number) => void,
@@ -12,6 +13,7 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  selectedTodo,
   isTodoInfoRequested,
   onTodoInfoRequest,
   onUserIdChange,
@@ -76,7 +78,7 @@ export const TodoList: React.FC<Props> = ({
                   onClick={handleSelectedTodo}
                 >
                   <span className="icon">
-                    {isTodoInfoRequested
+                    {isTodoInfoRequested && selectedTodo?.id === id
                       ? <i className="far fa-eye-slash" />
                       : <i className="far fa-eye" />}
                   </span>
