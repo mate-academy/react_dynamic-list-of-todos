@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FilterQuery } from '../../enums';
 
 type Props = {
   filterQuery: string,
@@ -40,9 +41,9 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleSelect}
             defaultValue={filterQuery}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterQuery.ALL}>All</option>
+            <option value={FilterQuery.ACTIVE}>Active</option>
+            <option value={FilterQuery.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

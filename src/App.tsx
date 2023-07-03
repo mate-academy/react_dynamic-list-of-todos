@@ -15,25 +15,26 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterQuery } from './enums';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filterQuery, setFilterQuery] = useState('all');
+  const [filterQuery, setFilterQuery] = useState(FilterQuery.ALL);
   const [searchQuery, setSearchQuery] = useState<null | string>(null);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
   useEffect(() => {
     getTodos()
-      .then(response => setTodos(response))
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
-    const rawTodos = filterQuery === 'all'
+    const preparedTodos = filterQuery === FilterQuery.ALL
       ? todos
       : todos.filter(todo => {
-        if (filterQuery === 'active') {
+        if (filterQuery === FilterQuery.ACTIVE) {
           return !todo.completed;
         }
 
@@ -41,12 +42,12 @@ export const App: React.FC = () => {
       });
 
     if (searchQuery) {
-      return rawTodos.filter(todo => (
+      return preparedTodos.filter(todo => (
         todo.title.toLowerCase().includes(searchQuery.toLowerCase())
       ));
     }
 
-    return rawTodos;
+    return preparedTodos;
   }, [todos, filterQuery, searchQuery]);
 
   const applyFilter = useCallback((value) => setFilterQuery(value), []);
@@ -69,13 +70,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && visibleTodos
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
                     selectedTodo={selectedTodo}
-                    choseTodo={setSelectedTodo}
+                    selectTodo={setSelectedTodo}
                   />
                 )}
             </div>
