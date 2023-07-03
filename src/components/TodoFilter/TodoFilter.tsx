@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 
+enum SortType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 type Props = {
-  filterChange: (methodSort: string) => void;
+  filterChange: (methodSort: SortType) => void;
   textChange: (text: string) => void;
 };
 
@@ -9,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({ filterChange, textChange }) => {
   const [text, setText] = useState('');
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    filterChange(event.target.value);
+    filterChange(event.target.value as SortType);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,9 +36,9 @@ export const TodoFilter: React.FC<Props> = ({ filterChange, textChange }) => {
             data-cy="statusSelect"
             onChange={handleFilterChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortType.ALL}>All</option>
+            <option value={SortType.ACTIVE}>Active</option>
+            <option value={SortType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -53,12 +59,12 @@ export const TodoFilter: React.FC<Props> = ({ filterChange, textChange }) => {
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {text
             && (
-              /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
                 onClick={handleClearSerch}
+                aria-label="delete"
               />
             )}
         </span>

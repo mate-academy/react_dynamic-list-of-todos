@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {errorMessage
-        ? <li>{errorMessage}</li>
+        ? <td>{errorMessage}</td>
         : todos.map(todo => (
           <tr
             key={todo.id}

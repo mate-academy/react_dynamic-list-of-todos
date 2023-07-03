@@ -24,9 +24,9 @@ type DataSort = {
 export function filterTodos(todos: Todo[], { sortType, query }: DataSort) {
   let newTodos = [...todos];
 
-  newTodos = newTodos.filter(todo => {
-    return todo.title.toLowerCase().includes(query.toLowerCase());
-  });
+  newTodos = newTodos.filter(todo => (
+    todo.title.toLowerCase().includes(query.toLowerCase())
+  ));
 
   if (sortType === SortType.ALL) {
     return newTodos;
@@ -65,7 +65,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortType, setSortType] = useState<SortType>(SortType.ALL);
   const [query, setQuery] = useState('');
-  const [iLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [visibiliteComponent, setVisibiliteComponent] = useState(false);
@@ -75,13 +75,13 @@ export const App: React.FC = () => {
     [],
   );
 
-  const handleFilterChange = (methodSort: string) => {
+  const handleFilterChange = (methodSort: SortType) => {
     switch (methodSort) {
-      case 'active':
+      case SortType.ACTIVE:
         setSortType(SortType.ACTIVE);
         break;
 
-      case 'completed':
+      case SortType.COMPLETED:
         setSortType(SortType.COMPLETED);
         break;
 
@@ -145,7 +145,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {iLoading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 errorMessage={errorMessage}
                 todos={visibleTodos}
