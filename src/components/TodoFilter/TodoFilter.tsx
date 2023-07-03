@@ -14,7 +14,7 @@ export const TodoFilter: FC<Props> = ({
   selectedOption,
   setSelectedOption,
 }) => {
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
@@ -48,7 +48,7 @@ export const TodoFilter: FC<Props> = ({
           type="text"
           className="input"
           value={searchQuery}
-          onChange={handleSearch}
+          onChange={handleChangeSearch}
           placeholder="Search..."
         />
         <span className="icon is-left">

@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import { FC, useState, useEffect } from 'react';
+import {
+  FC,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import './App.scss';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -11,7 +16,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { LoadingError } from './components/LoadingError';
+import { getFilteredTodos } from './helpers';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,7 +26,7 @@ export const App: FC = () => {
   const [hasLoadingError, setHasLoadingError] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  async function fetchTodos() {
+  const fetchTodos = useCallback(async () => {
     setIsLoading(true);
 
     try {
@@ -33,25 +38,9 @@ export const App: FC = () => {
       setIsLoading(false);
       setHasLoadingError(true);
     }
-  }
+  }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    const title = todo.title.toLowerCase();
-    const search = searchQuery.toLowerCase().trim();
-
-    const foundTodo = title.includes(search);
-
-    switch (selectedOption) {
-      case TodoStatusOptions.all:
-        return foundTodo;
-      case TodoStatusOptions.active:
-        return !todo.completed && foundTodo;
-      case TodoStatusOptions.completed:
-        return todo.completed && foundTodo;
-      default:
-        return foundTodo;
-    }
-  });
+  const visibleTodos = getFilteredTodos(todos, searchQuery, selectedOption);
 
   useEffect(() => {
     fetchTodos();
@@ -78,21 +67,14 @@ export const App: FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                // create a new component called LoadingError
-                // if the request fails, render the LoadingError component
-                // that will display a message and a button to retry
-                hasLoadingError ? (
-                  <LoadingError
-                    loading={isLoading}
-                    loadTodos={() => fetchTodos}
-                  />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    setSelectedTodo={setSelectedTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                )
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                  hasLoadingError={hasLoadingError}
+                  isLoading={isLoading}
+                  loadTodos={fetchTodos}
+                />
               )}
             </div>
           </div>

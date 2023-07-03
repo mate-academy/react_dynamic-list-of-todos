@@ -13,11 +13,13 @@ export const TodoItem: FC<Props> = ({
   setSelectedTodo,
   selectedTodo,
 }) => {
+  const isTodoSelected = todo === selectedTodo;
+
   return (
     <tr
       data-cy="todo"
       className={cn({
-        'has-background-info-light': todo === selectedTodo,
+        'has-background-info-light': isTodoSelected,
       })}
     >
       <td className="is-vcentered">
@@ -52,8 +54,8 @@ export const TodoItem: FC<Props> = ({
         >
           <span className="icon">
             <i className={cn('far', {
-              'fa-eye': todo !== selectedTodo,
-              'fa-eye-slash': todo === selectedTodo,
+              'fa-eye': !isTodoSelected,
+              'fa-eye-slash': isTodoSelected,
             })}
             />
           </span>
