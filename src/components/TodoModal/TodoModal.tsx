@@ -37,6 +37,10 @@ export const TodoModal: React.FC<Props> = ({
     }
   }, [currntUserId]);
 
+  const handleCloseModal = () => {
+    onTodoInfoRequestedChange(false);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -67,9 +71,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => {
-                  onTodoInfoRequestedChange(false);
-                }}
+                onClick={handleCloseModal}
                 aria-label="Close modal"
               />
             </header>

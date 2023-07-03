@@ -43,6 +43,12 @@ export const TodoList: React.FC<Props> = ({
             userId,
           } = todo;
 
+          const handleSelectedTodo = () => {
+            onTodoInfoRequest(true);
+            onUserIdChange(userId);
+            onSelectedTodoChange(todo);
+          };
+
           return (
             <tr data-cy="todo" className="" key={id}>
               <td className="is-vcentered">{id}</td>
@@ -67,11 +73,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => {
-                    onTodoInfoRequest(true);
-                    onUserIdChange(userId);
-                    onSelectedTodoChange(todo);
-                  }}
+                  onClick={handleSelectedTodo}
                 >
                   <span className="icon">
                     {isTodoInfoRequested
