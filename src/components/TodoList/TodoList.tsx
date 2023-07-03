@@ -1,6 +1,6 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoInfo } from '../TodoInfo/TodoInfo';
 
 interface Props {
   todos: Todo[],
@@ -38,53 +38,15 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => {
-          const {
-            id,
-            title,
-            completed,
-            userId,
-          } = todo;
-
-          const handleSelectedTodo = () => {
-            onTodoInfoRequest(true);
-            onUserIdChange(userId);
-            onSelectedTodoChange(todo);
-          };
-
           return (
-            <tr data-cy="todo" className="" key={id}>
-              <td className="is-vcentered">{id}</td>
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p className={classNames({
-                  'has-text-danger': !completed,
-                  'has-text-success': completed,
-                })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={handleSelectedTodo}
-                >
-                  <span className="icon">
-                    {isTodoInfoRequested && selectedTodo?.id === id
-                      ? <i className="far fa-eye-slash" />
-                      : <i className="far fa-eye" />}
-                  </span>
-                </button>
-              </td>
-            </tr>
+            <TodoInfo
+              todo={todo}
+              selectedTodo={selectedTodo}
+              isTodoInfoRequested={isTodoInfoRequested}
+              onTodoInfoRequest={onTodoInfoRequest}
+              onUserIdChange={onUserIdChange}
+              onSelectedTodoChange={onSelectedTodoChange}
+            />
           );
         })}
       </tbody>

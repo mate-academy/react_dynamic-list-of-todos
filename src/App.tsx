@@ -78,11 +78,11 @@ export const App: React.FC = () => {
                 ? (
                   <TodoList
                     todos={filteredTodos}
+                    selectedTodo={selectedTodo}
+                    isTodoInfoRequested={isTodoInfoRequested}
                     onTodoInfoRequest={setIsTodoInfoRequested}
                     onUserIdChange={setUserId}
-                    selectedTodo={selectedTodo}
                     onSelectedTodoChange={setSelectedTodo}
-                    isTodoInfoRequested={isTodoInfoRequested}
                   />
                 )
                 : (
