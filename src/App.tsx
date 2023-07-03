@@ -27,6 +27,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
