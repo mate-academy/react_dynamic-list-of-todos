@@ -5,6 +5,7 @@ import React, {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/Enum';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -13,11 +14,10 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isTodoSelected, setIsTodoSelected] = useState(false);
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState(FilterType.All);
 
   useEffect(() => {
     getTodos()
@@ -28,11 +28,9 @@ export const App: React.FC = () => {
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsTodoSelected(true);
   };
 
   const handleCloseModal = useCallback(() => {
-    setIsTodoSelected(false);
     setSelectedTodo(null);
   }, []);
 
@@ -40,13 +38,13 @@ export const App: React.FC = () => {
     let filteredTodos = todos;
 
     switch (filterType) {
-      case 'all':
+      case FilterType.All:
         filteredTodos = todos;
         break;
-      case 'completed':
+      case FilterType.Completed:
         filteredTodos = todos.filter(todo => todo.completed);
         break;
-      case 'active':
+      case FilterType.Active:
         filteredTodos = todos.filter(todo => !todo.completed);
         break;
       default:
@@ -92,14 +90,18 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length ? <Loader />
                 : (
-                  <TodoList todos={visibleTodos} selectedTodo={selectedTodo} handleSelectTodo={handleSelectTodo} />
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    handleSelectTodo={handleSelectTodo}
+                  />
                 )}
             </div>
           </div>
         </div>
       </div>
 
-      {isTodoSelected && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           handleCloseModal={handleCloseModal}

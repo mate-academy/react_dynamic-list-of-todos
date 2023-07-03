@@ -1,6 +1,9 @@
+/* eslint-disable max-len */
+import { FilterType } from '../../types/Enum';
+
 type TodoFilterProps = {
-  filterType: string,
-  setFilterType: (arg: string) => void,
+  filterType: FilterType,
+  setFilterType: (filterType: FilterType) => void,
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handleQueryDelete: () => void,
   query: string,
@@ -23,11 +26,11 @@ export const TodoFilter = (
           <select
             data-cy="statusSelect"
             value={filterType}
-            onChange={(event) => setFilterType(event?.target.value)}
+            onChange={(event) => setFilterType(event?.target.value as FilterType)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>
