@@ -8,7 +8,6 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import './App.scss';
-import { filterTodoByCompleted } from './helpers';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
@@ -31,16 +30,12 @@ export const App: React.FC = () => {
 
     if (selectedFilter) {
       switch (selectedFilter) {
-        case 'all':
-          todos = todosFromServer;
-          break;
-
         case 'active':
-          todos = filterTodoByCompleted(todosFromServer, false);
+          todos = todos.filter(todo => !todo.completed);
           break;
 
         case 'completed':
-          todos = filterTodoByCompleted(todosFromServer, true);
+          todos = todos.filter(todo => todo.completed);
           break;
 
         default:
