@@ -21,6 +21,10 @@ export const TodoFilter:React.FC<Props> = ({
     onQueryChange(event.target.value);
   };
 
+  const handleClearSearch = () => {
+    onQueryChange('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -57,9 +61,7 @@ export const TodoFilter:React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                onQueryChange('');
-              }}
+              onClick={handleClearSearch}
             />
           </span>
         )}
