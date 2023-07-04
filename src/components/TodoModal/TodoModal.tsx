@@ -1,49 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  selectedTodo: Todo,
+  closeModal: () => void,
+}
+
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  closeModal,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [userUploaded, setUserUploaded] = useState(false);
+  const [isUSerError, setIsUSerError] = useState(false);
+
+  useEffect(() => {
+    const loadUser = async (id: number) => {
+      try {
+        const loadedUser = await getUser(id);
+
+        setUser(loadedUser);
+        setUserUploaded(true);
+      } catch (error) {
+        setUserUploaded(true);
+        setIsUSerError(true);
+      }
+    };
+
+    loadUser(selectedTodo.userId);
+  }, [selectedTodo?.userId]);
+
+  const shouldDisplayModal = userUploaded && selectedTodo && user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
-        <Loader />
-      ) : (
+      {isUSerError && (
         <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
+          <div className="message p-2 my-4 is-danger">
+            <p className="message-body">Error loading data</p>
           </div>
         </div>
       )}
+
+      {shouldDisplayModal
+        ? (
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
+              >
+                {`Todo #${selectedTodo.id}`}
+              </div>
+
+              <button
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={closeModal}
+                aria-label="Close modal"
+              />
+            </header>
+
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {selectedTodo.title}
+              </p>
+
+              <p className="block" data-cy="modal-user">
+                {selectedTodo.completed
+                  ? <strong className="has-text-success">Done</strong>
+                  : <strong className="has-text-danger">Planned</strong>}
+
+                {' by '}
+
+                <a href={`mailto:${user.email}`}>
+                  {user.name}
+                </a>
+              </p>
+            </div>
+          </div>
+        )
+        : (
+          <Loader />
+        )}
+
     </div>
   );
 };
