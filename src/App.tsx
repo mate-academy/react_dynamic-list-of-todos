@@ -1,14 +1,54 @@
 /* eslint-disable max-len */
-import React from 'react';
+import {
+  FC,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+import './App.scss';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { TodoStatusOptions } from './enums/TodoStatusOptions';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getFilteredTodos } from './helpers';
 
-export const App: React.FC = () => {
+export const App: FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<string>(TodoStatusOptions.all);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasLoadingError, setHasLoadingError] = useState<boolean>(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const fetchTodos = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setHasLoadingError(true);
+    }
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    return getFilteredTodos(todos, searchQuery, selectedOption);
+  }, [todos, searchQuery, selectedOption]);
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +57,38 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                  hasLoadingError={hasLoadingError}
+                  isLoading={isLoading}
+                  loadTodos={fetchTodos}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          setTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
