@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './App.scss';
@@ -10,14 +12,15 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { debounce, filterTodosByStatus } from './types/Helpers/helpers';
+import { debounce, filterTodos } from './types/Helpers/helpers';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [isTodoCompleted, setIsTodoComlpeted] = useState('all');
+  const [filterType, setFilterType] = useState(FilterType.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -26,24 +29,12 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  let visibleTodos = [...todos];
-
   const applyQuery = useCallback(
     debounce(setAppliedQuery, 500),
     [],
   );
 
-  useMemo(() => {
-    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(appliedQuery));
-  }, [appliedQuery]);
-
-  if (isTodoCompleted === 'completed') {
-    visibleTodos = filterTodosByStatus(visibleTodos, true);
-  }
-
-  if (isTodoCompleted === 'active') {
-    visibleTodos = filterTodosByStatus(visibleTodos, false);
-  }
+  const visibleTodos = useMemo(() => filterTodos(todos, filterType, appliedQuery), [appliedQuery, filterType, todos]);
 
   return (
     <>
@@ -57,25 +48,28 @@ export const App: React.FC = () => {
                 query={query}
                 setQuery={setQuery}
                 applyQuery={applyQuery}
-                isTodoCompleted={isTodoCompleted}
-                setIsTodoComlpeted={setIsTodoComlpeted}
+                filterType={filterType}
+                setFilterType={setFilterType}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
 
-              <TodoList
-                todos={visibleTodos}
-                setSelectedTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
+              {!isLoading
+                && (
+                  <TodoList
+                    todos={visibleTodos}
+                    setSelectedTodo={setSelectedTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null
+      {selectedTodo
         && (
           <TodoModal
             selectedTodo={selectedTodo}

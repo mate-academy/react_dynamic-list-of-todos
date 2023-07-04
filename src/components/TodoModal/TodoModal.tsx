@@ -14,21 +14,27 @@ export const TodoModal: React.FC<Props> = memo(({
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(foundUser => setUser(foundUser));
+    getUser(selectedTodo.userId)
+      .then(foundUser => {
+        setUser(foundUser);
+        setIsLoading(false);
+      });
   }, []);
 
   const handleCloseButton = () => {
     setSelectedTodo(null);
     setUser(null);
+    setIsLoading(true);
   };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user === null ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -40,8 +46,8 @@ export const TodoModal: React.FC<Props> = memo(({
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="closeModal"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -61,8 +67,8 @@ export const TodoModal: React.FC<Props> = memo(({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

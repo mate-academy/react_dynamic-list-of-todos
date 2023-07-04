@@ -1,19 +1,20 @@
 import React, { memo } from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string;
   setQuery: (searchQuery: string) => void;
   applyQuery: (searchQuery: string) => void;
-  isTodoCompleted: string;
-  setIsTodoComlpeted: (status: string) => void;
+  filterType: FilterType;
+  setFilterType: (status: FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
   query,
   setQuery,
   applyQuery,
-  isTodoCompleted,
-  setIsTodoComlpeted,
+  filterType,
+  setFilterType,
 }) => {
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     const normalizedQuery = event.target.value.toLowerCase().trim();
@@ -23,11 +24,12 @@ export const TodoFilter: React.FC<Props> = memo(({
   };
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setIsTodoComlpeted(event.target.value);
+    setFilterType(event.target.value as FilterType);
   };
 
   const handleClearButton = () => {
     setQuery('');
+    applyQuery('');
   };
 
   return (
@@ -36,12 +38,17 @@ export const TodoFilter: React.FC<Props> = memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={isTodoCompleted}
+            value={filterType}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.entries(FilterType).map(([label, value]) => (
+              <option
+                key={label}
+                value={value}
+              >
+                {label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -60,10 +67,10 @@ export const TodoFilter: React.FC<Props> = memo(({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query !== ''
+          {query
             && (
-              // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button
+                aria-label="clearSearchButton"
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
