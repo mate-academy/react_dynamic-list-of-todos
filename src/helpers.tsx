@@ -6,22 +6,24 @@ export const getVisibleTodos = (
   query: string,
   filter: FilterBy,
 ) => {
-  let todosToFilter = todos;
+  const normalizedQuery = query.toLowerCase().trim();
 
-  switch (filter) {
-    case FilterBy.Active:
-      todosToFilter = todos.filter(todo => !todo.completed);
-      break;
+  return todos.filter(todo => {
+    const normalizedTitle = todo.title.toLowerCase();
+    const foundedTodo = normalizedTitle.includes(normalizedQuery);
 
-    case FilterBy.Completed:
-      todosToFilter = todos.filter(todo => todo.completed);
-      break;
+    switch (filter) {
+      case FilterBy.Active:
+        return !todo.completed && foundedTodo;
 
-    default:
-      break;
-  }
+      case FilterBy.Completed:
+        return todo.completed && foundedTodo;
 
-  return todosToFilter.filter(todo => (
-    todo.title.toLowerCase().includes(query.toLowerCase())
-  ));
+      case FilterBy.All:
+        return foundedTodo;
+
+      default:
+        return foundedTodo;
+    }
+  });
 };

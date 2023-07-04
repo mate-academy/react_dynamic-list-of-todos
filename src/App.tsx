@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
@@ -41,17 +41,15 @@ export const App: React.FC = () => {
     getTodosFromApi();
   }, []);
 
-  const visibleTodos = getVisibleTodos(todos, query, filterBy);
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, query, filterBy)
+  ), [todos, query, filterBy]);
 
-  const changeSelectedTodo = (id: number) => {
-    setSelectedTodoId(id);
+  const selectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
-  const activeTodo = useMemo(() => (
-    todos.find((todo) => todo.id === selectedTodoId)
-  ), [selectedTodoId]);
-
-  const handleClearSelectedTodo = () => changeSelectedTodo(0);
+  const handleClearSelectedTodo = () => setSelectedTodo(null);
 
   return (
     <>
@@ -69,25 +67,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && !isError && (
-                <Loader />
-              )}
+              {!isError && isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    onSelectedTodo={selectTodo}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
 
-              {!isLoading && !isError && (
-                <TodoList
-                  todos={visibleTodos}
-                  onSelectedTodo={changeSelectedTodo}
-                  selectedTodo={selectedTodoId}
-                />
-              )}
             </div>
           </div>
         </div>
       </div>
 
-      {activeTodo && (
+      {selectedTodo && (
         <TodoModal
-          todo={activeTodo}
+          todo={selectedTodo}
           onHide={handleClearSelectedTodo}
         />
       )}

@@ -76,7 +76,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onHide }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={cn({
                   'has-text-danger': !completed,
