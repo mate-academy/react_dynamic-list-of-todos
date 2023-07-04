@@ -30,9 +30,8 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {errorMessage
-        ? <td>{errorMessage}</td>
-        : todos.map(todo => (
+      {!errorMessage
+        ? todos.map(todo => (
           <tr
             key={todo.id}
             data-cy="todo"
@@ -70,7 +69,8 @@ export const TodoList: React.FC<Props> = ({
               </button>
             </td>
           </tr>
-        ))}
+        ))
+        : <td>{errorMessage}</td>}
     </tbody>
   </table>
 );

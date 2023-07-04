@@ -9,6 +9,8 @@ type Props = {
   handleClick: () => void;
 };
 
+const errorText = 'User not found';
+
 export const TodoModal: React.FC<Props> = ({ todo, handleClick }) => {
   const {
     id,
@@ -56,12 +58,12 @@ export const TodoModal: React.FC<Props> = ({ todo, handleClick }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={handleClick}
+              aria-label="delete"
             />
           </header>
 
@@ -69,21 +71,20 @@ export const TodoModal: React.FC<Props> = ({ todo, handleClick }) => {
             <p className="block" data-cy="modal-title">
               {title}
             </p>
-            {errorMessage !== 'User not found' || !user
+            {errorMessage !== errorText || !user
               ? <p>{errorMessage}</p>
               : (
-                <p className="block" data-cy="modal-user">
-                  {completed
-                    ? <strong className="has-text-success">Done</strong>
-                    : <strong className="has-text-danger">Planned</strong>}
+                <span>
+                  <p className="block" data-cy="modal-user">
+                    {completed
+                      ? <strong className="has-text-success">Done</strong>
+                      : <strong className="has-text-danger">Planned</strong>}
 
-                  {' by '}
-
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
-                  </a>
-                </p>
-
+                    <a href={`mailto:${user.email}`}>
+                      {user.name}
+                    </a>
+                  </p>
+                </span>
               )}
           </div>
         </div>
