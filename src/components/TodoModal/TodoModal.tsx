@@ -31,8 +31,6 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     loadUser(selectedTodo.userId);
-    // if (selectedTodo) {
-    // }
   }, [selectedTodo?.userId]);
 
   const shouldDisplayModal = userUploaded && selectedTodo && user;

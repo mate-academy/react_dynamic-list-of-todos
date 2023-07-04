@@ -17,7 +17,6 @@ export const TodoInfo: React.FC<Props> = ({
     id,
     title,
     completed,
-    // userId,
   } = todo;
 
   const handleSelectedTodo = () => {
