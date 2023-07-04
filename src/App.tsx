@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import './App.scss';
 import 'bulma/css/bulma.css';
@@ -40,7 +41,9 @@ export const App: FC = () => {
     }
   }, []);
 
-  const visibleTodos = getFilteredTodos(todos, searchQuery, selectedOption);
+  const visibleTodos = useMemo(() => {
+    return getFilteredTodos(todos, searchQuery, selectedOption);
+  }, [todos, searchQuery, selectedOption]);
 
   useEffect(() => {
     fetchTodos();
@@ -63,7 +66,6 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {/* eslint-disable-next-line no-nested-ternary */}
               {isLoading ? (
                 <Loader />
               ) : (
