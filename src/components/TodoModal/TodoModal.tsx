@@ -5,13 +5,13 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  selectedTodo: Todo | null,
-  onSelectedTodoChange: (arg: Todo | null) => void,
+  selectedTodo: Todo,
+  closeModal: () => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  onSelectedTodoChange,
+  closeModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userUploaded, setUserUploaded] = useState(false);
@@ -30,14 +30,10 @@ export const TodoModal: React.FC<Props> = ({
       }
     };
 
-    if (selectedTodo) {
-      loadUser(selectedTodo.userId);
-    }
+    loadUser(selectedTodo.userId);
+    // if (selectedTodo) {
+    // }
   }, [selectedTodo?.userId]);
-
-  const handleCloseModal = () => {
-    onSelectedTodoChange(null);
-  };
 
   const shouldDisplayModal = userUploaded && selectedTodo && user;
 
@@ -68,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={handleCloseModal}
+                onClick={closeModal}
                 aria-label="Close modal"
               />
             </header>

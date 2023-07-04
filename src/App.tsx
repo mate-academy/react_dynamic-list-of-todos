@@ -10,7 +10,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { FilterStatus } from './helper';
+import { FilterStatus, filterTodos } from './helper';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -37,22 +37,12 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const preparedQUery = query.toLowerCase();
-      const queriedTodo = todo.title.toLowerCase().includes(preparedQUery);
-
-      switch (filterCondition) {
-        case FilterStatus.ALL:
-          return queriedTodo;
-        case FilterStatus.ACTIVE:
-          return queriedTodo && !todo.completed;
-        case FilterStatus.COMPLETED:
-          return queriedTodo && todo.completed;
-        default:
-          return 0;
-      }
-    });
+    return filterTodos(todos, query, filterCondition);
   }, [todos, filterCondition, query]);
+
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
 
   return (
     <>
@@ -94,8 +84,8 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          onSelectedTodoChange={setSelectedTodo}
           selectedTodo={selectedTodo}
+          closeModal={handleCloseModal}
         />
       )}
     </>

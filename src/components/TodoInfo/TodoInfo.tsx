@@ -24,6 +24,8 @@ export const TodoInfo: React.FC<Props> = ({
     onSelectedTodoChange(todo);
   };
 
+  const isSelected = selectedTodo?.id === id;
+
   return (
     <tr data-cy="todo" className="" key={id}>
       <td className="is-vcentered">{id}</td>
@@ -51,7 +53,7 @@ export const TodoInfo: React.FC<Props> = ({
           onClick={handleSelectedTodo}
         >
           <span className="icon">
-            {selectedTodo?.id === id
+            {isSelected
               ? <i className="far fa-eye-slash" />
               : <i className="far fa-eye" />}
           </span>
