@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { FilterType } from '../../types/Enum';
+import { FilterType } from '../../types/FilterTypeEnum';
 
 type TodoFilterProps = {
   filterType: FilterType,

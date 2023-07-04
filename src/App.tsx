@@ -5,7 +5,7 @@ import React, {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
-import { FilterType } from './types/Enum';
+import { FilterType } from './types/FilterTypeEnum';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
