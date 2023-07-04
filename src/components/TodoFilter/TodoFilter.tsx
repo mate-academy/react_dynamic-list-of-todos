@@ -1,5 +1,8 @@
+import { ChangeEvent } from 'react';
+import { StatusFilter } from '../../helpers';
+
 type Props = {
-  handleStatus: (status: string) => void
+  handleStatus: (StatusFilter: StatusFilter) => void
   handleQuery: (title: string) => void
   query: string
   clearQuery: () => void
@@ -11,17 +14,25 @@ export const TodoFilter: React.FC<Props> = ({
   clearQuery,
   query,
 }) => {
+  const handleSelectStatus = (event: ChangeEvent<HTMLSelectElement>) => {
+    handleStatus(event.target.value as StatusFilter);
+  };
+
+  const handleSearchQuery = (event: ChangeEvent<HTMLInputElement>) => {
+    handleQuery(event.target.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => handleStatus(event.target.value)}
+            onChange={handleSelectStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={StatusFilter.ALL}>All</option>
+            <option value={StatusFilter.ACTIVE}>Active</option>
+            <option value={StatusFilter.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -33,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => handleQuery(event.target.value)}
+          onChange={handleSearchQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -41,9 +52,9 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
+              aria-label="Сlear Search Button "
               type="button"
               className="delete"
               onClick={clearQuery}

@@ -8,13 +8,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-// import { event } from 'cypress/types/jquery';
+import { StatusFilter } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(StatusFilter.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -24,10 +24,11 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsLoading(false))
+      .catch(error => new Error(`Error - todos was not loaded:', ${error}`));
   }, []);
 
-  const handleStatus = useCallback((selectedStatus: string) => {
+  const handleStatus = useCallback((selectedStatus: StatusFilter) => {
     setStatus(selectedStatus);
   }, []);
 
@@ -43,24 +44,21 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const filterTodos = useCallback((search: string, todoStatus: string) => {
-    if (todoStatus === 'completed') {
-      return todos.filter(todo => (
-        todo.completed && todo.title.toLowerCase().includes(search.toLowerCase())
-      ));
+  const visibleTodos = todos.filter(todo => {
+    const normalizedTodo
+    = todo.title.toLowerCase().trim().includes(query.toLowerCase());
+
+    switch (status) {
+      case StatusFilter.ALL:
+        return normalizedTodo;
+      case StatusFilter.ACTIVE:
+        return normalizedTodo && !todo.completed;
+      case StatusFilter.COMPLETED:
+        return normalizedTodo && todo.completed;
+      default:
+        throw new Error('Unknown status selector');
     }
-
-    if (todoStatus === 'active') {
-      return todos.filter(todo => (
-        !todo.completed && todo.title.toLowerCase().includes(search.toLowerCase())
-      ));
-    }
-
-    return todos.filter(todo => (
-      todo.title.toLowerCase().includes(search.toLowerCase())));
-  }, [query, status, todos]);
-
-  const visibleTodos = filterTodos(query, status);
+  });
 
   const clearQuery = () => {
     setQuery('');
@@ -83,22 +81,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading
-                ? (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    handleTodo={handleTodo}
-                  />
-                )
-                : (<Loader />)}
+              {!isLoading ? (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  handleTodo={handleTodo}
+                />
+              ) : (
+                <Loader />
+              )}
 
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onClear={clearSelectedTodo}

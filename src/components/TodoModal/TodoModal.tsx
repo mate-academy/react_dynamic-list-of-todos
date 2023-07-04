@@ -18,15 +18,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onClear }) => {
   useEffect(() => {
     setIsLoading(true);
 
-    if (!userId) {
-      return;
-    }
-
     getUser(userId)
       .then(userFromServer => {
         setUser(userFromServer);
         setIsLoading(false);
-      });
+      })
+      .catch(error => new Error(`Error - user by userId: ${userId} was not found:, ${error}`));
   }, []);
 
   return (
@@ -45,9 +42,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClear }) => {
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="Delete Button "
               className="delete"
               data-cy="modal-close"
               onClick={() => onClear()}
