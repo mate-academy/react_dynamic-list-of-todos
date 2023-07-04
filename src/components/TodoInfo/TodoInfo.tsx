@@ -5,30 +5,22 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todo: Todo
   selectedTodo: Todo | null,
-  // isTodoInfoRequested: boolean,
-  // onTodoInfoRequest: (arg: boolean) => void,
-  onUserIdChange: (arg: number) => void,
   onSelectedTodoChange: (arg: Todo) => void;
 }
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
   selectedTodo,
-  // isTodoInfoRequested,
-  // onTodoInfoRequest,
-  onUserIdChange,
   onSelectedTodoChange,
 }) => {
   const {
     id,
     title,
     completed,
-    userId,
+    // userId,
   } = todo;
 
   const handleSelectedTodo = () => {
-    // onTodoInfoRequest(true);
-    onUserIdChange(userId);
     onSelectedTodoChange(todo);
   };
 

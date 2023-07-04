@@ -15,10 +15,8 @@ import { FilterStatus } from './helper';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadedTodos, setIsLoadedTodos] = useState(false);
-  // const [isTodoInfoRequested, setIsTodoInfoRequested] = useState(false);
   const [filterCondition, setFilterCondition] = useState(FilterStatus.ALL);
   const [query, setQuery] = useState('');
-  const [userId, setUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
@@ -79,9 +77,6 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     selectedTodo={selectedTodo}
-                    // isTodoInfoRequested={isTodoInfoRequested}
-                    // onTodoInfoRequest={setIsTodoInfoRequested}
-                    onUserIdChange={setUserId}
                     onSelectedTodoChange={setSelectedTodo}
                   />
                 )
@@ -99,7 +94,6 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           onSelectedTodoChange={setSelectedTodo}
-          currntUserId={userId}
           selectedTodo={selectedTodo}
         />
       )}

@@ -5,13 +5,11 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  currntUserId: number | null,
   selectedTodo: Todo | null,
   onSelectedTodoChange: (arg: Todo | null) => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
-  currntUserId,
   selectedTodo,
   onSelectedTodoChange,
 }) => {
@@ -32,10 +30,10 @@ export const TodoModal: React.FC<Props> = ({
       }
     };
 
-    if (currntUserId) {
-      loadUser(currntUserId);
+    if (selectedTodo) {
+      loadUser(selectedTodo.userId);
     }
-  }, [currntUserId]);
+  }, [selectedTodo?.userId]);
 
   const handleCloseModal = () => {
     onSelectedTodoChange(null);
