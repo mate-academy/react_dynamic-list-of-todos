@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { getTodos } from './api';
 
@@ -25,35 +25,37 @@ export const App: React.FC = () => {
     getTodos()
       .then((todosFromServer) => {
         setTodos(todosFromServer);
-        setIsLoading(false);
       })
       .catch((error) => {
-        throw new Error('Loading todos error: ', error.message);
-      });
+        throw new Error(error.message);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    const normalizedQuery = query.toLowerCase().trim();
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      const normalizedQuery = query.toLowerCase().trim();
 
-    const normalizedTodo = todo.title
-      .toLowerCase()
-      .trim()
-      .includes(normalizedQuery);
+      const normalizedTodo = todo.title
+        .toLowerCase()
+        .trim()
+        .includes(normalizedQuery);
 
-    switch (filterStatus) {
-      case FilterStatus.ALL:
-        return normalizedTodo;
+      switch (filterStatus) {
+        case FilterStatus.ALL:
+          return normalizedTodo;
 
-      case FilterStatus.ACTIVE:
-        return normalizedTodo && !todo.completed;
+        case FilterStatus.ACTIVE:
+          return normalizedTodo && !todo.completed;
 
-      case FilterStatus.COMPLETED:
-        return normalizedTodo && todo.completed;
+        case FilterStatus.COMPLETED:
+          return normalizedTodo && todo.completed;
 
-      default:
-        throw new Error('Unknown status selector');
-    }
-  });
+        default:
+          throw new Error('Unknown status selector');
+      }
+    });
+  }, [todos, query, filterStatus]);
 
   const selectTodo = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
