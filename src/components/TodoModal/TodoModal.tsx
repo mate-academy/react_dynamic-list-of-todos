@@ -7,13 +7,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   currntUserId: number | null,
   selectedTodo: Todo | null,
-  onTodoInfoRequestedChange: (arg: boolean) => void,
+  onSelectedTodoChange: (arg: Todo | null) => void,
 }
 
 export const TodoModal: React.FC<Props> = ({
   currntUserId,
   selectedTodo,
-  onTodoInfoRequestedChange,
+  onSelectedTodoChange,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userUploaded, setUserUploaded] = useState(false);
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
   }, [currntUserId]);
 
   const handleCloseModal = () => {
-    onTodoInfoRequestedChange(false);
+    onSelectedTodoChange(null);
   };
 
   const shouldDisplayModal = userUploaded && selectedTodo && user;

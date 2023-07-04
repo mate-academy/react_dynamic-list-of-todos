@@ -5,8 +5,8 @@ import { TodoInfo } from '../TodoInfo/TodoInfo';
 interface Props {
   todos: Todo[],
   selectedTodo: Todo | null,
-  isTodoInfoRequested: boolean,
-  onTodoInfoRequest: (arg: boolean) => void,
+  // isTodoInfoRequested: boolean,
+  // onTodoInfoRequest: (arg: boolean) => void,
   onUserIdChange: (arg: number) => void,
   onSelectedTodoChange: (arg: Todo) => void;
 }
@@ -14,8 +14,8 @@ interface Props {
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
-  isTodoInfoRequested,
-  onTodoInfoRequest,
+  // isTodoInfoRequested,
+  // onTodoInfoRequest,
   onUserIdChange,
   onSelectedTodoChange,
 }) => {
@@ -42,8 +42,8 @@ export const TodoList: React.FC<Props> = ({
             <TodoInfo
               todo={todo}
               selectedTodo={selectedTodo}
-              isTodoInfoRequested={isTodoInfoRequested}
-              onTodoInfoRequest={onTodoInfoRequest}
+              // isTodoInfoRequested={isTodoInfoRequested}
+              // onTodoInfoRequest={onTodoInfoRequest}
               onUserIdChange={onUserIdChange}
               onSelectedTodoChange={onSelectedTodoChange}
             />

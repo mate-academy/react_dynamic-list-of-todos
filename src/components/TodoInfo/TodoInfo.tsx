@@ -5,8 +5,8 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todo: Todo
   selectedTodo: Todo | null,
-  isTodoInfoRequested: boolean,
-  onTodoInfoRequest: (arg: boolean) => void,
+  // isTodoInfoRequested: boolean,
+  // onTodoInfoRequest: (arg: boolean) => void,
   onUserIdChange: (arg: number) => void,
   onSelectedTodoChange: (arg: Todo) => void;
 }
@@ -14,8 +14,8 @@ interface Props {
 export const TodoInfo: React.FC<Props> = ({
   todo,
   selectedTodo,
-  isTodoInfoRequested,
-  onTodoInfoRequest,
+  // isTodoInfoRequested,
+  // onTodoInfoRequest,
   onUserIdChange,
   onSelectedTodoChange,
 }) => {
@@ -27,7 +27,7 @@ export const TodoInfo: React.FC<Props> = ({
   } = todo;
 
   const handleSelectedTodo = () => {
-    onTodoInfoRequest(true);
+    // onTodoInfoRequest(true);
     onUserIdChange(userId);
     onSelectedTodoChange(todo);
   };
@@ -59,7 +59,7 @@ export const TodoInfo: React.FC<Props> = ({
           onClick={handleSelectedTodo}
         >
           <span className="icon">
-            {isTodoInfoRequested && selectedTodo?.id === id
+            {selectedTodo?.id === id
               ? <i className="far fa-eye-slash" />
               : <i className="far fa-eye" />}
           </span>
