@@ -14,49 +14,35 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { StatusFilter } from './types/StatusFilter';
+import { filterTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<string>(StatusFilter.All);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodosFromServer);
+    setIsLoading(true);
+    getTodos()
+      .then(response => {
+        if ('Error' in response) {
+          setIsErrorMessage(true);
+        } else {
+          setTodosFromServer(response);
+        }
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    let todos = todosFromServer;
-
-    if (selectedFilter) {
-      switch (selectedFilter) {
-        case 'active':
-          todos = todos.filter(todo => !todo.completed);
-          break;
-
-        case 'completed':
-          todos = todos.filter(todo => todo.completed);
-          break;
-
-        default:
-          todos = todosFromServer;
-          break;
-      }
-    }
-
-    if (searchQuery) {
-      const currentQuery = searchQuery.toLowerCase();
-
-      todos = todos.filter(todo => todo.title
-        .toLowerCase().includes(currentQuery));
-    }
-
-    return todos;
-  }, [selectedFilter, todosFromServer, searchQuery]);
-
-  const selectedTodo = useMemo(() => (
-    visibleTodos.find(todo => todo.id === selectedTodoId) || null
-  ), [selectedTodoId]);
+  const visibleTodos = useMemo(() => filterTodos(
+    todosFromServer,
+    selectedFilter,
+    searchQuery,
+  ), [selectedFilter, todosFromServer, searchQuery]);
 
   return (
     <>
@@ -74,26 +60,35 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {todosFromServer.length === 0
-                ? (
-                  <Loader />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    setSelectedTodoId={setSelectedTodoId}
-                    selectedTodoId={selectedTodoId}
-                  />
-                )}
-            </div>
+            {isErrorMessage ? (
+              <div className="has-text-danger">
+                Unable to load the todos
+              </div>
+
+            ) : (
+              <div className="block">
+                {isLoading
+                  ? (
+                    <Loader />
+                  ) : (
+                    <TodoList
+                      todos={visibleTodos}
+                      setSelectedTodo={setSelectedTodo}
+                      selectedTodo={selectedTodo}
+                    />
+                  )}
+
+              </div>
+            )}
+
           </div>
         </div>
       </div>
 
-      {selectedTodoId && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodoId={setSelectedTodoId}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

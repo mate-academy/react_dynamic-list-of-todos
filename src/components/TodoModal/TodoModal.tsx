@@ -7,12 +7,12 @@ import { User } from '../../types/User';
 
 interface Props {
   selectedTodo: Todo | null;
-  setSelectedTodoId: (id: number | null) => void;
+  setSelectedTodo: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = React.memo(({
   selectedTodo,
-  setSelectedTodoId,
+  setSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -24,7 +24,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
   }, [selectedTodo]);
 
   const handleClickDeleteButton = () => {
-    setSelectedTodoId(null);
+    setSelectedTodo(null);
   };
 
   return (

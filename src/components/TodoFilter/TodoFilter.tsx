@@ -1,10 +1,11 @@
 import React from 'react';
+import { StatusFilter } from '../../types/StatusFilter';
 
 interface Props {
   selectedFilter: string;
-  setSelectedFilter: (value:string) => void;
+  setSelectedFilter: (value: string) => void;
   searchQuery: string;
-  setSearchQuery: (value:string) => void;
+  setSearchQuery: (value: string) => void;
 }
 
 export const TodoFilter: React.FC<Props> = React.memo(({
@@ -13,6 +14,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   searchQuery,
   setSearchQuery,
 }) => {
+  const { All, Active, Completed } = StatusFilter;
   const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(event.target.value);
   };
@@ -26,7 +28,10 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   });
 
   return (
-    <form className="field has-addons">
+    <form
+      className="field has-addons"
+      onSubmit={(event) => event.preventDefault()}
+    >
       <p className="control">
         <span className="select">
           <select
@@ -34,9 +39,9 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             value={selectedFilter}
             onChange={handleChangeFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={All}>All</option>
+            <option value={Active}>Active</option>
+            <option value={Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -56,12 +61,12 @@ export const TodoFilter: React.FC<Props> = React.memo(({
 
         {searchQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={handleClickDeleteButton}
+              aria-label="delete"
             />
           </span>
         )}
