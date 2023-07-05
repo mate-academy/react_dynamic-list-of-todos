@@ -11,17 +11,19 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { getFilteretTodos } from './helpers';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [todoStatus, setTodoStatus] = useState('all');
+  const [todoStatus, setTodoStatus] = useState(`${TodoStatus.all}`);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(err => (new Error(err.message)))
       .finally(() => (setIsLoading(false)));
   }, []);
 
@@ -52,7 +54,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (<Loader />
+              {isLoading ? (
+                <Loader />
               ) : (
                 <TodoList
                   todos={visibleTodos}

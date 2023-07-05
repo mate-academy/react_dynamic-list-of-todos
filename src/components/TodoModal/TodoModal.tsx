@@ -19,7 +19,8 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     getUser(userId)
-      .then(setUser);
+      .then(setUser)
+      .catch(error => (new Error(error.message)));
   }, [user]);
 
   return (
@@ -38,8 +39,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${selectedTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="clear selected todo"
               type="button"
               className="delete"
               data-cy="modal-close"
