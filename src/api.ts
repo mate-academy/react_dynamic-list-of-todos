@@ -19,9 +19,15 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`Failed to upload data: ${res.status} - ${res.statusText}`);
+      }
+
+      return res.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number | null) => get<User>(`/users/${userId}`);
