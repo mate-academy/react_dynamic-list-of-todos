@@ -13,7 +13,7 @@ export const TodoInfo: React.FC<Props> = ({
   setSelectedTodo,
   selectedTodo,
 }) => {
-  const isSelected = selectedTodo ? selectedTodo.id === todo.id : false;
+  const isSelected = selectedTodo?.id === todo.id;
 
   return (
     <tr data-cy="todo" className="">

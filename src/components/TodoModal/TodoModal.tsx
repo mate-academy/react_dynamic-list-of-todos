@@ -13,11 +13,18 @@ export const TodoModal: React.FC<Props> = memo(({
   selectedTodo,
   setSelectedTodo,
 }) => {
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = selectedTodo;
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.userId)
+    getUser(userId)
       .then(foundUser => {
         setUser(foundUser);
         setIsLoading(false);
@@ -43,7 +50,7 @@ export const TodoModal: React.FC<Props> = memo(({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo.id}`}
+              {`Todo #${id}`}
             </div>
 
             <button
@@ -57,11 +64,11 @@ export const TodoModal: React.FC<Props> = memo(({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed
+              {completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 
