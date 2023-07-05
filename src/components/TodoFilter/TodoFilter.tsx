@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { FilterType } from '../../types/FilterTypeEnum';
 
 type TodoFilterProps = {
@@ -26,7 +25,7 @@ export const TodoFilter = (
           <select
             data-cy="statusSelect"
             value={filterType}
-            onChange={(event) => setFilterType(event?.target.value as FilterType)}
+            onChange={(e) => setFilterType(e?.target.value as FilterType)}
           >
             <option value={FilterType.All}>All</option>
             <option value={FilterType.Active}>Active</option>

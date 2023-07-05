@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -41,12 +44,15 @@ export const App: React.FC = () => {
       case FilterType.All:
         filteredTodos = todos;
         break;
+
       case FilterType.Completed:
         filteredTodos = todos.filter(todo => todo.completed);
         break;
+
       case FilterType.Active:
         filteredTodos = todos.filter(todo => !todo.completed);
         break;
+
       default:
         break;
     }
@@ -88,7 +94,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length ? <Loader />
+              {!todos.length
+                ? <Loader />
                 : (
                   <TodoList
                     todos={visibleTodos}
