@@ -1,49 +1,88 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
-  return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
-
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+type Props = {
+  todos: Todo[];
+  selectTodo: (todoIDfromlist: number | string) => void
+  selectedTodoID:number | string
 };
+
+type State = {
+  user: User ;
+  selectedTodo: Todo;
+  loader:boolean
+};
+
+export class TodoModal extends Component<Props, State> {
+  state = {
+    user: {} as User,
+    selectedTodo: {} as Todo,
+    loader: true,
+  };
+
+  async componentDidMount() {
+    const { todos, selectedTodoID } = this.props;
+    const selectedTod = todos.find(todo => todo.id === selectedTodoID);
+
+    if (selectedTod) {
+      const user = await getUser(selectedTod.userId);
+
+      this.setState({ user, selectedTodo: selectedTod, loader: false });
+    }
+  }
+
+  render() {
+    const { user, selectedTodo, loader } = this.state;
+    const { selectTodo } = this.props;
+
+    return (
+      <div className="modal is-active" data-cy="modal">
+        <div className="modal-background" />
+        <div className="modal-card">
+          {(!user || loader) ? <Loader /> : '' }
+          {!loader && (
+            <>
+              <header className="modal-card-head">
+                <div
+                  className="modal-card-title has-text-weight-medium"
+                  data-cy="modal-header"
+                >
+                  {`Todo #${selectedTodo.id}`}
+                </div>
+
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <button
+                  type="button"
+                  className="delete"
+                  data-cy="modal-close"
+                  onClick={() => {
+                    selectTodo(0);
+                  }}
+                />
+              </header>
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {selectedTodo.title}
+                </p>
+
+                <p className="block" data-cy="modal-user">
+                  {selectedTodo.completed
+                    ? <strong className="has-text-success">Done</strong>
+                    : <strong className="has-text-danger">Planned</strong>}
+                  {' by '}
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                </p>
+              </div>
+            </>
+          )}
+
+        </div>
+      </div>
+    );
+  }
+}
