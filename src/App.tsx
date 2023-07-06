@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -8,22 +6,18 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
+import { check, getTodos } from './api';
 import { Todo } from './types/Todo';
-
-const str = async () => {
-  const data = await getTodos();
-
-  return data;
-};
+import { TodoUser } from './types/User';
 
 export const App: React.FC = () => {
   const [sourceData, setSourceData] = useState<Todo[] | null>(null);
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [sortBy, setSortBy] = useState('all');
-  const preRender = () => {
-    console.log(sortBy);
+  const [userModal, setUserModal] = useState<TodoUser | null>(null);
+  const [eyeMark, setEyeMark] = useState<number>(-1);
 
+  const preRender = () => {
     if (sourceData) {
       switch (sortBy) {
         case 'active':
@@ -46,7 +40,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    str().then(list => {
+    getTodos().then(list => {
       setSourceData(list);
       setTodos(list);
     });
@@ -55,8 +49,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     preRender();
   }, [sortBy]);
-
-  console.log('render');
 
   return (
     <>
@@ -78,6 +70,9 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todoList={todos !== null ? todos : []}
+                    setUserModal={setUserModal}
+                    eyeMark={eyeMark}
+                    setEyeMark={setEyeMark}
                   />
                 )}
             </div>
@@ -85,7 +80,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {false && <TodoModal />}
+      {check(userModal)
+        && (
+          <TodoModal
+            user={userModal as TodoUser}
+            setEyeMark={setEyeMark}
+            setUserModal={setUserModal}
+          />
+        )}
     </>
   );
 };

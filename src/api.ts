@@ -1,5 +1,5 @@
 import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { TodoUser, User } from './types/User';
 
 // eslint-disable-next-line max-len
 const BASE_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
@@ -21,6 +21,10 @@ function get<T>(url: string): Promise<T> {
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }
+
+export const check = (arg: Todo | TodoUser | null): boolean => {
+  return Boolean(arg);
+};
 
 export const getTodos = () => get<Todo[]>('/todos');
 
