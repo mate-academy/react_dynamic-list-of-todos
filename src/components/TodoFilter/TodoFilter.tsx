@@ -3,16 +3,20 @@ import { FilterBy } from '../../types/FilterBy';
 interface Props {
   onChangeFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   query: string,
-  onChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  onClearQuery: () => void,
+  setQuery: (query: string) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
   onChangeFilter,
   query,
-  onChangeQuery,
-  onClearQuery,
+  setQuery,
 }) => {
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const clearQuery = () => (setQuery(''));
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -32,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={onChangeQuery}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -45,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
               type="button"
               className="delete"
               aria-label="Delete"
-              onClick={onClearQuery}
+              onClick={clearQuery}
             />
           </span>
         )}

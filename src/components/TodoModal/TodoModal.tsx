@@ -1,22 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 interface Props {
-  isLoadingUser: boolean;
+  setSelectedUser: (user: User | null) => void,
   selectedUser: User | null;
   selectedTodo: Todo | null;
   closeModal: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  isLoadingUser,
+  setSelectedUser,
   selectedUser,
   selectedTodo,
   closeModal,
 }) => {
-  // console.log(isLoadingUser);
+  const isTodoSelected = selectedTodo;
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+
+  const loadUser = async () => {
+    setIsLoadingUser(true);
+
+    if (isTodoSelected) {
+      const userFromServer = await getUser(selectedTodo.userId);
+
+      setSelectedUser(userFromServer);
+    }
+
+    setIsLoadingUser(false);
+  };
+
+  useEffect(() => {
+    if (!selectedUser) {
+      loadUser();
+    }
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">

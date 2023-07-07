@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import './App.css';
 import { filterTodos } from './components/Helpers';
 import { User } from './types/User';
@@ -17,13 +17,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
-  const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [selectedUser, setSelectedUser] = useState<null | User>(null);
   const [filter, setFilter] = useState<string >('all');
   const [query, setQuery] = useState('');
 
   const visibleTodos = useMemo(() => filterTodos(todos, filter, query), [todos, filter, query]);
-  const isTodoSelected = selectedTodo;
 
   const loadTodos = async () => {
     setIsLoadingTodos(true);
@@ -33,24 +31,10 @@ export const App: React.FC = () => {
     setIsLoadingTodos(false);
   };
 
-  const loadUser = async () => {
-    setIsLoadingUser(true);
-
-    if (isTodoSelected) {
-      const userFromServer = await getUser(selectedTodo.userId);
-
-      setSelectedUser(userFromServer);
-    }
-
-    setIsLoadingUser(false);
-  };
-
   useEffect(() => {
     if (todos.length === 0) {
       loadTodos();
     }
-
-    loadUser();
   }, [selectedTodo]);
 
   const handleSelectTodo = (todo: Todo) => {
@@ -62,12 +46,6 @@ export const App: React.FC = () => {
 
     setFilter(filterType);
   };
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const clearQuery = () => (setQuery(''));
 
   const closeModal = () => {
     setSelectedUser(null);
@@ -85,8 +63,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeFilter={handleFilterChange}
                 query={query}
-                onChangeQuery={handleQueryChange}
-                onClearQuery={clearQuery}
+                setQuery={setQuery}
               />
             </div>
 
@@ -108,8 +85,8 @@ export const App: React.FC = () => {
 
       {(selectedTodo) && (
         <TodoModal
-          isLoadingUser={isLoadingUser}
           selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
           selectedTodo={selectedTodo}
           closeModal={closeModal}
         />
