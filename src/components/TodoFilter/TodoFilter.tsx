@@ -7,6 +7,11 @@ type Props = {
   resetQwery: () => void
 };
 
+enum FilterOption {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 export const TodoFilter : React.FC<Props> = ({
   changeCompleted,
   changeActive,
@@ -19,13 +24,13 @@ export const TodoFilter : React.FC<Props> = ({
     const selectedValue = event.target.value;
 
     switch (selectedValue) {
-      case 'all':
+      case FilterOption.All:
         changeAll();
         break;
-      case 'active':
+      case FilterOption.Active:
         changeActive();
         break;
-      case 'completed':
+      case FilterOption.Completed:
         changeCompleted();
         break;
       default:
@@ -41,9 +46,9 @@ export const TodoFilter : React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleSelectChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterOption.All}>All</option>
+            <option value={FilterOption.Active}>Active</option>
+            <option value={FilterOption.Completed}>Completed</option>
           </select>
         </span>
       </p>

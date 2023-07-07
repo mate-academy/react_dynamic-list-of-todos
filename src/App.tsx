@@ -50,7 +50,7 @@ export class App extends React.Component<{}, State> {
 
   handlechangeActive = () => {
     this.setState(prevState => {
-      const active = prevState.todos.filter(todo => todo.completed === false);
+      const active = prevState.todos.filter(todo => !todo.completed);
 
       return { filteredTodos: active };
     });
