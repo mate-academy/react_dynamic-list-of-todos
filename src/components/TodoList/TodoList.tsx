@@ -6,17 +6,19 @@ import { getUser } from '../../api';
 type Props = {
   todoList: Todo[];
   setUserModal: (arg: null | TodoUser)=> void;
+  setShowModal: (arg: boolean)=> void;
   eyeMark: number;
   setEyeMark: (arg: number) => void
 };
 
 export const TodoList: React.FC<Props> = ({
-  todoList, setUserModal, eyeMark, setEyeMark,
+  todoList, setUserModal, eyeMark, setEyeMark, setShowModal,
 }) => {
   const eyeButtonHandler = (todo: Todo) => {
     setEyeMark(todo.id);
+    setShowModal(true);
 
-    return getUser(todo.userId)
+    getUser(todo.userId)
       .then(user => {
         return { ...user, todo };
       })

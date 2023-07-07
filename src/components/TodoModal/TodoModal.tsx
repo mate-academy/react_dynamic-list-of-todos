@@ -1,11 +1,15 @@
 import React from 'react';
 import { Loader } from '../Loader';
 import { TodoUser } from '../../types/User';
-import { check } from '../../api';
+
+const check = (arg: TodoUser): boolean => {
+  return Boolean(arg);
+};
 
 type Props = {
   user: TodoUser
   setEyeMark: (arg: number) => void
+  setShowModal: (arg: boolean) => void
   setUserModal: (arg: TodoUser | null) => void
 };
 
@@ -13,17 +17,18 @@ export const TodoModal: React.FC<Props> = ({
   user,
   setEyeMark,
   setUserModal,
+  setShowModal,
 }) => {
   const closeButtonHandler = () => {
     setUserModal(null);
+    setShowModal(false);
     setEyeMark(-1);
   };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      { check(user.todo) ? (
+      { check(user) ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

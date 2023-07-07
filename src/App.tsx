@@ -6,49 +6,42 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { check, getTodos } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoUser } from './types/User';
 
 export const App: React.FC = () => {
-  const [sourceData, setSourceData] = useState<Todo[] | null>(null);
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [sourceData, setSourceData] = useState<Todo[]>([]);
   const [sortBy, setSortBy] = useState('all');
   const [userModal, setUserModal] = useState<TodoUser | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const [eyeMark, setEyeMark] = useState<number>(-1);
-
-  const preRender = () => {
-    if (sourceData) {
+  const sortTodos = () => {
+    if (loaded) {
       switch (sortBy) {
         case 'active':
-          setTodos(sourceData.filter(todo => !todo.completed));
-          break;
-
+          return sourceData.filter((todo) => !todo.completed);
         case 'completed':
-          setTodos(sourceData.filter(todo => todo.completed));
-          break;
-
+          return sourceData.filter((todo) => todo.completed);
         case 'all':
-          setTodos(sourceData);
-          break;
-
+          return sourceData;
         default:
-          setTodos(sourceData.filter(todo => todo.title.includes(sortBy)));
-          break;
+          return sourceData.filter((todo) => todo.title.includes(sortBy));
       }
     }
+
+    return [];
   };
 
-  useEffect(() => {
-    getTodos().then(list => {
-      setSourceData(list);
-      setTodos(list);
-    });
-  }, []);
+  const todos = sortTodos();
 
   useEffect(() => {
-    preRender();
-  }, [sortBy]);
+    getTodos().then((list) => {
+      setSourceData(list);
+      setLoaded(true);
+    });
+  }, []);
 
   return (
     <>
@@ -58,36 +51,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                sortType={setSortBy}
-                sortValue={sortBy}
-              />
+              <TodoFilter sortType={setSortBy} sortValue={sortBy} />
             </div>
 
             <div className="block">
-              {(!todos)
-                ? (<Loader />)
-                : (
-                  <TodoList
-                    todoList={todos !== null ? todos : []}
-                    setUserModal={setUserModal}
-                    eyeMark={eyeMark}
-                    setEyeMark={setEyeMark}
-                  />
-                )}
+              {loaded ? (
+                <TodoList
+                  todoList={todos !== null ? todos : []}
+                  setUserModal={setUserModal}
+                  setShowModal={setShowModal}
+                  eyeMark={eyeMark}
+                  setEyeMark={setEyeMark}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {check(userModal)
-        && (
-          <TodoModal
-            user={userModal as TodoUser}
-            setEyeMark={setEyeMark}
-            setUserModal={setUserModal}
-          />
-        )}
+      {/* {check(userModal) && ( */}
+      {showModal && (
+        <TodoModal
+          user={userModal as TodoUser}
+          setEyeMark={setEyeMark}
+          setUserModal={setUserModal}
+          setShowModal={setShowModal}
+        />
+      )}
     </>
   );
 };
