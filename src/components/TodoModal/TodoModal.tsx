@@ -7,28 +7,28 @@ const check = (arg: TodoUser): boolean => {
 };
 
 type Props = {
-  user: TodoUser
-  setEyeMark: (arg: number) => void
-  setShowModal: (arg: boolean) => void
-  setUserModal: (arg: TodoUser | null) => void
+  user: TodoUser;
+  setSelectButtonMark: (arg: number) => void;
+  setShowModal: (arg: boolean) => void;
+  setUserInfoForModal: (arg: TodoUser | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   user,
-  setEyeMark,
-  setUserModal,
+  setSelectButtonMark,
+  setUserInfoForModal,
   setShowModal,
 }) => {
   const closeButtonHandler = () => {
-    setUserModal(null);
+    setUserInfoForModal(null);
     setShowModal(false);
-    setEyeMark(-1);
+    setSelectButtonMark(-1);
   };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      { check(user) ? (
+      {check(user) ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -53,17 +53,19 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {user.todo.completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-danger">Planned</strong>}
+              {user.todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
+              <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
         </div>
-      ) : (<Loader />)}
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };

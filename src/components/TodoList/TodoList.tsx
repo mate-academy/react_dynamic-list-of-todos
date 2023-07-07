@@ -5,24 +5,28 @@ import { getUser } from '../../api';
 
 type Props = {
   todoList: Todo[];
-  setUserModal: (arg: null | TodoUser)=> void;
-  setShowModal: (arg: boolean)=> void;
-  eyeMark: number;
-  setEyeMark: (arg: number) => void
+  setUserInfoForModal: (arg: null | TodoUser) => void;
+  setShowModal: (arg: boolean) => void;
+  selectButtonMark: number;
+  setSelectButtonMark: (arg: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
-  todoList, setUserModal, eyeMark, setEyeMark, setShowModal,
+  todoList,
+  setUserInfoForModal,
+  selectButtonMark,
+  setSelectButtonMark,
+  setShowModal,
 }) => {
   const eyeButtonHandler = (todo: Todo) => {
-    setEyeMark(todo.id);
+    setSelectButtonMark(todo.id);
     setShowModal(true);
 
     getUser(todo.userId)
-      .then(user => {
+      .then((user) => {
         return { ...user, todo };
       })
-      .then(mutateUser => setUserModal(mutateUser));
+      .then((mutateUser) => setUserInfoForModal(mutateUser));
   };
 
   return (
@@ -41,14 +45,15 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todoList.map(todo => (
+        {todoList.map((todo) => (
           <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered" />
             <td className="is-vcentered is-expanded">
-              <p className={`${todo.completed
-                ? 'has-text-success'
-                : 'has-text-danger'}`}
+              <p
+                className={`${
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                }`}
               >
                 {todo.title}
               </p>
@@ -62,7 +67,11 @@ export const TodoList: React.FC<Props> = ({
               >
                 <span className="icon">
                   <i
-                    className={`${eyeMark === todo.id ? 'far fa-eye-slash' : 'far fa-eye'}`}
+                    className={`${
+                      selectButtonMark === todo.id
+                        ? 'far fa-eye-slash'
+                        : 'far fa-eye'
+                    }`}
                   />
                 </span>
               </button>
