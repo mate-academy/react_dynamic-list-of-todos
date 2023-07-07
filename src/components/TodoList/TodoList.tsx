@@ -21,7 +21,7 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {todos && todos.map(todo => (
+        {todos.map(todo => (
           <tr
             data-cy="todo"
             className={classNames({
@@ -64,23 +64,6 @@ export const TodoList: React.FC = () => {
             </td>
           </tr>
         ))}
-
-        {/* <tr data-cy="todo" className="has-background-info-light">
-          <td className="is-vcentered">2</td>
-          <td className="is-vcentered" />
-          <td className="is-vcentered is-expanded">
-            <p className="has-text-danger">
-              quis ut nam facilis et officia qui
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button data-cy="selectButton" className="button" type="button">
-              <span className="icon">
-                <i className="far fa-eye-slash" />
-              </span>
-            </button>
-          </td>
-        </tr> */}
       </tbody>
     </table>
   );

@@ -44,7 +44,7 @@ export const TodoContextProvider = ({ children }: Props) => {
   const filterTodosByField = ({ query, status }: FilterOptions) => {
     let filtered = [...todosContainer];
 
-    if (query) {
+    if (query.length > 0) {
       const normalizedQuery = query.toLowerCase();
 
       filtered = filtered.filter(todo => {
@@ -68,10 +68,10 @@ export const TodoContextProvider = ({ children }: Props) => {
     setTodos(filtered);
   };
 
-  const handleSelectTodo = (todo: Todo) => {
+  const handleSelectTodo = async (todo: Todo) => {
     setShowModal(true);
     setIsUserPending(true);
-    getUser(todo.userId)
+    await getUser(todo.userId)
       .then((res) => setSelectedTodo({ ...todo, user: res }))
       .then(() => setIsUserPending(false));
   };
