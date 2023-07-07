@@ -21,7 +21,6 @@ export const App: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<null | User>(null);
   const [filter, setFilter] = useState<string >('all');
   const [query, setQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const visibleTodos = useMemo(() => filterTodos(todos, filter, query), [todos, filter, query]);
   const isTodoSelected = selectedTodo;
@@ -56,7 +55,6 @@ export const App: React.FC = () => {
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsModalOpen(true);
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,9 +64,7 @@ export const App: React.FC = () => {
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const normalizedQuery = event.target.value;
-
-    setQuery(normalizedQuery);
+    setQuery(event.target.value);
   };
 
   const clearQuery = () => (setQuery(''));
@@ -76,7 +72,6 @@ export const App: React.FC = () => {
   const closeModal = () => {
     setSelectedUser(null);
     setSelectedTodo(null);
-    setIsModalOpen(false);
   };
 
   return (
@@ -111,7 +106,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {(isModalOpen) && (
+      {(selectedTodo) && (
         <TodoModal
           isLoadingUser={isLoadingUser}
           selectedUser={selectedUser}

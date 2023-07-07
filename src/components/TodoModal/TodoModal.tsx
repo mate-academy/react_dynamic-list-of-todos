@@ -16,6 +16,8 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   closeModal,
 }) => {
+  // console.log(isLoadingUser);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -32,12 +34,12 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => closeModal()}
+              onClick={closeModal}
+              aria-label="Close"
             />
           </header>
 
