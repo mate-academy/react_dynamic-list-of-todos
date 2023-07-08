@@ -14,7 +14,7 @@ interface State {
   filteredTodos: Todo[];
   loading: boolean;
   todoId: number | string;
-  qwery: string;
+  query: string;
 }
 
 export class App extends React.Component<{}, State> {
@@ -23,7 +23,7 @@ export class App extends React.Component<{}, State> {
     filteredTodos: [],
     loading: true,
     todoId: 0,
-    qwery: '',
+    query: '',
   };
 
   componentDidMount() {
@@ -33,22 +33,22 @@ export class App extends React.Component<{}, State> {
       });
   }
 
-  handlechangeAll = () => {
+  handleChangeAll = () => {
     this.setState(prevState => {
       return { filteredTodos: prevState.todos };
     });
   };
 
-  handlechangeCompleted = () => {
+  handleChangeCompleted = () => {
     this.setState(prevState => {
       const completedTodos
-      = prevState.todos.filter(todo => todo.completed === true);
+      = prevState.todos.filter(todo => todo.completed);
 
       return { filteredTodos: completedTodos };
     });
   };
 
-  handlechangeActive = () => {
+  handleChangeActive = () => {
     this.setState(prevState => {
       const active = prevState.todos.filter(todo => !todo.completed);
 
@@ -56,23 +56,23 @@ export class App extends React.Component<{}, State> {
     });
   };
 
-  findQwery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const qwery = event.target.value;
+  findQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
 
-    this.setState({ qwery });
+    this.setState({ query });
 
     this.setState(prevState => {
       const filteredTodos
         = prevState.filteredTodos.filter(todo => todo.title.toLowerCase()
-          .includes(qwery.toLowerCase().trim()));
+          .includes(query.toLowerCase().trim()));
 
       return { filteredTodos };
     });
   };
 
-  resetQwery = () => {
-    this.setState({ qwery: '' });
-    this.handlechangeAll();
+  resetQuery = () => {
+    this.setState({ query: '' });
+    this.handleChangeAll();
   };
 
   render() {
@@ -80,7 +80,7 @@ export class App extends React.Component<{}, State> {
       filteredTodos,
       loading,
       todoId,
-      qwery,
+      query,
     } = this.state;
 
     return (
@@ -92,12 +92,12 @@ export class App extends React.Component<{}, State> {
 
               <div className="block">
                 <TodoFilter
-                  qwery={qwery}
-                  findQwery={this.findQwery}
-                  changeCompleted={this.handlechangeCompleted}
-                  changeActive={this.handlechangeActive}
-                  changeAll={this.handlechangeAll}
-                  resetQwery={this.resetQwery}
+                  query={query}
+                  findQuery={this.findQuery}
+                  changeCompleted={this.handleChangeCompleted}
+                  changeActive={this.handleChangeActive}
+                  changeAll={this.handleChangeAll}
+                  resetQuery={this.resetQuery}
                 />
               </div>
 
@@ -115,7 +115,7 @@ export class App extends React.Component<{}, State> {
           </div>
         </div>
 
-        {todoId !== 0
+        {!!todoId
            && (
              <TodoModal
                todos={filteredTodos}

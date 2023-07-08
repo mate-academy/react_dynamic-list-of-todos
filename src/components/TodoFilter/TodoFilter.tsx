@@ -2,9 +2,9 @@ type Props = {
   changeCompleted : () => void
   changeActive: () => void
   changeAll:() => void
-  qwery: string
-  findQwery: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  resetQwery: () => void
+  query: string
+  findQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  resetQuery: () => void
 };
 
 enum FilterOption {
@@ -16,9 +16,9 @@ export const TodoFilter : React.FC<Props> = ({
   changeCompleted,
   changeActive,
   changeAll,
-  qwery,
-  findQwery,
-  resetQwery,
+  query,
+  findQuery,
+  resetQuery,
 }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -59,21 +59,21 @@ export const TodoFilter : React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={qwery}
-          onChange={findQwery}
+          value={query}
+          onChange={findQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {qwery && (
+          {query && (
             // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetQwery}
+              onClick={resetQuery}
             />
           )}
         </span>
