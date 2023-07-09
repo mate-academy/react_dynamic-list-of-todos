@@ -71,8 +71,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 sortType={sortType}
                 query={query}
-                onQueryChange={(inputQuery: string) => setQuery(inputQuery)}
-                onSelectChange={(selectValue: SortType) => setSortType(selectValue)}
+                onQueryChange={setQuery}
+                onSelectChange={setSortType}
               />
             </div>
 
@@ -81,8 +81,8 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoId}
-                  setSelectedTodoId={(todoId: number) => setSelectedTodoId(todoId)}
-                  showModal={(param: boolean) => setIsModalShowed(param)}
+                  setSelectedTodoId={setSelectedTodoId}
+                  showModal={setIsModalShowed}
                 />
               ) : (
                 <Loader />
