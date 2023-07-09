@@ -7,12 +7,12 @@ import '../../App.scss';
 
 type Props = {
   selectedTodo: Todo | null;
-  setSelectedTodoId: (id: number | null) => void;
+  setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodoId,
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -43,15 +43,14 @@ export const TodoModal: React.FC<Props> = ({
             >
               {`Todo #${selectedTodo.id}`}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="close-button"
               onClick={() => {
                 setUser(null);
-                setSelectedTodoId(null);
+                setSelectedTodo(null);
               }}
             />
           </header>

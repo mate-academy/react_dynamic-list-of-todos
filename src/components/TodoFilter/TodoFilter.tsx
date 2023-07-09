@@ -24,6 +24,8 @@ export const TodoFilter: React.FC<Props> = ({
     setTodoFilter(event.target.value as StatusFilter);
   };
 
+  const statusOptions = Object.values(StatusFilter);
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -32,9 +34,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={changeFilter}
           >
-            <option value={StatusFilter.All}>All</option>
-            <option value={StatusFilter.ACTIVE}>Active</option>
-            <option value={StatusFilter.COMPLETED}>Completed</option>
+            {statusOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
           </select>
         </span>
       </p>

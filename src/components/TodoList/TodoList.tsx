@@ -3,16 +3,20 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
-  selectedTodoId: number | null,
-  setSelectedTodoId: (id: number | null) => void,
+  todos: Todo[];
+  selectedTodo: Todo | null;
+  selectTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
-  setSelectedTodoId,
+  selectedTodo,
+  selectTodo,
 }) => {
+  const handleTodoClick = (todo: Todo) => {
+    selectTodo(todo);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -30,13 +34,11 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => {
-          const isSelected = todo.id === selectedTodoId;
-
           return (
             <tr
               data-cy="todo"
               className={cn({
-                'has-background-info-light': isSelected,
+                'has-background-info-light': selectedTodo === todo,
               })}
               key={todo.id}
             >
@@ -62,14 +64,12 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectedTodoId(
-                    isSelected ? null : todo.id,
-                  )}
+                  onClick={() => handleTodoClick(todo)}
                 >
                   <span className="icon">
                     <i className={cn('far', {
-                      'fa-eye': !isSelected,
-                      'fa-eye-slash': isSelected,
+                      'fa-eye': selectedTodo !== todo,
+                      'fa-eye-slash': selectedTodo === todo,
                     })}
                     />
                   </span>

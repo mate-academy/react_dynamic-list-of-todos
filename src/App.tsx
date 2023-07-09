@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [todoFilter, setTodoFilter] = useState<StatusFilter>(StatusFilter.All);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const visibleTodos = todos.filter(todo => {
     const formattedTitle = todo.title.toLowerCase().trim();
@@ -52,8 +52,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const getSelectedTodo = (id: number | null) => {
-    return visibleTodos.find(todo => todo.id === id) || null;
+  const selectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
   return (
@@ -77,8 +77,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={visibleTodos}
-                    selectedTodoId={selectedTodoId}
-                    setSelectedTodoId={setSelectedTodoId}
+                    selectedTodo={selectedTodo}
+                    selectTodo={selectTodo}
                   />
                 )}
             </div>
@@ -87,8 +87,8 @@ export const App: React.FC = () => {
       </div>
 
       <TodoModal
-        selectedTodo={getSelectedTodo(selectedTodoId)}
-        setSelectedTodoId={setSelectedTodoId}
+        selectedTodo={selectedTodo}
+        setSelectedTodo={setSelectedTodo}
       />
     </>
   );
