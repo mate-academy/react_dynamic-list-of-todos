@@ -1,14 +1,45 @@
 /* eslint-disable max-len */
-import React from 'react';
+import {
+  FC, useEffect, useState, useMemo, useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { SelectStatus } from './enums/SelectStatus';
+import { getFilteredTodos } from './utils/getFilteredTodos';
+import './App.scss';
 
-export const App: React.FC = () => {
+export const App: FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosStatus, setTodosStatus] = useState<SelectStatus>(SelectStatus.All);
+  const [query, setQuery] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    getTodos()
+      .then(data => setTodos(data))
+      .catch(err => {
+        throw new Error(err);
+      });
+  }, []);
+
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(todos, {
+      todosStatus,
+      query,
+    });
+  }, [todos, todosStatus, query]);
+
+  const onModalClose = useCallback(() => {
+    setSelectedTodo(null);
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +48,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={todosStatus}
+                onStatusChange={setTodosStatus}
+                query={query}
+                onQueryChange={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  todoId={selectedTodo?.id || null}
+                  onSelectTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onModalClose={onModalClose}
+        />
+      )}
     </>
   );
 };
