@@ -1,14 +1,65 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { Todo } from './types/Todo';
+import { SortType } from './types/SortType';
+
+import { getTodos } from './api';
+
+const getFilteredTodos = (
+  todos: Todo[],
+  sortType: SortType,
+  query: string,
+) => {
+  let visibleTodos = [...todos];
+
+  switch (sortType) {
+    case SortType.ACTIVE: {
+      visibleTodos = visibleTodos.filter(todo => todo.completed === false);
+      break;
+    }
+
+    case SortType.COMPLETED: {
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+      break;
+    }
+
+    case SortType.ALL:
+    default: {
+      break;
+    }
+  }
+
+  if (query) {
+    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  return visibleTodos;
+};
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const [query, setQuery] = useState('');
+  const [sortType, setSortType] = useState(SortType.ALL);
+
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isModalShowed, setIsModalShowed] = useState(false);
+
+  useEffect(() => {
+    getTodos()
+      .then(todosFromServer => setTodos(todosFromServer));
+  }, []);
+
+  const filteredTodos = getFilteredTodos(todos, sortType, query);
+
   return (
     <>
       <div className="section">
@@ -17,18 +68,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                sortType={sortType}
+                query={query}
+                onQueryChange={setQuery}
+                onSelectChange={setSortType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length > 0 ? (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodoId={selectedTodoId}
+                  setSelectedTodoId={setSelectedTodoId}
+                  showModal={setIsModalShowed}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isModalShowed && (
+        <TodoModal
+          selectedTodoId={selectedTodoId}
+          setSelectedTodoId={(todoId: number) => setSelectedTodoId(todoId)}
+          setIsModalShowed={(param: boolean) => setIsModalShowed(param)}
+        />
+      )}
     </>
   );
 };
