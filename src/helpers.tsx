@@ -9,13 +9,16 @@ export const filterTodos = (
   const optimizedQuery = query.toLowerCase().trim();
 
   return todos.filter(todo => {
+    const isTitleIncludeQuery = todo.title
+      .toLowerCase().includes(optimizedQuery);
+
     switch (filter) {
       case Filters.All:
-        return todo;
+        return todo && isTitleIncludeQuery;
       case Filters.Completed:
-        return todo.completed;
+        return todo.completed && isTitleIncludeQuery;
       case Filters.Active:
-        return !todo.completed;
+        return !todo.completed && isTitleIncludeQuery;
       default:
         return todo;
     }
