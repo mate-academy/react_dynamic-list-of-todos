@@ -6,8 +6,8 @@ import { User } from '../../types/User';
 
 type Props = {
   todos: Todo[];
-  selectTodo: (todoIDfromlist: number | string) => void
-  selectedTodoID:number | string
+  selectTodo: (todoIdFromlist: number | string) => void
+  selectedTodoId:number | string
 };
 
 type State = {
@@ -24,8 +24,8 @@ export class TodoModal extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    const { todos, selectedTodoID } = this.props;
-    const selectedTod = todos.find(todo => todo.id === selectedTodoID);
+    const { todos, selectedTodoId } = this.props;
+    const selectedTod = todos.find(todo => todo.id === selectedTodoId);
 
     if (selectedTod) {
       const user = await getUser(selectedTod.userId);

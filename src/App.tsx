@@ -112,9 +112,9 @@ export class App extends React.Component<{}, State> {
                 {loading ? <Loader /> : ''}
                 <TodoList
                   todos={queryTodos}
-                  selectedTodoID={todoId}
-                  selectTodo={(todoIDfromlist:number | string) => {
-                    this.setState({ todoId: todoIDfromlist });
+                  selectedTodoId={todoId}
+                  selectTodo={(todoIdFromlist:number | string) => {
+                    this.setState({ todoId: todoIdFromlist });
                   }}
                 />
               </div>
@@ -126,9 +126,9 @@ export class App extends React.Component<{}, State> {
            && (
              <TodoModal
                todos={queryTodos}
-               selectedTodoID={todoId}
-               selectTodo={(todoIDfromlist:number | string) => {
-                 this.setState({ todoId: todoIDfromlist });
+               selectedTodoId={todoId}
+               selectTodo={(todoIdFromlist:number | string) => {
+                 this.setState({ todoId: todoIdFromlist });
                }}
              />
            )}

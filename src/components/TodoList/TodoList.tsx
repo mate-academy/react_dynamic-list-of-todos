@@ -3,13 +3,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  selectTodo: (todoIDfromlist: number | string) => void
-  selectedTodoID:number | string
+  selectTodo: (todoIdfromlist: number | string) => void
+  selectedTodoId:number | string
 };
 export const TodoList: React.FC<Props> = ({
   todos,
   selectTodo,
-  selectedTodoID,
+  selectedTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -49,7 +49,7 @@ export const TodoList: React.FC<Props> = ({
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            {selectedTodoID === todo.id ? (
+            {selectedTodoId === todo.id ? (
               <button
                 data-cy="selectButton"
                 className="button"
