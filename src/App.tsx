@@ -11,21 +11,21 @@ import { Todo } from './types/Todo';
 
 interface State {
   todos: Todo[];
-  filteredTodos: Todo[];
   queryTodos: Todo[];
   loading: boolean;
   todoId: number | string;
   query: string;
+  filter: string;
 }
 
 export class App extends React.Component<{}, State> {
   state:State = {
     todos: [],
-    filteredTodos: [],
     queryTodos: [],
     loading: true,
     todoId: 0,
     query: '',
+    filter: '',
   };
 
   componentDidMount() {
@@ -33,7 +33,6 @@ export class App extends React.Component<{}, State> {
       .then(todos => {
         this.setState({
           todos,
-          filteredTodos: todos,
           queryTodos: todos,
           loading: false,
         });
@@ -42,25 +41,71 @@ export class App extends React.Component<{}, State> {
 
   handleChangeAll = () => {
     this.setState(prevState => {
-      return { filteredTodos: prevState.todos, queryTodos: prevState.todos };
+      return {
+        queryTodos: prevState.todos,
+        filter: '',
+      };
     });
+
+    if (this.state.query) {
+      this.setState(prevState => {
+        const allQuery = prevState.todos.filter(todo => todo.title.toLowerCase()
+          .includes(this.state.query.toLowerCase().trim()));
+
+        return {
+          queryTodos: allQuery,
+          filter: '',
+        };
+      });
+    }
   };
 
   handleChangeCompleted = () => {
     this.setState(prevState => {
       const completedTodos
-      = prevState.todos.filter(todo => todo.completed);
+    = prevState.todos.filter(todo => todo.completed);
 
-      return { filteredTodos: completedTodos, queryTodos: completedTodos };
+      return {
+        queryTodos: completedTodos,
+        filter: 'completed',
+      };
     });
+    if (this.state.query) {
+      this.setState(prevState => {
+        const completedTodosQuery
+        = prevState.todos.filter(todo => todo.completed)
+          .filter(todo => todo.title.toLowerCase()
+            .includes(this.state.query.toLowerCase().trim()));
+
+        return {
+          queryTodos: completedTodosQuery,
+          filter: 'completed',
+        };
+      });
+    }
   };
 
   handleChangeActive = () => {
     this.setState(prevState => {
       const active = prevState.todos.filter(todo => !todo.completed);
 
-      return { filteredTodos: active, queryTodos: active };
+      return {
+        queryTodos: active,
+        filter: 'active',
+      };
     });
+    if (this.state.query) {
+      this.setState(prevState => {
+        const activeQuery = prevState.todos.filter(todo => !todo.completed)
+          .filter(todo => todo.title.toLowerCase()
+            .includes(this.state.query.toLowerCase().trim()));
+
+        return {
+          queryTodos: activeQuery,
+          filter: 'active',
+        };
+      });
+    }
   };
 
   findQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,18 +113,66 @@ export class App extends React.Component<{}, State> {
 
     this.setState({ query });
 
-    this.setState(prevState => {
-      const queryTodos
-        = prevState.filteredTodos.filter(todo => todo.title.toLowerCase()
+    if (this.state.filter === 'active') {
+      this.setState(prevState => {
+        const activeQuery = prevState.todos.filter(todo => !todo.completed)
+          .filter(todo => todo.title.toLowerCase()
+            .includes(query.toLowerCase().trim()));
+
+        return {
+          queryTodos: activeQuery,
+        };
+      });
+    } else if (this.state.filter === 'completed') {
+      this.setState(prevState => {
+        const completedTodosQuery
+      = prevState.todos.filter(todo => todo.completed)
+        .filter(todo => todo.title.toLowerCase()
           .includes(query.toLowerCase().trim()));
 
-      return { queryTodos };
-    });
+        return {
+          queryTodos: completedTodosQuery,
+        };
+      });
+    } else {
+      this.setState(prevState => {
+        const queryTodos
+          = prevState.todos.filter(todo => todo.title.toLowerCase()
+            .includes(query.toLowerCase().trim()));
+
+        return { queryTodos };
+      });
+    }
   };
 
   resetQuery = () => {
-    this.setState({ query: '' });
-    this.handleChangeAll();
+    this.setState(prevState => {
+      const reset = prevState.todos;
+
+      return { queryTodos: reset, query: '' };
+    });
+
+    if (this.state.filter === 'active') {
+      this.setState(prevState => {
+        const activeResetQuery
+        = prevState.todos.filter(todo => !todo.completed);
+
+        return {
+          queryTodos: activeResetQuery,
+        };
+      });
+    }
+
+    if (this.state.filter === 'completed') {
+      this.setState(prevState => {
+        const completedTodosResetQuery
+      = prevState.todos.filter(todo => todo.completed);
+
+        return {
+          queryTodos: completedTodosResetQuery,
+        };
+      });
+    }
   };
 
   render() {
@@ -109,14 +202,17 @@ export class App extends React.Component<{}, State> {
               </div>
 
               <div className="block">
-                {loading ? <Loader /> : ''}
-                <TodoList
-                  todos={queryTodos}
-                  selectedTodoId={todoId}
-                  selectTodo={(todoIdFromlist:number | string) => {
-                    this.setState({ todoId: todoIdFromlist });
-                  }}
-                />
+                {loading
+                  ? <Loader />
+                  : (
+                    <TodoList
+                      todos={queryTodos}
+                      selectedTodoId={todoId}
+                      selectTodo={(todoIdFromlist:number | string) => {
+                        this.setState({ todoId: todoIdFromlist });
+                      }}
+                    />
+                  )}
               </div>
             </div>
           </div>

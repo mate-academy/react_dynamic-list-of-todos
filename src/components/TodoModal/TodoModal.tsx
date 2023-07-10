@@ -37,6 +37,8 @@ export class TodoModal extends Component<Props, State> {
   render() {
     const { user, selectedTodo, loader } = this.state;
     const { selectTodo } = this.props;
+    const { id, title, completed } = selectedTodo;
+    const { email, name } = user;
 
     return (
       <div className="modal is-active" data-cy="modal">
@@ -50,7 +52,7 @@ export class TodoModal extends Component<Props, State> {
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
                 >
-                  {`Todo #${selectedTodo.id}`}
+                  {`Todo #${id}`}
                 </div>
 
                 {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -65,16 +67,16 @@ export class TodoModal extends Component<Props, State> {
               </header>
               <div className="modal-card-body">
                 <p className="block" data-cy="modal-title">
-                  {selectedTodo.title}
+                  {title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
-                  {selectedTodo.completed
+                  {completed
                     ? <strong className="has-text-success">Done</strong>
                     : <strong className="has-text-danger">Planned</strong>}
                   {' by '}
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
+                  <a href={`mailto:${email}`}>
+                    {name}
                   </a>
                 </p>
               </div>
