@@ -12,6 +12,7 @@ import { Todo } from './types/Todo';
 interface State {
   todos: Todo[];
   filteredTodos: Todo[];
+  queryTodos: Todo[];
   loading: boolean;
   todoId: number | string;
   query: string;
@@ -21,6 +22,7 @@ export class App extends React.Component<{}, State> {
   state:State = {
     todos: [],
     filteredTodos: [],
+    queryTodos: [],
     loading: true,
     todoId: 0,
     query: '',
@@ -29,13 +31,18 @@ export class App extends React.Component<{}, State> {
   componentDidMount() {
     getTodos()
       .then(todos => {
-        this.setState({ todos, filteredTodos: todos, loading: false });
+        this.setState({
+          todos,
+          filteredTodos: todos,
+          queryTodos: todos,
+          loading: false,
+        });
       });
   }
 
   handleChangeAll = () => {
     this.setState(prevState => {
-      return { filteredTodos: prevState.todos };
+      return { filteredTodos: prevState.todos, queryTodos: prevState.todos };
     });
   };
 
@@ -44,7 +51,7 @@ export class App extends React.Component<{}, State> {
       const completedTodos
       = prevState.todos.filter(todo => todo.completed);
 
-      return { filteredTodos: completedTodos };
+      return { filteredTodos: completedTodos, queryTodos: completedTodos };
     });
   };
 
@@ -52,7 +59,7 @@ export class App extends React.Component<{}, State> {
     this.setState(prevState => {
       const active = prevState.todos.filter(todo => !todo.completed);
 
-      return { filteredTodos: active };
+      return { filteredTodos: active, queryTodos: active };
     });
   };
 
@@ -62,11 +69,11 @@ export class App extends React.Component<{}, State> {
     this.setState({ query });
 
     this.setState(prevState => {
-      const filteredTodos
+      const queryTodos
         = prevState.filteredTodos.filter(todo => todo.title.toLowerCase()
           .includes(query.toLowerCase().trim()));
 
-      return { filteredTodos };
+      return { queryTodos };
     });
   };
 
@@ -77,7 +84,7 @@ export class App extends React.Component<{}, State> {
 
   render() {
     const {
-      filteredTodos,
+      queryTodos,
       loading,
       todoId,
       query,
@@ -104,7 +111,7 @@ export class App extends React.Component<{}, State> {
               <div className="block">
                 {loading ? <Loader /> : ''}
                 <TodoList
-                  todos={filteredTodos}
+                  todos={queryTodos}
                   selectedTodoID={todoId}
                   selectTodo={(todoIDfromlist:number | string) => {
                     this.setState({ todoId: todoIDfromlist });
@@ -118,7 +125,7 @@ export class App extends React.Component<{}, State> {
         {!!todoId
            && (
              <TodoModal
-               todos={filteredTodos}
+               todos={queryTodos}
                selectedTodoID={todoId}
                selectTodo={(todoIDfromlist:number | string) => {
                  this.setState({ todoId: todoIDfromlist });
