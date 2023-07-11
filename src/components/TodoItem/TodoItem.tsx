@@ -7,13 +7,11 @@ interface Props {
   handleSelectTodo: (todo: Todo) => void
 }
 
-export const TodoItem: React.FC<Props> = (
-  {
-    todo,
-    selectedTodo,
-    handleSelectTodo,
-  },
-) => {
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  selectedTodo,
+  handleSelectTodo,
+}) => {
   const isSelectedTodoId = selectedTodo === todo;
 
   return (
@@ -35,8 +33,10 @@ export const TodoItem: React.FC<Props> = (
       <td className="is-vcentered is-expanded">
 
         <p className={cn(
-          { 'has-text-danger': !todo.completed },
-          { 'has-text-success': todo.completed },
+          {
+            'has-text-danger': !todo.completed,
+            'has-text-success': todo.completed,
+          },
         )}
         >
           {todo.title}
@@ -51,8 +51,10 @@ export const TodoItem: React.FC<Props> = (
         >
           <span className="icon">
             <i className={cn(
-              { 'far fa-eye': !isSelectedTodoId },
-              { 'far fa-eye-slash': isSelectedTodoId },
+              {
+                'far fa-eye': !isSelectedTodoId,
+                'far fa-eye-slash': isSelectedTodoId,
+              },
             )}
             />
           </span>

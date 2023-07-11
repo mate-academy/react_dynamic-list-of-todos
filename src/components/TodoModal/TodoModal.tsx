@@ -17,13 +17,12 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   closeModal,
 }) => {
-  const isTodoSelected = selectedTodo;
   const [isLoadingUser, setIsLoadingUser] = useState(false);
 
   const loadUser = async () => {
     setIsLoadingUser(true);
 
-    if (isTodoSelected) {
+    if (selectedTodo) {
       const userFromServer = await getUser(selectedTodo.userId);
 
       setSelectedUser(userFromServer);

@@ -6,17 +6,17 @@ export const filterTodos
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredTodos = initialTodos.filter((todo: Todo) => {
-    const isIncludes = todo.title.toLowerCase().includes(normalizedQuery);
+    const matchesQuery = todo.title.toLowerCase().includes(normalizedQuery);
 
     switch (filter) {
       case FilterBy.Active:
-        return !todo.completed && isIncludes;
+        return !todo.completed && matchesQuery;
 
       case FilterBy.Completed:
-        return todo.completed && isIncludes;
+        return todo.completed && matchesQuery;
 
       default:
-        return isIncludes;
+        return matchesQuery;
     }
   });
 

@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { FilterBy } from '../../types/FilterBy';
 
 interface Props {
@@ -11,11 +12,13 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setQuery(event.target.value);
-  };
+  }, []);
 
-  const clearQuery = () => (setQuery(''));
+  const clearQuery = useCallback(() => (setQuery('')), []);
 
   return (
     <form className="field has-addons">

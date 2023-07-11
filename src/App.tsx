@@ -21,7 +21,10 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<string >('all');
   const [query, setQuery] = useState('');
 
-  const visibleTodos = useMemo(() => filterTodos(todos, filter, query), [todos, filter, query]);
+  const visibleTodos = useMemo(
+    () => filterTodos(todos, filter, query),
+    [todos, filter, query],
+  );
 
   const loadTodos = async () => {
     setIsLoadingTodos(true);
@@ -83,7 +86,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {(selectedTodo) && (
+      {selectedTodo && (
         <TodoModal
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
