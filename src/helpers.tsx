@@ -1,9 +1,11 @@
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
 
-export const getFilteredTodos = (todos: Todo[],
+export const getFilteredTodos = (
+  todos: Todo[],
   searchQuery: string,
-  status: string) => {
+  status: string,
+) => {
   let visibleTodos = todos;
 
   if (status !== TodoStatus.all) {
