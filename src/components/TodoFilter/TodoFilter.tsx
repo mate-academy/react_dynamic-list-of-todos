@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
   const changeTodoStatusHandler = (
     event :React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setTodoStatus(`${event.target.value}`);
+    setTodoStatus(event.target.value);
   };
 
   const inputChangeHandler = (

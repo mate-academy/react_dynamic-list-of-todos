@@ -10,7 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { getFilteretTodos } from './helpers';
+import { getFilteredTodos } from './helpers';
 import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = useMemo(() => (
-    getFilteretTodos(todos, searchQuery, todoStatus)
+    getFilteredTodos(todos, searchQuery, todoStatus)
   ), [todoStatus, todos, searchQuery]);
 
   return (

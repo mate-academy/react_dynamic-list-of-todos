@@ -21,7 +21,7 @@ export const TodoModal: React.FC<Props> = ({
     getUser(userId)
       .then(setUser)
       .catch(error => (new Error(error.message)));
-  }, [user]);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

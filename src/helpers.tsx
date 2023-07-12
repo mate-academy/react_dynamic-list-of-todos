@@ -1,7 +1,7 @@
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
 
-export const getFilteretTodos = (todos: Todo[],
+export const getFilteredTodos = (todos: Todo[],
   searchQuery: string,
   status: string) => {
   let visibleTodos = todos;
