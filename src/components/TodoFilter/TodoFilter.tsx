@@ -13,17 +13,17 @@ export const TodoFilter: React.FC<Props> = ({
   todoStatus,
   setTodoStatus,
 }) => {
-  const clickHandler = () => {
+  const handleClick = () => {
     setSearchQuery('');
   };
 
-  const changeTodoStatusHandler = (
+  const handleSelectChange = (
     event :React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setTodoStatus(event.target.value);
   };
 
-  const inputChangeHandler = (
+  const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchQuery(event.target.value);
@@ -39,7 +39,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={todoStatus}
-            onChange={changeTodoStatusHandler}
+            onChange={handleSelectChange}
           >
             <option value={TodoStatus.all}>All</option>
             <option value={TodoStatus.active}>Active</option>
@@ -55,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={searchQuery}
           className="input"
           placeholder="Search..."
-          onChange={inputChangeHandler}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -68,7 +68,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={clickHandler}
+              onClick={handleClick}
             />
           </span>
         )}
