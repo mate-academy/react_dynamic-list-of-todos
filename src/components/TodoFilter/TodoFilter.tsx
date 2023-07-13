@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
         >
           <option value={Select.ALL}>All</option>
           <option value={Select.ACTIVE}>Active</option>
-          <option value={Select.COMLETED}>Completed</option>
+          <option value={Select.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>

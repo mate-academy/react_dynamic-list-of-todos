@@ -33,7 +33,7 @@ export const App: React.FC = () => {
           return titleLow.includes(queryLow);
         case Select.ACTIVE:
           return !completed && titleLow.includes(queryLow);
-        case Select.COMLETED:
+        case Select.COMPLETED:
           return completed && titleLow.includes(queryLow);
         default:
           return td;
