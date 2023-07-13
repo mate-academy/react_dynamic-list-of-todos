@@ -20,7 +20,7 @@ export const App: React.FC = () => {
     setIsLoading(true);
 
     getTodos()
-      .then(currentTodos => setTodos([...currentTodos]
+      .then(currentTodos => setTodos(currentTodos
         .filter(todo => todo.title
           .toLowerCase()
           .includes(query.toLowerCase()))))
