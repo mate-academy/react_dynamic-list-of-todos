@@ -5,19 +5,19 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   user: User | null;
-  userId: number;
+  isModalLoading: boolean;
   todo: Todo | null;
   closeModal: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  user, userId, todo, closeModal,
+  user, isModalLoading, todo, closeModal,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {userId && !user ? (
+      {isModalLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -31,6 +31,7 @@ export const TodoModal: React.FC<Props> = ({
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Close button"
               type="button"
               className="delete"
               data-cy="modal-close"

@@ -17,8 +17,7 @@ export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const [status, setStatus] = useState(Select.ALL);
   const [query, setQuery] = useState('');
 
@@ -51,6 +50,7 @@ export const App: React.FC = () => {
     const loadedUser = await getUser(userId);
 
     setUser(loadedUser);
+    setIsModalLoading(false);
   };
 
   useEffect(() => {
@@ -59,14 +59,13 @@ export const App: React.FC = () => {
 
   const handleSelectTodo = (selectedTodo: Todo) => {
     setSelectedTodoId(selectedTodo.id);
-    setSelectedUserId(selectedTodo.userId);
+    setIsModalLoading(true);
     setTodo(selectedTodo);
     loadUser(selectedTodo.userId);
   };
 
   const handleCloseModal = () => {
     setSelectedTodoId(0);
-    setSelectedUserId(0);
     setUser(null);
     setTodo(null);
   };
@@ -105,10 +104,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUserId && (
+      {todo && (
         <TodoModal
           user={user}
-          userId={selectedUserId}
+          isModalLoading={isModalLoading}
           todo={todo}
           closeModal={handleCloseModal}
         />

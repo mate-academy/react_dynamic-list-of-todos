@@ -14,8 +14,9 @@ export const TodoFilter: React.FC<Props> = ({
     <p className="control">
       <span className="select">
         <select
+          aria-label="Status select"
           data-cy="statusSelect"
-          name="status"
+          name="Status select"
           value={status}
           onChange={(event) => handleSelect(event.target.value as Select)}
         >
@@ -28,6 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
 
     <p className="control is-expanded has-icons-left has-icons-right">
       <input
+        aria-label="Search input"
         data-cy="searchInput"
         type="text"
         className="input"
@@ -44,6 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           // eslint-disable-next-line jsx-a11y/control-has-associated-label
           <button
+            aria-label="Clear search button"
             data-cy="clearSearchButton"
             type="button"
             className="delete"

@@ -54,6 +54,7 @@ export const TodoList: React.FC<Props> = ({
           </td>
           <td className="has-text-right is-vcentered">
             <button
+              aria-label="Select todo button"
               data-cy="selectButton"
               className="button"
               type="button"
