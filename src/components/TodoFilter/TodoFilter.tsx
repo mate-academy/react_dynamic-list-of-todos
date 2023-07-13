@@ -1,13 +1,29 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
+enum FilterStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoFilter = () => {
   const { filterTodosByField } = useTodoContext();
   const [filterQuery, setFilterQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilterStatus(event.target.value);
+    switch (event.target.value) {
+      case FilterStatus.Active:
+        setFilterStatus(FilterStatus.Active);
+        break;
+      case FilterStatus.Completed:
+        setFilterStatus(FilterStatus.Completed);
+        break;
+      default:
+        setFilterStatus(FilterStatus.All);
+        break;
+    }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

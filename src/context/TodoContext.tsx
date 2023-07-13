@@ -1,4 +1,9 @@
-import { createContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import { getTodos, getUser } from '../api';
 import { Todo, TodoStatus } from '../types/Todo';
 
@@ -85,16 +90,18 @@ export const TodoContextProvider = ({ children }: Props) => {
     fetchTodos();
   }, []);
 
-  const providingValues = {
-    todos,
-    isLoading,
-    selectedTodo,
-    showModal,
-    isUserPending,
-    filterTodosByField,
-    onSelect: handleSelectTodo,
-    closeModalWindow,
-  };
+  const providingValues = useMemo(() => {
+    return {
+      todos,
+      isLoading,
+      selectedTodo,
+      showModal,
+      isUserPending,
+      filterTodosByField,
+      onSelect: handleSelectTodo,
+      closeModalWindow,
+    };
+  }, []);
 
   return (
     <TodoContext.Provider value={providingValues}>
