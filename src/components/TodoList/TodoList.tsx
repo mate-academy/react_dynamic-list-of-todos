@@ -4,7 +4,7 @@ import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId: number | null;
+  selectedTodoId: number;
   onTodoSelect: (event: MouseEvent<HTMLButtonElement>, todoId: number) => void;
 };
 

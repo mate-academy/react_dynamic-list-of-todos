@@ -5,7 +5,9 @@ export function filterTodos(todos: Todo[], filterBy: FilterBy, query: string) {
   let filteredTodos = [...todos];
 
   if (query) {
-    filteredTodos = filteredTodos.filter(todo => todo.title.includes(query));
+    filteredTodos = filteredTodos.filter(todo => (
+      todo.title.toLowerCase().trim().includes(query.toLowerCase().trim())
+    ));
   }
 
   switch (filterBy) {
