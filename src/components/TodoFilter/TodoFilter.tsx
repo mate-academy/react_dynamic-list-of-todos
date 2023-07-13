@@ -3,8 +3,8 @@ import { TodoStatus } from '../../types/TodoStatus';
 interface Props {
   searchQuery: string,
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  todoStatus: string,
-  setTodoStatus: React.Dispatch<React.SetStateAction<string>>,
+  todoStatus: TodoStatus,
+  setTodoStatus: React.Dispatch<React.SetStateAction<TodoStatus>>,
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,7 +20,20 @@ export const TodoFilter: React.FC<Props> = ({
   const handleSelectChange = (
     event :React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setTodoStatus(event.target.value);
+    switch (event.target.value) {
+      case 'all':
+        setTodoStatus(TodoStatus.ALL);
+        break;
+      case 'completed':
+        setTodoStatus(TodoStatus.COMPLETED);
+        break;
+      case 'active':
+        setTodoStatus(TodoStatus.ACTIVE);
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleInputChange = (
@@ -41,9 +54,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={todoStatus}
             onChange={handleSelectChange}
           >
-            <option value={TodoStatus.all}>All</option>
-            <option value={TodoStatus.active}>Active</option>
-            <option value={TodoStatus.completed}>Completed</option>
+            <option value={TodoStatus.ALL}>All</option>
+            <option value={TodoStatus.ACTIVE}>Active</option>
+            <option value={TodoStatus.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [todoStatus, setTodoStatus] = useState(`${TodoStatus.all}`);
+  const [todoStatus, setTodoStatus] = useState(TodoStatus.ALL);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
   useEffect(() => {

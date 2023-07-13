@@ -8,13 +8,13 @@ export const getFilteredTodos = (
 ) => {
   let visibleTodos = todos;
 
-  if (status !== TodoStatus.all) {
+  if (status !== TodoStatus.ALL) {
     switch (status) {
-      case TodoStatus.active:
+      case TodoStatus.ACTIVE:
         visibleTodos = visibleTodos.filter(todo => !todo.completed);
         break;
 
-      case TodoStatus.completed:
+      case TodoStatus.COMPLETED:
         visibleTodos = visibleTodos.filter(todo => todo.completed);
         break;
 
