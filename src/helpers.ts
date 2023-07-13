@@ -1,20 +1,20 @@
 import { OptionType } from './types/OptionType';
 import { Todo } from './types/Todo';
 
-export const successFilter = (todos: Todo[], option: OptionType) => {
+export const filterByOption = (todos: Todo[], option: OptionType) => {
   switch (option) {
-    case OptionType.ALL:
+    case OptionType.all:
       return todos;
-    case OptionType.ACTIVE:
+    case OptionType.active:
       return todos.filter(todo => !todo.completed);
-    case OptionType.COMPLETED:
+    case OptionType.completed:
       return todos.filter(todo => todo.completed);
     default:
       throw new Error('Error, incorrect option.');
   }
 };
 
-export const filterByQuery = (todos: Todo[], query: string): Todo[] => (
+export const filterBySearchQuery = (todos: Todo[], query: string): Todo[] => (
   todos.filter(todo => (
     todo.title.toLowerCase().includes(query.toLowerCase())))
 );

@@ -11,28 +11,29 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { OptionType } from './types/OptionType';
-import { successFilter, filterByQuery } from './helpers';
+import { filterByOption, filterBySearchQuery } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedOption, setSelectedOption] = useState<OptionType>(OptionType.ALL);
+  const [selectedFilter, setSelectedFilter] = useState<OptionType>(OptionType.all);
 
   useEffect(() => {
     getTodos()
-      .then(response => {
-        setTodos(response);
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('We have a problem!');
       })
       .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
-    const data = successFilter(todos, selectedOption);
+    const data = filterByOption(todos, selectedFilter);
 
-    return filterByQuery(data, searchQuery);
-  }, [todos, selectedOption, searchQuery]);
+    return filterBySearchQuery(data, searchQuery);
+  }, [todos, selectedFilter, searchQuery]);
 
   return (
     <>
@@ -45,7 +46,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 searchQuery={searchQuery}
                 onSearchQuery={setSearchQuery}
-                onSelectedOption={setSelectedOption}
+                onSelectedOption={setSelectedFilter}
               />
             </div>
 
