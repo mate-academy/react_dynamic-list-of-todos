@@ -4,13 +4,13 @@ import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId: number;
-  onTodoSelect: (event: MouseEvent<HTMLButtonElement>, todoId: number) => void;
+  selectedTodo: Todo | null;
+  onTodoSelect: (event: MouseEvent<HTMLButtonElement>, todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
+  selectedTodo,
   onTodoSelect,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({
       {todos.map(todo => (
         <TodoInfo
           todo={todo}
-          selectedTodoId={selectedTodoId}
+          selectedTodo={selectedTodo}
           onTodoSelect={onTodoSelect}
         />
       ))}

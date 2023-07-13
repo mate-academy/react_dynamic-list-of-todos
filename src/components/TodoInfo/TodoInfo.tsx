@@ -4,17 +4,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  selectedTodoId: number;
-  onTodoSelect: (event: MouseEvent<HTMLButtonElement>, todoId: number) => void;
+  selectedTodo: Todo | null;
+  onTodoSelect: (event: MouseEvent<HTMLButtonElement>, todo: Todo) => void;
 };
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
-  selectedTodoId,
+  selectedTodo,
   onTodoSelect,
 }) => {
   const { id, title, completed } = todo;
-  const selected = selectedTodoId === id;
+  const selected = selectedTodo?.id === id;
 
   return (
     <tr
@@ -47,7 +47,7 @@ export const TodoInfo: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={event => onTodoSelect(event, id)}
+          onClick={event => onTodoSelect(event, todo)}
         >
           <span className="icon">
             <i className={classNames({

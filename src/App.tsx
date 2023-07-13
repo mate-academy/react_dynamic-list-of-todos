@@ -9,14 +9,14 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { FilterBy } from './types/FilterBy';
 import { filterTodos } from './util';
 
 export const App: React.FC = () => {
   // #region states
-  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
@@ -24,9 +24,9 @@ export const App: React.FC = () => {
   // #endregion
 
   // #region handlers
-  const handleTodoSelect = (event: MouseEvent<HTMLButtonElement>, todoId: number) => {
+  const handleTodoSelect = (event: MouseEvent<HTMLButtonElement>, todo: Todo) => {
     event.preventDefault();
-    setSelectedTodoId(todoId);
+    setSelectedTodo(todo);
   };
 
   const handleFilterByChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -41,12 +41,20 @@ export const App: React.FC = () => {
     event.preventDefault();
     setQuery('');
   };
+
+  const handleModalClose = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setSelectedTodo(null);
+  };
   // #endregion
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        throw new Error(error.message);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -75,14 +83,14 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} selectedTodoId={selectedTodoId} onTodoSelect={handleTodoSelect} />
+                <TodoList todos={visibleTodos} selectedTodo={selectedTodo} onTodoSelect={handleTodoSelect} />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={handleModalClose} />}
     </>
   );
 };
