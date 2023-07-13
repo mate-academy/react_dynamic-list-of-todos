@@ -1,8 +1,8 @@
 import {
   createContext,
   useEffect,
-  useState,
   useMemo,
+  useState,
 } from 'react';
 import { getTodos, getUser } from '../api';
 import { Todo, TodoStatus } from '../types/Todo';
@@ -73,12 +73,12 @@ export const TodoContextProvider = ({ children }: Props) => {
     setTodos(filtered);
   };
 
-  const handleSelectTodo = async (todo: Todo) => {
+  const handleSelectTodo = (todo: Todo) => {
     setShowModal(true);
     setIsUserPending(true);
-    await getUser(todo.userId)
+    getUser(todo.userId)
       .then((res) => setSelectedTodo({ ...todo, user: res }))
-      .then(() => setIsUserPending(false));
+      .finally(() => setIsUserPending(false));
   };
 
   const closeModalWindow = () => {
@@ -90,18 +90,24 @@ export const TodoContextProvider = ({ children }: Props) => {
     fetchTodos();
   }, []);
 
-  const providingValues = useMemo(() => {
-    return {
-      todos,
-      isLoading,
-      selectedTodo,
-      showModal,
-      isUserPending,
-      filterTodosByField,
-      onSelect: handleSelectTodo,
-      closeModalWindow,
-    };
-  }, []);
+  const value = {
+    todos,
+    isLoading,
+    selectedTodo,
+    showModal,
+    isUserPending,
+    filterTodosByField,
+    onSelect: handleSelectTodo,
+    closeModalWindow,
+  };
+
+  const providingValues = useMemo(() => value, [
+    todos,
+    isLoading,
+    selectedTodo,
+    showModal,
+    isUserPending,
+  ]);
 
   return (
     <TodoContext.Provider value={providingValues}>
