@@ -11,13 +11,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { filterTodos } from './helpers';
-import { Filters } from './types/Filters';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState<Filters>(Filters.All);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -28,20 +28,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = filter !== Filters.All || query
-    ? filterTodos(todosFromServer, filter, query)
-    : todosFromServer;
+  const visibleTodos = query
+    ? filterTodos(todosFromServer, Filter.All, query)
+    : filterTodos(todosFromServer, filter, '');
 
   const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === Filters.All
-      || event.target.value === Filters.Completed
-      || event.target.value === Filters.Active) {
-      setFilter(event.target.value);
-    }
+    const selectedFilter = event.target.value as Filter;
+
+    setFilter(selectedFilter);
   };
 
   const handleCloseModal = () => {

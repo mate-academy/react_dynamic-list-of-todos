@@ -13,14 +13,15 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   onClose,
 }) => {
-  const [selectedTodoUser, setSelectedTodoUser] = useState<User | null>(null);
+  const [selectedTodoAuthor, setSelectedTodoAuthor]
+    = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId)
         .then(result => {
-          setSelectedTodoUser(result || null);
+          setSelectedTodoAuthor(result || null);
           setIsLoading(false);
         });
     }
@@ -68,8 +69,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectedTodoUser?.email}`}>
-                {selectedTodoUser?.name}
+              <a href={`mailto:${selectedTodoAuthor?.email}`}>
+                {selectedTodoAuthor?.name}
               </a>
             </p>
           </div>

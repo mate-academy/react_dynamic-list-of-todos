@@ -1,4 +1,4 @@
-import { Filters } from '../../types/Filters';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   onFilterChange: (value: React.ChangeEvent<HTMLSelectElement>) => void,
@@ -20,9 +20,9 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           onChange={onFilterChange}
         >
-          {(Object.keys(Filters) as Array<keyof typeof Filters>).map(key => (
+          {(Object.keys(Filter) as Array<keyof typeof Filter>).map(key => (
             <option
-              value={Filters[key]}
+              value={Filter[key]}
               key={key}
             >
               {key}
