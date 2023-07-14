@@ -90,7 +90,7 @@ export const TodoContextProvider = ({ children }: Props) => {
     fetchTodos();
   }, []);
 
-  const value = {
+  const providingValues = useMemo(() => {
     todos,
     isLoading,
     selectedTodo,
@@ -99,9 +99,7 @@ export const TodoContextProvider = ({ children }: Props) => {
     filterTodosByField,
     onSelect: handleSelectTodo,
     closeModalWindow,
-  };
-
-  const providingValues = useMemo(() => value, [
+  }, [
     todos,
     isLoading,
     selectedTodo,
