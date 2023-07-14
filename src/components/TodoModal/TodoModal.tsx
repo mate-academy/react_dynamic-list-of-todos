@@ -1,21 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todos: Todo[],
+  todoId: number,
+  onClose: () => void,
+};
+
+export const TodoModal: React.FC<Props> = ({ todos, todoId, onClose }) => {
+  const todo = todos.find(el => el.id === todoId);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    if (todo) {
+      getUser(todo.userId)
+        .then(setUser)
+        .finally(() => setLoading(false));
+    }
+  }, [todoId]);
+
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
       <div className="modal-background" />
 
-      {true ? (
+      {loading && (
         <Loader />
-      ) : (
-        <div className="modal-card">
+      )}
+
+      {!loading && (
+        <div
+          className="modal-card"
+        >
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,27 +53,94 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                onClose();
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={classNames({
+                  'has-text-danger': !todo?.completed,
+                  'has-text-success': todo?.completed,
+                })}
+              >
+                {(todo?.completed) ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user?.name}
               </a>
             </p>
           </div>
         </div>
       )}
+
     </div>
+
+  // <div
+  //   className="modal is-active"
+  //   data-cy="modal"
+  // >
+  //   <div className="modal-background" />
+
+  //   {loading && !user ? (
+  //     <Loader />
+  //   ) : (
+  //     <div
+  //       className="modal-card"
+  //     >
+  //       <header className="modal-card-head">
+  //         <div
+  //           className="modal-card-title has-text-weight-medium"
+  //           data-cy="modal-header"
+  //         >
+  //           {`Todo #${todo?.id}`}
+  //         </div>
+
+  //         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+  //         <button
+  //           type="button"
+  //           className="delete"
+  //           data-cy="modal-close"
+  //           onClick={() => {
+
+  //           }}
+  //         />
+  //       </header>
+
+  //       <div className="modal-card-body">
+  //         <p className="block" data-cy="modal-title">
+  //           {todo?.title}
+  //         </p>
+
+  //         <p className="block" data-cy="modal-user">
+  //           <strong
+  //             className={classNames({
+  //               'has-text-danger': !todo?.completed,
+  //               'has-text-success': todo?.completed,
+  //             })}
+  //           >
+  //             {(todo?.completed) ? 'Done' : 'Planned'}
+  //           </strong>
+
+  //           {' by '}
+
+  //           <a href="mailto:Sincere@april.biz">
+  //             {user?.name}
+  //           </a>
+  //         </p>
+  //       </div>
+  //     </div>
+  //   )}
+  // </div>
   );
 };
