@@ -1,24 +1,26 @@
+import { FilterType } from "../../types/FilterType";
+
 type Props = {
-  qwery: string
-  setQwery: (qwery: string) => void
-  selectedFilter: string
-  setSelectedFilter: (selectedFilter: string) => void
+  query: string
+  setQuery: (qwery: string) => void
+  selectedFilter: FilterType
+  setSelectedFilter: (selectedFilter: FilterType) => void
 };
 
 export const TodoFilter: React.FC<Props> = (
   {
-    qwery,
-    setQwery,
+    query,
+    setQuery,
     setSelectedFilter,
     selectedFilter,
   },
 ) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQwery(event.target.value);
+    setQuery(event.target.value);
   };
 
   const handleSelectedChange = (event: { target: { value: string } }) => {
-    setSelectedFilter(event.target.value);
+    setSelectedFilter(event.target.value as FilterType);
   };
 
   return (
@@ -28,11 +30,11 @@ export const TodoFilter: React.FC<Props> = (
           <select
             data-cy="statusSelect"
             value={selectedFilter}
-            onChange={handleSelectedChange}
+            onChange={(e) => handleSelectedChange(e)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.ALL}>All</option>
+            <option value={FilterType.ACTIVE}>Active</option>
+            <option value={FilterType.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -43,7 +45,7 @@ export const TodoFilter: React.FC<Props> = (
           type="text"
           className="input"
           placeholder="Search..."
-          value={qwery}
+          value={query}
           onChange={handleInputChange}
         />
         <span className="icon is-left">
@@ -51,14 +53,14 @@ export const TodoFilter: React.FC<Props> = (
         </span>
 
         {
-          qwery && (
+          query && (
             <span className="icon is-right" style={{ pointerEvents: 'all' }}>
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={() => setQwery('')}
+                onClick={() => setQuery('')}
               />
             </span>
           )

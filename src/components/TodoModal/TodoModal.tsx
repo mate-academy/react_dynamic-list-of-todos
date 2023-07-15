@@ -5,14 +5,14 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  setOpenModal: (openModal: boolean) => void
+  setISOpenModal: (isOpenModal: boolean) => void
   selectedTodo: Todo | null
   clearTodo: () => void
 };
 
 export const TodoModal: React.FC<Props> = (
   {
-    setOpenModal, selectedTodo, clearTodo,
+    setISOpenModal, selectedTodo, clearTodo,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = (
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setOpenModal(false);
+                setISOpenModal(false);
                 clearTodo();
               }}
             />

@@ -9,32 +9,34 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [qwery, setQwery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
-  const [checkLoad, setCheckLoad] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [query, setQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState(FilterType.ALL);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOpenModal, setISOpenModal] = useState(false);
 
   const filterTodos = () => {
     let newTodos = [...todos];
 
-    const qweryNormal = qwery.toLowerCase().trim();
+    const queryNormal = query.toLowerCase().trim();
 
-    if (qweryNormal) {
-      newTodos = newTodos.filter(todo => todo.title.toLowerCase().includes(qweryNormal));
+    if (queryNormal) {
+      newTodos = newTodos.filter(todo => todo.title.toLowerCase().includes(queryNormal));
     }
 
     switch (selectedFilter) {
-      case 'active':
+      case FilterType.ACTIVE:
         return newTodos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case FilterType.COMPLETED:
         return newTodos.filter(todo => todo.completed);
 
-      default: return newTodos;
+      default:
+        return newTodos;
     }
   };
 
@@ -52,11 +54,11 @@ export const App: React.FC = () => {
     try {
       const arrTodo = await getTodos();
 
-      setCheckLoad(false);
+      setIsLoading(false);
 
       setTodos(arrTodo);
     } catch {
-      setCheckLoad(true);
+      setIsLoading(true);
     }
   };
 
@@ -73,8 +75,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setQwery={setQwery}
-                qwery={qwery}
+                setQuery={setQuery}
+                query={query}
                 selectedFilter={selectedFilter}
                 setSelectedFilter={setSelectedFilter}
               />
@@ -82,13 +84,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                checkLoad
+                isLoading
                   ? <Loader />
                   : (
                     <TodoList
                       selectedTodo={selectedTodo}
                       todos={visibleTodos}
-                      setOpenModal={setOpenModal}
+                      setISOpenModal={setISOpenModal}
                       handleDataModal={handleDataModal}
                     />
                   )
@@ -100,11 +102,11 @@ export const App: React.FC = () => {
       </div>
 
       {
-        openModal && (
+        isOpenModal && (
           <TodoModal
             clearTodo={clearSelectedTodo}
             selectedTodo={selectedTodo}
-            setOpenModal={setOpenModal}
+            setISOpenModal={setISOpenModal}
           />
         )
 
