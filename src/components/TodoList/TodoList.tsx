@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[]
   handleDataModal: (todo: Todo) => void
-  setISOpenModal: (isOpenModal: boolean) => void
+  setIsOpenModal: (isOpenModal: boolean) => void
   selectedTodo: Todo | null
 };
 
 export const TodoList: React.FC<Props> = (
   {
-    todos, handleDataModal, setISOpenModal, selectedTodo,
+    todos, handleDataModal, setIsOpenModal, selectedTodo,
   },
 ) => (
   <table className="table is-narrow is-fullwidth">
@@ -78,7 +78,7 @@ export const TodoList: React.FC<Props> = (
                     onClick={() => {
                       handleDataModal(todo);
 
-                      setISOpenModal(true);
+                      setIsOpenModal(true);
                     }}
                   >
                     <span className="icon">

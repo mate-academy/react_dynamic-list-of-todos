@@ -5,20 +5,20 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  setISOpenModal: (isOpenModal: boolean) => void
+  setIsOpenModal: (isOpenModal: boolean) => void
   selectedTodo: Todo | null
   clearTodo: () => void
 };
 
 export const TodoModal: React.FC<Props> = (
   {
-    setISOpenModal, selectedTodo, clearTodo,
+    setIsOpenModal, selectedTodo, clearTodo,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
   const [isError, setIsError] = useState(false);
 
-  const userGet = async () => {
+  const loadUser = async () => {
     try {
       const arrUser = await getUser(selectedTodo?.userId || 0);
 
@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = (
   };
 
   useEffect(() => {
-    userGet();
+    loadUser();
   }, []);
 
   return (
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = (
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setISOpenModal(false);
+                setIsOpenModal(false);
                 clearTodo();
               }}
             />
@@ -77,7 +77,7 @@ export const TodoModal: React.FC<Props> = (
 
               {' by '}
 
-              <a href={user.email}>
+              <a href={`mailto:${user.email}`}>
                 {user.name}
               </a>
             </p>

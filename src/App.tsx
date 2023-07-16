@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState(FilterType.ALL);
   const [isLoading, setIsLoading] = useState(true);
-  const [isOpenModal, setISOpenModal] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const filterTodos = () => {
     let newTodos = [...todos];
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = filterTodos();
 
-  const getTodo = async () => {
+  const getTodoList = async () => {
     try {
       const arrTodo = await getTodos();
 
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodo();
+    getTodoList();
   }, []);
 
   return (
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
                     <TodoList
                       selectedTodo={selectedTodo}
                       todos={visibleTodos}
-                      setISOpenModal={setISOpenModal}
+                      setIsOpenModal={setIsOpenModal}
                       handleDataModal={handleDataModal}
                     />
                   )
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
           <TodoModal
             clearTodo={clearSelectedTodo}
             selectedTodo={selectedTodo}
-            setISOpenModal={setISOpenModal}
+            setIsOpenModal={setIsOpenModal}
           />
         )
 

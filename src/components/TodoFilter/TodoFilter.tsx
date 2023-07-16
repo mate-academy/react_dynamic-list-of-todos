@@ -1,4 +1,4 @@
-import { FilterType } from "../../types/FilterType";
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string
