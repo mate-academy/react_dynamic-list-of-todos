@@ -4,23 +4,19 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
-type Pros = {
+type Props = {
   selectedTodo: Todo,
   selectMethod: (value: null) => void,
 };
 
-export const TodoModal: React.FC<Pros> = ({
+export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   selectMethod,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const getUserFromServer = async () => {
-    try {
-      setUser(await getUser(selectedTodo.userId));
-    } catch (error) {
-      throw new Error('Error user loading');
-    }
+    setUser(await getUser(selectedTodo.userId));
   };
 
   useEffect(() => {

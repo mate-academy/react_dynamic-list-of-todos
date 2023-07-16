@@ -15,24 +15,22 @@ export const App: React.FC = () => {
   const [selected, setSelected] = useState<Todo | null>();
   const [filterSelect, setFilterSelect] = useState('');
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getTodosFromServer = async () => {
+    setLoading(true);
     let todosArr;
 
-    try {
-      todosArr = await getTodos();
-    } catch (error) {
-      throw new Error('Error todos loading');
-    }
+    todosArr = await getTodos();
 
     switch (filterSelect) {
       case 'all':
         break;
       case 'active':
-        todosArr = todosArr.filter(item => item.completed);
+        todosArr = todosArr.filter(item => !item.completed);
         break;
       case 'completed':
-        todosArr = todosArr.filter(item => !item.completed);
+        todosArr = todosArr.filter(item => item.completed);
         break;
       default:
         break;
@@ -47,6 +45,7 @@ export const App: React.FC = () => {
     });
 
     setTodos(todosArr);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -70,7 +69,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                todos.length === 0
+                loading
                   ? <Loader />
                   : <TodoList todos={todos} selectMethod={(value) => setSelected(value)} selected={selected} />
               }
