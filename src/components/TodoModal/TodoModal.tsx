@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  setIsOpenModal: (isOpenModal: boolean) => void
+  selectedTodo: Todo | null
+  clearTodo: () => void
+};
+
+export const TodoModal: React.FC<Props> = (
+  {
+    setIsOpenModal, selectedTodo, clearTodo,
+  },
+) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
+
+  const loadUser = async () => {
+    try {
+      const arrUser = await getUser(selectedTodo?.userId || 0);
+
+      setUser(arrUser);
+    } catch {
+      setIsError(true);
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +45,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +53,32 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                setIsOpenModal(false);
+                clearTodo();
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
+            {isError && (
+              <h2 style={{ color: 'red' }}>
+                An error occured while user loading
+              </h2>
+            )}
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {selectedTodo?.completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
