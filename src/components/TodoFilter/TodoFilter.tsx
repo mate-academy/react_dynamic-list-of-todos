@@ -1,3 +1,4 @@
+import { validateFilter } from '../../helpers';
 import { Filters } from '../../types/Filters';
 
 type Props = {
@@ -12,18 +13,16 @@ export const TodoFilter: React.FC<Props> = ({
   query,
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === Filters.All
-      || event.target.value === Filters.Completed
-      || event.target.value === Filters.Active) {
-      onFilterChange(event.target.value);
-    }
+    onFilterChange(validateFilter(event.target.value));
   };
 
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     onQueryChange(event.target.value);
   };
 
-  const handleQueryClear = () => {
+  const handleQueryInputClear = () => {
     onQueryChange('');
   };
 
@@ -54,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQueryChange}
+          onChange={handleQueryInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -67,10 +66,9 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleQueryClear}
+              onClick={handleQueryInputClear}
             />
           )}
-
         </span>
       </p>
     </form>

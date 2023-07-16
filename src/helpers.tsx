@@ -27,3 +27,15 @@ export const filterTodos = (
       todo.title.toLowerCase().includes(optimizedQuery)
     ));
 };
+
+export const validateFilter = (filter: string) => {
+  if (filter === Filters.Active) {
+    return Filters.Active;
+  }
+
+  if (filter === Filters.Completed) {
+    return Filters.Completed;
+  }
+
+  return Filters.All;
+};
