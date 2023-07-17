@@ -61,7 +61,7 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList todos={preparedTodos} onSelect={setSelectedTodo} />
               )}
             </div>
