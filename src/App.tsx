@@ -23,7 +23,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(err => (new Error(err.message)))
+      .catch(err => {
+        throw new Error(err.message);
+      })
       .finally(() => (setIsLoading(false)));
   }, []);
 

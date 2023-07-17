@@ -20,7 +20,9 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     getUser(userId)
       .then(setUser)
-      .catch(error => (new Error(error.message)));
+      .catch(error => {
+        throw new Error(error.message);
+      });
   }, []);
 
   return (
