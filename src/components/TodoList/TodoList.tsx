@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = React.memo(({
       {todos.map(todo => (
         <TodoInfo
           key={todo.id}
-          todoFromServer={todo}
+          todo={todo}
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
         />

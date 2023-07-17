@@ -3,20 +3,20 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todoFromServer: Todo;
+  todo: Todo;
   setSelectedTodo: (todo: Todo | null) => void;
   selectedTodo: Todo | null;
 }
 
 export const TodoInfo: React.FC<Props> = ({
-  todoFromServer,
+  todo,
   setSelectedTodo,
   selectedTodo,
 }) => {
-  const { id, title, completed } = todoFromServer;
+  const { id, title, completed } = todo;
   const isSelected = selectedTodo?.id === id;
 
-  const handleClickShowButton = (todo: Todo) => {
+  const handleClickShowButton = () => {
     setSelectedTodo(todo);
   };
 
@@ -56,7 +56,7 @@ export const TodoInfo: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => handleClickShowButton(todoFromServer)}
+          onClick={handleClickShowButton}
         >
           <span className="icon">
             <i

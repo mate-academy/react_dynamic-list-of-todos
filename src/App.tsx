@@ -23,14 +23,14 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isErrorMessage, setIsErrorMessage] = useState(false);
+  const [shouldShowError, setShouldShowError] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
       .then(response => {
         if ('Error' in response) {
-          setIsErrorMessage(true);
+          setShouldShowError(true);
         } else {
           setTodosFromServer(response);
         }
@@ -60,7 +60,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {isErrorMessage ? (
+            {shouldShowError ? (
               <div className="has-text-danger">
                 Unable to load the todos
               </div>

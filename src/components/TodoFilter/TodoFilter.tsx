@@ -14,7 +14,6 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   searchQuery,
   setSearchQuery,
 }) => {
-  const { All, Active, Completed } = StatusFilter;
   const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(event.target.value);
   };
@@ -27,10 +26,12 @@ export const TodoFilter: React.FC<Props> = React.memo(({
     setSearchQuery('');
   });
 
+  const handleSubmit = (event: React.FormEvent) => event.preventDefault();
+
   return (
     <form
       className="field has-addons"
-      onSubmit={(event) => event.preventDefault()}
+      onSubmit={handleSubmit}
     >
       <p className="control">
         <span className="select">
@@ -39,9 +40,9 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             value={selectedFilter}
             onChange={handleChangeFilter}
           >
-            <option value={All}>All</option>
-            <option value={Active}>Active</option>
-            <option value={Completed}>Completed</option>
+            <option value={StatusFilter.All}>All</option>
+            <option value={StatusFilter.Active}>Active</option>
+            <option value={StatusFilter.Completed}>Completed</option>
           </select>
         </span>
       </p>

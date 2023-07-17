@@ -42,12 +42,12 @@ export const TodoModal: React.FC<Props> = React.memo(({
               {`Todo #${selectedTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={handleClickDeleteButton}
+              aria-label="delete button"
             />
           </header>
 
