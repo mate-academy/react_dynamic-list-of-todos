@@ -15,9 +15,8 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     setIsLoading(true);
@@ -52,7 +51,6 @@ export const App: React.FC = () => {
                   todos={todos}
                   selectedTodo={todo}
                   filter={filter}
-                  setUserId={setSelectedUserId}
                   setTodo={setTodo}
                   query={query}
                 />
@@ -62,10 +60,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUserId && todo && (
+      {todo && (
         <TodoModal
-          userId={selectedUserId}
-          setUserId={setSelectedUserId}
           todo={todo}
           setTodo={setTodo}
         />

@@ -5,7 +5,6 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
   index: number;
-  setUserId: (id: number | null) => void;
   setTodo: (todo: Todo) => void;
   selectedTodo: Todo | null;
 };
@@ -13,12 +12,10 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({
   todo,
   index,
-  setUserId,
   setTodo,
   selectedTodo,
 }) => {
   const selectTodoHandler = (currentTodo: Todo) => {
-    setUserId(currentTodo.userId);
     setTodo(currentTodo);
   };
 

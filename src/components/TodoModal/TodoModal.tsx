@@ -5,28 +5,23 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  userId: number;
-  setUserId: (id: number | null) => void;
   todo: Todo;
   setTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
-  setUserId,
   todo,
   setTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userId).then(data => {
+    getUser(todo.userId).then(data => {
       setUser(data);
     });
   }, []);
 
   const closeModal = () => {
-    setUserId(null);
     setTodo(null);
   };
 

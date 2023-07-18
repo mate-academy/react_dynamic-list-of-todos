@@ -15,10 +15,10 @@ function getTodos(todos: Todo[], query: string, filter: Filter): Todo[] {
   }
 
   switch (filter) {
-    case 'active':
+    case Filter.Active:
       return newTodos.filter(todo => !todo.completed);
 
-    case 'completed':
+    case Filter.Completed:
       return newTodos.filter(todo => todo.completed);
 
     default:
@@ -28,7 +28,6 @@ function getTodos(todos: Todo[], query: string, filter: Filter): Todo[] {
 
 type Props = {
   todos: Todo[];
-  setUserId: (id: number | null) => void;
   setTodo: (todo: Todo) => void;
   query: string;
   filter: Filter;
@@ -37,7 +36,6 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setUserId,
   setTodo,
   query,
   filter,
@@ -65,7 +63,6 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             todo={todo}
             index={index}
-            setUserId={setUserId}
             setTodo={setTodo}
             key={todo.id}
             selectedTodo={selectedTodo}
