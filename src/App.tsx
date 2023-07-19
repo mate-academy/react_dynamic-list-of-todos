@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,49 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { FilterValues } from './types/FilterValues';
 
 export const App: React.FC = () => {
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [hasLoading, setHasLoading] = useState(false);
+  const [filterByCompleted, setFilterByCompleted] = useState(FilterValues.all);
+  const [filterByTitle, setFilterByTitle] = useState('');
+  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    setHasLoading(true);
+    getTodos()
+      .then(res => {
+        const filteredTodos = res.filter(todo => {
+          switch (filterByCompleted) {
+            case 'all':
+              return true;
+
+            case 'active':
+              return todo.completed === false;
+
+            case 'completed':
+              return todo.completed === true;
+
+            default:
+              return false;
+          }
+        }).filter(todo => {
+          const generalQuery = filterByTitle.toLocaleLowerCase();
+          const generalTitle = todo.title.toLocaleLowerCase();
+
+          return generalTitle.includes(generalQuery);
+        });
+
+        setVisibleTodos(filteredTodos);
+      })
+      .finally(() => {
+        setHasLoading(false);
+      });
+  }, [filterByCompleted, filterByTitle]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +58,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterByCompleted={filterByCompleted}
+                onFilterByCompleted={(v) => setFilterByCompleted(v)}
+                filterByTitle={filterByTitle}
+                onFilterByTitle={v => setFilterByTitle(v)}
+
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {hasLoading
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectTodo={selectTodo}
+                    onSelectTodo={(todo) => setSelectTodo(todo)}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectTodo && (
+        <TodoModal
+          todo={selectTodo}
+          onSelectTodo={(todo) => setSelectTodo(todo)}
+        />
+      )}
     </>
   );
 };
