@@ -1,5 +1,6 @@
 import React from 'react';
 import { Status } from '../../types/Status';
+
 type Props = {
   query: string;
   handleInput: (query: string) => void;
@@ -17,6 +18,10 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleClear = () => {
     handleInput('');
+  };
+
+  const handleChange = (event: { target: { value: string; }; }) => {
+    handleInput(event.target.value);
   };
 
   return (
@@ -38,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => handleInput(event.target.value)}
+          onChange={handleChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
