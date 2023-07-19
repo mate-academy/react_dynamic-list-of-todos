@@ -28,10 +28,10 @@ export const App: React.FC = () => {
               return true;
 
             case 'active':
-              return todo.completed === false;
+              return !todo.completed;
 
             case 'completed':
-              return todo.completed === true;
+              return todo.completed;
 
             default:
               return false;
@@ -44,6 +44,10 @@ export const App: React.FC = () => {
         });
 
         setVisibleTodos(filteredTodos);
+      })
+      .catch(() => {
+        setVisibleTodos([]);
+        throw new Error('Can\'t load Todos with server...')
       })
       .finally(() => {
         setHasLoading(false);
