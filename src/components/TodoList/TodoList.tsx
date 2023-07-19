@@ -17,9 +17,8 @@ export const TodoList: React.FC<Props> = ({
   onSelectTodo,
   selectedTodo,
 }) => {
-  const handleSelectTodo = (
+  const handleSelectTodo = (todo: Todo) => (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    todo: Todo,
   ) => {
     onSelectTodo(event, todo);
   };
@@ -71,7 +70,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={(event) => handleSelectTodo(event, todo)}
+                onClick={handleSelectTodo(todo)}
               >
                 <span className="icon">
                   <i

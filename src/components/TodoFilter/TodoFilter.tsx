@@ -21,6 +21,10 @@ export const TodoFilter: React.FC<Props> = ({
     handleInput('');
   };
 
+  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleInput(event.target.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -40,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => handleInput(event.target.value)}
+          onChange={handleFilter}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -54,6 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
               type="button"
               className="delete"
               onClick={handleClear}
+              aria-label="clear search"
             />
           </span>
         )}
