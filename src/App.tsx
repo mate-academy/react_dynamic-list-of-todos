@@ -22,9 +22,6 @@ export const App: React.FC = () => {
       .then((todosFromServer) => {
         setTodos(todosFromServer);
       })
-      .catch((error) => {
-        throw new Error(error.message);
-      })
       .finally(() => setIsLoading(false));
   }, []);
 
