@@ -17,6 +17,7 @@ export const App: React.FC = () => {
   const [filterByCompleted, setFilterByCompleted] = useState(FilterValues.all);
   const [filterByTitle, setFilterByTitle] = useState('');
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
+  const [hasUncorrectLink, setHasUncorrectLink] = useState(false);
 
   useEffect(() => {
     setHasLoading(true);
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setVisibleTodos([]);
-        throw new Error('Can\'t load Todos with server...')
+        setHasUncorrectLink(true);
       })
       .finally(() => {
         setHasLoading(false);
@@ -71,17 +72,21 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {hasLoading
-                ? (<Loader />)
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectTodo={selectTodo}
-                    onSelectTodo={(todo) => setSelectTodo(todo)}
-                  />
-                )}
-            </div>
+            {hasUncorrectLink
+              ? (<p>Can&apos;t load Todos with server...</p>)
+              : (
+                <div className="block">
+                  {hasLoading
+                    ? (<Loader />)
+                    : (
+                      <TodoList
+                        todos={visibleTodos}
+                        selectTodo={selectTodo}
+                        onSelectTodo={(todo) => setSelectTodo(todo)}
+                      />
+                    )}
+                </div>
+              )}
           </div>
         </div>
       </div>
