@@ -13,12 +13,12 @@ import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState(Status.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
         throw new Error(error.message);
       })
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
       });
   }, []);
 
@@ -75,21 +75,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (
-                <Loader />
-              )}
-
-              {!loading && todos.length > 0 && (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
-                />
-              )}
-
-              {!loading && todos.length === 0 && (
-                <p>No todos</p>
-              )}
+              {isLoading
+                ? <Loader />
+                : (
+                  <>
+                    {todos.length > 0 ? (
+                      <TodoList
+                        todos={visibleTodos}
+                        selectedTodo={selectedTodo}
+                        setSelectedTodo={setSelectedTodo}
+                      />
+                    ) : (
+                      <p>No todos</p>
+                    )}
+                  </>
+                )}
             </div>
           </div>
         </div>
