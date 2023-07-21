@@ -4,15 +4,21 @@ import { getTodos } from '../../api';
 
 interface Props {
   setNewTodos: (todos: Todo[]) => void;
-  setTodosAreLoaded: (value: boolean) => void;
+  setIsTodosAreLoaded: (value: boolean) => void;
+}
+
+enum SortCondition {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export const TodoFilter: React.FC<Props> = React.memo(({
   setNewTodos,
-  setTodosAreLoaded,
+  setIsTodosAreLoaded,
 }) => {
   const [query, setQuery] = useState('');
-  const [sortCondition, setSortCondition] = useState('all');
+  const [sortBy, setSortBy] = useState(SortCondition.All);
   const inputValue: React.RefObject<HTMLInputElement> | null = useRef(null);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +34,20 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   };
 
   const handleFilterSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortCondition(event.target.value);
+    const { value } = event.target;
+
+    switch (value) {
+      case 'active':
+        setSortBy(SortCondition.Active);
+        break;
+
+      case 'completed':
+        setSortBy(SortCondition.Completed);
+        break;
+
+      default:
+        setSortBy(SortCondition.All);
+    }
   };
 
   function filterTodos(allTodos: Todo[]) {
@@ -36,13 +55,13 @@ export const TodoFilter: React.FC<Props> = React.memo(({
 
     if (query) {
       filteredTodos = filteredTodos.filter(
-        todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+        todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()),
       );
     }
 
-    if (sortCondition === 'active') {
+    if (sortBy === SortCondition.Active) {
       filteredTodos = filteredTodos.filter(todo => !todo.completed);
-    } else if (sortCondition === 'completed') {
+    } else if (sortBy === SortCondition.Completed) {
       filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
@@ -50,14 +69,14 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   }
 
   useEffect(() => {
-    setTodosAreLoaded(false);
+    setIsTodosAreLoaded(false);
 
     getTodos()
       .then(allTodos => {
         filterTodos(allTodos);
       })
-      .finally(() => setTodosAreLoaded(true));
-  }, [query, sortCondition]);
+      .finally(() => setIsTodosAreLoaded(true));
+  }, [query, sortBy]);
 
   return (
     <form className="field has-addons">
@@ -65,7 +84,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={sortCondition}
+            value={sortBy}
             onChange={handleFilterSelect}
           >
             <option value="all">All</option>

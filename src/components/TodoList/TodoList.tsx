@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  thisTodoIsOpen: Todo | null;
-  setThisTodoIsOpen: (todo: Todo) => void;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<Props> = React.memo(({
-  setThisTodoIsOpen,
+  setSelectedTodo,
   todos,
-  thisTodoIsOpen,
+  selectedTodo,
 
 }) => {
   return (
@@ -58,12 +58,12 @@ export const TodoList: React.FC<Props> = React.memo(({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setThisTodoIsOpen(todo)}
+                onClick={() => setSelectedTodo(todo)}
               >
                 <span className="icon">
                   <i className={classNames('far', {
-                    'fa-eye': thisTodoIsOpen?.id !== todo.id,
-                    'fa-eye-slash': thisTodoIsOpen?.id === todo.id,
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
                   })}
                   />
                 </span>

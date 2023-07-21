@@ -11,7 +11,7 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todoModal, setTodoModal] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosAreLoaded, setTodosAreLoaded] = useState(false);
+  const [isTodosAreLoaded, setIsTodosAreLoaded] = useState(false);
 
   return (
     <>
@@ -23,18 +23,18 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setNewTodos={setTodos}
-                setTodosAreLoaded={setTodosAreLoaded}
+                setIsTodosAreLoaded={setIsTodosAreLoaded}
               />
             </div>
 
             <div className="block">
-              {!todosAreLoaded ? (
+              {!isTodosAreLoaded ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={todos}
-                  thisTodoIsOpen={todoModal}
-                  setThisTodoIsOpen={setTodoModal}
+                  selectedTodo={todoModal}
+                  setSelectedTodo={setTodoModal}
                 />
               )}
 
