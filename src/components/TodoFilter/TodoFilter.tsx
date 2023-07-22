@@ -9,11 +9,11 @@ type Props = {
 
 function selectTodos(selectedOption: string, todo: Todo) {
   if (selectedOption === 'active') {
-    return todo.completed === false;
+    return todo.completed;
   }
 
   if (selectedOption === 'completed') {
-    return todo.completed === true;
+    return todo.completed;
   }
 
   return true;
