@@ -8,15 +8,19 @@ type Props = {
 };
 
 function selectTodos(selectedOption: string, todo: Todo) {
-  if (selectedOption === 'active') {
-    return todo.completed;
-  }
+  switch (selectedOption) {
+    case 'active':
+      return !todo.completed;
 
-  if (selectedOption === 'completed') {
-    return todo.completed;
-  }
+    case 'completed':
+      return todo.completed;
 
-  return true;
+    case 'all':
+      return true;
+
+    default:
+      throw new Error('Impossible value');
+  }
 }
 
 function filterTodos(query: string, todo: Todo) {
