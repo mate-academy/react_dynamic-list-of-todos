@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { SelectedOption } from '../../types/SelectedOption';
 
 type Props = {
   todos: Todo[];
   onChange: React.Dispatch<React.SetStateAction<Todo[]>>;
   visibleTodos: Todo[];
 };
-
-enum SelectedOption {
-  Active = 'active',
-  Completed = 'completed',
-  All = 'all',
-}
 
 function selectTodos(selectedOption: string, todo: Todo) {
   switch (selectedOption) {
@@ -30,7 +25,7 @@ function selectTodos(selectedOption: string, todo: Todo) {
 }
 
 function filterTodos(query: string, todo: Todo) {
-  return todo.title.toLowerCase().includes(query.toLowerCase().trim());
+  return todo.title.toLowerCase().includes(query.toLowerCase());
 }
 
 export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
@@ -56,11 +51,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
               event => setSelectedOption(event.target.value as SelectedOption)
             }
           >
-            <option value="all">All</option>
+            <option value={SelectedOption.All}>All</option>
 
-            <option value="active">Active</option>
+            <option value={SelectedOption.Active}>Active</option>
 
-            <option value="completed">Completed</option>
+            <option value={SelectedOption.Completed}>Completed</option>
           </select>
         </span>
       </p>
