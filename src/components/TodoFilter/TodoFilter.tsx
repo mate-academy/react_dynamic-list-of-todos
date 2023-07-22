@@ -7,15 +7,21 @@ type Props = {
   visibleTodos: Todo[];
 };
 
+enum SelectedOption {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
+
 function selectTodos(selectedOption: string, todo: Todo) {
   switch (selectedOption) {
-    case 'active':
+    case SelectedOption.Active:
       return !todo.completed;
 
-    case 'completed':
+    case SelectedOption.Completed:
       return todo.completed;
 
-    case 'all':
+    case SelectedOption.All:
       return true;
 
     default:
@@ -24,12 +30,15 @@ function selectTodos(selectedOption: string, todo: Todo) {
 }
 
 function filterTodos(query: string, todo: Todo) {
-  return todo.title.toLowerCase().includes(query.toLowerCase());
+  return todo.title.toLowerCase().includes(query.toLowerCase().trim());
 }
 
 export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
   const [query, setQuery] = useState('');
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [
+    selectedOption,
+    setSelectedOption,
+  ] = useState<SelectedOption>(SelectedOption.All);
 
   useEffect(() => {
     onChange(todos
@@ -43,7 +52,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => setSelectedOption(event.target.value)}
+            onChange={
+              event => setSelectedOption(event.target.value as SelectedOption)
+            }
           >
             <option value="all">All</option>
 
