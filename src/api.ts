@@ -17,11 +17,11 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see how the loader works
-  return wait(300)
+  return wait(1000)
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number | undefined) => get<User>(`/users/${userId}`);
