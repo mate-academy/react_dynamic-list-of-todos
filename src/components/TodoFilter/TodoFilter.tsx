@@ -1,8 +1,15 @@
-export const TodoFilter = () => (
+type Props = {
+  selectAll: string
+};
+
+export const TodoFilter: React.FC<Props> = ({ selectAll }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={selectAll}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
