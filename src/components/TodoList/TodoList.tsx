@@ -7,7 +7,8 @@ export const TodoList: React.FC = React.memo(() => {
     todos, selectedTodo, handleSelectedTodo, filterTodos, query, filterOption,
   } = useContext(TodoContext);
 
-  const visibleTodos = filterTodos(todos, query, filterOption);
+  const visibleTodos = useMemo(() => filterTodos(todos, query, filterOption),
+    [todos, query, filterOption]);
 
   return (
     <table className="table is-narrow is-fullwidth">
