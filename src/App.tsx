@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,44 +8,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
-
-function getPreparedTodos(
-  todoList: Todo[],
-  filter: string,
-  query: string,
-) {
-  let preparedTodos = [...todoList];
-
-  if (query) {
-    preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(query.trim().toLowerCase()));
-  }
-
-  if (filter !== 'all') {
-    switch (filter) {
-      case 'all':
-        preparedTodos = [...todoList];
-        break;
-
-      case 'active':
-        preparedTodos = preparedTodos.filter(todo => !todo.completed);
-        break;
-
-      case 'completed':
-        preparedTodos = preparedTodos.filter(todo => todo.completed);
-        break;
-
-      default:
-        throw new Error('Error');
-    }
-  }
-
-  return preparedTodos;
-}
+import { getPreparedTodos } from './services/GetTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -56,11 +25,11 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredTodos = getPreparedTodos(
+  const filteredTodos = useMemo(() => getPreparedTodos(
     todos,
     filter,
-    query,
-  );
+    debouncedQuery,
+  ), [todos, filter, debouncedQuery]);
 
   return (
     <>
@@ -73,6 +42,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 setFilter={setFilter}
                 setQuery={setQuery}
+                setDebouncedQuery={setDebouncedQuery}
                 query={query}
               />
             </div>
@@ -86,7 +56,6 @@ export const App: React.FC = () => {
                     todos={filteredTodos}
                   />
                 )}
-              {/* <Loader /> */}
             </div>
           </div>
         </div>

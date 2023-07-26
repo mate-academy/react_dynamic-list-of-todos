@@ -7,7 +7,7 @@ type Props = {
   todos: Todo[],
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   return (
@@ -79,4 +79,4 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       </tbody>
     </table>
   );
-};
+});

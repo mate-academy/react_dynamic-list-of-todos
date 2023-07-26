@@ -1,10 +1,22 @@
+import debounce from 'lodash.debounce';
+import React, { useCallback } from 'react';
+
 type Props = {
   setFilter: (filter: string) => void;
   setQuery: (query: string) => void;
+  setDebouncedQuery: (query: string) => void;
   query: string;
 };
+export const TodoFilter: React.FC<Props> = React.memo(({
+  setFilter,
+  setQuery,
+  setDebouncedQuery,
+  query,
+}) => {
+  const apllyDebouncedQuery = useCallback(
+    debounce(setDebouncedQuery, 500), [],
+  );
 
-export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => {
   // eslint-disable-next-line
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -16,6 +28,12 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => {
     const textOfQuery = event.target.value;
 
     setQuery(textOfQuery);
+    apllyDebouncedQuery(textOfQuery.trim());
+  };
+
+  const clear = () => {
+    setQuery('');
+    setDebouncedQuery('');
   };
 
   return (
@@ -65,11 +83,11 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={clear}
             />
           </span>
         )}
       </p>
     </form>
   );
-};
+});
