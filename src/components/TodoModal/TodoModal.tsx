@@ -5,19 +5,16 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  loading: boolean;
-  setLoading: (value: boolean) => void,
   selectedTodo: Todo | null,
   setSelectedTodo: (value: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  loading,
-  setLoading,
   selectedTodo,
   setSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);

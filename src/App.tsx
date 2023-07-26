@@ -83,8 +83,6 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          loading={loading}
-          setLoading={setLoading}
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
