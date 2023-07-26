@@ -7,8 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
 
 function getPreparedTodos(
   todoList: Todo[],
@@ -47,9 +46,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredTodos = getPreparedTodos(
@@ -74,16 +78,19 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
+              {loading ? (
+                <Loader />
+              )
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                  />
+                )}
               {/* <Loader /> */}
-              <TodoList
-                todos={filteredTodos}
-              />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
     </>
   );
 };
