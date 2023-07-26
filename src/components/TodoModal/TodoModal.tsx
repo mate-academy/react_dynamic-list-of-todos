@@ -15,9 +15,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
   useEffect(() => {
     getUser(todo.userId)
-      .then((u) => {
-        setUser(u);
-      })
+      .then((setUser))
       .catch((error) => {
         throw new Error(error.message);
       })

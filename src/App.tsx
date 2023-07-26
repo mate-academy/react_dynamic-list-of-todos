@@ -20,7 +20,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((todosFromServer) => setTodos(todosFromServer))
+      .then((setTodos))
       .catch((error) => {
         throw new Error(error.message);
       })
