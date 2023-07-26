@@ -15,8 +15,9 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [select, setSelect] = useState('all');
+  const [loading, setloading] = useState(true);
 
-  const getFilteredTodos = (visibleTodos: Todo[], visibleQuery: string, visibleSelect: string) => {
+  const getFilteredTodos = (visibleTodos: Todo[], visibleQuery: string, visibleSelect: string): Todo[] => {
     let filteredTodo = [...visibleTodos];
 
     if (visibleQuery) {
@@ -44,7 +45,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then((todoList) => getFilteredTodos(todoList, query, select))
-      .then(setTodos);
+      .then(setTodos)
+      .then(() => setloading(false));
   }, [query, select]);
 
   return (
@@ -64,7 +66,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && (
+              {loading && (
                 <Loader />
               )}
               <TodoList

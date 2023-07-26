@@ -22,11 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
             value={select}
             onChange={event => setSelect(event.target.value)}
           >
-            <option
-              value="all"
-            >
-              All
-            </option>
+            <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
