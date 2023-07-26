@@ -52,7 +52,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  selectedTodo={selectedTodo}
+                  selectedTodoId={selectedTodo?.id || null}
                   setSelectedTodo={setSelectedTodo}
                 />
               )}

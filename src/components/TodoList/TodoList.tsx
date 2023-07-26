@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: Todo | null,
+  selectedTodoId: number | null,
   setSelectedTodo: (newValue: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodo,
+  selectedTodoId,
   setSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -31,7 +31,9 @@ export const TodoList: React.FC<Props> = ({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className=""
+          className={classNames({
+            'has-background-info-light': todo.id === selectedTodoId,
+          })}
           key={todo.id}
         >
           <td className="is-vcentered">
@@ -67,8 +69,8 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i
                   className={classNames('far', {
-                    'fa-eye-slash': todo.id === selectedTodo?.id,
-                    'fa-eye': !(todo.id === selectedTodo?.id),
+                    'fa-eye-slash': todo.id === selectedTodoId,
+                    'fa-eye': todo.id !== selectedTodoId,
                   })}
                 />
               </span>
