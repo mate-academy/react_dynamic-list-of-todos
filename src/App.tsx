@@ -11,6 +11,7 @@ import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
 import { User } from './types/User';
 import { SortKeys } from './enum';
+import { getPreperedTodos } from './utils/filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -55,37 +56,13 @@ export const App: React.FC = () => {
     getUserById();
   }, [selectedTodo?.id, user?.id]);
 
-  function getPreperedTodos() {
-    let preperedTodos = [...todos];
-
-    if (filter) {
-      preperedTodos = preperedTodos.filter((todo) => {
-        const title = todo.title.toLowerCase();
-        const filterQuery = filter.trim().toLowerCase();
-
-        return title.includes(filterQuery);
-      });
-    }
-
-    if (select) {
-      switch (select) {
-        case SortKeys.All:
-          return preperedTodos;
-        case SortKeys.Active:
-          return preperedTodos.filter(todo => todo.completed === false);
-        case SortKeys.Completed:
-          return preperedTodos.filter(todo => todo.completed === true);
-        default:
-          return preperedTodos;
-      }
-    }
-
-    return preperedTodos;
-  }
-
   const preperedTodos = useMemo(() => {
-    return getPreperedTodos();
-  }, [getPreperedTodos, filter, SortKeys]);
+    return getPreperedTodos(
+      todos,
+      filter,
+      select,
+    )
+  }, [todos, filter, select]);
 
   return (
     <>
@@ -108,7 +85,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={preperedTodos}
                   todoId={selectedTodo?.id || 0}
-                  setSelectedTodo={setSelectedTodo}
+                  onSelectedTodo={setSelectedTodo}
                 />
               )}
               {loader && <Loader />}
@@ -120,8 +97,8 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           user={user}
-          setUser={setUser}
-          setSelectedTodo={setSelectedTodo}
+          onUser={setUser}
+          onSelectedTodo={setSelectedTodo}
         />
       )}
     </>

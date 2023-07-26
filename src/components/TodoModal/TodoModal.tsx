@@ -6,15 +6,15 @@ import { Loader } from '../Loader';
 type Props = {
   todo: Todo | null;
   user: User | null;
-  setUser: (user: User | null) => void;
-  setSelectedTodo: (value: Todo | null) => void;
+  onUser: (user: User | null) => void;
+  onSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = React.memo(({
   todo,
   user,
-  setUser,
-  setSelectedTodo,
+  onUser,
+  onSelectedTodo,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,8 +36,8 @@ export const TodoModal: React.FC<Props> = React.memo(({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setSelectedTodo(null);
-                setUser(null);
+                onSelectedTodo(null);
+                onUser(null);
               }}
             />
           </header>
