@@ -36,24 +36,24 @@ export const TodoList: React.FC<Props> = ({
           <th> </th>
         </tr>
       </thead>
-
       <tbody>
         {todos.map(todo => (
           <tr
-            key={todo.id}
             data-cy="todo"
             className={classNames({
               'has-background-info-light':
                selectedTodo?.id === todo.id && isActive,
             })}
+            key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered" />
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames({
                 'has-text-danger': !todo.completed,
@@ -71,11 +71,10 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleSelectedTodo(todo)}
               >
                 <span className="icon">
-                  <i
-                    className={classNames({
-                      'far fa-eye': selectedTodo?.id !== todo.id,
-                      'far fa-eye-slash': selectedTodo?.id === todo.id,
-                    })}
+                  <i className={classNames({
+                    'far fa-eye': selectedTodo?.id !== todo.id,
+                    'far fa-eye-slash': selectedTodo?.id === todo.id,
+                  })}
                   />
                 </span>
               </button>
