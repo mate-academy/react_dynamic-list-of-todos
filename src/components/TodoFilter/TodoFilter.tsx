@@ -3,7 +3,7 @@ import { Filter } from '../../types/Filter';
 type Props = {
   query: string,
   setQuery: (value: string) => void,
-  filter: string,
+  filter: Filter,
   setFilter: (value: Filter) => void,
 };
 
