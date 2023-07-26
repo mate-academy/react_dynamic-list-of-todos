@@ -1,31 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Loader } from '../Loader';
-import { User } from '../../types/User';
-import { getUser } from '../../api/api';
+import React, { useContext } from 'react';
+
 import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
 
+import { Loader } from '../Loader';
+
 export const TodoModal: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const { todo } = useContext(TodoContext);
+  const { todo, user, userLoading } = useContext(TodoContext);
   const { setTodo } = useContext(TodoUpdateContext);
-
-  useEffect(() => {
-    setLoading(true);
-
-    if (todo) {
-      getUser(todo.userId)
-        .then(data => setUser(data))
-        .finally(() => setLoading(false));
-    }
-  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {userLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

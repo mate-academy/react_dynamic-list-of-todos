@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 import classNames from 'classnames';
+
 import { useContext } from 'react';
-import { Todo } from '../../types/Todo';
+
 import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
@@ -11,6 +13,8 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todo: selectedTodo } = useContext(TodoContext);
   const { setTodo } = useContext(TodoUpdateContext);
+
+  console.log('render');
 
   return (
     <tr
