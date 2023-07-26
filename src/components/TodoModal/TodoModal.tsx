@@ -22,11 +22,10 @@ export const TodoModal: React.FC<Props> = ({
   setModalView,
 }) => {
   const [user, setUsers] = useState<User>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const todo = findTodoByID(filteredTodos, modalView);
 
   useEffect(() => {
-    setLoading(true);
     if (todo) {
       getUser(todo.userId)
         .then(setUsers)
