@@ -101,7 +101,6 @@ export const TodoList: React.FC<Props> = React.memo(({
           </td>
         </tr>
       )))}
-      ;
     </tbody>
   </table>
 ));

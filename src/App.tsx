@@ -61,7 +61,7 @@ export const App: React.FC = () => {
       todos,
       filter,
       select,
-    )
+    );
   }, [todos, filter, select]);
 
   return (
