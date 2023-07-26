@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = (
     setLoading(true);
 
     if (selectedTodo !== null) {
-      getUser(selectedTodo.id)
+      getUser(selectedTodo.userId)
         .then(setUser)
         .catch(() => { })
         .finally(() => setLoading(false));
