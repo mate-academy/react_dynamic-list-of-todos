@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, {
-  useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import 'bulma/css/bulma.css';
@@ -14,15 +14,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { SortType } from './types/SortType';
-import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [sortType, setSortType] = useState(SortType.ALL);
 
   useEffect(() => {
@@ -33,7 +30,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const getPreparedTodos = useCallback((
+  const getPreparedTodos = useMemo(() => (
     currentTodos: Todo[],
   ) => {
     let sortedTodos: Todo[] = [];
@@ -55,7 +52,9 @@ export const App: React.FC = () => {
         throw new Error('Wrong sort type');
     }
 
-    return sortedTodos.filter(todo => todo.title.toLowerCase().includes(inputValue));
+    const normalizedValue = inputValue.toLowerCase().trim();
+
+    return sortedTodos.filter(todo => todo.title.toLowerCase().includes(normalizedValue));
   }, [inputValue, sortType]);
 
   const preparedTodos = getPreparedTodos(todos);
@@ -80,11 +79,9 @@ export const App: React.FC = () => {
                 || (
                   <TodoList
                     todos={preparedTodos}
-                    setShowModal={setShowModal}
                     setLoading={setLoading}
-                    setUser={setUser}
+                    currentTodo={currentTodo}
                     setCurrentTodo={setCurrentTodo}
-                    showModal={showModal}
                   />
                 )}
             </div>
@@ -92,12 +89,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {!!currentTodo && (
         <TodoModal
-          setShowModal={setShowModal}
           loading={loading}
-          user={user}
+          setLoading={setLoading}
           todo={currentTodo}
+          setTodo={setCurrentTodo}
         />
       )}
     </>

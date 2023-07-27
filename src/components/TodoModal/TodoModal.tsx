@@ -1,25 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean,
-  user: User | null,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
   todo: Todo | null,
+  setTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  setShowModal,
   loading,
-  user,
+  setLoading,
   todo,
+  setTodo,
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+
   const handleCLick = () => {
-    setShowModal(false);
+    setTodo(null);
   };
+
+  useEffect(() => {
+    getUser(todo?.userId as number)
+      .then(setUser)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -52,7 +61,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames({
                   'has-text-danger': !todo?.completed,

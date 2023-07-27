@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
   setSortType,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const normalizedInput = event.target.value.toLowerCase();
+    const normalizedInput = event.target.value;
 
     setValue(normalizedInput);
   };

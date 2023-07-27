@@ -1,33 +1,23 @@
 import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
-import { User } from '../../types/User';
 
 type Props = {
   todos: Todo[],
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setUser: React.Dispatch<React.SetStateAction<User | null>>,
+  currentTodo: Todo | null
   setCurrentTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
-  showModal: boolean,
 };
 
 export const TodoList: React.FC<Props> = React.memo(({
   todos,
-  setShowModal,
   setLoading,
-  setUser,
+  currentTodo,
   setCurrentTodo,
-  showModal,
 }) => {
   const handleClick = (clickedTodo: Todo) => {
     setCurrentTodo(clickedTodo);
-    setShowModal(true);
     setLoading(true);
-    getUser(clickedTodo.userId)
-      .then(setUser)
-      .finally(() => setLoading(false));
   };
 
   return (
@@ -51,8 +41,7 @@ export const TodoList: React.FC<Props> = React.memo(({
             key={todo.id}
             data-cy="todo"
             className={cn({
-              'has-background-info-light': showModal,
-              '': !showModal,
+              'has-background-info-light': todo.id === currentTodo?.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -83,8 +72,8 @@ export const TodoList: React.FC<Props> = React.memo(({
                 <span className="icon">
                   <i
                     className={cn('far', {
-                      'fa-eye': !showModal,
-                      'fa-eye-slash': showModal,
+                      'fa-eye': todo.id !== currentTodo?.id,
+                      'fa-eye-slash': todo.id === currentTodo?.id,
                     })}
                   />
                 </span>
