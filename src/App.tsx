@@ -1,33 +1,58 @@
+/* eslint-disable @typescript-eslint/quotes */
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { getTodos } from './api';
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { getTodos } from "./api";
+import { TodoList } from "./components/TodoList";
+import { TodoFilter } from "./components/TodoFilter";
+import { TodoModal } from "./components/TodoModal";
+import { Loader } from "./components/Loader";
+import { Todo } from "./types/Todo";
+import { Select } from "./types/Select";
+
+const filter = (todos: Todo[], query: string, selectedCategory: Select) => {
+  let filteredTodos = [...todos];
+  const normalizedQuery = query.toLowerCase();
+
+  switch (selectedCategory) {
+    case Select.Completed:
+      filteredTodos = filteredTodos.filter((todo: Todo) => todo.completed);
+      break;
+    case Select.Active:
+      filteredTodos = filteredTodos.filter((todo: Todo) => !todo.completed);
+      break;
+    default:
+      break;
+  }
+
+  if (query) {
+    filteredTodos = filteredTodos
+      .filter((todo: Todo) => todo.title.toLowerCase()
+        .includes(normalizedQuery));
+  }
+
+  return filteredTodos;
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Select>(Select.All);
+
+  const filteredTodos = useMemo(
+    () => filter(todos, query, selectedCategory),
+    [query, selectedCategory, todos],
+  );
 
   useEffect(() => {
-    setLoading(true);
-
-    setTimeout(() => {
-      getTodos()
-        .then((res) => {
-          setTodos(res);
-          setFilteredTodos(res);
-        })
-        .catch(() => { })
-        .finally(() => setLoading(false));
-    }, 500);
+    getTodos()
+      .then((res) => {
+        setTodos(res);
+      })
+      .catch(() => { });
   }, []);
 
   return (
@@ -39,16 +64,17 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setFilteredTodos={setFilteredTodos}
+                selectedCategory={selectedCategory}
+                query={query}
+                setQuery={(v) => setQuery(v)}
+                setSelectedCategory={(v) => setSelectedCategory(v)}
               />
             </div>
 
             <div className="block">
-              {loading && (
+              {!todos.length ? (
                 <Loader />
-              )}
-              {!loading && (
+              ) : (
                 <TodoList
                   filteredTodos={filteredTodos}
                   selectedTodo={selectedTodo}

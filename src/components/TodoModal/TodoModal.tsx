@@ -9,21 +9,22 @@ type Props = {
   setSelectedTodo: (todo: Todo | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = (
-  { selectedTodo, setSelectedTodo },
-) => {
-  const [loading, setLoading] = useState(true);
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  setSelectedTodo,
+}) => {
+  // const [loading, setLoading] = useState(true);
   const hasSelectedTodo = selectedTodo !== null;
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
 
     if (selectedTodo !== null) {
       getUser(selectedTodo.userId)
         .then(setUser)
-        .catch(() => { })
-        .finally(() => setLoading(false));
+        .catch(() => { });
+      // .finally(() => setLoading(false));
     }
   }, []);
 
@@ -31,12 +32,14 @@ export const TodoModal: React.FC<Props> = (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && (
+      {/* {loading && (
         <Loader />
       )}
 
-      {!loading && (
-
+      {!loading && ( */}
+      {!user ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -74,7 +77,7 @@ export const TodoModal: React.FC<Props> = (
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${user?.email}`}>
                 {user?.name}
               </a>
             </p>

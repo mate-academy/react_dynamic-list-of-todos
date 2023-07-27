@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Select } from '../../types/Select';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
-  setFilteredTodos: (todos: Todo[]) => void,
+  query: string;
+  selectedCategory: Select;
+  setQuery: (v: string) => void;
+  setSelectedCategory: (v: Select) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
-  const [query, setQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<Select>(Select.All);
-
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  selectedCategory,
+  setQuery,
+  setSelectedCategory,
+}) => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
@@ -19,30 +22,6 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value as Select);
   };
-
-  useEffect(() => {
-    let filteredTodos = todos;
-    const normalizedQuery = query.toLowerCase();
-
-    switch (selectedCategory) {
-      case Select.Completed:
-        filteredTodos = filteredTodos.filter((todo: Todo) => todo.completed);
-        break;
-      case Select.Active:
-        filteredTodos = filteredTodos.filter((todo: Todo) => !todo.completed);
-        break;
-      default:
-        break;
-    }
-
-    if (query) {
-      filteredTodos = filteredTodos
-        .filter((todo: Todo) => todo.title.toLowerCase()
-          .includes(normalizedQuery));
-    }
-
-    setFilteredTodos(filteredTodos);
-  }, [query, selectedCategory]);
 
   return (
     <form className="field has-addons">
