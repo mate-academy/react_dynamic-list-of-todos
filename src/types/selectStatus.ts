@@ -1,5 +1,5 @@
 export enum SelectStatus {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
 }

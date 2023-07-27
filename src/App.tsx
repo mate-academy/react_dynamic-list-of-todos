@@ -9,14 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SelectStatus } from './types/selectStatus';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isTodoSelected, setIsTodoSelected] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState(SelectStatus.all);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -39,10 +39,10 @@ export const App: React.FC = () => {
     }
 
     switch (selectedStatus) {
-      case 'active':
+      case SelectStatus.active:
         return filteredTodos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case SelectStatus.completed:
         return filteredTodos.filter(todo => todo.completed);
 
       default:
@@ -73,27 +73,24 @@ export const App: React.FC = () => {
                 && (
                   <TodoList
                     todos={getFilteredTodos(todosFromServer)}
-                    isTodoSelected={isTodoSelected}
-                    setIsTodoSelected={setIsTodoSelected}
+                    selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
                 )
               }
 
-              {
-                errorMessage && (
-                  <p className="notification is-danger has-text-centered">{errorMessage}</p>
-                )
-              }
+              {errorMessage && (
+                <p className="notification is-danger has-text-centered">{errorMessage}</p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {
-        isTodoSelected && (
+        selectedTodo && (
           <TodoModal
-            setIsTodoSelected={setIsTodoSelected}
+            setSelectedTodo={setSelectedTodo}
             selectedTodo={selectedTodo}
           />
         )

@@ -5,23 +5,23 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  setIsTodoSelected: (value: boolean) => void,
   selectedTodo: Todo | null,
+  setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  setIsTodoSelected,
+  setSelectedTodo,
   selectedTodo,
 }) => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [todoInfo, setTodoInfo] = useState<User | null>(null);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
 
   useEffect(() => {
     setLoading(true);
 
     getUser(selectedTodo?.userId)
-      .then(user => setTodoInfo(user))
+      .then(user => setUserInfo(user))
       .catch(() => setErrorMessage('Error while getting todo info!'))
       .finally(() => setLoading(false));
   }, []);
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
       <div className="modal-background" />
       {loading && <Loader />}
 
-      {!loading && !errorMessage && todoInfo !== null
+      {!loading && !errorMessage && userInfo !== null
         && (
           <div className="modal-card">
             <header className="modal-card-head">
@@ -47,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setIsTodoSelected(false)}
+                onClick={() => setSelectedTodo(null)}
               />
             </header>
 
@@ -64,8 +64,8 @@ export const TodoModal: React.FC<Props> = ({
                 }
                 {' by '}
 
-                <a href={`mailto:${todoInfo?.email}`}>
-                  {todoInfo?.name}
+                <a href={`mailto:${userInfo?.email}`}>
+                  {userInfo?.name}
                 </a>
               </p>
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { SelectStatus } from '../../types/selectStatus';
 
 type Props = {
-  setSelectedStatus: (value: string) => void,
+  setSelectedStatus: (value: SelectStatus) => void,
   query: string,
   setQuery: (value: string) => void,
 };
@@ -18,11 +18,25 @@ export const TodoFilter: React.FC<Props> = React.memo(({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setSelectedStatus(event.target.value)}
+            onChange={(event) => {
+              setSelectedStatus(event.target.value as SelectStatus);
+            }}
           >
-            <option value="all">{SelectStatus.All}</option>
-            <option value="active">{SelectStatus.Active}</option>
-            <option value="completed">{SelectStatus.Completed}</option>
+            <option
+              value={SelectStatus.all}
+            >
+              {SelectStatus.all}
+            </option>
+            <option
+              value={SelectStatus.active}
+            >
+              {SelectStatus.active}
+            </option>
+            <option
+              value={SelectStatus.completed}
+            >
+              {SelectStatus.completed}
+            </option>
           </select>
         </span>
       </p>
