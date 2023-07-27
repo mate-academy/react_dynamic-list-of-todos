@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './App.scss';
@@ -10,19 +10,55 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const todoByDefault: Todo = {
-    userId: 0,
-    id: 0,
-    title: '',
-    completed: false,
-  };
+  // const todoByDefault: Todo = {
+  //   userId: 0,
+  //   id: 0,
+  //   title: '',
+  //   completed: false,
+  // };
 
-  const [todo, setTodo] = useState(todoByDefault);
+  const [todo, setTodo] = useState({} as Todo);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>('all');
   const [loading, setLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+    getTodos()
+      .then(someTodos => {
+        setTodos(someTodos);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  let preparedTodos = [...todos];
+
+  useMemo(() => {
+    const lowerCaseQuery = query.toLocaleLowerCase();
+
+    if (query) {
+      preparedTodos = preparedTodos.filter(
+        someTodo => someTodo.title.toLowerCase().includes(lowerCaseQuery),
+      );
+    }
+
+    switch (filterBy) {
+      case 'active':
+        preparedTodos = preparedTodos.filter(someTodo => !someTodo.completed);
+        break;
+
+      case 'completed':
+        preparedTodos = preparedTodos.filter(someTodo => someTodo.completed);
+        break;
+
+      default:
+        preparedTodos = [...preparedTodos];
+    }
+  }, [query, filterBy, todos]);
 
   return (
     <>
@@ -40,13 +76,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              <TodoList
-                setTodo={setTodo}
-                query={query}
-                filterBy={filterBy}
-                setLoading={setLoading}
-              />
+              {loading
+                ? (
+                  <Loader />
+                ) : (
+                  <TodoList
+                    todo={todo}
+                    setTodo={setTodo}
+                    todos={preparedTodos}
+                  />
+                )}
             </div>
           </div>
         </div>
