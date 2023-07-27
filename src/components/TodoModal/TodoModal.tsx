@@ -7,25 +7,25 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  offSelection: () => void
+  close: () => void
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  offSelection,
+  close,
 }) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(selectedTodo.userId)
-      .then(user => setSelectedUser(user));
+      .then(setUser);
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -42,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={offSelection}
+              onClick={close}
             />
           </header>
 
@@ -63,8 +63,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectedUser.email}`}>
-                {selectedUser.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>

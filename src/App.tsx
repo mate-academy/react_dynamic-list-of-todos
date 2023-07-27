@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,43 +7,49 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
+const getVisibleTodos = (todos: Todo[], query: string, status: Status) => {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  return todos
+    .filter(todo => {
+      switch (status) {
+        case Status.Completed:
+          return todo.completed;
+
+        case Status.Active:
+          return !todo.completed;
+
+        default:
+          return true;
+      }
+    })
+    .filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
+};
+
 export const App: React.FC = () => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [selectedValue, setSelectedValue] = useState('all');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const getSelectedTodos = (todos: Todo[]) => {
-    let filteredTodos = [...todos];
-    const normalizedQuery = query.trim().toLowerCase();
-
-    if (query) {
-      filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
-    }
-
-    switch (selectedValue) {
-      case 'completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
-        break;
-
-      case 'active':
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
-        break;
-
-      default:
-        break;
-    }
-
-    setVisibleTodos(filteredTodos);
-  };
-
   useEffect(() => {
+    setLoading(true);
+
     getTodos()
-      .then(todos => getSelectedTodos(todos));
-  }, [selectedValue, query]);
+      .then(setTodos)
+      //eslint-disable-next-line no-console
+      .catch(error => console.warn(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+const visibleTodos = useMemo(()=> {
+  return getVisibleTodos(todos, query, status)
+}, [todos, query, status])
 
   return (
     <>
@@ -54,22 +60,22 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelectValue={setSelectedValue}
-                selectedValue={selectedValue}
+                status={status}
+                onStatusChange={setStatus}
                 query={query}
                 setQuery={setQuery}
               />
             </div>
 
             <div className="block">
-              {visibleTodos.length ? (
+              {loading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   onSelectTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
-                />
-              )
-                : <Loader />}
+                />)}
             </div>
           </div>
         </div>
@@ -78,7 +84,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          offSelection={() => setSelectedTodo(null)}
+          close={() => setSelectedTodo(null)}
         />
       )}
     </>
