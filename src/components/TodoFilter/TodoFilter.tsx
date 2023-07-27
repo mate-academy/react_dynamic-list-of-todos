@@ -1,8 +1,10 @@
+import { FilterType } from '../../types/FilterTypes';
+
 type Props = {
   query: string;
   changeQuery: (query:string) => void;
-  filterType: string;
-  changeFilterType: (value:string) => void;
+  filterType: FilterType;
+  changeFilterType: (value:FilterType) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -18,11 +20,12 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterType}
-            onChange={event => changeFilterType(event.target.value)}
+            // eslint-disable-next-line max-len
+            onChange={event => changeFilterType(event.target.value as FilterType)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>

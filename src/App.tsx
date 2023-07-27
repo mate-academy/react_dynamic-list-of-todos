@@ -9,45 +9,13 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-const preparedTodos = (
-  todos: Todo[],
-  query: string,
-  filterType: string,
-) => {
-  let copyTodos = [...todos];
-
-  if (query) {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    copyTodos = copyTodos.filter(
-      todo => todo.title.toLowerCase().includes(normalizedQuery),
-    );
-  }
-
-  if (filterType) {
-    switch (filterType) {
-      case 'active':
-        copyTodos = copyTodos.filter(todo => !todo.completed);
-        break;
-
-      case 'completed':
-        copyTodos = copyTodos.filter(todo => todo.completed);
-        break;
-
-      case 'all':
-      default:
-        return copyTodos;
-    }
-  }
-
-  return copyTodos;
-};
+import { FilterType } from './types/FilterTypes';
+import { preparedTodos } from './utils/FilterFunction';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [filterType, setFiltertype] = useState<string>('all');
+  const [filterType, setFiltertype] = useState(FilterType.All);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -58,6 +26,9 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        throw new Error(error.message);
+      })
       .finally(() => setLoading(false));
   }, []);
 
