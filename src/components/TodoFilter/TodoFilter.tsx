@@ -1,11 +1,10 @@
 import { useContext } from 'react';
 
-import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 import { Status } from '../../types/Status';
 
 export const TodoFilter = () => {
-  const { query } = useContext(TodoContext);
-  const { setStatus, setQuery } = useContext(TodoUpdateContext);
+  const { query, setQuery, setStatus } = useContext(TodoContext);
 
   return (
     <form className="field has-addons">
@@ -15,9 +14,9 @@ export const TodoFilter = () => {
             data-cy="statusSelect"
             onChange={(event) => setStatus(event.target.value as Status)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>

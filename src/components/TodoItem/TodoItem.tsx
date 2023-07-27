@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import { useContext } from 'react';
 
-import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -11,10 +11,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todo: selectedTodo } = useContext(TodoContext);
-  const { setTodo } = useContext(TodoUpdateContext);
-
-  console.log('render');
+  const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
 
   return (
     <tr
@@ -45,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => setTodo(todo)}
+          onClick={() => setSelectedTodo(todo)}
         >
           <span className="icon">
             <i className={classNames('far', {

@@ -6,7 +6,7 @@ import { getFilteredTodos } from '../../services/getFilteredTodos';
 import { TodoItem } from '../TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { todos, status, query } = useContext(TodoContext);
+  const { todos, query, status } = useContext(TodoContext);
 
   const filteredTodos = useMemo(() => {
     return getFilteredTodos(todos, query, status);

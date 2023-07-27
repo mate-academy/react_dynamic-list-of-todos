@@ -12,7 +12,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  const { todo, loading } = useContext(TodoContext);
+  const { selectedTodo, loading } = useContext(TodoContext);
 
   return (
     <>
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todo && <TodoModal />}
+      {selectedTodo && <TodoModal />}
     </>
   );
 };

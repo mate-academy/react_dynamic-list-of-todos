@@ -7,8 +7,7 @@ import React, {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
-import { User } from '../types/User';
-import { getTodos, getUser } from '../api/api';
+import { getTodos } from '../api/api';
 
 type Props = {
   children: ReactNode
@@ -16,32 +15,23 @@ type Props = {
 
 export const TodoContext = React.createContext({
   todos: [] as Todo[],
-  todo: null as Todo | null,
-  status: Status.All,
-  query: '',
-  user: null as User | null,
-  loading: false,
-  userLoading: false,
-});
-
-export const TodoUpdateContext = React.createContext({
   setTodos: (_todos: Todo[]) => { },
-  setTodo: (_todo: Todo | null) => { },
+  selectedTodo: null as Todo | null,
+  setSelectedTodo: (_todo: Todo | null) => { },
+  status: Status.All,
   setStatus: (_status: Status) => { },
+  query: '',
   setQuery: (_query: string) => { },
-  setUser: (_user: User | null) => { },
+  loading: false,
   setLoading: (_loading: boolean) => { },
-  setUserLoading: (_loading: boolean) => { },
 });
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [status, setStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
-  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -51,43 +41,24 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    setUserLoading(true);
-
-    if (todo) {
-      getUser(todo.userId)
-        .then(data => setUser(data))
-        .finally(() => setUserLoading(false));
-    }
-  }, [todo]);
-
-  const valueTodoContext = {
-    todos,
-    todo,
-    status,
-    query,
-    user,
-    loading,
-    userLoading,
-  };
-
-  const valueTodoUpdateContext = useMemo(() => {
+  const valueTodoContext = useMemo(() => {
     return {
+      todos,
       setTodos,
-      setTodo,
+      selectedTodo,
+      setSelectedTodo,
+      status,
       setStatus,
+      query,
       setQuery,
-      setUser,
+      loading,
       setLoading,
-      setUserLoading,
     };
-  }, []);
+  }, [todos, selectedTodo, status, query, loading]);
 
   return (
-    <TodoUpdateContext.Provider value={valueTodoUpdateContext}>
-      <TodoContext.Provider value={valueTodoContext}>
-        {children}
-      </TodoContext.Provider>
-    </TodoUpdateContext.Provider>
+    <TodoContext.Provider value={valueTodoContext}>
+      {children}
+    </TodoContext.Provider>
   );
 };

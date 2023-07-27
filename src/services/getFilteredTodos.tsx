@@ -7,7 +7,7 @@ export const getFilteredTodos = (
   status: Status,
 ) => {
   return todos.filter(todo => {
-    const normalizedQuery = query.toLowerCase();
+    const normalizedQuery = query.toLowerCase().trim();
     const normalizedTitle = todo.title.toLowerCase();
 
     const titleMatch = normalizedTitle.includes(normalizedQuery);
