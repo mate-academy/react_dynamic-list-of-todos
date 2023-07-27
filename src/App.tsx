@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -30,7 +31,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const getPreparedTodos = useMemo(() => (
+  const getPreparedTodos = useCallback((
     currentTodos: Todo[],
   ) => {
     let sortedTodos: Todo[] = [];
@@ -57,7 +58,7 @@ export const App: React.FC = () => {
     return sortedTodos.filter(todo => todo.title.toLowerCase().includes(normalizedValue));
   }, [inputValue, sortType]);
 
-  const preparedTodos = getPreparedTodos(todos);
+  const preparedTodos = useMemo(() => getPreparedTodos(todos), [todos, inputValue, sortType]);
 
   return (
     <>
