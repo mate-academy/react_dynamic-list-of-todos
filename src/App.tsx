@@ -16,7 +16,6 @@ export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [filter, setFilter] = useState('');
   const [selectedType, setSelectedType] = useState('All');
 
@@ -48,7 +47,8 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(getVisibleTodos)
-      .catch(() => setError('Try again later'))
+      // eslint-disable-next-line no-console
+      .catch(error => console.warn(error))
       .finally(() => setLoading(false));
   }, [filter, selectedType]);
 
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && todoList && !error && (
+              {!loading && todoList && (
                 <TodoList
                   todoList={todoList}
                   setSelectedTodo={setSelectedTodo}
