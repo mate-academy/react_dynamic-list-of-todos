@@ -7,7 +7,7 @@ import { User } from '../../types/User';
 type Props = {
   todo: Todo,
   close: () => void,
-}
+};
 
 export const TodoModal: React.FC<Props> = ({
   todo,
@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     getUser(todo.userId).then(setUser);
-  }, [])
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">

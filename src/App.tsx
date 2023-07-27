@@ -21,32 +21,32 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     getTodos()
-    .then(setTodos)
-    .catch((error) => {
+      .then(setTodos)
+      .catch((error) => {
       // eslint-disable-next-line no-console
-      console.warn(error);
-    })
-    .finally(() => setLoading(false));
+        console.warn(error);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodos = useMemo(()=>{
+  const visibleTodos = useMemo(() => {
     const lowerQuery = query.toLocaleLowerCase();
 
     return todos
-    .filter(todo => {
-      switch (status) {
-        case Status.completed:
-          return todo.completed;
+      .filter(todo => {
+        switch (status) {
+          case Status.completed:
+            return todo.completed;
 
-        case Status.active:
-          return !todo.completed;
+          case Status.active:
+            return !todo.completed;
 
-        default:
-          return true;
-      }
-    })
-    .filter(todo => todo.title.toLocaleLowerCase().includes(lowerQuery));
-  }, [todos, query, status])
+          default:
+            return true;
+        }
+      })
+      .filter(todo => todo.title.toLocaleLowerCase().includes(lowerQuery));
+  }, [todos, query, status]);
 
   return (
     <>

@@ -1,11 +1,11 @@
-import { Status } from "../../types/Status";
+import { Status } from '../../types/Status';
 
 type Props = {
   status: Status,
   onStatusChange: (status: Status) => void
   query: string,
   onQueryChange: (query: string) => void
-}
+};
 
 export const TodoFilter: React.FC<Props> = ({
   query,
