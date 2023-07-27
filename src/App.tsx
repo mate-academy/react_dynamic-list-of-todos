@@ -15,28 +15,28 @@ const getFilerTodos = (
   todos: Todo[],
   qerty: string,
   filterBy: FilterBy,
-  ) => {
-    let newTodos = [...todos];
+) => {
+  let newTodos = [...todos];
 
-    if(qerty) {
-      const newQerty = qerty.toLowerCase().trim();
+  if (qerty) {
+    const newQerty = qerty.toLowerCase().trim();
 
-      newTodos = newTodos.filter(todo => todo.title.toLowerCase().includes(newQerty));
-    }
+    newTodos = newTodos.filter(todo => todo.title.toLowerCase().includes(newQerty));
+  }
 
-    switch( filterBy ) {
-      case 'active':
+  switch (filterBy) {
+    case 'active':
       return newTodos.filter(todo => !todo.completed);
 
-      case 'completed':
+    case 'completed':
       return newTodos.filter(todo => todo.completed);
 
-      default:
-        break;
-    }
-
-    return newTodos;
+    default:
+      break;
   }
+
+  return newTodos;
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -49,11 +49,11 @@ export const App: React.FC = () => {
     setLoading(true);
 
     getTodos()
-    .then(setTodos)
-    .catch(() => {
-      throw new Error('Please try latter');
-    })
-    .finally(() => setLoading(false));
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('Please try latter');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const filerTodos = getFilerTodos(todos, qerty, filerBy);
@@ -76,24 +76,24 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading
-              ? <Loader />
-              :(
-                <TodoList
-                  todos={filerTodos}
-                  selectTodo={selectTodo}
-                  whenTodoShow={setSelectTodo}
-                />
-              )}
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filerTodos}
+                    selectTodo={selectTodo}
+                    whenTodoShow={setSelectTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectTodo &&(
-      <TodoModal
-        closedTodo={setSelectTodo}
-        selectTodo={selectTodo}
-      />
+      {selectTodo && (
+        <TodoModal
+          closedTodo={setSelectTodo}
+          selectTodo={selectTodo}
+        />
       )}
     </>
   );

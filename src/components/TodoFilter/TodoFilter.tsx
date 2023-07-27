@@ -44,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          name='searchInput'
+          name="searchInput"
           value={qerty}
           onChange={handleImputChange}
         />
@@ -52,19 +52,19 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-
-       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {qerty && (
-        // eslint-disable-next-line jsx-a11y/control-has-associated-label
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-          aria-label='clear'
-          onClick={() => setQerty('')}
-        />)}
-       </span>
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {qerty && (
+          // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="clear"
+              onClick={() => setQerty('')}
+            />
+          )}
+        </span>
       </p>
     </form>
   );
-}
+};

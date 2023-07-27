@@ -16,12 +16,11 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if(selectTodo) {
+    if (selectTodo) {
       getUser(selectTodo.userId)
-      .then(setUser)
+        .then(setUser);
     }
   }, [selectTodo]);
-
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -55,10 +54,9 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-            {selectTodo.completed
-              ?<strong className="has-text-seccess">Done</strong>
-              :<strong className="has-text-danger">Planned</strong>
-            }
+              {selectTodo.completed
+                ? <strong className="has-text-seccess">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
