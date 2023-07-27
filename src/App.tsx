@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-console */
-/* eslint-disable max-len */
+/* eslint-disable import/no-cycle */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -13,9 +12,15 @@ import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 import { User } from './types/User';
 
+export const SortFieldEnum = {
+  COMPLETED: 'completed',
+  ACTIVE: 'active',
+  NONE: '',
+};
+
 type FilterArgs = {
   searchField: string;
-  sortField: 'completed' | 'active' | '';
+  sortField: (typeof SortFieldEnum)[keyof typeof SortFieldEnum];
 };
 
 function filteredTodos(todos: Todo[], { searchField, sortField }: FilterArgs) {
@@ -32,9 +37,9 @@ function filteredTodos(todos: Todo[], { searchField, sortField }: FilterArgs) {
   if (sortField) {
     visibleFilteredTodos = visibleFilteredTodos.filter((todo) => {
       switch (sortField) {
-        case 'active':
+        case SortFieldEnum.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case SortFieldEnum.COMPLETED:
           return todo.completed;
         default:
           return todo;
@@ -53,7 +58,8 @@ export const App: React.FC = () => {
   const [visibleUser, setVisibleUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [searchField, setSearchField] = useState('');
-  const [sortField, setSortField] = useState<'completed' | 'active' | ''>('');
+  const [sortField, setSortField]
+    = useState<(typeof SortFieldEnum)[keyof typeof SortFieldEnum]>('');
 
   console.log(visibleUser, isLoadingUser);
 
@@ -61,6 +67,9 @@ export const App: React.FC = () => {
     setIsLoadingUser(true);
     getUser(userId)
       .then((user) => setVisibleUser(user))
+      .catch((error) => {
+        console.warn(error);
+      })
       .finally(() => setIsLoadingUser(false));
   };
 
@@ -68,6 +77,9 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then((todo) => setTodos(todo))
+      .catch((error) => {
+        console.warn(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -83,7 +95,9 @@ export const App: React.FC = () => {
     setSearchField(str);
   };
 
-  const updateSortField = (str: 'completed' | 'active' | '') => {
+  const updateSortField = (
+    str: (typeof SortFieldEnum)[keyof typeof SortFieldEnum],
+  ) => {
     setSortField(str);
   };
 

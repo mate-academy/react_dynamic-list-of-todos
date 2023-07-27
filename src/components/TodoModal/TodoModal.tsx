@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -17,8 +16,6 @@ export const TodoModal: React.FC<Props> = ({
   user,
   isLoadingUser,
 }) => {
-  console.log(todo, user, isLoadingUser);
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -41,7 +40,14 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map((todo) => (
-          <tr data-cy="todo" className="" key={todo.id}>
+          <tr
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': isModalOpen,
+              '': !isModalOpen,
+            })}
+            key={todo.id}
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -68,11 +74,12 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleClick(todo, todo.userId)}
               >
                 <span className="icon">
-                  {!isModalOpen ? (
-                    <i className="far fa-eye" />
-                  ) : (
-                    <i className="far fa-eye-slash" />
-                  )}
+                  <i
+                    className={classNames({
+                      'far fa-eye': !isModalOpen,
+                      'far fa-eye-slash': isModalOpen,
+                    })}
+                  />
                 </span>
               </button>
             </td>

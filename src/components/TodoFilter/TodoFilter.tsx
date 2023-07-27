@@ -1,13 +1,14 @@
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
+// eslint-disable-next-line import/no-cycle
+import { SortFieldEnum } from '../../App';
 
 type Props = {
   updateSearchField: (str: string) => void;
-  updateSortField: (str: 'completed' | 'active' | '') => void;
+  updateSortField: (
+    str: (typeof SortFieldEnum)[keyof typeof SortFieldEnum]
+  ) => void;
   searchField: string;
-  sortField: 'completed' | 'active' | '';
+  sortField: (typeof SortFieldEnum)[keyof typeof SortFieldEnum];
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -23,8 +24,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             onChange={(event) =>
-              updateSortField(event.target.value as 'completed' | 'active' | '')
-            }
+              // eslint-disable-next-line implicit-arrow-linebreak
+              updateSortField(
+                event.target
+                  .value as (typeof SortFieldEnum)[keyof typeof SortFieldEnum],
+              )}
             value={sortField}
           >
             <option value="all">All</option>
@@ -50,6 +54,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {searchField && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
