@@ -1,4 +1,4 @@
-import { FilterStatus } from "../enum/enum";
+import { FilterStatus } from '../enum/enum';
 
 interface Props {
   query: string,
