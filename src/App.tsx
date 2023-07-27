@@ -12,7 +12,7 @@ import { Loader } from "./components/Loader";
 import { Todo } from "./types/Todo";
 import { Select } from "./types/Select";
 
-const filter = (todos: Todo[], query: string, selectedCategory: Select) => {
+const filterTodos = (todos: Todo[], query: string, selectedCategory: Select) => {
   let filteredTodos = [...todos];
   const normalizedQuery = query.toLowerCase();
 
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Select>(Select.All);
 
   const filteredTodos = useMemo(
-    () => filter(todos, query, selectedCategory),
+    () => filterTodos(todos, query, selectedCategory),
     [query, selectedCategory, todos],
   );
 
@@ -66,8 +66,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 selectedCategory={selectedCategory}
                 query={query}
-                setQuery={(v) => setQuery(v)}
-                setSelectedCategory={(v) => setSelectedCategory(v)}
+                setQuery={(value) => setQuery(value)}
+                setSelectedCategory={(value) => setSelectedCategory(value)}
               />
             </div>
 

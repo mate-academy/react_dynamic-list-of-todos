@@ -5,8 +5,8 @@ import { Select } from '../../types/Select';
 type Props = {
   query: string;
   selectedCategory: Select;
-  setQuery: (v: string) => void;
-  setSelectedCategory: (v: Select) => void;
+  setQuery: (value: string) => void;
+  setSelectedCategory: (value: Select) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
