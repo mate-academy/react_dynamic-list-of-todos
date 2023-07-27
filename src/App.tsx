@@ -28,6 +28,7 @@ export const App: React.FC = () => {
   }, []);
 
   const vidibleTodos = getPreperadTodos(todos, filteredBy, query);
+  const isTodoList = (!loading || (loading && selectedTodo)) && todos.length !== 0;
 
   return (
     <>
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {(!loading || (loading && selectedTodo)) && todos.length !== 0 && (
+              {isTodoList && (
                 <TodoList
                   todos={vidibleTodos}
                   onSelect={(todo) => setSelectedTodo(todo)}
