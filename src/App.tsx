@@ -13,7 +13,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-  const [modal, setModal] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
@@ -37,14 +37,14 @@ export const App: React.FC = () => {
               {
                 loading
                   ? <Loader />
-                  : <TodoList todos={filteredTodos} setModal={setModal} modal={modal} />
+                  : <TodoList todos={filteredTodos} setSelectedTodo={setSelectedTodo} selectedTodo={selectedTodo} />
               }
             </div>
           </div>
         </div>
       </div>
 
-      {modal && <TodoModal modal={modal} setModal={setModal} />}
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
     </>
   );
 };

@@ -6,19 +6,22 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 type Props = {
-  modal: Todo | null;
-  setModal: React.Dispatch<React.SetStateAction<Todo | null>>
+  selectedTodo: Todo | null;
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>
 };
 
-export const TodoModal: React.FC<Props> = ({ modal, setModal }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    getUser(modal?.userId).then(setUser)
+    getUser(selectedTodo?.userId).then(setUser)
       .finally(() => setLoading(false));
-  }, [modal]);
+  }, [selectedTodo]);
 
   return (
     <>
@@ -34,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ modal, setModal }) => {
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
                 >
-                  {`Todo #${modal?.id}`}
+                  {`Todo #${selectedTodo?.id}`}
                 </div>
 
                 {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -42,22 +45,22 @@ export const TodoModal: React.FC<Props> = ({ modal, setModal }) => {
                   type="button"
                   className="delete"
                   data-cy="modal-close"
-                  onClick={() => setModal(null)}
+                  onClick={() => setSelectedTodo(null)}
                 />
               </header>
               <div className="modal-card-body">
                 <p className="block" data-cy="modal-title">
-                  {modal?.title}
+                  {selectedTodo?.title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
                   {/* <strong className="has-text-success">Done</strong> */}
                   <strong className={classNames({
-                    'has-text-danger': !modal?.completed,
-                    'has-text-success': modal?.completed,
+                    'has-text-danger': !selectedTodo?.completed,
+                    'has-text-success': selectedTodo?.completed,
                   })}
                   >
-                    {modal?.completed
+                    {selectedTodo?.completed
                       ? 'Done'
                       : 'Planned'}
                   </strong>

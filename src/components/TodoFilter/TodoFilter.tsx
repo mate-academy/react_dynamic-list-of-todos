@@ -12,7 +12,7 @@ const enum FilteredBy {
   COMPLETED = 'completed',
 }
 
-function getFilteredByOwner(
+function getFilteredTodos(
   todos: Todo[],
   { filterBy, query }: { filterBy: FilteredBy, query: string },
 ) {
@@ -38,9 +38,12 @@ function getFilteredByOwner(
 export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
   const [filterBy, setFilterBy] = useState(FilteredBy.ALL);
   const [query, setQuery] = useState('');
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterBy(event.target.value as FilteredBy);
+  };
 
   useEffect(() => {
-    const visibleTodos = getFilteredByOwner(todos, { filterBy, query });
+    const visibleTodos = getFilteredTodos(todos, { filterBy, query });
 
     handleFilteredTodos(visibleTodos);
   }, [filterBy, todos, query]);
@@ -52,11 +55,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
           <select
             data-cy="statusSelect"
             value={filterBy}
-            onChange={
-              (event: React.ChangeEvent<HTMLSelectElement>) => setFilterBy(
-                event.target.value as FilteredBy,
-              )
-            }
+            onChange={handleFilterChange}
           >
             <option value={FilteredBy.ALL}>
               All
