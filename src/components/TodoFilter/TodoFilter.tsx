@@ -25,17 +25,17 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             <option
               value={SelectStatus.all}
             >
-              {SelectStatus.all}
+              All
             </option>
             <option
               value={SelectStatus.active}
             >
-              {SelectStatus.active}
+              Active
             </option>
             <option
               value={SelectStatus.completed}
             >
-              {SelectStatus.completed}
+              Completed
             </option>
           </select>
         </span>
