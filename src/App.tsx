@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,6 +10,31 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterOptions } from './types/FilterOptions';
+
+function prepareTodos(allTodos: Todo[], currentQuery: string, currentFilter: FilterOptions) {
+  let preparedTodos = [] as Todo[];
+
+  switch (currentFilter) {
+    case FilterOptions.All:
+    default:
+      preparedTodos = [...allTodos];
+      break;
+    case FilterOptions.Active:
+      preparedTodos = allTodos.filter(todo => !todo.completed);
+      break;
+    case FilterOptions.Completed:
+      preparedTodos = allTodos.filter(todo => todo.completed);
+      break;
+  }
+
+  if (currentQuery) {
+    preparedTodos = preparedTodos.filter(todo => (
+      todo.title.toLowerCase().includes(currentQuery.toLowerCase())
+    ));
+  }
+
+  return preparedTodos;
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
@@ -49,32 +74,7 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
-  function prepareTodos() {
-    let preparedTodos = [] as Todo[];
-
-    switch (filter) {
-      case FilterOptions.All:
-      default:
-        preparedTodos = [...todos];
-        break;
-      case FilterOptions.Active:
-        preparedTodos = todos.filter(todo => !todo.completed);
-        break;
-      case FilterOptions.Completed:
-        preparedTodos = todos.filter(todo => todo.completed);
-        break;
-    }
-
-    if (query) {
-      preparedTodos = preparedTodos.filter(todo => (
-        todo.title.toLowerCase().includes(query.toLowerCase())
-      ));
-    }
-
-    return preparedTodos;
-  }
-
-  const availabelTodos = prepareTodos();
+  const availabelTodos = useMemo(() => prepareTodos(todos, query, filter), [todos, query, filter]);
 
   return (
     <>
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
       </div>
 
       {showModal && (
-        <TodoModal activeItem={activeTodo} hideModal={handleHideModal} />
+        <TodoModal selectedTodo={activeTodo} hideModal={handleHideModal} />
       )}
     </>
   );

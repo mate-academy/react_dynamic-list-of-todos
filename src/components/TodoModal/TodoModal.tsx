@@ -5,18 +5,18 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 interface Props{
-  activeItem: Todo,
+  selectedTodo: Todo,
   hideModal: () => void
 }
 
-export const TodoModal: React.FC<Props> = ({ activeItem, hideModal }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, hideModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    if (activeItem) {
-      getUser(activeItem.userId)
+    if (selectedTodo) {
+      getUser(selectedTodo.userId)
         .then(setUser)
         .finally(() => setLoading(false));
     }
@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({ activeItem, hideModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${activeItem.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -49,11 +49,11 @@ export const TodoModal: React.FC<Props> = ({ activeItem, hideModal }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {activeItem.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {activeItem.completed
+              {selectedTodo.completed
                 ? (
                   <strong className="has-text-success">Done</strong>
                 )
