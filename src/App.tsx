@@ -28,7 +28,7 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((_error) => {
+      .catch(() => {
         setTodos([]);
       })
       .finally(() => {
