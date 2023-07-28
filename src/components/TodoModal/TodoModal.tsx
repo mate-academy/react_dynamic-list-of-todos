@@ -24,7 +24,7 @@ export const TodoModal: React.FC<Props> = ({
         setUser(data);
       })
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((_error) => {
+      .catch(() => {
         setUser(null);
       })
       .finally(() => {
