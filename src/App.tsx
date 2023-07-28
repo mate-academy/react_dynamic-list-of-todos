@@ -73,8 +73,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && todos.length > 0 && (
+               {isLoading && todos.length === 0 ? <Loader />
+                : (
                 <TodoList
                   todos={getFilteredTodos()}
                   selectTodo={selectTodo}
