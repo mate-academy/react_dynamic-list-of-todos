@@ -52,8 +52,10 @@ export const App: React.FC = () => {
       }
     });
 
-    return newTodos.filter(({ title }) => title.trim().toLowerCase()
+    newTodos = newTodos.filter(({ title }) => title.trim().toLowerCase()
       .includes(filter.trim().toLocaleLowerCase()));
+    
+    return newTodos;
   };
 
   return (
