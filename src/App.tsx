@@ -59,10 +59,9 @@ export const App: React.FC = () => {
   }, [todos, query, filter]);
 
   const selectTodo = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+
     todo: Todo,
   ) => {
-    event.preventDefault();
     setSelectedTodo(todo);
   };
 

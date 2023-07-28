@@ -6,7 +6,6 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onSelectTodo: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     todo: Todo
   ) => void;
   selectedTodo: Todo | null;
@@ -18,10 +17,9 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const handleSelectTodo = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     todo: Todo,
   ) => {
-    onSelectTodo(event, todo);
+    onSelectTodo(todo);
   };
 
   return (
@@ -71,7 +69,10 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={(event) => handleSelectTodo(event, todo)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleSelectTodo(todo);
+                }}
               >
                 <span className="icon">
                   <i
