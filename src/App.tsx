@@ -27,7 +27,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodos = useMemo(() => getPreperadTodos(todos, filteredBy, query), [todos, filteredBy]);
+  const visibleTodos = useMemo(() => getPreperadTodos(todos, filteredBy, query), [todos.length, filteredBy]);
   const isTodoList = (!loading || (loading && selectedTodo)) && todos.length !== 0;
 
   return (
