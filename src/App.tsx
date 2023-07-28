@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const vidibleTodos = getPreperadTodos(todos, filteredBy, query);
+  const visibleTodos = useMemo(() => getPreperadTodos(todos, filteredBy, query), [todos]);
   const isTodoList = (!loading || (loading && selectedTodo)) && todos.length !== 0;
 
   return (
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
 
               {isTodoList && (
                 <TodoList
-                  todos={vidibleTodos}
+                  todos={visibleTodos}
                   onSelect={(todo) => setSelectedTodo(todo)}
                   selectedTodo={selectedTodo}
                 />
@@ -65,7 +65,6 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          loading={loading}
           onLoading={setLoading}
           selectedTodo={selectedTodo}
           onSelectedTodo={setSelectedTodo}

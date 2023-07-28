@@ -5,14 +5,12 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  loading: boolean,
   onLoading: (value: boolean) => void,
   selectedTodo: Todo | null,
   onSelectedTodo: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  loading,
   onLoading,
   selectedTodo,
   onSelectedTodo,
@@ -28,13 +26,11 @@ export const TodoModal: React.FC<Props> = ({
       .finally(() => onLoading(false));
   }, [selectedTodo]);
 
-  const isLoading = loading && (!selectedTodo || !user);
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
