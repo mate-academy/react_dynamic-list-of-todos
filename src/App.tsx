@@ -22,12 +22,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
+    setQuery('');
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodos = useMemo(() => getPreperadTodos(todos, filteredBy, query), [todos.length, filteredBy]);
+  const visibleTodos = useMemo(() => getPreperadTodos(todos, filteredBy, query), [todos, filteredBy, query]);
   const isTodoList = (!loading || (loading && selectedTodo)) && todos.length !== 0;
 
   return (
