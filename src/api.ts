@@ -22,6 +22,12 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = () => get<Todo[]>('/todos')
+  .catch(() => {
+    throw new Error('Error');
+  });
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number) => get<User>(`/users/${userId}`)
+  .catch(() => {
+    throw new Error('Error');
+  });
