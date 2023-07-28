@@ -1,18 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-
-const enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Todo } from '../types/Todo';
+import { Filter } from '../types/Filter';
 
 type Props = {
-  todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  filter: Filter,
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>,
+  query: string,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
 };
 
-function getFilteredTodos(
+export function getFilteredTodos(
   todos: Todo[],
   filter: Filter,
   query: string,
@@ -43,14 +39,12 @@ function getFilteredTodos(
   return filteredTodos;
 }
 
-export const TodoFilter: React.FC<Props> = ({ todos, setTodos }) => {
-  const [filter, setFilter] = useState(Filter.All);
-  const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    setTodos(getFilteredTodos(todos, filter, query));
-  }, [filter, todos, query]);
-
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  setFilter,
+  query,
+  setQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -60,21 +54,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, setTodos }) => {
             value={filter}
             onChange={(event) => setFilter(event.target.value as Filter)}
           >
-            <option
-              value={Filter.All}
-            >
-              All
-            </option>
-            <option
-              value={Filter.Active}
-            >
-              Active
-            </option>
-            <option
-              value={Filter.Completed}
-            >
-              Completed
-            </option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.Active}>Active</option>
+            <option value={Filter.Completed}>Completed</option>
           </select>
         </span>
       </p>

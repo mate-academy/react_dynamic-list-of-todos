@@ -1,19 +1,21 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TodoFilter, getFilteredTodos } from './utils/TodoFilter';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-  const [modalView, setModalView] = useState(0);
+  const [filter, setFilter] = useState(Filter.All);
+  const [query, setQuery] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,6 +23,10 @@ export const App: React.FC = () => {
       .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
+
+  const filteredTodos: Todo[] = useMemo(() => {
+    return getFilteredTodos(todos, filter, query);
+  }, [todos, filter, query]);
 
   return (
     <>
@@ -31,8 +37,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setTodos={setFilteredTodos}
+                filter={filter}
+                setFilter={setFilter}
+                query={query}
+                setQuery={setQuery}
               />
             </div>
 
@@ -41,8 +49,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    modalView={modalView}
-                    setModalView={setModalView}
+                    modalView={selectedTodo}
+                    setModalView={setSelectedTodo}
                   />
                 )}
             </div>
@@ -50,12 +58,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalView
+      {selectedTodo
         ? (
           <TodoModal
             filteredTodos={filteredTodos}
-            modalView={modalView}
-            setModalView={setModalView}
+            modalView={selectedTodo}
+            setModalView={setSelectedTodo}
           />
         )
         : null}
