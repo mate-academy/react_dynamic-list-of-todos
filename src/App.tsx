@@ -32,27 +32,29 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const getFilteredTodos = () => {
-    let newTodos = [...todos];
+  const getFilteredTodos = useMemo(() => {
+    return () => {
+      let newTodos = [...todos];
 
-    newTodos = newTodos.filter((todo) => {
-      switch (filterSelect) {
-        case FilterSelect.Active:
-          return !todo.completed;
+      newTodos = newTodos.filter((todo) => {
+        switch (filterSelect) {
+          case FilterSelect.Active:
+            return !todo.completed;
 
-        case FilterSelect.Completed:
-          return todo.completed;
+          case FilterSelect.Completed:
+            return todo.completed;
 
-        default:
-          return true;
-      }
-    });
+          default:
+            return true;
+        }
+      });
 
-    newTodos = newTodos.filter(({ title }) => title.trim().toLowerCase()
-      .includes(filter.trim().toLocaleLowerCase()));
-    
-    return newTodos;
-  };
+      newTodos = newTodos.filter(({ title }) => title.trim().toLowerCase()
+        .includes(filter.trim().toLowerCase()));
+
+      return newTodos;
+    };
+  }, [todos, filterSelect]);
 
   return (
     <>
