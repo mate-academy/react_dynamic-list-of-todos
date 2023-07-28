@@ -64,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
               {' by '}
 
               <a href={`mailto:${user.email}`}>
-                {selectedTodo.title}
+                {user.name}
               </a>
             </p>
           </div>
