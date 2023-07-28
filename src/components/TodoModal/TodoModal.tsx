@@ -72,13 +72,13 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by ' }
 
-              {!isLoading && user !== null && (
+              {user !== null && (
                 <a href={`mailto:${user?.email}`}>
                   {user?.name}
                 </a>
               )}
 
-              {!isLoading && user === null && (
+              {user === null && (
                 <p>User not found</p>
               )}
             </p>
