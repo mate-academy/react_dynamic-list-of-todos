@@ -56,6 +56,8 @@ export const App: React.FC = () => {
     };
   }, [todos, filterSelect]);
 
+  const filteredTodos = getFilteredTodos();
+
   return (
     <>
       <div className="section">
@@ -76,7 +78,7 @@ export const App: React.FC = () => {
                {isLoading && todos.length === 0 ? <Loader />
                 : (
                 <TodoList
-                  todos={getFilteredTodos()}
+                  todos={filteredTodos}
                   selectTodo={selectTodo}
                   setSelectTodo={(todo) => setSelectTodo(todo)}
                 />
