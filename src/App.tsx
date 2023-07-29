@@ -13,7 +13,7 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleModal, setVisibleModal] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState<Status>(Status.All);
+  const [filter, setFilter] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
 
   const visibleTodos = useMemo(() => {
