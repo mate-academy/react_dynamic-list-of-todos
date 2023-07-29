@@ -1,9 +1,10 @@
+import { FilterType } from '../types/FilterTypes';
 import { Todo } from '../types/Todo';
 
 export const preparedTodos = (
   todos: Todo[],
   query: string,
-  filterType: string,
+  filterType: FilterType,
 ) => {
   let copyTodos = [...todos];
 
@@ -17,15 +18,15 @@ export const preparedTodos = (
 
   if (filterType) {
     switch (filterType) {
-      case 'active':
+      case FilterType.Active:
         copyTodos = copyTodos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
+      case FilterType.Completed:
         copyTodos = copyTodos.filter(todo => todo.completed);
         break;
 
-      case 'all':
+      case FilterType.All:
       default:
         return copyTodos;
     }
