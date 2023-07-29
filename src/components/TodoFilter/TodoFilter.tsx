@@ -2,9 +2,9 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   query: string,
-  setQuery: (value: string) => void,
+  setQuery: (query: string) => void,
   filter: Filter,
-  setFilter: (value: Filter) => void,
+  setFilter: (filter: Filter) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -50,11 +50,48 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodos = getVisibleTodos(todos, query, filter);
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, query, filter)
+  ), [todos, query, filter]);
 
   return (
     <>
-      {errorMessage ? (
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
+
+            <div className="block">
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                filter={filter}
+                setFilter={setFilter}
+              />
+            </div>
+
+            <div className="block">
+              {loading && !errorMessage ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={todo => setSelectedTodo(todo)}
+                  selectedTodo={selectedTodo}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
+      {errorMessage && (
         <div className="section">
           <div className="container">
             <div className="box message is-danger">
@@ -64,44 +101,6 @@ export const App: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="section">
-            <div className="container">
-              <div className="box">
-                <h1 className="title">Todos:</h1>
-
-                <div className="block">
-                  <TodoFilter
-                    query={query}
-                    setQuery={setQuery}
-                    filter={filter}
-                    setFilter={setFilter}
-                  />
-                </div>
-
-                <div className="block">
-                  {loading && !errorMessage ? (
-                    <Loader />
-                  ) : (
-                    <TodoList
-                      todos={visibleTodos}
-                      setSelectedTodo={todo => setSelectedTodo(todo)}
-                      selectedTodo={selectedTodo}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          { selectedTodo && (
-            <TodoModal
-              selectedTodo={selectedTodo}
-              setSelectedTodo={setSelectedTodo}
-            />
-          )}
-        </>
       )}
     </>
   );
