@@ -1,17 +1,19 @@
 import React from 'react';
+import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  setChoiceTodo: (newChoiceTodo:boolean)=>void
-
+  todoUser: Todo | null;
+  search:(userId: number, id: number) => void
 };
 
 export const TodoList: React.FC<Props> = (
   {
     todos,
-    setChoiceTodo,
+    todoUser,
+    search,
   },
 ) => (
   <table className="table is-narrow is-fullwidth">
@@ -31,7 +33,15 @@ export const TodoList: React.FC<Props> = (
     <tbody>
 
       {todos.map((todo) => (
-        <tr data-cy="todo" className="">
+        <tr
+          data-cy="todo"
+          className={todoUser !== null
+            ? cn({
+              'has-background-info-light':
+               todoUser.id === todo.id,
+            }) : ''}
+          key={todo.id}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
@@ -54,11 +64,23 @@ export const TodoList: React.FC<Props> = (
               className="button"
               type="button"
               onClick={() => {
-                setChoiceTodo(true);
+                search(todo.userId, todo.id);
               }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={
+                  todoUser !== null
+                    ? cn({
+                      'far fa-eye-slash':
+                       todoUser.id === todo.id,
+                      'far fa-eye':
+                       todoUser.id !== todo.id,
+
+                    })
+                    : 'far fa-eye'
+                }
+                />
+
               </span>
             </button>
           </td>
