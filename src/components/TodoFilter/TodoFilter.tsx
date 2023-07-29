@@ -1,73 +1,27 @@
-import React, { useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
-  todos: Todo[],
-  setVisibleTodos: (todos: Todo[]) => void;
+  filter: Status,
+  setFilter: (filter: Status) => void,
+  query: string,
+  setQuery: (query: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = React.memo(({
-  todos, setVisibleTodos,
+export const TodoFilter: React.FC<Props> = ({
+  filter, setFilter, query, setQuery,
 }) => {
-  const [filter, setFilter] = useState('all');
-  const [value, setValue] = useState('');
-
-  const filterTodos = (fil: string, query: string) => {
-    const currentTodos = query === '' ? todos : todos.filter(todo => (
-      todo.title.toLowerCase().includes(query.toLowerCase())
-    ));
-
-    switch (fil) {
-      case 'all':
-        setVisibleTodos(currentTodos);
-
-        return;
-
-      case 'active':
-        setVisibleTodos(currentTodos.filter(todo => todo.completed === false));
-
-        return;
-
-      case 'completed':
-        setVisibleTodos(currentTodos.filter(todo => todo.completed === true));
-
-        return;
-
-      default:
-        setVisibleTodos(currentTodos);
-    }
-  };
-
-  const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilter = event.target.value;
-
-    setFilter(newFilter);
-    filterTodos(newFilter, value);
-  };
-
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-
-    setValue(newValue);
-    filterTodos(filter, newValue);
-  };
-
-  const deleteValue = () => {
-    setValue('');
-    filterTodos(filter, '');
-  };
-
   return (
     <form
       className="field has-addons"
-      onSubmit={e => e.preventDefault()}
+      onSubmit={event => event.preventDefault()}
     >
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={handleChangeFilter}
+            onChange={event => setFilter(event.target.value as Status)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -82,25 +36,25 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           type="text"
           className="input"
           placeholder="Search..."
-          value={value}
-          onChange={handleChangeInput}
+          value={query}
+          onChange={event => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {value && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={deleteValue}
+              onClick={() => setQuery('')}
             />
           </span>
         )}
       </p>
     </form>
   );
-});
+};
