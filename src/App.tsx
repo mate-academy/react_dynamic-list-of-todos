@@ -22,13 +22,13 @@ export const App: React.FC = () => {
     ));
 
     switch (filter) {
-      case Status.All:
+      case Status.ALL:
         return currentTodos;
 
-      case Status.Active:
+      case Status.ACTIVE:
         return currentTodos.filter(todo => !todo.completed);
 
-      case Status.Completed:
+      case Status.COMPLETED:
         return currentTodos.filter(todo => todo.completed);
 
       default:
