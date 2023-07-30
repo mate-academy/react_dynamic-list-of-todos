@@ -4,15 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  modalView: number,
-  setModalView: React.Dispatch<React.SetStateAction<number>>,
+  selectedTodoId: number,
+  setSelectedTodoId: React.Dispatch<React.SetStateAction<number>>,
 };
 
 export const TodoList: React.FC<Props> = React.memo(
   ({
     todos,
-    modalView,
-    setModalView,
+    selectedTodoId,
+    setSelectedTodoId,
   }) => {
     if (todos.length === 0) {
       return null;
@@ -62,12 +62,12 @@ export const TodoList: React.FC<Props> = React.memo(
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setModalView(todo.id)}
+                  onClick={() => setSelectedTodoId(todo.id)}
                 >
                   <span className="icon">
                     <i className={classNames({
-                      'far fa-eye': modalView !== todo.id,
-                      'far fa-eye-slash': modalView === todo.id,
+                      'far fa-eye': selectedTodoId !== todo.id,
+                      'far fa-eye-slash': selectedTodoId === todo.id,
                     })}
                     />
                   </span>

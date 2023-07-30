@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.All);
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,8 +49,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    modalView={selectedTodo}
-                    setModalView={setSelectedTodo}
+                    selectedTodoId={selectedTodoId}
+                    setSelectedTodoId={setSelectedTodoId}
                   />
                 )}
             </div>
@@ -58,12 +58,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
+      {selectedTodoId
         ? (
           <TodoModal
             filteredTodos={filteredTodos}
-            modalView={selectedTodo}
-            setModalView={setSelectedTodo}
+            selectedTodoId={selectedTodoId}
+            setSelectedTodoId={setSelectedTodoId}
           />
         )
         : null}

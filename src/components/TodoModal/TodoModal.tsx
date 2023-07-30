@@ -7,8 +7,8 @@ import { getUser } from '../../api';
 
 type Props = {
   filteredTodos: Todo[],
-  modalView: number,
-  setModalView: React.Dispatch<React.SetStateAction<number>>,
+  selectedTodoId: number,
+  setSelectedTodoId: React.Dispatch<React.SetStateAction<number>>,
 };
 
 function findTodoByID(todos: Todo[], id: number) {
@@ -18,12 +18,12 @@ function findTodoByID(todos: Todo[], id: number) {
 
 export const TodoModal: React.FC<Props> = ({
   filteredTodos,
-  modalView,
-  setModalView,
+  selectedTodoId,
+  setSelectedTodoId,
 }) => {
   const [user, setUsers] = useState<User>();
   const [loading, setLoading] = useState(true);
-  const todo = findTodoByID(filteredTodos, modalView);
+  const todo = findTodoByID(filteredTodos, selectedTodoId);
 
   useEffect(() => {
     if (todo) {
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
         .then(setUsers)
         .finally(() => setLoading(false));
     }
-  }, [modalView]);
+  }, [selectedTodoId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setModalView(0)}
+                onClick={() => setSelectedTodoId(0)}
               />
             </header>
 
