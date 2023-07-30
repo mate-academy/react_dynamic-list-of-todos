@@ -24,7 +24,7 @@ export const getTodos = () => {
     .then(todos => todos);
 };
 
-export const getUser = (userId: number) => {
+export const getUser = (userId: number | undefined) => {
   return getData<User>(`/users/${userId}`)
     .then(users => users);
 };

@@ -1,40 +1,36 @@
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo | null,
   setSelectedTodo: (todo: Todo | null) => void,
-  isActive: boolean,
-  setIsActive: (value: boolean) => void,
-  selectedUser: User | null,
-  setSelectedUser: (user: User | null) => void,
 };
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
-  isActive,
-  setIsActive,
-  selectedUser,
-  setSelectedUser,
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getUser(selectedTodo?.userId).then(setUser);
+  }, [selectedTodo]);
   function handleModalCloser() {
-    setIsActive(false);
     setSelectedTodo(null);
-    setSelectedUser(null);
   }
 
   return (
     <div
-      className={classNames('modal', {
-        'is-active': isActive,
+      className={classNames('modal is-active', {
       })}
       data-cy="modal"
     >
       <div className="modal-background" />
 
-      {!selectedUser ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -76,8 +72,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>
-                {selectedUser?.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

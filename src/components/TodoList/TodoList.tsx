@@ -6,20 +6,15 @@ type Props = {
   todos: Todo[],
   selectedTodo: Todo | null,
   setSelectedTodo: (todo: Todo) => void,
-  isActive: boolean,
-  setIsActive: (value: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
   setSelectedTodo,
-  isActive,
-  setIsActive,
 }) => {
   const handleSelectedTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsActive(true);
   };
 
   return (
@@ -42,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             className={classNames({
               'has-background-info-light':
-               selectedTodo?.id === todo.id && isActive,
+               selectedTodo?.id === todo.id,
             })}
             key={todo.id}
           >
