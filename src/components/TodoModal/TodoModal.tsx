@@ -13,16 +13,22 @@ export const TodoModal: React.FC<Props> = ({
   visibleModal, setVisibleModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUser(visibleModal.userId).then(setUser);
-  }, []);
+    getUser(visibleModal.userId)
+      .then(setUser)
+      .catch(error => {
+        throw new Error(error.message);
+      })
+      .finally(() => setLoading(false));
+  }, [visibleModal.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {loading && !user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -57,8 +63,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

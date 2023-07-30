@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [visibleModal, setVisibleModal] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const visibleTodos = useMemo(() => {
     const currentTodos = query === '' ? todos : todos.filter(todo => (
@@ -37,7 +38,12 @@ export const App: React.FC = () => {
   }, [filter, query, todos]);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos)
+      .catch(error => {
+        throw new Error(error.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -57,7 +63,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {loading ? (
                 <Loader />
               ) : (
                 <TodoList
