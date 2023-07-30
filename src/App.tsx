@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -42,7 +42,10 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
 
-  const preparedTodos = getPreparedTodos(todos, query, filterType);
+  const preparedTodos = useMemo(
+    () => getPreparedTodos(todos, query, filterType),
+    [todos, query, filterType],
+  );
 
   useEffect(() => {
     getTodos().then((data) => {
