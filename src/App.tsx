@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -47,7 +47,9 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [status, setStatus] = useState<Status>(Status.all);
 
-  const visibleTodos = getFilteredTodos(todos, query, status);
+  const visibleTodos = useMemo(
+    () => getFilteredTodos(todos, query, status), [todos, query, status],
+  );
 
   useEffect(() => {
     setLoading(true);
