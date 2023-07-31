@@ -10,7 +10,7 @@ import { Loader } from './components/Loader';
 import { TodoContext } from './TodoContext';
 
 export const App: React.FC = () => {
-  const { loading, modalWindow } = useContext(TodoContext);
+  const { isLoading, modalWindow } = useContext(TodoContext);
 
   return (
     <>
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader /> : <TodoList />}
+              {isLoading ? <Loader /> : <TodoList />}
             </div>
           </div>
         </div>

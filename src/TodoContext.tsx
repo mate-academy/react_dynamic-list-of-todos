@@ -4,10 +4,10 @@ import { getTodos, getUser } from './api';
 
 interface ContextValues {
   todos: Todo[],
-  loading: boolean,
+  isLoading: boolean,
   modalWindow: boolean,
   selectedTodo: Todo | null,
-  modalLoading: boolean,
+  isModalLoading: boolean,
   query: string,
   filterOption: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
@@ -29,8 +29,8 @@ export const TodoContext = React.createContext({} as ContextValues);
 
 export const TodoProvider: React.FC = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const [modalWindow, setModalWindow] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -38,23 +38,23 @@ export const TodoProvider: React.FC = ({ children }) => {
   = useState<StateOption>(StateOption.all);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(response => {
         setTodos(response);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleSelectedTodo = (todo: Todo) => {
     setModalWindow(true);
-    setModalLoading(true);
+    setIsModalLoading(true);
     getUser(todo.userId)
       .then(response => setSelectedTodo({
         ...todo,
         user: response,
       }))
-      .finally(() => setModalLoading(false));
+      .finally(() => setIsModalLoading(false));
   };
 
   const closeModal = () => {
@@ -66,7 +66,7 @@ export const TodoProvider: React.FC = ({ children }) => {
     array: Todo[], filterQuery: string, selectedFilterOption: string,
   ) => {
     let filteredArray = [...array];
-    const normalizedQuery = filterQuery.toLowerCase();
+    const normalizedQuery = filterQuery.toLowerCase().trim();
 
     if (normalizedQuery) {
       filteredArray = filteredArray.filter(todo => todo.title
@@ -91,10 +91,10 @@ export const TodoProvider: React.FC = ({ children }) => {
 
   const contextValues = useMemo(() => ({
     todos,
-    loading,
+    isLoading,
     modalWindow,
     selectedTodo,
-    modalLoading,
+    isModalLoading,
     handleSelectedTodo,
     closeModal,
     filterTodos,
@@ -104,9 +104,9 @@ export const TodoProvider: React.FC = ({ children }) => {
     setFilterOption,
   }), [
     todos,
-    loading,
+    isLoading,
     selectedTodo,
-    modalLoading,
+    isModalLoading,
     modalWindow,
     query,
     filterOption,
