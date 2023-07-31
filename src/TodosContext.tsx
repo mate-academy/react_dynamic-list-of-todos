@@ -25,9 +25,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       });
   }, []);
 
-  const visibleTodos = getVisibleTodos(allTodos, { query, status });
+  const visibleTodos = useMemo(() => {
+    return getVisibleTodos(allTodos, { query, status });
+  }, [allTodos, query, status]);
 
-  const value: Context = useMemo(() => ({
+  const value: Context = {
     areTodosLoading,
     visibleTodos,
     query,
@@ -36,7 +38,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setStatus,
     todoOnView,
     setTodoOnView,
-  }), [areTodosLoading, allTodos, todoOnView, status, query]);
+  };
 
   return (
     <TodosContext.Provider value={value}>
