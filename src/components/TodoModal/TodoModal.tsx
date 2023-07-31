@@ -1,7 +1,7 @@
-import React from "react";
-import { Loader } from "../Loader";
-import { Todo } from "../../types/Todo";
-import { User } from "../../types/User";
+import React from 'react';
+import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
   todo: Todo | null;
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({
                 <strong className="has-text-danger">Planned</strong>
               )}
 
-              {" by "}
+              {' by '}
 
               <a href="mailto:Sincere@april.biz">{user?.name}</a>
             </p>
