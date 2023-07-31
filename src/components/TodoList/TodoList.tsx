@@ -5,12 +5,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  todosId: number | null;
+  todoId: number | null;
   onSelectedTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
-  const { todos, todosId, onSelectedTodo } = props;
+  const { todos, todoId, onSelectedTodo } = props;
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -59,8 +59,8 @@ export const TodoList: React.FC<Props> = (props) => {
               >
                 <span className="icon">
                   <i className={classNames('far', {
-                    'fa-eye': todo.id !== todosId,
-                    'fa-eye-slash': todo.id === todosId,
+                    'fa-eye': todo.id !== todoId,
+                    'fa-eye-slash': todo.id === todoId,
                   })}
                   />
                 </span>

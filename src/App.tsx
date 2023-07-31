@@ -20,14 +20,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [todoStatus, setTodoStatus] = useState<SelectStatus>(SelectStatus.All);
-  const [selectedTodos, setSelectedTodos] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(data => setTodos(data))
-      .catch(err => {
-        throw new Error(err);
-      });
+      .then(data => setTodos(data));
   }, []);
 
   const filtredTodos = useMemo(() => {
@@ -35,7 +32,7 @@ export const App: React.FC = () => {
   }, [todos, todoStatus, query]);
 
   const modalClose = useCallback(() => {
-    setSelectedTodos(null);
+    setSelectedTodo(null);
   }, []);
 
   return (
@@ -58,8 +55,8 @@ export const App: React.FC = () => {
               {todos.length !== 0 ? (
                 <TodoList
                   todos={filtredTodos}
-                  onSelectedTodo={setSelectedTodos}
-                  todosId={selectedTodos?.id || null}
+                  onSelectedTodo={setSelectedTodo}
+                  todoId={selectedTodo?.id || null}
                 />
               ) : (
                 <Loader />
@@ -69,9 +66,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodos && (
+      {selectedTodo && (
         <TodoModal
-          todo={selectedTodos}
+          todo={selectedTodo}
           modalClose={modalClose}
         />
       )}
