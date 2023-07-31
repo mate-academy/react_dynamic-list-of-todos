@@ -40,9 +40,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(error => {
-        throw new Error(error.message);
-      })
+      .catch(error => new Error(error.message))
       .finally(() => setLoading(false));
   }, []);
 

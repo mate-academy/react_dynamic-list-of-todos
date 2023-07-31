@@ -18,9 +18,7 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     getUser(visibleModal.userId)
       .then(setUser)
-      .catch(error => {
-        throw new Error(error.message);
-      })
+      .catch(error => new Error(error.message))
       .finally(() => setLoading(false));
   }, [visibleModal.userId]);
 
