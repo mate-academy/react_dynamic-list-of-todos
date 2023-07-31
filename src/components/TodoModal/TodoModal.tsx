@@ -12,10 +12,18 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
 
   useEffect(() => {
-    getUser(todo.userId)
+    getUser(userId)
       .then(setUser)
+      .catch(() => setErrorMessage('Error server connect. Try again later'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -32,39 +40,44 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {errorMessage || `Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="Close modal window"
               onClick={() => onCloseModal(null)}
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {todo.title}
-            </p>
+          {!errorMessage && (
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {title}
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              {todo.completed && (
-                <strong className="has-text-success">Done</strong>
-              )}
+              <p className="block" data-cy="modal-user">
+                {completed && (
+                  <strong className="has-text-success">Done</strong>
+                )}
 
-              {!todo.completed && (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+                {!completed && (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-              {' by '}
+                {' by '}
 
-              <a href={user?.email}>
-                {user?.name}
-              </a>
-            </p>
-          </div>
+                {user && (
+                  <a href={user.email}>
+                    {user.name}
+                  </a>
+                )}
+              </p>
+            </div>
+          )}
+
         </div>
       )}
     </div>

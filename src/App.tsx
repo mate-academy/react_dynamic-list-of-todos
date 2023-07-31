@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,6 +8,7 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilterMethods } from './types/FilterMethods';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,34 +16,37 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterMethod, setFilterMethod] = useState('');
   const [query, setQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setLoading(true);
 
     getTodos()
       .then(setTodos)
+      .catch(() => setErrorMessage('Error server connect. Try again later'))
       .finally(() => setLoading(false));
   }, []);
 
   function getFilteredTodos() {
-    const filteredTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    const filteredTodos = todos.filter(
+      todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
 
     switch (filterMethod) {
-      case 'active':
+      case FilterMethods.ACTIVE:
         return filteredTodos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case FilterMethods.COMPLETED:
         return filteredTodos.filter(todo => todo.completed);
 
-      case 'all':
-        return filteredTodos;
-
+      case FilterMethods.ALL:
       default:
         return filteredTodos;
     }
   }
 
-  const amountOfTodos = getFilteredTodos().length;
+  const filteredTodos = getFilteredTodos();
+  const amountOfTodos = filteredTodos.length;
 
   return (
     <>
@@ -51,7 +54,7 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">
-              {`Total Todos: ${amountOfTodos}`}
+              {errorMessage || `Total Todos: ${amountOfTodos}`}
             </h1>
 
             <div className="block">
@@ -67,15 +70,15 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {amountOfTodos > 0 && (
+              {!!amountOfTodos && (
                 <TodoList
-                  todos={getFilteredTodos()}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   onSelectTodo={setSelectedTodo}
                 />
               )}
 
-              {!loading && amountOfTodos === 0 && (
+              {!loading && !amountOfTodos && !errorMessage && (
                 <p>No Todos matching your request</p>
               )}
             </div>
