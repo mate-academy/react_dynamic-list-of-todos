@@ -1,21 +1,21 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import React, { useEffect, useState } from "react";
+import "bulma/css/bulma.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { Loader } from './components/Loader';
-import { TodoModal } from './components/TodoModal';
-import { User } from './types/User';
+import { TodoList } from "./components/TodoList";
+import { TodoFilter } from "./components/TodoFilter";
+import { Todo } from "./types/Todo";
+import { getTodos, getUser } from "./api";
+import { Loader } from "./components/Loader";
+import { TodoModal } from "./components/TodoModal";
+import { User } from "./types/User";
 
 export const SortFieldEnum = {
-  COMPLETED: 'completed',
-  ACTIVE: 'active',
-  NONE: '',
+  COMPLETED: "completed",
+  ACTIVE: "active",
+  NONE: "",
 };
 
 type FilterArgs = {
@@ -57,11 +57,9 @@ export const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleUser, setVisibleUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
-  const [searchField, setSearchField] = useState('');
-  const [sortField, setSortField]
-    = useState<(typeof SortFieldEnum)[keyof typeof SortFieldEnum]>('');
-
-  console.log(visibleUser, isLoadingUser);
+  const [searchField, setSearchField] = useState("");
+  const [sortField, setSortField] =
+    useState<(typeof SortFieldEnum)[keyof typeof SortFieldEnum]>("");
 
   const getUserById = (userId: number) => {
     setIsLoadingUser(true);
@@ -96,7 +94,7 @@ export const App: React.FC = () => {
   };
 
   const updateSortField = (
-    str: (typeof SortFieldEnum)[keyof typeof SortFieldEnum],
+    str: (typeof SortFieldEnum)[keyof typeof SortFieldEnum]
   ) => {
     setSortField(str);
   };
