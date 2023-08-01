@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.id as number)
+    getUser(selectedTodo.userId as number)
       .then(setUserInfo)
       .catch((error) => {
         throw new Error(error.code);
@@ -67,7 +67,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${userInfo?.email}`}>
                 {userInfo?.name}
               </a>
             </p>
