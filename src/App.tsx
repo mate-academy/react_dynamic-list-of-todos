@@ -1,14 +1,55 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './app.scss';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { FilterBy } from './Enums/FilterBy';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosLoading, setTodosLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [selectOption, setSelectOption] = useState('all');
+  const [filterValue, setFilterValue] = useState('');
+
+  useEffect(() => {
+    setTodosLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .catch((error) => {
+        throw new Error(error.code);
+      })
+      .finally(() => setTodosLoading(false));
+  }, []);
+
+  const handleFilteringGoods = useMemo(() => {
+    let selectedTodos: Todo[] = [...todos];
+
+    if (filterValue.trim()) {
+      selectedTodos = selectedTodos
+        .filter(todo => todo.title.toLowerCase().includes(filterValue.toLowerCase()));
+    }
+
+    switch (selectOption) {
+      case FilterBy.ACTIVE:
+        return selectedTodos.filter(todo => !todo.completed);
+      case FilterBy.COMPLETED:
+        return selectedTodos.filter(todo => todo.completed);
+      default:
+        return selectedTodos;
+    }
+  }, [selectOption, filterValue, todos]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +58,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                selectOption={selectOption}
+                setSelectOption={setSelectOption}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todosLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                    handleFilteringGoods={handleFilteringGoods}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedTodo !== null && (
+        <TodoModal
+          setSelectedTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+        />
+      )}
     </>
   );
 };
