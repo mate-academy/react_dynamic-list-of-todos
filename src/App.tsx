@@ -59,13 +59,13 @@ export const App: React.FC = () => {
     setQuery(value);
   }, []);
 
-  const handleFilterChange = (value: Filter) => {
+  const handleFilterChange = useCallback((value: Filter) => {
     setFilterBy(value);
-  };
+  }, []);
 
-  const handleSelectTodo = (todo: Todo | null) => {
+  const handleSelectTodo = useCallback((todo: Todo | null) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
   useEffect(() => {
     getTodos()
