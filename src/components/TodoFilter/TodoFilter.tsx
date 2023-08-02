@@ -45,8 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
             className="icon is-right"
             style={{ pointerEvents: 'all' }}
           >
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
+            <input
               onClick={() => setFilterValue('')}
               data-cy="clearSearchButton"
               type="button"

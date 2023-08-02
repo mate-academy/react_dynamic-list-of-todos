@@ -1,16 +1,15 @@
-/* eslint-disable no-lone-blocks */
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   selectedTodo: Todo | null,
   setSelectedTodo: (todo: Todo) => void
-  handleFilteringGoods: Todo[],
+  filteredTodos: Todo[],
 };
 
 export const TodoList: React.FC<Props> = ({
   selectedTodo,
-  handleFilteringGoods,
+  filteredTodos,
   setSelectedTodo,
 }) => {
   return (
@@ -29,7 +28,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {handleFilteringGoods.map(todo => (
+        {filteredTodos.map(todo => (
           <tr
             data-cy="todo"
             key={todo.id}
@@ -61,7 +60,7 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => setSelectedTodo(todo)}
               >
                 <span className="icon">
-                  <i className={selectedTodo !== null
+                  <i className={selectedTodo
                     ? 'far fa-eye-slash'
                     : 'far fa-eye'}
                   />

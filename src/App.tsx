@@ -32,7 +32,7 @@ export const App: React.FC = () => {
       .finally(() => setTodosLoading(false));
   }, []);
 
-  const handleFilteringGoods = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     let selectedTodos: Todo[] = [...todos];
 
     if (filterValue.trim()) {
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
                   <TodoList
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
-                    handleFilteringGoods={handleFilteringGoods}
+                    filteredTodos={filteredTodos}
                   />
                 )}
             </div>
