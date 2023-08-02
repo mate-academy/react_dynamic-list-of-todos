@@ -13,14 +13,12 @@ import { FilterType } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState(FilterType.All);
 
   useEffect(() => {
-    setLoading(true);
-
     getTodos()
       .then(setTodos)
       .catch((error) => {
