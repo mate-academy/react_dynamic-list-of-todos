@@ -1,12 +1,31 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { useDataAfterDelay } from '../../utils/loading';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  pickTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
+}
+
+export const TodoModal: React.FC<Props> = ({ todo, pickTodo }) => {
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
+
+  const {
+    data: user,
+    loading: userLoading,
+  } = useDataAfterDelay(() => getUser(userId));
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {true ? (
+      {userLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +34,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,23 +42,25 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => pickTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              <a href="mailto:Sincere@april.biz">{user?.name}</a>
             </p>
           </div>
         </div>
