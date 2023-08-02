@@ -1,53 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Todo } from '../../types/Todo';
+import { FilteredBy } from '../../types/FilterBy';
 
 type Props = {
-  todos: Todo[];
-  handleFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  handleFilteredTodos: React.Dispatch<React.SetStateAction<FilteredBy>>;
+  filterBy: string;
+  onInput: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
 };
 
-const enum FilteredBy {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
-
-function getFilteredTodos(
-  todos: Todo[],
-  { filterBy, query }: { filterBy: FilteredBy, query: string },
-) {
-  let preparedTodos = [...todos];
-
-  if (filterBy === 'active') {
-    preparedTodos = todos.filter(todo => !todo.completed);
-  }
-
-  if (filterBy === 'completed') {
-    preparedTodos = todos.filter(todo => todo.completed);
-  }
-
-  if (query) {
-    return preparedTodos.filter(todo => todo.title
-      .toLowerCase()
-      .includes(query.toLowerCase()));
-  }
-
-  return preparedTodos;
-}
-
-export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
-  const [filterBy, setFilterBy] = useState(FilteredBy.ALL);
-  const [query, setQuery] = useState('');
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterBy(event.target.value as FilteredBy);
-  };
-
-  useEffect(() => {
-    const visibleTodos = getFilteredTodos(todos, { filterBy, query });
-
-    handleFilteredTodos(visibleTodos);
-  }, [filterBy, todos, query]);
-
+export const TodoFilter: React.FC<Props> = ({
+  handleFilteredTodos,
+  filterBy,
+  onInput,
+  query,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -55,7 +20,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
           <select
             data-cy="statusSelect"
             value={filterBy}
-            onChange={handleFilterChange}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              handleFilteredTodos(event.target.value as FilteredBy);
+            }}
           >
             <option value={FilteredBy.ALL}>
               All
@@ -78,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
           value={query}
           onChange={
             (event) => {
-              setQuery(event.target.value);
+              onInput(event.target.value);
             }
           }
           type="text"
@@ -95,7 +62,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, handleFilteredTodos }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => onInput('')}
             />
           </span>
         )}

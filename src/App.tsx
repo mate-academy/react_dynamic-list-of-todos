@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,10 +9,13 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { getFilteredTodos } from './utils/filter';
+import { FilteredBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
+  const [filterBy, setFilterBy] = useState(FilteredBy.ALL);
+  const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loading, setloading] = useState(false);
 
@@ -22,6 +25,10 @@ export const App: React.FC = () => {
       .finally(() => setloading(false));
   }, []);
 
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(todos, { filterBy, query });
+  }, [todos, filterBy, query]);
+
   return (
     <>
       <div className="section">
@@ -30,7 +37,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} handleFilteredTodos={setFilteredTodos} />
+              <TodoFilter handleFilteredTodos={setFilterBy} filterBy={filterBy} onInput={setQuery} query={query} />
             </div>
 
             <div className="block">
