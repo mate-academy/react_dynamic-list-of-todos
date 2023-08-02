@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  clickedUser: Todo
+  setClickedUser: React.Dispatch<React.SetStateAction<Todo | null>>
+};
+
+export const TodoModal: React.FC<Props> = ({
+  clickedUser,
+  setClickedUser,
+}) => {
+  const [user, setUser] = useState<User>();
+  const [userLoading, setUserLoading] = useState(true);
+
+  useEffect(() => {
+    getUser(clickedUser.userId)
+      .then(setUser)
+      .catch(() => new Error('Try again later'))
+      .finally(() => setUserLoading(false));
+  }, [clickedUser]);
+
+  const handleCloseClick = () => {
+    setClickedUser(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {(userLoading && clickedUser) ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +40,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${clickedUser.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +48,26 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleCloseClick}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {clickedUser.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {clickedUser.completed
+                ? (<strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user?.name}
               </a>
             </p>
           </div>
