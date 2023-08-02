@@ -17,18 +17,49 @@ import { Filter } from './types/Filter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+const getVisibleTodos = (
+  todoList: Todo[],
+  queryString: string,
+  filter: string,
+) => {
+  let result = [...todoList];
+
+  if (queryString) {
+    result = result.filter(todo => {
+      return todo.title
+        .toLowerCase()
+        .includes(queryString.toLowerCase());
+    });
+  }
+
+  switch (filter) {
+    case Filter.ALL:
+      break;
+    case Filter.ACTIVE:
+      result = result.filter(todo => todo.completed === false);
+      break;
+    case Filter.COMPLETED:
+      result = result.filter(todo => todo.completed === true);
+      break;
+    default:
+      break;
+  }
+
+  return result;
+};
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState<string>(Filter.ALL);
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
   }, []);
 
-  const handleFilterChange = (value: string) => {
+  const handleFilterChange = (value: Filter) => {
     setFilterBy(value);
   };
 
@@ -41,37 +72,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
-
-  const getVisibleTodos = (
-    todoList: Todo[],
-    queryString: string,
-    filter: string,
-  ) => {
-    let result = [...todoList];
-
-    if (queryString) {
-      result = result.filter(todo => {
-        return todo.title
-          .toLowerCase()
-          .includes(queryString.toLowerCase());
-      });
-    }
-
-    switch (filter) {
-      case Filter.ALL:
-        break;
-      case Filter.ACTIVE:
-        result = result.filter(todo => todo.completed === false);
-        break;
-      case Filter.COMPLETED:
-        result = result.filter(todo => todo.completed === true);
-        break;
-      default:
-        break;
-    }
-
-    return result;
-  };
 
   const visibleTodos = useMemo(
     () => getVisibleTodos(todos, query, filterBy),

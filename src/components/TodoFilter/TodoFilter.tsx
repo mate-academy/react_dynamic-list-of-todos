@@ -5,7 +5,7 @@ type Props = {
   query: string
   filterBy: string
   handleQueryChange: (v:string) => void;
-  handleFilterChange: (v:string) => void;
+  handleFilterChange: (v:Filter) => void;
 };
 
 export const TodoFilter:React.FC<Props> = React.memo(
@@ -22,7 +22,7 @@ export const TodoFilter:React.FC<Props> = React.memo(
             <select
               data-cy="statusSelect"
               value={filterBy}
-              onChange={e => handleFilterChange(e.target.value)}
+              onChange={e => handleFilterChange(e.target.value as Filter)}
             >
               <option value={Filter.ALL}>All</option>
               <option value={Filter.ACTIVE}>Active</option>
