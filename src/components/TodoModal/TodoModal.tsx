@@ -14,13 +14,13 @@ export const TodoModal: React.FC<Props> = ({
   setClickedUser,
 }) => {
   const [user, setUser] = useState<User>();
-  const [userLoading, setUserLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
   useEffect(() => {
     getUser(clickedUser.userId)
       .then(setUser)
       .catch(() => new Error('Try again later'))
-      .finally(() => setUserLoading(false));
+      .finally(() => setIsUserLoading(false));
   }, [clickedUser]);
 
   const handleCloseClick = () => {
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(userLoading && clickedUser) ? (
+      {(isUserLoading && clickedUser) ? (
         <Loader />
       ) : (
         <div className="modal-card">

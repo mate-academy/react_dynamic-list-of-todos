@@ -9,21 +9,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<Status >(Status.All);
+  const [isLoading, setIsLoading] = useState(false);
   const [clickedUser, setClickedUser] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
       .catch(() => new Error('Try again later'))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -35,11 +36,11 @@ export const App: React.FC = () => {
     });
 
     switch (status) {
-      case 'all':
+      case Status.All:
         return filterTodos;
-      case 'active':
+      case Status.Active:
         return filterTodos.filter(todo => todo.completed === false);
-      case 'completed':
+      case Status.Completed:
         return filterTodos.filter(todo => todo.completed === true);
       default:
         return filterTodos;
@@ -63,10 +64,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (
+              {isLoading && (
                 <Loader />
               )}
-              {!loading && todos.length > 0 && (
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
                   setClickedUser={setClickedUser}
