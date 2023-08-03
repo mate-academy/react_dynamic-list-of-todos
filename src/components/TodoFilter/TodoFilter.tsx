@@ -1,7 +1,9 @@
+import { SortingStatus } from '../../types/sortingStatus';
+
 type Props = {
   query: string,
   onQuery: (query: string) => void,
-  onStatus: (sortingStatus: string) => void,
+  onStatus: (sortingStatus: SortingStatus) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -16,12 +18,12 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             onChange={(event) => {
-              onStatus(event.target.value);
+              onStatus(event.target.value as SortingStatus);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortingStatus.All}>All</option>
+            <option value={SortingStatus.Active}>Active</option>
+            <option value={SortingStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>

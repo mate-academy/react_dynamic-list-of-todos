@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SortingStatus } from './types/sortingStatus';
 
 function filterTodos(todos: Todo[], sortingStatus: string, query: string) {
   const serachingQuery = query.trim().toLowerCase();
@@ -18,10 +19,10 @@ function filterTodos(todos: Todo[], sortingStatus: string, query: string) {
 
   return todoWithQuery.filter(todo => {
     switch (sortingStatus) {
-      case 'active':
+      case SortingStatus.Active:
         return !todo.completed;
 
-      case 'completed':
+      case SortingStatus.Completed:
         return todo.completed;
 
       default:
@@ -32,10 +33,9 @@ function filterTodos(todos: Todo[], sortingStatus: string, query: string) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [sortingStatus, setSortingStatus] = useState('all');
+  const [sortingStatus, setSortingStatus] = useState(SortingStatus.All);
   const [query, setQuery] = useState('');
 
   const filteredTodos = useMemo(() => {
