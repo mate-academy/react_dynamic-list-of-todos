@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -23,7 +23,7 @@ type FilterArgs = {
   sortField: (typeof SortFieldEnum)[keyof typeof SortFieldEnum];
 };
 
-function filteredTodos(todos: Todo[], { searchField, sortField }: FilterArgs) {
+function filterTodos(todos: Todo[], { searchField, sortField }: FilterArgs) {
   let visibleFilteredTodos = [...todos];
 
   if (searchField) {
@@ -99,7 +99,10 @@ export const App: React.FC = () => {
     setSortField(str);
   };
 
-  const visibleTodos = filteredTodos(todos, { searchField, sortField });
+  const visibleTodos = useMemo(
+    () => filterTodos(todos, { searchField, sortField }),
+    [todos, searchField, sortField],
+  );
 
   return (
     <>
