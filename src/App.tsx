@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,50 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
+function filterTodos(todos: Todo[], sortingStatus: string, query: string) {
+  const serachingQuery = query.trim().toLowerCase();
+  const todoWithQuery = todos.filter(todo => (
+    todo.title.toLowerCase().includes(serachingQuery)
+  ));
+
+  return todoWithQuery.filter(todo => {
+    switch (sortingStatus) {
+      case 'active':
+        return !todo.completed;
+
+      case 'completed':
+        return todo.completed;
+
+      default:
+        return true;
+    }
+  });
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  // const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [sortingStatus, setSortingStatus] = useState('all');
+  const [query, setQuery] = useState('');
+
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, sortingStatus, query);
+  }, [todos, sortingStatus, query]);
+
+  const selectedTodo = filteredTodos.find(todo => todo.id === selectedTodoId) || null;
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .then(() => setIsLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onQuery={setQuery}
+                onStatus={setSortingStatus}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading
+                ? (
+                  <Loader />
+                )
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onSelect={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onSelect={(todoId: null) => setSelectedTodoId(todoId)}
+        />
+      )}
     </>
   );
 };
