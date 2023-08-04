@@ -1,11 +1,35 @@
-export const TodoFilter = () => (
+import { Status } from '../../enum/Status';
+
+type Props = {
+  setFilteredBy: (status: Status) => void,
+  setQuery: (query: string) => void,
+  query: string,
+};
+
+export const TodoFilter:React.FC<Props> = ({
+  setFilteredBy,
+  setQuery,
+  query,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          onChange={(event) => setFilteredBy(event.target.value as Status)}
+        >
+          <option
+            value={Status.ALL}
+          >
+            All
+          </option>
+
+          <option
+            value={Status.ACTIVE}
+          >
+            Active
+          </option>
+          <option value={Status.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,6 +40,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -27,6 +53,7 @@ export const TodoFilter = () => (
           data-cy="clearSearchButton"
           type="button"
           className="delete"
+          onClick={() => setQuery('')}
         />
       </span>
     </p>
