@@ -4,14 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setShowModal: (status: boolean) => void,
-  setPickedTodo: (todo: Todo) => void,
-  pickedTodo: Todo,
+  setPickedTodo: (pickedTodo: Todo | null) => void,
+  pickedTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setShowModal,
   setPickedTodo,
   pickedTodo,
 }) => (
@@ -34,7 +32,6 @@ export const TodoList: React.FC<Props> = ({
         <TodoItem
           key={todo.id}
           todo={todo}
-          setShowModal={setShowModal}
           setPickedTodo={setPickedTodo}
           pickedTodo={pickedTodo}
         />

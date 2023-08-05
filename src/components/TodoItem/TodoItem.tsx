@@ -4,14 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  setShowModal: (status: boolean) => void,
-  setPickedTodo: (todo: Todo) => void,
-  pickedTodo: Todo,
+  setPickedTodo: (pickedTodo: Todo | null) => void,
+  pickedTodo: Todo | null,
 };
 
 export const TodoItem:React.FC<Props> = ({
   todo,
-  setShowModal,
   setPickedTodo,
   pickedTodo,
 }) => {
@@ -20,11 +18,6 @@ export const TodoItem:React.FC<Props> = ({
     title,
     completed,
   } = todo;
-
-  const handleClick = () => {
-    setPickedTodo(todo);
-    setShowModal(true);
-  };
 
   return (
     <tr
@@ -55,7 +48,7 @@ export const TodoItem:React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={handleClick}
+          onClick={() => setPickedTodo(todo)}
         >
           <span className="icon">
             <i className={classNames('far', {

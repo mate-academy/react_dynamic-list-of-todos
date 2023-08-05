@@ -40,8 +40,7 @@ const getFilteredTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [pickedTodo, setPickedTodo] = useState<Todo>(todos[0]);
+  const [pickedTodo, setPickedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<Status>(Status.ALL);
   const [query, setQuery] = useState('');
 
@@ -76,7 +75,6 @@ export const App: React.FC = () => {
               {!loading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
-                  setShowModal={setShowModal}
                   setPickedTodo={setPickedTodo}
                   pickedTodo={pickedTodo}
                 />
@@ -86,10 +84,10 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {showModal && (
+      {pickedTodo && (
         <TodoModal
-          setShowModal={setShowModal}
           pickedTodo={pickedTodo}
+          setPickedTodo={setPickedTodo}
         />
       )}
     </>
