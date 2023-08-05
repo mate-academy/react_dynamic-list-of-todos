@@ -1,10 +1,8 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-// eslint-disable-next-line import/no-cycle
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
@@ -12,7 +10,9 @@ import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { SelectStatus } from './types/SelectStatus';
 
-function getPreparedTodos(todos: Todo[], selectStatus: SelectStatus, query: string) {
+function getPreparedTodos(
+  todos: Todo[], selectStatus: SelectStatus, query: string,
+) {
   let preparedTodos = [...todos];
 
   if (selectStatus) {
@@ -33,7 +33,8 @@ function getPreparedTodos(todos: Todo[], selectStatus: SelectStatus, query: stri
   }
 
   if (query.trim()) {
-    preparedTodos = preparedTodos.filter(todo => todo.title.toLocaleUpperCase().includes(query.toLocaleUpperCase()));
+    preparedTodos = preparedTodos.filter(todo => todo.title
+      .toLocaleUpperCase().includes(query.toLocaleUpperCase()));
   }
 
   return preparedTodos;
@@ -43,7 +44,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setisLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [selectStatus, setSelectStatus] = useState<SelectStatus>(SelectStatus.ALL);
+  const [selectStatus, setSelectStatus]
+  = useState<SelectStatus>(SelectStatus.ALL);
   const [query, setQuery] = useState('');
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
 
