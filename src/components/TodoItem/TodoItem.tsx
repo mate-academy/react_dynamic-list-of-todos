@@ -6,12 +6,14 @@ type Props = {
   todo: Todo,
   setShowModal: (status: boolean) => void,
   setPickedTodo: (todo: Todo) => void,
+  pickedTodo: Todo,
 };
 
 export const TodoItem:React.FC<Props> = ({
   todo,
   setShowModal,
   setPickedTodo,
+  pickedTodo,
 }) => {
   const {
     id,
@@ -30,8 +32,15 @@ export const TodoItem:React.FC<Props> = ({
       className=""
     >
       <td className="is-vcentered">{id}</td>
-      <td className="is-vcentered" />
+      <td className="is-vcentered">
+        {completed && (
+          <span className="icon" data-cy="iconCompleted">
+            <i className="fas fa-check" />
+          </span>
+        )}
+      </td>
       <td className="is-vcentered is-expanded">
+
         <p
           className={classNames({
             'has-text-success': completed,
@@ -49,7 +58,11 @@ export const TodoItem:React.FC<Props> = ({
           onClick={handleClick}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            <i className={classNames('far', {
+              'fa-eye': pickedTodo?.id !== todo.id,
+              'fa-eye-slash': pickedTodo?.id === todo.id,
+            })}
+            />
           </span>
         </button>
       </td>

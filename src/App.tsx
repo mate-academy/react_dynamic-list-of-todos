@@ -18,9 +18,11 @@ const getFilteredTodos = (
 ) => {
   let filteredTodos = [...todos];
 
-  if (query.toLowerCase().trim()) {
+  if (query) {
+    const preparedQuery = query.toLowerCase().trim();
+
     filteredTodos = filteredTodos
-      .filter(todo => todo.title.includes(query));
+      .filter(todo => todo.title.toLowerCase().includes(preparedQuery));
   }
 
   switch (filterBy) {
@@ -76,6 +78,7 @@ export const App: React.FC = () => {
                   todos={filteredTodos}
                   setShowModal={setShowModal}
                   setPickedTodo={setPickedTodo}
+                  pickedTodo={pickedTodo}
                 />
               )}
 
