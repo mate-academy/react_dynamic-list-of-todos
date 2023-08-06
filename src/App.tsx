@@ -30,7 +30,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    let result = todos;
+    let result = [...todos];
 
     if (query) {
       result = result.filter(todo => todo.title.toLowerCase().includes(query));
