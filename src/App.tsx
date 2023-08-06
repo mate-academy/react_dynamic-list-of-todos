@@ -80,5 +80,3 @@ export const App: React.FC = () => {
     </>
   );
 };
-
-// selected todo vinesti v store, showModal v store sdelat, loading user vinesti v TodoModal i func loadUser zapuskat tam cherez useEffect, po knopke na todoIteme prosto menyat showModal
