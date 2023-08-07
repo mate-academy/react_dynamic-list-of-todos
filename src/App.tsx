@@ -60,27 +60,6 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // const getFilteredTodos = () => {
-  //   const filteredTodos = todos.filter(
-  //     todo => todo.title.toLocaleLowerCase()
-  //       .includes(query.trim().toLocaleLowerCase()),
-  //   );
-
-  //   switch (status) {
-  //     case Status.ACTIVE:
-  //       return todos.filter(todo => !todo.completed);
-
-  //     case Status.COMPLETED:
-  //       return todos.filter(todo => todo.completed);
-
-  //     case Status.ALL:
-  //     default:
-  //       return todos;
-  //   }
-  // };
-
-  // const filteredTodos = getFilteredTodos();
-  // const isTodos = filteredTodos.length > 0;
   const visibleTodos = useMemo(
     () => getFilteredTodos(todos, query, status), [todos, query, status],
   );

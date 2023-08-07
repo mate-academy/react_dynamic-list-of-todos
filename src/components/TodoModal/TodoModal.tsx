@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
 
               <span> by </span>
 
-              <a href={`${user.email}:Sincere@april.biz`}>
+              <a href={`mailto:${user.email}`}>
                 {user?.name}
               </a>
             </p>
