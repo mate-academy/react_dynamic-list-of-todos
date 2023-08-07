@@ -18,6 +18,10 @@ export const TodoFilter: React.FC<Props> = ({
     onSelectedStatus(event.target.value as Status);
   };
 
+  const handleInputSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeQuery(event.target.value as string);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -41,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => onChangeQuery(event.target.value)}
+          onChange={handleInputSearch}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

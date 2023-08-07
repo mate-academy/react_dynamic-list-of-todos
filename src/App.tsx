@@ -27,19 +27,16 @@ function getFilteredTodos(
     );
   }
 
-  return visibleTodos
-    .filter(todo => {
-      switch (status) {
-        case Status.COMPLETED:
-          return todo.completed;
+  switch (status) {
+    case Status.COMPLETED:
+      return visibleTodos.filter(todo => todo.completed);
 
-        case Status.ACTIVE:
-          return !todo.completed;
+    case Status.ACTIVE:
+      return visibleTodos.filter(todo => !todo.completed);
 
-        default:
-          return true;
-      }
-    });
+    default:
+      return visibleTodos;
+  }
 }
 
 export const App: React.FC = () => {
