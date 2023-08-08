@@ -45,10 +45,9 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {loading && (
+              {loading ? (
                 <Loader />
-              )}
-              {!loading && (
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}

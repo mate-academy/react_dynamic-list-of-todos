@@ -14,12 +14,12 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUser(selectedTodo.userId)
       .then(setUser)
-      .finally(() => setLoading);
+      .finally(() => setLoading(false));
   }, [selectedTodo]);
 
   const handleResetTodo = useCallback(() => {
