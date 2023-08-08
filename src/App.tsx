@@ -12,41 +12,57 @@ import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState(Status.All);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
-      .catch((error) => {
+      .catch((err) => {
         // eslint-disable-next-line no-console
-        console.warn(error);
+        console.error(err);
+        setError('Something went wrong while fetching data.');
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
     const lowerQuery = query.toLowerCase();
 
     return todos.filter(todo => {
-      switch (status) {
-        case Status.Completed:
-          return todo.completed;
+      const isCompleted = status === Status.Completed ? todo.completed : true;
+      const isActive = status === Status.Active ? !todo.completed : true;
+      const isMatchQuery = todo.title.toLowerCase().includes(lowerQuery);
 
-        case Status.Active:
-          return !todo.completed;
-
-        default:
-          return true;
-      }
-    })
-      .filter(todo => todo.title.toLocaleLowerCase().includes(lowerQuery));
+      return isCompleted && isActive && isMatchQuery;
+    });
   }, [todos, query, status]);
+
+  let content = null;
+
+  if (isLoading) {
+    content = <Loader />;
+  } else if (error) {
+    content = (
+      <div className="notification is-danger">
+        {error}
+      </div>
+    );
+  } else {
+    content = (
+      <TodoList
+        todos={visibleTodos}
+        onTodoSelected={setSelectedTodo}
+        selectedTodoId={selectedTodo?.id}
+      />
+    );
+  }
 
   return (
     <>
@@ -65,15 +81,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={visibleTodos}
-                  onTodoSelected={setSelectedTodo}
-                  selectedTodoId={selectedTodo?.id}
-                />
-              )}
+              {content}
             </div>
           </div>
         </div>
