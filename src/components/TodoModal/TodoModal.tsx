@@ -17,6 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     getUser(selectedTodo.userId)
       .then(setUser)
       .finally(() => setLoading(false));
