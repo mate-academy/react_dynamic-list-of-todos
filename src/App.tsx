@@ -20,8 +20,10 @@ function getVisibleTodos(todos: Todo[], query: string, filter: TypeTodos) {
       switch (filter) {
         case TypeTodos.ACTIVE:
           return !todo.completed;
+
         case TypeTodos.COMPLETED:
           return todo.completed;
+
         default:
           return true;
       }
@@ -37,17 +39,14 @@ function getVisibleTodos(todos: Todo[], query: string, filter: TypeTodos) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
   const [typeSelect, setTypeSelect] = useState<TypeTodos>(TypeTodos.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setIsLoaded(true);
     getTodos()
       .then(todo => {
         setTodos(todo);
-        setIsLoaded(false);
       });
   }, []);
 
@@ -60,7 +59,6 @@ export const App: React.FC = () => {
           <div className="box">
             <h1 className="title">Todos:</h1>
 
-            {isLoaded && <Loader />}
             <div className="block">
               <TodoFilter
                 setTypeSelect={setTypeSelect}
@@ -70,11 +68,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                todos={visibleTodos}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
+              {todos.length
+                ? (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )
+                : <Loader />}
             </div>
           </div>
         </div>
