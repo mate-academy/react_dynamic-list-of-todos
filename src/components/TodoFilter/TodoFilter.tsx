@@ -1,19 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { TodosContext } from '../../TodosContext';
 import { Sort } from '../../types/Sort';
 
 type Props = {
-  onQuerry: (v: string) => void;
-  onSortMode: (mode: Sort) => void;
   querry: string;
+  onQuerry: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = (
-  {
-    querry,
-    onQuerry,
-    onSortMode,
-  },
-) => {
+export const TodoFilter: React.FC<Props> = ({ querry, onQuerry }) => {
+  const { setSortMode } = useContext(TodosContext);
   const handleClearButtonClick = () => {
     onQuerry('');
   };
@@ -27,7 +22,7 @@ export const TodoFilter: React.FC<Props> = (
   const handleSortModeChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    onSortMode(e.target.value as Sort);
+    setSortMode(e.target.value as Sort);
   };
 
   return (

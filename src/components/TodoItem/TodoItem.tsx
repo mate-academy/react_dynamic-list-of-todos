@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { TodosContext } from '../../TodosContext';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -6,8 +7,17 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const handleButtonClick = () => {
+  const {
+    setIsTodoModal,
+    setModalId,
+    setSelectedTodo,
+    selectedTodo,
+  } = useContext(TodosContext);
 
+  const handleButtonClick = () => {
+    setIsTodoModal(true);
+    setSelectedTodo(todo);
+    setModalId(todo.userId);
   };
 
   return (
@@ -39,7 +49,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={handleButtonClick}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            <i className={
+              selectedTodo
+                ? 'far fa-eye-slash'
+                : 'far fa-eye'
+            }
+            />
           </span>
         </button>
       </td>

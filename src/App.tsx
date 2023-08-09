@@ -1,28 +1,38 @@
-/* eslint-disable max-len */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from 'react';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TodosContext } from './TodosContext';
+import { Todo } from './types/Todo';
 import { Sort } from './types/Sort';
 
-const DEFAULT_ERROR_MESSAGE_TODOS = 'Failed to load todos, please try again later';
+const ERROR_MESSAGE_TODOS = 'Failed to load todos, please try again later';
 
 export const App: React.FC = () => {
+  const {
+    sortMode,
+    isTodoModal,
+  } = useContext(TodosContext);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadins, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   const [querry, setQuerry] = useState('');
-  const [sortMode, setSortMode] = useState(Sort.all);
+  const [todosError, setTodosError] = useState('');
 
   const getWantedTodos = useCallback((todo: Todo) => {
-    return todo.title.includes(querry);
-  }, []);
+    return todo.title.toLowerCase().includes(querry.trim().toLowerCase());
+  }, [querry]);
 
   function getVisibleTodos(type: Sort) {
     switch (type) {
@@ -52,7 +62,7 @@ export const App: React.FC = () => {
         setIsLoading(false);
       })
       .catch(() => {
-        setError(DEFAULT_ERROR_MESSAGE_TODOS);
+        setTodosError(ERROR_MESSAGE_TODOS);
       });
   }, []);
 
@@ -66,29 +76,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                onQuerry={setQuerry}
-                querry={querry}
-                onSortMode={setSortMode}
-              />
+              <TodoFilter querry={querry} onQuerry={setQuerry} />
             </div>
 
             <div className="block">
-              {isLoadins && !error && <Loader />}
+              {isLoadins && !todosError && <Loader />}
 
-              {!isLoadins && !error && (
+              {!isLoadins && !todosError && (
                 <TodoList list={visibleTodos} />
               )}
 
-              {error && (
-                <p className="error">{error}</p>
+              {todosError && (
+                <p className="error">{todosError}</p>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {isTodoModal && <TodoModal />}
     </>
   );
 };
