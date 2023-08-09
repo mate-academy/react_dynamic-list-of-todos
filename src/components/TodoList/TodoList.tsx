@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  todo: Todo,
+  todo: Todo | null,
   setTodo: (todo: Todo) => void,
 };
 
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({ todos, todo, setTodo }) => (
         <tr
           data-cy="todo"
           className={classNames(
-            { 'has-background-info-light': someTodo === todo },
+            { 'has-background-info-light': someTodo.id === todo?.id },
           )}
           key={someTodo.id}
         >

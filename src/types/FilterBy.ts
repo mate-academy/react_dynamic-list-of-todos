@@ -1,1 +1,5 @@
-export type FilterBy = 'all' | 'completed' | 'active';
+export enum FilterBy {
+  'all' = 'all',
+  'completed' = 'completed',
+  'active' = 'active',
+}

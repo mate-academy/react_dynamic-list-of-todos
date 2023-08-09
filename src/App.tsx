@@ -13,32 +13,23 @@ import { FilterBy } from './types/FilterBy';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  // const todoByDefault: Todo = {
-  //   userId: 0,
-  //   id: 0,
-  //   title: '',
-  //   completed: false,
-  // };
-
-  const [todo, setTodo] = useState({} as Todo);
+  const [todo, setTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState<FilterBy>('all');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.all);
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(someTodos => {
-        setTodos(someTodos);
-      })
+      .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
   let preparedTodos = [...todos];
 
   useMemo(() => {
-    const lowerCaseQuery = query.toLocaleLowerCase();
+    const lowerCaseQuery = query.trim().toLocaleLowerCase();
 
     if (query) {
       preparedTodos = preparedTodos.filter(
@@ -47,11 +38,11 @@ export const App: React.FC = () => {
     }
 
     switch (filterBy) {
-      case 'active':
+      case FilterBy.active:
         preparedTodos = preparedTodos.filter(someTodo => !someTodo.completed);
         break;
 
-      case 'completed':
+      case FilterBy.completed:
         preparedTodos = preparedTodos.filter(someTodo => someTodo.completed);
         break;
 
@@ -91,7 +82,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todo.id && (
+      {todo?.id && (
         <TodoModal
           todo={todo}
           setTodo={setTodo}
