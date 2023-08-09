@@ -1,30 +1,20 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
-import { getUser } from '../../api';
 
 type Props = {
   todos: Todo[],
   setSelectedTodo: (value: Todo) => void,
   selectedTodo?: Todo | null,
-  setUser: (value: User) => void,
-  setLoading: (value: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setSelectedTodo,
   selectedTodo,
-  setUser,
-  setLoading,
 }) => {
   const handleButtonClick = (todo: Todo) => {
-    setLoading(true);
     setSelectedTodo(todo);
-    getUser(todo.userId)
-      .then(setUser)
-      .finally(() => setLoading(false));
   };
 
   return (
@@ -48,7 +38,7 @@ export const TodoList: React.FC<Props> = ({
           <tr
             data-cy="todo"
             className={classNames(
-              '', { 'has-background-info-light': selectedTodo?.id === todo.id },
+              { 'has-background-info-light': selectedTodo?.id === todo.id },
             )}
             key={todo.id}
           >

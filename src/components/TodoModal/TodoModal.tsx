@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   loading: boolean,
   setSelectedTodo: (value: Todo | null) => void,
   selectedTodo?: Todo | null,
   user?: User | null,
+  setLoading: (value: boolean) => void,
+  setUser: (value: User) => void,
+  todo: Todo,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -17,7 +21,15 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
   selectedTodo,
   user,
+  setLoading,
+  setUser,
+  todo,
 }) => {
+  useEffect(() => {
+    setLoading(true);
+    getUser(todo.userId).then(setUser).finally(() => setLoading(false));
+  }, [todo.userId]);
+
   return (
     <div
       className={classNames('modal', { ' is-active': selectedTodo })}

@@ -19,6 +19,12 @@ function getFilteredTodos(
   query: string,
   sortBy: string,
 ) {
+  enum Status {
+    ALL = 'all',
+    ACTIVE = 'active',
+    COMPLETED = 'completed',
+  }
+
   let filteredTodos = todos;
 
   if (query.length > 0) {
@@ -28,13 +34,13 @@ function getFilteredTodos(
   }
 
   switch (sortBy) {
-    case 'all':
+    case Status.ALL:
       return filteredTodos;
 
-    case 'active':
+    case Status.ACTIVE:
       return filteredTodos.filter(todo => todo.completed === false);
 
-    case 'completed':
+    case Status.COMPLETED:
       return filteredTodos.filter(todo => todo.completed === true);
 
     default:
@@ -82,11 +88,9 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    setLoading={setLoading}
                     todos={filteredTodos}
                     setSelectedTodo={setSelectedTodo}
                     selectedTodo={selectedTodo}
-                    setUser={setUser}
                   />
                 )}
             </div>
@@ -100,6 +104,9 @@ export const App: React.FC = () => {
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
           user={user}
+          setLoading={setLoading}
+          setUser={setUser}
+          todo={selectedTodo}
         />
       )}
     </>
