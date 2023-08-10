@@ -33,7 +33,7 @@ export const App: React.FC = () => {
     const lowerQuery = query.toLowerCase();
 
     return todos.filter(todo => {
-      const isCompleted = status === Status.Complete ? todo.completed : true;
+      const isCompleted = status === Status.Completed ? todo.completed : true;
       const isActive = status === Status.Active ? !todo.completed : true;
       const isMatchQuery = todo.title.toLowerCase().includes(lowerQuery);
 

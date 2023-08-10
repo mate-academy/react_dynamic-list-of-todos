@@ -36,7 +36,7 @@ export const TodoList: React.FC<Props> = ({
             'has-background-info-light': selectedTodoId === todo.id,
           })}
         >
-          <td className="is-vcentered">{todo.userId}</td>
+          <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed ? (
               <span className="icon" data-cy="iconCompleted">
