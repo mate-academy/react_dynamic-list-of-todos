@@ -56,6 +56,9 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        throw new Error(error.message);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
