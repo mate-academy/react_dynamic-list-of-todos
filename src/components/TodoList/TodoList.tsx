@@ -6,15 +6,18 @@ type Props = {
   todos: Todo[],
   setSelectedTodo: (value: Todo) => void,
   selectedTodo?: Todo | null,
+  setLoading: (value: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setSelectedTodo,
   selectedTodo,
+  setLoading,
 }) => {
   const handleButtonClick = (todo: Todo) => {
     setSelectedTodo(todo);
+    setLoading(true);
   };
 
   return (

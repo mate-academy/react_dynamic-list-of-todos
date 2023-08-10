@@ -13,18 +13,13 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { User } from './types/User';
+import { Status } from './types/Status';
 
 function getFilteredTodos(
   todos: Todo[],
   query: string,
   sortBy: string,
 ) {
-  enum Status {
-    ALL = 'all',
-    ACTIVE = 'active',
-    COMPLETED = 'completed',
-  }
-
   let filteredTodos = todos;
 
   if (query.length > 0) {
@@ -84,15 +79,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={filteredTodos}
-                    setSelectedTodo={setSelectedTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                )}
+              {(loading && !selectedTodo) && (
+                <Loader />
+              )}
+              {!loading && (
+                <TodoList
+                  todos={filteredTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                  setLoading={setLoading}
+                />
+              )}
             </div>
           </div>
         </div>
