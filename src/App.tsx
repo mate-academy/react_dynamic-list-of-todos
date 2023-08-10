@@ -34,24 +34,24 @@ export const App: React.FC = () => {
 
     switch (filterType) {
       case FilterType.ACTIVE:
-        result = todos.filter((todo) => {
-          return !todo.completed;
-        });
+        result = todos.filter(todo => !todo.completed);
         break;
 
       case FilterType.COMPLETED:
-        result = todos.filter((todo) => {
-          return todo.completed;
-        });
+        result = todos.filter(todo => todo.completed);
         break;
 
       default:
         result = todos;
     }
 
-    return [...result].filter(
-      (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
-    );
+    if (query) {
+      return result.filter(
+       (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
+       );
+    }
+    
+    return result;
   }, [todos, filterType, query]);
 
   return (

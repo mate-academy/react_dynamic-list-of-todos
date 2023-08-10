@@ -12,8 +12,8 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo = () => {},
 }) => {
-  const setTodoHandler = (todo: Todo): void => {
-    setSelectedTodo(todo);
+  const setTodoHandler = (todo: Todo) => () => {
+   return setSelectedTodo(todo);
   };
 
   return (
@@ -56,7 +56,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setTodoHandler(todo)}
+                onClick={setTodoHandler(todo)}
               >
                 <span className="icon">
                   {selectedTodo?.id === todo.id
