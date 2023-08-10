@@ -3,6 +3,7 @@ import React, {
   useState,
   useContext,
   useCallback,
+  useMemo,
 } from 'react';
 
 import 'bulma/css/bulma.css';
@@ -36,16 +37,16 @@ export const App: React.FC = () => {
 
   function getVisibleTodos(type: Sort) {
     switch (type) {
-      case Sort.all:
+      case Sort.All:
         return todos
           .filter(getWantedTodos);
 
-      case Sort.active:
+      case Sort.Active:
         return todos
           .filter(todo => !todo.completed)
           .filter(getWantedTodos);
 
-      case Sort.completed:
+      case Sort.Completed:
         return todos
           .filter(todo => todo.completed)
           .filter(getWantedTodos);
@@ -59,14 +60,18 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosData => {
         setTodos(todosData);
-        setIsLoading(false);
       })
       .catch(() => {
         setTodosError(ERROR_MESSAGE_TODOS);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
-  const visibleTodos = getVisibleTodos(sortMode);
+  const visibleTodos: Todo[] = useMemo(() => {
+    return getVisibleTodos(sortMode);
+  }, [sortMode, todos]);
 
   return (
     <>

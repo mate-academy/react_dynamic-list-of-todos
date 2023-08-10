@@ -33,9 +33,9 @@ export const TodoFilter: React.FC<Props> = ({ querry, onQuerry }) => {
             data-cy="statusSelect"
             onChange={handleSortModeChange}
           >
-            <option value={Sort.all}>All</option>
-            <option value={Sort.active}>Active</option>
-            <option value={Sort.completed}>Completed</option>
+            <option value={Sort.All}>All</option>
+            <option value={Sort.Active}>Active</option>
+            <option value={Sort.Completed}>Completed</option>
           </select>
         </span>
       </p>

@@ -21,10 +21,11 @@ export const TodoModal: React.FC = () => {
     getUser(modalId as number)
       .then(newUser => {
         setUser(newUser);
-        setIsLoadingModal(false);
       })
       .catch(() => {
         setUserError(ERROR_MESSAGE_USER);
+      })
+      .finally(() => {
         setIsLoadingModal(false);
       });
   }, []);

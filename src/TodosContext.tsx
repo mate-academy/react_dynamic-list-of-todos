@@ -18,7 +18,7 @@ const initialData: State = {
   setSortMode: () => {},
   setIsTodoModal: () => {},
   setModalId: () => {},
-  sortMode: Sort.all,
+  sortMode: Sort.All,
   isTodoModal: false,
   modalId: null,
   selectedTodo: null,
@@ -32,7 +32,7 @@ type Props = {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [sortMode, setSortMode] = useState(Sort.all);
+  const [sortMode, setSortMode] = useState(Sort.All);
   const [isTodoModal, setIsTodoModal] = useState(false);
   const [modalId, setModalId] = useState<number | null>(null);
 
