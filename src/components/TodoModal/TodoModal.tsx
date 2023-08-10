@@ -14,9 +14,14 @@ export const TodoModal: React.FC<Props> = ({
   close,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => {
+        setError('Something went wrong while fetching data.');
+      });
   }, []);
 
   return (
@@ -43,7 +48,9 @@ export const TodoModal: React.FC<Props> = ({
               onClick={close}
             />
           </header>
-
+          <h1>
+            {error}
+          </h1>
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
               {todo.title}
@@ -57,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({
               )}
               {' by '}
               <a href={`mailto:${user.email}`}>
-                {user?.name}
+                {user.name}
               </a>
             </p>
           </div>

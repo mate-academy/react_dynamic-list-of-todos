@@ -29,37 +29,24 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const filteredTodos = todos.filter(todo => {
+    switch (status) {
+      case 'all': return todo;
+      case 'active': return !todo.completed;
+      case 'completed': return todo.completed;
+      default: return todo;
+    }
+  });
+
   const visibleTodos = useMemo(() => {
     const lowerQuery = query.toLowerCase();
 
-    return todos.filter(todo => {
-      const isCompleted = status === Status.Completed ? todo.completed : true;
-      const isActive = status === Status.Active ? !todo.completed : true;
+    return filteredTodos.filter(todo => {
       const isMatchQuery = todo.title.toLowerCase().includes(lowerQuery);
 
-      return isCompleted && isActive && isMatchQuery;
+      return isMatchQuery;
     });
   }, [todos, query, status]);
-
-  let content = null;
-
-  if (isLoading) {
-    content = <Loader />;
-  } else if (error) {
-    content = (
-      <div className="notification is-danger">
-        {error}
-      </div>
-    );
-  } else {
-    content = (
-      <TodoList
-        todos={visibleTodos}
-        onTodoSelected={setSelectedTodo}
-        selectedTodoId={selectedTodo?.id}
-      />
-    );
-  }
 
   return (
     <>
@@ -78,7 +65,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {content}
+              <h1>
+                {error}
+              </h1>
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
