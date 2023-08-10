@@ -50,7 +50,7 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [query, setQuery] = useState('');
   const [appliedQuery, setApliedQuery] = useState('');
-  const [status, setStatus] = useState('All');
+  const [status, setStatus] = useState<string>(Status.ALL);
 
   useEffect(() => {
     setLoading(true);
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
               {(loading && !selectedTodo) && (
                 <Loader />
               )}
-              {!loading && (
+              {todos.length !== 0 && (
                 <TodoList
                   todos={filteredTodos}
                   setSelectedTodo={setSelectedTodo}
