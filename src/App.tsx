@@ -47,10 +47,10 @@ export const App: React.FC = () => {
 
   const [query, setQuery] = useState<string>('');
   const [filter, setFilter] = useState<FilterType>(FilterType.ALL);
-  const [selectTodoId, setSelectTodoId] = useState<number | null>(null);
+  const [selectedTodoId, setselectedTodoId] = useState<number | null>(null);
 
-  const selectTodos = getFilteredTodos(todos, query, filter);
-  const selectTodo = selectTodos.find(todo => todo.id === selectTodoId);
+  const selectedTodos = getFilteredTodos(todos, query, filter);
+  const selectedTodo = selectedTodos.find(todo => todo.id === selectedTodoId);
 
   useEffect(() => {
     setIsLoading(true);
@@ -83,9 +83,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={selectTodos}
-                  onSelectTodoId={setSelectTodoId}
-                  selectTodoId={selectTodoId}
+                  todos={selectedTodos}
+                  onselectedTodoId={setselectedTodoId}
+                  selectedTodoId={selectedTodoId}
                 />
               )}
             </div>
@@ -93,10 +93,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          todo={selectTodo}
-          reset={(todoId: null) => setSelectTodoId(todoId)}
+          todo={selectedTodo}
+          reset={() => setselectedTodoId(null)}
         />
       )}
     </>

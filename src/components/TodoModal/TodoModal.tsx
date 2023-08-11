@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  reset: (todoId: null) => void,
+  reset: () => void,
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
@@ -51,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => reset(null)}
+              onClick={reset}
             />
           </header>
 
