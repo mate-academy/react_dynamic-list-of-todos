@@ -24,7 +24,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
 
       <tbody>
         {todos.map((todo: Todo) => (
-          <TodoItem todo={todo} />
+          <TodoItem todo={todo} key={todo.id} />
         ))}
       </tbody>
     </table>

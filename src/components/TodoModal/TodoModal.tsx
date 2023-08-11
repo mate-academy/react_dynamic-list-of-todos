@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Loader } from '../Loader';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo
-  openModal: (a: boolean) => void
+  toggleModal: (a: boolean) => void
   user: User
+  isLoadingUser: boolean
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, openModal, user }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  toggleModal,
+  user,
+  isLoadingUser,
+}) => {
   const {
     id,
     title,
     completed,
   } = todo;
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
 
   return (
     <div
@@ -34,11 +28,10 @@ export const TodoModal: React.FC<Props> = ({ todo, openModal, user }) => {
       data-cy="modal"
     >
       <div className="modal-background" />
-      {isLoading && <Loader />}
+      {isLoadingUser && <Loader />}
 
-      {
-        !isLoading && (
-
+      {!isLoadingUser
+        && (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -53,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({ todo, openModal, user }) => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => openModal(false)}
+                onClick={() => toggleModal(false)}
               />
             </header>
 
@@ -75,8 +68,7 @@ export const TodoModal: React.FC<Props> = ({ todo, openModal, user }) => {
               </p>
             </div>
           </div>
-        )
-      }
+        )}
     </div>
   );
 };

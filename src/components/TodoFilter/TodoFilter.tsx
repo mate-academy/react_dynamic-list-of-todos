@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
+import { FilterBy } from '../../types/enum';
 
 type Props = {
   setTodos: (a: Todo[]) => void
@@ -34,13 +35,13 @@ export const TodoFilter: React.FC<Props> = ({ setTodos }) => {
     let filteredTodos: Todo[] = [];
 
     switch (value) {
-      case 'all':
+      case FilterBy.ALL:
         filteredTodos = await getTodos();
         break;
-      case 'active':
+      case FilterBy.ACTIVE:
         filteredTodos = (await getTodos()).filter(todo => !todo.completed);
         break;
-      case 'completed':
+      case FilterBy.COMPLETED:
         filteredTodos = (await getTodos()).filter(todo => todo.completed);
         break;
       default:

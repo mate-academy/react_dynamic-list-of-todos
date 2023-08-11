@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { getUser } from '../../api';
 
@@ -12,7 +12,12 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const showModal = () => setModalIsOpen(!modalIsOpen);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+  const showModal = useCallback(() => {
+    setModalIsOpen(prevModalIsOpen => !prevModalIsOpen);
+  }, []);
+
   const {
     title,
     id,
@@ -23,9 +28,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
+    setIsLoadingUser(true);
+
     getUser(userId)
       .then(userData => {
         setUser(userData);
+        setIsLoadingUser(false);
+      })
+      .catch(() => {
+        setIsLoadingUser(false);
       });
   }, [userId]);
 
@@ -78,10 +89,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       {modalIsOpen && user
         && (
           <TodoModal
-            key={userId}
             todo={todo}
-            openModal={setModalIsOpen}
+            toggleModal={setModalIsOpen}
             user={user}
+            isLoadingUser={isLoadingUser}
           />
         )}
     </>
