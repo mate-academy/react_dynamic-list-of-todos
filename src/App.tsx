@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((res) => setTodos(res))
+      .then(setTodos)
       .catch((error) => {
         throw new Error(error.message);
       });
@@ -47,10 +47,10 @@ export const App: React.FC = () => {
 
     if (query) {
       return result.filter(
-       (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
-       );
+        (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
     }
-    
+
     return result;
   }, [todos, filterType, query]);
 
