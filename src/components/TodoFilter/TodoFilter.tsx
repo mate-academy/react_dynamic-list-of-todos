@@ -1,6 +1,6 @@
-import debounce from 'lodash.debounce';
 import { useCallback } from 'react';
 import { Status } from '../../types/Status';
+import { debounce } from '../../services/debounce';
 
 type Props = {
   setQuery: (text: string) => void,
