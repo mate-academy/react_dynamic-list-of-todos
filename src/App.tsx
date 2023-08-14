@@ -17,11 +17,13 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(Status.ALL);
   const [query, setQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => setErrorMessage('There are no todos'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,7 +33,7 @@ export const App: React.FC = () => {
 
       case Status.COMPLETED: return todo.completed;
 
-      default: return todo;
+      default: return true;
     }
   });
 
@@ -64,12 +66,16 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {todos.length > 0 && (
+              {todos.length > 0 ? (
                 <TodoList
                   todos={visibleTodos}
-                  selectedTodoId={selectedTodo?.id}
+                  selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
+              ) : (
+                <p>
+                  {errorMessage}
+                </p>
               )}
             </div>
           </div>

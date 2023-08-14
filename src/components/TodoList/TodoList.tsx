@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId?: number;
-  setSelectedTodo?: (value: Todo) => void;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (value: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, selectedTodoId, setSelectedTodo,
+  todos, selectedTodo, setSelectedTodo,
 }) => {
   const handleClick = (todo: Todo) => {
     if (setSelectedTodo) {
@@ -38,7 +38,8 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             key={todo.id}
             className={classNames({
-              'has-background-info-light': selectedTodoId === todo.id,
+              'has-background-info-light': selectedTodo !== null
+                                            && selectedTodo.id === todo.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -68,9 +69,11 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  <i className={selectedTodoId === todo.id
-                    ? 'far fa-eye-slash'
-                    : 'far fa-eye'}
+                  <i className={
+                    selectedTodo !== null && selectedTodo.id === todo.id
+                      ? 'far fa-eye-slash'
+                      : 'far fa-eye'
+                  }
                   />
                 </span>
               </button>
