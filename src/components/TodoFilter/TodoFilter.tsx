@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
           >
 
             {(Object.keys(Status) as Array<keyof typeof Status>).map(key => (
-              <option value={Status[key]}>
+              <option key={key} value={Status[key]}>
                 {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
               </option>
             ))}
