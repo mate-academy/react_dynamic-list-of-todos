@@ -1,12 +1,25 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Propse = {
+  user: User | null,
+  idTodo: number,
+  titleTodo: string,
+  onRemoveModal: (value: boolean) => void
+};
+
+export const TodoModal: React.FC<Propse> = ({
+  user,
+  idTodo,
+  titleTodo,
+  onRemoveModal,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +28,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${idTodo}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,12 +36,13 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => onRemoveModal(false)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {titleTodo}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -38,7 +52,7 @@ export const TodoModal: React.FC = () => {
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user.name}
               </a>
             </p>
           </div>
