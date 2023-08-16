@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Propse = {
-  user: User | null,
-  idTodo: number,
-  titleTodo: string,
-  onRemoveModal: (value: boolean) => void
+  userId: number | undefined,
+  idTodo: number | undefined,
+  titleTodo: string | undefined,
+  completed: boolean | undefined,
+  onRemoveModal: () => void
 };
 
 export const TodoModal: React.FC<Propse> = ({
-  user,
+  userId,
   idTodo,
   titleTodo,
+  completed,
   onRemoveModal,
 }) => {
+  const [currentUser, setCurrentUser] = useState<User>();
+
+  useEffect(() => {
+    if (userId) {
+      getUser(userId).then(setCurrentUser);
+    }
+  }, [userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {!currentUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -36,7 +47,7 @@ export const TodoModal: React.FC<Propse> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onRemoveModal(false)}
+              onClick={() => onRemoveModal()}
             />
           </header>
 
@@ -47,12 +58,14 @@ export const TodoModal: React.FC<Propse> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
+                {`${completed ? 'Done' : 'Planned'}`}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                {user.name}
+              <a href={`mailto:${currentUser.email}`}>
+                {currentUser.name}
               </a>
             </p>
           </div>

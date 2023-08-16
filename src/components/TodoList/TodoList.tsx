@@ -3,10 +3,9 @@ import { Todo } from '../../types/Todo';
 
 type Propse = {
   todos: Todo[],
-  openModal: (
-    value: boolean, todoId: number, userId: number, title: string) => void,
+  openModal: (todo: Todo) => void,
   isOpenedModal: boolean
-  idTodo: number
+  idTodo: number | undefined
 };
 
 export const TodoList: React.FC<Propse> = ({
@@ -47,7 +46,9 @@ export const TodoList: React.FC<Propse> = ({
           </td>
           <td className="has-text-right is-vcentered">
             <button
-              onClick={() => openModal(true, id, userId, title)}
+              onClick={() => openModal({
+                id, title, completed, userId,
+              })}
               data-cy="selectButton"
               className="button"
               type="button"

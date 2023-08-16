@@ -8,18 +8,21 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
-import { User } from './types/User';
+
+enum Filter {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
-  const [idTodo, setIdTodo] = useState(0);
-  const [titleTodo, setTitleTodo] = useState('');
-  const [user, setUser] = useState<User | null>(null);
-  const [filter, setFilter] = useState('all');
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState<string>(Filter.all);
   const [query, setQuery] = useState('');
 
   const filtredByQuery = (items: Todo[]) => {
@@ -27,33 +30,31 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = (items: Todo[]) => {
-    if (filter === 'active') {
-      const filtredItems = items.filter(item => !item.completed);
+    switch (filter) {
+      case 'active': {
+        const filtredItems = items.filter(item => !item.completed);
 
-      return filtredByQuery(filtredItems);
+        return filtredByQuery(filtredItems);
+      }
+
+      case 'completed': {
+        const filtredItems = items.filter(item => item.completed);
+
+        return filtredByQuery(filtredItems);
+      }
+
+      default:
+        return filtredByQuery(items);
     }
-
-    if (filter === 'completed') {
-      const filtredItems = items.filter(item => item.completed);
-
-      return filtredByQuery(filtredItems);
-    }
-
-    return filtredByQuery(items);
   };
 
   useEffect(() => {
-    getTodos().then(response => setTodos(response));
+    getTodos().then(setTodos);
   }, []);
 
-  const onOpenModal = (
-    value: boolean, todoId: number, userId: number, title: string,
-  ) => {
-    setIsOpenedModal(value);
-    setIdTodo(todoId);
-    setTitleTodo(title);
-
-    getUser(userId).then(person => setUser(person));
+  const onOpenModal = (todo: Todo) => {
+    setIsOpenedModal(true);
+    setCurrentTodo(todo);
   };
 
   return (
@@ -66,7 +67,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onSetFilter={(filt: string) => setFilter(filt)}
+                onSetFilter={setFilter}
                 onChangeQuery={(q) => setQuery(q)}
               />
             </div>
@@ -77,14 +78,9 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos(todos)}
-                  openModal={(
-                    value: boolean,
-                    todoId: number,
-                    userId: number,
-                    title: string,
-                  ) => onOpenModal(value, todoId, userId, title)}
+                  openModal={(todo: Todo) => onOpenModal(todo)}
                   isOpenedModal={isOpenedModal}
-                  idTodo={idTodo}
+                  idTodo={currentTodo?.id}
                 />
               )}
             </div>
@@ -94,10 +90,11 @@ export const App: React.FC = () => {
 
       {isOpenedModal && (
         <TodoModal
-          user={user}
-          idTodo={idTodo}
-          titleTodo={titleTodo}
-          onRemoveModal={(value) => setIsOpenedModal(value)}
+          userId={currentTodo?.userId}
+          idTodo={currentTodo?.id}
+          titleTodo={currentTodo?.title}
+          completed={currentTodo?.completed}
+          onRemoveModal={() => setIsOpenedModal(false)}
         />
       )}
     </>
