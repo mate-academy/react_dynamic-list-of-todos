@@ -31,13 +31,13 @@ export const App: React.FC = () => {
 
   const filteredTodos = (items: Todo[]) => {
     switch (filter) {
-      case 'active': {
+      case Filter.active: {
         const filtredItems = items.filter(item => !item.completed);
 
         return filtredByQuery(filtredItems);
       }
 
-      case 'completed': {
+      case Filter.completed: {
         const filtredItems = items.filter(item => item.completed);
 
         return filtredByQuery(filtredItems);
