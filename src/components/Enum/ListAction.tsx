@@ -1,5 +1,5 @@
 export enum ListAction {
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
 }
