@@ -15,6 +15,8 @@ export const TodoFilter: React.FC<Props> = ({
     setApplyQuery(event.target.value);
   };
 
+  const { ALL, ACTIVE, COMPLETED } = ListAction;
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -25,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
               setFilter(event.target.value as ListAction);
             }}
           >
-            <option value={ListAction.ALL}>All</option>
-            <option value={ListAction.ACTIVE}>Active</option>
-            <option value={ListAction.COMPLETED}>Completed</option>
+            <option value={ALL}>{ALL}</option>
+            <option value={ACTIVE}>{ACTIVE}</option>
+            <option value={COMPLETED}>{COMPLETED}</option>
           </select>
         </span>
       </p>
