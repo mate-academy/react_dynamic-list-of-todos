@@ -54,10 +54,6 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
-  const closeModal = () => {
-    setSelectedTodo(null);
-  };
-
   return (
     <>
       <div className="section">
@@ -90,7 +86,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          closeModal={closeModal}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

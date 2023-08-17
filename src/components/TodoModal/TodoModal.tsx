@@ -1,39 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  selectedTodo: Todo | null;
-  closeModal: () => void;
+  setSelectedTodo: (todo: Todo | null) => void,
+  selectedTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = ({
+  setSelectedTodo,
   selectedTodo,
-  closeModal,
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const getUserList = async () => {
-    let newUser;
-
-    if (selectedTodo) {
-      newUser = await getUser(selectedTodo.id);
-
-      setCurrentUser(newUser);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUserList();
+    getUser(selectedTodo.userId)
+      .then(setCurrentUser)
+      .finally(() => setIsLoading(false));
+  }, [selectedTodo]);
+
+  const handleCloseTodo = useCallback(() => {
+    setSelectedTodo(null);
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {selectedTodo && currentUser ? (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -48,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={closeModal}
+              onClick={handleCloseTodo}
             />
           </header>
 
@@ -66,14 +65,12 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${currentUser.email}`}>
-                {currentUser.name}
+              <a href={`mailto:${currentUser?.email}`}>
+                {currentUser?.name}
               </a>
             </p>
           </div>
         </div>
-      ) : (
-        <Loader />
       )}
     </div>
   );
