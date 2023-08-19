@@ -34,12 +34,13 @@ export const TodoList: React.FC<Props> = ({
             title,
             completed,
           } = todo;
+          const isSelected = selectedTodo === id;
 
           return (
             <tr
               data-cy="todo"
               className={cn({
-                'has-background-info-light': selectedTodo === id,
+                'has-background-info-light': isSelected,
               })}
               key={id}
             >
@@ -76,8 +77,8 @@ export const TodoList: React.FC<Props> = ({
                         cn(
                           'far',
                           {
-                            'fa-eye': !(selectedTodo === id),
-                            'fa-eye-slash': selectedTodo === id,
+                            'fa-eye': !(isSelected),
+                            'fa-eye-slash': isSelected,
                           },
                         )
                       }

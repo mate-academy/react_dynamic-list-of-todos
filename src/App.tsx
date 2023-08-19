@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -17,7 +16,7 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(Status.all);
   const [query, setQuery] = useState('');
   const getTodoByID = (id: number): Todo => {
-    return todos.find(todo => todo.id === id)!;
+    return todos.find(todo => todo.id === id) || todos[0];
   };
 
   useEffect(() => {
@@ -62,10 +61,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length < 1 && (
+              {!todos.length ? (
                 <Loader />
-              )}
-              {todos.length > 0 && (
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodoId}
