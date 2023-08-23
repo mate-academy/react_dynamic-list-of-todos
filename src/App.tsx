@@ -12,52 +12,56 @@ import { Status } from './types/Status';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoding] = useState(false);
-  const [todo, setTodo] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState(Status.ALL);
+  const [filter, setFilter] = useState(Status.all);
   const [query, setQuery] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setIsLoding(true);
+    setIsLoading(true);
     getTodos()
-      .then(setTodo)
+      .then(setTodos)
       .catch(() => setErrorMessage('There are no todos'))
-      .finally(() => setIsLoding(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredTodo = todo.filter(currentTodo => {
-    switch (filter) {
-      case Status.ACTIVE:
-        return !currentTodo.completed;
-
-      case Status.COMPLETED:
-        return currentTodo.completed;
-
-      default:
-        return true;
-    }
-  });
-
-  const visibleTodo = useMemo(() => {
-    if (query.trim()) {
-      return filteredTodo
-        .filter(currentTodo => currentTodo.title.toLowerCase()
-          .includes(query.toLowerCase()));
+  const filterTodos = (todosToFilter: Todo[], status: Status, searchTerm: string): Todo[] => {
+    if (status === Status.all && !searchTerm.trim()) {
+      return todosToFilter;
     }
 
-    return filteredTodo;
-  }, [todo, filter, query]);
+    return todosToFilter.filter(currentTodo => {
+      if (status === Status.active && currentTodo.completed) {
+        return false;
+      }
+
+      if (status === Status.completed && !currentTodo.completed) {
+        return false;
+      }
+
+      if (searchTerm.trim()
+        && !currentTodo.title.toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const visibleTodos = useMemo(() => {
+    return filterTodos(todos, filter, query);
+  }, [todos, filter, query]);
 
   return (
     <div className="App">
       <div className="section">
         <div className="container">
           <div className="box">
-            <h1 className="title">
-              Todos:
-            </h1>
+            <h1 className="title">Todos:</h1>
 
             <div className="block">
               <TodoFilter
@@ -68,20 +72,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (
-                <Loader />
-              )}
+              {isLoading && <Loader />}
 
-              {todo.length > 0 ? (
+              {todos.length > 0 ? (
                 <TodoList
-                  todo={visibleTodo}
+                  todo={visibleTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
               ) : (
-                <p>
-                  {errorMessage}
-                </p>
+                <p>{errorMessage}</p>
               )}
             </div>
           </div>

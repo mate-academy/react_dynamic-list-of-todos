@@ -7,6 +7,8 @@ type Props = {
   setQuery: (value: string) => void;
 };
 
+const SELECT_VALUES = [Status.all, Status.active, Status.completed];
+
 export const TodoFilter: React.FC<Props> = ({
   setFilter, setQuery, query,
 }) => {
@@ -34,16 +36,15 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleFilterChange}
           >
-            {(Object.keys(Status) as Array<keyof typeof Status>).map(key => (
+            {SELECT_VALUES.map(value => (
               <option
-                value={Status[key]}
-                key={key}
+                value={value}
+                key={value}
               >
-                {capitalizeFirstLetter(key)}
+                {capitalizeFirstLetter(Status[value])}
               </option>
             ))}
           </select>
-
         </span>
       </p>
 
