@@ -38,7 +38,15 @@ export const TodoModal: React.FC<Props> = ({
   let userElement;
 
   if (user) {
-    userElement = <a href={`mailto:${user.email}`}>{user.name}</a>;
+    userElement = (
+      <span>
+        {statusElement}
+        {' '}
+        by
+        {' '}
+        <a href={`mailto:${user.email}`}>{user.name}</a>
+      </span>
+    );
   } else if (error) {
     userElement = <span>Error Loading User</span>; // Display error message
   } else {
@@ -74,11 +82,15 @@ export const TodoModal: React.FC<Props> = ({
               {visibleModal.title}
             </p>
             <p className="block" data-cy="modal-user">
-              {statusElement}
-              by
               {userElement}
             </p>
           </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="notification is-danger">
+          Error loading user. Please try again later.
         </div>
       )}
     </div>

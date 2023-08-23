@@ -7,7 +7,6 @@ type Props = {
   visibleModal: Todo | null;
   setVisibleModal: (todo: Todo) => void
 };
-
 export const TodoList: React.FC<Props> = ({
   visibleTodos, visibleModal, setVisibleModal,
 }) => {
