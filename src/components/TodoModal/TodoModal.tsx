@@ -14,19 +14,42 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     getUser(visibleModal.userId)
       .then(setUser)
-      .catch(error => new Error(error.message))
+      .catch(() => {
+        setError(true);
+      })
       .finally(() => setLoading(false));
   }, [visibleModal.userId]);
+
+  let statusElement;
+
+  if (visibleModal.completed) {
+    statusElement = <strong className="has-text-success">Done</strong>;
+  } else {
+    statusElement = <strong className="has-text-danger">Planned</strong>;
+  }
+
+  let userElement;
+
+  if (user) {
+    userElement = <a href={`mailto:${user.email}`}>{user.name}</a>;
+  } else if (error) {
+    userElement = <span>Error Loading User</span>; // Display error message
+  } else {
+    userElement = <span>Unknown User</span>;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && !user ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -37,33 +60,23 @@ export const TodoModal: React.FC<Props> = ({
             >
               {`Todo #${visibleModal.id}`}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={() => setVisibleModal(null)}
-            />
+            >
+              <span className="sr-only">Close Modal</span>
+            </button>
           </header>
-
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
               {visibleModal.title}
             </p>
-
             <p className="block" data-cy="modal-user">
-              {visibleModal.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
-
-              {' by '}
-
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
+              {statusElement}
+              by
+              {userElement}
             </p>
           </div>
         </div>

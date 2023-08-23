@@ -41,7 +41,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(error => new Error(error.message))
+      .catch(error => {
+        throw error;
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -80,7 +82,6 @@ export const App: React.FC = () => {
         <TodoModal
           visibleModal={visibleModal}
           setVisibleModal={setVisibleModal}
-
         />
       )}
     </>

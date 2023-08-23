@@ -12,21 +12,28 @@ export const TodoFilter: React.FC<Props> = ({
   filter, setFilter, query, setQuery,
 }) => {
   const renderSearchIcon = () => (
-    <span className="icon is-left">
-      <i className="fas fa-magnifying-glass" />
-    </span>
+    <div className="control">
+      <button
+        className="button is-static"
+        type="button"
+      >
+        <span className="icon">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+      </button>
+    </div>
   );
 
   const renderClearButton = () => (
-    <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+    <div className="control">
       <button
         data-cy="clearSearchButton"
         type="button"
         className="delete"
         onClick={() => setQuery('')}
+        aria-label="Clear search"
       />
-    </span>
+    </div>
   );
 
   return (
@@ -48,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
 
-      <p className="control is-expanded has-icons-left has-icons-right">
+      <div className="control is-expanded has-icons-left has-icons-right">
         <input
           data-cy="searchInput"
           type="text"
@@ -59,7 +66,7 @@ export const TodoFilter: React.FC<Props> = ({
         />
         {renderSearchIcon()}
         {query && renderClearButton()}
-      </p>
+      </div>
     </form>
   );
 };
