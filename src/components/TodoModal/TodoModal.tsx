@@ -18,7 +18,12 @@ export const TodoModal: React.FC = () => {
     getUser(selectedTodo?.id)
       .then(setUser)
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [selectedTodo]);
+
+  const handleCrossClick = () => {
+    setSelectedTodo(null);
+    setUser(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -41,7 +46,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={handleCrossClick}
             />
           </header>
 
