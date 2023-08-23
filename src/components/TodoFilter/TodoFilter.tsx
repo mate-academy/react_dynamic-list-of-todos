@@ -8,10 +8,27 @@ type Props = {
   setQuery: (query: string) => void,
 };
 
-export const TodoFilter: React.FC<Props>
-= ({
+export const TodoFilter: React.FC<Props> = ({
   filter, setFilter, query, setQuery,
 }) => {
+  const renderSearchIcon = () => (
+    <span className="icon is-left">
+      <i className="fas fa-magnifying-glass" />
+    </span>
+  );
+
+  const renderClearButton = () => (
+    <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        data-cy="clearSearchButton"
+        type="button"
+        className="delete"
+        onClick={() => setQuery('')}
+      />
+    </span>
+  );
+
   return (
     <form
       className="field has-addons"
@@ -40,25 +57,9 @@ export const TodoFilter: React.FC<Props>
           value={query}
           onChange={event => setQuery(event.target.value)}
         />
-        <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
-        </span>
-
-        {query && (
-
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={() => setQuery('')}
-            />
-          </span>
-        )}
-
+        {renderSearchIcon()}
+        {query && renderClearButton()}
       </p>
     </form>
-
   );
 };

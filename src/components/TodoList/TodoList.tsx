@@ -25,19 +25,21 @@ export const TodoList: React.FC<Props> = ({
           <th> </th>
         </tr>
       </thead>
-
       <tbody>
-        {visibleTodos.map(todo => (
+        {visibleTodos.map(({
+          id, completed, title, userId,
+        }) => (
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': todo === visibleModal,
+              'has-background-info-light': visibleModal && visibleModal
+                .id === id,
             })}
-            key={todo.id}
+            key={id}
           >
-            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
-              {todo.completed && (
+              {completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -46,10 +48,10 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames(
-                  todo.completed ? 'has-text-success' : 'has-text-danger',
+                  completed ? 'has-text-success' : 'has-text-danger',
                 )}
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -57,15 +59,20 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setVisibleModal(todo)}
+                onClick={
+                  () => setVisibleModal({
+                    id, completed, title, userId,
+                  })
+                }
               >
                 <span className="icon">
-                  <i className={
-                    classNames(
+                  <i
+                    className={classNames(
                       'far',
-                      todo === visibleModal ? 'fa-eye-slash' : 'fa-eye',
-                    )
-                  }
+                      visibleModal && visibleModal.id === id
+                        ? 'fa-eye-slash'
+                        : 'fa-eye',
+                    )}
                   />
                 </span>
               </button>
@@ -73,6 +80,7 @@ export const TodoList: React.FC<Props> = ({
           </tr>
         ))}
       </tbody>
+
     </table>
   );
 };
