@@ -8,6 +8,7 @@ export const TodoModal: React.FC = () => {
   const { selectedTodo, setSelectedTodo } = useContext(TodosContext);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (!selectedTodo) {
@@ -17,6 +18,7 @@ export const TodoModal: React.FC = () => {
     setIsLoading(true);
     getUser(selectedTodo?.userId)
       .then(setUser)
+      .catch(e => setErrorMessage(e.message))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -26,7 +28,30 @@ export const TodoModal: React.FC = () => {
 
       {isLoading && <Loader />}
 
-      {user && (
+      {!isLoading && errorMessage && (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            />
+
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => setSelectedTodo(null)}
+            />
+          </header>
+
+          <div className="modal-card-body">
+            <p>{`Server responded with error: ${errorMessage}`}</p>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !errorMessage && user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

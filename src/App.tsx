@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,13 +25,15 @@ export const App: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState(Status.All);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(e => setErrorMessage(e.message))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [activeFilter, debouncedQuery]);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -34,23 +41,30 @@ export const App: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(timerId);
-  });
+  }, [query]);
 
-  const filteredTodos = todos.filter(todo => {
+  const filterByStatus = useCallback(todo => {
     switch (activeFilter) {
-      case Status.All:
-        return true;
-
       case Status.Active:
         return !todo.completed;
 
       case Status.Completed:
         return todo.completed;
 
+      case Status.All:
       default:
         return true;
     }
-  }).filter(todo => todo.title.toLowerCase().includes(debouncedQuery.toLowerCase()));
+  }, [activeFilter]);
+
+  const filterByTitle = useCallback(todo => todo.title
+    .toLowerCase()
+    .includes(debouncedQuery.toLowerCase()), [debouncedQuery]);
+
+  const filteredTodos = useMemo(() => todos
+    .filter(todo => filterByStatus(todo))
+    .filter(todo => filterByTitle(todo)),
+  [todos]);
 
   const value = {
     todos: filteredTodos,
@@ -75,7 +89,9 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading && <Loader />}
 
-              {!isLoading && todos.length > 0 && <TodoList />}
+              {!isLoading && !errorMessage && todos.length > 0 && <TodoList />}
+
+              {errorMessage && <p>{`Server responded with error: ${errorMessage}`}</p>}
             </div>
           </div>
         </div>

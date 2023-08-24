@@ -6,7 +6,7 @@ import { TodosContext } from '../../TodosContext';
 export const TodoList: React.FC = () => {
   const { todos } = useContext(TodosContext);
 
-  return (
+  return todos.length > 0 ? (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -22,16 +22,12 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {todos.length > 0 ? (
-          todos.map(todo => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))
-        ) : (
-          <tr>
-            <td colSpan={3}>No matches</td>
-          </tr>
-        )}
+        {todos.map(todo => (
+          <TodoItem key={todo.id} todo={todo} />
+        ))}
       </tbody>
     </table>
+  ) : (
+    <p style={{ textAlign: 'center' }}>No matches</p>
   );
 };
