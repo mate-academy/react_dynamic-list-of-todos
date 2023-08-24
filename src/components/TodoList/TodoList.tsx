@@ -1,22 +1,43 @@
+// eslint-disable
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { ToDoItem } from '../../ToDo';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+type Props = {
+  list: Todo[],
+};
 
-    <tbody>
-      <tr data-cy="todo" className="">
+export const TodoList: React.FC<Props> = ({ list }) => {
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {list.map(todo => {
+          return (
+            <ToDoItem todo={todo} key={todo.id} />
+          );
+        })}
+
+        {/* {list.map(todo =>
+       {
+        return (
+          <ToDoItem todo={todo}
+        )
+       }
+      )} */}
+        {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -94,7 +115,8 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
-    </tbody>
-  </table>
-);
+      </tr> */}
+      </tbody>
+    </table>
+  );
+};
