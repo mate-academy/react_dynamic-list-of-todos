@@ -1,13 +1,15 @@
+import { Selected } from '../../types/index';
+
 type Props = {
-  whatSelected: (data: string) => void;
-  whatQuery: (data: string) => void;
+  handleChangeSelected: (data: Selected) => void;
+  handleChangeQuery: (data: string) => void;
   query: string;
-  selected: string;
+  selected: Selected;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  whatSelected,
-  whatQuery,
+  handleChangeSelected,
+  handleChangeQuery,
   query,
   selected,
 }) => {
@@ -17,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => whatSelected(e.target.value)}
+            onChange={(e) => handleChangeSelected(e.target.value as Selected)}
             value={selected}
           >
             <option value="all">All</option>
@@ -34,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(e) => whatQuery(e.target.value)}
+          onChange={(e) => handleChangeQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -47,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => whatQuery('')}
+              onClick={() => handleChangeQuery('')}
             />
           </span>
         )}

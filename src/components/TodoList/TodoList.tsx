@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api';
+import { Selected } from '../../types/index';
 
 type Props = {
   isLoadTodos: (data: boolean) => void;
   whichModal: (todo: number, userId: number) => void;
   query: string;
-  selected: string;
+  selected: Selected;
   todoId: number | null;
 };
 
@@ -18,7 +19,6 @@ export const TodoList: React.FC<Props> = ({
   todoId,
 }) => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [, setFilteredTodos] = useState<Todo[] | null>(null);
   const [selectedTodos, setSelectedTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,6 @@ export const TodoList: React.FC<Props> = ({
         const todoData = await getTodos();
 
         setTodos(todoData);
-        setFilteredTodos(todoData);
         setSelectedTodos(todoData);
       } finally {
         isLoadTodos(false);
@@ -46,16 +45,14 @@ export const TodoList: React.FC<Props> = ({
           todo.title.toLowerCase().includes(query.toLowerCase())
         ));
 
-        setFilteredTodos(filtered);
-
         if (filtered) {
           setSelectedTodos(filtered.filter(filteredTodo => {
             switch (selected) {
-              case 'all':
+              case Selected.all:
                 return filteredTodo;
-              case 'active':
+              case Selected.active:
                 return filteredTodo.completed === false;
-              case 'completed':
+              case Selected.completed:
                 return filteredTodo.completed === true;
               default:
                 return filteredTodo;

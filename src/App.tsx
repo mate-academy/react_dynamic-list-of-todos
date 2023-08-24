@@ -7,28 +7,29 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Selected } from './types/index';
 
 export const App: React.FC = () => {
   const [loadTodos, setLoadTodos] = useState(false);
-  const [loadModal, setLoadModal] = useState<number | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
   const [todoId, settodoiD] = useState<number | null>(null);
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState<Selected>(Selected.all);
 
   const isLoadTodos = (data: boolean | ((prevState: boolean) => boolean)) => {
     setLoadTodos(data);
   };
 
-  const whichModal = (userId: number | null, todo: number | null) => {
-    setLoadModal(userId);
+  const whichModal = (user: number | null, todo: number | null) => {
+    setUserId(user);
     settodoiD(todo);
   };
 
-  const whatQuery = (data: string) => {
+  const handleChangeQuery = (data: string) => {
     setQuery(data);
   };
 
-  const whatSelected = (data: string) => {
+  const handleChangeSelected = (data: Selected) => {
     setSelected(data);
   };
 
@@ -41,8 +42,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                whatSelected={whatSelected}
-                whatQuery={whatQuery}
+                handleChangeSelected={handleChangeSelected}
+                handleChangeQuery={handleChangeQuery}
                 query={query}
                 selected={selected}
               />
@@ -63,7 +64,7 @@ export const App: React.FC = () => {
       </div>
 
       <TodoModal
-        loadModal={loadModal}
+        userId={userId}
         todoId={todoId}
         whichModal={whichModal}
       />

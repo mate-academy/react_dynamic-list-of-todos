@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 type Props = {
-  loadModal: number | null;
+  userId: number | null;
   todoId: number | null;
   whichModal: (todo: number | null, userId: number | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  loadModal,
+  userId,
   todoId,
   whichModal,
 }) => {
@@ -21,11 +21,11 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     const loadData = async () => {
-      if (loadModal !== null && todoId !== null) {
+      if (userId !== null && todoId !== null) {
         setIsLoading(true);
         setUser(null);
         setTodo(null);
-        const p1 = getUser(loadModal);
+        const p1 = getUser(userId);
         const p2 = getTodos();
 
         Promise.all([p1, p2])
@@ -44,25 +44,20 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     loadData();
-  }, [loadModal, todoId]);
+  }, [userId, todoId]);
 
   return (
     <>
-      {isLoading ? (
-        <>
-          <Loader />
-          <div>test</div>
-        </>
-      ) : null}
+      {isLoading ?? (
+        <Loader />
+      )}
       { (user && todo) && (
         <div className="modal is-active" data-cy="modal">
           <div className="modal-background" />
 
-          {isLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : null}
+          {isLoading ?? (
+            <Loader />
+          )}
           <div className="modal-card">
             <header className="modal-card-head">
               <div
