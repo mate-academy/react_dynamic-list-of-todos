@@ -1,5 +1,3 @@
-export enum Selected {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
-}
+export * from './Filter';
+export * from './Todo';
+export * from './User';

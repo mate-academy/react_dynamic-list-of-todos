@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,30 +7,40 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Selected } from './types/index';
+import { Filter } from './types/Filter';
+import { Todo } from './types/index';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [loadTodos, setLoadTodos] = useState(false);
-  const [userId, setUserId] = useState<number | null>(null);
-  const [todoId, settodoiD] = useState<number | null>(null);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<Selected>(Selected.all);
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.all);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
 
-  const isLoadTodos = (data: boolean | ((prevState: boolean) => boolean)) => {
-    setLoadTodos(data);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoadingTodos(true);
+      try {
+        const todoData = await getTodos();
 
-  const whichModal = (user: number | null, todo: number | null) => {
-    setUserId(user);
-    settodoiD(todo);
-  };
+        setTodos(todoData);
+      } finally {
+        setIsLoadingTodos(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleTodoSelect = useCallback((todo: Todo | null) => setSelectedTodo(todo), [setSelectedTodo]);
 
   const handleChangeQuery = (data: string) => {
     setQuery(data);
   };
 
-  const handleChangeSelected = (data: Selected) => {
-    setSelected(data);
+  const handleChangeSelected = (data: Filter) => {
+    setSelectedFilter(data);
   };
 
   return (
@@ -45,28 +55,28 @@ export const App: React.FC = () => {
                 handleChangeSelected={handleChangeSelected}
                 handleChangeQuery={handleChangeQuery}
                 query={query}
-                selected={selected}
+                selectedFilter={selectedFilter}
               />
             </div>
 
             <div className="block">
-              {loadTodos && <Loader />}
-              <TodoList
-                isLoadTodos={isLoadTodos}
-                whichModal={whichModal}
-                query={query}
-                selected={selected}
-                todoId={todoId}
-              />
+              {isLoadingTodos ? <Loader /> : (
+                <TodoList
+                  todos={todos}
+                  handleTodoSelect={handleTodoSelect}
+                  query={query}
+                  selectedFilter={selectedFilter}
+                  todoId={selectedTodo ? selectedTodo.id : null}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <TodoModal
-        userId={userId}
-        todoId={todoId}
-        whichModal={whichModal}
+        selectedTodo={selectedTodo}
+        handleTodoSelect={handleTodoSelect}
       />
     </>
   );

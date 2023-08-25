@@ -1,17 +1,17 @@
-import { Selected } from '../../types/index';
+import { Filter } from '../../types/index';
 
 type Props = {
-  handleChangeSelected: (data: Selected) => void;
+  handleChangeSelected: (data: Filter) => void;
   handleChangeQuery: (data: string) => void;
   query: string;
-  selected: Selected;
+  selectedFilter: Filter;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   handleChangeSelected,
   handleChangeQuery,
   query,
-  selected,
+  selectedFilter,
 }) => {
   return (
     <form className="field has-addons">
@@ -19,8 +19,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => handleChangeSelected(e.target.value as Selected)}
-            value={selected}
+            onChange={(e) => handleChangeSelected(e.target.value as Filter)}
+            value={selectedFilter}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

@@ -1,69 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api';
-import { Selected } from '../../types/index';
+import React, { useMemo } from 'react';
+import { Todo, Filter } from '../../types/index';
 
 type Props = {
-  isLoadTodos: (data: boolean) => void;
-  whichModal: (todo: number, userId: number) => void;
+  todos: Todo[] | null;
+  handleTodoSelect: (todo: Todo) => void;
   query: string;
-  selected: Selected;
+  selectedFilter: Filter;
   todoId: number | null;
 };
 
 export const TodoList: React.FC<Props> = ({
-  isLoadTodos,
-  whichModal,
+  todos,
+  handleTodoSelect,
   query,
-  selected,
+  selectedFilter,
   todoId,
 }) => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [selectedTodos, setSelectedTodos] = useState<Todo[] | null>(null);
+  const filteredTodos = useMemo(() => {
+    const queryFilter = todos?.filter(todo => (
+      todo.title.toLowerCase().includes(query.toLowerCase())
+    ));
 
-  useEffect(() => {
-    const fetchData = async () => {
-      isLoadTodos(true);
+    if (selectedFilter === Filter.all) {
+      return queryFilter;
+    }
 
-      try {
-        const todoData = await getTodos();
+    const isCompleted = selectedFilter === Filter.completed;
 
-        setTodos(todoData);
-        setSelectedTodos(todoData);
-      } finally {
-        isLoadTodos(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const isQuery = async () => {
-      if (todos) {
-        const filtered = todos.filter(todo => (
-          todo.title.toLowerCase().includes(query.toLowerCase())
-        ));
-
-        if (filtered) {
-          setSelectedTodos(filtered.filter(filteredTodo => {
-            switch (selected) {
-              case Selected.all:
-                return filteredTodo;
-              case Selected.active:
-                return filteredTodo.completed === false;
-              case Selected.completed:
-                return filteredTodo.completed === true;
-              default:
-                return filteredTodo;
-            }
-          }));
-        }
-      }
-    };
-
-    isQuery();
-  }, [query, selected, todos]);
+    return queryFilter?.filter(({ completed }) => completed === isCompleted);
+  }, [query, selectedFilter, todos]);
 
   return (
     <>
@@ -82,7 +47,7 @@ export const TodoList: React.FC<Props> = ({
         </thead>
 
         <tbody>
-          {selectedTodos?.map(todo => (
+          {filteredTodos?.map(todo => (
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
@@ -105,7 +70,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => whichModal(todo.userId, todo.id)}
+                  onClick={() => handleTodoSelect(todo)}
                 >
                   <span className="icon">
                     <i className={todoId === todo.id

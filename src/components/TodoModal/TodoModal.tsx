@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getTodos, getUser } from '../../api';
-import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
+import { Todo, User } from '../../types/index';
 
 type Props = {
-  userId: number | null;
-  todoId: number | null;
-  whichModal: (todo: number | null, userId: number | null) => void;
+  selectedTodo: Todo | null;
+  handleTodoSelect: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  userId,
-  todoId,
-  whichModal,
+  selectedTodo,
+  handleTodoSelect,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -21,17 +18,19 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     const loadData = async () => {
-      if (userId !== null && todoId !== null) {
+      if (selectedTodo !== null) {
         setIsLoading(true);
         setUser(null);
         setTodo(null);
-        const p1 = getUser(userId);
+        const p1 = getUser(selectedTodo.userId);
         const p2 = getTodos();
 
         Promise.all([p1, p2])
           .then(([userData, todosData]) => {
             setUser(userData);
-            const findTodo = todosData.find(todoData => todoData.id === todoId);
+            const findTodo = todosData.find(
+              todoData => todoData.id === selectedTodo.id,
+            );
 
             if (findTodo !== undefined) {
               setTodo(findTodo);
@@ -44,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({
     };
 
     loadData();
-  }, [userId, todoId]);
+  }, [selectedTodo]);
 
   return (
     <>
@@ -76,7 +75,7 @@ export const TodoModal: React.FC<Props> = ({
                 onClick={() => {
                   setUser(null);
                   setTodo(null);
-                  whichModal(null, null);
+                  handleTodoSelect(null);
                 }}
               />
             </header>
