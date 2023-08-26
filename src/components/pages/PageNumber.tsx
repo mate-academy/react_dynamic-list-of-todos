@@ -22,6 +22,7 @@ export const Page: React.FC<Props> = ({ page }) => {
 
   return (
     <button
+      style={{ cursor: 'pointer' }}
       type="button"
       value={2}
       onClick={(e) => clickHandler(e)}

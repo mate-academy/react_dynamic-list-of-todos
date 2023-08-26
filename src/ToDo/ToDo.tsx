@@ -1,4 +1,5 @@
 // eslint-disable-next-line
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -11,7 +12,13 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
       <td className="is-vcentered">{todo.id}</td>
       <td className="is-vcentered" />
       <td className="is-vcentered is-expanded">
-        <p className="has-text-danger">{todo.title}</p>
+        <p className={classNames({
+          'has-text-success': todo.completed === true,
+          'has-text-danger': todo.completed === false,
+        })}
+        >
+          {todo.title}
+        </p>
       </td>
       <td className="has-text-right is-vcentered">
         <button data-cy="selectButton" className="button" type="button">
