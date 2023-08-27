@@ -12,6 +12,7 @@ export enum ACTIONS {
   SET_CURRENT_PAGE = 'setCurrentPage',
   SET_SEARCH_VALUE = 'setSearchValue',
   SORT = 'sortBy',
+  SET_TODO = 'setTodo',
 }
 
 export enum FILTER {
@@ -25,6 +26,7 @@ type Action = { type: ACTIONS.SET_LIST, payload: Todo[] }
 | { type: ACTIONS.SET_VISIBLE_LIST, payload: Todo[] }
 | { type: ACTIONS.SET_CURRENT_PAGE, payload: number }
 | { type: ACTIONS.SET_SEARCH_VALUE, payload: string }
+| { type: ACTIONS.SET_TODO, payload: Todo }
 | { type: ACTIONS.SORT, payload: string };
 
 interface State {
@@ -33,6 +35,7 @@ interface State {
   currentPage: number,
   sortBy: string,
   searchValue: string,
+  selectedTodo: Todo,
 }
 
 type Props = {
@@ -78,6 +81,11 @@ function reducer(state: State, action: Action): State {
       ...state,
       sortBy: action.payload,
     }
+    case ACTIONS.SET_TODO:
+      return {
+      ...state,
+      selectedTodo: action.payload,
+    }
     default:
       return state;
   }
@@ -88,6 +96,7 @@ const InitialState: State = {
   currentPage: 1,
   sortBy: 'All',
   searchValue: '',
+  selectedTodo: {} as Todo,
 }
 
 export const StateContext = React.createContext(InitialState);

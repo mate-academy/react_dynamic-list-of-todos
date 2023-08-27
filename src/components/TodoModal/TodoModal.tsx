@@ -1,8 +1,29 @@
 // eslint-disable
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 // import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { StateContext, ACTIONS, DispatchContext } from '../ToDoContext';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
 export const TodoModal: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
+  const { selectedTodo } = useContext(StateContext);
+  const [userState, setUserState] = useState({} as User);
+
+  function closeTodoModal() {
+    dispatch({ type: ACTIONS.SET_TODO, payload: {} as Todo });
+  }
+
+  useEffect(() => {
+    getUser(selectedTodo.id)
+      .then((res) => setUserState(res));
+
+    return () => {
+      setUserState({} as User);
+    };
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -24,12 +45,13 @@ export const TodoModal: React.FC = () => {
             type="button"
             className="delete"
             data-cy="modal-close"
+            onClick={closeTodoModal}
           />
         </header>
 
         <div className="modal-card-body">
           <p className="block" data-cy="modal-title">
-            quis ut nam facilis et officia qui
+            {selectedTodo.title}
           </p>
 
           <p className="block" data-cy="modal-user">
@@ -39,7 +61,7 @@ export const TodoModal: React.FC = () => {
             {' by '}
 
             <a href="mailto:Sincere@april.biz">
-              Leanne Graham
+              {userState.name}
             </a>
           </p>
         </div>

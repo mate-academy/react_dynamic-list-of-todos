@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable */
 // eslint-disable
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,16 +14,20 @@ import {
 } from './components/ToDoContext';
 import { Page } from './components/pages';
 import { getTodos } from './api';
+import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
 
   const { list, visibleList, sortBy, searchValue } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+  const [needLoader, setNeedLoader] = useState(false);
   console.log(list.filter(todo => todo.completed), '???');
   // const arrayLength = () => {
   //   list.filter(todo => todo.completed)
   // }
-  const pageAmout = []; 
+  const { selectedTodo } = useContext(StateContext)
+  const pageAmout = [];
   let pageLength = list.length;
   if (sortBy === 'All') {
     pageLength = list.length;
@@ -44,9 +48,10 @@ export const App: React.FC = () => {
   for (let i = 1; i <= Math.ceil(pageLength / 18); i += 1) {
     pageAmout.push(i);
   }
-  // console.log(pageAmout, "PA");
+  console.log(selectedTodo);
 
   useEffect(() =>{
+    setNeedLoader(true);
     console.log('start loading');
 
     getTodos()
@@ -54,8 +59,9 @@ export const App: React.FC = () => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res })
       })
       .catch(() => console.log('error'))
-      .finally(() => console.log('stop loading'));
+      .finally(() => setNeedLoader(false));
   }, []);
+
   return (
     <>
       {/* <button onClick={getConvertedToDos}>get list</button> */}
@@ -70,6 +76,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {/* <Loader /> */}
+              {needLoader && (<Loader />)}
               <TodoList list={visibleList} />
             </div>
           </div>
@@ -77,6 +84,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* <TodoModal /> */}
+      {selectedTodo.id && (<TodoModal />)}
       <div style={{
         display: 'flex',
         justifyContent: 'center',

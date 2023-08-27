@@ -1,12 +1,20 @@
 // eslint-disable-next-line
+import { useContext } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { ACTIONS, DispatchContext } from '../components/ToDoContext';
 
 type Props = {
   todo: Todo
 };
 
 export const ToDoItem: React.FC<Props> = ({ todo }) => {
+  const dispatch = useContext(DispatchContext);
+
+  function selectUser() {
+    dispatch({ type: ACTIONS.SET_TODO, payload: todo });
+  }
+
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
@@ -21,7 +29,12 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
         </p>
       </td>
       <td className="has-text-right is-vcentered">
-        <button data-cy="selectButton" className="button" type="button">
+        <button
+          data-cy="selectButton"
+          className="button"
+          type="button"
+          onClick={selectUser}
+        >
           <span className="icon">
             <i className="far fa-eye" />
           </span>
