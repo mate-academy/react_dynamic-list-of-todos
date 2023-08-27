@@ -28,6 +28,7 @@ export const TodoModal: React.FC = () => {
       setUserState({} as User);
     };
   }, []);
+  console.log(userState, 'userState');
 
   return (
     <div className="modal is-active" data-cy="modal">

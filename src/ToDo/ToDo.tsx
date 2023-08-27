@@ -2,7 +2,11 @@
 import { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { ACTIONS, DispatchContext } from '../components/ToDoContext';
+import {
+  ACTIONS,
+  DispatchContext,
+  StateContext,
+} from '../components/ToDoContext';
 
 type Props = {
   todo: Todo
@@ -11,6 +15,7 @@ type Props = {
 export const ToDoItem: React.FC<Props> = ({ todo }) => {
   const [isButtonPressed, setIsButtonPressed] = useState(false);
   const dispatch = useContext(DispatchContext);
+  const { selectedTodo } = useContext(StateContext);
 
   function selectUser() {
     dispatch({ type: ACTIONS.SET_TODO, payload: todo });
@@ -39,7 +44,7 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
         >
           <span className="icon">
             <i className={classNames('far fa-eye', {
-              'far fa-eye-slash': isButtonPressed,
+              'far fa-eye-slash': selectedTodo.id,
             })}
             />
           </span>

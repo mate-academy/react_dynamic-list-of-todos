@@ -1,51 +1,42 @@
-// eslint-disable
 import debounce from 'lodash.debounce';
 import { useCallback, useContext, useState } from 'react';
-// import { Todo } from "../../types/Todo";
 import {
-  FILTER,
   ACTIONS,
   DispatchContext,
-  // StateContext,
 } from '../ToDoContext';
 
 export const TodoFilter = () => {
   const [input, setInput] = useState('');
-  // const [delayedInput, setDelayedInput] = useState('')
   const dispatch = useContext(DispatchContext);
 
   function onSelectHandler(e: React.ChangeEvent<HTMLSelectElement>) {
-    // eslint-disable-next-line
-    console.log('choise is maeden', e.target.value);
-    // console.log(delayedInput);
-    dispatch({ type: ACTIONS.SORT, payload: FILTER.ACTIVE });
+    dispatch({ type: ACTIONS.SORT, payload: e.target.value });
   }
 
   function setDelayedInput(value: string) {
     dispatch({ type: ACTIONS.SET_SEARCH_VALUE, payload: value });
   }
 
-  // const { searchValue } = useContext(StateContext);
   const applyDelayedInput = useCallback(debounce(setDelayedInput, 1000), []);
-  // console.log(searchValue, 'sv');
 
   function inputSearchHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
     applyDelayedInput(e.target.value);
-    // set to global state input value and active the search after debounce
-    // dispatch({ type: ACTIONS.SET_SEARCH_VALUE, payload: e.target.value })
-    // console.log(e.target.value);
-    // console.log();
+  }
+
+  function clearInput() {
+    setInput('');
+    setDelayedInput('');
   }
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={onSelectHandler}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+          <select data-cy="statusSelect" onChange={(e) => onSelectHandler(e)}>
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
           </select>
         </span>
       </p>
@@ -69,6 +60,7 @@ export const TodoFilter = () => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={clearInput}
           />
         </span>
       </p>

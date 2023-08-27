@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 /* eslint-disable */
 // eslint-disable
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  // useCallback,
+  useContext, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,55 +14,59 @@ import {
   DispatchContext,
   ACTIONS,
 } from './components/ToDoContext';
-import { Page } from './components/pages';
+// import { Page } from './components/pages';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
 
-  const { list, visibleList, sortBy, searchValue } = useContext(StateContext);
+  const { visibleList, sortBy, searchValue } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const [needLoader, setNeedLoader] = useState(false);
-  console.log(list.filter(todo => todo.completed), '???');
-  // const arrayLength = () => {
-  //   list.filter(todo => todo.completed)
-  // }
-  const { selectedTodo } = useContext(StateContext)
-  const pageAmout = [];
-  let pageLength = list.length;
-  if (sortBy === 'All') {
-    pageLength = list.length;
-  }
-  if (sortBy === 'Complited') {
-    // console.log(list.filter(todo => todo.completed), '!!');
-    pageLength = list.filter(elem => elem.completed).length
-  }
-  if (sortBy === 'Active') {
-    // console.log(list.filter(todo => todo.completed), '!!');
-    pageLength = list.filter(elem => !elem.completed).length
-  }
-  if (searchValue.length > 0) {
-    pageLength = list.filter(todo => todo.title.includes(searchValue)).length
-  }
-  // console.log(pageLength, 'PG');
 
-  for (let i = 1; i <= Math.ceil(pageLength / 18); i += 1) {
-    pageAmout.push(i);
+  const { selectedTodo } = useContext(StateContext);
+
+
+
+
+  let copyVisibleList: Todo[] = [] as Todo[];
+
+
+  if (searchValue.length === 0 && sortBy === 'All') {
+
+    copyVisibleList = [...visibleList];
   }
-  console.log(selectedTodo);
+  if (searchValue.length === 0 && sortBy === 'Completed') {
+    copyVisibleList = [...visibleList.filter(todo => todo.completed)];
+
+  }
+  if (searchValue.length === 0 && sortBy === 'Active') {
+    copyVisibleList = [...visibleList.filter(todo => !todo.completed)];
+  }
+  if (searchValue.length > 0 && sortBy === 'All') {
+    copyVisibleList = [...visibleList.filter(todo => todo.title.includes(searchValue))];
+  }
+  if (searchValue.length > 0 && sortBy === 'Completed') {
+    const shallowCopy = [...visibleList.filter(todo => todo.completed)]
+    copyVisibleList = shallowCopy.filter(todo => todo.title.includes(searchValue));
+  }if (searchValue.length > 0 && sortBy === 'Active') {
+    const shallowCopy = [...visibleList.filter(todo => !todo.completed)]
+    copyVisibleList = shallowCopy.filter(todo => todo.title.includes(searchValue));
+  }
 
   useEffect(() =>{
     setNeedLoader(true);
-    console.log('start loading');
-
     getTodos()
       .then(res => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res })
+        dispatch({ type: ACTIONS.SET_VISIBLE_LIST, payload: res })
       })
       .catch(() => console.log('error'))
       .finally(() => setNeedLoader(false));
   }, []);
+
 
   return (
     <>
@@ -77,7 +83,7 @@ export const App: React.FC = () => {
             <div className="block">
               {/* <Loader /> */}
               {needLoader && (<Loader />)}
-              <TodoList list={visibleList} />
+              <TodoList list={copyVisibleList} />
             </div>
           </div>
         </div>
@@ -85,28 +91,7 @@ export const App: React.FC = () => {
 
       {/* <TodoModal /> */}
       {selectedTodo.id && (<TodoModal />)}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '10px',
-        marginBottom: '20px',
-      }}>
 
-        {pageAmout.map(page => {
-          return (
-            <Page page={page} key={page} />
-          )
-        })}
-        {/* <button>1</button>
-       <button
-         value={2}
-         onClick={(e) => clickHandler(e)}
-       >
-        2
-      </button>
-       <button>3</button>
-       <button>4</button> */}
-      </div>
     </>
   );
 };
