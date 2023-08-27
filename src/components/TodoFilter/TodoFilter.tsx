@@ -27,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select
-           data-cy="statusSelect"
-           value={selectedStatus}
-           onChange={handleChangeStatus}
+            data-cy="statusSelect"
+            value={selectedStatus}
+            onChange={handleChangeStatus}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

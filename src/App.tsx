@@ -6,30 +6,31 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
-
+import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('Try again later');
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const visibleTodos = useMemo(() => {
+    let filteredTodos = todos;
+
     if (query.trim()) {
-      return todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+      filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
     }
 
     if (selectedStatus === 'active') {
-      return todos.filter(todo => !todo.completed);
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    } else if (selectedStatus === 'completed') {
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
-    if (selectedStatus === 'completed') {
-      return todos.filter(todo => todo.completed);
-    }
-
-    return todos;
+    return filteredTodos;
   }, [todos, query, selectedStatus]);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export const App: React.FC = () => {
     setTimeout(() => {
       getTodos()
         .then(setTodos)
-        // .catch(() => setErrorMessage('Try again later'))
+        .catch(() => setErrorMessage(errorMessage))
         .finally(() => setLoading(false));
     }, 1000);
   }, []);
@@ -51,21 +52,38 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter query={query} setQuery={setQuery} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                selectedStatus={selectedStatus}
+                setSelectedStatus={setSelectedStatus}
+              />
             </div>
 
             <div className="block">
               {loading && (
                 <Loader />
               )}
-              <TodoList items={visibleTodos} />
+              {!loading
+              && (
+                <TodoList
+                  items={visibleTodos}
+                  onTodoSelected={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* `      <TodoModal /> */}
-      `
+      {selectedTodo
+        && (
+          <TodoModal
+            todo={selectedTodo}
+            close={() => setSelectedTodo(null)}
+          />
+        )}
       {' '}
     </>
   );
