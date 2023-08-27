@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { ACTIONS, DispatchContext } from '../components/ToDoContext';
@@ -9,10 +9,12 @@ type Props = {
 };
 
 export const ToDoItem: React.FC<Props> = ({ todo }) => {
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
   const dispatch = useContext(DispatchContext);
 
   function selectUser() {
     dispatch({ type: ACTIONS.SET_TODO, payload: todo });
+    setIsButtonPressed(!isButtonPressed);
   }
 
   return (
@@ -36,7 +38,10 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
           onClick={selectUser}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            <i className={classNames('far fa-eye', {
+              'far fa-eye-slash': isButtonPressed,
+            })}
+            />
           </span>
         </button>
       </td>
