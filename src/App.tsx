@@ -57,23 +57,15 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {(() => {
-                if (isLoading) {
-                  return <Loader />;
-                }
-
-                if (error) {
-                  return <div className="notification is-danger">{error}</div>;
-                }
-
-                return (
-                  <TodoList
-                    todos={visibleTodos}
-                    onTodoSelected={setSelectedTodo}
-                    selectedTodoId={selectedTodo?.id}
-                  />
-                );
-              })()}
+              {isLoading && (<Loader />)}
+              {error && (<div className="notification is-danger">{error}</div>)}
+              {!isLoading && !error && (
+                <TodoList
+                  todos={visibleTodos}
+                  onTodoSelected={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
