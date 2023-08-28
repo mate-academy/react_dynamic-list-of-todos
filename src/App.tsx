@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -24,9 +24,7 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error(err);
+      .catch(() => {
         setError('Something went wrong while fetching data.');
       })
       .finally(() => setIsLoading(false));
@@ -44,33 +42,12 @@ export const App: React.FC = () => {
     });
   }, [todos, query, status]);
 
-  let content = null;
-
-  if (isLoading) {
-    content = <Loader />;
-  } else if (error) {
-    content = (
-      <div className="notification is-danger">
-        {error}
-      </div>
-    );
-  } else {
-    content = (
-      <TodoList
-        todos={visibleTodos}
-        onTodoSelected={setSelectedTodo}
-        selectedTodoId={selectedTodo?.id}
-      />
-    );
-  }
-
   return (
     <>
       <div className="section">
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-
             <div className="block">
               <TodoFilter
                 query={query}
@@ -79,9 +56,24 @@ export const App: React.FC = () => {
                 onStatusChange={setStatus}
               />
             </div>
-
             <div className="block">
-              {content}
+              {(() => {
+                if (isLoading) {
+                  return <Loader />;
+                }
+
+                if (error) {
+                  return <div className="notification is-danger">{error}</div>;
+                }
+
+                return (
+                  <TodoList
+                    todos={visibleTodos}
+                    onTodoSelected={setSelectedTodo}
+                    selectedTodoId={selectedTodo?.id}
+                  />
+                );
+              })()}
             </div>
           </div>
         </div>
