@@ -1,5 +1,3 @@
-// eslint-disable
-/* eslint-disable */
 import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
@@ -21,14 +19,15 @@ export const TodoModal: React.FC = () => {
     setDoWeNeedLaoder(true);
     getUser(selectedTodo.id)
       .then((res) => setUserState(res))
+      /* eslint-disable */
       .catch((err) => console.log(err))
+      /* eslint-enable */
       .finally(() => setDoWeNeedLaoder(false));
 
     return () => {
       setUserState({} as User);
     };
   }, []);
-  console.log(userState, 'userState');
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -43,7 +42,8 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectedTodo.id}
+              Todo #
+              {selectedTodo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -62,12 +62,10 @@ export const TodoModal: React.FC = () => {
 
             <p className="block" data-cy="modal-user">
               {selectedTodo.completed ? (
-              <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
               )}
-              {/* <strong className="has-text-success">Done</strong> */}
-              {/* <strong className="has-text-danger">Planned</strong> */}
 
               {' by '}
 

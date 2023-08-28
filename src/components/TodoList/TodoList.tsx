@@ -1,4 +1,3 @@
-// eslint-disable
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { ToDoItem } from '../../ToDo';

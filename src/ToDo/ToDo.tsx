@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
