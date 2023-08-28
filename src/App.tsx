@@ -11,6 +11,7 @@ import {
   StateContext,
   DispatchContext,
   ACTIONS,
+  FILTER,
 } from './components/ToDoContext';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
@@ -23,41 +24,46 @@ export const App: React.FC = () => {
   const [needLoader, setNeedLoader] = useState(false);
 
   const { selectedTodo } = useContext(StateContext);
-  let copyVisibleList: Todo[] = [] as Todo[];
 
-  if (searchValue.length === 0 && sortBy === 'All') {
-    copyVisibleList = [...visibleList];
-  }
+  const newList = () => {
+    let copyVisibleList: Todo[] = [] as Todo[];
 
-  if (searchValue.length === 0 && sortBy === 'Completed') {
-    copyVisibleList = [...visibleList.filter(todo => todo.completed)];
-  }
+    if (searchValue.length === 0 && sortBy === FILTER.ALL) {
+      copyVisibleList = [...visibleList];
+    }
 
-  if (searchValue.length === 0 && sortBy === 'Active') {
-    copyVisibleList = [...visibleList.filter(todo => !todo.completed)];
-  }
+    if (searchValue.length === 0 && sortBy === FILTER.COMPLITED) {
+      copyVisibleList = [...visibleList.filter(todo => todo.completed)];
+    }
 
-  if (searchValue.length > 0 && sortBy === 'All') {
-    copyVisibleList = [...visibleList.filter(
-      todo => todo.title.includes(searchValue),
-    )];
-  }
+    if (searchValue.length === 0 && sortBy === FILTER.ACTIVE) {
+      copyVisibleList = [...visibleList.filter(todo => !todo.completed)];
+    }
 
-  if (searchValue.length > 0 && sortBy === 'Completed') {
-    const shallowCopy = [...visibleList.filter(todo => todo.completed)];
+    if (searchValue.length > 0 && sortBy === FILTER.ALL) {
+      copyVisibleList = [...visibleList.filter(
+        todo => todo.title.includes(searchValue),
+      )];
+    }
 
-    copyVisibleList = shallowCopy.filter(
-      todo => todo.title.includes(searchValue),
-    );
-  }
+    if (searchValue.length > 0 && sortBy === FILTER.COMPLITED) {
+      const shallowCopy = [...visibleList.filter(todo => todo.completed)];
 
-  if (searchValue.length > 0 && sortBy === 'Active') {
-    const shallowCopy = [...visibleList.filter(todo => !todo.completed)];
+      copyVisibleList = shallowCopy.filter(
+        todo => todo.title.includes(searchValue),
+      );
+    }
 
-    copyVisibleList = shallowCopy.filter(
-      todo => todo.title.includes(searchValue),
-    );
-  }
+    if (searchValue.length > 0 && sortBy === FILTER.ACTIVE) {
+      const shallowCopy = [...visibleList.filter(todo => !todo.completed)];
+
+      copyVisibleList = shallowCopy.filter(
+        todo => todo.title.includes(searchValue),
+      );
+    }
+
+    return copyVisibleList;
+  };
 
   useEffect(() => {
     setNeedLoader(true);
@@ -66,12 +72,11 @@ export const App: React.FC = () => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res });
         dispatch({ type: ACTIONS.SET_VISIBLE_LIST, payload: res });
       })
-      /* eslint-disable */
-      .catch(() => console.log('error'))
-      /* eslint-enable */
+      .catch((err) => {
+        throw err;
+      })
       .finally(() => setNeedLoader(false));
   }, []);
-
 
   return (
     <>
@@ -87,7 +92,7 @@ export const App: React.FC = () => {
             <div className="block">
               {/* <Loader /> */}
               {needLoader && (<Loader />)}
-              <TodoList list={copyVisibleList} />
+              <TodoList list={newList()} />
             </div>
           </div>
         </div>

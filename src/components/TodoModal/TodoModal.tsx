@@ -9,31 +9,31 @@ export const TodoModal: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { selectedTodo } = useContext(StateContext);
   const [userState, setUserState] = useState({} as User);
-  const [doWeNeedLoader, setDoWeNeedLaoder] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function closeTodoModal() {
     dispatch({ type: ACTIONS.SET_TODO, payload: {} as Todo });
   }
 
   useEffect(() => {
-    setDoWeNeedLaoder(true);
-    getUser(selectedTodo.id)
+    setIsLoading(true);
+    getUser(selectedTodo.userId)
       .then((res) => setUserState(res))
-      /* eslint-disable */
-      .catch((err) => console.log(err))
-      /* eslint-enable */
-      .finally(() => setDoWeNeedLaoder(false));
+      .catch((err) => {
+        throw err;
+      })
+      .finally(() => setIsLoading(false));
 
     return () => {
       setUserState({} as User);
     };
-  }, []);
+  }, [selectedTodo.id]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {doWeNeedLoader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
