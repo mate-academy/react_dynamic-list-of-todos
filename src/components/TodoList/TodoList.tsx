@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../enum/enum';
@@ -18,18 +20,17 @@ function filteredTodos(
   return todos.filter(todo => {
     const lowerCaseTitle = todo.title.toLowerCase();
 
-    if (
-      (selectedFilter === Filter.Active && todo.completed)
-      || (selectedFilter === Filter.Completed && !todo.completed)
-    ) {
+    const isActiveAndCompleted = selectedFilter === Filter.Active
+    && todo.completed;
+    const isCompletedAndNotCompleted = selectedFilter === Filter.Completed
+    && !todo.completed;
+
+    if (isActiveAndCompleted || isCompletedAndNotCompleted) {
       return false;
     }
 
-    if (inputValue && !lowerCaseTitle.includes(inputValue.toLowerCase())) {
-      return false;
-    }
-
-    return true;
+    return !(inputValue
+      && !lowerCaseTitle.includes(inputValue.toLowerCase()));
   });
 }
 
@@ -64,7 +65,9 @@ export const TodoList: React.FC<Props> = ({
           return (
             <tr
               data-cy="todo"
-              className={todoIsSelect ? 'has-background-info-light' : ''}
+              className={classNames({
+                'has-background-info-light': todoIsSelect,
+              })}
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
@@ -78,7 +81,13 @@ export const TodoList: React.FC<Props> = ({
                 <td className="is-vcentered" />
               )}
               <td className="is-vcentered is-expanded">
-                <p className="has-text-danger">{todo.title}</p>
+                <p className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+                >
+                  {todo.title}
+                </p>
               </td>
               <td className="has-text-right is-vcentered">
                 <button
@@ -89,8 +98,10 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => setSelectedTodo(todo)}
                 >
                   <span className="icon">
-                    <i className={todoIsSelect
-                      ? 'far fa-eye-slash' : 'far fa-eye'}
+                    <i className={classNames({
+                      'far fa-eye-slash': todoIsSelect,
+                      'far fa-eye': !todoIsSelect,
+                    })}
                     />
                   </span>
                 </button>

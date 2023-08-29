@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -13,11 +15,11 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User>();
 
   const fetchUser = useCallback(async (userId: number) => {
-    setLoading(true);
+    setIsLoading(true);
 
     if (userId) {
       try {
@@ -25,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({
 
         setUser(fetchedUser);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   }, []);
@@ -40,11 +42,11 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && (
+      {isLoading && (
         <Loader />
       )}
 
-      {!loading && selectedTodo && (
+      {!isLoading && selectedTodo && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -71,7 +73,11 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">
+              <strong className={classNames({
+                'has-text-success': selectedTodo.completed,
+                'has-text-danger': !selectedTodo.completed,
+              })}
+              >
                 {selectedTodo.completed ? 'Done' : 'Planned'}
               </strong>
 

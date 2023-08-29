@@ -15,13 +15,13 @@ export const App: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [inputValue, setInputValue] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos().then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -40,11 +40,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (
+              {isLoading && (
                 <Loader />
               )}
 
-              {!loading && todos.length > 0 && (
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={todos}
                   selectedFilter={selectedFilter}
