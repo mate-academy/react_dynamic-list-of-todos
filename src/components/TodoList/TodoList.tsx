@@ -3,10 +3,10 @@ import { Todo } from '../../types/Todo';
 import { ToDoItem } from '../../ToDo';
 
 type Props = {
-  list: Todo[],
+  todos: Todo[],
 };
 
-export const TodoList: React.FC<Props> = ({ list }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = ({ list }) => {
 
       <tbody>
 
-        {list.map(todo => <ToDoItem todo={todo} key={todo.id} />)}
+        {todos.map(todo => <ToDoItem todo={todo} key={todo.id} />)}
 
       </tbody>
     </table>

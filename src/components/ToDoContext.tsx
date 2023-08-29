@@ -13,9 +13,9 @@ export enum ACTIONS {
 
 export enum FILTER {
   SEARCH = 'Search',
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLITED = 'Completed',
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLITED = 'completed',
 }
 
 type Action = { type: ACTIONS.SET_LIST, payload: Todo[] }
@@ -71,7 +71,7 @@ function reducer(state: State, action: Action): State {
 const InitialState: State = {
   list: [],
   visibleList: [],
-  sortBy: 'All',
+  sortBy: FILTER.ALL,
   searchValue: '',
   selectedTodo: {} as Todo,
 };

@@ -24,7 +24,15 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
-      <td className="is-vcentered" />
+      {todo.completed ? (
+        <td className="is-vcentered">
+          <span className="icon" data-cy="iconCompleted">
+            <i className="fas fa-check" />
+          </span>
+        </td>
+      ) : (
+        <td className="is-vcentered" />
+      )}
       <td className="is-vcentered is-expanded">
         <p className={classNames({
           'has-text-success': todo.completed === true,
@@ -43,7 +51,7 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
         >
           <span className="icon">
             <i className={classNames('far fa-eye', {
-              'far fa-eye-slash': selectedTodo.id,
+              'far fa-eye fa-eye-slash': selectedTodo.id,
             })}
             />
           </span>

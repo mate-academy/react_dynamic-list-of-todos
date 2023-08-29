@@ -25,44 +25,29 @@ export const App: React.FC = () => {
 
   const { selectedTodo } = useContext(StateContext);
 
-  const newList = () => {
-    let copyVisibleList: Todo[] = [] as Todo[];
-
-    if (searchValue.length === 0 && sortBy === FILTER.ALL) {
-      copyVisibleList = [...visibleList];
+  function filterTodos(todoslist: Todo[]): Todo[] {
+    switch (sortBy) {
+      case FILTER.ALL:
+        return [...todoslist];
+      case FILTER.COMPLITED:
+        return [...todoslist.filter(todo => todo.completed)];
+      case FILTER.ACTIVE:
+        return [...todoslist.filter(todo => !todo.completed)];
+      default:
+        return todoslist;
     }
+  }
 
-    if (searchValue.length === 0 && sortBy === FILTER.COMPLITED) {
-      copyVisibleList = [...visibleList.filter(todo => todo.completed)];
-    }
-
-    if (searchValue.length === 0 && sortBy === FILTER.ACTIVE) {
-      copyVisibleList = [...visibleList.filter(todo => !todo.completed)];
-    }
-
-    if (searchValue.length > 0 && sortBy === FILTER.ALL) {
-      copyVisibleList = [...visibleList.filter(
-        todo => todo.title.includes(searchValue),
-      )];
-    }
-
-    if (searchValue.length > 0 && sortBy === FILTER.COMPLITED) {
-      const shallowCopy = [...visibleList.filter(todo => todo.completed)];
-
-      copyVisibleList = shallowCopy.filter(
-        todo => todo.title.includes(searchValue),
+  const getVisibleTodos = () => {
+    if (searchValue.length > 0) {
+      const temp = visibleList.filter(
+        todo => todo.title.toLowerCase().includes(searchValue.toLowerCase()),
       );
+
+      return filterTodos(temp);
     }
 
-    if (searchValue.length > 0 && sortBy === FILTER.ACTIVE) {
-      const shallowCopy = [...visibleList.filter(todo => !todo.completed)];
-
-      copyVisibleList = shallowCopy.filter(
-        todo => todo.title.includes(searchValue),
-      );
-    }
-
-    return copyVisibleList;
+    return filterTodos(visibleList);
   };
 
   useEffect(() => {
@@ -71,9 +56,6 @@ export const App: React.FC = () => {
       .then(res => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res });
         dispatch({ type: ACTIONS.SET_VISIBLE_LIST, payload: res });
-      })
-      .catch((err) => {
-        throw err;
       })
       .finally(() => setNeedLoader(false));
   }, []);
@@ -92,12 +74,12 @@ export const App: React.FC = () => {
             <div className="block">
               {/* <Loader /> */}
               {needLoader && (<Loader />)}
-              <TodoList list={newList()} />
+              <TodoList todos={getVisibleTodos()} />
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo.id && (<TodoModal />)}
+      {selectedTodo.id && (<TodoModal key={selectedTodo.id} />)}
     </>
   );
 };

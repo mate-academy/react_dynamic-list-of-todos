@@ -14,14 +14,14 @@ export const TodoFilter = () => {
   }
 
   function setDelayedInput(value: string) {
-    dispatch({ type: ACTIONS.SET_SEARCH_VALUE, payload: value });
+    dispatch({ type: ACTIONS.SET_SEARCH_VALUE, payload: value.toLowerCase() });
   }
 
   const applyDelayedInput = useCallback(debounce(setDelayedInput, 1000), []);
 
   function inputSearchHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
-    applyDelayedInput(e.target.value);
+    applyDelayedInput(e.target.value.toLowerCase());
   }
 
   function clearInput() {
@@ -34,9 +34,9 @@ export const TodoFilter = () => {
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={(e) => onSelectHandler(e)}>
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>
@@ -54,15 +54,17 @@ export const TodoFilter = () => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={clearInput}
-          />
-        </span>
+        {input.length > 0 && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={clearInput}
+            />
+          </span>
+        )}
       </p>
     </form>
   );
