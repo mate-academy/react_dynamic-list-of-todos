@@ -25,7 +25,6 @@ type Action = { type: ACTIONS.SET_LIST, payload: Todo[] }
 | { type: ACTIONS.SORT, payload: string };
 
 interface State {
-  list: Todo[],
   visibleList: Todo[],
   sortBy: string,
   searchValue: string,
@@ -41,7 +40,7 @@ function reducer(state: State, action: Action): State {
     case ACTIONS.SET_LIST:
       return {
         ...state,
-        list: action.payload,
+        visibleList: action.payload,
       };
     case ACTIONS.SET_VISIBLE_LIST:
       return {
@@ -69,7 +68,6 @@ function reducer(state: State, action: Action): State {
 }
 
 const InitialState: State = {
-  list: [],
   visibleList: [],
   sortBy: FILTER.ALL,
   searchValue: '',

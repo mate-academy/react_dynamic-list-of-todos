@@ -30,9 +30,9 @@ export const App: React.FC = () => {
       case FILTER.ALL:
         return [...todoslist];
       case FILTER.COMPLITED:
-        return [...todoslist.filter(todo => todo.completed)];
+        return todoslist.filter(todo => todo.completed);
       case FILTER.ACTIVE:
-        return [...todoslist.filter(todo => !todo.completed)];
+        return todoslist.filter(todo => !todo.completed);
       default:
         return todoslist;
     }
