@@ -1,14 +1,25 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { getTodos } from './api';
+import { TodosContext } from './TodoProvider';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const { setTodos, selectedTodo } = useContext(TodosContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -21,14 +32,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? <Loader /> : <TodoList />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal />}
     </>
   );
 };
