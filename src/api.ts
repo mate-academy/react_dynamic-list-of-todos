@@ -19,7 +19,9 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      return res.ok ? res.json() : Promise.reject(new Error('Try again later'));
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
