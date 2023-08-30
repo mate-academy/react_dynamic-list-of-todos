@@ -16,8 +16,12 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
-  }, []);
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => {
+        throw new Error('Error fetching user');
+      });
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
