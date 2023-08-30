@@ -9,7 +9,7 @@ export const TodoModal: React.FC = () => {
     selectedTodo,
     setSelectedTodo,
   } = useContext(TodosContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

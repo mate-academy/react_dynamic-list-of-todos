@@ -33,7 +33,7 @@ type Props = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const filteredItems = useMemo(() => {
