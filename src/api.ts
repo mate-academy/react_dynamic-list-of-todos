@@ -12,7 +12,7 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-function get<T>(url: string): Promise<T> {
+export function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
