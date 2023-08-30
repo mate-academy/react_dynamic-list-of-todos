@@ -20,7 +20,8 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getTodos().then(data => setTodos(data))
+    getTodos()
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
