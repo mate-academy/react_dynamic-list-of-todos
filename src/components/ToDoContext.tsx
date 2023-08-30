@@ -26,7 +26,7 @@ type Action = { type: ACTIONS.SET_LIST, payload: Todo[] }
 
 interface State {
   visibleList: Todo[],
-  sortBy: string,
+  sortBy: FILTER,
   searchValue: string,
   selectedTodo: Todo,
 }
