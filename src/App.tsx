@@ -8,13 +8,14 @@ import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Try again later');
-  const [query, setQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('Try again later');
+  const [query, setQuery] = useState<string>('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const visibleTodos = useMemo(() => {
@@ -24,9 +25,9 @@ export const App: React.FC = () => {
       filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
     }
 
-    if (selectedStatus === 'active') {
+    if (selectedStatus === Status.Active) {
       filteredTodos = filteredTodos.filter(todo => !todo.completed);
-    } else if (selectedStatus === 'completed') {
+    } else if (selectedStatus === Status.Completed) {
       filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
