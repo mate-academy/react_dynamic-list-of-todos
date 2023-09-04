@@ -23,6 +23,7 @@ export const TodoFilter = () => {
     setFilter,
     filter,
     setAppliedSearchText,
+    appliedSearchText,
   } = useTodos();
 
   const appliedQuery = useCallback(debounce(setAppliedSearchText, 500), []);
@@ -81,7 +82,7 @@ export const TodoFilter = () => {
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {searchText.length !== 0 && (
+        {appliedSearchText.length !== 0 && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

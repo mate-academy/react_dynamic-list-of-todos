@@ -11,6 +11,7 @@ interface TodosContextType {
   modal: boolean;
   todosWithUser: TodoWithUser[];
   searchText: string;
+  appliedSearchText: string;
   filter: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -96,6 +97,7 @@ export const TodosProvider: React
       searchText,
       filter,
       setFilter,
+      appliedSearchText,
       setAppliedSearchText,
       loadingModal,
       setLoadingModal,
