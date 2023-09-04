@@ -7,7 +7,7 @@ interface TodoModalProps {
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({ todo }) => {
-  const { loadingModal, setModal } = useTodos();
+  const { loadingModal, setModal, setLoadingModal } = useTodos();
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -30,7 +30,10 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo }) => {
               className="delete"
               data-cy="modal-close"
               aria-label="delete"
-              onClick={() => setModal(false)}
+              onClick={() => {
+                setModal(false);
+                setLoadingModal(true);
+              }}
             />
           </header>
 

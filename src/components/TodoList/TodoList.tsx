@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodoWithUser, useTodos } from '../Context';
 import { TodoModal } from '../TodoModal';
+import { getUser } from '../../api';
 
 const ACTIVE_TODOS = 'active';
 const COMPLETED_TODOS = 'completed';
@@ -11,11 +12,23 @@ export const TodoList: React.FC = () => {
   } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | null>(null);
 
+  useEffect(() => {
+    const fetchUserAndOpenModal = async (todo: TodoWithUser) => {
+      setLoadingModal(true);
+      await getUser(todo.userId);
+      setSelectedTodo(todo);
+      setModal(true);
+      setLoadingModal(false);
+    };
+
+    if (modal && selectedTodo) {
+      fetchUserAndOpenModal(selectedTodo);
+    }
+  }, [modal, selectedTodo]);
+
   const openModal = (todo: TodoWithUser) => {
-    setLoadingModal(true);
     setSelectedTodo(todo);
     setModal(true);
-    setLoadingModal(false);
   };
 
   const filteredTodos = () => {

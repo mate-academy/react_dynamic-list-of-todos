@@ -32,7 +32,7 @@ const TodosContext = createContext<TodosContextType | undefined>(undefined);
 
 export const TodosProvider: React
   .FC<{ children: ReactNode }> = ({ children }) => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [loadingModal, setLoadingModal] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
@@ -65,6 +65,7 @@ export const TodosProvider: React
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const fetchUsers = async () => {
       const userPromises = todos.map((todo) => getUser(todo.userId));
       const users = await Promise.all(userPromises);
@@ -77,7 +78,6 @@ export const TodosProvider: React
       setTodosWithUser(getPreparedTodos(newTodosWithUsers, appliedSearchText));
 
       setLoading(false);
-      setLoadingModal(false);
     };
 
     if (todos.length > 0) {
