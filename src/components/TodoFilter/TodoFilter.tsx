@@ -1,34 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Filter } from '../../types/FIlter';
 
 type Props = {
   filter: Filter
   updateFilter: (newFilter: Filter) => void,
+  query: string,
   updateQuery: (newQuery: string) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
   updateFilter,
+  query,
   updateQuery,
 }) => {
-  const [valueSelect, setValueSelect] = useState<Filter>(filter);
-  const [valueSearch, setValueSearch] = useState('');
-
-  useEffect(() => {
-    updateQuery(valueSearch);
-  }, [valueSearch]);
-
-  useEffect(() => {
-    updateFilter(valueSelect);
-  }, [valueSelect]);
-
   const handlerSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setValueSelect(event.target.value as Filter);
+    updateFilter(event.target.value as Filter);
   };
 
   const handlerSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValueSearch(event.target.value);
+    updateQuery(event.target.value);
   };
 
   return (
@@ -39,22 +30,27 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select
-            value={valueSelect}
+            value={filter}
             data-cy="statusSelect"
             onChange={handlerSelect}
           >
-            {Object.values(Filter).map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
+            {Object.values(Filter).map((option) => {
+              const name = option.slice(0, 1).toUpperCase()
+              + option.slice(1, option.length).toLowerCase();
+
+              return (
+                <option key={option} value={option}>
+                  {name}
+                </option>
+              );
+            })}
           </select>
         </span>
       </p>
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
-          value={valueSearch}
+          value={query}
           data-cy="searchInput"
           type="text"
           className="input"
@@ -65,14 +61,14 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {valueSearch.length > 0 && (
+        {query.length > 0 && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               aria-label="delete"
-              onClick={() => setValueSearch('')}
+              onClick={() => updateQuery('')}
             />
           </span>
         )}

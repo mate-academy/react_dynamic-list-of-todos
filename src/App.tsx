@@ -9,28 +9,47 @@ import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/FIlter';
+import { ErrorModal } from './components/ErrorModal/ErrorModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.All);
   const [query, setQuery] = useState('');
   const [modal, setModal] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    const timeoutId = setTimeout(() => {
+      setErrorMessage('Request timed out');
+      setIsLoading(false);
+    }, 3000);
+
+    getTodos()
+      .then(todosData => {
+        clearTimeout(timeoutId);
+        setTodos(todosData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        clearTimeout(timeoutId);
+        setErrorMessage(`Error fetching todos data. ${error}`);
+        setIsLoading(false);
+      });
   }, []);
 
   const filteredTodos = todos.filter(todo => {
+    const lowerCaseQuery = query.toLowerCase();
+    const lowerCaseTitle = todo.title.toLowerCase();
+
     switch (filter) {
       case Filter.Active:
-        return !todo.completed
-        && todo.title.toLowerCase().includes(query.toLowerCase());
+        return !todo.completed && lowerCaseTitle.includes(lowerCaseQuery);
       case Filter.Completed:
-        return todo.completed
-        && todo.title.toLowerCase().includes(query.toLowerCase());
+        return todo.completed && lowerCaseTitle.includes(lowerCaseQuery);
       case Filter.All:
       default:
-        return todo.title.toLowerCase().includes(query.toLowerCase());
+        return lowerCaseTitle.includes(lowerCaseQuery);
     }
   });
 
@@ -45,18 +64,19 @@ export const App: React.FC = () => {
               <TodoFilter
                 filter={filter}
                 updateFilter={(newFilter) => setFilter(newFilter)}
+                query={query}
                 updateQuery={(newQuery) => setQuery(newQuery)}
               />
             </div>
 
             <div className="block">
-              {!todos.length ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filteredTodos}
                   modal={modal}
-                  updateModal={(newTodo) => setModal(newTodo)}
+                  updateModal={setModal}
                 />
               )}
             </div>
@@ -68,8 +88,11 @@ export const App: React.FC = () => {
         <TodoModal
           modal={modal}
           deleteModal={() => setModal(null)}
+          updateErrorMessage={(error: string) => setErrorMessage(error)}
         />
       )}
+
+      {errorMessage && <ErrorModal message={errorMessage} />}
     </>
   );
 };
