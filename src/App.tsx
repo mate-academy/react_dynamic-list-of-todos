@@ -23,12 +23,14 @@ export const App: React.FC = () => {
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
       case Filter.Active:
-        return !todo.completed && todo.title.includes(query);
+        return !todo.completed
+        && todo.title.toLowerCase().includes(query.toLowerCase());
       case Filter.Completed:
-        return todo.completed && todo.title.includes(query);
+        return todo.completed
+        && todo.title.toLowerCase().includes(query.toLowerCase());
       case Filter.All:
       default:
-        return todo.title.includes(query);
+        return todo.title.toLowerCase().includes(query.toLowerCase());
     }
   });
 
