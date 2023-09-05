@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  modal: Todo,
+  deleteModal: () => void
+};
+
+export const TodoModal: React.FC<Props> = ({
+  modal,
+  deleteModal,
+}) => {
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    getUser(modal.userId).then(setUser);
+  }, [modal]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,30 +33,34 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${modal.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="modal-close"
+              onClick={deleteModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {modal.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
+              <strong className={classNames({
+                'has-text-danger': !modal.completed,
+                'has-text-success': modal.completed,
+              })}
+              >
+                {modal.completed ? 'Done' : 'Planned'}
+              </strong>
               {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
