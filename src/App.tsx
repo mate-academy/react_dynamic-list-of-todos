@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { Loader } from './components/Loader';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/FIlter';
-import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
