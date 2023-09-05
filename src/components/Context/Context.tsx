@@ -41,10 +41,10 @@ export const TodosProvider: React
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosWithUser, setTodosWithUser] = useState<TodoWithUser[]>([]);
 
-  const [searchText, setSearchText] = useState('');
-  const [appliedSearchText, setAppliedSearchText] = useState('');
+  const [searchText, setSearchText] = useState<string>('');
+  const [appliedSearchText, setAppliedSearchText] = useState<string>('');
 
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<string>('all');
 
   function getPreparedTodos(currTodos: TodoWithUser[], query: string) {
     let preparedTodos = [...currTodos];
@@ -86,23 +86,24 @@ export const TodosProvider: React
     }
   }, [todos, appliedSearchText]);
 
+  const contextValues = {
+    loading,
+    setLoading,
+    modal,
+    setModal,
+    todosWithUser,
+    setSearchText,
+    searchText,
+    filter,
+    setFilter,
+    appliedSearchText,
+    setAppliedSearchText,
+    loadingModal,
+    setLoadingModal,
+  };
+
   return (
-    <TodosContext.Provider value={{
-      loading,
-      setLoading,
-      modal,
-      setModal,
-      todosWithUser,
-      setSearchText,
-      searchText,
-      filter,
-      setFilter,
-      appliedSearchText,
-      setAppliedSearchText,
-      loadingModal,
-      setLoadingModal,
-    }}
-    >
+    <TodosContext.Provider value={contextValues}>
       {children}
     </TodosContext.Provider>
   );

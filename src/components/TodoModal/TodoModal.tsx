@@ -9,6 +9,11 @@ interface TodoModalProps {
 export const TodoModal: React.FC<TodoModalProps> = ({ todo }) => {
   const { loadingModal, setModal, setLoadingModal } = useTodos();
 
+  const {
+    id, user, title, completed,
+  } = todo;
+  const { name, email } = user;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -22,7 +27,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
             <button
@@ -39,20 +44,20 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {
-                todo.completed
+                completed
                   ? (<strong className="has-text-success">Done</strong>)
                   : (<strong className="has-text-danger">Planned</strong>)
               }
 
               {' by '}
 
-              <a href={`mailto:${todo.user.email}`}>
-                {todo.user.name}
+              <a href={`mailto:${email}`}>
+                {name}
               </a>
             </p>
           </div>
