@@ -26,34 +26,6 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  // const filterTodos = (filteredTodos: Todo[], status: Status, searchTodo: string): Todo[] => {
-  //   if (status === Status.all && !searchTodo.trim()) {
-  //     return filteredTodos;
-  //   }
-
-  //   return filteredTodos.filter(currentTodo => {
-  //     if (status === Status.active && currentTodo.completed) {
-  //       return false;
-  //     }
-
-  //     if (status === Status.completed && !currentTodo.completed) {
-  //       return false;
-  //     }
-
-  //     if (searchTodo.trim()
-  //       && !currentTodo.title.toLowerCase().includes(searchTodo.toLowerCase())
-  //     ) {
-  //       return false;
-  //     }
-
-  //     return true;
-  //   });
-  // };
-
-  // const visibleTodos = useMemo(() => {
-  //   return filterTodos(todos, filter, query);
-  // }, [todos, filter, query]);
-
   return (
     <>
       <div className="section">
