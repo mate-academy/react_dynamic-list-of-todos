@@ -29,10 +29,14 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
+    if (status === Status.All && query === '') {
+      return todos;
+    }
+
     return todos.filter(todo => {
       const isCompleted = status === Status.Completed ? todo.completed : true;
       const isActive = status === Status.Active ? !todo.completed : true;
-      const matchQuery = todo.title.toLowerCase().includes(query.toLowerCase());
+      const matchQuery = query ? todo.title.toLowerCase().includes(query.toLowerCase()) : true;
 
       return isCompleted && isActive && matchQuery;
     });
