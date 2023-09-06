@@ -1,50 +1,30 @@
-import { Status } from '../../types/Status';
-
 type Props = {
   query: string;
-  setFilter: (value: Status) => void;
+  setFilter: (filter: string) => void;
   setQuery: (value: string) => void;
 };
-
-const SELECT_VALUES = [Status.all, Status.active, Status.completed];
 
 export const TodoFilter: React.FC<Props> = ({
   setFilter, setQuery, query,
 }) => {
-  const handleFilterChange = (event:
-  React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value as Status);
-  };
-
-  const handleQueryChange = (event:
-  React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const handleQueryClear = () => {
-    setQuery('');
-  };
-
-  const capitalizerFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={handleFilterChange}
+            title="Select your option"
+            onChange={(e) => setFilter(e.target.value)}
           >
-            {SELECT_VALUES.map(value => (
-              <option
-                value={value}
-                key={value}
-              >
-                {capitalizerFirstLetter(Status[value])}
-              </option>
-            ))}
+            <option value="all">
+              All
+            </option>
+            <option value="active">
+              Active
+            </option>
+            <option value="completed">
+              Completed
+            </option>
           </select>
         </span>
       </p>
@@ -61,7 +41,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQueryChange}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -77,7 +57,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleQueryClear}
+              onClick={() => setQuery('')}
             />
           </span>
         )}
