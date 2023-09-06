@@ -33,13 +33,13 @@ export const TodoModal: React.FC<Props> = ({
 
     getUser(userId)
       .then(userData => {
-        clearTimeout(timeoutId);
         setUser(userData);
-        setIsLoading(false);
       })
       .catch(error => {
-        clearTimeout(timeoutId);
         updateErrorMessage(`Error fetching user data. ${error}`);
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
         setIsLoading(false);
       });
   }, [modal]);

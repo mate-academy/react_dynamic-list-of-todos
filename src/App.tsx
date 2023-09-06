@@ -27,13 +27,13 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(todosData => {
-        clearTimeout(timeoutId);
         setTodos(todosData);
-        setIsLoading(false);
       })
       .catch(error => {
-        clearTimeout(timeoutId);
         setErrorMessage(`Error fetching todos data. ${error}`);
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
         setIsLoading(false);
       });
   }, []);
@@ -70,15 +70,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  modal={modal}
-                  updateModal={setModal}
-                />
-              )}
+              {isLoading
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    modal={modal}
+                    updateModal={setModal}
+                  />
+                )}
             </div>
           </div>
         </div>
