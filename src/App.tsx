@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,55 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { Status } from './types/Status';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(Status.all);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(() => setErrorMessage('There are no todos'))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const filteredTodos = (todosToFilter: Todo[], filterStatus: Status, searchSymbols: string): Todo[] => {
+    if (filterStatus === Status.all && !searchSymbols.trim()) {
+      return todosToFilter;
+    }
+
+    return todosToFilter.filter(currentTodo => {
+      if (filterStatus === Status.active && currentTodo.completed) {
+        return false;
+      }
+
+      if (filterStatus === Status.completed && !currentTodo.completed) {
+        return false;
+      }
+
+      if (searchSymbols.trim()
+        && !currentTodo.title.toLowerCase()
+          .includes(searchSymbols.toLowerCase())
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const visibleTodos = useMemo(() => {
+    return filteredTodos(todos, filter, query);
+  }, [todos, filter, query]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +65,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                setFilter={setFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              {todos.length > 0 ? (
+                <TodoList
+                  todo={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              ) : (
+                <p>{errorMessage}</p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal handleCloseModal={() => setSelectedTodo(null)} selectedTodo={selectedTodo} />}
     </>
   );
 };
