@@ -9,6 +9,7 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { FILTER } from './types/filterTypes';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -60,10 +61,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                todos={filteredTodos}
-                setSelectedTodo={setSelectedTodo}
-              />
+              { todos.length === 0
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
