@@ -1,12 +1,32 @@
-import React from 'react';
+import { TodoModalInfo } from '../../types/TodoModalInfo';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type TodoModalProps = {
+  info: TodoModalInfo
+  onModalClose: () => void
+};
+
+export const TodoModal = (
+  {
+    info: {
+      todoId,
+      todoTitle,
+      todoCompleted,
+      userEmail,
+      userName,
+      showModalLoader,
+    },
+    onModalClose,
+  }: TodoModalProps,
+) => {
+  const todoStatusClass = `has-text-${todoCompleted ? 'success' : 'danger'}`;
+  const todoStatusText = todoCompleted ? 'Done' : 'Planned';
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {showModalLoader ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +35,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todoId}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +43,23 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onModalClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todoTitle}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={todoStatusClass}>{todoStatusText}</strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${userEmail}`}>
+                {userName}
               </a>
             </p>
           </div>
