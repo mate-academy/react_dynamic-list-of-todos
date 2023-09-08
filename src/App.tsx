@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,11 +10,12 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { ShowTodos } from './types/ShowTodos';
 import { getTodos } from './api';
+import { StatusTodos } from './types/StatusTodos';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodos, setSelectedTodos] = useState<ShowTodos>(ShowTodos.All);
+  const [selectedStatus, setSelectedStatus] = useState<ShowTodos>(ShowTodos.All);
   const [query, setQuery] = useState<null | string>(null);
   const [selectedTodoID, setSelectedTodoID] = useState<null | number>(null);
 
@@ -25,18 +27,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleFilterSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
-      case 'active':
-        setSelectedTodos(ShowTodos.Active);
+      case StatusTodos.Active:
+        setSelectedStatus(ShowTodos.Active);
         break;
 
-      case 'completed':
-        setSelectedTodos(ShowTodos.Completed);
+      case StatusTodos.Completed:
+        setSelectedStatus(ShowTodos.Completed);
         break;
 
       default:
-        setSelectedTodos(ShowTodos.All);
+        setSelectedStatus(ShowTodos.All);
         break;
     }
   };
@@ -46,8 +48,6 @@ export const App: React.FC = () => {
   };
 
   const clearQuery = () => setQuery(null);
-
-  const setTodoID = (todoID: number) => setSelectedTodoID(todoID);
 
   const clearTodo = () => setSelectedTodoID(null);
 
@@ -65,8 +65,8 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = React.useMemo(
-    () => getVisibleTodos(selectedTodos),
-    [selectedTodos, todos],
+    () => getVisibleTodos(selectedStatus),
+    [selectedStatus, todos],
   );
 
   const getFilteredTodos = (filterQuery: null | string) => {
@@ -95,7 +95,7 @@ export const App: React.FC = () => {
                 query={query}
                 handleQueryChange={handleQueryChange}
                 clearQuery={clearQuery}
-                handleFilterSelect={handleFilterSelect}
+                handleFilterSelect={handleFilterStatus}
               />
             </div>
 
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={filteredTodos}
                     selectedTodoID={selectedTodoID}
-                    setTodoID={setTodoID}
+                    setTodoID={setSelectedTodoID}
                   />
                 )}
             </div>

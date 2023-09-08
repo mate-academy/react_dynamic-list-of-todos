@@ -12,7 +12,9 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, clearTodo }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState <null | User>(null);
+  const [user, setUser] = useState<User | null>(null);
+  let email;
+  let name;
 
   useEffect(() => {
     getUser(todo.userId)
@@ -21,6 +23,10 @@ export const TodoModal: React.FC<Props> = ({ todo, clearTodo }) => {
         setIsLoading(false);
       });
   }, [todo.id]);
+
+  if (user) {
+    ({ email, name } = user);
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -61,7 +67,9 @@ export const TodoModal: React.FC<Props> = ({ todo, clearTodo }) => {
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              {user && (
+                <a href={`mailto:${email}`}>{name}</a>
+              )}
             </p>
           </div>
         </div>
