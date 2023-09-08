@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos()
@@ -30,21 +31,23 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const filteredByQueryTodos = todos.filter((todo => todo.title.includes(query)));
+
     switch (filter) {
       case 'active':
-        setVisiableTodos(todos.filter((t => t.completed)));
+        setVisiableTodos(filteredByQueryTodos.filter((todo => todo.completed)));
         break;
 
       case 'completed':
-        setVisiableTodos(todos.filter((t => !t.completed)));
+        setVisiableTodos(filteredByQueryTodos.filter((todo => !todo.completed)));
         break;
 
       case 'all':
       default:
-        setVisiableTodos(todos);
+        setVisiableTodos(filteredByQueryTodos);
         break;
     }
-  }, [filter]);
+  }, [filter, query]);
 
   return (
     <>
@@ -54,7 +57,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={filter} setFilter={setFilter} />
+              <TodoFilter filter={filter} setFilter={setFilter} query={query} setQuery={setQuery} />
             </div>
 
             <div className="block">

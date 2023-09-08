@@ -1,12 +1,13 @@
-// import { useEffect, useState } from "react";
-// import { Todo } from '../../types/Todo';
-
 type Props = {
   filter: string,
   setFilter: (f: string) => void,
+  query: string,
+  setQuery: (s: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
+export const TodoFilter: React.FC<Props> = ({
+  filter, setFilter, query, setQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -29,6 +30,8 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
           type="text"
           className="input"
           placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -40,6 +43,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={() => setQuery('')}
           />
         </span>
       </p>
