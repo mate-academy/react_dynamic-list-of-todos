@@ -9,37 +9,21 @@ export const TodoFilter = ({ getTodos }: TodoFilterProps) => {
   const [filterMode, setFilterMode] = useState(FilterMode.all);
   const [query, setQuery] = useState('');
 
-  const onChangeFilterOption = (event: ChangeEvent<HTMLSelectElement>) => {
-    let mode;
-
-    switch (event.target.value) {
-      default:
-      case 'all':
-        mode = FilterMode.all;
-        break;
-      case 'active':
-        mode = FilterMode.active;
-        break;
-      case 'completed':
-        mode = FilterMode.completed;
-    }
+  const handleChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const mode = event.target.value as FilterMode;
 
     setFilterMode(mode);
     getTodos(mode, query);
   };
 
-  const onChangeQuery = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const inputQuery = event.target.value;
 
     setQuery(inputQuery);
     getTodos(filterMode, inputQuery);
   };
 
-  const onResetQuery = () => {
-    const input
-      = document.getElementsByClassName('input')[0] as HTMLInputElement;
-
-    input.value = '';
+  const handleClick = () => {
     setQuery('');
     getTodos(filterMode, '');
   };
@@ -48,7 +32,11 @@ export const TodoFilter = ({ getTodos }: TodoFilterProps) => {
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={onChangeFilterOption}>
+          <select
+            data-cy="statusSelect"
+            onChange={handleChangeSelect}
+            value={filterMode}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -62,7 +50,8 @@ export const TodoFilter = ({ getTodos }: TodoFilterProps) => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={onChangeQuery}
+          onChange={handleChangeInput}
+          value={query}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -75,7 +64,7 @@ export const TodoFilter = ({ getTodos }: TodoFilterProps) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={onResetQuery}
+              onClick={handleClick}
             />
           )}
         </span>

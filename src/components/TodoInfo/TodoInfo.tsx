@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 type TodoInfoProps = {
   todo: Todo
-  onEyeButtonClick: (todoId: number) => void
+  onClick: (todoId: number) => void
   detailsButtonClassNames: string
 };
 
@@ -14,7 +14,7 @@ export const TodoInfo = (
       title,
       completed,
     },
-    onEyeButtonClick,
+    onClick,
     detailsButtonClassNames,
   }: TodoInfoProps,
 ) => {
@@ -42,7 +42,7 @@ export const TodoInfo = (
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => onEyeButtonClick(id)}
+          onClick={() => onClick(id)}
         >
           <span className="icon">
             <i className={detailsButtonClassNames} />

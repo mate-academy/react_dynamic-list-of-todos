@@ -4,12 +4,12 @@ import { TodoInfo } from '../TodoInfo';
 
 type TodoListProps = {
   todos: Todo[]
-  onEyeButtonClick: (todoId: number) => void
+  onClick: (todoId: number) => void
   clickedTodoId: number
 };
 
 export const TodoList = (
-  { todos, onEyeButtonClick, clickedTodoId }: TodoListProps,
+  { todos, onClick, clickedTodoId }: TodoListProps,
 ) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -37,7 +37,7 @@ export const TodoList = (
           <TodoInfo
             key={todoId}
             todo={todo}
-            onEyeButtonClick={onEyeButtonClick}
+            onClick={onClick}
             detailsButtonClassNames={buttonClassName}
           />
         );
