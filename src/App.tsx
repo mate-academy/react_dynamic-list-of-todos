@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos, getUser } from './api';
@@ -9,14 +8,14 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { User } from './types/User';
+import { Status } from './utils/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [hasSelectedTodo, setHasSelectedTodo] = useState(false);
   const [loaderIsShown, setLoaderIsShown] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  const [todosStatus, setTodosStatus] = useState('All');
+  const [todosStatus, setTodosStatus] = useState(Status.ALL);
   const [query, setQuery] = useState('');
 
   setTimeout(() => {
@@ -29,11 +28,11 @@ export const App: React.FC = () => {
         let filteredTodos = todosFromServer;
 
         switch (todosStatus) {
-          case 'active':
+          case Status.ACTIVE:
             filteredTodos = filteredTodos.filter(todo => !todo.completed);
             break;
 
-          case 'completed':
+          case Status.COMPLETED:
             filteredTodos = filteredTodos.filter(todo => todo.completed);
             break;
 
@@ -53,7 +52,6 @@ export const App: React.FC = () => {
 
   const handleClick = async (todo: Todo) => {
     setSelectedTodo(todo);
-    setHasSelectedTodo(true);
 
     const currentUser = await getUser(todo.userId);
 
@@ -61,16 +59,7 @@ export const App: React.FC = () => {
   };
 
   const closeWindow = () => {
-    setHasSelectedTodo(false);
     setSelectedTodo(null);
-  };
-
-  const handleChange = (status: string) => {
-    setTodosStatus(status);
-  };
-
-  const queryChange = (value: string) => {
-    setQuery(value);
   };
 
   const clearQuery = () => {
@@ -86,8 +75,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleChange={handleChange}
-                queryChange={queryChange}
+                handleChange={setTodosStatus}
+                queryChange={setQuery}
                 clearQuery={clearQuery}
                 query={query}
               />
@@ -109,7 +98,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {hasSelectedTodo && (
+      {selectedTodo && (
         <TodoModal
           user={user}
           todo={selectedTodo}
