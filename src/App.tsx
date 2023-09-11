@@ -10,6 +10,41 @@ import { Loader } from './components/Loader';
 import { User } from './types/User';
 import { Status } from './utils/Status';
 
+type FilterParams = {
+  todosFromServer: Todo[],
+  todosStatus: Status,
+  query: string,
+};
+
+function getFilteredTodos({
+  todosFromServer,
+  todosStatus,
+  query,
+}: FilterParams) {
+  let filteredTodos = todosFromServer;
+
+  switch (todosStatus) {
+    case Status.ACTIVE:
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+      break;
+
+    case Status.COMPLETED:
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      filteredTodos = [...filteredTodos];
+  }
+
+  const lowerQuery = query.toLowerCase();
+
+  filteredTodos = filteredTodos.filter(
+    todo => todo.title.toLowerCase().includes(lowerQuery),
+  );
+
+  return filteredTodos;
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -18,33 +53,20 @@ export const App: React.FC = () => {
   const [todosStatus, setTodosStatus] = useState(Status.ALL);
   const [query, setQuery] = useState('');
 
-  setTimeout(() => {
-    setLoaderIsShown(false);
-  }, 300);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaderIsShown(false);
+    }, 300);
+  }, []);
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
-        let filteredTodos = todosFromServer;
-
-        switch (todosStatus) {
-          case Status.ACTIVE:
-            filteredTodos = filteredTodos.filter(todo => !todo.completed);
-            break;
-
-          case Status.COMPLETED:
-            filteredTodos = filteredTodos.filter(todo => todo.completed);
-            break;
-
-          default:
-            filteredTodos = [...filteredTodos];
-        }
-
-        const lowerQuery = query.toLowerCase();
-
-        filteredTodos = filteredTodos.filter(
-          todo => todo.title.toLowerCase().includes(lowerQuery),
-        );
+        const filteredTodos = getFilteredTodos({
+          todosFromServer,
+          todosStatus,
+          query,
+        });
 
         setTodos(filteredTodos);
       });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -16,9 +16,11 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 300);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
