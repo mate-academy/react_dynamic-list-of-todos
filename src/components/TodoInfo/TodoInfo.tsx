@@ -23,6 +23,7 @@ export const TodoInfo = (
   return (
     <tr data-cy="todo">
       <td className="is-vcentered">{id}</td>
+
       <td className="is-vcentered">
         {completed && (
           <span className="icon" data-cy="iconCompleted">
@@ -30,6 +31,7 @@ export const TodoInfo = (
           </span>
         )}
       </td>
+
       <td className="is-vcentered is-expanded">
         <p
           className={todoStatusClass}
@@ -37,6 +39,7 @@ export const TodoInfo = (
           {title}
         </p>
       </td>
+
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"
