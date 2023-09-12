@@ -1,100 +1,110 @@
 import React from 'react';
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
+import { Status } from '../../types/Status';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+type Props = {
+  todos: Todo[],
+  selectedTodo: Todo | null,
+  setSelectedTodo: (value: Todo) => void;
+  filter: string,
+  query: string,
+};
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+function filterTodos(
+  todos: Todo[],
+  filter: string,
+  query: string,
+): Todo[] {
+  return todos.filter(todo => {
+    const lowerCaseTitle = todo.title.toLowerCase();
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+    const isActiveAndCompleted = filter === Status.Active
+      && todo.completed;
+    const isCompletedAndNotCompleted = filter === Status.Completed
+      && !todo.completed;
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+    if (isActiveAndCompleted || isCompletedAndNotCompleted) {
+      return false;
+    }
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
+    return !(query
+    && !lowerCaseTitle.includes(query.toLowerCase()));
+  });
+}
+
+export const TodoList: React.FC<Props> = ({
+  todos, selectedTodo, setSelectedTodo, filter, query,
+}) => {
+  const updatedTodos = filterTodos(todos, filter, query);
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
             <span className="icon">
-              <i className="far fa-eye" />
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {updatedTodos.map(currentTodo => {
+          const todoIsSelect = currentTodo.id === selectedTodo?.id;
+
+          return (
+            <tr
+              data-cy="todo"
+              key={currentTodo.id}
+              className={classNames({
+                'has-background-info-light':
+                todoIsSelect,
+              })}
+            >
+              <td className="is-vcentered">{currentTodo.id}</td>
+              {currentTodo.completed ? (
+                <td className="is-vcentered">
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                </td>
+              ) : (
+                <td className="is-vcentered" />
+              )}
+              <td className="is-vcentered">
+                <p
+                  className={currentTodo.completed
+                    ? 'has-text-success'
+                    : 'has-text-danger'}
+                >
+                  {currentTodo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => setSelectedTodo(currentTodo)}
+                >
+                  <span className="icon">
+                    <i className={classNames({
+                      'far fa-eye-slash': todoIsSelect,
+                      'far fa-eye': !todoIsSelect,
+                    })}
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
