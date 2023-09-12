@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 interface Props {
-  todo: Todo | null;
-  isLoading: boolean;
+  todo: Todo;
   setSelectedTodoId: (todoId: number) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  isLoading,
   setSelectedTodoId,
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
+  }, [todo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -52,8 +63,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${todo?.user?.email}`}>
-                {todo?.user?.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

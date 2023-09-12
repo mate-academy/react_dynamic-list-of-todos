@@ -9,13 +9,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { FilterBy, Todo } from './types/Todo';
-import { User } from './types/User';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { filterTodos } from './service/todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -23,14 +22,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setloading(true);
+    setIsLoading(true);
 
     getTodos()
       .then((todoData: Todo[]) => {
         setTodos(todoData);
       })
       .catch(() => setErrorMessage('Try again later'))
-      .finally(() => setloading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -43,24 +42,14 @@ export const App: React.FC = () => {
     const openedTodo = todos.find(todo => todo.id === selectedTodoId);
 
     if (openedTodo?.userId) {
-      setloading(true);
-
-      getUser(openedTodo.userId)
-        .then((userData: User) => {
-          const user = userData as User;
-
-          setSelectedTodo({
-            ...openedTodo,
-            user: user || null,
-          });
-        })
-        .catch(() => setErrorMessage('Try again later'))
-        .finally(() => setloading(false));
+      setSelectedTodo({
+        ...openedTodo,
+      });
     }
   }, [selectedTodoId]);
 
   const preparedTodos = filterTodos(todos, filterBy, query);
-  const isShowTodoList = (!loading || (loading && selectedTodoId))
+  const isShowTodoList = (!isLoading || (isLoading && selectedTodoId))
     && (!errorMessage && todos.length > 0);
 
   return (
@@ -80,13 +69,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && !selectedTodoId && <Loader />}
+              {isLoading && !selectedTodoId && <Loader />}
 
               {isShowTodoList && (
                 <TodoList
                   todos={preparedTodos}
                   onTodoClick={(todoId) => setSelectedTodoId(todoId)}
-                  selectedTodo={selectedTodo}
+                  selectedTodoId={selectedTodoId}
                 />
               )}
 
@@ -98,10 +87,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodoId && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          isLoading={loading}
           setSelectedTodoId={(todoId) => setSelectedTodoId(todoId)}
         />
       )}
