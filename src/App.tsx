@@ -41,10 +41,6 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      getTodos().then(setTodos);
-    }, 1000);
-
     getTodos().then((todosFrommServer) => {
       setTodos(todosFrommServer);
 
