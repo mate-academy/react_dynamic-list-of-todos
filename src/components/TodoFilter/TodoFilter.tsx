@@ -9,8 +9,10 @@ type TodoFilterProps = {
 export const TodoFilter
   = ({ onFilter, onTitleFilter, onClearFilter } : TodoFilterProps) => {
     const [query, setQuery] = useState<string>('');
+    const [filter, setFilter] = useState<string>('all');
     const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
     = (event) => {
+      setFilter(event.target.value);
       onFilter(event.target.value);
     };
 
@@ -21,6 +23,7 @@ export const TodoFilter
     };
 
     const handleClearButton = () => {
+      setFilter('all');
       setQuery('');
       onClearFilter();
     };
@@ -31,6 +34,7 @@ export const TodoFilter
           <span className="select">
             <select
               data-cy="statusSelect"
+              value={filter}
               onChange={handleSelect}
             >
               <option value="all">All</option>

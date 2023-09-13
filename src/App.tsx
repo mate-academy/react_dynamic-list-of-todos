@@ -59,6 +59,7 @@ export const App: React.FC = () => {
 
   const handleClearFilter = () => {
     setTitleFilter('');
+    setFilter('all');
   };
 
   useEffect(() => {
