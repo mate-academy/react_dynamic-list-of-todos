@@ -6,17 +6,20 @@ export enum FilterParams {
   Completed = 'completed',
 }
 
-type Props = {
-  filterParam: string,
-  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
+interface Filter {
+  selectFilter: string,
   query: string,
+}
+
+type Props = {
+  filterParam: Filter,
+  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterParam,
   onFilterChange,
-  query,
   onSearch,
 }) => {
   return (
@@ -25,7 +28,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            defaultValue={filterParam}
+            defaultValue={filterParam.selectFilter}
             onChange={onFilterChange}
           >
             <option value={FilterParams.All}>All</option>
@@ -41,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={filterParam.query}
           onChange={onSearch}
         />
         <span className="icon is-left">

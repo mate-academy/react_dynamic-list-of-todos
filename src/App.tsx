@@ -13,8 +13,10 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState([] as Todo[]);
 
-  const [filterParam, setFilterParam] = useState(FilterParams.All as string);
-  const [query, setQuery] = useState('');
+  const [filterParam, setFilterParam] = useState({
+    selectFilter: 'all',
+    query: '',
+  });
 
   const [isLoading, setIsLoading] = useState(true);
   // const [isModalActive, setIsModalActive] = useState(false);
@@ -25,29 +27,30 @@ export const App: React.FC = () => {
   }, []);
 
   const handleChangeFilterParam = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilterParam(event.target.value);
+    setFilterParam((prev) => ({ ...prev, selectFilter: event.target.value }));
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setFilterParam((prev) => ({ ...prev, query: event.target.value }));
   };
 
   useEffect(() => {
-    const todosCopy = getTodos().then(todo => todo);
+    if (filterParam.selectFilter === FilterParams.Active && !filterParam.query) {
+      getTodos().then(todo => todo.filter((todoTask) => !todoTask.completed)).then(setTodos);
+    }
 
+    if (filterParam.selectFilter === FilterParams.Completed && !filterParam.query) {
+      getTodos().then(todo => todo.filter((todoTask) => todoTask.completed)).then(setTodos);
+    }
 
-    switch (filterParam) {
-      case FilterParams.Active:
-        setTodos(todosCopy.filter(({ completed }) => !completed));
-        break;
+    if (filterParam.selectFilter === FilterParams.All && !filterParam.query) {
+      getTodos().then(setTodos);
+    }
 
-      case FilterParams.Completed:
-        setTodos(todosCopy.filter(({ completed }) => completed));
-        break;
-
-      case FilterParams.All:
-      default:
-        getTodos().then(setTodos);
+    if (filterParam.query) {
+      getTodos()
+        .then(todo => todo.filter(({ title }) => title.includes(filterParam.query.toLowerCase())))
+        .then(setTodos);
     }
   }, [filterParam]);
 
@@ -62,7 +65,6 @@ export const App: React.FC = () => {
               <TodoFilter
                 filterParam={filterParam}
                 onFilterChange={handleChangeFilterParam}
-                query={query}
                 onSearch={handleSearch}
               />
             </div>
