@@ -1,12 +1,17 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  showedTodo: Todo | null,
+};
+
+export const TodoModal: React.FC<Props> = ({ showedTodo }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!showedTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
