@@ -11,11 +11,11 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [titleFilter, setTitleFilter] = useState('');
-  const [filter, setFilter] = useState('');
+  const [titleFilter, setTitleFilter] = useState<string>('');
+  const [filter, setFilter] = useState<string>('');
 
   const handleSelectedTodo = (todo: Todo) => {
     const findTodo = todos.find(value => value === todo) as Todo;

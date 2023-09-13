@@ -11,7 +11,7 @@ type TodoModalProps = {
 
 export const TodoModal: React.FC<TodoModalProps>
   = ({ todo, handleModalClose }) => {
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {

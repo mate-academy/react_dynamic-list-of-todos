@@ -8,7 +8,7 @@ type TodoFilterProps = {
 
 export const TodoFilter
   = ({ onFilter, onTitleFilter, onClearFilter } : TodoFilterProps) => {
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState<string>('');
     const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
     = (event) => {
       onFilter(event.target.value);
