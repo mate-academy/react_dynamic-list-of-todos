@@ -18,6 +18,23 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
 
+  const filterByStatus = (status: string, todosList: Todo[]) => {
+    switch (status) {
+      case 'active':
+        setVisiableTodos(todosList.filter((todo => todo.completed)));
+        break;
+
+      case 'completed':
+        setVisiableTodos(todosList.filter((todo => !todo.completed)));
+        break;
+
+      case 'all':
+      default:
+        setVisiableTodos(todosList);
+        break;
+    }
+  };
+
   useEffect(() => {
     getTodos()
       .then(setTodos);
@@ -31,22 +48,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const filteredByQueryTodos = todos.filter((todo => todo.title.includes(query)));
+    const filteredByQueryTodos = todos.filter((todo => todo.title.toLowerCase().includes(query.toLowerCase())));
 
-    switch (filter) {
-      case 'active':
-        setVisiableTodos(filteredByQueryTodos.filter((todo => todo.completed)));
-        break;
-
-      case 'completed':
-        setVisiableTodos(filteredByQueryTodos.filter((todo => !todo.completed)));
-        break;
-
-      case 'all':
-      default:
-        setVisiableTodos(filteredByQueryTodos);
-        break;
-    }
+    filterByStatus(filter, filteredByQueryTodos);
   }, [filter, query]);
 
   return (
