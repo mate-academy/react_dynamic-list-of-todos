@@ -5,11 +5,10 @@ import React, {
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
@@ -18,10 +17,8 @@ export type CompletedFilter = 'all' | 'active' | 'completed';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>([]);
   const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
-  const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [completedFilters, setCompletedFilters] = useState<CompletedFilter>('all');
   const [inputFilter, setInputfilter] = useState<string>('');
   const [filteredTodos, setFilteredTodos] = useState<Todo[] | null>(todos);
@@ -30,7 +27,6 @@ export const App: React.FC = () => {
     const loadTodos = async () => {
       setLoadingTodos(true);
       setError(false);
-      setUser(null);
 
       getTodos().then(setTodos).catch(e => {
         setError(e.message);
@@ -40,27 +36,10 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      setLoadingUser(true);
-      setError(false);
-      setUser(null);
-
-      if (todo) {
-        getUser(todo?.userId).then(setUser).catch(e => {
-          setError(e.message);
-        }).finally(() => setLoadingUser(false));
-      }
-    };
-
-    loadUser();
-  }, [todo]);
-
   const selectTodo = (chosenTodo: Todo) => {
     if (todos) {
       const t = todos?.find(to => to.id === chosenTodo.id);
 
-      setLoadingUser(true);
       setTodo(t as Todo);
     }
   };
@@ -75,9 +54,8 @@ export const App: React.FC = () => {
 
   useCallback(selectInputFilter, [inputFilter]);
 
-  const selectUser = () => {
+  const closeModal = () => {
     setTodo(null);
-    setUser(null);
   };
 
   const onClickHandle = () => {
@@ -115,11 +93,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectfilter={selectCompletedFilter}
-                selectinputfilter={selectInputFilter}
-                selectedfilter={completedFilters}
-                selectedinpputfilter={inputFilter}
-                onclickhandle={onClickHandle}
+                selectFilter={selectCompletedFilter}
+                selectInputFilter={selectInputFilter}
+                selectedFilter={completedFilters}
+                selectedInpputFilter={inputFilter}
+                onClickHandle={onClickHandle}
               />
             </div>
 
@@ -130,8 +108,8 @@ export const App: React.FC = () => {
               {!loadingTodos && (
                 <TodoList
                   todos={filteredTodos}
-                  settodo={selectTodo}
-                  selectedtodo={todo}
+                  setTodo={selectTodo}
+                  selectedTodo={todo}
                 />
               )}
             </div>
@@ -141,10 +119,8 @@ export const App: React.FC = () => {
 
       {todo && (
         <TodoModal
-          user={user}
-          loading={loadingUser}
-          chosentodo={todo}
-          setuser={selectUser}
+          chosenTodo={todo}
+          closeModal={closeModal}
         />
       )}
     </>
