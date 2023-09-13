@@ -4,9 +4,29 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
+  selectedTodo: Todo | null,
+  selectUser: (userId: number) => void,
+  selectTodo: (todoId: number) => void,
+  setModal: (status: boolean) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodo,
+  selectUser,
+  selectTodo,
+  setModal,
+}) => {
+  const handleToggleModal = (
+    userId: number,
+    todoId: number,
+    status: boolean,
+  ) => {
+    selectUser(userId);
+    selectTodo(todoId);
+    setModal(status);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -43,9 +63,18 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => handleToggleModal(todo.userId, todo.id, true)}
+              >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames('far', {
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
+                  })}
+                  />
                 </span>
               </button>
             </td>
