@@ -1,12 +1,13 @@
+import { FILTER } from '../../types/Filter';
+
 type Props = {
-  filter: string,
   setFilter: (f: string) => void,
   query: string,
   setQuery: (s: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filter, setFilter, query, setQuery,
+  setFilter, query, setQuery,
 }) => {
   return (
     <form className="field has-addons">
@@ -14,12 +15,11 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FILTER.ALL}>All</option>
+            <option value={FILTER.ACTIVE}>Active</option>
+            <option value={FILTER.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

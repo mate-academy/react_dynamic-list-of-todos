@@ -14,7 +14,11 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
 
   useEffect(() => {
     getUser(todo.userId)
-      .then(setSelectedUser);
+      .then(setSelectedUser)
+      .catch(() => {
+        setSelectedUser(null);
+        throw new Error('Server is not responding');
+      });
   }, [todo]);
 
   const onCloseHanler = () => {

@@ -23,7 +23,6 @@ export const TodoList: React.FC<Props> = (
           <th>#</th>
           <th>
             <span className="icon">
-              {}
               <i className="fas fa-check" />
             </span>
           </th>
@@ -62,11 +61,11 @@ export const TodoList: React.FC<Props> = (
                 onClick={() => onSelectHandler(todo)}
               >
                 <span className="icon">
-                  <i className={
-                    `far ${selectedTodo === todo
-                      ? 'fa-eye-slash'
-                      : 'fa-eye'}`
-                  }
+                  <i className={classNames(
+                    'far',
+                    { 'fa-eye-slash': selectedTodo === todo },
+                    { 'fa-eye': !(selectedTodo === todo) },
+                  )}
                   />
                 </span>
               </button>
