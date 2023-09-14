@@ -38,15 +38,10 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then((todosFrommServer) => {
       setTodos(todosFrommServer);
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 100);
     });
   }, []);
 
@@ -62,21 +57,21 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                onQueryChange={setQuery}
                 selectedFilter={selectedFilter}
-                setSelectedFilter={setSelectedFilter}
+                onSelectFilter={setSelectedFilter}
               />
             </div>
 
             <div className="block">
-              {loading ? (
-                <Loader />
-              ) : (
+              {todos.length ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  onSelectTodo={setSelectedTodo}
                 />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
@@ -86,7 +81,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          onSelectTodo={setSelectedTodo}
         />
       )}
     </>

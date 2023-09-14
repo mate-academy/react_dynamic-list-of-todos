@@ -6,22 +6,18 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | null;
-  setSelectedTodo: (value: Todo | null) => void;
+  onSelectTodo: (value: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  onSelectTodo,
+}) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (todo?.userId) {
-      getUser(todo?.userId).then((userFromServer) => {
-        setUser(userFromServer);
-
-        setTimeout(() => {
-          setLoading(false);
-        }, 100);
-      });
+      getUser(todo?.userId).then(setUser);
     }
   }, [todo?.userId]);
 
@@ -29,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -46,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => onSelectTodo(null)}
             />
           </header>
 
