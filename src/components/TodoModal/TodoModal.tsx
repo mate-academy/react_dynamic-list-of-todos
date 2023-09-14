@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+import classNames from 'classnames';
+
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+
+import { getUser } from '../../api';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  activeTodo: Todo | null,
+  handleToggleModal: () => void,
+  handleSetActiveTodo: (todo: Todo | null) => void,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  activeTodo,
+  handleToggleModal,
+  handleSetActiveTodo,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = activeTodo ? activeTodo.userId : NaN;
+
+  useLayoutEffect(() => {
+    if (Number.isNaN(userId)) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    getUser(userId)
+      .then(setUser)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleCloseModal = () => {
+    handleSetActiveTodo(null);
+    handleToggleModal();
+    setUser(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +55,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${activeTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +63,31 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleCloseModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {activeTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={classNames({
+                  'has-text-danger': !activeTodo?.completed,
+                  'has-text-success': activeTodo?.completed,
+                })}
+              >
+                {activeTodo?.completed
+                  ? 'Done'
+                  : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
