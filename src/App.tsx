@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,7 +9,11 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-const getFilteredTodos = (todos: Todo[], query: string, selectedFilter: string) => {
+const getFilteredTodos = (
+  todos: Todo[],
+  query: string,
+  selectedFilter: string,
+) => {
   let todosCopy = [...todos];
 
   if (query) {
