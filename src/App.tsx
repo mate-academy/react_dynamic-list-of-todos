@@ -1,5 +1,9 @@
-/* eslint-disable max-len */
-import React, { useEffect, useState, useContext } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,10 +14,48 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { TodoContext } from './components/TodoContext';
+import { Filter, FilterEnum } from './types/Filter';
+
+const DEFAULT_FILTER: Filter = {
+  select: FilterEnum.all,
+  input: '',
+};
+
+const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
+  const { input, select } = filter;
+
+  if (!input && select === FilterEnum.all) {
+    return todos;
+  }
+
+  let newTodos = [...todos];
+  const validatedInput = input.toLowerCase().trim();
+
+  newTodos = newTodos
+    .filter(({ title }) => title.toLowerCase().includes(validatedInput));
+
+  switch (select) {
+    case FilterEnum.active:
+      newTodos = newTodos.filter(({ completed }) => !completed);
+      break;
+    case FilterEnum.completed:
+      newTodos = newTodos.filter(({ completed }) => completed);
+      break;
+    default:
+  }
+
+  return newTodos;
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<Filter>(DEFAULT_FILTER);
   const { showedTodo } = useContext(TodoContext);
+
+  const filtredTodos = useMemo(
+    () => getFiltredTodos(filter, todos),
+    [filter, todos],
+  );
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -27,12 +69,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter filter={filter} onFilter={setFilter} />
             </div>
 
             <div className="block">
               {todos.length ? (
-                <TodoList todos={todos} />
+                <TodoList todos={filtredTodos} />
               ) : (
                 <Loader />
               )}

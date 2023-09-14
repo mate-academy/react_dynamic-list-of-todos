@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const { setShowedTodo } = useContext(TodoContext);
+  const { showedTodo, setShowedTodo } = useContext(TodoContext);
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLTableRowElement>) => {
     event.currentTarget.classList.add('has-background-info-light');
@@ -76,7 +76,11 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   onClick={() => setShowedTodo(todo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={classNames('far', {
+                      'fa-eye-slash': showedTodo?.id === id,
+                      'fa-eye': showedTodo?.id !== id,
+                    })}
+                    />
                   </span>
                 </button>
               </td>
