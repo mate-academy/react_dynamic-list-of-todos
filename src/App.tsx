@@ -10,31 +10,8 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-// function filterTodos(todos: Todo[], filterParams: FilterParamsType) {
-//   let todosCopy = [...todos];
-
-//   if (filterParams.selectFilter === FilterParams.Active && !filterParams.query) {
-//     todosCopy = todosCopy.filter((todoTask) => !todoTask.completed);
-//   }
-
-//   if (filterParams.selectFilter === FilterParams.Completed && !filterParams.query) {
-//     todosCopy = todosCopy.filter((todoTask) => todoTask.completed);
-//   }
-
-//   // if (filterParams.selectFilter === FilterParams.All && !filterParams.query) {
-//   //   todosCopy = getTodos().then();
-//   // }
-
-//   if (filterParams.query) {
-//     todosCopy = todosCopy.filter(({ title }) => title.toLowerCase()
-//       .includes(filterParams.query.toLowerCase()));
-//   }
-
-//   return todosCopy;
-// }
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState([] as Todo[]);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
 
   const [filterParam, setFilterParam] = useState({
     selectFilter: 'all',
@@ -51,33 +28,11 @@ export const App: React.FC = () => {
     getTodos().then(setTodos).finally(() => setIsLoading(false));
   }, []);
 
-  const handleChangeFilterParam = (event: ChangeEvent<HTMLSelectElement>) => {
+  const changeFilterParam = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterParam((prev) => ({ ...prev, selectFilter: event.target.value }));
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterParam((prev) => ({ ...prev, query: event.target.value }));
-  };
-
-  const handleResetQuery = () => {
-    setFilterParam((prev) => ({ ...prev, query: '' }));
-  };
-
-  const handleSelectUser = (id: number) => {
-    setUserId(id);
-  };
-
-  const handleSelectTodo = (todoId: number) => {
-    setSelectedTodo(todos.find(({ id }) => id === todoId) || null);
-  };
-
-  const handleHideModal = () => {
-    setSelectedTodo(null);
-    setUserId(0);
-    setIsModalActive(false);
-  };
-
-  useEffect(() => {
+  const filterTodos = () => {
     if (filterParam.selectFilter === FilterParams.All) {
       getTodos().then(todo => {
         setTodos(todo.filter(({ title }) => title.toLowerCase().includes(filterParam.query.toLowerCase())));
@@ -101,6 +56,32 @@ export const App: React.FC = () => {
         }));
       });
     }
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterParam((prev) => ({ ...prev, query: event.target.value }));
+  };
+
+  const resetQuery = () => {
+    setFilterParam((prev) => ({ ...prev, query: '' }));
+  };
+
+  const selectUser = (id: number) => {
+    setUserId(id);
+  };
+
+  const selectTodo = (todoId: number) => {
+    setSelectedTodo(todos?.find(({ id }) => id === todoId) || null);
+  };
+
+  const hideModal = () => {
+    setSelectedTodo(null);
+    setUserId(0);
+    setIsModalActive(false);
+  };
+
+  useEffect(() => {
+    filterTodos();
   }, [filterParam]);
 
   return (
@@ -113,9 +94,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterParam={filterParam}
-                onFilterChange={handleChangeFilterParam}
+                onFilterChange={changeFilterParam}
                 onSearch={handleSearch}
-                onReset={handleResetQuery}
+                onReset={resetQuery}
               />
             </div>
 
@@ -126,8 +107,8 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={todos}
                   selectedTodo={selectedTodo}
-                  selectTodo={handleSelectTodo}
-                  selectUser={handleSelectUser}
+                  selectTodo={selectTodo}
+                  selectUser={selectUser}
                   setModal={setIsModalActive}
                 />
               )}
@@ -139,7 +120,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           userId={userId}
-          onHide={handleHideModal}
+          onHide={hideModal}
         />
       )}
     </>

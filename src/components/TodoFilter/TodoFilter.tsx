@@ -1,9 +1,9 @@
 import React from 'react';
 
 export enum FilterParams {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
 }
 
 interface Filter {
@@ -33,9 +33,10 @@ export const TodoFilter: React.FC<Props> = ({
             defaultValue={filterParam.selectFilter}
             onChange={onFilterChange}
           >
-            <option value={FilterParams.All}>All</option>
-            <option value={FilterParams.Active}>Active</option>
-            <option value={FilterParams.Completed}>Completed</option>
+            {(Object.keys(FilterParams) as Array<keyof typeof FilterParams>)
+              .map((key) => (
+                <option value={FilterParams[key]}>{FilterParams[key]}</option>
+              ))}
           </select>
         </span>
       </p>
@@ -54,12 +55,12 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
         {filterParam.query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={onReset}
+              aria-label="clearSearchButton"
             />
           </span>
         )}
