@@ -24,7 +24,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setTodos([]);
-        throw new Error('Server is not responding');
       })
       .finally(() => setLoader(false));
   }, []);
@@ -42,7 +41,6 @@ export const App: React.FC = () => {
       case FILTER.COMPLETED:
         return filteredByQueryTodos.filter((todo => !todo.completed));
 
-      case FILTER.ALL:
       default:
         return filteredByQueryTodos;
     }

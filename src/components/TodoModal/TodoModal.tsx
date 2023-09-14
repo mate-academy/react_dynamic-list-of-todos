@@ -17,7 +17,6 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
       .then(setSelectedUser)
       .catch(() => {
         setSelectedUser(null);
-        throw new Error('Server is not responding');
       });
   }, [todo]);
 
