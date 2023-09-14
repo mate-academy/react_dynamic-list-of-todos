@@ -1,3 +1,4 @@
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -7,7 +8,9 @@ type Props = {
   selectedTodo: Todo | null,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onClick, selectedTodo }) => {
+export const TodoList: React.FC<Props> = React.memo(({
+  todos, onClick, selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -33,6 +36,7 @@ export const TodoList: React.FC<Props> = ({ todos, onClick, selectedTodo }) => {
               className={classNames({
                 'has-background-info-light': isTodoSelected,
               })}
+              key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
               {todo.completed
@@ -77,4 +81,4 @@ export const TodoList: React.FC<Props> = ({ todos, onClick, selectedTodo }) => {
       </tbody>
     </table>
   );
-};
+});

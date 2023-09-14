@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -47,21 +47,21 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos(filterKey, query, todos);
 
-  const handleTodoSelection = (todo: Todo | null) => {
+  const handleTodoSelection = useCallback((todo: Todo | null) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const handleFilterKeySelection = (key: string) => {
+  const handleFilterKeySelection = useCallback((key: string) => {
     setFilterKey(key);
-  };
+  }, []);
 
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-  };
+  }, []);
 
-  const handleQueryDelete = () => {
+  const handleQueryDelete = useCallback(() => {
     setQuery('');
-  };
+  }, []);
 
   useEffect(() => {
     setLoading(true);

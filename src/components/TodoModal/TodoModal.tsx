@@ -9,7 +9,9 @@ type Props = {
   onClick: (todo: Todo | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, onClick }) => {
+export const TodoModal: React.FC<Props> = React.memo(({
+  selectedTodo, onClick,
+}) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -69,4 +71,4 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClick }) => {
       )}
     </div>
   );
-};
+});

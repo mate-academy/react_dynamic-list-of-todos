@@ -7,7 +7,7 @@ type Props = {
   query: string,
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(({
   onFilterKeyChange, onQueryChange, query, onDelete,
 }) => (
   <form className="field has-addons">
@@ -50,4 +50,4 @@ export const TodoFilter: React.FC<Props> = ({
       )}
     </p>
   </form>
-);
+));
