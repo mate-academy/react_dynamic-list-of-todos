@@ -37,9 +37,11 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
             value={filter.select}
             onChange={handleChangeSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(FilterEnum).map(value => (
+              <option value={value} key={value}>
+                {value.at(0)?.toUpperCase() + value.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -59,8 +61,8 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
 
         {!!filter.input && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="deleteButton"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

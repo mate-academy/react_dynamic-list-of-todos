@@ -28,10 +28,8 @@ const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
     return todos;
   }
 
-  let newTodos = [...todos];
   const validatedInput = input.toLowerCase().trim();
-
-  newTodos = newTodos
+  let newTodos = [...todos]
     .filter(({ title }) => title.toLowerCase().includes(validatedInput));
 
   switch (select) {

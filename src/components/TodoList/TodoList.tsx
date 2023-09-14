@@ -1,23 +1,12 @@
-import React, { useContext } from 'react';
-import classNames from 'classnames';
+import React from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoContext } from '../TodoContext';
+import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[];
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const { showedTodo, setShowedTodo } = useContext(TodoContext);
-
-  const handleMouseEnter = (event: React.MouseEvent<HTMLTableRowElement>) => {
-    event.currentTarget.classList.add('has-background-info-light');
-  };
-
-  const handleMouseLeave = (event: React.MouseEvent<HTMLTableRowElement>) => {
-    event.currentTarget.classList.remove('has-background-info-light');
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -34,59 +23,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       </thead>
 
       <tbody>
-        {todos.map((todo) => {
-          const {
-            id,
-            completed,
-            title,
-          } = todo;
-
-          return (
-            <tr
-              data-cy="todo"
-              className=""
-              key={id}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <td className="is-vcentered">{id}</td>
-              {completed ? (
-                <td className="is-vcentered">
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                </td>
-              ) : (
-                <td className="is-vcentered" />
-              )}
-              <td className="is-vcentered is-expanded">
-                <p className={classNames({
-                  'has-text-danger': !completed,
-                  'has-text-success': completed,
-                })}
-                >
-                  {title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => setShowedTodo(todo)}
-                >
-                  <span className="icon">
-                    <i className={classNames('far', {
-                      'fa-eye-slash': showedTodo?.id === id,
-                      'fa-eye': showedTodo?.id !== id,
-                    })}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+        {todos.map((todo) => <TodoItem todo={todo} key={todo.id} />)}
       </tbody>
     </table>
   );
