@@ -10,8 +10,7 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({
-  todo,
-  onSelectTodo,
+  todo, onSelectTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
