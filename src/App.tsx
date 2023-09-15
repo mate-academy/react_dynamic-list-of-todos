@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useCallback, useState } from 'react';
+import React, {
+  useEffect, useCallback, useState, useMemo,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,8 +11,9 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterKey } from './types/FilterKey';
 
-function getFilteredTodos(key: string, query: string, todosToFilter: Todo[]) {
+function getFilteredTodos(key: FilterKey, query: string, todosToFilter: Todo[]) {
   let filteredTodos = [];
 
   switch (key) {
@@ -44,16 +47,18 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterKey, setFilterKey] = useState('all');
+  const [filterKey, setFilterKey] = useState<FilterKey>(FilterKey.All);
   const [query, setQuery] = useState('');
 
-  const filteredTodos = getFilteredTodos(filterKey, query, todos);
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(filterKey, query, todos);
+  }, [filterKey, query, todos]);
 
   const handleTodoSelection = useCallback((todo: Todo | null) => {
     setSelectedTodo(todo);
   }, []);
 
-  const handleFilterKeySelection = useCallback((key: string) => {
+  const handleFilterKeySelection = useCallback((key: FilterKey) => {
     setFilterKey(key);
   }, []);
 
@@ -71,6 +76,7 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
+      .catch(() => setTodos([]))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -91,20 +97,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
-                <TodoList
-                  todos={filteredTodos}
-                  onClick={handleTodoSelection}
-                  selectedTodo={selectedTodo}
-                />
-              )}
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onClick={handleTodoSelection}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           onClick={handleTodoSelection}

@@ -1,7 +1,8 @@
 import React from 'react';
+import { FilterKey } from '../../types/FilterKey';
 
 type Props = {
-  onFilterKeyChange: (key: string) => void,
+  onFilterKeyChange: (key: FilterKey) => void,
   onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   onDelete: () => void
   query: string,
@@ -15,11 +16,13 @@ export const TodoFilter: React.FC<Props> = React.memo(({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => onFilterKeyChange(event.target.value)}
+          onChange={
+            (event) => onFilterKeyChange(event.target.value as FilterKey)
+          }
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterKey.All}>All</option>
+          <option value={FilterKey.Active}>Active</option>
+          <option value={FilterKey.Completed}>Completed</option>
         </select>
       </span>
     </p>
