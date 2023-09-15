@@ -4,12 +4,12 @@ import { FilterKey } from '../../types/FilterKey';
 type Props = {
   onFilterKeyChange: (key: FilterKey) => void,
   onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  onDelete: () => void
+  onQueryDelete: () => void
   query: string,
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(({
-  onFilterKeyChange, onQueryChange, query, onDelete,
+  onFilterKeyChange, onQueryChange, query, onQueryDelete,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={onDelete}
+            onClick={onQueryDelete}
           />
         </span>
       )}

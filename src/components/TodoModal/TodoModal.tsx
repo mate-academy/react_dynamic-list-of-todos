@@ -6,20 +6,29 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo,
-  onClick: (todo: Todo | null) => void,
+  onTodoSelectionCancel: () => void,
 };
 
 export const TodoModal: React.FC<Props> = React.memo(({
-  selectedTodo, onClick,
+  selectedTodo, onTodoSelectionCancel,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setIsLoading(true);
     getUser(selectedTodo.userId)
-      .then(setUser)
-      .catch(() => setUser(null))
+      .then((selectedUser) => {
+        if (!selectedUser) {
+          throw new Error('Cannot find user with such id');
+        }
+
+        setUser(selectedUser);
+      })
+      .catch((errorMessage) => {
+        // eslint-disable-next-line
+        console.log(errorMessage);
+        setUser(null);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -44,7 +53,7 @@ export const TodoModal: React.FC<Props> = React.memo(({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClick(null)}
+              onClick={onTodoSelectionCancel}
             />
           </header>
 

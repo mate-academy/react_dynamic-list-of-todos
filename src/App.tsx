@@ -17,17 +17,17 @@ function getFilteredTodos(key: FilterKey, query: string, todosToFilter: Todo[]) 
   let filteredTodos = [];
 
   switch (key) {
-    case 'all': {
+    case FilterKey.All: {
       filteredTodos = todosToFilter;
       break;
     }
 
-    case 'active': {
+    case FilterKey.Active: {
       filteredTodos = todosToFilter.filter(todo => !todo.completed);
       break;
     }
 
-    case 'completed': {
+    case FilterKey.Completed: {
       filteredTodos = todosToFilter.filter(todo => todo.completed);
       break;
     }
@@ -70,13 +70,25 @@ export const App: React.FC = () => {
     setQuery('');
   }, []);
 
+  const handleTodoSelectionCancel = useCallback(() => {
+    setSelectedTodo(null);
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
     getTodos()
       .then(todosFromServer => {
+        if (!todosFromServer.length) {
+          throw new Error("Couldn't get any todos from server");
+        }
+
         setTodos(todosFromServer);
       })
-      .catch(() => setTodos([]))
+      .catch((errorMessage) => {
+        // eslint-disable-next-line
+        console.log(errorMessage);
+        setTodos([]);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -92,7 +104,7 @@ export const App: React.FC = () => {
                 onFilterKeyChange={handleFilterKeySelection}
                 onQueryChange={handleQueryChange}
                 query={query}
-                onDelete={handleQueryDelete}
+                onQueryDelete={handleQueryDelete}
               />
             </div>
 
@@ -114,7 +126,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onClick={handleTodoSelection}
+          onTodoSelectionCancel={handleTodoSelectionCancel}
         />
       )}
     </>
