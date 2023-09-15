@@ -29,20 +29,17 @@ const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
   }
 
   const validatedInput = input.toLowerCase().trim();
-  let newTodos = todos
-    .filter(({ title }) => title.toLowerCase().includes(validatedInput));
 
   switch (select) {
     case TodoStates.Active:
-      newTodos = newTodos.filter(({ completed }) => !completed);
-      break;
+      return todos.filter(({ completed, title }) => (
+        title.toLowerCase().includes(validatedInput) && !completed));
     case TodoStates.Completed:
-      newTodos = newTodos.filter(({ completed }) => completed);
-      break;
+      return todos.filter(({ completed, title }) => (
+        title.toLowerCase().includes(validatedInput) && completed));
     default:
+      return todos;
   }
-
-  return newTodos;
 };
 
 export const App: React.FC = () => {
@@ -83,8 +80,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <>
-                  <TodoList todos={filtredTodos} />
-                  {!filtredTodos.length && 'No todos'}
+                  {!filtredTodos.length ? 'No todos' : (
+                    <TodoList todos={filtredTodos} />
+                  )}
                 </>
               )}
             </div>

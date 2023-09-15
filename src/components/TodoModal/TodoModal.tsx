@@ -26,7 +26,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading && !showedUser ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -64,9 +64,11 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href={`mailto:${showedUser?.email}`}>
-                {showedUser?.name}
-              </a>
+              {showedUser ? (
+                <a href={`mailto:${showedUser.email}`}>
+                  {showedUser.name}
+                </a>
+              ) : 'There is no user for this task'}
             </p>
           </div>
         </div>

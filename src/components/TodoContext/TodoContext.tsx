@@ -1,12 +1,12 @@
 import React, { createContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
-type ContextObject = {
+type TodoContextType = {
   showedTodo: Todo | null;
-  setShowedTodo: (u: Todo | null) => void;
+  setShowedTodo: (todo: Todo | null) => void;
 };
 
-export const TodoContext = createContext<ContextObject>({
+export const TodoContext = createContext<TodoContextType>({
   showedTodo: null,
   setShowedTodo: () => {},
 });

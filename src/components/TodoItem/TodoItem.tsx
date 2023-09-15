@@ -16,19 +16,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const { showedTodo, setShowedTodo } = useContext(TodoContext);
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLTableRowElement>) => {
-    event.currentTarget.classList.add('has-background-info-light');
-  };
-
-  const handleMouseLeave = (event: React.MouseEvent<HTMLTableRowElement>) => {
-    event.currentTarget.classList.remove('has-background-info-light');
-  };
-
   return (
     <tr
       data-cy="todo"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={classNames({
+        'has-background-info-light': id === showedTodo?.id,
+      })}
     >
       <td className="is-vcentered">{id}</td>
       {completed ? (

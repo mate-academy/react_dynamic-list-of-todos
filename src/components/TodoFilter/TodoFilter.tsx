@@ -1,37 +1,33 @@
 import React from 'react';
 import { Filter, TodoStates } from '../../types/Filter';
 
-function capitalizer(str: string): string {
-  return str.at(0)?.toUpperCase() + str.slice(1);
-}
-
 const todoStatesArray = Object.values(TodoStates);
 
 type Props = {
   filter: Filter;
-  onFilter: (f: Filter) => void;
+  onFilter: (filter: Filter | ((filter: Filter) => Filter)) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
   const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilter({
-      ...filter,
+    onFilter(prevState => ({
+      ...prevState,
       select: event.target.value as TodoStates,
-    });
+    }));
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onFilter({
-      ...filter,
+    onFilter(prevState => ({
+      ...prevState,
       input: event.target.value,
-    });
+    }));
   };
 
   const handleClearInput = () => {
-    onFilter({
-      ...filter,
+    onFilter(prevState => ({
+      ...prevState,
       input: '',
-    });
+    }));
   };
 
   return (
@@ -44,8 +40,12 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
             onChange={handleChangeSelect}
           >
             {todoStatesArray.map(value => (
-              <option value={value} key={value}>
-                {capitalizer(value)}
+              <option
+                value={value}
+                key={value}
+                className="capitalized"
+              >
+                {value}
               </option>
             ))}
           </select>
@@ -65,8 +65,8 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {!!filter.input && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        {filter.input && (
+          <span className="icon is-right pointerEvent">
             <button
               aria-label="deleteButton"
               data-cy="clearSearchButton"
