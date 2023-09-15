@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Select } from './types/Select';
+import { TodosFilter } from './types/TodosFilter';
 
 const getFilteredTodos = (
   todos: Todo[],
@@ -25,9 +25,9 @@ const getFilteredTodos = (
 
   if (selectedFilter) {
     switch (selectedFilter) {
-      case 'active':
+      case TodosFilter.active:
         return todosCopy.filter(({ completed }) => !completed);
-      case 'completed':
+      case TodosFilter.completed:
         return todosCopy.filter(({ completed }) => completed);
       default:
         return todosCopy;
@@ -40,17 +40,22 @@ const getFilteredTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<Select>(Select.all);
+  const [selectedFilter, setSelectedFilter] = useState<TodosFilter>(
+    TodosFilter.all,
+  );
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getTodos().then((todosFrommServer) => {
-      setTodos(todosFrommServer);
-    }).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }).finally(() => setIsLoading(false));
+    getTodos()
+      .then((todosFrommServer) => {
+        setTodos(todosFrommServer);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {

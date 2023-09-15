@@ -1,10 +1,10 @@
-import { Select } from '../../types/Select';
+import { TodosFilter } from '../../types/TodosFilter';
 
 type Props = {
   query: string;
   onQueryChange: (value: string) => void;
   selectedFilter: string;
-  onSelectFilter: (value: Select) => void;
+  onSelectFilter: (value: TodosFilter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const resetFilters = () => {
     onQueryChange('');
-    onSelectFilter(Select.all);
+    onSelectFilter(TodosFilter.all);
   };
 
   return (
@@ -25,9 +25,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedFilter}
-            onChange={(event) => onSelectFilter(event?.target.value as Select)}
+            onChange={(event) => {
+              onSelectFilter(event?.target.value as TodosFilter);
+            }}
           >
-            {Object.entries(Select).map(([key, value]) => (
+            {Object.entries(TodosFilter).map(([key, value]) => (
               <option value={key} key={key}>
                 {value}
               </option>
