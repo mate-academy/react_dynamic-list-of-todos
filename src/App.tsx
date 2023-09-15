@@ -5,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
       case Status.Active:
         return validTodo(false);
       default:
-        return todo && todo.title.includes(query);
+        return todo.title.includes(query);
     }
   });
 
@@ -75,7 +74,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          changeTodo={setSelectedTodo}
+          closeModal={() => setSelectedTodo(null)}
         />
       )}
     </>

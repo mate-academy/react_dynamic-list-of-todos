@@ -1,6 +1,4 @@
 import React, {
-  Dispatch,
-  SetStateAction,
   useEffect,
   useState,
 } from 'react';
@@ -11,11 +9,11 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  selectedTodo: Todo | null,
-  changeTodo: Dispatch<SetStateAction<Todo | null>>
+  selectedTodo: Todo,
+  closeModal: () => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, changeTodo }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, closeModal }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
@@ -46,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, changeTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => changeTodo(null)}
+              onClick={closeModal}
             />
           </header>
 
