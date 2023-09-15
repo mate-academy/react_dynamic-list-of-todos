@@ -7,17 +7,19 @@ export const filterTodos = (filter: Filters, todos: Todo[]) => {
   let visibleTodos = [...todos];
   const normalaziedQuery = query.toLowerCase();
 
+  if (query) {
+    visibleTodos = visibleTodos.filter(({ title }) => (
+      title.toLowerCase().includes(normalaziedQuery)));
+  }
+
   switch (select) {
     case FilterParams.Active:
-      visibleTodos = visibleTodos.filter(({ completed, title }) => (
-        !completed
-        && title.toLowerCase().includes(normalaziedQuery)));
+      visibleTodos = visibleTodos.filter(({ completed }) => !completed);
       break;
 
     case FilterParams.Completed:
-      visibleTodos = visibleTodos.filter(({ completed, title }) => {
-        return completed
-          && title.toLowerCase().includes(normalaziedQuery);
+      visibleTodos = visibleTodos.filter(({ completed }) => {
+        return completed;
       });
       break;
 
