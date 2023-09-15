@@ -3,7 +3,7 @@ import { Filter } from '../../types/Filter';
 import { Options } from '../../types/Options';
 
 type Props = {
-  handleFilter: (filter: Filter) => void,
+  handleFilter: (filter: Filter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
   const [option, setOption] = useState<Options>(Options.all);
 
   useEffect(() => {
-    handleFilter({ query, option });
+    handleFilter({ option, query });
   }, [query, option]);
 
   const handleChangeFilterOption

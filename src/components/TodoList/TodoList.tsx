@@ -27,17 +27,19 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {todos.map(({
+          id, completed, userId, title,
+        }) => (
           <tr
-            key={todo.id}
             data-cy="todo"
+            key={id}
             className=""
           >
             <td className="is-vcentered">
-              {todo.id}
+              {id}
             </td>
             <td className="is-vcentered">
-              {todo.completed && (
+              {completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -46,11 +48,11 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={classNames({
-                  'has-text-danger': !todo.completed,
-                  'has-text-success': todo.completed,
+                  'has-text-danger': !completed,
+                  'has-text-success': completed,
                 })}
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -58,14 +60,18 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleShowModal(todo)}
+                onClick={
+                  () => handleShowModal({
+                    id, completed, userId, title,
+                  })
+                }
               >
                 <span className="icon">
                   <i className={classNames(
                     'far',
                     {
-                      'fa-eye-slash': selectedTodo?.id === todo.id,
-                      'fa-eye': selectedTodo?.id !== todo.id,
+                      'fa-eye-slash': selectedTodo?.id === id,
+                      'fa-eye': selectedTodo?.id !== id,
                     },
                   )}
                   />

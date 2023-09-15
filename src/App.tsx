@@ -12,10 +12,10 @@ import { Filter } from './types/Filter';
 import { Options } from './types/Options';
 import { getTodos } from './api';
 
-function getFilteredTodos(todos: Todo[], filter: Filter) {
-  // let filteredTodos = [...todos];
+function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
+  let filteredTodos = [...todos];
 
-  const filteredTodos: Todo[] = todos.filter(todo => {
+  filteredTodos = filteredTodos.filter(todo => {
     switch (filter.option) {
       case Options.active:
         return !todo.completed;
@@ -25,12 +25,12 @@ function getFilteredTodos(todos: Todo[], filter: Filter) {
 
       case Options.all:
       default:
-        return filteredTodos;
+        return todo;
     }
   });
 
   if (filter.query) {
-    filteredTodos.filter(({ title }) => title.includes(filter.query.trim()));
+    filteredTodos = filteredTodos.filter(({ title }) => title.toLowerCase().includes(filter.query.trim().toLowerCase()));
   }
 
   return filteredTodos;
@@ -39,7 +39,7 @@ function getFilteredTodos(todos: Todo[], filter: Filter) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>({ option: Options.all, query: '' });
 
@@ -57,12 +57,12 @@ export const App: React.FC = () => {
 
   const handleShowModal = (todo: Todo) => {
     setSelectedTodo(todo);
-    setShowModal(true);
+    setIsShowModal(true);
   };
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
-    setShowModal(false);
+    setIsShowModal(false);
   };
 
   return (
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {isShowModal && (
         <TodoModal
           selectedTodo={selectedTodo}
           handleCloseModal={handleCloseModal}
