@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,6 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Select } from './types/Select';
 
 const getFilteredTodos = (
   todos: Todo[],
@@ -25,9 +26,9 @@ const getFilteredTodos = (
   if (selectedFilter) {
     switch (selectedFilter) {
       case 'active':
-        return todosCopy.filter((todo) => todo.completed === false);
+        return todosCopy.filter(({ completed }) => !completed);
       case 'completed':
-        return todosCopy.filter((todo) => todo.completed === true);
+        return todosCopy.filter(({ completed }) => completed);
       default:
         return todosCopy;
     }
@@ -39,16 +40,22 @@ const getFilteredTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<Select>(Select.all);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then((todosFrommServer) => {
       setTodos(todosFrommServer);
-    });
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }).finally(() => setIsLoading(false));
   }, []);
 
-  const filteredTodos = getFilteredTodos(todos, query, selectedFilter);
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(todos, query, selectedFilter);
+  }, [todos, query, selectedFilter]);
 
   return (
     <>
@@ -67,7 +74,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length ? (
+              {!isLoading ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}

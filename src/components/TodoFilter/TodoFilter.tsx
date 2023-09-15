@@ -4,7 +4,7 @@ type Props = {
   query: string;
   onQueryChange: (value: string) => void;
   selectedFilter: string;
-  onSelectFilter: (value: string) => void;
+  onSelectFilter: (value: Select) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const resetFilters = () => {
     onQueryChange('');
-    onSelectFilter('all');
+    onSelectFilter(Select.all);
   };
 
   return (
@@ -25,7 +25,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedFilter}
-            onChange={(event) => onSelectFilter(event?.target.value)}
+            onChange={(event) => onSelectFilter(event?.target.value as Select)}
           >
             {Object.entries(Select).map(([key, value]) => (
               <option value={key} key={key}>

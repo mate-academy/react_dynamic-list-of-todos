@@ -12,12 +12,14 @@ export const TodoItem: React.FC<Props> = ({
   selectedTodo,
   onSelectTodo,
 }) => {
+  const isSelected = selectedTodo === todo;
+
   return (
     <tr
       key={todo.id}
       data-cy="todo"
       className={classnames({
-        'has-background-info-light': selectedTodo === todo,
+        'has-background-info-light': isSelected,
       })}
     >
       <td className="is-vcentered">{todo.id}</td>
@@ -29,9 +31,10 @@ export const TodoItem: React.FC<Props> = ({
         )}
       </td>
       <td className="is-vcentered is-expanded">
-        <p className={todo.completed
-          ? 'has-text-success'
-          : 'has-text-danger'}
+        <p className={classnames({
+          'has-text-success': todo.completed,
+          'has-text-danger': !todo.completed,
+        })}
         >
           {todo.title}
         </p>
@@ -44,9 +47,14 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => onSelectTodo(todo)}
         >
           <span className="icon">
-            {selectedTodo === todo
-              ? <i className="far fa-eye-slash" />
-              : <i className="far fa-eye" />}
+            <i className={classnames(
+              'far',
+              {
+                'fa-eye': !isSelected,
+                'fa-eye-slash': isSelected,
+              },
+            )}
+            />
           </span>
         </button>
       </td>
