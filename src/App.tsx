@@ -81,7 +81,7 @@ export const App: React.FC = () => {
               ) : (
                 <>
                   <TodoList todos={filtredTodos} />
-                  {!todos.length && 'No todos'}
+                  {!filtredTodos.length && 'No todos'}
                 </>
               )}
             </div>
