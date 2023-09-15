@@ -26,7 +26,8 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter(todo => {
     const validTodo = (completed: boolean) => {
-      return todo.completed === completed && todo.title.includes(query);
+      return todo.completed === completed
+        && todo.title.toLowerCase().includes(query.toLowerCase());
     };
 
     switch (status) {
@@ -35,7 +36,7 @@ export const App: React.FC = () => {
       case Status.Active:
         return validTodo(false);
       default:
-        return todo.title.includes(query);
+        return todo.title.toLowerCase().includes(query.toLowerCase());
     }
   });
 

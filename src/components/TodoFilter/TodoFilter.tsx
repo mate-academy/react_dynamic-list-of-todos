@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeQuery(event.target.value.trimEnd());
+    changeQuery(event.target.value.trimStart());
   };
 
   return (
@@ -49,13 +49,15 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => changeQuery('')}
-          />
+          {/* eslint-disable jsx-a11y/control-has-associated-label */}
+          {query && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => changeQuery('')}
+            />
+          )}
         </span>
       </p>
     </form>
