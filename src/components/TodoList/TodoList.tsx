@@ -46,8 +46,9 @@ export const TodoList: React.FC<Props> = ({
         {todos?.map(todo => (
           <TodoTask
             todo={todo}
-            handleToggleModal={handleToggleModal}
+            onToggleModal={handleToggleModal}
             selectedTodo={selectedTodo}
+            key={todo.id}
           />
         ))}
       </tbody>

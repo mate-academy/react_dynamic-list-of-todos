@@ -1,18 +1,9 @@
 import React from 'react';
-
-export enum FilterParams {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
-
-interface Filter {
-  selectFilter: string,
-  query: string,
-}
+import { FilterParams } from '../../utils/FilterParams';
+import { Filters } from '../../types/Filters';
 
 type Props = {
-  filterParam: Filter,
+  filterParam: Filters,
   onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void,
   onReset: () => void,
@@ -30,12 +21,15 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            defaultValue={filterParam.selectFilter}
+            defaultValue={filterParam.select}
             onChange={onFilterChange}
           >
             {(Object.keys(FilterParams) as Array<keyof typeof FilterParams>)
               .map((key) => (
-                <option value={FilterParams[key]}>{FilterParams[key]}</option>
+                <option value={FilterParams[key]} key={key}>
+                  {FilterParams[key][0].toUpperCase()
+                  + FilterParams[key].slice(1)}
+                </option>
               ))}
           </select>
         </span>

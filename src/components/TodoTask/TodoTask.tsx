@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  handleToggleModal: (
+  onToggleModal: (
     userId: number,
     todoId: number,
     status: boolean,
@@ -13,7 +13,7 @@ type Props = {
 
 export const TodoTask: React.FC<Props> = ({
   todo,
-  handleToggleModal,
+  onToggleModal,
   selectedTodo,
 }) => {
   return (
@@ -40,7 +40,7 @@ export const TodoTask: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => handleToggleModal(todo.userId, todo.id, true)}
+          onClick={() => onToggleModal(todo.userId, todo.id, true)}
         >
           <span className="icon">
             <i className={classNames('far', {
