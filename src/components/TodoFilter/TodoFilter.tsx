@@ -20,8 +20,12 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
     };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery('');
     setQuery(event.target.value);
+  };
+
+  const handleDeleteQuery = () => {
+    setQuery('');
+    setOption(Options.all);
   };
 
   return (
@@ -53,14 +57,18 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {query
+          && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={handleDeleteQuery}
+              />
+            </span>
+          )}
       </p>
     </form>
   );
