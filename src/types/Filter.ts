@@ -1,7 +1,7 @@
 export enum FilterEnum {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export type Filter = {

@@ -17,26 +17,26 @@ import { TodoContext } from './components/TodoContext';
 import { Filter, FilterEnum } from './types/Filter';
 
 const DEFAULT_FILTER: Filter = {
-  select: FilterEnum.all,
+  select: FilterEnum.All,
   input: '',
 };
 
 const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
   const { input, select } = filter;
 
-  if (!input && select === FilterEnum.all) {
+  if (!input && select === FilterEnum.All) {
     return todos;
   }
 
   const validatedInput = input.toLowerCase().trim();
-  let newTodos = [...todos]
+  let newTodos = todos
     .filter(({ title }) => title.toLowerCase().includes(validatedInput));
 
   switch (select) {
-    case FilterEnum.active:
+    case FilterEnum.Active:
       newTodos = newTodos.filter(({ completed }) => !completed);
       break;
-    case FilterEnum.completed:
+    case FilterEnum.Completed:
       newTodos = newTodos.filter(({ completed }) => completed);
       break;
     default:
@@ -49,6 +49,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(DEFAULT_FILTER);
   const { showedTodo } = useContext(TodoContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const filtredTodos = useMemo(
     () => getFiltredTodos(filter, todos),
@@ -56,7 +57,11 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(() => setTodos([]))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -71,10 +76,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length ? (
-                <TodoList todos={filtredTodos} />
-              ) : (
+              {isLoading ? (
                 <Loader />
+              ) : (
+                <>
+                  <TodoList todos={filtredTodos} />
+                  {!todos.length && 'No todos'}
+                </>
               )}
             </div>
           </div>

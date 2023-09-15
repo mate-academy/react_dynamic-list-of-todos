@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
     });
   };
 
-  const handleClickCross = () => {
+  const handleClearInput = () => {
     onFilter({
       ...filter,
       input: '',
@@ -66,11 +66,10 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClickCross}
+              onClick={handleClearInput}
             />
           </span>
         )}
-
       </p>
     </form>
   );
