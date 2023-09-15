@@ -27,11 +27,11 @@ const prepareTodos = (todos: Todo[], { query, filterParameter }: FilterObject) =
 
   if (filterParameter !== FilterTodos.All) {
     todosCopy = todosCopy.filter(todo => {
-      switch (true) {
-        case filterParameter === FilterTodos.Active:
+      switch (filterParameter) {
+        case FilterTodos.Active:
           return !todo.completed;
 
-        case filterParameter === FilterTodos.Completed:
+        case FilterTodos.Completed:
           return todo.completed;
 
         default:
