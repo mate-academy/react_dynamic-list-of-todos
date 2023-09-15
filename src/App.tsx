@@ -38,7 +38,8 @@ const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
       return todos.filter(({ completed, title }) => (
         title.toLowerCase().includes(validatedInput) && completed));
     default:
-      return todos;
+      return todos.filter(({ title }) => (
+        title.toLowerCase().includes(validatedInput)));
   }
 };
 
