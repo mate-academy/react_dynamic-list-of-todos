@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -16,8 +15,9 @@ import { DEFAULT_FILTER } from './constants';
 export const App: React.FC = () => {
   const [isTodosLoading, setIsTodosLoading] = useState(true);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [isTodoLoading, setIsTodoLoading] = useState(false);
+  const [modalIsActive, setModalIsActive] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | null>(null);
+  // eslint-disable-next-line max-len
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(DEFAULT_FILTER);
 
   useEffect(() => {
@@ -41,6 +41,7 @@ export const App: React.FC = () => {
       });
   }, [filterOptions]);
 
+  // eslint-disable-next-line max-len
   const handleFilterTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterOptions((prevState) => (
       {
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
   };
 
   const handleTodoSelection = (todo: Todo) => {
-    setIsTodoLoading(true);
+    setModalIsActive(true);
 
     getUser(todo.userId)
       .then(userFounded => {
@@ -78,13 +79,11 @@ export const App: React.FC = () => {
             user: userFounded,
           },
         );
-      })
-      .finally(() => {
-        setIsTodoLoading(false);
       });
   };
 
   const handleModalClosing = () => {
+    setModalIsActive(false);
     setSelectedTodo(null);
   };
 
@@ -106,8 +105,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isTodosLoading
-                ? <Loader />
-                : (
+                ? (
+                  <Loader />
+                ) : (
                   <TodoList
                     todos={visibleTodos}
                     onSelect={handleTodoSelection}
@@ -118,10 +118,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
+      {modalIsActive && (
         <TodoModal
           todo={selectedTodo}
-          isLoading={isTodoLoading}
           onClose={handleModalClosing}
         />
       )}
