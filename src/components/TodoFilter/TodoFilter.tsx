@@ -1,5 +1,11 @@
 import React from 'react';
-import { Filter, FilterEnum } from '../../types/Filter';
+import { Filter, TodoStates } from '../../types/Filter';
+
+function capitalizer(str: string): string {
+  return str.at(0)?.toUpperCase() + str.slice(1);
+}
+
+const todoStatesArray = Object.values(TodoStates);
 
 type Props = {
   filter: Filter;
@@ -10,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
   const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onFilter({
       ...filter,
-      select: event.target.value as FilterEnum,
+      select: event.target.value as TodoStates,
     });
   };
 
@@ -37,9 +43,9 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilter }) => {
             value={filter.select}
             onChange={handleChangeSelect}
           >
-            {Object.values(FilterEnum).map(value => (
+            {todoStatesArray.map(value => (
               <option value={value} key={value}>
-                {value.at(0)?.toUpperCase() + value.slice(1)}
+                {capitalizer(value)}
               </option>
             ))}
           </select>

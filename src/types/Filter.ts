@@ -1,10 +1,10 @@
-export enum FilterEnum {
+export enum TodoStates {
   All = 'all',
   Active = 'active',
   Completed = 'completed',
 }
 
 export type Filter = {
-  select: FilterEnum;
+  select: TodoStates;
   input: string;
 };

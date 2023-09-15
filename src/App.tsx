@@ -14,17 +14,17 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { TodoContext } from './components/TodoContext';
-import { Filter, FilterEnum } from './types/Filter';
+import { Filter, TodoStates } from './types/Filter';
 
 const DEFAULT_FILTER: Filter = {
-  select: FilterEnum.All,
+  select: TodoStates.All,
   input: '',
 };
 
 const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
   const { input, select } = filter;
 
-  if (!input && select === FilterEnum.All) {
+  if (!input && select === TodoStates.All) {
     return todos;
   }
 
@@ -33,10 +33,10 @@ const getFiltredTodos = (filter: Filter, todos: Todo[]): Todo[] => {
     .filter(({ title }) => title.toLowerCase().includes(validatedInput));
 
   switch (select) {
-    case FilterEnum.Active:
+    case TodoStates.Active:
       newTodos = newTodos.filter(({ completed }) => !completed);
       break;
-    case FilterEnum.Completed:
+    case TodoStates.Completed:
       newTodos = newTodos.filter(({ completed }) => completed);
       break;
     default:
@@ -60,7 +60,10 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(() => setTodos([]))
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
