@@ -27,7 +27,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <tr
       data-cy="todo"
-      className=""
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
