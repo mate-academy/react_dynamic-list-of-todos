@@ -33,14 +33,16 @@ function getFilteredTodos(key: string, query: string, todosToFilter: Todo[]) {
       filteredTodos = todosToFilter;
   }
 
-  filteredTodos = filteredTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  filteredTodos = filteredTodos.filter(todo => todo.title
+    .toLowerCase()
+    .includes(query.toLowerCase().trim()));
 
   return filteredTodos;
 }
 
 export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterKey, setFilterKey] = useState('all');
   const [query, setQuery] = useState('');
@@ -64,12 +66,12 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -89,8 +91,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && (
+              {isLoading && <Loader />}
+              {!isLoading && (
                 <TodoList
                   todos={filteredTodos}
                   onClick={handleTodoSelection}
