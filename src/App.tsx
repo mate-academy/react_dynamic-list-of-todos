@@ -1,14 +1,68 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+import { Todo, TodoStatus, FilterOptions } from './types';
+import { getTodos } from './api';
 import { Loader } from './components/Loader';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoList } from './components/TodoList';
+import { TodoModal } from './components/TodoModal';
+
+function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
+  const { status, query } = filterOptions;
+  let preparedTodos = [...todos];
+
+  if (status !== TodoStatus.All) {
+    preparedTodos = preparedTodos.filter(({ completed }) => {
+      switch (status) {
+        case TodoStatus.Active:
+          return !completed;
+        case TodoStatus.Completed:
+          return completed;
+        default:
+          throw new Error('This will never happen.');
+      }
+    });
+  }
+
+  if (query) {
+    preparedTodos = preparedTodos.filter(({ title }) => {
+      return title.toLowerCase().includes(query.toLowerCase());
+    });
+  }
+
+  return preparedTodos;
+}
+
+export const initialFilterOptions: FilterOptions = {
+  status: TodoStatus.All,
+  query: '',
+};
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const filteredTodos = useMemo(
+    () => getFilteredTodos(todos, filterOptions),
+    [todos, filterOptions],
+  );
+
   return (
     <>
       <div className="section">
@@ -17,18 +71,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                options={filterOptions}
+                onOptionsChange={setFilterOptions}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  onSelect={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onClose={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
