@@ -17,18 +17,35 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [updateAt, setUpdateAt] = useState(new Date());
 
   useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId)
         .then(userFromServer => setUser(userFromServer))
+        .catch(() => setErrorMessage('Try again later'))
         .finally(() => setIsLoading(false));
     }
-  }, []);
+  }, [updateAt]);
+
+  function reload() {
+    setUpdateAt(new Date());
+    setErrorMessage('');
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
+
+      {errorMessage && (
+        <p className="notification is-danger">
+          {errorMessage}
+          <button type="button" onClick={reload}>
+            Reload
+          </button>
+        </p>
+      )}
 
       {isLoading ? (
         <Loader />

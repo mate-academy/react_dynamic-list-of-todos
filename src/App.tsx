@@ -42,14 +42,17 @@ export const App: React.FC = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>({ option: Options.all, query: '' });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [updateAt, setUpdateAt] = useState(new Date());
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(() => setErrorMessage('Try again later'))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [updateAt]);
 
   const handleFilter = (currentFilter: Filter) => {
     setFilter(currentFilter);
@@ -65,8 +68,22 @@ export const App: React.FC = () => {
     setIsShowModal(false);
   };
 
+  function reload() {
+    setUpdateAt(new Date());
+    setErrorMessage('');
+  }
+
   return (
     <>
+      {errorMessage && (
+        <p className="notification is-danger">
+          {errorMessage}
+          <button type="button" onClick={reload}>
+            Reload
+          </button>
+        </p>
+      )}
+
       <div className="section">
         <div className="container">
           <div className="box">

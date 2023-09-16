@@ -27,6 +27,11 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
+        {!todos && (
+          <p className="notification is-danger">
+            Try again later
+          </p>
+        )}
         {todos.map(({
           id, completed, userId, title,
         }) => (
