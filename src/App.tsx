@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,14 +15,14 @@ import { DEFAULT_FILTER } from './constants';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [modalIsActive, setModalIsActive] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | Todo | null>(
+    null,
+  );
   // eslint-disable-next-line max-len
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(DEFAULT_FILTER);
 
   useEffect(() => {
-    getTodos()
-      .then(setVisibleTodos);
+    getTodos().then(setVisibleTodos);
   }, []);
 
   useEffect(() => {
@@ -32,43 +33,49 @@ export const App: React.FC = () => {
     });
   }, [filterOptions]);
 
-  // eslint-disable-next-line max-len
   const handleFilterTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setFilterOptions((prevState) => ({
-      ...prevState,
-      filterType: event.target.value,
-    }));
+    setFilterOptions((prevState) => (
+      {
+        ...prevState,
+        filterType: event.target.value,
+      }
+    ));
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterOptions((prevState) => ({
-      ...prevState,
-      query: event.target.value,
-    }));
+    setFilterOptions((prevState) => (
+      {
+        ...prevState,
+        query: event.target.value,
+      }
+    ));
   };
 
   const handleResetInput = () => {
-    setFilterOptions((prevState) => ({
-      ...prevState,
-      query: '',
-    }));
+    setFilterOptions((prevState) => (
+      {
+        ...prevState,
+        query: '',
+      }
+    ));
   };
 
   const handleTodoSelection = (todo: Todo) => {
-    setModalIsActive(true);
+    setSelectedTodo(todo);
 
     getUser(todo.userId).then((userFounded) => {
-      setSelectedTodo({
-        ...todo,
-        user: userFounded,
-      });
+      setSelectedTodo(
+        {
+          ...todo,
+          user: userFounded,
+        },
+      );
     });
   };
 
   const handleModalClosing = () => {
-    setModalIsActive(false);
     setSelectedTodo(null);
   };
 
@@ -103,7 +110,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalIsActive && (
+      {selectedTodo !== null && (
         <TodoModal todo={selectedTodo} onClose={handleModalClosing} />
       )}
     </>

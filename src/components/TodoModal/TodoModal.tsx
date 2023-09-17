@@ -1,14 +1,14 @@
 import React from 'react';
 import { Loader } from '../Loader';
-import { TodoWithUser } from '../../types/Todo';
+import { Todo, TodoWithUser } from '../../types/Todo';
 
 interface Props {
-  todo: TodoWithUser | null;
+  todo: TodoWithUser | Todo ;
   onClose: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  if (!todo) {
+  if (!('user' in todo)) {
     return (
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />

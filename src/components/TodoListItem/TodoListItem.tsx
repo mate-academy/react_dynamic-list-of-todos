@@ -3,7 +3,7 @@ import { Todo, TodoWithUser } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
-  selectedTodo: TodoWithUser | null;
+  selectedTodo: TodoWithUser | Todo | null;
   onSelect: (todo: Todo) => void;
 }
 

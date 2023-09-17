@@ -4,7 +4,7 @@ import { TodoListItem } from '../TodoListItem/TodoListItem';
 
 interface Props {
   todos: Todo[];
-  selectedTodo: TodoWithUser | null;
+  selectedTodo: TodoWithUser | Todo | null;
   onSelect: (todo: Todo) => void;
 }
 
