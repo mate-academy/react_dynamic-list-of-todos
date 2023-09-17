@@ -1,14 +1,47 @@
-/* eslint-disable max-len */
-import React from 'react';
+import {
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { getTodos } from './api';
+
+import { TodoContext } from './context/ContextTodo';
+
+import { TodoFilter, getPreparedTodos } from './components/TodoFilter';
+import { TodoModal } from './components/TodoModal';
+import { TodoList } from './components/TodoList';
+import { Loader } from './components/Loader';
+
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+export const App: FC = () => {
+  const {
+    setTodos,
+    isOpenModal,
+    todos,
+    inputField,
+    filteredBy,
+  } = useContext(TodoContext);
 
-export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const preparedTodos = useMemo(() => getPreparedTodos(todos, {
+    inputField,
+    filteredBy,
+  }), [inputField, filteredBy, todos]);
+
+  const isShowTodoList = Boolean(preparedTodos.length) && !isLoading;
+
   return (
     <>
       <div className="section">
@@ -21,14 +54,19 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+
+              {isShowTodoList && (
+                <TodoList todos={preparedTodos} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isOpenModal && (
+        <TodoModal />
+      )}
     </>
   );
 };
