@@ -31,15 +31,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             onChange={handleFilter}
           >
-            <option value={Filter.All}>
-              All
-            </option>
-            <option value={Filter.Active}>
-              Active
-            </option>
-            <option value={Filter.Completed}>
-              Completed
-            </option>
+            {Object.keys(Filter).map(key => (
+              <option value={key} key={key}>
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -59,10 +55,10 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
+              aria-label="Clear Search Button"
               className="delete"
               onClick={() => setQuery('')}
             />

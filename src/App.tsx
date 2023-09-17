@@ -10,37 +10,24 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import { filterTodoList } from './utils/functions';
 
 export const App: React.FC = () => {
-  const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [loadingList, setLoadingList] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const [todosList, setTodosList] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState(Filter.All);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
-  const filteredTodos = todoList
-    .filter(todo => todo.title.toLowerCase()
-      .includes(query.toLowerCase()))
-    .filter(todo => {
-      switch (filter) {
-        case Filter.Active:
-          return !todo.completed;
-
-        case Filter.Completed:
-          return todo.completed;
-
-        default:
-          return todo;
-      }
-    });
+  const filteredTodos = filterTodoList(todosList, query, filter);
 
   useEffect(() => {
     getTodos()
-      .then(setTodoList)
-      .finally(() => setLoadingList(false));
+      .then(setTodosList)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const selectedTodo = todoList.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = todosList.find(todo => todo.id === selectedTodoId);
 
   return (
     <>
@@ -59,7 +46,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingList && (<Loader />)}
+              {isLoading && (<Loader />)}
               <TodoList
                 filteredTodos={filteredTodos}
                 setSelectedTodoId={setSelectedTodoId}
