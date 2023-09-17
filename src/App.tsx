@@ -1,14 +1,25 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { PreparedTodo } from './types/PreparedTodos';
 
 export const App: React.FC = () => {
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectTodo, setSelectTodo] = useState<PreparedTodo | null>(null);
+
+  useEffect(() => {
+    getTodos().then(todos => setVisibleTodos(todos));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -21,14 +32,28 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {visibleTodos.length > 0 ? (
+                <TodoList
+                  selectTodo={selectTodo}
+                  visibleTodos={visibleTodos}
+                  setIsModalOpen={setIsModalOpen}
+                  setSelectTodo={setSelectTodo}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isModalOpen && (
+        <TodoModal
+          setSelectTodo={setSelectTodo}
+          selectTodo={selectTodo}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </>
   );
 };
