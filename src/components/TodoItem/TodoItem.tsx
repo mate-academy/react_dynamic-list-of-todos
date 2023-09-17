@@ -33,7 +33,7 @@ export const TodoItem: FC<TTodoItemProps> = ({ todo }) => {
       <td className="is-vcentered">{id}</td>
       <td className="is-vcentered">
         {completed && (
-          <i className="fas fa-check" />
+          <i className="fas fa-check" data-cy="iconCompleted" />
         )}
       </td>
       <td className="is-vcentered is-expanded">
@@ -53,7 +53,12 @@ export const TodoItem: FC<TTodoItemProps> = ({ todo }) => {
           onClick={() => handleSelectTodo(todo)}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            <i
+              className={cn('far', {
+                'fa-eye': selectedTodo?.id !== id,
+                'fa-eye-slash': selectedTodo?.id === id,
+              })}
+            />
           </span>
         </button>
       </td>
