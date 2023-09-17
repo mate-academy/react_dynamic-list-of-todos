@@ -13,7 +13,6 @@ import { FilterOptions } from './types/FilterOptions';
 import { DEFAULT_FILTER } from './constants';
 
 export const App: React.FC = () => {
-  const [isTodosLoading, setIsTodosLoading] = useState(true);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [modalIsActive, setModalIsActive] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | null>(null);
@@ -22,64 +21,50 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(setVisibleTodos)
-      .finally(() => {
-        setIsTodosLoading(false);
-      });
+      .then(setVisibleTodos);
   }, []);
 
   useEffect(() => {
-    setIsTodosLoading(true);
-    getTodos()
-      .then((todos) => {
-        const filtered = filterTodos(todos, filterOptions);
+    getTodos().then((todos) => {
+      const filtered = filterTodos(todos, filterOptions);
 
-        setVisibleTodos(filtered);
-      })
-      .finally(() => {
-        setIsTodosLoading(false);
-      });
+      setVisibleTodos(filtered);
+    });
   }, [filterOptions]);
 
   // eslint-disable-next-line max-len
-  const handleFilterTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterOptions((prevState) => (
-      {
-        ...prevState,
-        filterType: event.target.value,
-      }));
+  const handleFilterTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setFilterOptions((prevState) => ({
+      ...prevState,
+      filterType: event.target.value,
+    }));
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterOptions((prevState) => (
-      {
-        ...prevState,
-        query: event.target.value,
-      }
-    ));
+    setFilterOptions((prevState) => ({
+      ...prevState,
+      query: event.target.value,
+    }));
   };
 
   const handleResetInput = () => {
-    setFilterOptions((prevState) => (
-      {
-        ...prevState,
-        query: '',
-      }
-    ));
+    setFilterOptions((prevState) => ({
+      ...prevState,
+      query: '',
+    }));
   };
 
   const handleTodoSelection = (todo: Todo) => {
     setModalIsActive(true);
 
-    getUser(todo.userId)
-      .then(userFounded => {
-        setSelectedTodo(
-          {
-            ...todo,
-            user: userFounded,
-          },
-        );
+    getUser(todo.userId).then((userFounded) => {
+      setSelectedTodo({
+        ...todo,
+        user: userFounded,
       });
+    });
   };
 
   const handleModalClosing = () => {
@@ -104,25 +89,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodosLoading
-                ? (
-                  <Loader />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    onSelect={handleTodoSelection}
-                  />
-                )}
+              {visibleTodos.length ? (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  onSelect={handleTodoSelection}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {modalIsActive && (
-        <TodoModal
-          todo={selectedTodo}
-          onClose={handleModalClosing}
-        />
+        <TodoModal todo={selectedTodo} onClose={handleModalClosing} />
       )}
     </>
   );
