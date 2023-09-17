@@ -13,12 +13,10 @@ export function getPreparedTodos(todos: Todo[], {
   inputField = '',
   filteredBy = ETodoStatus.ALL,
 }: ITodosQuery) {
-  let clonedTodos = [...todos];
-
   if (inputField) {
     const searchQueryLowerCase = inputField.toLowerCase().trim();
 
-    clonedTodos = clonedTodos.filter(({ title }) => (
+    return todos.filter(({ title }) => (
       title.toLowerCase().includes(searchQueryLowerCase)
     ));
   }
@@ -26,19 +24,17 @@ export function getPreparedTodos(todos: Todo[], {
   if (filteredBy !== ETodoStatus.ALL) {
     switch (filteredBy) {
       case ETodoStatus.Active:
-        clonedTodos = clonedTodos.filter(({ completed }) => !completed);
-        break;
+        return todos.filter(({ completed }) => !completed);
 
       case ETodoStatus.Completed:
-        clonedTodos = clonedTodos.filter(({ completed }) => completed);
-        break;
+        return todos.filter(({ completed }) => completed);
 
       default:
         throw new Error('Invalid select status');
     }
   }
 
-  return clonedTodos;
+  return [...todos];
 }
 
 export const TodoFilter = () => {
