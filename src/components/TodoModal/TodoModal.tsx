@@ -4,9 +4,7 @@ import { User } from '../../types';
 import { getUser } from '../../api';
 import { TodoContext } from '../../TodoContext';
 
-type Props = {};
-
-export const TodoModal: React.FC<Props> = () => {
+export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
