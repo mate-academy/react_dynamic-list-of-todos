@@ -24,7 +24,7 @@ export const TodoFilter: React.FC<Props> = ({
     event.preventDefault();
     setTempQuery(event.target.value);
 
-    applyQuery(event.target.value);
+    applyQuery(event.target.value.trim().toLowerCase());
   };
 
   const clearSearch = () => {
