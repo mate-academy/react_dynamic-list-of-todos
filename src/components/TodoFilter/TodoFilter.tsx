@@ -4,7 +4,7 @@ import { TodoStatus, FilterOptions } from '../../types';
 
 type Props = {
   options: FilterOptions;
-  onOptionsChange: (newOptions: FilterOptions) => void;
+  onOptionsChange: React.Dispatch<React.SetStateAction<FilterOptions>>;
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
@@ -12,24 +12,24 @@ export const TodoFilter: React.FC<Props> = memo(({
   onOptionsChange,
 }) => {
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    onOptionsChange({
-      ...options,
+    onOptionsChange((currentOptions) => ({
+      ...currentOptions,
       status: event.target.value as TodoStatus,
-    });
+    }));
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
+    onOptionsChange((currentOptions) => ({
+      ...currentOptions,
       query: event.target.value,
-    });
+    }));
   };
 
   const handleResetClick = () => {
-    onOptionsChange({
-      ...options,
+    onOptionsChange((currentOptions) => ({
+      ...currentOptions,
       query: '',
-    });
+    }));
   };
 
   const { status, query } = options;
