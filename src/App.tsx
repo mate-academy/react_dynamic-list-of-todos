@@ -19,8 +19,10 @@ function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
       switch (status) {
         case TodoStatus.Active:
           return !completed;
+
         case TodoStatus.Completed:
           return completed;
+
         default:
           throw new Error('This will never happen.');
       }
