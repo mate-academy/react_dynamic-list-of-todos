@@ -1,1 +1,5 @@
-export enum SortTodos {All, Active, Completed}
+export enum SortTodos {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}

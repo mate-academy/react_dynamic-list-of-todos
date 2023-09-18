@@ -1,11 +1,9 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import { SortTodos } from '../../types/SortTodos';
 
 type Props = {
-  selectFilter: number,
-  setSelectFilter: (event: number) => void
-  filteredTodos: (value: number) => Todo[];
+  selectFilter: SortTodos,
+  setSelectFilter: (sortStatus: SortTodos) => void
   setFilterField: (e: string) => void;
   filterField: string,
 };
@@ -13,7 +11,6 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   setSelectFilter,
   selectFilter,
-  filteredTodos,
   setFilterField,
   filterField,
 }) => {
@@ -22,16 +19,23 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select
+            className="is-capitalized"
             value={selectFilter}
             data-cy="statusSelect"
             onChange={(e) => {
-              filteredTodos(+e.target.value);
-              setSelectFilter(+e.target.value);
+              setSelectFilter(e.target.value as SortTodos);
             }}
           >
-            <option value={SortTodos.All}>All</option>
-            <option value={SortTodos.Active}>Active</option>
-            <option value={SortTodos.Completed}>Completed</option>
+
+            {Object.values(SortTodos).map(option => (
+              <option
+                className="is-capitalized"
+                key={option}
+                value={option}
+              >
+                {option}
+              </option>
+            ))}
           </select>
         </span>
       </p>

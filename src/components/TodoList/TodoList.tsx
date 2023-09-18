@@ -59,7 +59,12 @@ export const TodoList: React.FC<Props> = ({
                     <i className="fas fa-check" />
                   </span>
                 </td>
-              ) : (<td  aria-label="icon is clicked" className="is-vcentered" />)}
+              ) : (
+                <td
+                  aria-label="icon is clicked"
+                  className="is-vcentered"
+                />
+              )}
 
               <td className="is-vcentered is-expanded">
                 <p

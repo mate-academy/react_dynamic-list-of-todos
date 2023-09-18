@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -22,7 +22,7 @@ export const App: React.FC = () => {
     getTodos().then(todos => setVisibleTodos(todos));
   }, []);
 
-  const filteredTodos = () => {
+  const filteredTodos = useMemo(() => {
     let filterTodos = [...visibleTodos];
 
     if (filterField) {
@@ -30,11 +30,11 @@ export const App: React.FC = () => {
     }
 
     switch (selectFilter) {
-      case SortTodos.Completed:
+      case SortTodos.Active:
         filterTodos = filterTodos.filter(todo => !todo.completed);
         break;
 
-      case SortTodos.Active:
+      case SortTodos.Completed:
         filterTodos = filterTodos.filter(todo => todo.completed);
         break;
 
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
     }
 
     return filterTodos;
-  };
+  }, [filterField, selectFilter, visibleTodos]);
 
   return (
     <>
@@ -56,7 +56,6 @@ export const App: React.FC = () => {
               <TodoFilter
                 filterField={filterField}
                 setFilterField={setFilterField}
-                filteredTodos={filteredTodos}
                 selectFilter={selectFilter}
                 setSelectFilter={setSelectFilter}
               />
@@ -66,7 +65,7 @@ export const App: React.FC = () => {
               {visibleTodos.length ? (
                 <TodoList
                   selectTodo={selectTodo}
-                  visibleTodos={filteredTodos()}
+                  visibleTodos={filteredTodos}
                   setIsModalOpen={setIsModalOpen}
                   setSelectTodo={setSelectTodo}
                 />
