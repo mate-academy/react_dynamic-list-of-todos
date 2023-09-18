@@ -18,7 +18,6 @@ export const App: React.FC = () => {
   // eslint-disable-next-line max-len
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
   // eslint-disable-next-line max-len
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(DEFAULT_FILTER);
   // чи можливо відключати еслінт якщо в такому разі код буде більш зрозумілим.
@@ -69,12 +68,10 @@ export const App: React.FC = () => {
 
   const handleTodoSelection = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsModalActive(true);
   };
 
   const handleModalClosing = () => {
     setSelectedTodo(null);
-    setIsModalActive(false);
   };
 
   return (
@@ -109,7 +106,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalActive && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onClose={handleModalClosing}

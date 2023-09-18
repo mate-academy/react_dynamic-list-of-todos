@@ -5,15 +5,11 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 interface Props {
-  todo: Todo | null;
+  todo: Todo;
   onClose: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  if (todo === null) {
-    throw new Error('Invalid todo');
-  }
-
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
