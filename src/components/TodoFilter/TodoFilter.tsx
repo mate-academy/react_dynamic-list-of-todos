@@ -7,15 +7,15 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
   const [query, setQuery] = useState('');
-  const [field, setField] = useState<FilterField>(FilterField.All);
+  const [filterField, setFilterField] = useState<FilterField>(FilterField.All);
 
   useEffect(() => {
-    onFilter({ field, query });
-  }, [query, field]);
+    onFilter({ filterField, query });
+  }, [query, filterField]);
 
   const handleChangeFilterField
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setField(event.target.value as FilterField);
+    setFilterField(event.target.value as FilterField);
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={field}
+            value={filterField}
             onChange={handleChangeFilterField}
           >
             <option value={FilterField.All}>All</option>

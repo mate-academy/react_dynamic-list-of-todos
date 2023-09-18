@@ -6,16 +6,22 @@ import { getUserById } from '../../api/user';
 
 type Props = {
   todo: Todo,
-  onModal: (todo: Todo | null) => void;
+  onToggleModal: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onModal }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
+    setLoader(true);
+
     getUserById(todo.userId)
       .then(setUser)
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
       .finally(() => setLoader(false));
   }, []);
 
@@ -40,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onModal(null)}
+              onClick={() => onToggleModal(null)}
             />
           </header>
 

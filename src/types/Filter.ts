@@ -5,6 +5,6 @@ export enum FilterField {
 }
 
 export interface Filter {
-  field: FilterField;
+  filterField: FilterField;
   query: string;
 }
