@@ -34,6 +34,9 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodoItems)
+      .catch((error) => {
+        throw error;
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -56,10 +59,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (<Loader />)}
-              <TodoList
-                todos={visibleTodos}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList todos={visibleTodos} />
+              )}
             </div>
           </div>
         </div>

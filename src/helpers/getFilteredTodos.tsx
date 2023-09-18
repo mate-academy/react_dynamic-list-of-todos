@@ -13,10 +13,8 @@ export function getFilteredTodos(
         switch (category) {
           case Filters.Active:
             return !completed;
-          case Filters.Completed:
-            return completed;
           default:
-            return Filters.All;
+            return completed;
         }
       });
   }

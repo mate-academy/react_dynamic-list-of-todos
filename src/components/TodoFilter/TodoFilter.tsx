@@ -24,9 +24,11 @@ export const TodoFilter: React.FC<Props> = ({
               (event) => selectCategory(event.target.value as Filters)
             }
           >
-            <option value={Filters.All}>All</option>
-            <option value={Filters.Active}>Active</option>
-            <option value={Filters.Completed}>Completed</option>
+            {Object.entries(Filters).map(([key, value]) => (
+              <option value={value} key={key}>
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>

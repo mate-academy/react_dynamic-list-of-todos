@@ -53,9 +53,11 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => setSelectedTodo(todo)}
         >
           <span className="icon">
-            <i className={classNames(selectedTodo === todo
-              ? 'far fa-eye-slash'
-              : 'far fa-eye')}
+            <i
+              className={classNames({
+                'far fa-eye-slash': selectedTodo,
+                'far fa-eye': !selectedTodo,
+              })}
             />
           </span>
         </button>

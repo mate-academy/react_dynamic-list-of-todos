@@ -6,13 +6,19 @@ import { TodoContext } from '../../TodoContext';
 
 export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
 
   useEffect(() => {
+    setIsLoading(true);
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(setUser);
+        .then(setUser)
+        .catch((error) => {
+          throw error;
+        })
+        .finally(() => setIsLoading(false));
     }
   }, []);
 
@@ -20,7 +26,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
