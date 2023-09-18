@@ -73,8 +73,8 @@ export const App: React.FC = () => {
   };
 
   const handleModalClosing = () => {
-    setIsModalActive(false);
     setSelectedTodo(null);
+    setIsModalActive(false);
   };
 
   return (
