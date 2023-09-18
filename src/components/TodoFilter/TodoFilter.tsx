@@ -1,14 +1,33 @@
-export const TodoFilter = () => {
+import React from 'react';
+import { Todo } from '../../types/Todo';
+import { SortTodos } from '../../types/SortTodos';
+
+type Props = {
+  selectFilter: number,
+  setSelectFilter: (event: number) => void
+  filteredTodos: (value: number) => Todo[];
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  setSelectFilter,
+  selectFilter,
+  filteredTodos,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
+            value={selectFilter}
             data-cy="statusSelect"
+            onChange={(e) => {
+              filteredTodos(+e.target.value);
+              setSelectFilter(+e.target.value);
+            }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortTodos.All}>All</option>
+            <option value={SortTodos.Active}>Active</option>
+            <option value={SortTodos.Completed}>Completed</option>
           </select>
         </span>
       </p>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { PreparedTodo } from '../../types/PreparedTodos';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  selectTodo: PreparedTodo | null,
+  selectTodo: Todo | null,
   setIsModalOpen: (value: boolean) => void,
   setSelectTodo: (todo: Todo | null) => void
 };
