@@ -44,10 +44,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
+  // const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0] ?? {});
   const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0] ?? {});
   const [showLoader, setShowLoader] = useState(true);
   const [selectedOption, setSelectedOption] = useState('');
-  const [viewCounter, setViewCounter] = useState(0);
 
   useEffect(() => {
     getTodos().then((newTodos) => {
@@ -65,7 +65,12 @@ export const App: React.FC = () => {
 
   const onclickHandlerCloseModal = () => {
     setShowModal(false);
-    setViewCounter(prev => prev + 1);
+    setSelectedTodo({
+      id: 0,
+      title: '',
+      completed: false,
+      userId: 0,
+    });
   };
 
   const filterCallBack = (newQuery: string) => {
@@ -100,8 +105,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   onClickHandlerOpenModal={onClickHandlerOpenModal}
-                  viewCounter={viewCounter}
-                  // selectedTodo={selectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -115,7 +119,6 @@ export const App: React.FC = () => {
           selectedTodo={selectedTodo}
         />
       )}
-
     </>
   );
 };

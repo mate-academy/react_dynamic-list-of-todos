@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
   onClickHandlerOpenModal: (todo: Todo) => void;
-  viewCounter: number,
+  selectedTodo: Todo,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onClickHandlerOpenModal = () => {},
-  viewCounter,
+  selectedTodo,
 }) => {
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
-
-  useEffect(() => {
-    if (selectedTodo) {
-      setSelectedTodo(undefined);
-    }
-  }, [viewCounter]);
+  // const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
 
   return (
     <table
@@ -74,7 +68,7 @@ export const TodoList: React.FC<Props> = ({
                 type="button"
                 onClick={() => {
                   onClickHandlerOpenModal(todo);
-                  setSelectedTodo(todo);
+                  // setSelectedTodo(todo);
                 }}
               >
                 <span className="icon">
