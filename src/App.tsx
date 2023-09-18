@@ -27,7 +27,7 @@ function filterByCompletion(todos: Todo[], completionParam: CompletionFilter) {
   return todos.filter(({ completed }) => completed === completionStatus);
 }
 
-function postsFilter(dataToFilter: Todo[], completionParam: CompletionFilter, searchQuery: string) {
+function getFilteredTodos(dataToFilter: Todo[], completionParam: CompletionFilter, searchQuery: string) {
   let filteredTodos = dataToFilter;
 
   filteredTodos = filterByQuery(filteredTodos, searchQuery);
@@ -38,27 +38,25 @@ function postsFilter(dataToFilter: Todo[], completionParam: CompletionFilter, se
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
-  const [isLoaderVisible, setIsLoaderVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [completionFilter, setCompletionFilter] = useState<CompletionFilter>(CompletionFilter.All);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const filteredTodos = getFilteredTodos(todosFromServer, completionFilter, searchQuery);
+
   useEffect(() => {
-    setIsLoaderVisible(true);
+    setIsLoading(true);
 
     getTodos()
       .then((todoList) => {
         setTodosFromServer(todoList);
       })
-      .finally(() => setIsLoaderVisible(false));
+      .catch()
+      .finally(() => setIsLoading(false));
   }, []);
-
-  useEffect(() => {
-    setFilteredTodos(postsFilter(todosFromServer, completionFilter, searchQuery));
-  }, [todosFromServer, completionFilter, searchQuery]);
 
   return (
     <>
@@ -77,7 +75,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaderVisible
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList

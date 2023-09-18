@@ -20,7 +20,9 @@ export const TodoModal: React.FC<Props> = ({
   } = selectedTodo;
 
   useEffect(() => {
-    getUser(userId).then((foundUser) => setUser(foundUser));
+    getUser(userId)
+      .then((foundUser) => setUser(foundUser))
+      .catch();
   }, [selectedTodo]);
 
   return (
