@@ -16,7 +16,7 @@ export function filterTodos(
   }
 
   if (query) {
-    const normalizedQuery = query.toLowerCase();
+    const normalizedQuery = query.toLowerCase().trim();
 
     todoToRecieve = todoToRecieve.filter(({ title }) => {
       const normalizedTodoTitle = title.toLowerCase();

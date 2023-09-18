@@ -17,8 +17,9 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
-  const [filterOptions, setFilterOptions]
-    = useState<FilterOptions>(DEFAULT_FILTER);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>(
+    DEFAULT_FILTER,
+  );
 
   useEffect(() => {
     setIsTodosLoading(true);
