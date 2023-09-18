@@ -28,7 +28,7 @@ export async function filterTodos(
 
   if (query.length > 0) {
     todosFromServer = todosFromServer
-      .filter((todo: Todo) => todo.title.includes(query));
+      .filter((todo: Todo) => todo.title.toLowerCase().includes(query));
   }
 
   return todosFromServer;
