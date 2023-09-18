@@ -59,8 +59,7 @@ export const TodoList: React.FC<Props> = ({
                     <i className="fas fa-check" />
                   </span>
                 </td>
-              )
-                : (<td className="is-vcentered">{' '}</td>)}
+              ) : (<td  aria-label="icon is clicked" className="is-vcentered" />)}
 
               <td className="is-vcentered is-expanded">
                 <p
@@ -80,12 +79,12 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  aria-label="ViewTodo"
+                  aria-label="View Todo"
                 >
                   <span className="icon">
                     <i
                       className={cn('far', {
-                        'fa-eye': true,
+                        'fa-eye': todo.id !== selectTodo?.id,
                         'fa-eye-slash': todo.id === selectTodo?.id,
                       })}
                     />

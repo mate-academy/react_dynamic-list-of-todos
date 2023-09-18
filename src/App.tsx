@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     let filterTodos = [...visibleTodos];
 
     if (filterField) {
-      filterTodos = filterTodos.filter(todo => todo.title.includes(filterField.toLowerCase().trim()));
+      filterTodos = filterTodos.filter(todo => todo.title.toLowerCase().includes(filterField.toLowerCase().trim()));
     }
 
     switch (selectFilter) {
@@ -54,6 +54,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                filterField={filterField}
                 setFilterField={setFilterField}
                 filteredTodos={filteredTodos}
                 selectFilter={selectFilter}

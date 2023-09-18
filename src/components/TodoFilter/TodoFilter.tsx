@@ -7,6 +7,7 @@ type Props = {
   setSelectFilter: (event: number) => void
   filteredTodos: (value: number) => Todo[];
   setFilterField: (e: string) => void;
+  filterField: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   selectFilter,
   filteredTodos,
   setFilterField,
+  filterField,
 }) => {
   return (
     <form className="field has-addons">
@@ -36,6 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
+          value={filterField}
           onChange={(event) => setFilterField(event.target.value)}
           data-cy="searchInput"
           type="text"
@@ -48,11 +51,15 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {filterField && (
+            <button
+              onClick={() => setFilterField('')}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="reset field"
+            />
+          )}
         </span>
       </p>
     </form>
