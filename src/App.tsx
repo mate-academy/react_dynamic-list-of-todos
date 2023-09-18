@@ -9,34 +9,36 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { getTodos } from './api';
-import { handleFilterTodo } from './services/services';
+import { getFilterTodo } from './services/services';
+import { FilterType } from './services/variables';
 
 export const App: React.FC = () => {
   const [hasModal, setHasModal] = useState(false);
-  const [hasLoader, setHasLoader] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [user, setUser] = useState<User | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState(FilterType.All);
   const [query, setQuery] = useState('');
 
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId) as Todo;
 
   useEffect(() => {
-    getTodos().then((response) => {
-      setTodos(response);
-    })
+    setisLoading(true);
+
+    getTodos()
+      .then((response) => {
+        setTodos(response);
+      })
       .catch((errorMessage) => {
         // eslint-disable-next-line
         console.log(errorMessage);
         setTodos([]);
       })
-      .finally(() => setHasLoader(false));
+      .finally(() => setisLoading(false));
   }, []);
 
-  const filteredTodos = handleFilterTodo(query, filterBy, todos);
+  const filteredTodos = getFilterTodo(query, filterBy, todos);
 
   return (
     <div className="App">
@@ -55,16 +57,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {hasLoader && (
+              {isLoading && (
                 <Loader />
               )}
-              <TodoList
-                onShowModal={setHasModal}
-                todos={filteredTodos}
-                onSetUser={setUser}
-                onSetSelectedTodoId={setSelectedTodoId}
-                selectedTodoId={selectedTodoId}
-              />
+              {!isLoading && (
+                <TodoList
+                  onShowModal={setHasModal}
+                  todos={filteredTodos}
+                  // onSetUser={setUser}
+                  onSetSelectedTodoId={setSelectedTodoId}
+                  selectedTodoId={selectedTodoId}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -72,10 +76,8 @@ export const App: React.FC = () => {
 
       {hasModal && (
         <TodoModal
-          user={user}
           onShowModal={setHasModal}
           selectedTodo={selectedTodo}
-          selectedTodoId={selectedTodoId}
           onSetSelectedTodoId={setSelectedTodoId}
         />
       )}

@@ -1,14 +1,11 @@
 import React from 'react';
-import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
-import { User } from '../../types/User';
+import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[],
   onShowModal: (v: boolean) => void,
-  onSetUser: (user: User) => void,
   onSetSelectedTodoId: (number: number) => void,
   selectedTodoId: number,
 };
@@ -16,18 +13,9 @@ type Props = {
 export const TodoList: React.FC<Props> = ({
   todos,
   onShowModal,
-  onSetUser,
   onSetSelectedTodoId,
   selectedTodoId,
 }) => {
-  const handleShowBtn = (todoId: number, userId = 0) => {
-    onSetSelectedTodoId(todoId);
-    onShowModal(true);
-    getUser(userId).then((response) => {
-      onSetUser(response);
-    });
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -48,52 +36,13 @@ export const TodoList: React.FC<Props> = ({
           const isActive = selectedTodoId === todo.id;
 
           return (
-            <tr
+            <TodoItem
               key={todo.id}
-              data-cy="todo"
-              className={cn(
-                '',
-                { 'has-background-info-light': isActive },
-              )}
-            >
-              <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered">
-                {todo.completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={cn({
-                    'has-text-danger': !todo.completed,
-                    'has-text-success': todo.completed,
-                  })}
-                >
-                  {todo.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => {
-                    handleShowBtn(todo.id, todo.userId);
-                  }}
-                >
-                  <span className="icon">
-                    {isActive
-                      ? (
-                        <i className="far fa-eye-slash" />
-                      ) : (
-                        <i className="far fa-eye" />
-                      )}
-                  </span>
-                </button>
-              </td>
-            </tr>
+              todo={todo}
+              isActive={isActive}
+              onSetSelectedTodoId={onSetSelectedTodoId}
+              onShowModal={onShowModal}
+            />
           );
         })}
       </tbody>

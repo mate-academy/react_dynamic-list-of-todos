@@ -3,23 +3,43 @@ import { Loader } from '../Loader';
 import { showLoader } from '../../services/services';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
   onShowModal: (v: boolean) => void,
-  user: User | null,
-  selectedTodo: Todo | undefined,
-  selectedTodoId: number,
+  selectedTodo: Todo,
   onSetSelectedTodoId: (v: number) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   onShowModal,
-  user,
   selectedTodo,
-  selectedTodoId,
   onSetSelectedTodoId,
 }) => {
-  const [hasLoader, setHasLoader] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = selectedTodo;
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    getUser(userId)
+      .then((response) => {
+        setUser(response);
+      })
+      .catch((errorMessage) => {
+        // eslint-disable-next-line no-console
+        console.log(errorMessage);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const handleCloseModal = () => {
     onShowModal(false);
@@ -27,14 +47,14 @@ export const TodoModal: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    showLoader(setHasLoader);
+    showLoader(setIsLoading);
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {hasLoader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -43,7 +63,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodoId}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -57,11 +77,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo?.completed
+              {completed
                 ? (
                   <strong className="has-text-success">Done</strong>
                 ) : (

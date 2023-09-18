@@ -5,13 +5,12 @@ export const showLoader = (callback: (v: boolean) => void) => {
   setTimeout(() => callback(false), LOADING_TIME);
 };
 
-export const handleFilterTodo = (
+export const getFilterTodo = (
   query: string,
   filterBy: string,
   todos: Todo[],
 ) => {
-  if (filterBy === FilterType.All
-    && query === '') {
+  if (filterBy === FilterType.All && !query) {
     return todos;
   }
 
@@ -24,11 +23,11 @@ export const handleFilterTodo = (
   return preparedGoods.filter(todo => {
     switch (filterBy) {
       case FilterType.Active: {
-        return todo.completed === false;
+        return !todo.completed;
       }
 
       case FilterType.Completed: {
-        return todo.completed === true;
+        return todo.completed;
       }
 
       default: {
