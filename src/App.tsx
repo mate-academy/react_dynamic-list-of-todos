@@ -26,7 +26,9 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodosList)
       // eslint-disable-next-line no-console
-      .catch((errorMessage) => console.log(errorMessage))
+      .catch((error) => {
+        throw error;
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
