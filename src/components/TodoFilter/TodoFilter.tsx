@@ -6,12 +6,14 @@ type Props = {
   selectFilter: number,
   setSelectFilter: (event: number) => void
   filteredTodos: (value: number) => Todo[];
+  setFilterField: (e: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   setSelectFilter,
   selectFilter,
   filteredTodos,
+  setFilterField,
 }) => {
   return (
     <form className="field has-addons">
@@ -34,6 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
+          onChange={(event) => setFilterField(event.target.value)}
           data-cy="searchInput"
           type="text"
           className="input"

@@ -16,25 +16,33 @@ export const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [selectFilter, setSelectFilter] = useState(SortTodos.All);
+  const [filterField, setFilterField] = useState('');
 
   useEffect(() => {
     getTodos().then(todos => setVisibleTodos(todos));
   }, []);
 
   const filteredTodos = () => {
+    let filterTodos = [...visibleTodos];
+
+    if (filterField) {
+      filterTodos = filterTodos.filter(todo => todo.title.includes(filterField.toLowerCase().trim()));
+    }
+
     switch (selectFilter) {
       case SortTodos.Completed:
-        return visibleTodos.filter(todo => !todo.completed);
+        filterTodos = filterTodos.filter(todo => !todo.completed);
+        break;
 
       case SortTodos.Active:
-        return visibleTodos.filter(todo => todo.completed);
-
-      case SortTodos.All:
-        return visibleTodos;
+        filterTodos = filterTodos.filter(todo => todo.completed);
+        break;
 
       default:
-        return visibleTodos;
+        return filterTodos;
     }
+
+    return filterTodos;
   };
 
   return (
@@ -46,6 +54,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                setFilterField={setFilterField}
                 filteredTodos={filteredTodos}
                 selectFilter={selectFilter}
                 setSelectFilter={setSelectFilter}
