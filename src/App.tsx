@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal/TodoModal';
 import { Loader } from './components/Loader';
 
 const getFilterTodos = (
@@ -116,6 +116,7 @@ export const App: React.FC = () => {
                     selectedTodo={selectedTodo}
                   />
                 )}
+
             </div>
           </div>
         </div>
