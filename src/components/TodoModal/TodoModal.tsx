@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { getUserById } from '../../api/user';
+import { getUser } from '../../api';
 
 type Props = {
   todo: Todo,
@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
   useEffect(() => {
     setIsLoading(true);
 
-    getUserById(todo.userId)
+    getUser(todo.userId)
       .then(setUser)
       .catch(error => {
         // eslint-disable-next-line no-console

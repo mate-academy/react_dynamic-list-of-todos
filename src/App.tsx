@@ -7,9 +7,9 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getAllTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Filter, FilterField } from './types/Filter';
+import { getTodos } from './api';
 
 function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
   let newTodos = todos.filter(todo => {
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getAllTodos()
+    getTodos()
       .then((currentTodos: Todo[]) => {
         setTodos(currentTodos);
       })
