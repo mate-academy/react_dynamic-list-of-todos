@@ -23,12 +23,16 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             defaultValue={filterParam.select}
             onChange={onFilterChange}
+            className="is-capitalized"
           >
-            {(Object.keys(FilterParams) as Array<keyof typeof FilterParams>)
-              .map((key) => (
-                <option value={FilterParams[key]} key={key}>
-                  {FilterParams[key][0].toUpperCase()
-                  + FilterParams[key].slice(1)}
+            {(Object.values(FilterParams))
+              .map((value) => (
+                <option
+                  value={value}
+                  key={value}
+                  className="is-capitalized"
+                >
+                  {value}
                 </option>
               ))}
           </select>

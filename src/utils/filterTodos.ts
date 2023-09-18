@@ -18,9 +18,7 @@ export const filterTodos = (filter: Filters, todos: Todo[]) => {
       break;
 
     case FilterParams.Completed:
-      visibleTodos = visibleTodos.filter(({ completed }) => {
-        return completed;
-      });
+      visibleTodos = visibleTodos.filter(({ completed }) => completed);
       break;
 
     default:

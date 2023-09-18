@@ -45,7 +45,9 @@ export const App: React.FC = () => {
     setFilterParam((prev) => ({ ...prev, select: event.target.value as FilterParams }));
   };
 
-  const filteredTodos = useMemo(() => filterTodos(filterParam, todos), [filterParam, todos]);
+  const filteredTodos = useMemo(() => (
+    filterTodos(filterParam, todos)
+  ), [filterParam, todos]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterParam((prev) => ({ ...prev, query: event.target.value }));
