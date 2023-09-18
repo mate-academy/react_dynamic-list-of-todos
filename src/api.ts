@@ -16,10 +16,11 @@ function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see how the loader works
   return fetch(fullURL)
+    .catch((error) => {
+      throw new Error(error);
+    })
     .then(res => res.json())
-    // Add delay after fetching, before resolving
     .then(data => wait(300).then(() => data));
 }
 

@@ -18,6 +18,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       .then(user => {
         setCurrentUser(user);
       })
+      .catch((error) => {
+        throw new Error(error);
+      })
       .finally(() => setIsUserLoading(false));
   }, []);
 

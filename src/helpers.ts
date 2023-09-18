@@ -8,7 +8,7 @@ export function filterTodos(
   let todoToRecieve = [...todos];
 
   if (filterType !== 'all') {
-    const isCompleted = filterType !== 'active';
+    const isCompleted = filterType === 'completed';
 
     todoToRecieve = todoToRecieve.filter(
       ({ completed }) => completed === isCompleted,
