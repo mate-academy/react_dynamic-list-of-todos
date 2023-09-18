@@ -9,6 +9,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Select } from './types/Select';
 
 function hasQueryContent(content: string, query: string) {
   const normalizedQuery = query.trim().toLowerCase();
@@ -17,11 +18,11 @@ function hasQueryContent(content: string, query: string) {
 }
 
 function filterBySelection(todo: Todo, selectedOption: string) : boolean {
-  if (!selectedOption || selectedOption === 'all') {
+  if (!selectedOption || selectedOption === Select.All) {
     return true;
   }
 
-  if (selectedOption === 'active') {
+  if (selectedOption === Select.Active) {
     return !todo.completed;
   }
 
@@ -86,6 +87,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeQuery={filterCallBack}
                 onChangeSelectOption={onChangeSelectOption}
+                query={query}
               />
             </div>
 
@@ -99,6 +101,7 @@ export const App: React.FC = () => {
                   todos={visibleTodos}
                   onClickHandlerOpenModal={onClickHandlerOpenModal}
                   viewCounter={viewCounter}
+                  // selectedTodo={selectedTodo}
                 />
               )}
             </div>

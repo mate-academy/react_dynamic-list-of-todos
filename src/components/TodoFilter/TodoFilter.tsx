@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
+import { Select } from '../../types/Select';
 
 type Props = {
   onChangeQuery: (query: string) => void,
   onChangeSelectOption: (event: string) => void,
+  query: string,
 
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onChangeQuery = () => {},
   onChangeSelectOption = () => {},
+  query,
 }) => {
-  const [query, setQuery] = useState('');
   const [selectOption, setSelectOption] = useState<string>();
 
   function onChangeSetQuery(event: React.ChangeEvent<HTMLInputElement>) {
     onChangeQuery(event.target.value);
-    setQuery(event.target.value);
   }
 
   function removeQuery() {
     onChangeQuery('');
-    setQuery('');
   }
 
   const onChangeOnChooseOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectOption(event?.target?.value);
     onChangeSelectOption(event?.target?.value);
+    onChangeQuery('');
   };
 
   return (
@@ -64,7 +65,7 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           <span
             className="icon is-right"
-            style={{ pointerEvents: 'all' }}
+            style={{ pointerEvents: Select.All }}
           >
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
