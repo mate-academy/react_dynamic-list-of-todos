@@ -54,10 +54,12 @@ export const TodoItem: React.FC<Props> = ({
         >
           <span className="icon">
             <i
-              className={classNames({
-                'far fa-eye-slash': selectedTodo,
-                'far fa-eye': !selectedTodo,
-              })}
+              className={classNames(
+                'far', {
+                  'fa-eye-slash': selectedTodo,
+                  'fa-eye': !selectedTodo,
+                },
+              )}
             />
           </span>
         </button>
