@@ -7,12 +7,12 @@ import { ERROR_MESSAGE } from '../../helpers/variables';
 
 type Props = {
   selectedTodo: Todo,
-  handleSelectedTodo: (todo: Todo | null) => void
+  onSelectedTodo: (todo: Todo | null) => void
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  handleSelectedTodo,
+  onSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isStatusLoaded, setisStatusLoaded] = useState(false);
@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => handleSelectedTodo(null)}
+              onClick={() => onSelectedTodo(null)}
             />
           </header>
 

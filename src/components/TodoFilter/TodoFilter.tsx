@@ -1,15 +1,15 @@
 type Props = {
   query: string,
-  handleQuery: (event: React.ChangeEvent<HTMLInputElement>) => void
-  resetQuery: () => void,
+  onQuery: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onResetQuery: () => void,
   selectFilterChange: string,
   handleSelectFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  handleQuery = () => { },
-  resetQuery = () => { },
+  onQuery = () => { },
+  onResetQuery = () => { },
   selectFilterChange,
   handleSelectFilter,
 }) => {
@@ -36,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQuery}
+          onChange={onQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -49,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetQuery}
+              onClick={onResetQuery}
             />
           </span>
         )}

@@ -45,17 +45,17 @@ function getPreparedTodos(
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectFilterChange, setselectFilterChange] = useState('all');
+  const [selectFilterChange, setSelectFilterChange] = useState('all');
   const [isStatusLoaded, setisStatusLoaded] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleSelectedTodo = (todo: Todo | null) => setSelectedTodo(todo);
 
   const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setselectFilterChange(event.target.value);
+    setSelectFilterChange(event.target.value);
   };
 
-  const resetQuery = () => {
+  const handleResetQuery = () => {
     setQuery('');
   };
 
@@ -82,8 +82,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                handleQuery={handleQuery}
-                resetQuery={resetQuery}
+                onQuery={handleQuery}
+                onResetQuery={handleResetQuery}
                 selectFilterChange={selectFilterChange}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -96,7 +96,7 @@ export const App: React.FC = () => {
                   <TodoList
                     selectedTodo={selectedTodo}
                     todos={visibleTodos}
-                    handleSelectedTodo={handleSelectedTodo}
+                    onSelectedTodo={handleSelectedTodo}
                   />
                 )}
             </div>
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             selectedTodo={selectedTodo}
-            handleSelectedTodo={handleSelectedTodo}
+            onSelectedTodo={handleSelectedTodo}
           />
         )}
     </>
