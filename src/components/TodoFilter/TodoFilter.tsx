@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Filter, FilterField } from '../../types/Filter';
 
 type Props = {
   onFilter: (filter: Filter) => void;
+  filter: Filter
 };
 
-export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
-  const [query, setQuery] = useState('');
-  const [filterField, setFilterField] = useState<FilterField>(FilterField.All);
-
-  useEffect(() => {
-    onFilter({ filterField, query });
-  }, [query, filterField]);
+export const TodoFilter: React.FC<Props> = ({ onFilter, filter }) => {
+  const { filterField, query } = filter;
 
   const handleChangeFilterField
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterField(event.target.value as FilterField);
+    onFilter({
+      filterField: event.target.value as FilterField,
+      query,
+    });
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    onFilter({
+      filterField,
+      query: event.target.value,
+    });
   };
 
   const handleDeleteQuery = () => {
-    setQuery('');
+    onFilter({
+      filterField,
+      query: '',
+    });
   };
 
   return (
@@ -35,9 +40,14 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
             value={filterField}
             onChange={handleChangeFilterField}
           >
-            <option value={FilterField.All}>All</option>
-            <option value={FilterField.Active}>Active</option>
-            <option value={FilterField.Completed}>Completed</option>
+            {Object.keys(FilterField).map(option => (
+              <option
+                key={option}
+                value={FilterField[option as keyof typeof FilterField]}
+              >
+                {option}
+              </option>
+            ))}
           </select>
         </span>
       </p>

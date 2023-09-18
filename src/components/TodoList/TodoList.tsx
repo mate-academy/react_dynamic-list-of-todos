@@ -1,16 +1,17 @@
 import React from 'react';
-import classnames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
   onToggleModal: (todo:Todo | null) => void;
-  choseTodoId: number | undefined;
+  selectedTodoId: number | undefined;
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, onToggleModal,
-  choseTodoId,
+  todos,
+  onToggleModal,
+  selectedTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -28,47 +29,12 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => (
-        <tr
-          data-cy="todo"
+        <TodoItem
           key={todo.id}
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p
-              className={
-                classnames({
-                  'has-text-danger': !todo.completed,
-                  'has-text-success': todo.completed,
-                })
-              }
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => onToggleModal(todo)}
-            >
-              <span className="icon">
-                <i className={classnames('far', {
-                  'fa-eye': choseTodoId !== todo.id,
-                  'fa-eye-slash': choseTodoId === todo.id,
-                })}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
+          onToggleModal={onToggleModal}
+          todo={todo}
+          selectedTodoId={selectedTodoId}
+        />
       ))}
     </tbody>
   </table>

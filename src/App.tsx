@@ -73,14 +73,21 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilter={handleFilterChange} />
+              <TodoFilter
+                onFilter={handleFilterChange}
+                filter={filter}
+              />
             </div>
 
             <div className="block">
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} onToggleModal={handleToggleModal} choseTodoId={selectedTodo?.id} />
+                <TodoList
+                  todos={visibleTodos}
+                  onToggleModal={handleToggleModal}
+                  selectedTodoId={selectedTodo?.id}
+                />
               )}
             </div>
           </div>
