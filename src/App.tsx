@@ -41,12 +41,14 @@ export const initialFilterOptions: FilterOptions = {
 };
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then(setTodos)
       .catch((error) => {

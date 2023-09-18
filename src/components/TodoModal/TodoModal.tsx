@@ -11,10 +11,12 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getUser(todo.userId)
       .then(setUser)
       .catch((error) => {
