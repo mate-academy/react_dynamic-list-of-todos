@@ -1,24 +1,24 @@
 import React from 'react';
-import classNames from 'classnames';
 
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[],
   activeTodo: Todo | null,
-  handleToggleModal: () => void,
-  handleSetActiveTodo: (todo: Todo | null) => void,
+  onModalToggle: () => void,
+  onActiveTodoSet: (todo: Todo | null) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   activeTodo,
-  handleToggleModal,
-  handleSetActiveTodo,
+  onModalToggle,
+  onActiveTodoSet,
 }) => {
-  const handleOpenModal = (todo: Todo) => {
-    handleToggleModal();
-    handleSetActiveTodo(todo);
+  const handleModalOpen = (todo: Todo) => {
+    onModalToggle();
+    onActiveTodoSet(todo);
   };
 
   return (
@@ -37,64 +37,14 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => {
-          const {
-            id,
-            title,
-            completed,
-          } = todo;
-
-          return (
-            <tr
-              data-cy="todo"
-              className={classNames({
-                'has-background-info-light': id === activeTodo?.id,
-              })}
-              key={id}
-            >
-              <td className="is-vcentered">
-                {id}
-              </td>
-
-              <td className="is-vcentered">
-                {completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={classNames({
-                    'has-text-danger': !completed,
-                    'has-text-success': completed,
-                  })}
-                >
-                  {title}
-                </p>
-              </td>
-
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => handleOpenModal(todo)}
-                >
-                  <span className="icon">
-                    <i
-                      className={classNames('far', {
-                        'fa-eye': id !== activeTodo?.id,
-                        'fa-eye-slash': id === activeTodo?.id,
-                      })}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+        {todos.map(todo => (
+          <TodoItem
+            todo={todo}
+            activeTodo={activeTodo}
+            onModalOpen={handleModalOpen}
+            key={todo.id}
+          />
+        ))}
       </tbody>
     </table>
   );

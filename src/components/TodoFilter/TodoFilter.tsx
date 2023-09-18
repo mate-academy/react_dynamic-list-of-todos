@@ -4,15 +4,15 @@ import { FilterType, FilterOptions } from '../../types/FilterType';
 
 type Props = {
   filter: FilterType,
-  handleSetFilter: (event:
+  onFilterSet: (event:
   React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void,
-  handleClearInput: () => void,
+  onInputClear: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
-  handleSetFilter,
-  handleClearInput,
+  onFilterSet,
+  onInputClear,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -21,11 +21,14 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           name="filterByStatus"
           value={filter.filterByStatus}
-          onChange={(e) => handleSetFilter(e)}
+          onChange={onFilterSet}
         >
-          <option value={FilterOptions.All}>All</option>
-          <option value={FilterOptions.Active}>Active</option>
-          <option value={FilterOptions.Completed}>Completed</option>
+          {(Object.keys(FilterOptions) as (keyof typeof FilterOptions)[])
+            .map((key) => (
+              <option value={FilterOptions[key]} key={key}>
+                {key}
+              </option>
+            ))}
         </select>
       </span>
     </p>
@@ -38,7 +41,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={filter.filterByTitle}
-        onChange={(e) => handleSetFilter(e)}
+        onChange={onFilterSet}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -51,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={handleClearInput}
+            onClick={onInputClear}
           />
         )}
       </span>

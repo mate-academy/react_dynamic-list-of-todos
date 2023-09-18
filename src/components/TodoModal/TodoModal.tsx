@@ -9,21 +9,21 @@ import { Loader } from '../Loader';
 
 type Props = {
   activeTodo: Todo | null,
-  handleToggleModal: () => void,
-  handleSetActiveTodo: (todo: Todo | null) => void,
+  onModalToggle: () => void,
+  onActiveTodoSet: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   activeTodo,
-  handleToggleModal,
-  handleSetActiveTodo,
+  onModalToggle,
+  onActiveTodoSet,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const userId = activeTodo ? activeTodo.userId : NaN;
+  const userId = activeTodo ? activeTodo.userId : null;
 
   useLayoutEffect(() => {
-    if (Number.isNaN(userId)) {
+    if (!userId) {
       return;
     }
 
@@ -37,8 +37,8 @@ export const TodoModal: React.FC<Props> = ({
   }, []);
 
   const handleCloseModal = () => {
-    handleSetActiveTodo(null);
-    handleToggleModal();
+    onActiveTodoSet(null);
+    onModalToggle();
     setUser(null);
   };
 

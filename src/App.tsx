@@ -24,44 +24,57 @@ export const App: React.FC = () => {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(initialFilterValue);
+  const [error, setError] = useState(false);
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
-  const handleToggleModal = () => {
+  const handleModalToggle = () => {
     setIsVisibleModal(prev => !prev);
   };
 
-  const handleSetActiveTodo = (todo: Todo | null) => {
+  const handleActiveTodoSet = (todo: Todo | null) => {
     setActiveTodo(todo);
   };
 
-  const handleSetFilter
-  = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const handleFilterSet
+    = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+      const { name, value } = event.target;
 
-    setFilter(prevFilter => ({
-      ...prevFilter,
-      [name]: value.trimStart(),
-    }));
-  };
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        [name]: value.trimStart(),
+      }));
+    };
 
-  const handleClearInput
-  = () => {
-    setFilter(prevFilter => ({
-      ...prevFilter,
-      filterByTitle: '',
-    }));
-  };
+  const handleInputClear
+    = () => {
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        filterByTitle: '',
+      }));
+    };
 
   useEffect(() => {
     setIsLoading(true);
+    setError(false);
 
     getTodos()
       .then(setTodos)
+      .catch(() => setError(true))
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
+
+  if (error) {
+    return (
+      <article className="message is-danger">
+        <div className="message-header">
+          <p>Error</p>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <>
@@ -73,8 +86,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filter={filter}
-                handleSetFilter={handleSetFilter}
-                handleClearInput={handleClearInput}
+                onFilterSet={handleFilterSet}
+                onInputClear={handleInputClear}
               />
             </div>
 
@@ -85,8 +98,8 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   activeTodo={activeTodo}
-                  handleToggleModal={handleToggleModal}
-                  handleSetActiveTodo={handleSetActiveTodo}
+                  onModalToggle={handleModalToggle}
+                  onActiveTodoSet={handleActiveTodoSet}
                 />
               )}
             </div>
@@ -97,8 +110,8 @@ export const App: React.FC = () => {
       {isVisibleModal && (
         <TodoModal
           activeTodo={activeTodo}
-          handleToggleModal={handleToggleModal}
-          handleSetActiveTodo={handleSetActiveTodo}
+          onModalToggle={handleModalToggle}
+          onActiveTodoSet={handleActiveTodoSet}
         />
       )}
     </>
