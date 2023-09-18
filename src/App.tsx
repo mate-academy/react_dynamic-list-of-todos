@@ -13,9 +13,9 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
   const [filter, setFilter] = useState(Select.All);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
 
