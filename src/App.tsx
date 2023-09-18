@@ -4,20 +4,21 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterBy } from './components/Enums/FilterBy';
+import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState(FilterBy.ALL);
   const [filterText, setFilterText] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const handleFilterChange = (status: string) => {
+  const handleFilterChange = (status: FilterBy) => {
     setSelectedStatus(status);
   };
 
@@ -34,18 +35,23 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos().then((todosData: Todo[]) => {
-      setTodos(todosData);
-      setLoading(false);
-    });
+    getTodos()
+      .then((todosData: Todo[]) => {
+        setTodos(todosData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching todos:', error);
+      });
   }, []);
 
   const filteredTodos = todos.filter(todo => {
     return (
-      (selectedStatus === 'all' || (selectedStatus === 'active' && !todo.completed)
-        || (selectedStatus === 'completed' && todo.completed))
+      (selectedStatus === FilterBy.ALL || (selectedStatus === FilterBy.ACTIVE && !todo.completed)
+        || (selectedStatus === FilterBy.COMPLETED && todo.completed))
       && (filterText === '' || todo.title.toLowerCase()
-        .includes(filterText.toLowerCase()))
+        .includes(filterText.toLowerCase().trim()))
     );
   });
 
@@ -57,7 +63,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilterChange={handleFilterChange} onTextChange={handleTextChange} />
+              <TodoFilter
+                selectedStatus={selectedStatus}
+                onFilterChange={handleFilterChange}
+                onTextChange={handleTextChange}
+                filterText={filterText}
+              />
             </div>
 
             <div className="block">

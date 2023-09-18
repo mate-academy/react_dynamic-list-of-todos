@@ -1,30 +1,29 @@
-import {
-  useState, ChangeEvent,
-} from 'react';
+import { FilterBy } from '../Enums/FilterBy';
 
 type TodoFilterProps = {
-  onFilterChange: (status: string) => void;
+  selectedStatus: FilterBy;
+  onFilterChange: (status: FilterBy) => void;
   onTextChange: (text: string) => void;
+  filterText: string;
 };
 
-export const TodoFilter: React.FC<TodoFilterProps> = (
-  { onFilterChange, onTextChange },
-) => {
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [filterText, setFilterText] = useState('');
+export const TodoFilter: React.FC<TodoFilterProps> = ({
+  selectedStatus,
+  onFilterChange,
+  onTextChange,
+  filterText,
+}) => {
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value as FilterBy;
 
-  const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedStatus(e.target.value);
-    onFilterChange(e.target.value);
+    onFilterChange(selectedValue);
   };
 
-  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onTextChange(e.target.value);
   };
 
   const handleClearInput = () => {
-    setFilterText('');
     onTextChange('');
   };
 
@@ -37,9 +36,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
             value={selectedStatus}
             onChange={handleStatusChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterBy.ALL}>All</option>
+            <option value={FilterBy.ACTIVE}>Active</option>
+            <option value={FilterBy.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
@@ -57,7 +56,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {filterText && (
+        {filterText !== '' && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

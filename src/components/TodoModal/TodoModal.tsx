@@ -21,9 +21,9 @@ export const TodoModal: React.FC<TodoModalProps> = (
         .then(userData => {
           setUser(userData);
         })
-        .catch((error) => {
+        .catch(() => {
           // eslint-disable-next-line no-console
-          console.error(error);
+          setUser({ name: 'no user found', email: '' });
         })
         .finally(() => setLoading(false));
     }
