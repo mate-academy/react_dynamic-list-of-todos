@@ -64,7 +64,9 @@ export const App: React.FC = () => {
       .then(todoFromServer => {
         setTodos(todoFromServer);
       })
-      .catch(() => setIsLoading(false))
+      .catch(() => {
+        throw new Error('Can not loading todos');
+      })
       .finally(() => setIsLoading(false));
   }, []);
 

@@ -15,7 +15,10 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   useEffect(() => {
     getUser(todo.userId)
       .then(setUser)
-      .catch(() => setUser(null));
+      .catch(() => {
+        setUser(null);
+        throw new Error('Can not loading data');
+      });
   }, []);
 
   return (
