@@ -7,6 +7,7 @@ import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
+import { TodoItem } from './components/TodoItem';
 import { TodoModal } from './components/TodoModal';
 
 function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
@@ -83,11 +84,16 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodo={selectedTodo}
-                  onSelect={setSelectedTodo}
-                />
+                <TodoList>
+                  {filteredTodos.map(todo => (
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      selectedTodo={selectedTodo}
+                      onSelect={setSelectedTodo}
+                    />
+                  ))}
+                </TodoList>
               )}
             </div>
           </div>

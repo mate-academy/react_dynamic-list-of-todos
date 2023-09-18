@@ -1,19 +1,10 @@
-import React, { memo } from 'react';
-
-import { Todo } from '../../types';
-import { TodoItem } from '../TodoItem';
+import React, { ReactNode, memo } from 'react';
 
 type Props = {
-  todos: Todo[];
-  selectedTodo?: Todo | null;
-  onSelect?: (todo: Todo | null) => void;
+  children: ReactNode;
 };
 
-export const TodoList: React.FC<Props> = memo(({
-  todos,
-  selectedTodo = null,
-  onSelect = () => {},
-}) => (
+export const TodoList: React.FC<Props> = memo(({ children }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -32,14 +23,7 @@ export const TodoList: React.FC<Props> = memo(({
     </thead>
 
     <tbody>
-      {todos.map(todo => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          selectedTodo={selectedTodo}
-          onSelect={onSelect}
-        />
-      ))}
+      {children}
     </tbody>
   </table>
 ));
