@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { Todo, TodoWithUser } from '../../types/Todo';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
-  selectedTodo: TodoWithUser | Todo | null;
+  selectedTodo: Todo | null;
   onSelect: (todo: Todo) => void;
 }
 

@@ -7,22 +7,27 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo, TodoWithUser } from './types/Todo';
-import { getTodos, getUser } from './api';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { filterTodos } from './helpers';
 import { FilterOptions } from './types/FilterOptions';
 import { DEFAULT_FILTER } from './constants';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<TodoWithUser | Todo | null>(
-    null,
-  );
+  // eslint-disable-next-line max-len
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
   // eslint-disable-next-line max-len
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(DEFAULT_FILTER);
+  // чи можливо відключати еслінт якщо в такому разі код буде більш зрозумілим.
 
   useEffect(() => {
-    getTodos().then(setVisibleTodos);
+    setIsTodosLoading(true);
+    getTodos()
+      .then(setVisibleTodos)
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
   useEffect(() => {
@@ -64,18 +69,11 @@ export const App: React.FC = () => {
 
   const handleTodoSelection = (todo: Todo) => {
     setSelectedTodo(todo);
-
-    getUser(todo.userId).then((userFounded) => {
-      setSelectedTodo(
-        {
-          ...todo,
-          user: userFounded,
-        },
-      );
-    });
+    setIsModalActive(true);
   };
 
   const handleModalClosing = () => {
+    setIsModalActive(false);
     setSelectedTodo(null);
   };
 
@@ -96,22 +94,26 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length ? (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  onSelect={handleTodoSelection}
-                />
-              ) : (
-                <Loader />
-              )}
+              {isTodosLoading
+                ? (
+                  <Loader />
+                ) : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    onSelect={handleTodoSelection}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null && (
-        <TodoModal todo={selectedTodo} onClose={handleModalClosing} />
+      {isModalActive && (
+        <TodoModal
+          todo={selectedTodo}
+          onClose={handleModalClosing}
+        />
       )}
     </>
   );

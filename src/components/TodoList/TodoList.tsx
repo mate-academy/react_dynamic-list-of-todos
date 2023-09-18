@@ -1,10 +1,10 @@
 import React from 'react';
-import { Todo, TodoWithUser } from '../../types/Todo';
+import { Todo } from '../../types/Todo';
 import { TodoListItem } from '../TodoListItem/TodoListItem';
 
 interface Props {
   todos: Todo[];
-  selectedTodo: TodoWithUser | Todo | null;
+  selectedTodo: Todo | null;
   onSelect: (todo: Todo) => void;
 }
 
