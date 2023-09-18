@@ -4,17 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onClickHandlerOpenModal: (todo: Todo) => void;
-  selectedTodo: Todo,
+  onHandleOpenModal: (todo: Todo) => void;
+  selectedTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onClickHandlerOpenModal = () => {},
+  onHandleOpenModal = () => {},
   selectedTodo,
 }) => {
-  // const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
-
   return (
     <table
       className="table is-narrow is-fullwidth"
@@ -67,15 +65,14 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  onClickHandlerOpenModal(todo);
-                  // setSelectedTodo(todo);
+                  onHandleOpenModal(todo);
                 }}
               >
                 <span className="icon">
-                  <i className={classNames(
-                    { 'far fa-eye': selectedTodo !== todo },
-                    { 'far fa-eye-slash': selectedTodo === todo },
-                  )}
+                  <i className={classNames({
+                    'far fa-eye': selectedTodo !== todo,
+                    'far fa-eye-slash': selectedTodo === todo,
+                  })}
                   />
                 </span>
               </button>

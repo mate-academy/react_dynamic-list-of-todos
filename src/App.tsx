@@ -11,13 +11,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Select } from './types/Select';
 
-function hasQueryContent(content: string, query: string) {
+function hasNormalizedQuery(content: string, query: string) {
   const normalizedQuery = query.trim().toLowerCase();
 
   return content.toLowerCase().includes(normalizedQuery);
 }
 
-function filterBySelection(todo: Todo, selectedOption: string) : boolean {
+function filterBySelect(todo: Todo, selectedOption: string) : boolean {
   if (!selectedOption || selectedOption === Select.All) {
     return true;
   }
@@ -29,14 +29,14 @@ function filterBySelection(todo: Todo, selectedOption: string) : boolean {
   return todo.completed;
 }
 
-function filteredTodosByQuery(todos: Todo[], query: string, selectedOption: string) {
+function filterTodosByQuery(todos: Todo[], query: string, selectedOption: string) {
   if (!query && !selectedOption) {
     return todos;
   }
 
   return todos.filter((todo) => (
-    hasQueryContent(todo.title, query)
-    && filterBySelection(todo, selectedOption)
+    hasNormalizedQuery(todo.title, query)
+    && filterBySelect(todo, selectedOption)
   ));
 }
 
@@ -44,8 +44,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
-  // const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0] ?? {});
-  const [selectedTodo, setSelectedTodo] = useState<Todo>(todos[0] ?? {});
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [showLoader, setShowLoader] = useState(true);
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -56,28 +55,23 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const visibleTodos = filteredTodosByQuery(todos, query, selectedOption);
+  const visibleTodos = filterTodosByQuery(todos, query, selectedOption);
 
-  const onClickHandlerOpenModal = (todo: Todo) => {
+  const onHandleOpenModal = (todo: Todo) => {
     setShowModal(true);
     setSelectedTodo(todo);
   };
 
-  const onclickHandlerCloseModal = () => {
+  const onHandleCloseModal = () => {
     setShowModal(false);
-    setSelectedTodo({
-      id: 0,
-      title: '',
-      completed: false,
-      userId: 0,
-    });
+    setSelectedTodo(null);
   };
 
   const filterCallBack = (newQuery: string) => {
     setQuery(newQuery);
   };
 
-  const onChangeSelectOption = (newOption: string) => {
+  const onChangeSelect = (newOption: string) => {
     setSelectedOption(newOption);
   };
 
@@ -91,7 +85,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onChangeQuery={filterCallBack}
-                onChangeSelectOption={onChangeSelectOption}
+                onChangeSelect={onChangeSelect}
                 query={query}
               />
             </div>
@@ -104,7 +98,7 @@ export const App: React.FC = () => {
               {!showLoader && (
                 <TodoList
                   todos={visibleTodos}
-                  onClickHandlerOpenModal={onClickHandlerOpenModal}
+                  onHandleOpenModal={onHandleOpenModal}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -115,7 +109,7 @@ export const App: React.FC = () => {
 
       {showModal === true && (
         <TodoModal
-          onclickHandlerCloseModal={onclickHandlerCloseModal}
+          onHandleCloseModal={onHandleCloseModal}
           selectedTodo={selectedTodo}
         />
       )}

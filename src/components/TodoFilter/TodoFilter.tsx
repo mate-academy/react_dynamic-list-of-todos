@@ -3,14 +3,14 @@ import { Select } from '../../types/Select';
 
 type Props = {
   onChangeQuery: (query: string) => void,
-  onChangeSelectOption: (event: string) => void,
+  onChangeSelect: (event: string) => void,
   query: string,
 
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onChangeQuery = () => {},
-  onChangeSelectOption = () => {},
+  onChangeSelect = () => {},
   query,
 }) => {
   const [selectOption, setSelectOption] = useState<string>();
@@ -23,10 +23,10 @@ export const TodoFilter: React.FC<Props> = ({
     onChangeQuery('');
   }
 
-  const onChangeOnChooseOption
+  const onChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectOption(event?.target?.value);
-    onChangeSelectOption(event?.target?.value);
+    setSelectOption(event.target.value);
+    onChangeSelect(event.target.value);
     onChangeQuery('');
   };
 
@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             id="select"
             value={selectOption}
-            onChange={onChangeOnChooseOption}
+            onChange={onChangeOption}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -49,7 +49,9 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
 
-      <p className="control is-expanded has-icons-left has-icons-right">
+      <p
+        className="control is-expanded has-icons-left has-icons-right"
+      >
         <input
           data-cy="searchInput"
           type="text"

@@ -5,29 +5,27 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  onclickHandlerCloseModal: () => void;
-  selectedTodo: Todo;
+  onHandleCloseModal: () => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  onclickHandlerCloseModal = () => {},
+  onHandleCloseModal = () => {},
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
 
-  const {
-    title,
-    id,
-    userId,
-    completed,
-  } = selectedTodo;
-
   useEffect(() => {
-    getUser(userId).then(setUser);
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(setUser);
+    }
   }, []);
 
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
       <div className="modal-background" />
 
       {!user ? (
@@ -39,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${id}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -47,17 +45,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onclickHandlerCloseModal}
+              onClick={onHandleCloseModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {!completed
+              {!selectedTodo?.completed
                 ? <strong className="has-text-danger">Planned</strong>
                 : <strong className="has-text-success">Done</strong>}
 
