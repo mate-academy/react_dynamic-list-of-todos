@@ -21,7 +21,7 @@ import { TodoContext } from './TodoContext';
 export const App: React.FC = () => {
   const [todoItems, setTodoItems] = useState<Todo[]>([]);
   const [filterByCategory, setFilterByCategory] = useState(Filters.All);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
 
   const visibleTodos = useMemo(() => getFilteredTodos(
@@ -31,6 +31,7 @@ export const App: React.FC = () => {
   ), [query, filterByCategory, todoItems]);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodoItems)
       .finally(() => setIsLoading(false));

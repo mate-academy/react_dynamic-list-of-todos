@@ -19,7 +19,12 @@ export const TodoItem: React.FC<Props> = ({
   const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
 
   return (
-    <tr data-cy="todo" className="has-background-info-light">
+    <tr
+      data-cy="todo"
+      className={classNames({
+        'has-background-info-light': selectedTodo === todo,
+      })}
+    >
       <td className="is-vcentered">
         {id}
       </td>
