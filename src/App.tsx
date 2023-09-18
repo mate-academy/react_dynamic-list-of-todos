@@ -28,9 +28,10 @@ const getFilteredTodos = (todos: Todo[], filter: Filter):Todo[] => {
   });
 
   if (filter.query) {
+    const lowercaseQuery = filter.query.toLowerCase();
+
     filterTodos = filterTodos
-      .filter(({ title }) => title.toLowerCase()
-        .includes(filter.query.toLowerCase()));
+      .filter(({ title }) => title.toLowerCase().includes(lowercaseQuery));
   }
 
   return filterTodos;
@@ -39,13 +40,17 @@ const getFilteredTodos = (todos: Todo[], filter: Filter):Todo[] => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [task, setTask] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<Filter>({ option: Options.All, query: '' });
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
   useEffect(() => {
-    getTodos().then(setTodos).finally(() => setLoading(false));
+    getTodos().then(setTodos)
+      .finally(() => setLoading(false)).catch((error) => {
+      // eslint-disable-next-line no-console
+        console.error('Something bad happened!', error);
+      });
   }, []);
 
   const handleFilter = (currentFilter: Filter) => {
