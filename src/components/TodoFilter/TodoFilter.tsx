@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Filter } from '../../types/Filter';
-import { Options } from '../../types/Options';
+import { TodosFilters } from '../../types/TodosFilters';
 
 type Props = {
   handleFilter: (filter: Filter) => void;
@@ -8,7 +8,7 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState<Options>(Options.All);
+  const [option, setOption] = useState<TodosFilters>(TodosFilters.All);
 
   useEffect(() => {
     handleFilter({ option, query });
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
 
   const handleChangeFilterOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOption(event.target.value as Options);
+    setOption(event.target.value as TodosFilters);
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,7 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
 
   const handleDeleteQuery = () => {
     setQuery('');
-    setOption(Options.All);
+    setOption(TodosFilters.All);
   };
 
   return (
@@ -37,9 +37,9 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
             value={option}
             onChange={handleChangeFilterOption}
           >
-            <option value={Options.All}>All</option>
-            <option value={Options.Active}>Active</option>
-            <option value={Options.Completed}>Completed</option>
+            <option value={TodosFilters.All}>All</option>
+            <option value={TodosFilters.Active}>Active</option>
+            <option value={TodosFilters.Completed}>Completed</option>
           </select>
         </span>
       </p>

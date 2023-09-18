@@ -9,19 +9,17 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { Options } from './types/Options';
+import { TodosFilters } from './types/TodosFilters';
 import { Filter } from './types/Filter';
 
 function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
-  let filteredTodos = [...todos];
-
-  filteredTodos = filteredTodos.filter(todo => {
+  let filteredTodos = todos.filter(todo => {
     switch (filter.option) {
-      case Options.Active:
+      case TodosFilters.Active:
         return !todo.completed;
-      case Options.Completed:
+      case TodosFilters.Completed:
         return todo.completed;
-      case Options.All:
+      case TodosFilters.All:
       default:
         return todo;
     }
@@ -36,18 +34,32 @@ function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
   return filteredTodos;
 }
 
+const initialState = {
+  todos: [],
+  loading: false,
+  selectedTodo: null,
+  filter: {
+    option: TodosFilters.All,
+    query: '',
+  },
+};
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState<Filter>({ option: Options.All, query: '' });
+  const [todos, setTodos] = useState<Todo[]>(initialState.todos);
+  const [loading, setLoading] = useState(initialState.loading);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(initialState.selectedTodo);
+  const [filter, setFilter] = useState<Filter>(initialState.filter);
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
   useEffect(() => {
+    setLoading(true);
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -57,12 +69,10 @@ export const App: React.FC = () => {
 
   const handleShowModal = (todo: Todo) => {
     setSelectedTodo(todo);
-    setShowModal(true);
   };
 
   const handlerCloseModal = () => {
     setSelectedTodo(null);
-    setShowModal(false);
   };
 
   return (
@@ -91,13 +101,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal
-        && (
+      {selectedTodo
+        ? (
           <TodoModal
             selectedTodo={selectedTodo}
             handlerCloseModal={handlerCloseModal}
           />
-        )}
+        )
+        : null}
     </>
   );
 };
