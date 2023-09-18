@@ -27,10 +27,15 @@ export const TodoList: React.FC<Props> = ({
       </tr>
     </thead>
 
-    <TodoItem
-      filteredTodos={filteredTodos}
-      setSelectedTodoId={setSelectedTodoId}
-      selectedTodo={selectedTodo}
-    />
+    <tbody>
+      {filteredTodos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          setSelectedTodoId={setSelectedTodoId}
+          selectedTodo={selectedTodo}
+        />
+      ))}
+    </tbody>
   </table>
 );

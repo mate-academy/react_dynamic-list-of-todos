@@ -5,22 +5,27 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodoId: number,
   selectedTodo: Todo | null,
   setSelectedTodoId: (id: number) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodoId,
   selectedTodo,
   setSelectedTodoId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(setUser);
+        .then(setUser)
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error);
+        })
+        .finally(() => setIsLoading(false));
     }
   }, []);
 
@@ -28,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedTodo || !user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -37,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodoId}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -61,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
+              <a href={`mailto:${user?.email}`}>
                 {user?.name}
               </a>
             </p>

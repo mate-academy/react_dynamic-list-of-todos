@@ -14,7 +14,7 @@ import { filterTodoList } from './utils/functions';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(Filter.All);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
@@ -22,8 +22,11 @@ export const App: React.FC = () => {
   const filteredTodos = filterTodoList(todosList, query, filter);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodosList)
+      // eslint-disable-next-line no-console
+      .catch((errorMessage) => console.log(errorMessage))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -59,7 +62,6 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          selectedTodoId={selectedTodoId}
           selectedTodo={selectedTodo}
           setSelectedTodoId={setSelectedTodoId}
         />

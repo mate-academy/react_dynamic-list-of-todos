@@ -28,11 +28,12 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            defaultValue={Filter.All}
             value={filter}
             onChange={handleFilter}
           >
-            {Object.keys(Filter).map(key => (
-              <option value={key} key={key}>
+            {Object.entries(Filter).map(([key, value]) => (
+              <option value={value} key={key}>
                 {key}
               </option>
             ))}
