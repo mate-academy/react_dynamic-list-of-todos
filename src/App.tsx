@@ -35,7 +35,7 @@ function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
   return preparedTodos;
 }
 
-export const initialFilterOptions: FilterOptions = {
+const initialFilterOptions: FilterOptions = {
   status: TodoStatus.All,
   query: '',
 };
