@@ -9,7 +9,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Select } from './types/Select';
+import { TodoStatus } from './types/TodoStatus ';
 
 function hasNormalizedQuery(content: string, query: string) {
   const normalizedQuery = query.trim().toLowerCase();
@@ -19,9 +19,9 @@ function hasNormalizedQuery(content: string, query: string) {
 
 function filterBySelect(todo: Todo, selectedOption: string) : boolean {
   switch (selectedOption) {
-    case Select.Active:
+    case TodoStatus.Active:
       return !todo.completed;
-    case Select.Completed:
+    case TodoStatus.Completed:
       return todo.completed;
     default:
       return true;

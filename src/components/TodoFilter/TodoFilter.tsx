@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Select } from '../../types/Select';
+import { TodoStatus } from '../../types/TodoStatus ';
 
 type Props = {
   onChangeQuery: (query: string) => void,
@@ -42,9 +42,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectOption}
             onChange={onChangeOption}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -67,7 +67,7 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           <span
             className="icon is-right"
-            style={{ pointerEvents: Select.All }}
+            style={{ pointerEvents: TodoStatus.All }}
           >
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
