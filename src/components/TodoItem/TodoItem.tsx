@@ -16,7 +16,6 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <tr
       data-cy="todo"
-      className=""
       key={todo.id}
     >
       <td
