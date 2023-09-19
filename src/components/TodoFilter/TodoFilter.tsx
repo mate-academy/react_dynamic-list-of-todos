@@ -1,32 +1,33 @@
 import React from 'react';
+import { SelectedFilterState } from '../../types/SelectedFilterState';
 
 type Props = {
-  handleSelectedFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void,
-  selectedFilter: string,
+  selectedFilter: SelectedFilterState,
+  setSelectedFilter: (status: SelectedFilterState) => void,
   query: string,
-  handleQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  resetForm: () => void,
+  setQuery: (query: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  handleSelectedFilter,
   selectedFilter,
+  setSelectedFilter,
   query,
-  handleQueryChange,
-  resetForm,
+  setQuery,
 }) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            data-cy="statusSelect"
             value={selectedFilter}
-            onChange={handleSelectedFilter}
+            data-cy="statusSelect"
+            onChange={(event) => {
+              setSelectedFilter(event.target.value as SelectedFilterState);
+            }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectedFilterState.All}>All</option>
+            <option value={SelectedFilterState.Active}>Active</option>
+            <option value={SelectedFilterState.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -38,20 +39,25 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQueryChange}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query.length > 0 && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetForm}
+              onClick={() => {
+                setQuery('');
+                setSelectedFilter(SelectedFilterState.All);
+              }}
             />
           </span>
         )}
