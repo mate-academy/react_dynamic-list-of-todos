@@ -12,14 +12,61 @@ import * as todosAPI from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isloading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');
+
+  const handleFilterChange = (status: string) => {
+    setFilterStatus(status);
+  };
+
+  const handleSelectedTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const handleCloseTodo = () => {
+    setSelectedTodo(null);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+  };
+
+  const filteredTodos = todos
+    .filter((todo) => {
+      if (filterStatus === 'all') {
+        return true;
+      }
+
+      if (filterStatus === 'active') {
+        return !todo.completed;
+      }
+
+      if (filterStatus === 'completed') {
+        return todo.completed;
+      }
+
+      return true;
+    })
+    .filter((todo) => {
+      if (query.trim() === '') {
+        return true;
+      }
+
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    });
 
   useEffect(() => {
-    todosAPI.getTodos()
+    todosAPI
+      .getTodos()
       .then((data) => {
         setTodos(data);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        throw new Error(error.message);
+        setIsLoading(false);
       });
   }, []);
 
@@ -31,18 +78,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                onFilterChange={handleFilterChange}
+                handleQuery={handleQueryChange}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList todos={todos} />
+              {isloading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  handleSelectedTodo={handleSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo !== null && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handleCloseTodo={handleCloseTodo}
+        />
+      )}
     </>
   );
 };

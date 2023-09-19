@@ -3,9 +3,15 @@ import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
   todos: Todo[];
+  handleSelectedTodo: (todo: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  handleSelectedTodo,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -24,14 +30,35 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
       {todos.map((todo) => (
         <tr key={todo.id} data-cy="todo" className="">
           <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered" />
-          <td className="is-vcentered is-expanded">
-            <p className="has-text-danger">{todo.title}</p>
+          <td className="is-vcentered">
+            {todo.completed && (
+              <span className="icon" data-cy="iconCompleted">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
+          <td className="is-v centered is-expanded">
+            <p
+              className={
+                todo.completed ? 'has-text-success' : 'has-text-danger'
+              }
+            >
+              {todo.title}
+            </p>
           </td>
           <td className="has-text-right is-vcentered">
-            <button data-cy="selectButton" className="button" type="button">
+            <button
+              data-cy="selectButton"
+              className="button"
+              type="button"
+              onClick={() => handleSelectedTodo(todo)}
+            >
               <span className="icon">
-                <i className="far fa-eye" />
+                {selectedTodo ? (
+                  <i className="far fa-eye-slash" />
+                ) : (
+                  <i className="far fa-eye" />
+                )}
               </span>
             </button>
           </td>
