@@ -27,7 +27,6 @@ export const TodoFilter: React.FC<Props> = ({
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectOption(event.target.value);
     onChangeSelect(event.target.value);
-    onChangeQuery('');
   };
 
   return (
