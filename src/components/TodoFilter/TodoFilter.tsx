@@ -1,8 +1,16 @@
-export const TodoFilter = () => (
+interface TodoFilterProps {
+  setFilter: (filter: string) => void;
+}
+
+export const TodoFilter: React.FC<TodoFilterProps> = ({ setFilter }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          title="Filter"
+          onChange={(e) => setFilter(e.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>

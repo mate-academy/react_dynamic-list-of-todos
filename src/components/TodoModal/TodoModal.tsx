@@ -1,12 +1,24 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  isUserLoading: boolean;
+  user: User | null;
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  isUserLoading,
+  user,
+  setSelectedTodo,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -23,6 +35,9 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                setSelectedTodo(null);
+              }}
             />
           </header>
 
@@ -38,7 +53,7 @@ export const TodoModal: React.FC = () => {
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user?.name}
               </a>
             </p>
           </div>
