@@ -16,10 +16,9 @@ function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+  return fetch(fullURL)
+    .then(res => res.json())
+    .then(data => wait(300).then(() => data));
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
