@@ -6,21 +6,19 @@ import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
-  onClose: () => void;
+  onClose: (todo?: Todo) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setIsUserLoading(true);
     getUser(todo.userId)
-      .then(user => {
-        setCurrentUser(user);
-      })
+      .then(setCurrentUser)
       .catch((error) => {
-        throw error;
+        // eslint-disable-next-line no-console
+        console.error(error);
       })
       .finally(() => setIsUserLoading(false));
   }, []);
@@ -47,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
+              onClick={() => onClose()}
             />
           </header>
 

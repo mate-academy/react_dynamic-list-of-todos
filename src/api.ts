@@ -17,9 +17,6 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   return fetch(fullURL)
-    .catch((error) => {
-      throw error;
-    })
     .then(res => res.json())
     .then(data => wait(300).then(() => data));
 }

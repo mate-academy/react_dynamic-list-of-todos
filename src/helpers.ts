@@ -9,11 +9,11 @@ export function filterTodos(
   let todoToRecieve = [...todos].filter(({ completed }) => {
     switch (filterType) {
       case FilterType.Active: {
-        return completed === false;
+        return !completed;
       }
 
       case FilterType.Completed: {
-        return completed === true;
+        return completed;
       }
 
       case FilterType.All:

@@ -15,7 +15,7 @@ export const TodoListItem: React.FC<Props> = ({
   const { id, title, completed } = todo;
 
   return (
-    <tr data-cy="todo" className="">
+    <tr data-cy="todo">
       <td className="is-vcentered">{id}</td>
 
       <td className="is-vcentered">

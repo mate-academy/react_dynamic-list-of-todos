@@ -31,7 +31,8 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch((error) => {
-        throw error;
+        // eslint-disable-next-line no-console
+        console.error(error);
       })
       .finally(() => setIsTodosLoading(false));
   }, []);
@@ -59,12 +60,12 @@ export const App: React.FC = () => {
     }));
   };
 
-  const handleTodoSelection = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
-
-  const handleModalClosing = () => {
-    setSelectedTodo(null);
+  const handleToggleModal = (todo?: Todo) => {
+    if (todo) {
+      setSelectedTodo(todo);
+    } else {
+      setSelectedTodo(null);
+    }
   };
 
   return (
@@ -90,7 +91,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
-                  onSelect={handleTodoSelection}
+                  onSelect={handleToggleModal}
                 />
               )}
             </div>
@@ -99,7 +100,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onClose={handleModalClosing} />
+        <TodoModal todo={selectedTodo} onClose={handleToggleModal} />
       )}
     </>
   );
