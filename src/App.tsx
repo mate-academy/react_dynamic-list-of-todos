@@ -26,10 +26,8 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodosList)
       .catch((err) => {
-        // Display an error message on the UI
         // eslint-disable-next-line no-console
         console.error('An error occurred:', err);
-        // You can also set a state variable to display the error message
         setError('An error occurred while fetching data.');
       })
       .finally(() => setIsLoading(false));
