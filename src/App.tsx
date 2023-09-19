@@ -102,7 +102,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && !errorMessage && (
+      {selectedTodo
+        && !errorMessage
+        && isLoading && (
         <TodoModal
           onHandleModal={handleModal}
           selectedTodo={selectedTodo}
