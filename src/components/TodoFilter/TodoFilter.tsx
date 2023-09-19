@@ -1,11 +1,40 @@
-export const TodoFilter = () => (
+import { Status } from '../../types/StatusState';
+
+type FilterProps = {
+  status: Status;
+  onStatusChange: (status: Status) => void;
+  query: string;
+  onQueryChange: (query: string) => void;
+};
+
+export const TodoFilter: React.FC<FilterProps> = ({
+  status,
+  onStatusChange,
+  query,
+  onQueryChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={status}
+          onChange={(event) => {
+            onStatusChange(event.target.value as Status);
+          }}
+        >
+          <option value="all" onClick={() => onStatusChange(Status.all)}>
+            All
+          </option>
+          <option value="active" onClick={() => onStatusChange(Status.active)}>
+            Active
+          </option>
+          <option
+            value="completed"
+            onClick={() => onStatusChange(Status.completed)}
+          >
+            Completed
+          </option>
         </select>
       </span>
     </p>
@@ -16,6 +45,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => onQueryChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -23,11 +54,15 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
+        {query && (
+          // eslint-disable-next-line jsx-a11y/control-has-associated-label
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onQueryChange('')}
+          />
+        )}
       </span>
     </p>
   </form>
