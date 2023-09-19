@@ -32,9 +32,10 @@ export const TodoItem: React.FC<Props> = ({
 
       <td className="is-vcentered is-expanded">
         <p
-          className={completed
-            ? 'has-text-success'
-            : 'has-text-danger'}
+          className={classNames({
+            'has-text-success': completed,
+            'has-text-danger': !completed,
+          })}
         >
           {title}
         </p>

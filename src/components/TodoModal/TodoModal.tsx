@@ -14,22 +14,25 @@ export const TodoModal: React.FC<Props> = ({
   changeSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     id, title, userId, completed,
   } = selectedTodo;
 
   useEffect(() => {
+    setIsLoading(true);
     getUser(userId)
       .then((foundUser) => setUser(foundUser))
-      .catch();
+      .catch()
+      .finally(() => setIsLoading(false));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,32 +53,42 @@ export const TodoModal: React.FC<Props> = ({
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {title}
-            </p>
+          {user
+            ? (
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {title}
+                </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {completed
-                ? (
-                  <strong className="has-text-success">
-                    Done
-                  </strong>
-                )
-                : (
-                  <strong className="has-text-danger">
-                    Planned
-                  </strong>
-                )}
+                <p className="block" data-cy="modal-user">
+                  {/* <strong className="has-text-success">Done</strong> */}
+                  {completed
+                    ? (
+                      <strong className="has-text-success">
+                        Done
+                      </strong>
+                    )
+                    : (
+                      <strong className="has-text-danger">
+                        Planned
+                      </strong>
+                    )}
 
-              {' by '}
+                  {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
-              </a>
-            </p>
-          </div>
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                </p>
+              </div>
+            )
+            : (
+              <div className="modal-card-body">
+                <p className="block has-text-danger" data-cy="modal-title">
+                  Something went wrong :(
+                </p>
+              </div>
+            )}
         </div>
       )}
     </div>
