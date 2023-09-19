@@ -1,8 +1,8 @@
-import { Filters } from '../../types';
+import { TodoStatus } from '../../types';
 
 type Props = {
-  selectCategory: (filter: Filters) => void;
-  filter: Filters;
+  selectCategory: (filter: TodoStatus) => void;
+  filter: TodoStatus;
   setQuery: (event: string) => void;
   query: string;
 };
@@ -20,10 +20,10 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           value={filter}
           onChange={
-            (event) => selectCategory(event.target.value as Filters)
+            (event) => selectCategory(event.target.value as TodoStatus)
           }
         >
-          {Object.entries(Filters).map(([key, value]) => (
+          {Object.entries(TodoStatus).map(([key, value]) => (
             <option value={value} key={key}>
               {key}
             </option>

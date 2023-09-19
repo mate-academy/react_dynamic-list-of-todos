@@ -14,13 +14,13 @@ import {
   Loader,
 } from './components';
 import { getFilteredTodos } from './helpers/getFilteredTodos';
-import { Todo, Filters } from './types';
+import { Todo, TodoStatus } from './types';
 import { getTodos } from './api';
 import { TodoContext } from './TodoContext';
 
 export const App: React.FC = () => {
   const [todoItems, setTodoItems] = useState<Todo[]>([]);
-  const [filterByCategory, setFilterByCategory] = useState(Filters.All);
+  const [filterByCategory, setFilterByCategory] = useState(TodoStatus.All);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -35,7 +35,8 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodoItems)
       .catch((error) => {
-        throw error;
+        // eslint-disable-next-line no-console
+        console.warn(error);
       })
       .finally(() => setIsLoading(false));
   }, []);

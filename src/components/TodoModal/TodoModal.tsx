@@ -16,7 +16,8 @@ export const TodoModal: React.FC = () => {
       getUser(selectedTodo.userId)
         .then(setUser)
         .catch((error) => {
-          throw error;
+          // eslint-disable-next-line no-console
+          console.warn(error);
         })
         .finally(() => setIsLoading(false));
     }

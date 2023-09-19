@@ -1,17 +1,17 @@
-import { Filters, Todo } from '../types';
+import { TodoStatus, Todo } from '../types';
 
 export function getFilteredTodos(
-  category: Filters,
+  category: TodoStatus,
   query: string,
   todoItems: Todo[],
 ) {
   let preparedItems: Todo[] = todoItems;
 
-  if (category !== Filters.All) {
+  if (category !== TodoStatus.All) {
     preparedItems = preparedItems
       .filter(({ completed }) => {
         switch (category) {
-          case Filters.Active:
+          case TodoStatus.Active:
             return !completed;
           default:
             return completed;

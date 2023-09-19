@@ -1,3 +1,3 @@
 export * from './Todo';
-export * from './Filters';
+export * from './TodoStatus';
 export * from './User';
