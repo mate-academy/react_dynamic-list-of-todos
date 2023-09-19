@@ -28,7 +28,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filtredTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     const lowerTitleQuery = query.toLowerCase();
 
     return todos.filter(todo => {
@@ -40,10 +40,9 @@ export const App: React.FC = () => {
         default:
           return true;
       }
-    })
-      .filter(todo => (
-        todo.title.toLowerCase().includes(lowerTitleQuery)
-      ));
+    }).filter(todo => (
+      todo.title.toLowerCase().includes(lowerTitleQuery)
+    ));
   }, [statusState, query, todos]);
 
   return (
@@ -67,7 +66,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filtredTodos}
+                    todos={filteredTodos}
                     selectedTodoId={selectedTodo?.id}
                     onTodoSelected={setSelectedTodo}
                   />
