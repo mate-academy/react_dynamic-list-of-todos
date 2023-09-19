@@ -10,6 +10,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { ErrorText } from './components/ErrorText';
 import { getTodos } from './api';
 import { getFilteredTodos } from './helpers/getFilteredTodos';
 
@@ -68,11 +69,7 @@ export const App: React.FC = () => {
 
   if (error) {
     return (
-      <article className="message is-danger">
-        <div className="message-header">
-          <p>Error</p>
-        </div>
-      </article>
+      <ErrorText />
     );
   }
 

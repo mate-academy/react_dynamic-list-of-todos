@@ -6,6 +6,7 @@ import { User } from '../../types/User';
 
 import { getUser } from '../../api';
 import { Loader } from '../Loader';
+import { ErrorText } from '../ErrorText';
 
 type Props = {
   activeTodo: Todo | null,
@@ -21,16 +22,20 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const userId = activeTodo ? activeTodo.userId : null;
+  const [error, setError] = useState(false);
 
   useLayoutEffect(() => {
     if (!userId) {
       return;
     }
 
+    setError(false);
+
     setIsLoading(true);
 
     getUser(userId)
       .then(setUser)
+      .catch(() => setError(true))
       .finally(() => {
         setIsLoading(false);
       });
@@ -67,30 +72,33 @@ export const TodoModal: React.FC<Props> = ({
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {activeTodo?.title}
-            </p>
+          {error ? (<ErrorText />
+          ) : (
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {activeTodo?.title}
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              <strong
-                className={classNames({
-                  'has-text-danger': !activeTodo?.completed,
-                  'has-text-success': activeTodo?.completed,
-                })}
-              >
-                {activeTodo?.completed
-                  ? 'Done'
-                  : 'Planned'}
-              </strong>
+              <p className="block" data-cy="modal-user">
+                <strong
+                  className={classNames({
+                    'has-text-danger': !activeTodo?.completed,
+                    'has-text-success': activeTodo?.completed,
+                  })}
+                >
+                  {activeTodo?.completed
+                    ? 'Done'
+                    : 'Planned'}
+                </strong>
 
-              {' by '}
+                {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
-              </a>
-            </p>
-          </div>
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
+                </a>
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
