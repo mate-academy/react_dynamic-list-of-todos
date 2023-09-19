@@ -1,4 +1,4 @@
-import { Filter } from '../types/Filter';
+import { TodoStatus } from '../types/TodoStatus';
 import { Todo } from '../types/Todo';
 
 export function filterTodoList(
@@ -11,10 +11,10 @@ export function filterTodoList(
       .includes(query.toLowerCase()))
     .filter(todo => {
       switch (filter) {
-        case Filter.Active:
+        case TodoStatus.Active:
           return !todo.completed;
 
-        case Filter.Completed:
+        case TodoStatus.Completed:
           return todo.completed;
 
         default:

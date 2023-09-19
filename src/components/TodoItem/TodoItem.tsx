@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  setSelectedTodoId: (arg: number) => void,
-  selectedTodo: Todo | undefined,
+  setSelectedTodo: (arg: Todo) => void,
+  selectedTodo: Todo | null,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  setSelectedTodoId,
+  setSelectedTodo,
   selectedTodo,
 }) => {
   return (
@@ -25,8 +25,8 @@ export const TodoItem: React.FC<Props> = ({
       </td>
       <td className="is-vcentered is-expanded">
         <p className={classNames({
-          'has-text-danger': todo.completed === false,
-          'has-text-success': todo.completed === false,
+          'has-text-danger': !todo.completed,
+          'has-text-success': todo.completed,
         })}
         >
           {todo.title}
@@ -37,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => setSelectedTodoId(todo.id)}
+          onClick={() => setSelectedTodo(todo)}
         >
           <span className="icon">
             <i className={classNames({

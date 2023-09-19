@@ -1,9 +1,9 @@
 import React from 'react';
-import { Filter } from '../../types/Filter';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   filter: string,
-  setFilter: (value: Filter) => void,
+  setFilter: (value: TodoStatus) => void,
   query: string,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
 };
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value as Filter);
+    setFilter(event.target.value as TodoStatus);
   };
 
   return (
@@ -28,11 +28,11 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            defaultValue={Filter.All}
+            defaultValue={TodoStatus.All}
             value={filter}
             onChange={handleFilter}
           >
-            {Object.entries(Filter).map(([key, value]) => (
+            {Object.entries(TodoStatus).map(([key, value]) => (
               <option value={value} key={key}>
                 {key}
               </option>

@@ -4,13 +4,13 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   filteredTodos: Todo[],
-  selectedTodo: Todo | undefined,
-  setSelectedTodoId: (arg: number) => void,
+  selectedTodo: Todo | null,
+  setSelectedTodo: (arg: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   filteredTodos,
-  setSelectedTodoId,
+  setSelectedTodo,
   selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
         <TodoItem
           key={todo.id}
           todo={todo}
-          setSelectedTodoId={setSelectedTodoId}
+          setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
         />
       ))}

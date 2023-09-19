@@ -6,12 +6,12 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo | null,
-  setSelectedTodoId: (id: number) => void,
+  setSelectedTodo: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodoId,
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +21,9 @@ export const TodoModal: React.FC<Props> = ({
     if (selectedTodo) {
       getUser(selectedTodo.userId)
         .then(setUser)
-        .catch((error) => {
-          throw error;
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.warn(error);
         })
         .finally(() => setIsLoading(false));
     }
@@ -49,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodoId(0)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 

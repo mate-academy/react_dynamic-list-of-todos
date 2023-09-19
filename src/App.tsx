@@ -9,15 +9,15 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { Filter } from './types/Filter';
+import { TodoStatus } from './types/TodoStatus';
 import { filterTodoList } from './utils/functions';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState(Filter.All);
+  const [filter, setFilter] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const filteredTodos = filterTodoList(todosList, query, filter);
 
@@ -25,14 +25,12 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodosList)
-      // eslint-disable-next-line no-console
-      .catch((error) => {
-        throw error;
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.warn(error);
       })
       .finally(() => setIsLoading(false));
   }, []);
-
-  const selectedTodo = todosList.find(todo => todo.id === selectedTodoId);
 
   return (
     <>
@@ -51,12 +49,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (<Loader />)}
-              <TodoList
-                filteredTodos={filteredTodos}
-                setSelectedTodoId={setSelectedTodoId}
-                selectedTodo={selectedTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  filteredTodos={filteredTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodoId={setSelectedTodoId}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
