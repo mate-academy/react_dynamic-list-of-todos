@@ -1,100 +1,115 @@
-import React from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
+import { getTodos } from '../../api';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+type Props = {
+  setHandle: Dispatch<SetStateAction<boolean>>,
+  setSelectedTodo: Dispatch<SetStateAction<Todo | null>>,
+  filter: string,
+  searchText: string,
+};
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+// eslint-disable-next-line max-len
+export const TodoList: React.FC<Props> = ({ setHandle, setSelectedTodo, filter, searchText }) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  useEffect(() => {
+    getTodos().then(json => {
+      setTodos(json);
+    });
+  });
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === 'all') {
+      return todo.title.includes(searchText);
+    }
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
+    if (filter === 'completed') {
+      return todo.completed && todo.title.includes(searchText);
+    }
+
+    if (filter === 'active') {
+      return !todo.completed && todo.title.includes(searchText);
+    }
+
+    return true;
+  });
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
             <span className="icon">
-              <i className="far fa-eye" />
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {filteredTodos?.map(todo => {
+          return (
+            <tr
+              key={todo.id}
+              data-cy="todo"
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
+                {todo.completed === true
+                && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p
+                  className={
+                    (todo.completed === true)
+                      ? 'has-text-success'
+                      : 'has-text-danger'
+                  }
+                  // style={
+                  //   (todo.completed === true)
+                  //     ? { color: 'green' }
+                  //     : { color: 'red' }
+                  // }
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={
+                    () => {
+                      setHandle(true);
+                      setSelectedTodo(todo);
+                    }
+                  }
+                >
+                  <span className="icon">
+                    <i className="far fa-eye" />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+
+      </tbody>
+    </table>
+  );
+};
