@@ -41,7 +41,6 @@ function filterTodosByQuery(todos: Todo[], query: string, selectedOption: string
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [showLoader, setShowLoader] = useState(true);
@@ -57,12 +56,10 @@ export const App: React.FC = () => {
   const visibleTodos = filterTodosByQuery(todos, query, selectedOption);
 
   const onHandleOpenModal = (todo: Todo) => {
-    setShowModal(true);
     setSelectedTodo(todo);
   };
 
   const onHandleCloseModal = () => {
-    setShowModal(false);
     setSelectedTodo(null);
   };
 
@@ -106,7 +103,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal === true && (
+      {selectedTodo && (
         <TodoModal
           onHandleCloseModal={onHandleCloseModal}
           selectedTodo={selectedTodo}
