@@ -31,7 +31,6 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -68,7 +67,6 @@ export const App: React.FC = () => {
   const hideModal = () => {
     setSelectedTodo(null);
     setUserId(0);
-    setIsModalActive(false);
   };
 
   return (
@@ -96,14 +94,13 @@ export const App: React.FC = () => {
                   selectedTodo={selectedTodo}
                   selectTodo={selectTodo}
                   selectUser={selectUser}
-                  setModal={setIsModalActive}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {isModalActive && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           userId={userId}

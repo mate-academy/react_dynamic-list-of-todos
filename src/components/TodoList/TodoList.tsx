@@ -7,7 +7,6 @@ type Props = {
   selectedTodo: Todo | null,
   selectUser: (userId: number) => void,
   selectTodo: (todoId: number) => void,
-  setModal: (status: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -15,16 +14,13 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   selectUser,
   selectTodo,
-  setModal,
 }) => {
   const handleToggleModal = (
     userId: number,
     todoId: number,
-    status: boolean,
   ) => {
     selectUser(userId);
     selectTodo(todoId);
-    setModal(status);
   };
 
   return (
