@@ -17,9 +17,17 @@ export const App: React.FC = () => {
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [selectFilter, setSelectFilter] = useState(SortTodos.All);
   const [filterField, setFilterField] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getTodos().then(todos => setVisibleTodos(todos));
+    setIsLoading(false);
+
+    getTodos().then(setVisibleTodos)
+      .catch(() =>  {
+        // eslint-disable-next-line
+        console.log('Error loading todos')
+      })
+      .finally(() => setIsLoading(true));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -62,7 +70,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {visibleTodos.length ? (
+              {isLoading ? (
                 <TodoList
                   selectTodo={selectTodo}
                   visibleTodos={filteredTodos}
