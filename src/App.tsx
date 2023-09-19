@@ -45,12 +45,15 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getTodos().then((newTodos) => {
-      setTodos(newTodos);
-      setIsLoading(true);
-    });
+    getTodos()
+      .then((newTodos) => {
+        setTodos(newTodos);
+        setIsLoading(true);
+      })
+      .catch(() => setErrorMessage('Try again later'));
   }, []);
 
   const visibleTodos = filterTodosByQuery(todos, query, selectedOption);
@@ -87,7 +90,7 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {isLoading && (
+              {isLoading && !errorMessage && (
                 <TodoList
                   todos={visibleTodos}
                   onHandleModal={handleModal}
@@ -99,10 +102,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodo && !errorMessage && (
         <TodoModal
           onHandleModal={handleModal}
           selectedTodo={selectedTodo}
+          setErrorMessage={setErrorMessage}
         />
       )}
     </>

@@ -7,17 +7,21 @@ import { Todo } from '../../types/Todo';
 type Props = {
   onHandleModal: (todo: Todo | undefined) => void;
   selectedTodo: Todo | null;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 };
 
 export const TodoModal: React.FC<Props> = ({
   onHandleModal = () => {},
   selectedTodo,
+  setErrorMessage,
 }) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then(setUser);
+      getUser(selectedTodo.userId)
+        .then(setUser)
+        .catch(() => setErrorMessage('Try again later'));
     }
   }, []);
 
