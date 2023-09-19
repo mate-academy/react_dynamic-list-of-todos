@@ -4,9 +4,14 @@ import { Todo } from '../../types/Todo';
 interface TodoListProps {
   todos: Todo[];
   onShowClick: (selectedTodo: Todo) => void;
+  selectedTodo: Todo | null;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, onShowClick }) => {
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  onShowClick,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -23,10 +28,16 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onShowClick }) => {
       </thead>
 
       <tbody>
-        {todos.map((todo, index) => (
+        {todos.map((todo) => (
           <tr key={todo.id} data-cy="todo" className="">
-            <td className="is-vcentered">{index + 1}</td>
-            <td className="is-vcentered" />
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p className={todo.completed
                 ? 'has-text-success'
@@ -43,7 +54,10 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onShowClick }) => {
                 onClick={() => onShowClick(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={selectedTodo?.id === todo.id
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
+                  />
                 </span>
               </button>
             </td>

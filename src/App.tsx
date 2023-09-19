@@ -18,6 +18,7 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');
 
   const handleToDoClick = (userId: number) => {
     setIsUserLoading(true);
@@ -27,6 +28,10 @@ export const App: React.FC = () => {
     }).catch(() => {
       setIsUserLoading(false);
     });
+  };
+
+  const handleClearQuery = () => {
+    setQuery('');
   };
 
   useEffect(() => {
@@ -45,6 +50,10 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter((todo) => {
+    if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
+      return false;
+    }
+
     switch (filter) {
       case 'completed':
         return todo.completed;
@@ -62,13 +71,23 @@ export const App: React.FC = () => {
           <div className="box">
             <h1 className="title">Todos:</h1>
             <div className="block">
-              <TodoFilter setFilter={setFilter} />
+              <TodoFilter
+                setFilter={setFilter}
+                query={query}
+                setQuery={setQuery}
+                handleClearQuery={handleClearQuery}
+              />
             </div>
             <div className="block">
               {isLoading
                 ? <Loader />
-                // eslint-disable-next-line max-len
-                : <TodoList todos={filteredTodos} onShowClick={handleShowClick} />}
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onShowClick={handleShowClick}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
@@ -77,6 +96,7 @@ export const App: React.FC = () => {
         <TodoModal
           isUserLoading={isUserLoading}
           user={user}
+          selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
       )}
