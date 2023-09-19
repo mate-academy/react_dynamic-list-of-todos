@@ -31,25 +31,30 @@ export const App: React.FC = () => {
     status: Status,
     queryValue: string,
   ) {
-    let filtered = [...items];
+    const filteredByStatus = items.filter(item => {
+      switch (status) {
+        case Status.Active:
+          return !item.completed;
 
-    if (queryValue) {
-      filtered = filtered.filter(item => {
-        return item.title.toLowerCase().includes(queryValue?.toLowerCase());
+        case Status.Completed:
+          return item.completed;
+
+        case Status.All:
+        default:
+          return item;
+      }
+    });
+
+    if (queryValue.trim()) {
+      const filteredByName = filteredByStatus.filter(item => {
+        return item.title.toLowerCase()
+          .includes(queryValue?.trim().toLowerCase());
       });
+
+      return filteredByName;
     }
 
-    switch (status) {
-      case Status.Active:
-        return filtered.filter(item => !item.completed);
-
-      case Status.Completed:
-        return filtered.filter(item => item.completed);
-
-      case Status.All:
-      default:
-        return filtered;
-    }
+    return filteredByStatus;
   }
 
   const filteredTodos = useMemo(() => {

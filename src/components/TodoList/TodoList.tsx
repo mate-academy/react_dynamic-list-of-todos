@@ -13,6 +13,10 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo = () => {},
 }) => {
+  const handleOpenModal = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -31,10 +35,6 @@ export const TodoList: React.FC<Props> = ({
       <tbody>
         {todos.map(todo => {
           const { id, title, completed } = todo;
-
-          const handleOpenModal = () => {
-            setSelectedTodo(todo);
-          };
 
           return (
             <tr
@@ -71,7 +71,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={handleOpenModal}
+                  onClick={() => handleOpenModal(todo)}
                 >
                   <span className="icon">
                     {selectedTodo?.id === todo.id ? (

@@ -1,4 +1,5 @@
 import React from 'react';
+import './TodoFilter.scss';
 import { Status } from '../../types/Status';
 
 type Props = {
@@ -54,8 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span
-            className="icon is-right"
-            style={{ pointerEvents: 'all' }}
+            className="icon is-right pointer-events-all"
           >
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
