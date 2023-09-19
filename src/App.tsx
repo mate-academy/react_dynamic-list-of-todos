@@ -43,13 +43,13 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [showLoader, setShowLoader] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
 
   useEffect(() => {
     getTodos().then((newTodos) => {
       setTodos(newTodos);
-      setShowLoader(false);
+      setIsLoading(true);
     });
   }, []);
 
@@ -87,11 +87,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {showLoader && (
+              {!isLoading && (
                 <Loader />
               )}
 
-              {!showLoader && (
+              {isLoading && (
                 <TodoList
                   todos={visibleTodos}
                   onHandleOpenModal={onHandleOpenModal}
