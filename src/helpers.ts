@@ -1,19 +1,27 @@
 import { FilterOptions } from './types/FilterOptions';
+import { FilterType } from './types/FilterType';
 import { Todo } from './types/Todo';
 
 export function filterTodos(
   todos: Todo[],
   { query, filterType }: FilterOptions,
 ) {
-  let todoToRecieve = [...todos];
+  let todoToRecieve = [...todos].filter(({ completed }) => {
+    switch (filterType) {
+      case FilterType.Active: {
+        return completed === false;
+      }
 
-  if (filterType !== 'all') {
-    const isCompleted = filterType === 'completed';
+      case FilterType.Completed: {
+        return completed === true;
+      }
 
-    todoToRecieve = todoToRecieve.filter(
-      ({ completed }) => completed === isCompleted,
-    );
-  }
+      case FilterType.All:
+      default: {
+        return true;
+      }
+    }
+  });
 
   if (query) {
     const normalizedQuery = query.toLowerCase().trim();

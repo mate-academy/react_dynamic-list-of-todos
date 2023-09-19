@@ -1,3 +1,5 @@
+import { FilterType } from '../../types/FilterType';
+
 interface Props {
   query: string;
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,12 +18,17 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          defaultValue="all"
+          defaultValue={FilterType.All}
           onChange={onTypeChange}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.values(FilterType).map(type => (
+            <option
+              value={type}
+              key={type}
+            >
+              {type}
+            </option>
+          ))}
         </select>
       </span>
     </p>

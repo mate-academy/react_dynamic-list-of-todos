@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -12,36 +12,36 @@ import { getTodos } from './api';
 import { filterTodos } from './helpers';
 import { FilterOptions } from './types/FilterOptions';
 import { DEFAULT_FILTER } from './constants';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(
     DEFAULT_FILTER,
   );
 
+  const visibleTodos = useMemo(() => {
+    return filterTodos(todos, filterOptions);
+  }, [filterOptions, todos]);
+
   useEffect(() => {
     setIsTodosLoading(true);
     getTodos()
-      .then(setVisibleTodos)
+      .then(setTodos)
+      .catch((error) => {
+        throw error;
+      })
       .finally(() => setIsTodosLoading(false));
   }, []);
-
-  useEffect(() => {
-    getTodos().then((todos) => {
-      const filtered = filterTodos(todos, filterOptions);
-
-      setVisibleTodos(filtered);
-    });
-  }, [filterOptions]);
 
   const handleFilterTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setFilterOptions((prevState) => ({
       ...prevState,
-      filterType: event.target.value,
+      filterType: event.target.value as FilterType,
     }));
   };
 
