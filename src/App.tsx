@@ -12,10 +12,10 @@ import { TodoModal } from './components/TodoModal';
 
 function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
   const { status, query } = filterOptions;
-  let preparedTodos = [...todos];
+  let filteredTodos = [...todos];
 
   if (status !== TodoStatus.All) {
-    preparedTodos = preparedTodos.filter(({ completed }) => {
+    filteredTodos = filteredTodos.filter(({ completed }) => {
       switch (status) {
         case TodoStatus.Active:
           return !completed;
@@ -30,12 +30,12 @@ function getFilteredTodos(todos: Todo[], filterOptions: FilterOptions) {
   }
 
   if (query) {
-    preparedTodos = preparedTodos.filter(({ title }) => {
+    filteredTodos = filteredTodos.filter(({ title }) => {
       return title.toLowerCase().includes(query.toLowerCase());
     });
   }
 
-  return preparedTodos;
+  return filteredTodos;
 }
 
 const initialFilterOptions: FilterOptions = {
