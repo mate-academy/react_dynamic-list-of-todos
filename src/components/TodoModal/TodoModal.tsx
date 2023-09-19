@@ -6,32 +6,38 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   selectTodo: Todo | null,
-  setIsModalOpen: (value: boolean) => void,
   setSelectTodo: (todo: Todo | null) => void
 };
 export const TodoModal: React.FC<Props> = ({
   selectTodo,
   setSelectTodo,
-  setIsModalOpen,
 }) => {
-  const [selectUser, setSelectUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectUser(null);
+    setSelectedUser(null);
     setSelectTodo(null);
   };
 
   useEffect(() => {
-    getUser(selectTodo?.userId || 0)
-      .then((user) => setSelectUser(user));
+    if (selectTodo?.userId) {
+      setIsLoading(true);
+      getUser(selectTodo?.userId)
+        .then((user) => setSelectedUser(user))
+        .catch(() => {
+          // eslint-disable-next-line
+          console.log('Error loading todos')
+        })
+        .finally(() => setIsLoading(false));
+    }
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectUser ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -45,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
-              onClick={() => closeModal()}
+              onClick={closeModal}
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -66,8 +72,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectUser.email}`}>
-                {selectUser?.name}
+              <a href={`mailto:${selectedUser?.email}`}>
+                {selectedUser?.name}
               </a>
             </p>
           </div>

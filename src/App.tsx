@@ -9,48 +9,29 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { SortTodos } from './types/SortTodos';
+import { TodoStatus } from './types/TodoStatus';
+import { filterTodos } from './components/utils/filterTodos';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
-  const [selectFilter, setSelectFilter] = useState(SortTodos.All);
+  const [selectFilter, setSelectFilter] = useState(TodoStatus.All);
   const [filterField, setFilterField] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(false);
+    setIsLoading(true);
 
     getTodos().then(setVisibleTodos)
-      .catch(() =>  {
+      .catch(() => {
         // eslint-disable-next-line
         console.log('Error loading todos')
       })
-      .finally(() => setIsLoading(true));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {
-    let filterTodos = [...visibleTodos];
-
-    if (filterField) {
-      filterTodos = filterTodos.filter(todo => todo.title.toLowerCase().includes(filterField.toLowerCase().trim()));
-    }
-
-    switch (selectFilter) {
-      case SortTodos.Active:
-        filterTodos = filterTodos.filter(todo => !todo.completed);
-        break;
-
-      case SortTodos.Completed:
-        filterTodos = filterTodos.filter(todo => todo.completed);
-        break;
-
-      default:
-        return filterTodos;
-    }
-
-    return filterTodos;
+    return filterTodos(visibleTodos, filterField, selectFilter);
   }, [filterField, selectFilter, visibleTodos]);
 
   return (
@@ -71,25 +52,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   selectTodo={selectTodo}
                   visibleTodos={filteredTodos}
-                  setIsModalOpen={setIsModalOpen}
                   setSelectTodo={setSelectTodo}
                 />
-              ) : (
-                <Loader />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {isModalOpen && (
+      {selectTodo && (
         <TodoModal
           setSelectTodo={setSelectTodo}
           selectTodo={selectTodo}
-          setIsModalOpen={setIsModalOpen}
         />
       )}
     </>
