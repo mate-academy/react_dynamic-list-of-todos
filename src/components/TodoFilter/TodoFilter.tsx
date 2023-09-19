@@ -2,10 +2,10 @@ import React from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
-  filter: string,
-  setFilter: (value: TodoStatus) => void,
-  query: string,
-  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  filter: string;
+  setFilter: (value: TodoStatus) => void;
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,12 +14,16 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
-  const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
-  const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(event.target.value as TodoStatus);
+  };
+
+  const clearSearch = () => {
+    setQuery('');
   };
 
   return (
@@ -30,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             defaultValue={TodoStatus.All}
             value={filter}
-            onChange={handleFilter}
+            onChange={handleFilterChange}
           >
             {Object.entries(TodoStatus).map(([key, value]) => (
               <option value={value} key={key}>
@@ -48,20 +52,20 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQuery}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
+          <i className="fas fa-search" />
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className="icon is-right">
             <button
               data-cy="clearSearchButton"
               type="button"
               aria-label="Clear Search Button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={clearSearch}
             />
           </span>
         )}
