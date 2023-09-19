@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
+import { useFetch } from '../../hooks/useFetch';
 
 interface Props {
   selectedTodo: Todo
@@ -11,21 +12,25 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onModalClose }: Props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const { dataCollection, isLoading } = useFetch<User>(async () => getUser(selectedTodo.id));
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      if (selectedTodo) {
-        setIsLoading(true);
-        getUser(selectedTodo.userId)
-          .then(data => setUser(data))
-          .finally(() => setIsLoading(false));
-      }
-    };
+  console.log(dataCollection);
 
-    loadUsers();
-  }, []);
+  // useEffect(() => {
+  //   const loadUsers = async () => {
+  //     if (selectedTodo) {
+  //       setIsLoading(true);
+  //       getUser(selectedTodo.userId)
+  //         .then(data => setUser(data))
+  //         .finally(() => setIsLoading(false));
+  //     }
+  //   };
+
+  //   loadUsers();
+  // }, []);
+
 
   return (
     <div className="modal is-active" data-cy="modal">

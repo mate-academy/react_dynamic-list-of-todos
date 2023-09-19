@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,34 +9,27 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { useFetch } from './hooks/useFetch';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<string>('All');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const { dataCollection, isLoading } = useFetch(getTodos);
 
-  useEffect(() => {
-    const loadTodos = async () => {
-      setIsLoading(true);
-      getTodos()
-        .then(setTodos)
-        .finally(() => setIsLoading(false));
-    };
-
-    loadTodos();
-  }, []);
-
-  const filterTodosByActiveFilter = (filter: string) => {
-    switch (filter) {
-      case 'Completed':
-        return todos.filter(todo => todo.completed);
-      case 'Active':
-        return todos.filter(todo => !todo.completed);
-      case 'All':
-      default:
-        return todos;
+  const filterTodosByActiveFilter = () => {
+    if (dataCollection) {
+      switch (activeFilter) {
+        case 'Completed':
+          return dataCollection?.filter(todo => todo.completed);
+        case 'Active':
+          return dataCollection?.filter(todo => !todo.completed);
+        case 'All':
+        default:
+          return dataCollection;
+      }
+    } else {
+      return [];
     }
   };
 
@@ -44,7 +37,7 @@ export const App: React.FC = () => {
     return todoList.filter(todo => todo.title.toUpperCase().includes(query.toUpperCase()));
   };
 
-  const filteredTodosByActiveFilter = filterTodosByActiveFilter(activeFilter);
+  const filteredTodosByActiveFilter = filterTodosByActiveFilter();
   const visibleTodos = filterTodosByQuery(filteredTodosByActiveFilter);
 
   return (
@@ -73,7 +66,6 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
 
       {selectedTodo && <TodoModal selectedTodo={selectedTodo} onModalClose={setSelectedTodo} />}
     </>
