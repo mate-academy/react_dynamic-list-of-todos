@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onHandleOpenModal: (todo: Todo) => void;
-  selectedTodo: Todo | null,
+  onHandleModal: (todo: Todo) => void;
+  selectedTodo: Todo | undefined,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onHandleOpenModal = () => {},
+  onHandleModal = () => {},
   selectedTodo,
 }) => {
   return (
@@ -65,7 +65,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  onHandleOpenModal(todo);
+                  onHandleModal(todo);
                 }}
               >
                 <span className="icon">

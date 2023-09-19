@@ -5,12 +5,12 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  onHandleCloseModal: () => void;
+  onHandleModal: (todo: Todo | undefined) => void;
   selectedTodo: Todo | null;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  onHandleCloseModal = () => {},
+  onHandleModal = () => {},
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
@@ -45,7 +45,9 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onHandleCloseModal}
+              onClick={() => {
+                onHandleModal(undefined);
+              }}
             />
           </header>
 
