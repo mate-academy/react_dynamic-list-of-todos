@@ -18,15 +18,14 @@ function hasNormalizedQuery(content: string, query: string) {
 }
 
 function filterBySelect(todo: Todo, selectedOption: string) : boolean {
-  if (!selectedOption || selectedOption === Select.All) {
-    return true;
+  switch (selectedOption) {
+    case Select.Active:
+      return !todo.completed;
+    case Select.Completed:
+      return todo.completed;
+    default:
+      return true;
   }
-
-  if (selectedOption === Select.Active) {
-    return !todo.completed;
-  }
-
-  return todo.completed;
 }
 
 function filterTodosByQuery(todos: Todo[], query: string, selectedOption: string) {
