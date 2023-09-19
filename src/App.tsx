@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { SortType } from './types/SortType';
+import { FilterType } from './types/FilterType';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -19,17 +19,17 @@ function checkQuery(string: string, query: string): boolean {
   return preparedString.includes(preparedQuery);
 }
 
-function filterTodos(todos: Todo[], query: string, sortField: SortType) {
+function filterTodos(todos: Todo[], query: string, filterField: FilterType) {
   let filteredTodos = [...todos];
 
-  if (sortField !== SortType.All) {
-    switch (sortField) {
-      case SortType.Completed: {
+  if (filterField !== FilterType.All) {
+    switch (filterField) {
+      case FilterType.Completed: {
         filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
       }
 
-      case SortType.Active: {
+      case FilterType.Active: {
         filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
       }
@@ -49,7 +49,7 @@ function filterTodos(todos: Todo[], query: string, sortField: SortType) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosLoading, setTodosLoading] = useState(false);
-  const [sortField, setSortField] = useState(SortType.All);
+  const [filterField, setFilterField] = useState(FilterType.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -61,8 +61,8 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return filterTodos(todos, query, sortField);
-  }, [todos, query, sortField]);
+    return filterTodos(todos, query, filterField);
+  }, [todos, query, filterField]);
 
   return (
     <>
@@ -73,8 +73,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeSortField={setSortField}
-                sortField={sortField}
+                onChangeFilterField={setFilterField}
+                filterField={filterField}
                 onChangeQuery={setQuery}
                 query={query}
               />

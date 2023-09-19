@@ -65,9 +65,9 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onChangeSelectedTodo(todo)}
               >
                 <span className="icon">
-                  <i className={classNames({
-                    'far fa-eye': id !== selectedTodo?.id,
-                    'far fa-eye-slash': id === selectedTodo?.id,
+                  <i className={classNames('far', {
+                    'fa-eye': id !== selectedTodo?.id,
+                    'fa-eye-slash': id === selectedTodo?.id,
                   })}
                   />
                 </span>

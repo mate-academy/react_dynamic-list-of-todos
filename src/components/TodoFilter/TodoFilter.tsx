@@ -1,16 +1,16 @@
 import React from 'react';
-import { SortType } from '../../types/SortType';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  onChangeSortField: (SortType: SortType) => void;
-  sortField: SortType;
+  onChangeFilterField: (FilterType: FilterType) => void;
+  filterField: FilterType;
   onChangeQuery: (event: string) => void;
   query: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onChangeSortField,
-  sortField,
+  onChangeFilterField,
+  filterField,
   onChangeQuery,
   query,
 }) => {
@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleSortTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    onChangeSortField(event.target.value as SortType);
+    onChangeFilterField(event.target.value as FilterType);
   };
 
   const handleClearInput = () => {
@@ -35,10 +35,10 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             className="is-capitalized"
             data-cy="statusSelect"
-            value={sortField}
+            value={filterField}
             onChange={handleSortTypeChange}
           >
-            {Object.values(SortType).map(option => (
+            {Object.values(FilterType).map(option => (
               <option
                 className="is-capitalized"
                 value={option}
