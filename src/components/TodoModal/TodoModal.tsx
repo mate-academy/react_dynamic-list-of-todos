@@ -13,12 +13,17 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onSelectedTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (todo.userId) {
       getUser(todo.userId)
         .then(setUser)
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error);
+        })
         .finally(() => setIsLoading(false));
     }
   }, [todo.userId]);

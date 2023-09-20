@@ -1,10 +1,10 @@
-import { FilterTodos } from '../../types/FilterTodos';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   query: string,
   onQueryChange: (val: string) => void,
   selectedFilter: string,
-  onSelectedFilter: (val: FilterTodos) => void,
+  onSelectedFilter: (val: TodoStatus) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -19,12 +19,13 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            className="is-capitalized"
             value={selectedFilter}
             onChange={(event) => {
-              onSelectedFilter(event.target.value as FilterTodos);
+              onSelectedFilter(event.target.value as TodoStatus);
             }}
           >
-            {(Object.values(FilterTodos))
+            {(Object.values(TodoStatus))
               .map((value) => (
                 <option
                   value={value}

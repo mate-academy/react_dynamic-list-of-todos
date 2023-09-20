@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { FilterTodos } from './types/FilterTodos';
+import { TodoStatus } from './types/TodoStatus';
 import { getTodos } from './api';
 
 const getFilteredTodos = (
@@ -29,9 +29,9 @@ const getFilteredTodos = (
   if (selectedFilter) {
     todosCopy = todosCopy.filter(({ completed }) => {
       switch (selectedFilter) {
-        case FilterTodos.Active:
+        case TodoStatus.Active:
           return !completed;
-        case FilterTodos.Completed:
+        case TodoStatus.Completed:
           return completed;
         default:
           return todosCopy;
@@ -45,14 +45,21 @@ const getFilteredTodos = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<FilterTodos>(FilterTodos.All);
+  const [selectedFilter, setSelectedFilter] = useState<TodoStatus>(TodoStatus.All);
 
   useEffect(() => {
-    getTodos().then((todosFromSerwer) => {
-      setTodos(todosFromSerwer);
-    }).finally(() => setIsLoading(false));
+    setIsLoading(true);
+    getTodos()
+      .then((todosFromSerwer) => {
+        setTodos(todosFromSerwer);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -78,14 +85,13 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading ? (
                 <Loader />
-              )
-                : (
-                  <TodoList
-                    todos={filteredTodos}
-                    selectedTodo={selectedTodo}
-                    onSelectedTodo={setSelectedTodo}
-                  />
-                )}
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  onSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
