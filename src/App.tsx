@@ -10,6 +10,28 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import * as todosAPI from './api';
 
+function filterTodos(todos: Todo[], filterStatus: string, query: string) {
+  return todos
+    .filter((todo) => {
+      switch (filterStatus) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    })
+    .filter((todo) => {
+      if (query.trim() === '') {
+        return true;
+      }
+
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    });
+}
+
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isloading, setIsLoading] = useState(true);
@@ -33,29 +55,7 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const filteredTodos = todos
-    .filter((todo) => {
-      if (filterStatus === 'all') {
-        return true;
-      }
-
-      if (filterStatus === 'active') {
-        return !todo.completed;
-      }
-
-      if (filterStatus === 'completed') {
-        return todo.completed;
-      }
-
-      return true;
-    })
-    .filter((todo) => {
-      if (query.trim() === '') {
-        return true;
-      }
-
-      return todo.title.toLowerCase().includes(query.toLowerCase());
-    });
+  const filteredTodos = filterTodos(todos, filterStatus, query);
 
   useEffect(() => {
     todosAPI
@@ -66,7 +66,6 @@ export const App: React.FC = () => {
       })
       .catch((error) => {
         throw new Error(error.message);
-        setIsLoading(false);
       });
   }, []);
 

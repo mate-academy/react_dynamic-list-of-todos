@@ -4,6 +4,7 @@ type TodoFilterProps = {
   onFilterChange: (status: string) => void;
   handleQuery: (value: string) => void;
 };
+
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   onFilterChange,
   handleQuery,
@@ -19,6 +20,11 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
     handleQuery(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setQuery('');
+    handleQuery('');
   };
 
   return (
@@ -56,10 +62,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setQuery('');
-                handleQuery('');
-              }}
+              onClick={handleClearSearch}
             />
           </span>
         )}
