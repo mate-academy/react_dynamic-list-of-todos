@@ -19,7 +19,8 @@ export const TodoList: React.FC<Props>
     let filteredTodos = t0d0s;
 
     if (titleFilter) {
-      filteredTodos = t0d0s.filter(todo => todo.title.includes(titleFilter));
+      filteredTodos = t0d0s.filter(todo => todo.title
+        .toLowerCase().includes(titleFilter.toLowerCase()));
     }
 
     switch (filterBy) {
