@@ -10,35 +10,35 @@ type Props = {
   modalTodo: Todo | null;
 };
 
+const filterTodos = (toodos: Todo[],
+  filterBy: Filter,
+  titleFilter: string) => {
+  let filteredTodos = toodos;
+
+  if (titleFilter) {
+    filteredTodos = toodos.filter(todo => todo.title
+      .toLowerCase().includes(titleFilter.toLowerCase()));
+  }
+
+  switch (filterBy) {
+    case 'completed':
+      filteredTodos = filteredTodos.filter(todo => todo.completed === true);
+
+      break;
+    case 'active':
+      filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+      break;
+    default:
+    case 'all':
+  }
+
+  return filteredTodos;
+};
+
 export const TodoList: React.FC<Props>
 = ({
   todos, handleSelectTodo, filter, textFilter, modalTodo,
 }) => {
-  const filterTodos = (t0d0s: Todo[],
-    filterBy: Filter,
-    titleFilter: string) => {
-    let filteredTodos = t0d0s;
-
-    if (titleFilter) {
-      filteredTodos = t0d0s.filter(todo => todo.title
-        .toLowerCase().includes(titleFilter.toLowerCase()));
-    }
-
-    switch (filterBy) {
-      case 'completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
-
-        break;
-      case 'active':
-        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
-        break;
-      default:
-      case 'all':
-    }
-
-    return filteredTodos;
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>

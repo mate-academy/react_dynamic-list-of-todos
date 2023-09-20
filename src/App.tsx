@@ -31,9 +31,9 @@ export const App: React.FC = () => {
   };
 
   const fetchData = async () => {
-    const t0d0s = getTodos();
+    const toodos = getTodos();
 
-    setTodos(await t0d0s);
+    setTodos(await toodos);
   };
 
   useEffect(() => {
@@ -52,8 +52,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && <TodoList todos={todos} handleSelectTodo={handleSelectTodo} filter={filter} textFilter={textFilter} modalTodo={modalTodo} />}
+              {isLoading ? <Loader />
+                : <TodoList todos={todos} handleSelectTodo={handleSelectTodo} filter={filter} textFilter={textFilter} modalTodo={modalTodo} />}
             </div>
           </div>
         </div>
