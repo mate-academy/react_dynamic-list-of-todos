@@ -13,10 +13,10 @@ export const TodoFilter: React.FC<Props> = ({
   selectedFilter,
   onSelectedFilter,
 }) => {
-  const resetAllFilters = () => {
-    onQueryChange('');
-    onSelectedFilter(FilterTodos.All);
-  };
+  // const resetAllFilters = () => {
+  //   onQueryChange('');
+  //   onSelectedFilter(FilterTodos.All);
+  // };
 
   return (
     <form className="field has-addons">
@@ -26,7 +26,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={selectedFilter}
             onChange={(event) => {
-              onSelectedFilter(event?.target.value as FilterTodos);
+              onSelectedFilter(event.target.value as FilterTodos);
             }}
           >
             {(Object.values(FilterTodos))
@@ -61,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetAllFilters}
+              onClick={() => onQueryChange('')}
             />
           </span>
         )}

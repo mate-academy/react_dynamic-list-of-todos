@@ -67,8 +67,8 @@ export const TodoList: React.FC<Props> = ({
                 <i className={classNames(
                   'far',
                   {
-                    'fa-eye': selectedTodo !== todo,
-                    'fa-eye-slash': selectedTodo === todo,
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
                   },
                 )}
                 />
