@@ -6,16 +6,17 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type TodoModalProps = {
-  setSelectedTodo: (todoId: number) => void;
-  selectedTodo: number;
+  setSelectedTodoId: (todoId: number) => void;
+  selectedTodoId: number;
   todos: Todo[];
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({
-  setSelectedTodo, selectedTodo, todos,
+  setSelectedTodoId, selectedTodoId, todos,
 }) => {
   const [todoSelectedUser, setTodoSelectedUser] = useState<User | null>(null);
-  const todoSelected: Todo | null = todos.find(todo => todo.id === selectedTodo)
+  // eslint-disable-next-line max-len
+  const todoSelected: Todo | null = todos.find(todo => todo.id === selectedTodoId)
   || null;
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
                 className="delete"
                 data-cy="modal-close"
                 title="close"
-                onClick={() => setSelectedTodo(0)}
+                onClick={() => setSelectedTodoId(0)}
               />
             )}
 

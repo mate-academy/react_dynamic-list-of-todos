@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { FilterOptions } from '../../types/FilterOptions';
 
 type TodoFilterProps = {
-  onFilterChange: (selectedOption: string) => void;
+  onFilterChange: (selectedOption: FilterOptions) => void;
   typedTitle: string;
   setTypedTitle: (title: string) => void;
 };
@@ -9,14 +10,14 @@ type TodoFilterProps = {
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   onFilterChange, typedTitle, setTypedTitle,
 }) => {
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState<FilterOptions>('all');
 
   // eslint-disable-next-line max-len
   const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
     const { value } = event.target;
 
-    setSelectedOption(value);
-    onFilterChange(value);
+    setSelectedOption(value as FilterOptions);
+    onFilterChange(value as FilterOptions);
   };
 
   return (

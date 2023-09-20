@@ -1,19 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { getVisibleTodos } from './VisibleTodos';
 
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { FilterOptions } from './types/FilterOptions';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredOption, setFilteredOption] = useState('all');
+  const [filteredOption, setFilteredOption] = useState<FilterOptions>('all');
   const [typedTitle, setTypedTitle] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<number>(0);
+  const [selectedTodoId, setSelectedTodoId] = useState<number>(0);
 
   useEffect(() => {
     getTodos()
@@ -22,23 +24,13 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleFilterChange = (selected: string) => {
+  const handleFilterChange = (selected: FilterOptions) => {
     setFilteredOption(selected);
   };
 
-  let filteredTodos;
-
-  if (filteredOption === 'active') {
-    filteredTodos = todos.filter(todo => !todo.completed);
-  } else if (filteredOption === 'completed') {
-    filteredTodos = todos.filter(todo => todo.completed);
-  } else {
-    filteredTodos = todos;
-  }
-
-  const visibleTodos = filteredTodos.filter((todo) => (
-    todo.title.toLowerCase().includes(typedTitle.trim().toLowerCase())
-  ));
+  const visibleTodosResult = useMemo(() => {
+    return getVisibleTodos(todos, filteredOption, typedTitle);
+  }, [todos, filteredOption, typedTitle]);
 
   return (
     <>
@@ -56,22 +48,25 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                setSelectedTodo={setSelectedTodo}
-                selectedTodo={selectedTodo}
-              />
+              {todos.length === 0
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodosResult}
+                    setSelectedTodoId={setSelectedTodoId}
+                    selectedTodoId={selectedTodoId}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodoId && (
         <TodoModal
-          setSelectedTodo={setSelectedTodo}
-          todos={visibleTodos}
-          selectedTodo={selectedTodo}
+          setSelectedTodoId={setSelectedTodoId}
+          todos={visibleTodosResult}
+          selectedTodoId={selectedTodoId}
         />
       )}
     </>
