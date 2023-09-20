@@ -10,7 +10,6 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { useTodos } from './useTodos';
 import { Filter } from './types/Filter';
-// import { useTodoFilterMemo } from './useTodoFilterMemo';
 
 const filterTodos = (todos: Todo[], filter: Filter, searchInput: string) => {
   return (todos.filter(todo => {
@@ -40,8 +39,6 @@ export const App: React.FC = () => {
   const [chosenTodo, setChosenTodo] = useState<Todo | null>(null);
   const [searchInput, setSearchInput] = useState<string>('');
   const [filter, setFilter] = useState<Filter>('all');
-  // const displayedTodos = useTodoFilterMemo(todos, filter, searchInput);
-  // const [todosShowed, setTodosShowed] = useState<Todo[]>([]);
 
   return (
     <>
