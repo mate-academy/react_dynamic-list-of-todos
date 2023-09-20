@@ -24,6 +24,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            className="is-capitalized"
             value={selectedFilter}
             onChange={(event) => {
               onSelectedFilter(event?.target.value as TodoFilterTypes);

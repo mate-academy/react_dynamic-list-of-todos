@@ -14,7 +14,7 @@ import { TodoFilterTypes } from './types/TodoFilterTypes';
 const getFilteredTodos = (
   todos: Todo[],
   query: string,
-  selectedFilter: string,
+  selectedFilter: TodoFilterTypes,
 ) => {
   let todosClone = [...todos];
 
@@ -44,12 +44,13 @@ const getFilteredTodos = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<TodoFilterTypes>(TodoFilterTypes.All);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
       .catch((error) => {
