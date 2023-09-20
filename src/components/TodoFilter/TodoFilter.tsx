@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 type TodoFilterProps = {
-  onFilter: (status: string) => void,
+  onFilter: (status: Filter) => void,
   onTitleFilter: (title: string) => void,
   onClearFilter: () => void,
 };
@@ -12,16 +13,26 @@ export const TodoFilter
     const [filter, setFilter] = useState<string>('all');
 
     const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
-  = (event) => {
-    setFilter(event.target.value);
-    onFilter(event.target.value);
-  };
+    = (event) => {
+      const selectedValue = event.target.value;
+      let filterValue: Filter = 'all';
 
-    const handleInput: React.ChangeEventHandler<HTMLInputElement>
-  = (event) => {
-    setQuery(event.target.value);
-    onTitleFilter(event.target.value);
-  };
+      if (selectedValue === 'active') {
+        filterValue = 'active';
+      } else if (selectedValue === 'completed') {
+        filterValue = 'completed';
+      }
+
+      setFilter(selectedValue);
+      onFilter(filterValue);
+    };
+
+    const handleInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+      const inputValue = (event.target as HTMLInputElement).value;
+
+      setQuery(inputValue);
+      onTitleFilter(inputValue);
+    };
 
     const handleClearing = () => {
       setFilter('all');

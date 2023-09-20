@@ -9,61 +9,57 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filter } from './types/Filter';
+
+const handleFilterLogic = (filter: Filter, todo: Todo, filterByTitle: string) => {
+  if (filter === 'all') {
+    return todo.title.toLowerCase().includes(filterByTitle);
+  }
+
+  if (filter === 'completed') {
+    return todo.completed && todo.title.toLowerCase().includes(filterByTitle);
+  }
+
+  if (filter === 'active') {
+    return !todo.completed && todo.title.toLowerCase().includes(filterByTitle);
+  }
+
+  return todo.title.toLowerCase().includes(filterByTitle);
+};
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
   const [filterByTitle, setFilterByTitle] = useState<string>('');
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = useState<Filter>('all');
 
   const selectTodos = (todo: Todo) => {
-    const findTodo = todos.find(value => value === todo) as Todo;
+    const foundTodo = todos.find(value => value === todo);
 
-    setSelectedTodo(findTodo);
+    setSelectedTodo(foundTodo);
   };
 
   const handleModalClose = () => {
-    setSelectedTodo(null);
+    setSelectedTodo(undefined);
   };
 
-  const handleFilter = (status: string) => {
-    if (status === 'all') {
-      setFilter('all');
-    } else if (status === 'completed') {
-      setFilter('completed');
-    } else if (status === 'active') {
-      setFilter('active');
-    }
+  const handleSelectFilter = (filterBy: Filter) => {
+    setFilter(filterBy);
   };
 
   const handleTitleFilter = (title: string) => {
     setFilterByTitle(title.toLowerCase());
   };
 
-  const visibleTodos = todos.filter(todo => {
-    if (filter === 'all') {
-      return todo.title.toLowerCase().includes(filterByTitle);
-    }
-
-    if (filter === 'completed') {
-      return todo.completed && todo.title.toLowerCase().includes(filterByTitle);
-    }
-
-    if (filter === 'active') {
-      return !todo.completed && todo.title.toLowerCase().includes(filterByTitle);
-    }
-
-    return todo.title.toLowerCase().includes(filterByTitle);
-  });
-
   const handleClearFilter = () => {
     setFilterByTitle('');
     setFilter('all');
   };
 
+  const visibleTodos = todos.filter(todo => handleFilterLogic(filter, todo, filterByTitle));
+
   useEffect(() => {
-    setIsLoading(true);
     getTodos().then(setTodos).finally(() => setIsLoading(false));
   }, []);
 
@@ -76,25 +72,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilter={handleFilter}
+                onFilter={handleSelectFilter}
                 onTitleFilter={handleTitleFilter}
                 onClearFilter={handleClearFilter}
               />
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                handleSelectedTodo={selectTodos}
-                selectedTodo={selectedTodo}
-              />
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    handleSelectedTodo={selectTodos}
+                    selectedTodo={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo !== null && <TodoModal todo={selectedTodo} handleModalClose={handleModalClose} />}
+      {selectedTodo && <TodoModal todo={selectedTodo} handleModalClose={handleModalClose} />}
     </>
   );
 };
