@@ -1,43 +1,37 @@
 import React, {
   Dispatch,
   SetStateAction,
-  useEffect,
-  useState,
 } from 'react';
-import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
+import { filterTodos } from '../filteredTodos/filteredTodos';
 
 type Props = {
-  setHandle: Dispatch<SetStateAction<boolean>>,
+  todos: Todo[],
+  setHandleClose: Dispatch<SetStateAction<boolean>>,
+  handleClose: boolean,
   setSelectedTodo: Dispatch<SetStateAction<Todo | null>>,
+  selectedTodo: Todo | null,
   filter: string,
   searchText: string,
 };
 
 // eslint-disable-next-line max-len
 export const TodoList: React.FC<Props> = ({
-  setHandle, setSelectedTodo, filter, searchText,
+  // eslint-disable-next-line max-len
+  setHandleClose,
+  handleClose,
+  setSelectedTodo, selectedTodo, filter, searchText, todos,
 }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const filteredTodos = filterTodos({ todos, filter, searchText });
 
-  useEffect(() => {
-    getTodos().then(json => {
-      setTodos(json);
-    });
-  });
+  // eslint-disable-next-line no-console
+  console.log(selectedTodo);
 
-  const filteredTodos = todos.filter((todo) => {
-    switch (filter) {
-      case 'all':
-        return todo.title.includes(searchText);
-      case 'completed':
-        return todo.completed && todo.title.includes(searchText);
-      case 'active':
-        return !todo.completed && todo.title.includes(searchText);
-      default:
-        return true;
-    }
-  });
+  function handleClick(todo: Todo) {
+    setHandleClose(true);
+    setSelectedTodo(todo);
+    // setSlash('slash');
+  }
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -56,52 +50,50 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
 
-        {filteredTodos?.map(todo => {
-          return (
-            <tr
-              key={todo.id}
-              data-cy="todo"
-            >
-              <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered">
-                {todo.completed === true
-                && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={
-                    (todo.completed === true)
-                      ? 'has-text-success'
-                      : 'has-text-danger'
+        {filteredTodos?.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed === true
+              && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                className={
+                  (todo.completed === true)
+                    ? 'has-text-success'
+                    : 'has-text-danger'
+                }
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => handleClick(todo)}
+              >
+                <span className="icon">
+                  <i className={
+                    (!handleClose)
+                      ? 'far fa-eye'
+                      : 'far fa-eye-slash'
                   }
-                >
-                  {todo.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={
-                    () => {
-                      setHandle(true);
-                      setSelectedTodo(todo);
-                    }
-                  }
-                >
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
 
       </tbody>
     </table>

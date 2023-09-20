@@ -11,19 +11,13 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  setHandle: Dispatch<SetStateAction<boolean>>,
+  setHandleClose: Dispatch<SetStateAction<boolean>>,
   todo: Todo | null;
 };
 
-export const TodoModal: React.FC<Props> = ({ setHandle, todo }) => {
+export const TodoModal: React.FC<Props> = ({ setHandleClose, todo }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   useEffect(() => {
     if (todo && todo.userId !== undefined) {
@@ -63,7 +57,7 @@ export const TodoModal: React.FC<Props> = ({ setHandle, todo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setHandle(false)}
+              onClick={() => setHandleClose(false)}
             />
           </header>
 

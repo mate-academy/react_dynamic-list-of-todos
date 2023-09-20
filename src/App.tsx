@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,20 +8,23 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [handleClose, setHandle] = useState(false);
+  // const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [handleClose, setHandleClose] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
 
   const [searchText, setSearchText] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    getTodos().then(json => {
+      setTodos(json);
+    });
   }, []);
 
   return (
@@ -36,13 +39,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader /> : <TodoList searchText={searchText} filter={filter} setHandle={setHandle} setSelectedTodo={setSelectedTodo} />}
+              {(todos?.length > 0) ? <TodoList todos={todos} searchText={searchText} filter={filter} handleClose={handleClose} setHandleClose={setHandleClose} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} /> : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {handleClose && <TodoModal setHandle={setHandle} todo={selectedTodo} />}
+      {handleClose && <TodoModal setHandleClose={setHandleClose} todo={selectedTodo} />}
     </>
   );
 };

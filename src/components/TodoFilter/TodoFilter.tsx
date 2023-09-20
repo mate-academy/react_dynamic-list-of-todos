@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 type Props = {
-  filter: string,
-  setFilter: Dispatch<SetStateAction<string>>;
+  filter: 'all' | 'completed' | 'active',
+  setFilter: Dispatch<SetStateAction<'all' | 'completed' | 'active'>>;
   setSearchText: Dispatch<SetStateAction<string>>,
   searchText: string,
 };
@@ -11,7 +11,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   filter, setFilter, setSearchText, searchText,
 }) => {
-  const [handle, setHandle] = useState(false);
+  const [handleClear, setHandleClear] = useState(false);
 
   return (
     <form className="field has-addons">
@@ -20,7 +20,8 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            // eslint-disable-next-line max-len
+            onChange={(e) => setFilter(e.target.value as 'all' | 'completed' | 'active')}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -38,7 +39,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value);
-            setHandle(true);
+            setHandleClear(true);
           }}
         />
         <span className="icon is-left">
@@ -47,14 +48,14 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {handle && (
+          {handleClear && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => {
                 setSearchText('');
-                setHandle(false);
+                setHandleClear(false);
               }}
               aria-label="Clear Search"
             />
