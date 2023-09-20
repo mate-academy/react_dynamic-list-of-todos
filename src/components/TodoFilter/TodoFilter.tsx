@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Status } from '../../types/Status';
 
 type TodoFilterProps = {
   onFilter: (status: string) => void,
@@ -9,11 +10,11 @@ type TodoFilterProps = {
 export const TodoFilter
 = ({ onFilter, onTitleFilter, onClearFilter } : TodoFilterProps) => {
   const [query, setQuery] = useState<string>('');
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState(Status.all);
   const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
     = (event) => {
-      setFilter(event.target.value);
-      onFilter(event.target.value);
+      setFilter(event.target.value as Status);
+      onFilter(event.target.value as Status);
     };
 
   const handleSearchInput: React.ChangeEventHandler<HTMLInputElement>
@@ -23,7 +24,7 @@ export const TodoFilter
     };
 
   const handleClearButton = () => {
-    setFilter('all');
+    setFilter(Status.all);
     setQuery('');
     onClearFilter();
   };
@@ -38,9 +39,9 @@ export const TodoFilter
             value={filter}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.all}>All</option>
+            <option value={Status.active}>Active</option>
+            <option value={Status.completed}>Completed</option>
           </select>
         </span>
       </p>

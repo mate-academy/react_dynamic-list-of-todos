@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [titleFilter, setTitleFilter] = useState<string>('');
-  const [filter, setFilter] = useState<string>('');
+  const [titleFilter, setTitleFilter] = useState('');
+  const [filter, setFilter] = useState(Status.all);
 
   const handleSelectedTodo = (todo: Todo) => {
     const findTodo = todos.find(value => value === todo) as Todo;
@@ -27,13 +28,16 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const handleFilter = (status: string) => {
-    if (status === 'all') {
-      setFilter('all');
-    } else if (status === 'completed') {
-      setFilter('completed');
-    } else if (status === 'active') {
-      setFilter('active');
+  const handleFilter = () => {
+    switch (filter) {
+      case Status.active:
+        return setFilter(Status.active);
+
+      case Status.completed:
+        return setFilter(Status.completed);
+
+      default:
+        return Status.all;
     }
   };
 
@@ -42,15 +46,15 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'all') {
+    if (Status.all) {
       return todo.title.toLowerCase().includes(titleFilter);
     }
 
-    if (filter === 'completed') {
+    if (Status.completed) {
       return todo.completed && todo.title.toLowerCase().includes(titleFilter);
     }
 
-    if (filter === 'active') {
+    if (Status.active) {
       return !todo.completed && todo.title.toLowerCase().includes(titleFilter);
     }
 
@@ -59,7 +63,7 @@ export const App: React.FC = () => {
 
   const handleClearFilter = () => {
     setTitleFilter('');
-    setFilter('all');
+    setFilter(Status.all);
   };
 
   useEffect(() => {
