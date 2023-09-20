@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -22,7 +23,10 @@ export const TodoModal: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData().catch(() => {
+      alert('User not found.');
+      handleSelectTodo(null);
+    });
   }, []);
 
   return (
