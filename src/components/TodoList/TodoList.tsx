@@ -7,11 +7,12 @@ type Props = {
   handleSelectTodo: (todo: Todo) => void;
   filter: Filter;
   textFilter: string,
+  modalTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props>
 = ({
-  todos, handleSelectTodo, filter, textFilter,
+  todos, handleSelectTodo, filter, textFilter, modalTodo,
 }) => {
   const filterTodos = (t0d0s: Todo[],
     filterBy: Filter,
@@ -81,7 +82,9 @@ export const TodoList: React.FC<Props>
                 onClick={() => handleSelectTodo(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  {modalTodo === todo
+                    ? <i className="far fa-eye-slash" />
+                    : <i className="far fa-eye" />}
                 </span>
               </button>
             </td>

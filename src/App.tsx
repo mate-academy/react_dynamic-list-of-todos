@@ -53,7 +53,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              {!isLoading && <TodoList todos={todos} handleSelectTodo={handleSelectTodo} filter={filter} textFilter={textFilter} />}
+              {!isLoading && <TodoList todos={todos} handleSelectTodo={handleSelectTodo} filter={filter} textFilter={textFilter} modalTodo={modalTodo} />}
             </div>
           </div>
         </div>
