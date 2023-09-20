@@ -1,7 +1,7 @@
 import { TodoStatus } from '../../types/TodoStatus';
 import { Todo } from '../../types/Todo';
 
-export function filterTodos(
+export function getFilteredTodos(
   visibleTodos: Todo[],
   filterField : string,
   selectFilter: TodoStatus | null,

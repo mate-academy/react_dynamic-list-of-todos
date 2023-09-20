@@ -10,13 +10,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { TodoStatus } from './types/TodoStatus';
-import { filterTodos } from './components/utils/filterTodos';
+import { getFilteredTodos } from './components/utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
-  const [selectFilter, setSelectFilter] = useState(TodoStatus.All);
-  const [filterField, setFilterField] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [todoStatusFilter, setTodoStatusFilter] = useState(TodoStatus.All);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,8 +31,8 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return filterTodos(visibleTodos, filterField, selectFilter);
-  }, [filterField, selectFilter, visibleTodos]);
+    return getFilteredTodos(visibleTodos, searchQuery, todoStatusFilter);
+  }, [searchQuery, todoStatusFilter, visibleTodos]);
 
   return (
     <>
@@ -43,10 +43,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterField={filterField}
-                setFilterField={setFilterField}
-                selectFilter={selectFilter}
-                setSelectFilter={setSelectFilter}
+                filterField={searchQuery}
+                setFilterField={setSearchQuery}
+                selectFilter={todoStatusFilter}
+                setSelectFilter={setTodoStatusFilter}
               />
             </div>
 
@@ -55,9 +55,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  selectTodo={selectTodo}
+                  selectTodo={selectedTodo}
                   visibleTodos={filteredTodos}
-                  setSelectTodo={setSelectTodo}
+                  setSelectTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -65,10 +65,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          setSelectTodo={setSelectTodo}
-          selectTodo={selectTodo}
+          setSelectTodo={setSelectedTodo}
+          selectTodo={selectedTodo}
         />
       )}
     </>
