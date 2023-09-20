@@ -20,7 +20,8 @@ export const TodoFilter : React.FC<TodoFilterProps> = ({
           data-cy="statusSelect"
           value={statusFilter}
           onChange={(e) => handleStatusFilterChange(
-            e.target.value as StatusFilter)}
+            e.target.value as StatusFilter,
+          )}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
