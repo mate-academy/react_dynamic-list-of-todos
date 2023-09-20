@@ -13,11 +13,6 @@ export const TodoFilter: React.FC<Props> = ({
   selectedFilter,
   onSelectedFilter,
 }) => {
-  // const resetAllFilters = () => {
-  //   onQueryChange('');
-  //   onSelectedFilter(FilterTodos.All);
-  // };
-
   return (
     <form className="field has-addons">
       <p className="control">
