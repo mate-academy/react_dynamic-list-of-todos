@@ -5,11 +5,13 @@ import { Todo } from '../../types/Todo';
 type TodoListProps = {
   dataTodos: Todo[];
   setChosenTodo: (todo: Todo) => void;
+  chosenTodo: Todo | null;
 };
 
 export const TodoList: React.FC<TodoListProps> = ({
   dataTodos,
   setChosenTodo,
+  chosenTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -59,7 +61,11 @@ export const TodoList: React.FC<TodoListProps> = ({
               onClick={() => (setChosenTodo(todo))}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i className={cn('far', {
+                  'fa-eye': todo.id !== chosenTodo?.id,
+                  'fa-eye-slash': todo.id === chosenTodo?.id,
+                })}
+                />
               </span>
             </button>
           </td>

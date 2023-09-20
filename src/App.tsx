@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,53 +7,41 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { useTodos } from './useTodos';
+import { Filter } from './types/Filter';
+// import { useTodoFilterMemo } from './useTodoFilterMemo';
+
+const filterTodos = (todos: Todo[], filter: Filter, searchInput: string) => {
+  return (todos.filter(todo => {
+    if (filter === 'active' && todo.completed) {
+      return false;
+    }
+
+    if (filter === 'completed' && !todo.completed) {
+      return false;
+    }
+
+    if (
+      !todo.title.toLocaleLowerCase().includes(
+        searchInput.toLocaleLowerCase(),
+      )
+    ) {
+      return false;
+    }
+
+    return true;
+  })
+  );
+};
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { todos, isLoading } = useTodos();
   const [chosenTodo, setChosenTodo] = useState<Todo | null>(null);
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filter, setFilter] = useState<string>('all');
-  const [chosenUser, setChosenUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    getTodos()
-      .then(
-        setTodos,
-      );
-
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (chosenTodo !== null) {
-      getUser(chosenTodo.userId)
-        .then(
-          setChosenUser,
-        );
-    }
-  }, [chosenTodo]);
-
-  const handleFilterTodos = () => {
-    let todosfiltered = [...todos];
-
-    if (searchInput !== '') {
-      todosfiltered = todosfiltered.filter((todo) => (todo.title.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase())));
-    }
-
-    if (filter === 'active') {
-      todosfiltered = todosfiltered.filter((todo) => todo.completed === false);
-    }
-
-    if (filter === 'completed') {
-      todosfiltered = todosfiltered.filter((todo) => todo.completed === true);
-    }
-
-    return todosfiltered;
-  };
+  const [filter, setFilter] = useState<Filter>('all');
+  // const displayedTodos = useTodoFilterMemo(todos, filter, searchInput);
+  // const [todosShowed, setTodosShowed] = useState<Todo[]>([]);
 
   return (
     <>
@@ -74,7 +62,13 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading
                 ? <Loader />
-                : <TodoList dataTodos={handleFilterTodos()} setChosenTodo={setChosenTodo} />}
+                : (
+                  <TodoList
+                    dataTodos={filterTodos(todos, filter, searchInput)}
+                    setChosenTodo={setChosenTodo}
+                    chosenTodo={chosenTodo}
+                  />
+                )}
 
             </div>
           </div>
@@ -85,8 +79,6 @@ export const App: React.FC = () => {
         <TodoModal
           chosenTodo={chosenTodo}
           setChosenTodo={setChosenTodo}
-          chosenUser={chosenUser}
-          setChosenUser={setChosenUser}
         />
       )}
     </>

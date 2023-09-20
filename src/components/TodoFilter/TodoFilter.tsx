@@ -1,8 +1,11 @@
+import React from 'react';
+import { Filter } from '../../types/Filter';
+
 type TodoFilterProps = {
   searchInput: string;
   setSearchInput: (input: string) => void ;
-  setFilter: (filter: string) => void,
-  filter: string;
+  setFilter: (filter: Filter) => void,
+  filter: Filter;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
@@ -10,6 +13,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   setSearchInput,
   setFilter,
   filter,
+
 }) => {
   const handleSearchInput: React.ChangeEventHandler<HTMLInputElement> = (
     event,
@@ -24,7 +28,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   const handleFilterChoise: React.ChangeEventHandler<HTMLSelectElement> = (
     event,
   ) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value as Filter);
   };
 
   return (

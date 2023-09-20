@@ -1,23 +1,20 @@
 import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
+import { useUser } from '../../useUser';
 
 type TodoModalProps = {
   chosenTodo: Todo;
   setChosenTodo: (todo: Todo | null) => void;
-  chosenUser: User | null;
-  setChosenUser: (user: User | null) => void;
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   chosenTodo,
   setChosenTodo,
-  chosenUser,
-  setChosenUser,
 }) => {
+  const { chosenUser, isLoading } = useUser(chosenTodo.userId);
+
   const handleOnClick = () => {
-    setChosenUser(null);
     setChosenTodo(null);
   };
 
@@ -25,7 +22,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {(!chosenTodo || !chosenUser) ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
