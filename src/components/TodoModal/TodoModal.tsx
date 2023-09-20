@@ -13,16 +13,21 @@ export const TodoModal: React.FC<Props> = ({
   todo, closeModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
-  }, []);
+    getUser(todo.userId)
+      .then((userData) => {
+        setUser(userData);
+        setLoading(false);
+      });
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,10 +55,11 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {todo?.completed
-                ? <strong className="has-text-success">Done</strong>
-                : <strong className="has-text-damger">Planned</strong>}
+              {todo?.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 

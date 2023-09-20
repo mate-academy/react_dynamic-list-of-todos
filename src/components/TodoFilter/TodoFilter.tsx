@@ -1,12 +1,36 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { SyntheticEvent, useState } from 'react';
 
- type Props = {
-   handleQuery: (value: string) => void;
-   handleOption: (value: boolean | null) => void;
- };
+type Props = {
+  handleQuery: (value: string) => void;
+  handleOption: (value: boolean | null) => void;
+};
+
+// eslint-disable-next-line max-len
+const handleOptions = (newOption: string, handleOption: (value: boolean | null) => void) => {
+  let booleanOption: boolean | null = null;
+
+  switch (newOption) {
+    case 'all':
+      booleanOption = null;
+      break;
+    case 'active':
+      booleanOption = false;
+      break;
+    case 'completed':
+      booleanOption = true;
+      break;
+    default:
+      booleanOption = null;
+  }
+
+  handleOption(booleanOption);
+};
+
 export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
   const [query, setQuery] = useState('');
-  const [selectedOption, setSelectedOption] = useState<string>('all');
+  // eslint-disable-next-line max-len
+  const [selectedOption, setSelectedOption] = useState<string | 'all' | 'completed' | 'active'>('all');
 
   const handleQueryValue = (event: SyntheticEvent<HTMLInputElement>) => {
     const newValue = (event.target as HTMLInputElement).value.trim();
@@ -20,28 +44,11 @@ export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
     handleQuery('');
   };
 
-  const handleOptions = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
 
     setSelectedOption(newOption);
-
-    let booleanOption: boolean | null = null;
-
-    switch (newOption) {
-      case 'all':
-        booleanOption = null;
-        break;
-      case 'active':
-        booleanOption = false;
-        break;
-      case 'completed':
-        booleanOption = true;
-        break;
-      default:
-        booleanOption = null;
-    }
-
-    handleOption(booleanOption);
+    handleOptions(newOption, handleOption);
   };
 
   return (
@@ -51,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
           <select
             data-cy="statusSelect"
             value={selectedOption}
-            onChange={handleOptions}
+            onChange={handleSelectChange}
           >
             <option
               value="all"
@@ -87,7 +94,6 @@ export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {query && (
-          // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
