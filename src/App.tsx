@@ -14,7 +14,7 @@ import { filterTodoList } from './utils/functions';
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState(TodoStatus.All);
+  const [filter, setFilter] = useState<TodoStatus>(TodoStatus.All);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [error, setError] = useState('');
