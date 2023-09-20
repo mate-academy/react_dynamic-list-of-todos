@@ -15,7 +15,9 @@ type Props = {
 };
 
 // eslint-disable-next-line max-len
-export const TodoList: React.FC<Props> = ({ setHandle, setSelectedTodo, filter, searchText }) => {
+export const TodoList: React.FC<Props> = ({
+  setHandle, setSelectedTodo, filter, searchText,
+}) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -25,19 +27,16 @@ export const TodoList: React.FC<Props> = ({ setHandle, setSelectedTodo, filter, 
   });
 
   const filteredTodos = todos.filter((todo) => {
-    if (filter === 'all') {
-      return todo.title.includes(searchText);
+    switch (filter) {
+      case 'all':
+        return todo.title.includes(searchText);
+      case 'completed':
+        return todo.completed && todo.title.includes(searchText);
+      case 'active':
+        return !todo.completed && todo.title.includes(searchText);
+      default:
+        return true;
     }
-
-    if (filter === 'completed') {
-      return todo.completed && todo.title.includes(searchText);
-    }
-
-    if (filter === 'active') {
-      return !todo.completed && todo.title.includes(searchText);
-    }
-
-    return true;
   });
 
   return (
@@ -79,11 +78,6 @@ export const TodoList: React.FC<Props> = ({ setHandle, setSelectedTodo, filter, 
                       ? 'has-text-success'
                       : 'has-text-danger'
                   }
-                  // style={
-                  //   (todo.completed === true)
-                  //     ? { color: 'green' }
-                  //     : { color: 'red' }
-                  // }
                 >
                   {todo.title}
                 </p>

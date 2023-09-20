@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [handle, setHandle] = useState(false);
+  const [handleClose, setHandle] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filter, setFilter] = useState('all');
@@ -23,12 +23,6 @@ export const App: React.FC = () => {
       setLoading(false);
     }, 3000);
   }, []);
-
-  // function handleClose() {
-  //   setClose({
-  //     handle: true,
-  //   });
-  // }
 
   return (
     <>
@@ -48,7 +42,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {handle && <TodoModal setHandle={setHandle} todo={selectedTodo} />}
+      {handleClose && <TodoModal setHandle={setHandle} todo={selectedTodo} />}
     </>
   );
 };

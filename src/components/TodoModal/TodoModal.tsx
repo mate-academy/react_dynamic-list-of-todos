@@ -18,7 +18,6 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ setHandle, todo }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  // const [details, setDetails] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -83,22 +82,7 @@ export const TodoModal: React.FC<Props> = ({ setHandle, todo }) => {
                   by
                   {' '}
                   <a href={`mailto:${user.email}`}>{user.name}</a>
-                  {/* <button
-                    className="button"
-                    type="button"
-                    onClick={() => setDetails(true)}
-                  >
-                    {user.name}
-                  </button> */}
                 </p>
-
-                {/* {details && user && (
-                  <div>
-                    <p>{user?.name}</p>
-                    <p>{user?.phone}</p>
-                    <p>{user?.email}</p>
-                  </div>
-                )} */}
               </div>
             )}
           </div>
