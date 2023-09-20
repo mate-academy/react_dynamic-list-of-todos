@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Status } from '../../types/Status';
 
 type TodoFilterProps = {
-  onFilter: (status: string) => void,
+  onFilter: (status: Status) => void,
   onTitleFilter: (title: string) => void,
   onClearFilter: () => void,
 };
 
 export const TodoFilter
 = ({ onFilter, onTitleFilter, onClearFilter } : TodoFilterProps) => {
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(Status.all);
   const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
     = (event) => {
