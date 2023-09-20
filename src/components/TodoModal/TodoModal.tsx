@@ -44,12 +44,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectedTodo }) => {
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={() => onSelectedTodo(null)}
+              aria-label="modal-close"
             />
           </header>
 
@@ -64,9 +64,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectedTodo }) => {
                 'has-text-success': todo.completed,
               })}
               >
-                {todo.completed
-                  ? 'Done'
-                  : 'Planned'}
+                {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

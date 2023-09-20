@@ -1,4 +1,5 @@
 import { TodoStatus } from '../../types/TodoStatus';
+import './TodoFilter.scss';
 
 type Props = {
   query: string,
@@ -27,10 +28,7 @@ export const TodoFilter: React.FC<Props> = ({
           >
             {(Object.values(TodoStatus))
               .map((value) => (
-                <option
-                  value={value}
-                  key={value}
-                >
+                <option value={value} key={value}>
                   {value}
                 </option>
               ))}
@@ -51,13 +49,13 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => onQueryChange('')}
+              aria-label="clearSearchButton"
             />
           </span>
         )}
