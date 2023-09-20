@@ -1,4 +1,5 @@
 import { Select } from '../../utils/Select';
+import './TodoFilter.scss';
 
 type Props = {
   setFilterOption: (filterOption: Select) => void,
@@ -17,7 +18,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => (
     setQuery(event.target.value)
   );
-  const handleButtonClick = () => setQuery('');
+  const handleQueryClear = () => setQuery('');
 
   return (
     <form className="field has-addons">
@@ -48,13 +49,13 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {!!query.length && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleButtonClick}
+              onClick={handleQueryClear}
+              aria-label="Delete"
             />
           </span>
         )}

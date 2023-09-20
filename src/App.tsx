@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -31,16 +31,22 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
+  const filterByFilterOption = useCallback((todosToFilter: Todo[]): Todo[] => {
+    return todosToFilter.filter(todo => {
       switch (filterOption) {
         case Select.Active: return !todo.completed;
         case Select.Completed: return todo.completed;
         case Select.All:
         default: return true;
       }
-    }).filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
-  }, [todos, filterOption, query]);
+    });
+  }, [todos, filterOption]);
+
+  const filterByQuery = useCallback((todosToFilter: Todo[]) => {
+    return todosToFilter.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
+  }, [todos, query]);
+
+  const filteredTodos = filterByFilterOption(filterByQuery(todos));
 
   return (
     <>

@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo,
-  setSelectedTodo: (todo: Todo) => void,
+  setSelectedTodo: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -43,12 +43,12 @@ export const TodoModal: React.FC<Props> = ({
               {selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null as unknown as Todo)}
+              onClick={() => setSelectedTodo(null)}
+              aria-label="Delete"
             />
           </header>
 
