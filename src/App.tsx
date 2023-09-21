@@ -21,9 +21,9 @@ const filterTodos = (todos: Todo[], filter: Filter, searchInput: string) => {
       return false;
     }
 
-   return todo.title.toLocaleLowerCase().includes(
-             searchInput.toLocaleLowerCase()
-          ),
+    return todo.title.toLocaleLowerCase().includes(
+      searchInput.toLocaleLowerCase(),
+    );
   })
   );
 };
