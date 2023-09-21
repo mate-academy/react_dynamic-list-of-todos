@@ -1,12 +1,12 @@
 import { Todo } from '../../types/Todo';
 
-type Props = {
+type Args = {
   todos: Todo[],
   filter: string,
   searchText: string,
 };
 
-export function filterTodos({ filter, searchText, todos }: Props) {
+export function filterTodos({ filter, searchText, todos }: Args) {
   const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case 'all':

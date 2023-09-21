@@ -25,10 +25,6 @@ export const TodoModal: React.FC<Props> = ({ setHandleClose, todo }) => {
         .then((userData) => {
           setUser(userData);
           setLoading(false);
-        })
-        .catch((error) => {
-          setLoading(false);
-          throw new Error('user error', error);
         });
     } else {
       setLoading(false);

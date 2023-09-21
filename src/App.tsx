@@ -7,17 +7,13 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { Todo, Filter } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  // const [dataLoaded, setDataLoaded] = useState(false);
-
   const [handleClose, setHandleClose] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
-  const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
-
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const [searchText, setSearchText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -39,7 +35,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(todos?.length > 0) ? <TodoList todos={todos} searchText={searchText} filter={filter} handleClose={handleClose} setHandleClose={setHandleClose} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} /> : <Loader />}
+              {(todos?.length > 0)
+                ? <TodoList todos={todos} searchText={searchText} filter={filter} handleClose={handleClose} setHandleClose={setHandleClose} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+                : <Loader />}
             </div>
           </div>
         </div>

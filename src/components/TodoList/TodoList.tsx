@@ -15,12 +15,14 @@ type Props = {
   searchText: string,
 };
 
-// eslint-disable-next-line max-len
 export const TodoList: React.FC<Props> = ({
-  // eslint-disable-next-line max-len
   setHandleClose,
   handleClose,
-  setSelectedTodo, selectedTodo, filter, searchText, todos,
+  setSelectedTodo,
+  selectedTodo,
+  filter,
+  searchText,
+  todos,
 }) => {
   const filteredTodos = filterTodos({ todos, filter, searchText });
 
@@ -30,7 +32,6 @@ export const TodoList: React.FC<Props> = ({
   function handleClick(todo: Todo) {
     setHandleClose(true);
     setSelectedTodo(todo);
-    // setSlash('slash');
   }
 
   return (

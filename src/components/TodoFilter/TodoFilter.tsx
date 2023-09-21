@@ -1,8 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Filter } from '../../types/Todo';
 
 type Props = {
   filter: 'all' | 'completed' | 'active',
-  setFilter: Dispatch<SetStateAction<'all' | 'completed' | 'active'>>;
+  setFilter: Dispatch<SetStateAction<Filter>>;
   setSearchText: Dispatch<SetStateAction<string>>,
   searchText: string,
 };
@@ -11,7 +12,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({
   filter, setFilter, setSearchText, searchText,
 }) => {
-  const [handleClear, setHandleClear] = useState(false);
+  const [isClear, setIsClear] = useState(false);
 
   return (
     <form className="field has-addons">
@@ -21,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={filter}
             // eslint-disable-next-line max-len
-            onChange={(e) => setFilter(e.target.value as 'all' | 'completed' | 'active')}
+            onChange={(e) => setFilter(e.target.value as Filter)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -39,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value);
-            setHandleClear(true);
+            setIsClear(true);
           }}
         />
         <span className="icon is-left">
@@ -48,14 +49,14 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {handleClear && (
+          {isClear && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => {
                 setSearchText('');
-                setHandleClear(false);
+                setIsClear(false);
               }}
               aria-label="Clear Search"
             />
