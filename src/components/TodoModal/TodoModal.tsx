@@ -3,6 +3,7 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import { TodoModalMessage } from '../TodoModalMessage/TodoModalMessage';
 
 type Props = {
   selectedTodo: Todo,
@@ -24,7 +25,8 @@ export const TodoModal: React.FC<Props> = ({
     setIsLoading(true);
     getUser(userId)
       .then((foundUser) => setUser(foundUser))
-      .catch()
+      // eslint-disable-next-line
+      .catch((error) => console.warn(error))
       .finally(() => setIsLoading(false));
   }, [selectedTodo]);
 
@@ -53,42 +55,11 @@ export const TodoModal: React.FC<Props> = ({
             />
           </header>
 
-          {user
-            ? (
-              <div className="modal-card-body">
-                <p className="block" data-cy="modal-title">
-                  {title}
-                </p>
-
-                <p className="block" data-cy="modal-user">
-                  {/* <strong className="has-text-success">Done</strong> */}
-                  {completed
-                    ? (
-                      <strong className="has-text-success">
-                        Done
-                      </strong>
-                    )
-                    : (
-                      <strong className="has-text-danger">
-                        Planned
-                      </strong>
-                    )}
-
-                  {' by '}
-
-                  <a href={`mailto:${user.email}`}>
-                    {user.name}
-                  </a>
-                </p>
-              </div>
-            )
-            : (
-              <div className="modal-card-body">
-                <p className="block has-text-danger" data-cy="modal-title">
-                  Something went wrong :(
-                </p>
-              </div>
-            )}
+          <TodoModalMessage
+            title={title}
+            completed={completed}
+            user={user}
+          />
         </div>
       )}
     </div>

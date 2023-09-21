@@ -54,7 +54,8 @@ export const App: React.FC = () => {
       .then((todoList) => {
         setTodosFromServer(todoList);
       })
-      .catch()
+      // eslint-disable-next-line
+      .catch((error) => console.warn(error))
       .finally(() => setIsLoading(false));
   }, []);
 

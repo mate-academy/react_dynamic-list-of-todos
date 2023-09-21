@@ -13,21 +13,8 @@ export const TodoFilter: React.FC<Props> = ({
   completionStatus,
   changeCompletionStatus,
 }) => {
-  const handleCompletionStatusChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    switch (event.target.value) {
-      case CompletionFilter.Completed:
-        changeCompletionStatus(CompletionFilter.Completed);
-        break;
-
-      case CompletionFilter.Active:
-        changeCompletionStatus(CompletionFilter.Active);
-        break;
-
-      default:
-        changeCompletionStatus(CompletionFilter.All);
-    }
+  const capitalizeFirstLetter = (string: string) => {
+    return string[0].toUpperCase() + string.slice(1);
   };
 
   return (
@@ -37,11 +24,15 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             value={completionStatus}
             data-cy="statusSelect"
-            onChange={handleCompletionStatusChange}
+            onChange={event => (
+              changeCompletionStatus(event.target.value as CompletionFilter))}
           >
             {Object.values(CompletionFilter).map(value => (
-              <option key={value} value={value}>
-                {value}
+              <option
+                key={value}
+                value={value}
+              >
+                {capitalizeFirstLetter(value)}
               </option>
             ))}
           </select>
