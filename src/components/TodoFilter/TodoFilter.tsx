@@ -4,6 +4,9 @@ import { TodoContext } from '../../context/ContextTodo';
 
 import { ETodoStatus, Todo } from '../../types/Todo';
 
+import '../../utils/custom-string-extensions';
+import styles from './TodoFilter.module.scss';
+
 interface ITodosQuery {
   inputField?: string;
   filteredBy?: ETodoStatus;
@@ -32,7 +35,7 @@ export function getPreparedTodos(todos: Todo[], {
         return preparedTodos.filter(({ completed }) => completed);
 
       default:
-        throw new Error('Invalid select status');
+        throw new Error('Invalid status selected.');
     }
   }
 
@@ -60,9 +63,9 @@ export const TodoFilter = () => {
             value={filteredBy}
             onChange={handleSelectStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(ETodoStatus).map(el => (
+              <option value={el}>{el.toCapitalize()}</option>
+            ))}
           </select>
         </span>
       </p>
@@ -82,7 +85,7 @@ export const TodoFilter = () => {
         </span>
 
         {inputField && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className={`icon is-right ${styles.deleteButton}`}>
             <button
               data-cy="clearSearchButton"
               type="button"

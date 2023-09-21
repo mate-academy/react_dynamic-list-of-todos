@@ -12,7 +12,7 @@ export const TodoModal: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const {
-    setIsOpenModal,
+    setIsModalOpen,
     selectedTodo,
     setSelectedTodo,
   } = useContext(TodoContext);
@@ -22,9 +22,9 @@ export const TodoModal: React.FC = () => {
       .then(user => setSelectedUser(user));
   }, []);
 
-  const handCloseModal = () => {
+  const handleCloseModal = () => {
     setSelectedTodo(null);
-    setIsOpenModal(false);
+    setIsModalOpen(false);
   };
 
   return (
@@ -48,7 +48,7 @@ export const TodoModal: React.FC = () => {
               className="delete"
               data-cy="modal-close"
               aria-label="delete button"
-              onClick={handCloseModal}
+              onClick={handleCloseModal}
             />
           </header>
 

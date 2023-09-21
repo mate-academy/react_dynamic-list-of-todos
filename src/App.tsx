@@ -21,7 +21,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 export const App: FC = () => {
   const {
     setTodos,
-    isOpenModal,
+    isModalOpen,
     todos,
     inputField,
     filteredBy,
@@ -32,6 +32,10 @@ export const App: FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.warn(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -40,7 +44,7 @@ export const App: FC = () => {
     filteredBy,
   }), [inputField, filteredBy, todos]);
 
-  const isShowTodoList = Boolean(preparedTodos.length) && !isLoading;
+  const isTodoListVisible = Boolean(preparedTodos.length) && !isLoading;
 
   return (
     <>
@@ -56,7 +60,7 @@ export const App: FC = () => {
             <div className="block">
               {isLoading && <Loader />}
 
-              {isShowTodoList && (
+              {isTodoListVisible && (
                 <TodoList todos={preparedTodos} />
               )}
             </div>
@@ -64,7 +68,7 @@ export const App: FC = () => {
         </div>
       </div>
 
-      {isOpenModal && (
+      {isModalOpen && (
         <TodoModal />
       )}
     </>

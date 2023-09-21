@@ -13,14 +13,14 @@ export const TodoItem: FC<TTodoItemProps> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const {
-    setIsOpenModal,
+    setIsModalOpen,
     setSelectedTodo,
     selectedTodo,
   } = useContext(TodoContext);
 
   const handleSelectTodo = (chosenTodo: Todo) => {
     setSelectedTodo(chosenTodo);
-    setIsOpenModal(true);
+    setIsModalOpen(true);
   };
 
   return (
