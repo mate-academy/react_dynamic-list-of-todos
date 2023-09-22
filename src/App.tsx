@@ -35,11 +35,9 @@ export const App: React.FC = () => {
     }
   }, [activeFilter, dataCollection]);
 
-  const filterTodosByQuery = (todoList: Todo[]) => {
-    return todoList.filter(todo => todo.title.toUpperCase().includes(query.toUpperCase()));
-  };
-
-  const visibleTodos = filterTodosByQuery(filteredByActiveFilter);
+  const filteredByQuery = useMemo(() => {
+    return filteredByActiveFilter.filter(todo => todo.title.toUpperCase().includes(query.toUpperCase()));
+  }, [query, filteredByActiveFilter]);
 
   if (error) {
     return (
@@ -66,7 +64,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading && <Loader />}
               <TodoList
-                todos={visibleTodos}
+                todos={filteredByQuery}
                 onSelectingTodo={setSelectedTodo}
               />
             </div>
