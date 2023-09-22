@@ -1,9 +1,9 @@
 import { Todo } from '../types/Todo';
 
 export enum FilterType {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
 }
 
 export function filterTodos(

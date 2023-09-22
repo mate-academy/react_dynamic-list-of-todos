@@ -26,10 +26,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
     getUser(todo.userId)
       .then(data => {
         setUser(data);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // eslint-disable-next-line no-console
         console.error(error);
-      }).finally(() => setIsLoading(false));
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (

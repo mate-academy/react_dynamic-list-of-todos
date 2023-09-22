@@ -14,7 +14,6 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [todoType, setTodoType] = useState(FilterType.All);
   const [query, setQuery] = useState('');
@@ -32,11 +31,7 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  useEffect(() => {
-    const filteredTodos = filterTodos(todos, todoType, query);
-
-    setSelectedTodos(filteredTodos);
-  }, [query, todoType, todos]);
+  const filteredTodos = filterTodos(todos, todoType, query);
 
   const handleSetActiveTodo = (activeId: number) => {
     if (todos !== null) {
@@ -66,9 +61,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {(isLoading)
-                ? <Loader />
-                : <TodoList todos={selectedTodos} activeTodoId={activeTodo?.id} onSetActiveTodo={handleSetActiveTodo} />}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  activeTodoId={activeTodo?.id}
+                  onSetActiveTodo={handleSetActiveTodo}
+                />
+              )}
 
             </div>
           </div>
