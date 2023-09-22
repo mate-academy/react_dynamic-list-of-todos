@@ -10,13 +10,14 @@ export function filterTodos({ filter, searchText, todos }: Args) {
   const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case 'all':
-        return todo.title.includes(searchText.toLowerCase().trim());
+        return todo.title.toLowerCase()
+          .includes(searchText.toLowerCase().trim());
       case 'completed':
         return todo.completed
-        && todo.title.includes(searchText.toLowerCase().trim());
+        && todo.title.toLowerCase().includes(searchText.toLowerCase().trim());
       case 'active':
         return !todo.completed
-        && todo.title.includes(searchText.toLowerCase().trim());
+        && todo.title.toLowerCase().includes(searchText.toLowerCase().trim());
       default:
         return true;
     }
