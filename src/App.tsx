@@ -70,6 +70,8 @@ export const App: React.FC = () => {
     setSelectedOption(newOption);
   };
 
+  // const isModal = () => selectedTodo &&
+
   return (
     <>
       <div className="section">

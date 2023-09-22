@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  onHandleModal: (todo: Todo) => void;
+  handleModal: (todo: Todo) => void;
   selectedTodo: Todo | undefined,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  onHandleModal = () => {},
+  handleModal: onHandleModal,
   selectedTodo,
 }) => {
   return (
