@@ -42,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({
           >
             {Object.values(FilterType).map((filterType) => (
               <option key={filterType} value={filterType}>
-                {filterType}
+                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
               </option>
             ))}
           </select>
