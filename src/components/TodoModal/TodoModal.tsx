@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { useFetch } from '../../hooks/useFetch';
+import { ErrorModal } from '../ErrorModal';
 
 interface Props {
   selectedTodo: Todo
@@ -12,31 +13,28 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onModalClose }: Props) => {
-  // const [isLoading, setIsLoading] = useState(true);
+  const { dataCollection, isLoading, error } = useFetch<User>(async () => getUser(selectedTodo.userId));
   const [user, setUser] = useState<User | null>(null);
-  const { dataCollection, isLoading } = useFetch<User>(async () => getUser(selectedTodo.id));
 
-  console.log(dataCollection);
+  useEffect(() => {
+    setUser(dataCollection);
 
-  // useEffect(() => {
-  //   const loadUsers = async () => {
-  //     if (selectedTodo) {
-  //       setIsLoading(true);
-  //       getUser(selectedTodo.userId)
-  //         .then(data => setUser(data))
-  //         .finally(() => setIsLoading(false));
-  //     }
-  //   };
+    return () => {
+      setUser(null);
+    };
+  }, [dataCollection]);
 
-  //   loadUsers();
-  // }, []);
-
+  if (error) {
+    return (
+      <ErrorModal error={error.message} />
+    );
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {isLoading && user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -76,7 +74,6 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onModalClose }: Props
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
                 {user?.name}
               </a>
             </p>

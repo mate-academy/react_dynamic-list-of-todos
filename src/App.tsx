@@ -10,21 +10,25 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { useFetch } from './hooks/useFetch';
+import { ErrorModal } from './components/ErrorModal';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
-  const [activeFilter, setActiveFilter] = useState<string>('All');
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const { dataCollection, isLoading } = useFetch(getTodos);
+  const { dataCollection, isLoading, error } = useFetch<Todo[]>(getTodos);
 
   const filterTodosByActiveFilter = () => {
+    // eslint-disable-next-line no-console
+    console.log('filterTodosByActiveFilter');
     if (dataCollection) {
       switch (activeFilter) {
-        case 'Completed':
+        case 'completed':
           return dataCollection?.filter(todo => todo.completed);
-        case 'Active':
+        case 'active':
           return dataCollection?.filter(todo => !todo.completed);
-        case 'All':
+        case 'all':
         default:
           return dataCollection;
       }
@@ -39,6 +43,12 @@ export const App: React.FC = () => {
 
   const filteredTodosByActiveFilter = filterTodosByActiveFilter();
   const visibleTodos = filterTodosByQuery(filteredTodosByActiveFilter);
+
+  if (error) {
+    return (
+      <ErrorModal error={error.message} />
+    );
+  }
 
   return (
     <>
