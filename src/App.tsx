@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -15,34 +15,31 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
-  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+  const [activeFilter, setActiveFilter] = useState<Filter>('All');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const { dataCollection, isLoading, error } = useFetch<Todo[]>(getTodos);
 
-  const filterTodosByActiveFilter = () => {
-    // eslint-disable-next-line no-console
-    console.log('filterTodosByActiveFilter');
+  const filteredByActiveFilter = useMemo(() => {
     if (dataCollection) {
       switch (activeFilter) {
-        case 'completed':
+        case 'Completed':
           return dataCollection?.filter(todo => todo.completed);
-        case 'active':
+        case 'Active':
           return dataCollection?.filter(todo => !todo.completed);
-        case 'all':
+        case 'All':
         default:
           return dataCollection;
       }
     } else {
       return [];
     }
-  };
+  }, [activeFilter, dataCollection]);
 
   const filterTodosByQuery = (todoList: Todo[]) => {
     return todoList.filter(todo => todo.title.toUpperCase().includes(query.toUpperCase()));
   };
 
-  const filteredTodosByActiveFilter = filterTodosByActiveFilter();
-  const visibleTodos = filterTodosByQuery(filteredTodosByActiveFilter);
+  const visibleTodos = filterTodosByQuery(filteredByActiveFilter);
 
   if (error) {
     return (
