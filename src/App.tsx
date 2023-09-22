@@ -10,22 +10,33 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { FilterType, filterTodos } from './utils/filter';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
-  const [todoType, setTodoType] = useState(FilterType.ALL);
+  const [todoType, setTodoType] = useState(FilterType.All);
   const [query, setQuery] = useState('');
-
-  const fetchData = async () => {
-    const filteredTodos = await filterTodos(todoType, query);
-
-    setTodos(filteredTodos);
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, [query, todoType]);
+    setIsLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const filteredTodos = filterTodos(todos, todoType, query);
+
+    setSelectedTodos(filteredTodos);
+  }, [query, todoType, todos]);
 
   const handleSetActiveTodo = (activeId: number) => {
     if (todos !== null) {
@@ -55,16 +66,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos
+              {(isLoading)
                 ? <Loader />
-                : <TodoList todos={todos} activeTodoId={activeTodo?.id} onActiveTodo={handleSetActiveTodo} />}
+                : <TodoList todos={selectedTodos} activeTodoId={activeTodo?.id} onSetActiveTodo={handleSetActiveTodo} />}
 
             </div>
           </div>
         </div>
       </div>
       {activeTodo && (
-        <TodoModal todo={activeTodo} onClose={handleClose} />
+        <TodoModal todo={activeTodo} onCloseModal={handleClose} />
       )}
 
     </>

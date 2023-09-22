@@ -1,32 +1,32 @@
-import { getTodos } from '../api';
 import { Todo } from '../types/Todo';
 
 export enum FilterType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
-export async function filterTodos(
+export function filterTodos(
+  todos: Todo[],
   filterType: FilterType,
   query: string,
 ) {
-  let todosFromServer = await getTodos();
+  let todosFromServer = [...todos];
 
   switch (filterType) {
-    case FilterType.ALL:
+    case FilterType.All:
       break;
-    case FilterType.ACTIVE:
+    case FilterType.Active:
       todosFromServer = todosFromServer.filter((todo: Todo) => !todo.completed);
       break;
 
-    case FilterType.COMPLETED:
+    case FilterType.Completed:
       todosFromServer = todosFromServer.filter((todo: Todo) => todo.completed);
       break;
     default: break;
   }
 
-  if (query.length > 0) {
+  if (query) {
     todosFromServer = todosFromServer
       .filter((todo: Todo) => todo.title.toLowerCase().includes(query));
   }

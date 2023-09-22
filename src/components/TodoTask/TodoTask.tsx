@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo,
   activeTodoId?: number | null,
-  onActiveTodo: (activeId: number) => void
+  onSetActiveTodo: (activeId: number) => void
 };
 
 export const TodoTask: React.FC<Props> = ({
   todo,
   activeTodoId,
-  onActiveTodo,
+  onSetActiveTodo,
 }) => {
   const {
     id,
@@ -18,14 +18,14 @@ export const TodoTask: React.FC<Props> = ({
     title,
   } = todo;
 
-  const isTodoActive = (todoId: number) => activeTodoId === todoId;
+  const isTodoActive = activeTodoId === id;
 
   return (
     <tr
       data-cy="todo"
       // has-background-info-light
       className={classNames({
-        'has-background-info-light': isTodoActive(id),
+        'has-background-info-light': isTodoActive,
       })}
     >
       <td className="is-vcentered">{id}</td>
@@ -50,13 +50,13 @@ export const TodoTask: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => onActiveTodo(id)}
+          onClick={() => onSetActiveTodo(id)}
         >
           <span className="icon">
             <i
               className={classNames({
-                'far fa-eye': !isTodoActive(id),
-                'far fa-eye-slash': isTodoActive(id),
+                'far fa-eye': !isTodoActive,
+                'far fa-eye-slash': isTodoActive,
               })}
             />
           </span>

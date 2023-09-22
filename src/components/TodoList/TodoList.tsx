@@ -5,13 +5,13 @@ import { TodoTask } from '../TodoTask/TodoTask';
 type Props = {
   todos: Todo[],
   activeTodoId?: number | null,
-  onActiveTodo: (activeId: number) => void
+  onSetActiveTodo: (activeId: number) => void
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   activeTodoId,
-  onActiveTodo,
+  onSetActiveTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
             key={todo.id}
             todo={todo}
             activeTodoId={activeTodoId}
-            onActiveTodo={onActiveTodo}
+            onSetActiveTodo={onSetActiveTodo}
           />
         ))}
       </tbody>

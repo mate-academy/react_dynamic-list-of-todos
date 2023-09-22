@@ -8,28 +8,35 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo,
-  onClose: () => void
+  onCloseModal: () => void
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
   const {
     id,
     title,
     completed,
   } = todo;
   const [user, setUser] = useState<User | null>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getUser(todo.userId).then(data => {
-      setUser(data);
-    });
+    setIsLoading(true);
+
+    getUser(todo.userId)
+      .then(data => {
+        setUser(data);
+      }).catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }).finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -45,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             <button
               type="button"
               className="delete"
-              onClick={onClose}
+              onClick={onCloseModal}
               data-cy="modal-close"
             />
           </header>
@@ -68,8 +75,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

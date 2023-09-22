@@ -40,9 +40,12 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={(event) => onChangeType(event.target.value as FilterType)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(FilterType).map((filterType) => (
+              <option key={filterType} value={filterType}>
+                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+              </option>
+            ))}
+
           </select>
         </span>
       </p>
