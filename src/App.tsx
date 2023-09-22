@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { useTodos } from './useTodos';
 import { Todo } from './types/Todo';
+import { useFilteredTodos } from './useFilteredTodos';
 
 export const App: React.FC = () => {
   const { todos, isLoading } = useTodos();
@@ -16,21 +17,7 @@ export const App: React.FC = () => {
   const [titleFilter, setTitleFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
-  const displayTodos = useMemo(() => todos.filter(todo => {
-    if (!todo.title.toLowerCase().includes(titleFilter.toLowerCase().trim())) {
-      return false;
-    }
-
-    if (statusFilter === 'active' && todo.completed) {
-      return false;
-    }
-
-    if (statusFilter === 'completed' && !todo.completed) {
-      return false;
-    }
-
-    return true;
-  }), [titleFilter, statusFilter, todos]);
+  const displayTodos = useFilteredTodos(todos, titleFilter, statusFilter);
 
   return (
     <>
@@ -49,8 +36,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={displayTodos}
                   handleSelectTodo={setSelectedTodo}
@@ -62,7 +50,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {
-        selectedTodo && (
+        selectedTodo !== null && (
           <TodoModal
             selectedTodo={selectedTodo}
             handleClose={() => setSelectedTodo(null)}

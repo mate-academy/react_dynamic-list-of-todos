@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader } from '../Loader';
-import { useUser } from './useUser';
+import { useUser } from '../../useUser';
 import { Todo } from '../../types/Todo';
 
 type TodoModalProps = {
@@ -48,11 +48,8 @@ export const TodoModal: React.FC<TodoModalProps> = ({
             <p className="block" data-cy="modal-user">
               {
                 selectedTodo.completed
-                && <strong className="has-text-success">Done</strong>
-              }
-              {
-                !selectedTodo.completed
-                && <strong className="has-text-danger">Planned</strong>
+                  ? <strong className="has-text-success">Done</strong>
+                  : <strong className="has-text-danger">Planned</strong>
               }
 
               {' by '}

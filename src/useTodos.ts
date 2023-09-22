@@ -10,7 +10,12 @@ export const useTodos = () => {
     getTodos().then((data) => {
       setTodos(data);
       setIsLoading(false);
-    });
+    })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error of fething data:', error);
+        setIsLoading(false);
+      });
   }, []);
 
   return { todos, isLoading };
