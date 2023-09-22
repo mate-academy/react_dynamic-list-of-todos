@@ -10,32 +10,30 @@ import { ErrorText } from '../ErrorText';
 
 type Props = {
   activeTodo: Todo | null,
-  onModalToggle: () => void,
   onActiveTodoSet: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   activeTodo,
-  onModalToggle,
   onActiveTodoSet,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const userId = activeTodo ? activeTodo.userId : null;
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useLayoutEffect(() => {
     if (!userId) {
       return;
     }
 
-    setError(false);
+    setIsError(false);
 
     setIsLoading(true);
 
     getUser(userId)
       .then(setUser)
-      .catch(() => setError(true))
+      .catch(() => setIsError(true))
       .finally(() => {
         setIsLoading(false);
       });
@@ -43,7 +41,6 @@ export const TodoModal: React.FC<Props> = ({
 
   const handleCloseModal = () => {
     onActiveTodoSet(null);
-    onModalToggle();
     setUser(null);
   };
 
@@ -72,7 +69,8 @@ export const TodoModal: React.FC<Props> = ({
             />
           </header>
 
-          {error ? (<ErrorText />
+          {isError ? (
+            <ErrorText />
           ) : (
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">

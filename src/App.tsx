@@ -22,7 +22,6 @@ const initialFilterValue: FilterType = {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(initialFilterValue);
   const [error, setError] = useState(false);
@@ -30,7 +29,11 @@ export const App: React.FC = () => {
   const filteredTodos = getFilteredTodos(todos, filter);
 
   const handleModalToggle = () => {
-    setIsVisibleModal(prev => !prev);
+    if (activeTodo) {
+      setActiveTodo(null);
+    }
+
+    setActiveTodo(activeTodo);
   };
 
   const handleActiveTodoSet = (todo: Todo | null) => {
@@ -104,10 +107,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isVisibleModal && (
+      {activeTodo && (
         <TodoModal
           activeTodo={activeTodo}
-          onModalToggle={handleModalToggle}
           onActiveTodoSet={handleActiveTodoSet}
         />
       )}

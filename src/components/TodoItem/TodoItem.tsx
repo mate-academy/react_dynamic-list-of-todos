@@ -19,12 +19,13 @@ export const TodoItem: React.FC<Props> = ({
     title,
     completed,
   } = todo;
+  const isSelectedTodo = id === activeTodo?.id;
 
   return (
     <tr
       data-cy="todo"
       className={classNames({
-        'has-background-info-light': id === activeTodo?.id,
+        'has-background-info-light': isSelectedTodo,
       })}
     >
       <td className="is-vcentered">
@@ -61,7 +62,7 @@ export const TodoItem: React.FC<Props> = ({
             <i
               className={classNames('far', {
                 'fa-eye': id !== activeTodo?.id,
-                'fa-eye-slash': id === activeTodo?.id,
+                'fa-eye-slash': isSelectedTodo,
               })}
             />
           </span>

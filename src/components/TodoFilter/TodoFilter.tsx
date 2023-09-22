@@ -23,9 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
           value={filter.filterByStatus}
           onChange={onFilterSet}
         >
-          {(Object.keys(FilterOptions) as (keyof typeof FilterOptions)[])
-            .map((key) => (
-              <option value={FilterOptions[key]} key={key}>
+          {(Object.entries(FilterOptions))
+            .map(([key, value]) => (
+              <option value={value} key={key}>
                 {key}
               </option>
             ))}
