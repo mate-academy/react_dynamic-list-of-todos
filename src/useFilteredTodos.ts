@@ -10,7 +10,8 @@ export function useFilteredTodos(
   const filteredTodos = useMemo(() => {
     const filtered = todos.filter((todo) => {
       const isTitle = todo.title.toLowerCase().includes(
-        titleFilter.toLowerCase().trim());
+        titleFilter.toLowerCase().trim(),
+      );
 
       if (!isTitle) {
         return false;
