@@ -1,8 +1,8 @@
-import { Todo } from '../../types/Todo';
+import { Filter, Todo } from '../../types/Todo';
 
 type Args = {
   todos: Todo[],
-  filter: string,
+  filter: Filter,
   searchText: string,
 };
 
@@ -10,11 +10,13 @@ export function filterTodos({ filter, searchText, todos }: Args) {
   const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case 'all':
-        return todo.title.includes(searchText);
+        return todo.title.includes(searchText.toLowerCase().trim());
       case 'completed':
-        return todo.completed && todo.title.includes(searchText);
+        return todo.completed
+        && todo.title.includes(searchText.toLowerCase().trim());
       case 'active':
-        return !todo.completed && todo.title.includes(searchText);
+        return !todo.completed
+        && todo.title.includes(searchText.toLowerCase().trim());
       default:
         return true;
     }

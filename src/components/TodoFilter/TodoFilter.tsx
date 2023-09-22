@@ -2,13 +2,11 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Filter } from '../../types/Todo';
 
 type Props = {
-  filter: 'all' | 'completed' | 'active',
+  filter: Filter,
   setFilter: Dispatch<SetStateAction<Filter>>;
   setSearchText: Dispatch<SetStateAction<string>>,
   searchText: string,
 };
-
-// eslint-disable-next-line max-len
 export const TodoFilter: React.FC<Props> = ({
   filter, setFilter, setSearchText, searchText,
 }) => {
@@ -21,7 +19,6 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            // eslint-disable-next-line max-len
             onChange={(e) => setFilter(e.target.value as Filter)}
           >
             <option value="all">All</option>
@@ -40,15 +37,18 @@ export const TodoFilter: React.FC<Props> = ({
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value);
-            setIsClear(true);
+            if (e.target.value !== '') {
+              setIsClear(true);
+            } else {
+              setIsClear(false);
+            }
           }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right">
           {isClear && (
             <button
               data-cy="clearSearchButton"

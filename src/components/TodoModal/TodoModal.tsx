@@ -11,11 +11,13 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  setHandleClose: Dispatch<SetStateAction<boolean>>,
   todo: Todo | null;
+  setSelectedTodo: Dispatch<SetStateAction<Todo | null>>,
 };
 
-export const TodoModal: React.FC<Props> = ({ setHandleClose, todo }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo, setSelectedTodo,
+}) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
@@ -25,6 +27,8 @@ export const TodoModal: React.FC<Props> = ({ setHandleClose, todo }) => {
         .then((userData) => {
           setUser(userData);
           setLoading(false);
+        }).catch(() => {
+          throw new Error('error modal');
         });
     } else {
       setLoading(false);
@@ -48,12 +52,12 @@ export const TodoModal: React.FC<Props> = ({ setHandleClose, todo }) => {
               {todo?.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setHandleClose(false)}
+              aria-label="close-button"
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 

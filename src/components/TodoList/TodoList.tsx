@@ -2,35 +2,21 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { filterTodos } from '../filteredTodos/filteredTodos';
 
 type Props = {
-  todos: Todo[],
-  setHandleClose: Dispatch<SetStateAction<boolean>>,
-  handleClose: boolean,
-  setSelectedTodo: Dispatch<SetStateAction<Todo | null>>,
+  filteredTodos: Todo[],
   selectedTodo: Todo | null,
-  filter: string,
-  searchText: string,
+  setSelectedTodo: Dispatch<SetStateAction<Todo | null>>,
 };
 
 export const TodoList: React.FC<Props> = ({
-  setHandleClose,
-  handleClose,
   setSelectedTodo,
   selectedTodo,
-  filter,
-  searchText,
-  todos,
+  filteredTodos,
 }) => {
-  const filteredTodos = filterTodos({ todos, filter, searchText });
-
-  // eslint-disable-next-line no-console
-  console.log(selectedTodo);
-
   function handleClick(todo: Todo) {
-    setHandleClose(true);
     setSelectedTodo(todo);
   }
 
@@ -58,8 +44,7 @@ export const TodoList: React.FC<Props> = ({
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              {todo.completed === true
-              && (
+              {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -67,11 +52,8 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  (todo.completed === true)
-                    ? 'has-text-success'
-                    : 'has-text-danger'
-                }
+                className={todo.completed
+                  ? 'has-text-success' : 'has-text-danger'}
               >
                 {todo.title}
               </p>
@@ -84,11 +66,10 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  <i className={
-                    (!handleClose)
-                      ? 'far fa-eye'
-                      : 'far fa-eye-slash'
-                  }
+                  <i className={cn('far', {
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
+                  })}
                   />
                 </span>
               </button>

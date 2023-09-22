@@ -9,17 +9,21 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo, Filter } from './types/Todo';
 import { getTodos } from './api';
+import { filterTodos } from './components/filteredTodos/filteredTodos';
 
 export const App: React.FC = () => {
-  const [handleClose, setHandleClose] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [searchText, setSearchText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const filteredTodos = filterTodos({ todos, filter, searchText });
+
   useEffect(() => {
     getTodos().then(json => {
       setTodos(json);
+    }).catch(() => {
+      throw new Error('error');
     });
   }, []);
 
@@ -36,14 +40,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               {(todos?.length > 0)
-                ? <TodoList todos={todos} searchText={searchText} filter={filter} handleClose={handleClose} setHandleClose={setHandleClose} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+                ? <TodoList filteredTodos={filteredTodos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
                 : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      {handleClose && <TodoModal setHandleClose={setHandleClose} todo={selectedTodo} />}
+      {selectedTodo !== null && <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
     </>
   );
 };
