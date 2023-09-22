@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import './TodoList.scss';
 
 type Props = {
   todos: Todo[],
@@ -10,7 +11,7 @@ type Props = {
 
 export const TodoList: React.FC<Props>
   = ({ todos, handleSelectedTodo, selectedTodo }) => (
-    <table style={{ width: '100%' }}>
+    <table>
       <thead>
         <tr>
           <th>#</th>

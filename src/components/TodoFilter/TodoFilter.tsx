@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Filter } from '../../types/Filter';
+import './TodoFilter.scss';
 
 type TodoFilterProps = {
   onFilter: (status: Filter) => void,
@@ -10,21 +11,14 @@ type TodoFilterProps = {
 export const TodoFilter
   = ({ onFilter, onTitleFilter, onClearFilter } : TodoFilterProps) => {
     const [query, setQuery] = useState<string>('');
-    const [filter, setFilter] = useState<string>('all');
+    const [filter, setFilter] = useState<Filter>('all');
 
     const handleSelect: React.ChangeEventHandler<HTMLSelectElement>
     = (event) => {
-      const selectedValue = event.target.value;
-      let filterValue: Filter = 'all';
-
-      if (selectedValue === 'active') {
-        filterValue = 'active';
-      } else if (selectedValue === 'completed') {
-        filterValue = 'completed';
-      }
+      const selectedValue = event.target.value as Filter;
 
       setFilter(selectedValue);
-      onFilter(filterValue);
+      onFilter(selectedValue);
     };
 
     const handleInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -69,8 +63,7 @@ export const TodoFilter
             <i className="fas fa-magnifying-glass" />
           </span>
 
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             {query && (
               <button
                 data-cy="clearSearchButton"
