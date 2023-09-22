@@ -62,7 +62,7 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
-  const filterCallBack = (newQuery: string) => {
+  const handleFilterCallBack = (newQuery: string) => {
     setQuery(newQuery);
   };
 
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onChangeQuery={filterCallBack}
+                onChangeQuery={handleFilterCallBack}
                 onChangeSelect={onChangeSelect}
                 query={query}
               />
