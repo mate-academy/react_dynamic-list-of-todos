@@ -5,7 +5,7 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  userId: number
+  userId: number | null
   todo: Todo | null
   setShowModal: (show: false) => void;
   setSelectedTodo: (todo: Todo | null) => void
@@ -19,11 +19,14 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(userId)
-      .then((response) => {
-        setUserData(response);
-        setIsLoading(false);
-      });
+
+    if (userId !== null) {
+      getUser(userId)
+        .then((response) => {
+          setUserData(response);
+          setIsLoading(false);
+        });
+    }
   }, [userId]);
 
   return (

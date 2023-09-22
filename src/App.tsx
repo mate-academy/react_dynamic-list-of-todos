@@ -8,18 +8,10 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterOptions } from './types/FilterOptions';
 
-export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setisLoading] = useState<boolean>(true);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [userId, setUserId] = useState<number | null>(null);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [query, setQuery] = useState<string>('');
-  const [filterOption, setFilterOption] = useState<string>('all');
-
-  const handleFilter
-  = (todosArray: Todo[], text: string, option: string): Todo[] => {
+const handleFilter
+  = (todosArray: Todo[], text: string, option: FilterOptions): Todo[] => {
     return todosArray.filter((todo) => {
       const lowerCaseTitle = todo.title.toLowerCase().trim();
 
@@ -40,6 +32,15 @@ export const App: React.FC = () => {
       return false;
     });
   };
+
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setisLoading] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState<string>('');
+  const [filterOption, setFilterOption] = useState<FilterOptions>('all');
 
   useEffect(() => {
     getTodos()
@@ -86,7 +87,7 @@ export const App: React.FC = () => {
 
       {showModal && (
         <TodoModal
-          userId={userId as number}
+          userId={userId}
           todo={selectedTodo}
           setShowModal={setShowModal}
           setSelectedTodo={setSelectedTodo}
