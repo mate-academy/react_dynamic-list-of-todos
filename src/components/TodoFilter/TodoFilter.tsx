@@ -12,8 +12,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<FilterOptions>('all');
 
-  // eslint-disable-next-line max-len
-  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    event,
+  ) => {
     const { value } = event.target;
 
     setSelectedOption(value as FilterOptions);
@@ -53,13 +54,13 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {typedTitle.length > 0
             && (
-              // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
                 title="delete"
                 onClick={() => setTypedTitle('')}
+                aria-label="clearSearchButton"
               />
             )}
 

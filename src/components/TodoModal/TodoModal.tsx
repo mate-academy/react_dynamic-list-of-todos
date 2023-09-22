@@ -15,15 +15,19 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   setSelectedTodoId, selectedTodoId, todos,
 }) => {
   const [todoSelectedUser, setTodoSelectedUser] = useState<User | null>(null);
-  // eslint-disable-next-line max-len
-  const todoSelected: Todo | null = todos.find(todo => todo.id === selectedTodoId)
-  || null;
+  const todoSelected: Todo | null = todos.find(
+    todo => todo.id === selectedTodoId,
+  ) || null;
 
   useEffect(() => {
     if (todoSelected) {
       getUser(todoSelected?.userId)
         .then((data) => {
           setTodoSelectedUser(data);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Eroor while fetching todos:', error);
         });
     }
   }, []);
@@ -46,13 +50,13 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
             {todoSelected
             && (
-              // eslint-disable-next-line jsx-a11y/control-has-associated-label
               <button
                 type="button"
                 className="delete"
                 data-cy="modal-close"
                 title="close"
                 onClick={() => setSelectedTodoId(0)}
+                aria-label="closeButton"
               />
             )}
 

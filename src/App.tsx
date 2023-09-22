@@ -21,6 +21,10 @@ export const App: React.FC = () => {
     getTodos()
       .then((data) => {
         setTodos(data);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Eroor while fetching todos:', error);
       });
   }, []);
 
@@ -28,9 +32,9 @@ export const App: React.FC = () => {
     setFilteredOption(selected);
   };
 
-  const visibleTodosResult = useMemo(() => {
-    return getVisibleTodos(todos, filteredOption, typedTitle);
-  }, [todos, filteredOption, typedTitle]);
+  const visibleTodosResult = useMemo(() => getVisibleTodos(todos,
+    filteredOption, typedTitle),
+  [todos, filteredOption, typedTitle]);
 
   return (
     <>
