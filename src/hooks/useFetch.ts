@@ -7,7 +7,6 @@ export const useFetch = <T>(callback:() => Promise<T>) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       try {
         const response = await callback();
 
@@ -19,6 +18,7 @@ export const useFetch = <T>(callback:() => Promise<T>) => {
       }
     };
 
+    setIsLoading(true);
     fetchData();
   }, []);
 
