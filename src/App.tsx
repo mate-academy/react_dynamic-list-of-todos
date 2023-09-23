@@ -48,10 +48,12 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then((newTodos) => {
         setTodos(newTodos);
-        setIsLoading(true);
+        setIsLoading(false);
       })
       .catch(() => setErrorMessage('Try again later'));
   }, []);
@@ -70,7 +72,7 @@ export const App: React.FC = () => {
     setSelectedOption(newOption);
   };
 
-  // const isModal = () => selectedTodo &&
+  const isShowModal = selectedTodo && !errorMessage && !isLoading;
 
   return (
     <>
@@ -90,11 +92,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoading && (
+              {isLoading && (
                 <Loader />
               )}
 
-              {isLoading && !errorMessage && (
+              {!isLoading && !errorMessage && (
                 <TodoList
                   todos={visibleTodos}
                   onHandleModal={handleModal}
@@ -106,9 +108,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-        && !errorMessage
-        && isLoading && (
+      {isShowModal && (
         <TodoModal
           onHandleModal={handleModal}
           selectedTodo={selectedTodo}

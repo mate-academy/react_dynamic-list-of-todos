@@ -16,11 +16,17 @@ export const TodoModal: React.FC<Props> = ({
   setErrorMessage,
 }) => {
   const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (selectedTodo) {
       getUser(selectedTodo.userId)
-        .then(setUser)
+        .then((newUser) => {
+          setUser(newUser);
+          setIsLoading(false);
+        })
         .catch(() => setErrorMessage('Try again later'));
     }
   }, []);
@@ -32,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
     >
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

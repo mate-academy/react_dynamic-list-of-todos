@@ -41,7 +41,6 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             id="select"
             value={selectedOption}
-            // value={query}
             onChange={onChangeOption}
           >
             <option value={TodoStatus.All}>All</option>
