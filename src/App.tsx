@@ -84,6 +84,8 @@ export const App: React.FC = () => {
                 onChangeQuery={handleFilterCallBack}
                 onChangeSelect={onChangeSelect}
                 query={query}
+                selectedOption={selectedOption}
+                onSetSelectedOption={setSelectedOption}
               />
             </div>
 

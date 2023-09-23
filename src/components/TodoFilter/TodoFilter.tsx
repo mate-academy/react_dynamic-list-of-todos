@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TodoStatus } from '../../types/TodoStatus ';
 
 type Props = {
   onChangeQuery: (query: string) => void,
   onChangeSelect: (event: string) => void,
+  onSetSelectedOption: React.Dispatch<React.SetStateAction<string>>
   query: string,
+  selectedOption: string,
 
 };
 
@@ -12,9 +14,9 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeQuery = () => {},
   onChangeSelect = () => {},
   query,
+  selectedOption,
+  onSetSelectedOption,
 }) => {
-  const [selectOption, setSelectOption] = useState<string>();
-
   function onChangeSetQuery(event: React.ChangeEvent<HTMLInputElement>) {
     onChangeQuery(event.target.value);
   }
@@ -25,7 +27,7 @@ export const TodoFilter: React.FC<Props> = ({
 
   const onChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectOption(event.target.value);
+    onSetSelectedOption(event.target.value);
     onChangeSelect(event.target.value);
   };
 
@@ -38,7 +40,8 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             id="select"
-            value={selectOption}
+            value={selectedOption}
+            // value={query}
             onChange={onChangeOption}
           >
             <option value={TodoStatus.All}>All</option>
