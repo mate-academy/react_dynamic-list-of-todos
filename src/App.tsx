@@ -62,11 +62,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={filteredByQuery}
-                onSelectingTodo={setSelectedTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredByQuery}
+                  onSelectingTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>

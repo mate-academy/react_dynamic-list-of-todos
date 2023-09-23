@@ -29,8 +29,6 @@ export const ErrorModal = ({ error }: Props) => {
       <strong>Something went wrong!</strong>
 
       <small>
-        Error message:
-        {' '}
         {error}
       </small>
     </StyledDiv>
