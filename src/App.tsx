@@ -68,7 +68,7 @@ export const App: React.FC = () => {
     setQuery(newQuery);
   };
 
-  const onChangeSelect = (newOption: string) => {
+  const handleChangeSelect = (newOption: string) => {
     setSelectedOption(newOption);
   };
 
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onChangeQuery={handleFilterCallBack}
-                onChangeSelect={onChangeSelect}
+                onChangeSelect={handleChangeSelect}
                 query={query}
                 selectedOption={selectedOption}
                 onSetSelectedOption={setSelectedOption}

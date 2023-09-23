@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => (
           <TodoItem
             todo={todo}
-            handleModal={onHandleModal}
+            onHandleModal={onHandleModal}
             selectedTodo={selectedTodo}
           />
         ))}
