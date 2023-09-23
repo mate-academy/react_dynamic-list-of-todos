@@ -17,13 +17,11 @@ export const TodoFilter: React.FC<Props> = ({
   selectedOption,
   onSetSelectedOption,
 }) => {
-  function onChangeSetQuery(event: React.ChangeEvent<HTMLInputElement>) {
+  const onChangeSetQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeQuery(event.target.value);
-  }
+  };
 
-  function removeQuery() {
-    onChangeQuery('');
-  }
+  const removeQuery = () => onChangeQuery('');
 
   const onChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
