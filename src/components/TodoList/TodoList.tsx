@@ -28,50 +28,54 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(todo => (
-        <tr
-          data-cy="todo"
-          className={classNames({
-            'has-background-info-light': selectedTodo?.id === todo.id,
-          })}
-          key={todo.id}
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expended">
-            <p className={classNames({
-              'has-text-danger': todo.completed === false,
-              'has-text-success': todo.completed,
+      {todos.map(todo => {
+        const isSelectedId = selectedTodo?.id === todo.id;
+
+        return (
+          <tr
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': isSelectedId,
             })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => setSelectedTodo(todo)}
-            >
-              <span className="icon">
-                <i
-                  className={classNames('far', {
-                    'fa-eye': todo.id !== selectedTodo?.id,
-                    'fa-eye-slash': todo.id === selectedTodo?.id,
-                  })}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
-      ))}
+            key={todo.id}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expended">
+              <p className={classNames({
+                'has-text-danger': !todo.completed,
+                'has-text-success': todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => setSelectedTodo(todo)}
+              >
+                <span className="icon">
+                  <i
+                    className={classNames('far', {
+                      'fa-eye': !isSelectedId,
+                      'fa-eye-slash': isSelectedId,
+                    })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        );
+      })}
     </tbody>
   </table>
 );

@@ -5,8 +5,8 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 type Props = {
-  selectedTodo: Todo | null;
-  setSelectedTodo: (value: Todo | null) => void;
+  selectedTodo: Todo;
+  setSelectedTodo: (value: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -14,21 +14,25 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (selectedTodo) {
-      getUser(selectedTodo.userId)
-        .then(setSelectedUser)
-        .finally(() => setLoading(false));
-    }
+    setIsLoading(true);
+
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .catch(error => {
+      // eslint-disable-next-line no-console
+        console.warn(error);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && (!selectedTodo || !selectedUser) ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

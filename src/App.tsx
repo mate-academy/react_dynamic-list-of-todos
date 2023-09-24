@@ -21,15 +21,15 @@ function getVisibleTodos(todos: Todo[], query: string, filter: string) {
   }
 
   switch (filter) {
-    case Filter.ALL:
-    default:
-      return preparedTodos;
-
     case Filter.COMPLETED:
       return preparedTodos.filter(todo => todo.completed);
 
     case Filter.ACTIVE:
-      return preparedTodos.filter(todo => todo.completed === false);
+      return preparedTodos.filter(todo => !todo.completed);
+
+    case Filter.ALL:
+    default:
+      return preparedTodos;
   }
 }
 
@@ -44,6 +44,10 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(error => {
+      // eslint-disable-next-line no-console
+        console.warn(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -68,15 +72,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading
-                ? (<Loader />
-                ) : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-                  />
-                )}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
