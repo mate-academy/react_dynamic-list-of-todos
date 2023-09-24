@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,54 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { TodoStatus } from './types/Filter';
+import { getTodos } from './api';
+
+function getVisibleTodos(todos: Todo[], query: string, selectedStatus: TodoStatus) {
+  let preparedTodos = [...todos];
+  const normalizedQuery = query.toLowerCase().trim();
+
+  if (query) {
+    preparedTodos = preparedTodos
+      .filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
+  }
+
+  switch (selectedStatus) {
+    case TodoStatus.Completed:
+      return preparedTodos.filter(todo => todo.completed);
+
+    case TodoStatus.Active:
+      return preparedTodos.filter(todo => !todo.completed);
+
+    case TodoStatus.All:
+    default:
+      return preparedTodos;
+  }
+}
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<TodoStatus>(TodoStatus.All);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(error => {
+      // eslint-disable-next-line no-console
+        console.warn(error);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, query, selectedStatus)
+  ), [todos, query, selectedStatus]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +63,35 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                selectedStatus={selectedStatus}
+                setSelectedStatus={setSelectedStatus}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
