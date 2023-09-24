@@ -9,24 +9,25 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [loading, setLoadning] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [list, setList] = useState<Todo[]>([]);
   const [task, setTask] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [option, setOption] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setLoadning(true);
+    setLoading(true);
 
     getTodos()
       .then((todos) => {
         setList(todos);
-        setLoadning(false);
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.error('Something bad happened!', error);
-        setLoadning(false);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
