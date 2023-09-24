@@ -11,20 +11,22 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { ERROR_MESSAGE } from './helpers/variables';
+import { SortType } from './types/SortType';
 
 function getPreparedTodos(
   todos: Todo[],
   query: string,
-  optionChange: string,
+  optionChange: SortType,
 ): Todo[] {
   let getNewTodos = [...todos];
 
   getNewTodos = getNewTodos.filter(todo => {
     switch (optionChange) {
-      case 'active':
+      case SortType.Active:
         return !todo.completed;
-      case 'completed':
+      case SortType.Complited:
         return todo.completed;
+      case SortType.All:
       default:
         return todo;
     }
@@ -45,31 +47,34 @@ function getPreparedTodos(
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectFilterChange, setSelectFilterChange] = useState('all');
-  const [isStatusLoaded, setisStatusLoaded] = useState(false);
+  const [selectedSortType, setSelectedSortType] = useState<SortType>(SortType.All);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleSelectedTodo = (todo: Todo | null) => setSelectedTodo(todo);
 
   const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectFilterChange(event.target.value);
+    setSelectedSortType(event.target.value as SortType);
   };
 
   const handleResetQuery = () => {
     setQuery('');
   };
 
-  const visibleTodos = getPreparedTodos(todos, query, selectFilterChange);
+  const visibleTodos = getPreparedTodos(todos, query, selectedSortType);
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then(setTodos)
-      .catch(() => ERROR_MESSAGE)
-      .finally(() => setisStatusLoaded(true));
+      // eslint-disable-next-line no-console
+      .catch(() => console.error(ERROR_MESSAGE))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -84,13 +89,13 @@ export const App: React.FC = () => {
                 query={query}
                 onQuery={handleQuery}
                 onResetQuery={handleResetQuery}
-                selectFilterChange={selectFilterChange}
+                selectedSortType={selectedSortType}
                 handleSelectFilter={handleSelectFilter}
               />
             </div>
 
             <div className="block">
-              {!isStatusLoaded
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
@@ -104,13 +109,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-        && (
-          <TodoModal
-            selectedTodo={selectedTodo}
-            onSelectedTodo={handleSelectedTodo}
-          />
-        )}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onSelectedTodo={handleSelectedTodo}
+        />
+      )}
     </>
   );
 };

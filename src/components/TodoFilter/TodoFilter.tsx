@@ -1,8 +1,10 @@
+import { SortType } from '../../types/SortType';
+
 type Props = {
   query: string,
   onQuery: (event: React.ChangeEvent<HTMLInputElement>) => void
   onResetQuery: () => void,
-  selectFilterChange: string,
+  selectedSortType: SortType,
   handleSelectFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void
 };
 
@@ -10,7 +12,7 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   onQuery = () => { },
   onResetQuery = () => { },
-  selectFilterChange,
+  selectedSortType,
   handleSelectFilter,
 }) => {
   return (
@@ -19,12 +21,14 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selectFilterChange}
+            value={selectedSortType}
             onChange={handleSelectFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.values(SortType).map((selectedType) => (
+              <option key={selectedType} value={selectedType}>
+                {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
