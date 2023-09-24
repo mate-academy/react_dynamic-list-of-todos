@@ -21,13 +21,13 @@ function getVisibleTodos(todos: Todo[], query: string, selectedStatus: TodoStatu
   }
 
   switch (selectedStatus) {
-    case TodoStatus.COMPLETED:
+    case TodoStatus.Completed:
       return preparedTodos.filter(todo => todo.completed);
 
-    case TodoStatus.ACTIVE:
+    case TodoStatus.Active:
       return preparedTodos.filter(todo => !todo.completed);
 
-    case TodoStatus.ALL:
+    case TodoStatus.All:
     default:
       return preparedTodos;
   }
@@ -38,7 +38,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<TodoStatus>(TodoStatus.ALL);
+  const [selectedStatus, setSelectedStatus] = useState<TodoStatus>(TodoStatus.All);
 
   useEffect(() => {
     setIsLoading(true);
