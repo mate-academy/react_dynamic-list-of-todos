@@ -8,10 +8,10 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { Filter } from './types/Filter';
+import { TodoStatus } from './types/Filter';
 import { getTodos } from './api';
 
-function getVisibleTodos(todos: Todo[], query: string, filter: string) {
+function getVisibleTodos(todos: Todo[], query: string, selectedStatus: TodoStatus) {
   let preparedTodos = [...todos];
   const normalizedQuery = query.toLowerCase().trim();
 
@@ -20,14 +20,14 @@ function getVisibleTodos(todos: Todo[], query: string, filter: string) {
       .filter(todo => todo.title.toLowerCase().includes(normalizedQuery));
   }
 
-  switch (filter) {
-    case Filter.COMPLETED:
+  switch (selectedStatus) {
+    case TodoStatus.COMPLETED:
       return preparedTodos.filter(todo => todo.completed);
 
-    case Filter.ACTIVE:
+    case TodoStatus.ACTIVE:
       return preparedTodos.filter(todo => !todo.completed);
 
-    case Filter.ALL:
+    case TodoStatus.ALL:
     default:
       return preparedTodos;
   }
@@ -38,7 +38,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Filter>(Filter.ALL);
+  const [selectedStatus, setSelectedStatus] = useState<TodoStatus>(TodoStatus.ALL);
 
   useEffect(() => {
     setIsLoading(true);
@@ -52,8 +52,8 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => (
-    getVisibleTodos(todos, query, filter)
-  ), [todos, query, filter]);
+    getVisibleTodos(todos, query, selectedStatus)
+  ), [todos, query, selectedStatus]);
 
   return (
     <>
@@ -66,8 +66,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                filter={filter}
-                setFilter={setFilter}
+                selectedStatus={selectedStatus}
+                setSelectedStatus={setSelectedStatus}
               />
             </div>
 

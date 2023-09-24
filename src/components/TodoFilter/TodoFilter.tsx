@@ -1,18 +1,18 @@
 import React from 'react';
-import { Filter } from '../../types/Filter';
+import { TodoStatus } from '../../types/Filter';
 
 type Props = {
   query: string;
   setQuery: (value: string) => void;
-  filter: Filter;
-  setFilter: (value: Filter) => void;
+  selectedStatus: TodoStatus;
+  setSelectedStatus: (value: TodoStatus) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
-  filter,
-  setFilter,
+  selectedStatus,
+  setSelectedStatus,
 }) => {
   return (
     <form className="field has-addons">
@@ -20,12 +20,20 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filter}
-            onChange={event => setFilter(event.target.value as Filter)}
+            value={selectedStatus}
+            onChange={event => (
+              setSelectedStatus(event.target.value as TodoStatus)
+            )}
           >
-            <option value={Filter.ALL}>All</option>
+            {(Object.keys(TodoStatus) as Array<keyof typeof TodoStatus>)
+              .map((key) => (
+                <option value={TodoStatus[key]}>
+                  {key}
+                </option>
+              ))}
+            {/* <option value={Filter.ALL}>All</option>
             <option value={Filter.ACTIVE}>Active</option>
-            <option value={Filter.COMPLETED}>Completed</option>
+            <option value={Filter.COMPLETED}>Completed</option> */}
           </select>
         </span>
       </p>
