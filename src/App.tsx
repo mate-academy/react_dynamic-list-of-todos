@@ -17,7 +17,7 @@ function hasNormalizedQuery(content: string, query: string) {
   return content.toLowerCase().includes(normalizedQuery);
 }
 
-function filterBySelect(todo: Todo, selectedOption: string) : boolean {
+function filterBySelect(todo: Todo, selectedOption: TodoStatus) : boolean {
   switch (selectedOption) {
     case TodoStatus.Active:
       return !todo.completed;
@@ -28,7 +28,7 @@ function filterBySelect(todo: Todo, selectedOption: string) : boolean {
   }
 }
 
-function filterTodosByQuery(todos: Todo[], query: string, selectedOption: string) {
+function filterTodosByQuery(todos: Todo[], query: string, selectedOption: TodoStatus) {
   if (!query && !selectedOption) {
     return todos;
   }
@@ -42,9 +42,9 @@ function filterTodosByQuery(todos: Todo[], query: string, selectedOption: string
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState(TodoStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -55,12 +55,13 @@ export const App: React.FC = () => {
         setTodos(newTodos);
         setIsLoading(false);
       })
-      .catch(() => setErrorMessage('Try again later'));
+      .catch(() => setErrorMessage('Try again later'))
+      .finally();
   }, []);
 
   const visibleTodos = filterTodosByQuery(todos, query, selectedOption);
 
-  const handleModal = (todo: Todo | undefined) => {
+  const handleToggleModal = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
     setQuery(newQuery);
   };
 
-  const handleChangeSelect = (newOption: string) => {
+  const handleChangeSelect = (newOption: TodoStatus) => {
     setSelectedOption(newOption);
   };
 
@@ -99,7 +100,7 @@ export const App: React.FC = () => {
               {!isLoading && !errorMessage && (
                 <TodoList
                   todos={visibleTodos}
-                  onHandleModal={handleModal}
+                  onHandleModal={handleToggleModal}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -110,7 +111,7 @@ export const App: React.FC = () => {
 
       {isShowModal && (
         <TodoModal
-          onHandleModal={handleModal}
+          onHandleModal={handleToggleModal}
           selectedTodo={selectedTodo}
           setErrorMessage={setErrorMessage}
         />

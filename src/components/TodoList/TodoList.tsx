@@ -5,7 +5,7 @@ import { TodoItem } from '../TodoItem';
 type Props = {
   todos: Todo[];
   onHandleModal: (todo: Todo) => void;
-  selectedTodo: Todo | undefined,
+  selectedTodo: Todo | null,
 };
 
 export const TodoList: React.FC<Props> = ({

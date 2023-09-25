@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
   onHandleModal: (todo: Todo) => void;
-  selectedTodo: Todo | undefined,
+  selectedTodo: Todo | null,
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -18,9 +18,7 @@ export const TodoItem: React.FC<Props> = ({
       data-cy="todo"
       key={todo.id}
     >
-      <td
-        className="is-vcentered"
-      >
+      <td className="is-vcentered">
         {todo.id}
       </td>
       <td className="is-vcentered">

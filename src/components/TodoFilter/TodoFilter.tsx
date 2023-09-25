@@ -3,8 +3,8 @@ import { TodoStatus } from '../../types/TodoStatus ';
 
 type Props = {
   onChangeQuery: (query: string) => void,
-  onChangeSelect: (event: string) => void,
-  onSetSelectedOption: React.Dispatch<React.SetStateAction<string>>
+  onChangeSelect: (event: TodoStatus) => void,
+  onSetSelectedOption: React.Dispatch<React.SetStateAction<TodoStatus>>
   query: string,
   selectedOption: string,
 
@@ -25,8 +25,8 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSetSelectedOption(event.target.value);
-    onChangeSelect(event.target.value);
+    onSetSelectedOption(event.target.value as TodoStatus);
+    onChangeSelect(event.target.value as TodoStatus);
   };
 
   return (

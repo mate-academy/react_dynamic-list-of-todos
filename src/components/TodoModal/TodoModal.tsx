@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  onHandleModal: (todo: Todo | undefined) => void;
+  onHandleModal: (todo: Todo | null) => void;
   selectedTodo: Todo | null;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 };
@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onHandleModal(undefined);
+                onHandleModal(null);
               }}
             />
           </header>
