@@ -47,6 +47,14 @@ export const App: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState(TodoStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
 
+  function showError(message: string) {
+    setErrorMessage(message);
+
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  }
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -55,7 +63,7 @@ export const App: React.FC = () => {
         setTodos(newTodos);
         setIsLoading(false);
       })
-      .catch(() => setErrorMessage('Try again later'))
+      .catch(() => showError('Try again later'))
       .finally(() => {
         setIsLoading(false);
       });
@@ -79,6 +87,10 @@ export const App: React.FC = () => {
 
   return (
     <>
+      {errorMessage && (
+        <div>{errorMessage}</div>
+      )}
+
       <div className="section">
         <div className="container">
           <div className="box">
@@ -90,7 +102,6 @@ export const App: React.FC = () => {
                 onChangeSelect={handleChangeSelect}
                 query={query}
                 selectedOption={selectedOption}
-                onSetSelectedOption={setSelectedOption}
               />
             </div>
 

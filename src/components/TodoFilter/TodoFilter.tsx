@@ -4,10 +4,8 @@ import { TodoStatus } from '../../types/TodoStatus ';
 type Props = {
   onChangeQuery: (query: string) => void,
   onChangeSelect: (event: TodoStatus) => void,
-  onSetSelectedOption: React.Dispatch<React.SetStateAction<TodoStatus>>
   query: string,
-  selectedOption: string,
-
+  selectedOption: TodoStatus,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,7 +13,6 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeSelect = () => {},
   query,
   selectedOption,
-  onSetSelectedOption,
 }) => {
   const onChangeSetQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChangeQuery(event.target.value);
@@ -25,9 +22,22 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSetSelectedOption(event.target.value as TodoStatus);
-    onChangeSelect(event.target.value as TodoStatus);
+    let valueEnum: TodoStatus;
+
+    if (event.target.value === 'active') {
+      valueEnum = TodoStatus.Active;
+    } else if (event.target.value === 'completed') {
+      valueEnum = TodoStatus.Completed;
+    } else {
+      valueEnum = TodoStatus.All;
+    }
+
+    onChangeSelect(valueEnum);
   };
+
+  const todoStatusValues = Object.values(TodoStatus);
+  const todoStatuses = Object.keys(TodoStatus)
+    .map((todoKey, i) => ([todoKey, todoStatusValues[i]]));
 
   return (
     <form className="field has-addons">
@@ -41,9 +51,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleChangeOption}
           >
-            <option value={TodoStatus.All}>All</option>
-            <option value={TodoStatus.Active}>Active</option>
-            <option value={TodoStatus.Completed}>Completed</option>
+            {todoStatuses.map(currentStatus => (
+              <option value={currentStatus[1]} key={currentStatus[0]}>
+                {currentStatus[0]}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -66,7 +78,7 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           <span
             className="icon is-right"
-            style={{ pointerEvents: TodoStatus.All }}
+            style={{ pointerEvents: 'all' }}
           >
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
