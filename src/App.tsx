@@ -56,7 +56,9 @@ export const App: React.FC = () => {
         setIsLoading(false);
       })
       .catch(() => setErrorMessage('Try again later'))
-      .finally();
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const visibleTodos = filterTodosByQuery(todos, query, selectedOption);

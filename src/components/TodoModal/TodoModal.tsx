@@ -27,7 +27,10 @@ export const TodoModal: React.FC<Props> = ({
           setUser(newUser);
           setIsLoading(false);
         })
-        .catch(() => setErrorMessage('Try again later'));
+        .catch(() => setErrorMessage('Try again later'))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, []);
 
