@@ -3,7 +3,7 @@ import { Options } from '../../types/Options';
 
 type Props = {
   handleQuery: (value: string) => void;
-  handleOption: (value: boolean | null) => void;
+  handleOption: (value: Options | null) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
@@ -24,11 +24,11 @@ export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
   };
 
   const handleOptions = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newOption = event.target.value;
+    const newOption = event.target.value as Options;
 
     setSelectedOption(newOption);
 
-    handleOption(newOption === 'all' ? null : newOption === 'completed');
+    handleOption(newOption === 'all' ? null : newOption);
   };
 
   return (

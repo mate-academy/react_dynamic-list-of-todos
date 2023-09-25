@@ -1,12 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { Options } from '../../types/Options';
 
 type ListOfTodos = {
   todoList: Todo[],
   modalActive: (todo: Todo) => void;
   query: string;
-  option: boolean | null;
+  option: Options | null;
   activeTaskId: number | null;
 };
 
@@ -29,19 +30,20 @@ export const TodoList: React.FC<ListOfTodos>
   let filteredTodos: Todo[] = [];
 
   switch (option) {
-    case null:
+    case 'all':
       filteredTodos = filteredTodosList(query, todoList);
       break;
-    case true:
+    case 'completed':
       filteredTodos = filteredTodosList(query,
         todoList).filter(todo => todo.completed === true);
       break;
-    case false:
+    case 'active':
       filteredTodos = filteredTodosList(query,
         todoList).filter(todo => todo.completed === false);
       break;
     default:
       filteredTodos = filteredTodosList(query, todoList);
+      break;
   }
 
   return (
