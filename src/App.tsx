@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [titleFilter, setTitleFilter] = useState<string>('');
@@ -28,13 +28,7 @@ export const App: React.FC = () => {
   };
 
   const handleFilter = (status: string) => {
-    if (status === 'all') {
-      setFilter('all');
-    } else if (status === 'completed') {
-      setFilter('completed');
-    } else if (status === 'active') {
-      setFilter('active');
-    }
+    setFilter(status);
   };
 
   const handleTitleFilter = (title: string) => {
@@ -42,20 +36,17 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'all') {
-      return todo.title.toLowerCase().includes(titleFilter);
+    switch (filter) {
+      case 'all':
+        return true;
+      case 'completed':
+        return todo.completed;
+      case 'active':
+        return !todo.completed;
+      default:
+        return true;
     }
-
-    if (filter === 'completed') {
-      return todo.completed && todo.title.toLowerCase().includes(titleFilter);
-    }
-
-    if (filter === 'active') {
-      return !todo.completed && todo.title.toLowerCase().includes(titleFilter);
-    }
-
-    return todo.title.toLowerCase().includes(titleFilter);
-  });
+  }).filter(todo => todo.title.toLowerCase().includes(titleFilter));
 
   const handleClearFilter = () => {
     setTitleFilter('');
@@ -63,7 +54,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos().then(setTodos).finally(() => setIsLoaded(true));
+    getTodos().then(setTodos).finally(() => setIsLoading(true));
   }, []);
 
   return (
@@ -82,7 +73,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoaded && <Loader />}
+              {!isLoading && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 handleSelectedTodo={handleSelectedTodo}
@@ -93,7 +84,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null && <TodoModal todo={selectedTodo} handleModalClose={handleModalClose} />}
+      {selectedTodo && <TodoModal todo={selectedTodo} handleModalClose={handleModalClose} />}
     </>
   );
 };

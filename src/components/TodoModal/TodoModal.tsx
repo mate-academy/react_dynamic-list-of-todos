@@ -11,18 +11,18 @@ type TodoModalProps = {
 
 export const TodoModal: React.FC<TodoModalProps>
   = ({ todo, handleModalClose }) => {
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-      getUser(todo.userId).then(setUser).finally(() => setIsLoaded(true));
+      getUser(todo.userId).then(setUser).finally(() => setIsLoading(true));
     }, []);
 
     return (
       <div className="modal is-active" data-cy="modal">
         <div className="modal-background" />
 
-        {!isLoaded ? (
+        {!isLoading ? (
           <Loader />)
           : (
             <div className="modal-card">
