@@ -8,10 +8,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterOption } from './types/Filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState<FilterOption>('all');
   const [input, setInput] = useState('');
   const [task, setTask] = useState<Todo>();
   const [loading, setLoading] = useState(false);
@@ -40,18 +41,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (
+              {loading ? (
                 <Loader />
-              )}
-
-              {!loading && todos.length > 0 && (
-                <TodoList
-                  todos={todos}
-                  selectedFilter={selectedFilter}
-                  input={input}
-                  setTask={setTask}
-                  task={task}
-                />
+              ) : (
+                todos.length > 0 && (
+                  <TodoList
+                    todos={todos}
+                    selectedFilter={selectedFilter}
+                    input={input}
+                    setTask={setTask}
+                    task={task}
+                  />
+                )
               )}
             </div>
           </div>
