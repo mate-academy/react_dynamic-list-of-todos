@@ -21,12 +21,14 @@ export const App: React.FC = () => {
       return false;
     }
 
-    if (statusFilter === 'active' && todo.completed) {
-      return false;
-    }
+    switch (statusFilter) {
+      case 'active':
+        return !todo.completed;
 
-    if (statusFilter === 'completed' && !todo.completed) {
-      return false;
+      case 'completed':
+        return todo.completed;
+
+      default:
     }
 
     return true;
@@ -50,8 +52,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? <Loader /> : (
                 <TodoList
                   todos={displayTodos}
                   handleSelectedTodo={setSelectedTodo}
