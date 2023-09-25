@@ -16,7 +16,9 @@ const filteredTodosList = (value: string, todos: Todo[]) => {
 };
 
 export const TodoList: React.FC<ListOfTodos>
-= ({ todoList, modalActive, query, option, activeTaskId, }) => {
+= ({
+  todoList, modalActive, query, option, activeTaskId,
+}) => {
   const isDoneStyle = (isDone: boolean) => {
     return classNames({
       'has-text-danger': !isDone,
@@ -26,16 +28,20 @@ export const TodoList: React.FC<ListOfTodos>
 
   let filteredTodos: Todo[] = [];
 
-  if (option === null) {
-    filteredTodos = filteredTodosList(query, todoList);
-  } else if (option) {
-    filteredTodos
-     = filteredTodosList(query, todoList)
-        .filter(todo => todo.completed === true);
-  } else {
-    filteredTodos
-    = filteredTodosList(query, todoList)
-        .filter(todo => todo.completed === false);
+  switch (option) {
+    case null:
+      filteredTodos = filteredTodosList(query, todoList);
+      break;
+    case true:
+      filteredTodos = filteredTodosList(query,
+        todoList).filter(todo => todo.completed === true);
+      break;
+    case false:
+      filteredTodos = filteredTodosList(query,
+        todoList).filter(todo => todo.completed === false);
+      break;
+    default:
+      filteredTodos = filteredTodosList(query, todoList);
   }
 
   return (

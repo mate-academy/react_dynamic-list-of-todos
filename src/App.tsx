@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Options } from './types/Options';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<Todo[]>([]);
   const [task, setTask] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState<boolean | null>(null);
+  const [option, setOption] = useState<Options | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +45,7 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleOption = (value: boolean | null) => {
+  const handleOption = (value: Options | null) => {
     setOption(value);
   };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Options } from '../../types/Options';
 
 type Props = {
   handleQuery: (value: string) => void;
@@ -7,7 +8,8 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
   const [query, setQuery] = useState('');
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<Options
+  | null>(null);
 
   const handleQueryValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -26,23 +28,7 @@ export const TodoFilter: React.FC<Props> = ({ handleQuery, handleOption }) => {
 
     setSelectedOption(newOption);
 
-    let booleanOption: boolean | null = null;
-
-    switch (newOption) {
-      case 'all':
-        booleanOption = null;
-        break;
-      case 'active':
-        booleanOption = false;
-        break;
-      case 'completed':
-        booleanOption = true;
-        break;
-      default:
-        booleanOption = null;
-    }
-
-    handleOption(booleanOption);
+    handleOption(newOption === 'all' ? null : newOption === 'completed');
   };
 
   return (
