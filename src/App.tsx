@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,17 +10,21 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+type PossibleCases = boolean | Todo[] | Todo | null | string;
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [titleFilter, setTitleFilter] = useState<string>('');
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = useState<PossibleCases>('');
 
   const handleSelectedTodo = (todo: Todo) => {
-    const findTodo = todos.find(value => value === todo) as Todo;
+    const findTodo = todos.find(value => value === todo);
 
-    setSelectedTodo(findTodo);
+    if (findTodo) {
+      setSelectedTodo(findTodo);
+    }
   };
 
   const handleModalClose = () => {
@@ -35,18 +39,20 @@ export const App: React.FC = () => {
     setTitleFilter(title.toLowerCase());
   };
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filter) {
-      case 'all':
-        return true;
-      case 'completed':
-        return todo.completed;
-      case 'active':
-        return !todo.completed;
-      default:
-        return true;
-    }
-  }).filter(todo => todo.title.toLowerCase().includes(titleFilter));
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filter) {
+        case 'all':
+          return true;
+        case 'completed':
+          return todo.completed;
+        case 'active':
+          return !todo.completed;
+        default:
+          return true;
+      }
+    }).filter(todo => todo.title.toLowerCase().includes(titleFilter));
+  }, [todos, filter, titleFilter]);
 
   const handleClearFilter = () => {
     setTitleFilter('');
@@ -54,7 +60,13 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getTodos().then(setTodos).finally(() => setIsLoading(true));
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(true))
+      .catch(error => {
+        /* eslint-disable-next-line */
+        console.error('Error fetching todos:', error);
+      });
   }, []);
 
   return (

@@ -15,7 +15,13 @@ export const TodoModal: React.FC<TodoModalProps>
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-      getUser(todo.userId).then(setUser).finally(() => setIsLoading(true));
+      getUser(todo.userId)
+        .then(setUser)
+        .finally(() => setIsLoading(true))
+        .catch(error => {
+          /* eslint-disable-next-line */
+          console.error('Error fetching user:', error);
+        });
     }, []);
 
     return (

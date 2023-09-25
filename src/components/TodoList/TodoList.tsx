@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props>
             <tr
               data-cy="todo"
               className={cn({
-                'has-background-info-light': todo === selectedTodo,
+                'has-background-info-light': todo.id === selectedTodo?.id,
               })}
               key={todo.id}
             >
@@ -60,8 +60,8 @@ export const TodoList: React.FC<Props>
                 >
                   <span className="icon">
                     <i className={cn('far', {
-                      'fa-eye': todo !== selectedTodo,
-                      'fa-eye-slash': todo === selectedTodo,
+                      'fa-eye': todo.id !== selectedTodo?.id,
+                      'fa-eye-slash': todo.id === selectedTodo?.id,
                     })}
                     />
                   </span>
