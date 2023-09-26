@@ -23,9 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
     setQuery('');
   };
 
-  const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
+  const capitalizeFirstLetter = (str: string) => (
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  );
 
   return (
     <form className="field has-addons">

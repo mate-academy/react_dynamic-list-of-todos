@@ -26,33 +26,23 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filterTodos = (todosToFilter: Todo[], status: Status, searchTerm: string): Todo[] => {
-    if (status === Status.all && !searchTerm.trim()) {
-      return todosToFilter;
-    }
+  const filterTodos = useMemo(() => {
+    const lowerTitleQuery = query.toLowerCase();
 
-    return todosToFilter.filter(currentTodo => {
-      if (status === Status.active && currentTodo.completed) {
-        return false;
+    return todos.filter(todo => {
+      switch (filter) {
+        case Status.active:
+          return !todo.completed;
+        case Status.completed:
+          return todo.completed;
+        case Status.all:
+        default:
+          return true;
       }
-
-      if (status === Status.completed && !currentTodo.completed) {
-        return false;
-      }
-
-      if (searchTerm.trim()
-        && !currentTodo.title.toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-  };
-
-  const visibleTodos = useMemo(() => {
-    return filterTodos(todos, filter, query);
+    })
+      .filter(todo => (
+        todo.title.toLowerCase().includes(lowerTitleQuery)
+      ));
   }, [todos, filter, query]);
 
   return (
@@ -78,7 +68,7 @@ export const App: React.FC = () => {
 
               {todos.length > 0 && (
                 <TodoList
-                  todo={visibleTodos}
+                  todo={filterTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
