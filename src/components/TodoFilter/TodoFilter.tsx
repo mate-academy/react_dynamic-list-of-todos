@@ -40,9 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
   return (
     <form className="field has-addons">
       <p className="control">
-        <span
-          className="select"
-        >
+        <span className="select">
           <select
             data-cy="statusSelect"
             id="select"
