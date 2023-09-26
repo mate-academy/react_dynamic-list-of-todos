@@ -4,19 +4,21 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { FilterOption, TodoFilter } from './components/TodoFilter';
+
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { FilterOptions } from './types/FilterOptions';
 
 import { getTodos } from './api';
+import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [statusFilter, setStatusFilter] = useState<FilterOption>('all');
-  const [titleFilter, setTitleFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<FilterOptions>('all');
+  const [searchQwery, setSearchQwery] = useState<string>('');
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -26,26 +28,37 @@ export const App: React.FC = () => {
       .then((data) => {
         setTodos(data);
         setIsLoading(false);
+      })
+      .catch(() => {
+        throw new Error('An error occurred while fetching todos:');
+        setIsLoading(false);
       });
   }, []);
 
   const displayTodos = useMemo(() => {
     return todos.filter(todo => {
-      if (!todo.title.toLowerCase().includes(titleFilter.toLowerCase())) {
-        return false;
+      switch (statusFilter) {
+        case 'active':
+          if (todo.completed) {
+            return false;
+          }
+
+          break;
+
+        case 'completed':
+          if (!todo.completed) {
+            return false;
+          }
+
+          break;
+
+        default:
+          break;
       }
 
-      if (statusFilter === 'active' && todo.completed) {
-        return false;
-      }
-
-      if (statusFilter === 'completed' && !todo.completed) {
-        return false;
-      }
-
-      return true;
+      return todo.title.toLowerCase().includes(searchQwery.toLowerCase());
     });
-  }, [titleFilter, statusFilter, todos]);
+  }, [searchQwery, statusFilter, todos]);
 
   return (
     <>
@@ -58,13 +71,13 @@ export const App: React.FC = () => {
               <TodoFilter
                 statusFilter={statusFilter}
                 setStatusFilter={setStatusFilter}
-                titleFilter={titleFilter}
-                setTitleFilter={setTitleFilter}
+                titleFilter={searchQwery}
+                setTitleFilter={setSearchQwery}
               />
             </div>
 
             <div className="block">
-              {isLoading !== false
+              {isLoading
                 ? <Loader />
                 : <TodoList todos={displayTodos} handleSelectedTodo={setSelectedTodo} selectedTodo={selectedTodo} />}
             </div>
