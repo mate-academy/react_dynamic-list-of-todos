@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { getUser } from '../../api';
-import { User } from '../../types/User';
-import { Todo } from '../../types/Todo';
 
-type TodoModalProps = {
-  todo: Todo;
-  handleClose: ()=>void;
-};
-
-export const TodoModal: React.FC<TodoModalProps> = ({ todo, handleClose }) => {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    getUser(todo.userId).then(setUser)
-      // eslint-disable-next-line no-console
-      .catch(() => console.error(`Unable to load user id: ${todo.userId}.`));
-  }, []);
-
+export const TodoModal: React.FC = () => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
