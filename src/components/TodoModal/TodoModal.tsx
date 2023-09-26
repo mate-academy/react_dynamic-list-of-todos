@@ -25,7 +25,6 @@ export const TodoModal: React.FC<Props> = ({
       getUser(selectedTodo.userId)
         .then((newUser) => {
           setUser(newUser);
-          setIsLoading(false);
         })
         .catch(() => setErrorMessage('Try again later'))
         .finally(() => {
@@ -52,15 +51,12 @@ export const TodoModal: React.FC<Props> = ({
             >
               {`Todo #${selectedTodo?.id}`}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="jsx-a11y"
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                onHandleModal(null);
-              }}
+              onClick={() => onHandleModal(null)}
             />
           </header>
 

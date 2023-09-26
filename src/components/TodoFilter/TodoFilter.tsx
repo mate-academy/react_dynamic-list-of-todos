@@ -1,4 +1,5 @@
 import React from 'react';
+import './TodoFilter.scss';
 import { TodoStatus } from '../../types/TodoStatus ';
 
 type Props = {
@@ -22,17 +23,7 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleChangeOption
   = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    let valueEnum: TodoStatus;
-
-    if (event.target.value === 'active') {
-      valueEnum = TodoStatus.Active;
-    } else if (event.target.value === 'completed') {
-      valueEnum = TodoStatus.Completed;
-    } else {
-      valueEnum = TodoStatus.All;
-    }
-
-    onChangeSelect(valueEnum);
+    onChangeSelect(event.target.value as TodoStatus);
   };
 
   const todoStatuses = Object.entries(TodoStatus);
@@ -47,9 +38,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleChangeOption}
           >
-            {todoStatuses.map(currentStatus => (
-              <option value={currentStatus[1]} key={currentStatus[0]}>
-                {currentStatus[0]}
+            {todoStatuses.map(([key, value]) => (
+              <option value={value} key={key}>
+                {key}
               </option>
             ))}
           </select>
@@ -74,10 +65,9 @@ export const TodoFilter: React.FC<Props> = ({
         {query && (
           <span
             className="icon is-right"
-            style={{ pointerEvents: 'all' }}
           >
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="jsx-a11y"
               data-cy="clearSearchButton"
               type="button"
               className="delete"

@@ -43,9 +43,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => {
-            onHandleModal(todo);
-          }}
+          onClick={() => onHandleModal(todo)}
         >
           <span className="icon">
             <i className={classNames({

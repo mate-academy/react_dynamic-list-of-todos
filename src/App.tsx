@@ -61,7 +61,6 @@ export const App: React.FC = () => {
     getTodos()
       .then((newTodos) => {
         setTodos(newTodos);
-        setIsLoading(false);
       })
       .catch(() => showError('Try again later'))
       .finally(() => {
