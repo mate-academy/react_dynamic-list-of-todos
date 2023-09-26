@@ -16,10 +16,8 @@ interface IContextInitial {
   todos: Todo[];
   inputField: string;
   filteredBy: ETodoStatus;
-  isModalOpen: boolean;
   selectedTodo: Todo | null;
   setSelectedTodo: (newTodo: Todo | null) => void
-  setIsModalOpen: (newValue: boolean) => void;
   setFilteredBy: (newValue: ETodoStatus) => void;
   setInputField: (newValues: string) => void;
   setTodos: (newValues: Todo[]) => void;
@@ -28,11 +26,9 @@ interface IContextInitial {
 const initialContext: IContextInitial = {
   todos: [],
   inputField: '',
-  filteredBy: ETodoStatus.ALL,
-  isModalOpen: false,
+  filteredBy: ETodoStatus.All,
   selectedTodo: null,
   setSelectedTodo: () => { },
-  setIsModalOpen: () => { },
   setFilteredBy: () => { },
   setInputField: () => { },
   setTodos: () => { },
@@ -43,28 +39,24 @@ export const TodoContext = createContext(initialContext);
 export const ContextTodo: FC<TContextTodoProps> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputField, setInputField] = useState('');
-  const [filteredBy, setFilteredBy] = useState(ETodoStatus.ALL);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filteredBy, setFilteredBy] = useState(ETodoStatus.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const initialValueDeps = [
     todos,
     inputField,
     filteredBy,
-    isModalOpen,
     selectedTodo,
   ];
 
   const initialValue = useMemo(() => ({
     todos,
     inputField,
-    isModalOpen,
     selectedTodo,
     filteredBy,
     setSelectedTodo,
     setTodos,
     setInputField,
-    setIsModalOpen,
     setFilteredBy,
   }), initialValueDeps);
 

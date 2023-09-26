@@ -12,19 +12,21 @@ export const TodoModal: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const {
-    setIsModalOpen,
     selectedTodo,
     setSelectedTodo,
   } = useContext(TodoContext);
 
   useEffect(() => {
-    getUser(selectedTodo?.userId ?? 0)
-      .then(user => setSelectedUser(user));
+    if (selectedTodo) {
+      getUser(selectedTodo.userId)
+        .then(user => setSelectedUser(user))
+        // eslint-disable-next-line no-console
+        .catch(error => console.warn(error));
+    }
   }, []);
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
-    setIsModalOpen(false);
   };
 
   return (

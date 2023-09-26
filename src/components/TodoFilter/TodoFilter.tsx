@@ -14,7 +14,7 @@ interface ITodosQuery {
 
 export function getPreparedTodos(todos: Todo[], {
   inputField = '',
-  filteredBy = ETodoStatus.ALL,
+  filteredBy = ETodoStatus.All,
 }: ITodosQuery) {
   let preparedTodos = [...todos];
 
@@ -26,7 +26,7 @@ export function getPreparedTodos(todos: Todo[], {
     ));
   }
 
-  if (filteredBy !== ETodoStatus.ALL) {
+  if (filteredBy !== ETodoStatus.All) {
     switch (filteredBy) {
       case ETodoStatus.Active:
         return preparedTodos.filter(({ completed }) => !completed);
@@ -64,7 +64,7 @@ export const TodoFilter = () => {
             onChange={handleSelectStatus}
           >
             {Object.values(ETodoStatus).map(el => (
-              <option value={el}>{el.toCapitalize()}</option>
+              <option key={el} value={el}>{el.toCapitalize()}</option>
             ))}
           </select>
         </span>

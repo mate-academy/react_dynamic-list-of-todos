@@ -13,21 +13,21 @@ export const TodoItem: FC<TTodoItemProps> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const {
-    setIsModalOpen,
     setSelectedTodo,
     selectedTodo,
   } = useContext(TodoContext);
 
+  const isCurrentTodo = selectedTodo?.id === id;
+
   const handleSelectTodo = (chosenTodo: Todo) => {
     setSelectedTodo(chosenTodo);
-    setIsModalOpen(true);
   };
 
   return (
     <tr
       data-cy="todo"
       className={cn({
-        'has-background-info-light': selectedTodo?.id === id,
+        'has-background-info-light': isCurrentTodo,
       })}
     >
       <td className="is-vcentered">{id}</td>
@@ -55,8 +55,8 @@ export const TodoItem: FC<TTodoItemProps> = ({ todo }) => {
           <span className="icon">
             <i
               className={cn('far', {
-                'fa-eye': selectedTodo?.id !== id,
-                'fa-eye-slash': selectedTodo?.id === id,
+                'fa-eye': isCurrentTodo,
+                'fa-eye-slash': !isCurrentTodo,
               })}
             />
           </span>

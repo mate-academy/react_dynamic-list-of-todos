@@ -21,7 +21,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 export const App: FC = () => {
   const {
     setTodos,
-    isModalOpen,
+    selectedTodo,
     todos,
     inputField,
     filteredBy,
@@ -68,7 +68,7 @@ export const App: FC = () => {
         </div>
       </div>
 
-      {isModalOpen && (
+      {selectedTodo && (
         <TodoModal />
       )}
     </>
