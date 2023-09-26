@@ -35,9 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
     onChangeSelect(valueEnum);
   };
 
-  const todoStatusValues = Object.values(TodoStatus);
-  const todoStatuses = Object.keys(TodoStatus)
-    .map((todoKey, i) => ([todoKey, todoStatusValues[i]]));
+  const todoStatuses = Object.entries(TodoStatus);
 
   return (
     <form className="field has-addons">
