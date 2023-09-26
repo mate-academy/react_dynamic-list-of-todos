@@ -11,18 +11,19 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [allToodo, setAllToodo] = useState<Todo[]>([]);
-  const [filterToodo, setFilterToodo] = useState(allToodo);
-  const [visibleToodo, setVisibleToodo] = useState(filterToodo);
+  const [allTodo, setAllTodo] = useState<Todo[]>([]);
+  const [filterTodo, setFilterTodo] = useState(allTodo);
+  const [visibleTodo, setVisibleTodo] = useState(filterTodo);
   const [selectUserId, setSelectUserId] = useState(0);
   const [selectTodoId, setSelectTodoId] = useState(0);
   const [formItems, setFormItems] = useState({ statusSelect: 'all', input: '' });
+
   const selectItems = (UserId: number, todoId: number) => {
     setSelectUserId(UserId);
     setSelectTodoId(todoId);
   };
 
-  const hanldleChange = (key: string, value: string) => {
+  const handleChange = (key: string, value: string) => {
     setFormItems(prev => ({
       ...prev,
       [key]: value,
@@ -32,34 +33,34 @@ export const App: React.FC = () => {
   const handleSelect = () => {
     switch (true) {
       case formItems.statusSelect === 'active':
-        setFilterToodo(allToodo.filter(todo => !todo.completed));
+        setFilterTodo(allTodo.filter(todo => !todo.completed));
         break;
 
       case formItems.statusSelect === 'completed':
-        setFilterToodo(allToodo.filter(todo => todo.completed));
+        setFilterTodo(allTodo.filter(todo => todo.completed));
         break;
 
       default:
-        setFilterToodo(allToodo);
+        setFilterTodo(allTodo);
     }
   };
 
   const handleSearch = () => {
-    setVisibleToodo(filterToodo.filter(todo => todo.title.toLocaleLowerCase()
+    setVisibleTodo(filterTodo.filter(todo => todo.title.toLocaleLowerCase()
       .includes(formItems.input.toLocaleLowerCase())));
   };
 
   useEffect(() => {
-    getTodos().then(res => setAllToodo(res));
+    getTodos().then(setAllTodo);
   }, []);
 
   useEffect(() => {
     handleSelect();
-  }, [formItems, allToodo]);
+  }, [formItems, allTodo]);
 
   useEffect(() => {
     handleSearch();
-  }, [filterToodo, formItems]);
+  }, [filterTodo, formItems]);
 
   return (
     <>
@@ -71,14 +72,14 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 valueFormItems={formItems}
-                hanldleChange={hanldleChange}
+                handleChange={handleChange}
               />
             </div>
 
             <div className="block">
-              {allToodo.length !== 0 ? (
+              {allTodo.length !== 0 ? (
                 <TodoList
-                  todos={visibleToodo}
+                  todos={visibleTodo}
                   selectTodo={selectTodoId}
                   selectItems={selectItems}
                 />

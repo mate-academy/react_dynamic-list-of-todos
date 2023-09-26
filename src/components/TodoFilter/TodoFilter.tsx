@@ -2,12 +2,12 @@ import { FilterForm } from '../../types/FilterForm';
 
 type Props = {
   valueFormItems: FilterForm,
-  hanldleChange: (key: string, value: string) => void,
+  handleChange: (key: string, value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   valueFormItems,
-  hanldleChange,
+  handleChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           className="statusSelect"
           value={valueFormItems.statusSelect}
-          onChange={e => hanldleChange(e.target.className, e.target.value)}
+          onChange={e => handleChange(e.target.className, e.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={valueFormItems.input}
-        onChange={e => hanldleChange(e.target.className, e.target.value)}
+        onChange={e => handleChange(e.target.className, e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -45,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => hanldleChange('input', '')}
+            onClick={() => handleChange('input', '')}
           />
         )}
       </span>
