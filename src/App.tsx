@@ -10,6 +10,24 @@ import { getTodos, getUser } from './api';
 
 import { User } from './types/User';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/Todo';
+
+const filterTodos = (todos: Todo[], query: string, filter: FilterType) => {
+  return todos.filter((todo) => {
+    if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
+      return false;
+    }
+
+    switch (filter) {
+      case 'completed':
+        return todo.completed;
+      case 'active':
+        return !todo.completed;
+      default:
+        return true;
+    }
+  });
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,7 +35,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
   const [query, setQuery] = useState<string>('');
 
   const handleToDoClick = (userId: number) => {
@@ -49,20 +67,7 @@ export const App: React.FC = () => {
     handleToDoClick(todo.userId);
   };
 
-  const filteredTodos = todos.filter((todo) => {
-    if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
-      return false;
-    }
-
-    switch (filter) {
-      case 'completed':
-        return todo.completed;
-      case 'active':
-        return !todo.completed;
-      default:
-        return true;
-    }
-  });
+  const filteredTodos = filterTodos(todos, query, filter);
 
   return (
     <>

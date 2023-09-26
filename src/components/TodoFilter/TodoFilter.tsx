@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { FilterType } from "../../types/Todo";
 interface TodoFilterProps {
-  setFilter: (filter: string) => void;
+  setFilter: (filter: FilterType) => void;
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   handleClearQuery: () => void;
@@ -18,7 +19,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         <select
           data-cy="statusSelect"
           title="Filter"
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => setFilter(e.target.value as FilterType)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

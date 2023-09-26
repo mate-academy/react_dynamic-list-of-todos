@@ -11,8 +11,7 @@ export const TodoList: React.FC<TodoListProps> = ({
   todos,
   onShowClick,
   selectedTodo,
-}) => {
-  return (
+}) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -66,4 +65,3 @@ export const TodoList: React.FC<TodoListProps> = ({
       </tbody>
     </table>
   );
-};
