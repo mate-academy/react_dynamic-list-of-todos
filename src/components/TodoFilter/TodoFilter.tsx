@@ -1,6 +1,8 @@
+import { Option } from '../../types/Option';
+
 type Props = {
   query: string;
-  option: string;
+  option: Option;
   handleOption: (option:string) => void;
   handleQuery: (value:string) => void;
 };
@@ -38,18 +40,16 @@ export const TodoFilter:React.FC<Props> = ({
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
-      {query.trim().length > 0 && (
-        <>
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            <button
-              aria-label="clear search"
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={() => handleQuery('')}
-            />
-          </span>
-        </>
+      {query.trim() && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <button
+            aria-label="clear search"
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => handleQuery('')}
+          />
+        </span>
       )}
     </p>
   </form>
