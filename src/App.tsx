@@ -33,14 +33,6 @@ export const App: React.FC = () => {
     }
 
     return todosToFilter.filter(currentTodo => {
-      if (filterStatus === Status.active && currentTodo.completed) {
-        return false;
-      }
-
-      if (filterStatus === Status.completed && !currentTodo.completed) {
-        return false;
-      }
-
       if (searchSymbols.trim()
         && !currentTodo.title.toLowerCase()
           .includes(searchSymbols.toLowerCase())
@@ -48,7 +40,15 @@ export const App: React.FC = () => {
         return false;
       }
 
-      return true;
+      switch (filterStatus) {
+        case Status.active:
+          return !currentTodo.completed;
+
+        case Status.completed:
+          return currentTodo.completed;
+        default:
+          return currentTodo;
+      }
     });
   };
 

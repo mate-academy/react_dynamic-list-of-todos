@@ -32,12 +32,12 @@ export const TodoFilter: React.FC<Props> = (
             data-cy="statusSelect"
             onChange={handleFilterChange}
           >
-            {FILTER_VALUES.map(v => (
+            {FILTER_VALUES.map(value => (
               <option
-                value={v}
-                key={v}
+                value={value}
+                key={value}
               >
-                {(Status[v])}
+                {(Status[value])}
               </option>
             ))}
           </select>
