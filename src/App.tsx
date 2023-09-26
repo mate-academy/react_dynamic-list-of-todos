@@ -7,17 +7,15 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { Todo, Status } from './types/Todo';
 import { getTodos } from './api';
-
-type PossibleCases = boolean | Todo[] | Todo | null | string;
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [titleFilter, setTitleFilter] = useState<string>('');
-  const [filter, setFilter] = useState<PossibleCases>('');
+  const [filter, setFilter] = useState<Status>(Status.ALL);
 
   const handleSelectedTodo = (todo: Todo) => {
     const findTodo = todos.find(value => value === todo);
@@ -31,7 +29,7 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const handleFilter = (status: string) => {
+  const handleFilter = (status: Status) => {
     setFilter(status);
   };
 
@@ -42,12 +40,12 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filter) {
-        case 'all':
+        case Status.ALL:
           return true;
-        case 'completed':
-          return todo.completed;
-        case 'active':
+        case Status.ACTIVE:
           return !todo.completed;
+        case Status.COMPLETED:
+          return todo.completed;
         default:
           return true;
       }
@@ -56,17 +54,17 @@ export const App: React.FC = () => {
 
   const handleClearFilter = () => {
     setTitleFilter('');
-    setFilter('all');
+    setFilter(Status.ALL);
   };
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setIsLoading(true))
       .catch(error => {
         /* eslint-disable-next-line */
         console.error('Error fetching todos:', error);
-      });
+      })
+      .finally(() => setIsLoading(true));
   }, []);
 
   return (

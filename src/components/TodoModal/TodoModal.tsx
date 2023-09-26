@@ -17,11 +17,11 @@ export const TodoModal: React.FC<TodoModalProps>
     useEffect(() => {
       getUser(todo.userId)
         .then(setUser)
-        .finally(() => setIsLoading(true))
         .catch(error => {
           /* eslint-disable-next-line */
           console.error('Error fetching user:', error);
-        });
+        })
+        .finally(() => setIsLoading(true));
     }, []);
 
     return (

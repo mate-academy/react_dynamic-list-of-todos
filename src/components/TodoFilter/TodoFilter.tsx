@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { Status } from '../../types/Todo';
 
 type TodoFilterProps = {
-  onFilter: (status: string) => void,
+  onFilter: (status: Status) => void,
   onTitleFilter: (title: string) => void,
   onClearFilter: () => void,
 };
@@ -10,12 +11,12 @@ export const TodoFilter
 = ({ onFilter, onTitleFilter, onClearFilter }: TodoFilterProps) => {
   const [filterAndQuery, setFilterAndQuery]
   = useState<{ filter: string, query: string }>({
-    filter: 'all',
+    filter: Status.ALL,
     query: '',
   });
 
   const handleSelect: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-    const newFilter = event.target.value;
+    const newFilter = event.target.value as Status;
 
     setFilterAndQuery(prevState => ({ ...prevState, filter: newFilter }));
     onFilter(newFilter);
@@ -30,7 +31,7 @@ export const TodoFilter
   };
 
   const handleClearButton = () => {
-    setFilterAndQuery({ filter: 'all', query: '' });
+    setFilterAndQuery({ filter: Status.ALL, query: '' });
     onClearFilter();
   };
 
@@ -43,9 +44,9 @@ export const TodoFilter
             value={filterAndQuery.filter}
             onChange={handleSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
