@@ -1,8 +1,24 @@
-export const TodoFilter = () => (
+type Props = {
+  query: string;
+  option: string;
+  handleOption: (option:string) => void;
+  handleQuery: (value:string) => void;
+};
+
+export const TodoFilter:React.FC<Props> = ({
+  query,
+  option,
+  handleQuery,
+  handleOption,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={option}
+          onChange={e => handleOption(e.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
