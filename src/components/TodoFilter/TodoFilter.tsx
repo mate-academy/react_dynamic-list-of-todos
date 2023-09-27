@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Query } from '../../types/Query';
+import { QueryEnum } from '../helpers/QueryEnum';
 
 interface Props {
   todos: Todo[] | null;
@@ -20,13 +21,13 @@ const getSortedTodos = (
 
   if (query) {
     switch (query) {
-      case 'active': {
+      case QueryEnum.active: {
         newTodos = newTodos.filter(todo => !todo.completed);
 
         break;
       }
 
-      case 'completed': {
+      case QueryEnum.completed: {
         newTodos = newTodos.filter(todo => todo.completed);
 
         break;
@@ -51,10 +52,10 @@ const getSortedTodos = (
 
 export const TodoFilter: React.FC<Props> = ({
   todos,
-  setTodos = () => { },
+  setTodos = () => {},
 }) => {
-  const [input, setInput] = useState('');
-  const [query, setQuery] = useState<Query>('all');
+  const [input, setInput] = useState<string>('');
+  const [query, setQuery] = useState<Query>(QueryEnum.all);
 
   useEffect(() => {
     const newTodos = getSortedTodos(todos, query, input);
@@ -82,13 +83,13 @@ export const TodoFilter: React.FC<Props> = ({
             value={query}
             onChange={event => setQuery(event.target.value as Query)}
           >
-            <option value="all">
+            <option value={QueryEnum.all}>
               All
             </option>
-            <option value="active">
+            <option value={QueryEnum.active}>
               Active
             </option>
-            <option value="completed">
+            <option value={QueryEnum.completed}>
               Completed
             </option>
           </select>

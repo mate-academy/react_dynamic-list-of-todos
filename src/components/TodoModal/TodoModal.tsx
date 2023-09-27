@@ -15,7 +15,7 @@ export const TodoModal: React.FC<Props> = ({
   selectTodo = () => {},
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState<boolean>(false);
 
   useEffect(() => {
     setLoader(true);
@@ -26,6 +26,9 @@ export const TodoModal: React.FC<Props> = ({
         .finally(() => setLoader(false));
     }
   }, [todo]);
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { id, title, completed } = todo!;
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -42,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${todo?.id}`}
+                {`Todo #${id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -56,13 +59,13 @@ export const TodoModal: React.FC<Props> = ({
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {todo?.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
                 <strong className={classNames({
-                  'has-text-danger': !todo?.completed,
-                  'has-text-success': todo?.completed,
+                  'has-text-danger': !completed,
+                  'has-text-success': completed,
                 })}
                 >
                   {todo?.completed ? 'Done' : 'Planned'}
