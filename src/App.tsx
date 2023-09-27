@@ -14,9 +14,18 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState('all');
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then(result => setTodos(result));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    getTodos().then(result => {
+      setTodos(result);
+      setLoading(false);
+    });
   }, []);
 
   const todosToShow = useMemo(() => {
@@ -53,15 +62,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={todosToShow}
-                    selectedTodo={selectedTodo}
-                    setSelectedTodo={setSelectedTodo}
-                  />
-                )}
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={todosToShow}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
