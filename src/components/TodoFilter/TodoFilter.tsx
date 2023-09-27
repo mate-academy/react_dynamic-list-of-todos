@@ -1,9 +1,9 @@
 import { Filter } from '../utils';
 
 type Props = {
-  filterBy: Filter;
+  filterBy: Filter | string;
   query: string,
-  setFilterBy: (e: Filter) => void,
+  setFilterBy: (e: Filter | string) => void,
   setQuery: (e: string) => void,
 };
 
@@ -13,8 +13,6 @@ export const TodoFilter = ({
   setFilterBy,
   setQuery,
 }: Props) => {
-  // const [hide, setHide] = useState<boolean>(true);
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -22,7 +20,7 @@ export const TodoFilter = ({
           <select
             data-cy="statusSelect"
             value={filterBy}
-            onChange={(e) => setFilterBy(e.target.value as Filter)}
+            onChange={(e) => setFilterBy(e.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -46,16 +44,16 @@ export const TodoFilter = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
 
-          {query !== ''
-            ? (
+          {query
+             && (
           /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
-              <button
-                data-cy="clearSearchButton"
-                type="button"
-                className="delete"
-                onClick={() => setQuery('')}
-              />
-            ) : null }
+               <button
+                 data-cy="clearSearchButton"
+                 type="button"
+                 className="delete"
+                 onClick={() => setQuery('')}
+               />
+             )}
         </span>
       </p>
     </form>

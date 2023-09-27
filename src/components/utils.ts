@@ -2,7 +2,11 @@ import { Todo } from '../types/Todo';
 
 export type Filter = 'completed' | 'all' | 'active';
 
-export const filterTodos = (todos: Todo[], filterBy: Filter, query: string) => {
+export const filterTodos = (
+  todos: Todo[],
+  filterBy: Filter | string,
+  query: string,
+) => {
   const filteredTodos = todos.filter(todo => todo.title.toLowerCase()
     .includes(query.toLowerCase()));
 
