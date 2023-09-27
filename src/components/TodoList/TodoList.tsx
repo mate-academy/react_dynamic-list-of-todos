@@ -16,8 +16,7 @@ export const TodoList: React.FC<ListProps> = ({
   setSelectedTodo,
   selectedTodoId,
   setSelectedTodoId,
-}) => {
-  return (
+}) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
