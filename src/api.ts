@@ -16,8 +16,8 @@ function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see now the loader works
-  return wait(500)
+  // we add some delay to see how the loader works
+  return wait(300)
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }
