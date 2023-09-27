@@ -20,25 +20,27 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
-  const visibleTodos = () => {
-    const visible = [...todos].filter((todo) => {
-      if (filter === 'active' && todo.completed) {
-        return false;
-      }
+const visibleTodos = () => {
+  const visible = [...todos].filter((todo) => {
+    switch (filter) {
+      case 'active':
+        if (todo.completed) return false;
+        break;
 
-      if (filter === 'completed' && !todo.completed) {
-        return false;
-      }
+      case 'completed':
+        if (!todo.completed) return false;
+        break;
+    }
 
-      if (!todo.title.toLowerCase().includes(searchTerm.toLowerCase())) {
-        return false;
-      }
+    if (!todo.title.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
 
-      return true;
-    });
+    return true;
+  });
 
-    return visible;
-  };
+  return visible;
+};
 
   useEffect(() => {
     getTodos()
