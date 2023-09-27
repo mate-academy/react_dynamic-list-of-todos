@@ -16,8 +16,7 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
   setIsLoading,
-}: Props) => {
-  return (
+}: Props) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -80,4 +79,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-};
+
