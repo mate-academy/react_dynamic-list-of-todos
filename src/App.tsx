@@ -67,15 +67,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader /> : null}
-
-              <TodoList
-                todoList={list}
-                modalActive={(todo: Todo) => modalActive(todo)}
-                query={query}
-                option={option}
-                activeTaskId={task?.id || null}
-              />
+              {loading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todoList={list}
+                    modalActive={(todo: Todo) => modalActive(todo)}
+                    query={query}
+                    option={option}
+                    activeTaskId={task?.id || null}
+                  />
+                )}
             </div>
           </div>
         </div>
