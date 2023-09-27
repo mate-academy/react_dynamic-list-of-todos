@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: Todo;
+  selectedTodo: Todo | null;
   setIsHide: (bool: boolean) => void;
   setSelectedTodo: (todo: Todo) => void,
   setIsLoading: (bool: boolean) => void,

@@ -56,7 +56,7 @@ export const App: React.FC = () => {
                     <TodoList
                       todos={filteredTodos}
                       setIsHide={setIsHide}
-                      selectedTodo={selectedTodo as Todo}
+                      selectedTodo={selectedTodo}
                       setSelectedTodo={setSelectedTodo}
                       setIsLoading={setIsLoading}
                     />
@@ -68,16 +68,17 @@ export const App: React.FC = () => {
       </div>
 
       {
-        isHide
-     || (
-       <TodoModal
-         isLoading={isLoading}
-         setIsLoading={setIsLoading}
-         setIsHide={setIsHide}
-         selectedTodo={selectedTodo as Todo}
-         setSelectedTodo={setSelectedTodo}
-       />
-     )
+        !isHide
+        && selectedTodo
+        && (
+          <TodoModal
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setIsHide={setIsHide}
+            selectedTodo={selectedTodo}
+            setSelectedTodo={setSelectedTodo}
+          />
+        )
       }
     </>
   );
