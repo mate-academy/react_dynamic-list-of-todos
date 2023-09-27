@@ -13,6 +13,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   searchTerm,
 }) => {
   const [isSearchEmpty, setIsSearchEmpty] = useState(true);
+  
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFilter: Filter = event.target.value as Filter;
 
