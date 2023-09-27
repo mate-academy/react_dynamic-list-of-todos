@@ -26,7 +26,7 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(todo => {
+      {todos.map((todo) => {
         const { id, title, completed } = todo;
 
         return (

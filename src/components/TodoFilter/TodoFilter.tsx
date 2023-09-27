@@ -7,7 +7,7 @@ type Props = {
   setValue: (query: string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = React.memo(({
+export const TodoFilter: React.FC<Props> = (({
   filterBy, setFilterBy, value, setValue,
 }) => (
   <form className="field has-addons">
