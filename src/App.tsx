@@ -1,61 +1,71 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { Todo } from './types/Todo';
+import * as todosAPI from './api';
 import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
-type Option = 'all' | 'active' | 'completed';
+function filterTodos(todos: Todo[], filterStatus: string, query: string) {
+  return todos
+    .filter((todo) => {
+      switch (filterStatus) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    })
+    .filter((todo) => {
+      if (query.trim() === '') {
+        return true;
+      }
+
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    });
+}
 
 export const App: React.FC = () => {
-  const [list, setList] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [option, setOption] = useState<Option>('all');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isloading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
-  const [task, setTask] = useState<Todo | null>(null);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const todos = await getTodos();
+  const handleFilterChange = (status: string) => {
+    setFilterStatus(status);
+  };
 
-        setList(todos);
-      } catch (error) {
-        // eslint-disable-next-line
-        console.log('Error in loading todos', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const handleSelectedTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
 
-    fetchTodos();
-  }, []);
+  const handleCloseTodo = () => {
+    setSelectedTodo(null);
+  };
 
-  const filteredTodos = list
-    .filter((todo: Todo) => todo.title.search(new RegExp(query.trim(), 'i')) > -1)
-    .filter((todo: Todo) => option === 'all'
-      || (option === 'active' && !todo.completed)
-      || (option === 'completed' && todo.completed));
-
-  const handleQuery = (value: string) => {
+  const handleQueryChange = (value: string) => {
     setQuery(value);
   };
 
-  const handleOption = (value: string) => {
-    setOption(value as Option);
-  };
+  const filteredTodos = filterTodos(todos, filterStatus, query);
 
-  const handleTask = (todo: Todo) => {
-    setTask(todo);
-  };
-
-  const handleClose = () => {
-    setTask(null);
-  };
+  useEffect(() => {
+    todosAPI
+      .getTodos()
+      .then((data) => {
+        setTodos(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        throw new Error(error.message);
+      });
+  }, []);
 
   return (
     <>
@@ -66,21 +76,19 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleQuery={handleQuery}
-                handleOption={handleOption}
-                query={query}
-                option={option as string}
+                onFilterChange={handleFilterChange}
+                handleQuery={handleQueryChange}
               />
             </div>
 
             <div className="block">
-              {isLoading ? (
+              {isloading ? (
                 <Loader />
               ) : (
                 <TodoList
-                  list={filteredTodos}
-                  activeTodo={task}
-                  handleTask={handleTask}
+                  todos={filteredTodos}
+                  handleSelectedTodo={handleSelectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -88,10 +96,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {task && (
+      {selectedTodo !== null && (
         <TodoModal
-          todo={task}
-          handleClose={handleClose}
+          selectedTodo={selectedTodo}
+          handleCloseTodo={handleCloseTodo}
         />
       )}
     </>
