@@ -62,9 +62,9 @@ export const TodoList: React.FC<ListOfTodos>
       </thead>
 
       <tbody>
-        {filteredTodos.map(todo => (
-          <React.Fragment key={todo.id}>
-            <tr data-cy="todo" className="">
+        {filteredTodos.map(todo => [
+          <>
+            <tr key={todo.id} data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>
               {todo.completed
                 ? (
@@ -95,8 +95,9 @@ export const TodoList: React.FC<ListOfTodos>
                 </button>
               </td>
             </tr>
-          </React.Fragment>
-        ))}
+            ,
+          </>,
+        ])}
       </tbody>
     </table>
   );

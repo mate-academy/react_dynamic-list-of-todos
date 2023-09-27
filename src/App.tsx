@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -19,18 +18,22 @@ export const App: React.FC = () => {
   const [option, setOption] = useState<Options | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    const fetchData = async () => {
+      setLoading(true);
 
-    getTodos()
-      .then((todos) => {
+      try {
+        const todos = await getTodos();
+
         setList(todos);
-        setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Something bad happened!', error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const modalActive = (todo: Todo) => {
@@ -57,11 +60,14 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter handleQuery={handleQuery} handleOption={handleOption} />
+              <TodoFilter
+                handleQuery={handleQuery}
+                handleOption={handleOption}
+              />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {loading ? <Loader /> : null}
 
               <TodoList
                 todoList={list}
