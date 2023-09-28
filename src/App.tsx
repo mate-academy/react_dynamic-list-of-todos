@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<'all' | 'completed'
-  | 'incomplete'>('all');
+  | 'active'>('all');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
