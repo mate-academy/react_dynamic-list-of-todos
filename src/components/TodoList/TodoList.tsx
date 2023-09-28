@@ -58,9 +58,7 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => {
-                onTodoSelected(todo);
-              }}
+              onClick={() => onTodoSelected(todo)}
             >
               <span className="icon">
                 <i className={classNames('far', {

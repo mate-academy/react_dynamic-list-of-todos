@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
@@ -13,7 +13,7 @@ import { StatusState } from './types/StatusState';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoadiang, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
   const [statusState, setStatusState] = useState(StatusState.All);
   const [titleQuery, setTitleQuery] = useState('');
@@ -22,28 +22,34 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
-  const filteredTodos = useMemo(() => {
+  const filterTodosByStatus = (todo: Todo) => {
+    switch (statusState) {
+      case StatusState.Active:
+        return !todo.completed;
+      case StatusState.Completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  };
+
+  const filterTodosByTitle = (todo: Todo) => {
     const lowerTitleQuery = titleQuery.toLowerCase();
 
-    return todos
-      .filter(todo => {
-        switch (statusState) {
-          case StatusState.Active:
-            return !todo.completed;
-          case StatusState.Competed:
-            return todo.completed;
-          default:
-            return true;
-        }
-      })
-      .filter(todo => (
-        todo.title.toLowerCase().includes(lowerTitleQuery)
-      ));
+    return todo.title.toLowerCase().includes(lowerTitleQuery);
+  };
+
+  const filteredTodos = useMemo(() => {
+    return todos.filter(filterTodosByStatus).filter(filterTodosByTitle);
   }, [statusState, titleQuery, todos]);
 
   return (
@@ -63,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadiang
+              {isLoading
                 ? (
                   <Loader />
                 )

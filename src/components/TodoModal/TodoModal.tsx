@@ -17,6 +17,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onTodoSelected }) => {
     setIsLoading(true);
     getUser(todo.userId)
       .then(setUser)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -39,11 +43,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onTodoSelected }) => {
                 {todo.id}
               </div>
 
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <button
                 type="button"
                 className="delete"
                 data-cy="modal-close"
+                aria-label="Close"
                 onClick={() => onTodoSelected(null)}
               />
             </header>
