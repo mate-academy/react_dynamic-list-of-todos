@@ -44,12 +44,10 @@ export const TodoModal: React.FC<Props> = ({
 
           <p className="block" data-cy="modal-user">
             {userInfo?.todo.completed ? (
-              <strong className="has-text-success">Done</strong>
+              <strong className="has-text-success">Done by </strong>
             ) : (
-              <strong className="has-text-danger">Planned</strong>
+              <strong className="has-text-danger">Planned by </strong>
             )}
-
-            {' by '}
 
             <a href="mailto:Sincere@april.biz">{userInfo?.name}</a>
           </p>
