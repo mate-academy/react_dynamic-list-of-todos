@@ -10,13 +10,13 @@ export const getFilterTodo = (
     return todos;
   }
 
-  const preparedGoods = todos.filter(todo => {
+  const preparedTodos = todos.filter(todo => {
     return todo.title
       .toLowerCase()
       .includes(query.toLowerCase());
   });
 
-  return preparedGoods.filter(todo => {
+  return preparedTodos.filter(todo => {
     switch (filterBy) {
       case FilterType.Active: {
         return !todo.completed;

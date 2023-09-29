@@ -25,12 +25,12 @@ export const TodoFilter: React.FC<Props> = ({
           }}
         >
           {(Object.keys(FilterType) as Array<keyof typeof FilterType>)
-            .map(option => (
+            .map(type => (
               <option
-                key={option}
-                value={option.toLowerCase()}
+                key={type}
+                value={type.toLowerCase()}
               >
-                {option}
+                {type}
               </option>
             ))}
         </select>
@@ -52,13 +52,14 @@ export const TodoFilter: React.FC<Props> = ({
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {!!query && (
-          // eslint-disable-next-line jsx-a11y/control-has-associated-label
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
             onClick={() => onSetQuery('')}
-          />
+          >
+            {' '}
+          </button>
         )}
       </span>
     </p>
