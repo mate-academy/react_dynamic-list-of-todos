@@ -1,9 +1,5 @@
-import { LOADING_TIME, FilterType } from './variables';
+import { FilterType } from './variables';
 import { Todo } from '../types/Todo';
-
-export const showLoader = (callback: (v: boolean) => void) => {
-  setTimeout(() => callback(false), LOADING_TIME);
-};
 
 export const getFilterTodo = (
   query: string,

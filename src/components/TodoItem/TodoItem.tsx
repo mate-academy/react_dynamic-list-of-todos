@@ -6,15 +6,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo,
   isActive: boolean,
-  onShowModal: (v: boolean) => void,
-  onSetSelectedTodoId: (number: number) => void,
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   isActive,
-  onShowModal,
-  onSetSelectedTodoId,
+  setSelectedTodo,
 }) => {
   const {
     id,
@@ -22,9 +20,8 @@ export const TodoItem: React.FC<Props> = ({
     title,
   } = todo;
 
-  const handleShowBtn = (todoId: number) => {
-    onSetSelectedTodoId(todoId);
-    onShowModal(true);
+  const handleShowBtn = () => {
+    setSelectedTodo(todo);
   };
 
   return (
@@ -58,9 +55,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => {
-            handleShowBtn(id);
-          }}
+          onClick={handleShowBtn}
         >
           <span className="icon">
             <i

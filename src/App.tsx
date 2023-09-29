@@ -14,14 +14,11 @@ import { getFilterTodo } from './services/services';
 import { FilterType } from './services/variables';
 
 export const App: React.FC = () => {
-  const [hasModal, setHasModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState(FilterType.All);
   const [query, setQuery] = useState('');
-
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId) as Todo;
 
   useEffect(() => {
     setisLoading(true);
@@ -57,28 +54,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (
-                <Loader />
-              )}
-              {!isLoading && (
-                <TodoList
-                  onShowModal={setHasModal}
-                  todos={filteredTodos}
-                  // onSetUser={setUser}
-                  onSetSelectedTodoId={setSelectedTodoId}
-                  selectedTodoId={selectedTodoId}
-                />
-              )}
+              {isLoading
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {hasModal && (
+      {selectedTodo && (
         <TodoModal
-          onShowModal={setHasModal}
           selectedTodo={selectedTodo}
-          onSetSelectedTodoId={setSelectedTodoId}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </div>

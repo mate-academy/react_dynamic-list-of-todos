@@ -8,8 +8,6 @@ type Props = {
   onSetQuery: (option: string) => void,
 };
 
-const OPTIONS = ['All', 'Completed', 'Active'];
-
 export const TodoFilter: React.FC<Props> = ({
   filterBy,
   setFilterBy,
@@ -26,9 +24,15 @@ export const TodoFilter: React.FC<Props> = ({
             setFilterBy(event.target.value as FilterType);
           }}
         >
-          {OPTIONS.map(option => (
-            <option value={option.toLowerCase()}>{option}</option>
-          ))}
+          {(Object.keys(FilterType) as Array<keyof typeof FilterType>)
+            .map(option => (
+              <option
+                key={option}
+                value={option.toLowerCase()}
+              >
+                {option}
+              </option>
+            ))}
         </select>
       </span>
     </p>
