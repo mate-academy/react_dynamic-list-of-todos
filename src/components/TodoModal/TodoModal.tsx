@@ -16,10 +16,10 @@ export const TodoModal: React.FC<Props> = (
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     if (selectedTodo) {
       getUser(selectedTodo.userId)
@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = (
           // eslint-disable-next-line no-console
           console.log(error);
         })
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, []);
 
@@ -36,7 +36,7 @@ export const TodoModal: React.FC<Props> = (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -48,9 +48,9 @@ export const TodoModal: React.FC<Props> = (
               {`Todo #${selectedTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="delete-button"
               className="delete"
               data-cy="modal-close"
               onClick={() => onSelect(null)}

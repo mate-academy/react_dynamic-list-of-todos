@@ -4,19 +4,19 @@ type Props = {
   searchQuery: string;
   onQueryChange: (query: string) => void;
   selectedFilter: TodosFilter;
-  onfilterChange: (filter: TodosFilter) => void;
+  onFilterChange: (filter: TodosFilter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   searchQuery,
   onQueryChange,
   selectedFilter,
-  onfilterChange,
+  onFilterChange,
 }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectFilter = event.target.value as TodosFilter;
 
-    onfilterChange(selectFilter);
+    onFilterChange(selectFilter);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,9 +25,9 @@ export const TodoFilter: React.FC<Props> = ({
     onQueryChange(newQuery);
   };
 
-  const clear = () => {
+  const resetSearchAndFilter = () => {
     onQueryChange('');
-    onfilterChange(TodosFilter.All);
+    onFilterChange(TodosFilter.All);
   };
 
   return (
@@ -60,14 +60,14 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
           {searchQuery && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               aria-label="Clear"
-              onClick={clear}
+              onClick={resetSearchAndFilter}
             />
           )}
         </span>

@@ -15,19 +15,19 @@ import { getpreparedTodos } from './utils/PreparedTodos';
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<TodosFilter>(TodosFilter.All);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodo)
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(error);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const preparedTodos = useMemo(() => {
@@ -46,17 +46,17 @@ export const App: React.FC = () => {
                 searchQuery={query}
                 onQueryChange={setQuery}
                 selectedFilter={filter}
-                onfilterChange={setFilter}
+                onFilterChange={setFilter}
               />
             </div>
 
             <div className="block">
 
-              {loading && (
+              {isLoading && (
                 <Loader />
               )}
 
-              {!loading && todos.length > 0 && (
+              {!isLoading && !!todos.length && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}
