@@ -39,7 +39,7 @@ export const App: React.FC = () => {
       .finally(() => setState(prevState => ({ ...prevState, isLoading: false })));
   }, []);
 
-  const filteredOfTodos = useMemo(() => {
+  const filteredOfTodos: Todo[] = useMemo(() => {
     return forFilteredTodos(state.todos, state.query, state.selectedFilter);
   }, [state.todos, state.query, state.selectedFilter]);
 

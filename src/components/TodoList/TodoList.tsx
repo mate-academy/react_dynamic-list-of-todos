@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodoId?: Todo | null;
+  selectedTodoId?: number | null;
   getSelectedTodo?: (todo: Todo) => void;
 };
 
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => {
-        const isSelected = selectedTodoId === todo;
+        const isSelected = selectedTodoId === todo.id;
 
         return (
           <tr
