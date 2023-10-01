@@ -1,14 +1,10 @@
-export enum FilterOptions {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { FilterOptions } from '../../types/Todo';
 
 type Props = {
   query: string;
   setQuery: (str: string) => void;
-  selectedOption: string;
-  setSelectedOption: (str: string) => void;
+  selectedOption: FilterOptions;
+  setSelectedOption: (str: FilterOptions) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -30,7 +26,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={selectedOption}
             onChange={(event) => (
-              setSelectedOption(event.target.value)
+              setSelectedOption(event.target.value as FilterOptions)
             )}
           >
             {Object.entries(FilterOptions).map(([key, value]) => (

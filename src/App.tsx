@@ -4,56 +4,55 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { FilterOptions, TodoFilter } from './components/TodoFilter';
-import { Todo } from './types/Todo';
+import { TodoFilter } from './components/TodoFilter';
+import { FilterOptions, Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 function preparedTodos(
-  arr: Todo[],
-  option: string,
+  todos: Todo[],
+  filterOption: FilterOptions,
   query: string,
 ) {
-  let todos = [...arr];
+  let newTodos = todos.filter(todo => {
+    switch (filterOption) {
+      case FilterOptions.Active:
+        return !todo.completed;
+      case FilterOptions.Completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   if (query) {
-    todos = todos.filter(todo => todo.title
+    newTodos = newTodos.filter(todo => todo.title
       .toLowerCase()
       .includes(query.toLowerCase()));
   }
 
-  if (option) {
-    switch (option) {
-      case FilterOptions.Active: {
-        return todos.filter(todo => !todo.completed);
-      }
-
-      case FilterOptions.Completed: {
-        return todos.filter(todo => todo.completed);
-      }
-
-      default: {
-        return todos;
-      }
-    }
-  }
-
-  return todos;
+  return newTodos;
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<FilterOptions>(FilterOptions.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then(setTodos)
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
       .finally(() => setIsLoading(false));
-  });
+  }, []);
 
   const visibleTodos = preparedTodos(todos, selectedOption, query);
 
@@ -87,6 +86,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
