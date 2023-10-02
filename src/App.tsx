@@ -10,7 +10,9 @@ import { getTodos } from './api';
 
 import { TodoContext } from './context/ContextTodo';
 
-import { TodoFilter, getPreparedTodos } from './components/TodoFilter';
+import { getPreparedTodos } from './utils/todoFilter';
+
+import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { TodoList } from './components/TodoList';
 import { Loader } from './components/Loader';
