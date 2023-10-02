@@ -9,14 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { FilterTodos } from './types/FilterTodos';
+import { TodoStatus } from './types/FilterTodos';
 
 type FilterObject = {
   query: string;
-  filterParameter?: FilterTodos | string;
+  filterParameter?: TodoStatus | string;
 };
 
-const prepareTodos = (todos: Todo[], { query, filterParameter }: FilterObject) => {
+const getFilteredTodos = (todos: Todo[], { query, filterParameter }: FilterObject) => {
   let todosCopy = [...todos];
 
   if (query) {
@@ -25,13 +25,13 @@ const prepareTodos = (todos: Todo[], { query, filterParameter }: FilterObject) =
     });
   }
 
-  if (filterParameter !== FilterTodos.All) {
+  if (filterParameter !== TodoStatus.All) {
     todosCopy = todosCopy.filter(todo => {
       switch (filterParameter) {
-        case FilterTodos.Active:
+        case TodoStatus.Active:
           return !todo.completed;
 
-        case FilterTodos.Completed:
+        case TodoStatus.Completed:
           return todo.completed;
 
         default:
@@ -44,21 +44,25 @@ const prepareTodos = (todos: Todo[], { query, filterParameter }: FilterObject) =
 };
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterParameter, setFilterParameter] = useState<FilterTodos | string>(FilterTodos.All);
+  const [filterParameter, setFilterParameter] = useState<TodoStatus | string>(TodoStatus.All);
   const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const preparedTodos = prepareTodos(todos, { query, filterParameter });
+  const preparedTodos = getFilteredTodos(todos, { query, filterParameter });
 
   return (
     <>
@@ -77,13 +81,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-
-              <TodoList
-                todos={preparedTodos}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={preparedTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>

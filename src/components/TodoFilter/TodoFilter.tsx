@@ -1,8 +1,8 @@
-import { FilterTodos } from '../../types/FilterTodos';
+import { TodoStatus } from '../../types/FilterTodos';
 
 type Props = {
   query: string;
-  filterParameter: FilterTodos | string;
+  filterParameter: TodoStatus | string;
   onInputChange: (str: string) => void;
   onSelectChange: (field: string) => void;
 };
@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
     return onSelectChange(event.target.value);
   };
 
-  const clear = () => onInputChange('');
+  const handleInputClear = () => onInputChange('');
 
   return (
     <form className="field has-addons">
@@ -32,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterParameter}
             onChange={handleSelect}
           >
-            <option value={FilterTodos.All}>All</option>
-            <option value={FilterTodos.Active}>Active</option>
-            <option value={FilterTodos.Completed}>Completed</option>
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -59,7 +59,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={clear}
+              onClick={handleInputClear}
             />
           </span>
         )}

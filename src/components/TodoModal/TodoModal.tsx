@@ -13,7 +13,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { id, title, completed } = todo;
 
@@ -22,8 +22,9 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
 
     getUser(todo.userId)
       .then(setUser)
-      .catch(() => {
-        throw new Error('Nothing was found!');
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
       })
       .finally(() => setIsLoading(false));
   }, []);
