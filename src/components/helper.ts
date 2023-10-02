@@ -6,7 +6,7 @@ export const forFilteredTodos = (
   query: string,
   selectedFilter: ForFilteredTodos,
 ) => {
-  let preparedTodo = [...todos];
+  let preparedTodo = todos;
 
   if (query) {
     preparedTodo = todos.filter(({ title }) => {

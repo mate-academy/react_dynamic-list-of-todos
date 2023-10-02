@@ -1,3 +1,5 @@
+import './TodoFilter.scss';
+
 export enum ForFilteredTodos {
   all = 'all',
   noCompleted = 'noCompleted',
@@ -17,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
   selectedFilter,
   getSelectedFilter,
 }) => {
-  const reset = () => {
+  const resetFilter = () => {
     getSetQuery('');
     getSelectedFilter(ForFilteredTodos.all);
   };
@@ -55,14 +57,14 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query !== '' && (
+        <span className="icon is-right">
+          {!!query && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               aria-label="Clear Search"
-              onClick={reset}
+              onClick={resetFilter}
             />
           )}
         </span>
