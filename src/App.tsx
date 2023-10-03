@@ -9,17 +9,17 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { TodosFilters } from './types/TodosFilters';
+import { TodosStatus } from './types/TodosStatus';
 import { Filter } from './types/Filter';
+import { DEFAULT_FILTER } from './constants/constants';
 
 function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
   let filteredTodos = todos.filter(todo => {
     switch (filter.option) {
-      case TodosFilters.Active:
+      case TodosStatus.Active:
         return !todo.completed;
-      case TodosFilters.Completed:
+      case TodosStatus.Completed:
         return todo.completed;
-      case TodosFilters.All:
       default:
         return todo;
     }
@@ -34,41 +34,27 @@ function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
   return filteredTodos;
 }
 
-const initialState = {
-  todos: [],
-  loading: false,
-  selectedTodo: null,
-  filter: {
-    option: TodosFilters.All,
-    query: '',
-  },
-};
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(initialState.todos);
-  const [loading, setLoading] = useState(initialState.loading);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(initialState.selectedTodo);
-  const [filter, setFilter] = useState<Filter>(initialState.filter);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState<Filter>(DEFAULT_FILTER);
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(error);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const handleFilter = (currentFilter: Filter) => {
+  const updateFilter = (currentFilter: Filter) => {
     setFilter(currentFilter);
-  };
-
-  const handleShowModal = (todo: Todo) => {
-    setSelectedTodo(todo);
   };
 
   const handlerCloseModal = () => {
@@ -83,17 +69,17 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter handleFilter={handleFilter} />
+              <TodoFilter updateFilter={updateFilter} />
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={filteredTodos}
                     selectedTodo={selectedTodo}
-                    handleShowModal={handleShowModal}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
@@ -101,14 +87,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo
-        ? (
-          <TodoModal
-            selectedTodo={selectedTodo}
-            handlerCloseModal={handlerCloseModal}
-          />
-        )
-        : null}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handlerCloseModal={handlerCloseModal}
+        />
+      )}
     </>
   );
 };

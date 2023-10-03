@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Filter } from '../../types/Filter';
-import { TodosFilters } from '../../types/TodosFilters';
+import { TodosStatus } from '../../types/TodosStatus';
+import { DEFAULT_FILTER } from '../../constants/constants';
 
 type Props = {
-  handleFilter: (filter: Filter) => void;
+  updateFilter: (filter: Filter) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
+export const TodoFilter: React.FC<Props> = ({ updateFilter }) => {
   const [query, setQuery] = useState('');
-  const [option, setOption] = useState<TodosFilters>(TodosFilters.All);
-
-  useEffect(() => {
-    handleFilter({ option, query });
-  }, [query, option]);
+  const [option, setOption] = useState<TodosStatus>(TodosStatus.All);
 
   const handleChangeFilterOption
-  = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOption(event.target.value as TodosFilters);
+  = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newOption = e.target.value as TodosStatus;
+
+    setOption(newOption);
+    updateFilter({ option: newOption, query });
   };
 
-  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+  const handleChangeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+
+    setQuery(newQuery);
+    updateFilter({ option, query: newQuery });
   };
 
   const handleDeleteQuery = () => {
     setQuery('');
-    setOption(TodosFilters.All);
+    setOption(TodosStatus.All);
+    updateFilter(DEFAULT_FILTER);
   };
 
   return (
@@ -37,9 +41,14 @@ export const TodoFilter: React.FC<Props> = ({ handleFilter }) => {
             value={option}
             onChange={handleChangeFilterOption}
           >
-            <option value={TodosFilters.All}>All</option>
-            <option value={TodosFilters.Active}>Active</option>
-            <option value={TodosFilters.Completed}>Completed</option>
+            {Object.keys(TodosStatus).map(key => (
+              <option
+                key={key}
+                value={TodosStatus[key as keyof typeof TodosStatus]}
+              >
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>

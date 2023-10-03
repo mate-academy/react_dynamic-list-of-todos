@@ -1,6 +1,6 @@
-import { TodosFilters } from './TodosFilters';
+import { TodosStatus } from './TodosStatus';
 
 export interface Filter {
-  option: TodosFilters;
+  option: TodosStatus;
   query: string;
 }
