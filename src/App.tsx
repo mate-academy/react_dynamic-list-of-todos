@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -36,27 +36,27 @@ export const App: React.FC = () => {
     }
   }, [selectedTodo]);
 
-  const getFilteredTodos = useCallback(() => {
-    let filteredTodos = todos;
+  const filteredTodos = useMemo(() => {
+    let filtered = todos;
 
     switch (filterParam) {
       case TodoStatus.Active:
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        filtered = filtered.filter(todo => !todo.completed);
         break;
       case TodoStatus.Completed:
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        filtered = filtered.filter(todo => todo.completed);
         break;
       default:
         break;
     }
 
     if (query.trim()) {
-      filteredTodos = filteredTodos.filter(
+      filtered = filtered.filter(
         todo => todo.title.toLowerCase().includes(query.toLowerCase()),
       );
     }
 
-    return filteredTodos;
+    return filtered;
   }, [todos, filterParam, query]);
 
   return (
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={getFilteredTodos()}
+                    todos={filteredTodos}
                     selectedTodo={selectedTodo}
                     setSelectedTodo={setSelectedTodo}
                   />
