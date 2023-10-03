@@ -1,4 +1,5 @@
 import { TodosFilter } from '../../types/TodoFilter';
+import './TodoFilter.scss';
 
 type Props = {
   searchQuery: string;
@@ -59,8 +60,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-
+        <span className="icon is-right is-pointer-events-all">
           {searchQuery && (
             <button
               data-cy="clearSearchButton"
@@ -73,6 +73,5 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
     </form>
-
   );
 };

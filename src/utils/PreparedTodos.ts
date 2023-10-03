@@ -4,27 +4,25 @@ import { TodosFilter } from '../types/TodoFilter';
 export const getpreparedTodos = (
   todos: Todo[],
   query: string,
-  filter: TodosFilter,
+  filterState: TodosFilter,
 ) => {
-  let preparedTodos = [...todos];
+  let filteredTodos = [...todos];
 
   if (query) {
-    preparedTodos = preparedTodos
-      .filter(({ title }) => title.toLowerCase().includes(query.toLowerCase()));
+    const preparedQuery = query.toLowerCase();
+
+    filteredTodos = filteredTodos.filter(
+      ({ title }) => title.toLowerCase().includes(preparedQuery),
+    );
   }
 
-  if (filter !== TodosFilter.All) {
-    switch (filter) {
-      case TodosFilter.Active:
-        preparedTodos = preparedTodos.filter((todo) => !todo.completed);
-        break;
-      case TodosFilter.Completed:
-        preparedTodos = preparedTodos.filter((todo) => todo.completed);
-        break;
-      default:
-        break;
-    }
+  if (filterState === TodosFilter.Active) {
+    filteredTodos = filteredTodos.filter((todo) => !todo.completed);
   }
 
-  return preparedTodos;
+  if (filterState === TodosFilter.Completed) {
+    filteredTodos = filteredTodos.filter((todo) => todo.completed);
+  }
+
+  return filteredTodos;
 };
