@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
+import { FilterType } from '../../types/Todo';
 
 type Props = {
   filterBy: string,
-  setFilterBy: (option: string) => void,
+  setFilterBy: Dispatch<SetStateAction<FilterType>>,
   value: string,
   setValue: (query: string) => void,
 };
@@ -16,7 +17,7 @@ export const TodoFilter: React.FC<Props> = (({
         <select
           data-cy="statusSelect"
           value={filterBy}
-          onChange={(event) => setFilterBy(event.target.value)}
+          onChange={(event) => setFilterBy(event.target.value as FilterType)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
