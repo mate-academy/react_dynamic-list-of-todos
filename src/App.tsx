@@ -24,6 +24,10 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.warn(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -32,6 +36,10 @@ export const App: React.FC = () => {
       setIsLoading(true);
       getUser(selectedTodo.userId)
         .then(setUser)
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.warn(error);
+        })
         .finally(() => setIsLoading(false));
     }
   }, [selectedTodo]);
@@ -43,9 +51,11 @@ export const App: React.FC = () => {
       case TodoStatus.Active:
         filtered = filtered.filter(todo => !todo.completed);
         break;
+
       case TodoStatus.Completed:
         filtered = filtered.filter(todo => todo.completed);
         break;
+
       default:
         break;
     }
