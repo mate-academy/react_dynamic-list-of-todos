@@ -93,7 +93,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onSelectFiltering={selectFilterQuery}
-                onSearching={selectSearchQuery}
+                searchQuery={searchQuery}
+                selectSearchQuery={selectSearchQuery}
               />
             </div>
 

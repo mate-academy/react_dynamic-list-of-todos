@@ -1,1 +1,1 @@
-export type FilteringQuery = "all" | "active" | "completed";
+export type FilteringQuery = 'all' | 'active' | 'completed';
