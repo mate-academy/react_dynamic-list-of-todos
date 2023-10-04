@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
   selectedOption,
   setSelectedOption,
 }) => {
-  const resetButton = () => {
+  const handleResetInput = () => {
     setQuery('');
     setSelectedOption(FilterOptions.All);
   };
@@ -55,13 +55,13 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right pointerEvent">
             <button
+              aria-label="deleteButton"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetButton}
+              onClick={handleResetInput}
             />
           </span>
         )}
