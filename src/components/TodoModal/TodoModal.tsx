@@ -19,8 +19,16 @@ export const TodoModal: React.FC<Props> = ({
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedTodo?.userId || 0).then(setSelectedUser);
-  }, []);
+    if (selectedTodo?.userId) {
+      getUser(selectedTodo.userId)
+        .then(setSelectedUser)
+        .catch(() => {
+          setSelectedUser(null);
+        });
+    } else {
+      setSelectedUser(null);
+    }
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">

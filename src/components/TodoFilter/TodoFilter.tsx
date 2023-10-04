@@ -25,15 +25,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             onChange={onFilterChange}
           >
-            <option value={TodoStatus.All}>
-              All
-            </option>
-            <option value={TodoStatus.Active}>
-              Active
-            </option>
-            <option value={TodoStatus.Completed}>
-              Completed
-            </option>
+            {Object.values(TodoStatus).map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -64,6 +60,5 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
     </form>
-
   );
 };

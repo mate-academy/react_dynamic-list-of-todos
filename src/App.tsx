@@ -14,31 +14,44 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState(TodoStatus.All);
-  const [inputValue, setInputValue] = useState('');
-  const [isOpedModal, setIsOpedModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(TodoStatus.All);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  // const [loader, setLoader] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    const fetchData = async () => {
+      try {
+        const data = await getTodos();
+
+        setTodos(data);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching todos:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value as TodoStatus);
+    setFilterStatus(event.target.value as TodoStatus);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    setSearchQuery(event.target.value);
   };
 
   const clearInput = () => {
-    setInputValue('');
+    setSearchQuery('');
   };
 
-  const visibleTodos = useMemo(() => filterTodos(filter, todos), [filter, todos]);
+  const visibleTodos = useMemo(() => filterTodos(filterStatus, todos), [filterStatus, todos]);
 
-  const seachTodo = search(inputValue, visibleTodos);
+  const seachTodo = search(searchQuery, visibleTodos);
 
   return (
     <>
@@ -50,32 +63,32 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onFilterChange={handleFilterChange}
-                filter={filter}
-                inputValue={inputValue}
+                filter={filterStatus}
+                inputValue={searchQuery}
                 onInputChange={handleInputChange}
                 clearInput={clearInput}
               />
             </div>
 
             <div className="block">
-              {!todos.length
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={seachTodo}
-                    setIsOpedModal={setIsOpedModal}
-                    isOpedModal={isOpedModal}
-                    setSelectedTodo={setSelectedTodo}
-                    selectedTodo={selectedTodo}
-                  />
-                )}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={seachTodo}
+                  setIsOpenModal={setIsOpenModal}
+                  isOpenModal={isOpenModal}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-      {isOpedModal && (
+      {selectedTodo && (
         <TodoModal
-          setIsOpedModal={setIsOpedModal}
+          setIsOpedModal={setIsOpenModal}
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />

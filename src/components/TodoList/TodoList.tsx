@@ -1,26 +1,21 @@
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  onSelect?: (todo: Todo | null) => void;
-  setIsOpedModal: (newValue: boolean) => void;
-  isOpedModal: boolean;
+  setIsOpenModal: (newValue: boolean) => void;
   setSelectedTodo: (newValue: Todo | null) => void;
   selectedTodo: Todo | null;
+  isOpenModal: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setIsOpedModal,
+  setIsOpenModal,
   setSelectedTodo,
   selectedTodo,
+  isOpenModal,
 }) => {
-  const handleTodoChosen = (todoId:number) => {
-    setIsOpedModal(true);
-    setSelectedTodo(todos.find(todo => todo.id === todoId) || null);
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -37,48 +32,17 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <tr
-            data-cy="todo"
-            className={classNames({
-              'has-background-info-light': selectedTodo?.id === todo.id,
-            })}
+        {todos.map((todo) => (
+          <TodoItem
             key={todo.id}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={todo.completed
-                  ? 'has-text-success'
-                  : 'has-text-danger'}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                onClick={() => handleTodoChosen(todo.id)}
-                data-cy="selectButton"
-                className="button"
-                type="button"
-              >
-                <span className="icon">
-                  <i className={classNames('far', {
-                    'fa-eye': selectedTodo?.id !== todo.id,
-                    'fa-eye-slash': selectedTodo?.id === todo.id,
-                  })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+            todo={todo}
+            isSelected={selectedTodo?.id === todo.id}
+            onSelect={(selectedTodoItem) => {
+              setIsOpenModal(true);
+              setSelectedTodo(selectedTodoItem);
+            }}
+            isOpenModal={isOpenModal}
+          />
         ))}
       </tbody>
     </table>
