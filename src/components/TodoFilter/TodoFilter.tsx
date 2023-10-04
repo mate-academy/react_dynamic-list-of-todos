@@ -40,9 +40,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedFilter}
             onChange={handleSelectChange}
           >
-            <option value={TodosFilter.All}>All</option>
-            <option value={TodosFilter.Active}>Active</option>
-            <option value={TodosFilter.Completed}>Completed</option>
+            {Object.values(TodosFilter).map((filter) => (
+              <option key={filter} value={filter}>
+                {filter}
+              </option>
+            ))}
           </select>
         </span>
       </p>

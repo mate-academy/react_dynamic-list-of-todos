@@ -17,11 +17,11 @@ export const getpreparedTodos = (
   }
 
   if (filterState === TodosFilter.Active) {
-    filteredTodos = filteredTodos.filter((todo) => !todo.completed);
+    filteredTodos = filteredTodos.filter(({ completed }) => !completed);
   }
 
   if (filterState === TodosFilter.Completed) {
-    filteredTodos = filteredTodos.filter((todo) => todo.completed);
+    filteredTodos = filteredTodos.filter(({ completed }) => completed);
   }
 
   return filteredTodos;
