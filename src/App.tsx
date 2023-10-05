@@ -16,8 +16,8 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState(Filter.All);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,7 +28,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    if (filter === Filter.All && query === '') {
+    if (filter === Filter.All && !query) {
       return todos;
     }
 
