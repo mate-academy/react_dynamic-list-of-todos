@@ -1,9 +1,10 @@
 import React from 'react';
-import { SelectedFilterState } from '../../types/SelectedFilterState';
+import { TodoStatus } from '../../types/TodoStatus';
+import { FILTER_OPTIONS } from '../../utils/constants';
 
 type Props = {
-  selectedFilter: SelectedFilterState,
-  setSelectedFilter: (status: SelectedFilterState) => void,
+  selectedFilter: TodoStatus,
+  setSelectedFilter: (status: TodoStatus) => void,
   query: string,
   setQuery: (query: string) => void,
 };
@@ -22,12 +23,17 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedFilter}
             data-cy="statusSelect"
             onChange={(event) => {
-              setSelectedFilter(event.target.value as SelectedFilterState);
+              setSelectedFilter(event.target.value as TodoStatus);
             }}
           >
-            <option value={SelectedFilterState.All}>All</option>
-            <option value={SelectedFilterState.Active}>Active</option>
-            <option value={SelectedFilterState.Completed}>Completed</option>
+            {FILTER_OPTIONS.map(option => (
+              <option
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -56,7 +62,7 @@ export const TodoFilter: React.FC<Props> = ({
               className="delete"
               onClick={() => {
                 setQuery('');
-                setSelectedFilter(SelectedFilterState.All);
+                setSelectedFilter(TodoStatus.All);
               }}
             />
           </span>

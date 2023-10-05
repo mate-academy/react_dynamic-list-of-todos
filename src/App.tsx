@@ -9,40 +9,31 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
-import { SelectedFilterState } from './types/SelectedFilterState';
+import { TodoStatus } from './types/TodoStatus';
+import { getFilteredTodos } from './helpers/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
-  const [selectedFilter, setSelectedFilter] = useState(SelectedFilterState.All);
+  const [selectedFilter, setSelectedFilter] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
 
   const filteredTodos = useMemo(() => {
     const lowerCaseQuery = query.toLowerCase();
 
-    return todos
-      .filter(todo => {
-        switch (selectedFilter) {
-          case SelectedFilterState.Active:
-            return !todo.completed;
-          case SelectedFilterState.Completed:
-            return todo.completed;
-          default:
-            return true;
-        }
-      })
-      .filter(todo => (
-        todo.title.toLowerCase().includes(lowerCaseQuery)
-      ));
+    return getFilteredTodos(todos, selectedFilter, lowerCaseQuery);
   }, [selectedFilter, query, todos]);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => {
+        throw new Error('Error');
+      })
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
       });
   }, []);
 
@@ -61,7 +52,7 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {loading
+              {isLoading
                 ? (
                   <Loader />
                 ) : (
