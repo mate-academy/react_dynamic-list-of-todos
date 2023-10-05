@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isloading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterStatus, setFilterStatus] = useState(Filter.All);
   const [query, setQuery] = useState('');
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isloading && !selectedTodo
+              {isLoading && !selectedTodo
                 ? <Loader />
 
                 : (
