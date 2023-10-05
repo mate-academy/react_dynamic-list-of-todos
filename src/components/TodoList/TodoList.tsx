@@ -31,9 +31,7 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => {
         const { id, title, completed } = todo;
-        const isTodoSelected = selectedTodo
-          ? selectedTodo.id === id
-          : false;
+        const isTodoSelected = selectedTodo?.id === id;
 
         return (
           <tr data-cy="todo" className="">

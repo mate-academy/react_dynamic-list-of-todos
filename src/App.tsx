@@ -14,7 +14,7 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterParam, setFilterParam] = useState<string>(TodoStatus.All);
+  const [filterParam, setFilterParam] = useState<TodoStatus>(TodoStatus.All);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);

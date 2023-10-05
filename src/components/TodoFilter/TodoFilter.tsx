@@ -4,7 +4,7 @@ type Props = {
   query: string,
   onQueryChange: (newQuery: string) => void,
   filterParam: string,
-  onFilterChange: (newFilterParam: string) => void,
+  onFilterChange: (newFilterParam: TodoStatus) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -27,7 +27,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterParam}
-            onChange={event => onFilterChange(event.target.value)}
+            onChange={event => onFilterChange(event.target.value as TodoStatus)}
           >
             <option value={TodoStatus.All}>All</option>
             <option value={TodoStatus.Active}>Active</option>
