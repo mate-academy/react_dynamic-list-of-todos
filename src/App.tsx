@@ -22,31 +22,31 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
-  function filterTodos(filterType: string) {
-    return todos
-      .filter(todo => {
-        switch (filterType) {
-          case Filter.ALL:
-            return true;
-
-          case Filter.ACTIVE:
-            return !todo.completed;
-
-          case Filter.COMPLETED:
-            return todo.completed;
-
-          default:
-            return true;
-        }
-      })
-      .filter(todo => {
-        return todo.title.toLowerCase().includes(query.toLowerCase());
-      });
-  }
-
   const filteredTodos: Todo[] = useMemo(() => {
-    return filterTodos(filter);
-  }, [todos, query, filter]);
+    let preparedTodos = [...todos];
+
+    preparedTodos = preparedTodos.filter(todo => {
+      switch (filter) {
+        case Filter.ALL:
+          return true;
+
+        case Filter.ACTIVE:
+          return !todo.completed;
+
+        case Filter.COMPLETED:
+          return todo.completed;
+
+        default:
+          return true;
+      }
+    });
+
+    if (query.trim()) {
+      preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+    }
+
+    return preparedTodos;
+  }, [todos, filter, query]);
 
   return (
     <>
