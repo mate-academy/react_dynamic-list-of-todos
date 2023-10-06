@@ -9,12 +9,13 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getPreparedTodos } from './helpers/helpers';
+import { getPreparedTodos } from './helpers/helpersFunctions';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<FilterType>(FilterType.All);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,6 +24,10 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error loading tasks:', error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -39,9 +44,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                value={query}
-                handleInputQuery={setQuery}
-                onSelectedCategory={setSelectedCategory}
+                queryParam={query}
+                onInputChange={setQuery}
+                onSelectCategory={setSelectedCategory}
               />
             </div>
 
@@ -51,8 +56,8 @@ export const App: React.FC = () => {
                 : (
                   <TodoList
                     todos={preparedTodos}
-                    onSelectedUser={setSelectedTodo}
-                    onSelectedTodo={selectedTodo}
+                    onTodoSelect={setSelectedTodo}
+                    selectedTodo={selectedTodo}
                   />
                 )}
             </div>
@@ -63,7 +68,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          removeModal={setSelectedTodo}
+          onCloseModal={setSelectedTodo}
         />
       )}
     </>

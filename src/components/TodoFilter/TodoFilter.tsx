@@ -1,24 +1,30 @@
+import { FilterType } from '../../types/FilterType';
+
 interface Props {
-  value: string,
-  handleInputQuery: (value: string) => void,
-  onSelectedCategory: (category: string) => void,
+  queryParam: string,
+  onInputChange: (value: string) => void,
+  onSelectCategory: (category: FilterType) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  value,
-  handleInputQuery,
-  onSelectedCategory,
+  queryParam,
+  onInputChange,
+  onSelectCategory,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => onSelectedCategory(event.target.value)}
+          onChange={(event) => (
+            onSelectCategory(event.target.value as FilterType)
+          )}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.entries(FilterType).map(([key, filterType]) => (
+            <option key={filterType} value={filterType}>
+              {key}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -29,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={value}
+        value={queryParam}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          handleInputQuery(event.target.value);
+          onInputChange(event.target.value);
         }}
       />
       <span className="icon is-left">
@@ -39,13 +45,13 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {value && (
-          // eslint-disable-next-line jsx-a11y/control-has-associated-label
+        {queryParam && (
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => handleInputQuery('')}
+            aria-label="Button icon"
+            onClick={() => onInputChange('')}
           />
         )}
       </span>

@@ -7,11 +7,13 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   selectedTodo: Todo,
-  removeModal: (value: null) => void;
+  onCloseModal: (value: null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+
   const {
     title,
     id,
@@ -20,15 +22,22 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
   } = selectedTodo;
 
   useEffect(() => {
+    setIsLoading(true);
+
     getUser(userId)
-      .then(setUser);
+      .then(setUser)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error loading user:', error);
+      })
+      .finally(() => setIsLoading(false));
   }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -40,12 +49,12 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
+              aria-label="Button close modal"
               className="delete"
               data-cy="modal-close"
-              onClick={() => removeModal(null)}
+              onClick={() => onCloseModal(null)}
             />
           </header>
 
@@ -55,7 +64,6 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong className={cn({
                 'has-text-danger': !completed,
                 'has-text-success': completed,
@@ -68,8 +76,8 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, removeModal }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
