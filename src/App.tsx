@@ -25,21 +25,20 @@ export const App: React.FC = () => {
   const filteredTodos: Todo[] = useMemo(() => {
     let preparedTodos = [...todos];
 
-    preparedTodos = preparedTodos.filter(todo => {
-      switch (filter) {
-        case Filter.ALL:
-          return true;
+    if (filter !== Filter.ALL) {
+      preparedTodos = preparedTodos.filter(todo => {
+        switch (filter) {
+          case Filter.ACTIVE:
+            return !todo.completed;
 
-        case Filter.ACTIVE:
-          return !todo.completed;
+          case Filter.COMPLETED:
+            return todo.completed;
 
-        case Filter.COMPLETED:
-          return todo.completed;
-
-        default:
-          return true;
-      }
-    });
+          default:
+            return true;
+        }
+      });
+    }
 
     if (query.trim()) {
       preparedTodos = preparedTodos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
