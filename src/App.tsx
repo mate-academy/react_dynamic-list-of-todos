@@ -20,7 +20,7 @@ function checkQuery(string: string, query: string): boolean {
 }
 
 function filterTodos(todos: Todo[], query: string, filterField: FilterType) {
-  let filteredTodos = [...todos];
+  let filteredTodos = todos;
 
   if (filterField !== FilterType.All) {
     switch (filterField) {

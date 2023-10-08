@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   onChangeSelectedTodo: (todo: Todo | null) => void;
 };
 
@@ -35,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo?.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -49,12 +49,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {selectedTodo?.completed
+              {selectedTodo.completed
                 ? (
                   <strong className="has-text-success">Done</strong>
                 )
