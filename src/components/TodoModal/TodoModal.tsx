@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({
     getUser(selectedTodo.userId).then(user => {
       setSelectedUser(user);
     });
-  }, []);
+  }, [selectedTodo.userId]);
 
   return (
     selectedTodo && (

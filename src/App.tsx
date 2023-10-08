@@ -17,30 +17,31 @@ import { TodoModal } from './components/TodoModal';
 export const App: React.FC = () => {
   const [isTodosLoaded, setIsTodosLoaded] = useState(false);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [select, setSelect] = useState(SelectValues.all);
+  const [select, setSelect] = useState(SelectValues.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   function getPreparedTodos(todos: Todo[]): Todo[] {
-    let filtedTodos: Todo[] = [...todos];
+    let filteredTodos: Todo[] = [...todos];
 
     switch (select) {
-      case SelectValues.active:
-        filtedTodos = filtedTodos.filter(todo => todo.completed === false);
+      case SelectValues.Active:
+        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
         break;
 
-      case SelectValues.completed:
-        filtedTodos = filtedTodos.filter(todo => todo.completed === true);
+      case SelectValues.Completed:
+        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
         break;
 
-      default: filtedTodos = [...filtedTodos];
+      default:
+        break;
     }
 
-    filtedTodos = filtedTodos.filter(todo => {
+    filteredTodos = filteredTodos.filter(todo => {
       return todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
     });
 
-    return filtedTodos;
+    return filteredTodos;
   }
 
   useEffect(() => {
