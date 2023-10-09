@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [filteredBy, setFilteredBy] = useState('all');
   const [query, setQuery] = useState('');
 
-  const filteredTodos
+  let filteredTodos
     = (filteredBy === 'all') ? todos : todos.filter((todo) => {
       switch (filteredBy) {
         case 'active':
@@ -29,9 +29,10 @@ export const App: React.FC = () => {
       }
     });
 
-  filteredTodos.filter(todo => todo.title.toLowerCase().includes(
-    query.toLowerCase(),
-  ));
+  filteredTodos
+    = filteredTodos.filter(todo => todo.title.toLowerCase().includes(
+      query.toLowerCase(),
+    ));
 
   useEffect(() => {
     setLoading(true);
