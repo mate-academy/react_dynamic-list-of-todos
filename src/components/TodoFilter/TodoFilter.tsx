@@ -1,34 +1,60 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React from 'react';
+import { Status } from '../../types/Status';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface Props {
+  filterStatus: string;
+  setFilterStatus: React.Dispatch<React.SetStateAction<string>>;
+  filterValue: string;
+  setFilterValue: React.Dispatch<React.SetStateAction<string>>;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+export const TodoFilter: React.FC<Props> = ({
+  filterStatus,
+  setFilterStatus,
+  filterValue,
+  setFilterValue,
+}) => {
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterStatus}
+            onChange={({ target }) => setFilterStatus(target.value)}
+          >
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={filterValue}
+          onChange={({ target }) => setFilterValue(target.value)}
         />
-      </span>
-    </p>
-  </form>
-);
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {filterValue && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setFilterValue('')}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
