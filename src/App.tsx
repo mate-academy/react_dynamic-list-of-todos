@@ -9,20 +9,23 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { StatusFilterSelect } from './enums/enums';
+import { StatusFilterSelect } from './enums/StatusFilterSelect';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [openModal, setOpenModal] = useState(false);
+  const [errorMessageTodos, setErrorMessageTodos] = useState('');
 
   const [filterByQuery, setFilterByQuery] = useState('');
   const [filterBySelect, setFilterBySelect] = useState('all');
 
   useEffect(() => {
     setLoading(true);
-    getTodos().then(setTodos).finally(() => setLoading(false));
+    getTodos().then(setTodos).catch(() => {
+      setErrorMessageTodos('Todos loading error! Try again!');
+    }).finally(() => setLoading(false));
   }, []);
 
   const filterTodos = useMemo(() => {
@@ -67,13 +70,15 @@ export const App: React.FC = () => {
                 )
               }
 
-              {!loading && todos.length > 0 && (
+              {!loading && !errorMessageTodos && todos.length > 0 ? (
                 <TodoList
                   todos={filterTodos}
                   selTodo={setSelectedTodo}
                   modal={openModal}
                   onModal={setOpenModal}
                 />
+              ) : (
+                <p className="has-text-danger">{errorMessageTodos}</p>
               )}
             </div>
           </div>
