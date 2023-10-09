@@ -18,16 +18,16 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const filteredTodos
-  = (filteredBy === 'all') ? todos : todos.filter((todo) => {
-    switch (filteredBy) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+    = (filteredBy === 'all') ? todos : todos.filter((todo) => {
+      switch (filteredBy) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
 
   filteredTodos.filter(todo => todo.title.toLowerCase().includes(
     query.toLowerCase(),
