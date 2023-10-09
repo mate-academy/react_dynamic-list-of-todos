@@ -17,8 +17,11 @@ export const TodoModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo?.userId || 0)
+    getUser(selectedTodo?.userId)
       .then(setSelectedUser)
+      .catch(() => {
+        throw new Error('Cant get user from server');
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
