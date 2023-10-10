@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { Loader } from '../Loader';
-import { getUser } from '../../api';
+import { getUser } from '../../utils/api';
 import { User } from '../../types/User';
 import { TodosContext } from '../TodosContext';
 
