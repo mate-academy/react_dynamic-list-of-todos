@@ -1,6 +1,8 @@
+import { FilterBy } from '../../types/FilterBy';
+
 type Props = {
   query: string;
-  setFilteredBy: (filteredBy: string) => void;
+  setFilteredBy: (filterBy: FilterBy) => void;
   setQuery: (title: string) => void;
 };
 
@@ -9,10 +11,6 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -23,11 +21,11 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setFilteredBy(event.target.value)}
+            onChange={(event) => setFilteredBy(event.target.value as FilterBy)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterBy.all}>All</option>
+            <option value={FilterBy.active}>Active</option>
+            <option value={FilterBy.completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -39,7 +37,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleQueryChange}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

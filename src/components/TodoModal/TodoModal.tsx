@@ -14,13 +14,15 @@ export const TodoModal: React.FC<Props> = ({
   onClose = () => { },
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (selectedTodo.userId) {
       getUser(selectedTodo.userId)
-        .then(setUser);
+        .then(setUser)
+        .catch(() => setErrorMessage('Error fetching user data'));
     }
-  }, []);
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -61,12 +63,20 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
         </div>
+      )}
+      {errorMessage && (
+        <p className="notification is-danger">
+          {errorMessage}
+          <button type="button" onClick={() => onClose(null)}>
+            Close
+          </button>
+        </p>
       )}
     </div>
   );
