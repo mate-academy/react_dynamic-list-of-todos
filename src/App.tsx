@@ -12,7 +12,7 @@ import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
 
 const getFilteredTodos = (todos: Todo[], filter: FilterEnum, query = ''):Todo[] => {
-  let filterTodos = [...todos];
+  let filterTodos = todos;
 
   filterTodos = filterTodos.filter(todo => {
     switch (filter) {
@@ -45,11 +45,13 @@ export const App: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<Todo | null>();
 
   useEffect(() => {
-    getTodos().then(setTodos)
-      .finally(() => setLoading(false)).catch((error) => {
+    getTodos()
+      .then(setTodos)
+      .catch((error) => {
       // eslint-disable-next-line no-console
         console.error('Something bad happened!', error);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
