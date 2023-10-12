@@ -37,8 +37,6 @@ export const App: React.FC = () => {
     getTodos().then(setTodos).finally(() => setLoading(false));
   }, []);
 
-  console.log(selectedTodo);
-
   return (
     <>
       <div className="section">
