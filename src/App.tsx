@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -7,8 +6,14 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { todoContext, DefaultValueType } from './Contexts/Context';
 
 export const App: React.FC = () => {
+  const {
+    currentItem,
+    visibleItems,
+  } = React.useContext(todoContext) as DefaultValueType;
+
   return (
     <>
       <div className="section">
@@ -21,14 +26,19 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {
+                visibleItems.length === 0
+                  ? <Loader />
+                  : (
+                    <TodoList />
+                  )
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {currentItem.isVisible && <TodoModal />}
     </>
   );
 };
