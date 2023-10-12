@@ -27,11 +27,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               {
-                visibleItems.length === 0
-                  ? <Loader />
-                  : (
-                    <TodoList />
-                  )
+                visibleItems.length
+                  ? <TodoList />
+                  : <Loader />
               }
             </div>
           </div>

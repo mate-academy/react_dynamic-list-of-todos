@@ -9,7 +9,6 @@ import { TodoItem } from '../TodoItem/TodoItem';
 export const TodoList: React.FC = () => {
   const {
     visibleItems,
-    query,
     getFilteredItemsByCondition,
   } = useContext(todoContext) as DefaultValueType;
 
@@ -31,8 +30,6 @@ export const TodoList: React.FC = () => {
       <tbody>
         {
           visibleItems && getFilteredItemsByCondition(visibleItems)
-            .filter(item => item.title.toLowerCase()
-              .includes(query.toLowerCase()))
             .map(todo => {
               return <TodoItem todo={todo} key={todo.id} />;
             })

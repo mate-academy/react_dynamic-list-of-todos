@@ -21,12 +21,6 @@ const TodoItem:React.FC<Props> = ({ todo }) => {
   function handleClick() {
     const user = getUser(todo.userId);
 
-    // console.log(user, todo);
-
-    // user.then((person) => {
-    //   console.log(person.name);
-    // })
-
     const currItem: ModalInfo = {
       user,
       todo,

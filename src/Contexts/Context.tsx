@@ -69,6 +69,9 @@ export const AppContext: React.FC<React.ReactNode> = ({ children }) => {
       default:
     }
 
+    filteredItems = filteredItems.filter(item => item.title.toLowerCase()
+      .includes(query.toLowerCase()));
+
     return filteredItems;
   }
 
