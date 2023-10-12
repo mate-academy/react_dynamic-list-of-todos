@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import FilterOptions from './types/FilterOption';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -19,11 +20,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const filteredByFilter
-    = (filteredBy === 'all') ? todos : todos.filter((todo) => {
+    = (filteredBy === FilterOptions.ALL) ? todos : todos.filter((todo) => {
       switch (filteredBy) {
-        case 'active':
+        case FilterOptions.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case FilterOptions.COMPLETED:
           return todo.completed;
         default:
           return true;
