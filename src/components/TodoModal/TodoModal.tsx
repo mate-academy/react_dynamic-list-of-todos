@@ -8,29 +8,29 @@ export const TodoModal: React.FC = () => {
     setCurrentItem,
   } = React.useContext(todoContext) as DefaultValueType;
 
-  async function resolveUser() {
-    if (!currentItem) {
-      return;
-    }
-
-    const currUser = await currentItem.user;
-
-    setCurrentItem({ ...currentItem, user: currUser });
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callback = React.useCallback(resolveUser, []);
+  const { user, todo } = currentItem;
 
   React.useEffect(() => {
-    callback();
-  }, [callback]);
+    async function resolveUser() {
+      if (!currentItem) {
+        return;
+      }
+
+      const currUser = await currentItem.user;
+
+      setCurrentItem({ ...currentItem, user: currUser });
+    }
+
+    resolveUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
       {
-        currentItem?.user instanceof Promise
+        user instanceof Promise
           ? (
             <Loader />
           ) : (
@@ -40,7 +40,7 @@ export const TodoModal: React.FC = () => {
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
                 >
-                  {`Todo #${currentItem.todo.id}`}
+                  {`Todo #${todo.id}`}
                 </div>
 
                 {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -61,24 +61,24 @@ export const TodoModal: React.FC = () => {
 
               <div className="modal-card-body">
                 <p className="block" data-cy="modal-title">
-                  {currentItem.todo.title}
+                  {todo.title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
                   {/* <strong className="has-text-success">Done</strong> */}
                   <strong className={
-                    currentItem.todo.completed
+                    todo.completed
                       ? 'has-text-success'
                       : 'has-text-danger'
                   }
                   >
-                    {currentItem.todo.completed ? 'Done' : 'Planned'}
+                    {todo.completed ? 'Done' : 'Planned'}
                   </strong>
 
                   {' by '}
 
                   <a href="mailto:Sincere@april.biz">
-                    {currentItem.user.name}
+                    {user.name}
                   </a>
                 </p>
               </div>
