@@ -13,7 +13,7 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filteredBy, setFilteredBy] = useState('all');
@@ -37,11 +37,11 @@ export const App: React.FC = () => {
   const filteredTodos = filteredByFilter.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -60,11 +60,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (
+              {isLoading && (
                 <Loader />
               )}
 
-              {!loading && todos.length > 0 && (
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodo?.id}
