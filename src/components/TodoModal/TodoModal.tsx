@@ -16,9 +16,9 @@ export const TodoModal: React.FC = () => {
         return;
       }
 
-      const currUser = await currentItem.user;
+      const userResponse = await user;
 
-      setCurrentItem({ ...currentItem, user: currUser });
+      setCurrentItem({ ...currentItem, user: userResponse });
     }
 
     resolveUser();
@@ -77,7 +77,7 @@ export const TodoModal: React.FC = () => {
 
                   {' by '}
 
-                  <a href="mailto:Sincere@april.biz">
+                  <a href={`mailto:${user.email}`}>
                     {user.name}
                   </a>
                 </p>
