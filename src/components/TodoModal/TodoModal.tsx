@@ -5,12 +5,12 @@ import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 
 type Props = {
-  sSelectedTodo: (todo: Todo | null) => void,
+  setSelectedTodo: (todo: Todo | null) => void,
   selectedTodo: Todo,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  sSelectedTodo,
+  setSelectedTodo,
   selectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
@@ -41,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => sSelectedTodo(null)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 

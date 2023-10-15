@@ -3,21 +3,21 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   query: string,
-  sFilter: (filterBy: Filter) => void,
-  sQuery: (query: string) => void,
+  setFilter: (filterBy: Filter) => void,
+  setQuery: (query: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  sFilter,
-  sQuery,
+  setFilter,
+  setQuery,
 }) => {
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    sFilter(e.target.value as Filter);
+    setFilter(e.target.value as Filter);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    sQuery(e.target.value);
+    setQuery(e.target.value);
   };
 
   return (
@@ -52,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => sQuery('')}
+              onClick={() => setQuery('')}
             />
           </span>
         )}
