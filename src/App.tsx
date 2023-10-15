@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -18,11 +18,9 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.all);
   const [query, setQuery] = useState('');
 
-  const filteredTodos = useMemo(() => {
-    const normalizedQuery = query.toLowerCase().trim();
-
-    return todos.filter(todo => {
-      switch (status) {
+  const filterTodosByStatus = (todosToFilter: Todo[], statusToFilter: string) => {
+    return todosToFilter.filter((todo) => {
+      switch (statusToFilter) {
         case Status.active:
           return !todo.completed;
         case Status.completed:
@@ -30,16 +28,28 @@ export const App: React.FC = () => {
         default:
           return true;
       }
-    })
-      .filter(todo => {
-        return todo.title.toLowerCase().includes(normalizedQuery);
-      });
-  }, [status, query, todos]);
+    });
+  };
+
+  const filterTodosByQuery = (todosToFilter: Todo[], queryToFilter: string) => {
+    const normalizedQuery = queryToFilter.toLowerCase().trim();
+
+    return todosToFilter.filter(todo => {
+      return todo.title.toLowerCase().includes(normalizedQuery);
+    });
+  };
+
+  const filteredTodosByStatus = filterTodosByStatus(todos, status);
+  const filteredTodos = filterTodosByQuery(filteredTodosByStatus, query);
 
   useEffect(() => {
     setIsLoading(true);
 
-    getTodos().then(setTodos)
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('Can not load todos!');
+      })
       .finally(() => {
         setIsLoading(false);
       });
