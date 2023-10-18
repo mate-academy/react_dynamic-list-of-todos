@@ -35,7 +35,9 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(({ id, completed, title, userId }) => (
+        {todos.map(({
+          id, completed, title, userId,
+        }) => (
           <tr
             key={id}
             data-cy="todo"
