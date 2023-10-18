@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
 import { User } from './types/User';
+import { Status } from './types/status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,7 +21,7 @@ export const App: React.FC = () => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Status.All);
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
@@ -43,31 +44,35 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    let currentTodos = todos;
+  const currentTodos = useMemo(() => {
+    let tempTodos = todos;
 
     switch (status) {
-      case 'completed':
-        currentTodos = todos.filter(todo => todo.completed);
+      case Status.Completed:
+        tempTodos = todos.filter(todo => todo.completed);
         break;
-      case 'active':
-        currentTodos = todos.filter(todo => !todo.completed);
+      case Status.Active:
+        tempTodos = todos.filter(todo => !todo.completed);
         break;
       default:
-        currentTodos = todos;
+        tempTodos = todos;
         break;
     }
 
-    if (searchQuery.trim() !== '') {
-      currentTodos = currentTodos.filter(todo => todo.title.toLowerCase()
-        .includes(searchQuery.toLowerCase()));
+    if (searchQuery) {
+      tempTodos = tempTodos.filter(
+        todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
     }
 
-    setFilteredTodos(currentTodos);
+    return tempTodos;
+  }, [todos, status, searchQuery]);
 
+  useEffect(() => {
+    setFilteredTodos(currentTodos);
     getUser(selectedUserId)
       .then(setSelectedUser);
-  }, [status, todos, searchQuery, selectedUserId]);
+  }, [currentTodos, selectedUserId]);
 
   return (
     <>

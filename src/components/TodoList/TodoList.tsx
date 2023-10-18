@@ -1,6 +1,5 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-// import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -36,19 +35,19 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {todos.map(({ id, completed, title, userId }) => (
           <tr
-            key={todo.id}
+            key={id}
             data-cy="todo"
             className={
-              selectedTodoId === todo.id
+              selectedTodoId === id
                 ? 'has-background-info-light'
                 : ''
             }
           >
-            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
-              {todo.completed && (
+              {completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -57,10 +56,10 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                  completed ? 'has-text-success' : 'has-text-danger'
                 }
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -68,12 +67,12 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleButtonClick(todo.id, todo.userId)}
+                onClick={() => handleButtonClick(id, userId)}
               >
                 <span className="icon">
                   <i
                     className={
-                      selectedTodoId === todo.id
+                      selectedTodoId === id
                         ? 'far fa-eye-slash'
                         : 'far fa-eye'
                     }

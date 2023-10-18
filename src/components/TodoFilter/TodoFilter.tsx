@@ -1,6 +1,8 @@
+import { Status } from '../../types/status';
+
 type Props = {
   status: string;
-  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setStatus: React.Dispatch<React.SetStateAction<Status>>;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
 };
@@ -12,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   setSearchQuery,
 }) => {
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(event.target.value);
+    setStatus(event.target.value as Status);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
