@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { wait } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  setSelectedTodoId: React.Dispatch<React.SetStateAction<number | null>>;
+  user: User | null;
+  todo: Todo;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  setSelectedTodoId,
+  user,
+  todo,
+}) => {
+  const [isModalLoading, setIsModalLoading] = useState(true);
+
+  useEffect(() => {
+    wait(300).then(() => {
+      setIsModalLoading(false);
+    });
+  }, []);
+
+  const handleDeleteClick = () => {
+    setSelectedTodoId(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isModalLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +40,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +48,27 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleDeleteClick}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

@@ -6,7 +6,7 @@ const BASE_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api
 
 // This function creates a promise
 // that is resolved after a given delay
-function wait(delay: number): Promise<void> {
+export function wait(delay: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });
