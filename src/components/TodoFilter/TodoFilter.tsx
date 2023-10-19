@@ -17,31 +17,6 @@ export const TodoFilter: React.FC<Props> = React.memo(
     const [useOpinion, setUseOpinion] = useState(Filter.All);
     const timerId = useRef(0);
 
-    /* const filterAndSortTodos = (text: string, opinion: Filter) => {
-      const filteredTodo = originalTodos
-        .filter((todo) => {
-          if (opinion === Filter.Active) {
-            return !todo.completed;
-          }
-
-          if (opinion === Filter.Comleted) {
-            return todo.completed;
-          }
-
-          return true;
-        })
-        .filter((todo) => {
-          return todo.title.toUpperCase().includes(text.toUpperCase().trim());
-        });
-
-      window.clearTimeout(timerId.current);
-      timerId.current = window.setTimeout(() => {
-        setTodos(
-          filteredTodo,
-        );
-      }, 500);
-    }; */
-
     const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setQuery(event.target.value);
 
