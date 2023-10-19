@@ -17,11 +17,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(TodosFilter.All);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
         // eslint-disable-next-line no-console
         console.log(error);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? (
                   <Loader />
                 ) : (

@@ -23,7 +23,7 @@ export const getPreparedTodos = (
         return preparedTodos.filter(({ completed }) => completed);
 
       default:
-        throw new Error('Invalid data');
+        throw new Error('Invalid filter');
     }
   }
 
