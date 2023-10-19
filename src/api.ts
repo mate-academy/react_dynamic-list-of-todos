@@ -22,6 +22,18 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = (isCompleted?: boolean, query = '') => {
+  return get<Todo[]>('/todos')
+    .then(todos => {
+      if (isCompleted === undefined) {
+        return todos;
+      }
+
+      return todos.filter(({ completed }) => completed === isCompleted);
+    })
+    .then((todos) => todos.filter(
+      ({ title }) => title.toLowerCase().includes(query.toLowerCase()),
+    ));
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
