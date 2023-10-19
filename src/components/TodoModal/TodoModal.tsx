@@ -2,11 +2,13 @@ import React from 'react';
 import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
+  const isLoading = false;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
