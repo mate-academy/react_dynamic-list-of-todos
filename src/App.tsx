@@ -11,7 +11,6 @@ import { Todo } from './types/Todo';
 import { TodosFilter } from './types/TodosFilter';
 import { getTodos } from './api';
 import { getPreparedTodos } from './services/todos';
-// import { getPreparedTodos } from './services/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -75,7 +74,6 @@ export const App: React.FC = () => {
           onSelectTodo={setSelectedTodo}
         />
       )}
-
     </>
   );
 };
