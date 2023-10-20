@@ -4,9 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
   todos: Todo[];
+  onTodoSelect: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
+export const TodoList: React.FC<TodoListProps> = (
+  { todos, onTodoSelect },
+) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -32,7 +35,12 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            <button data-cy="selectButton" className="button" type="button">
+            <button
+              type="button"
+              data-cy="selectButton"
+              className="button"
+              onClick={() => onTodoSelect(todo)}
+            >
               <span className="icon">
                 <i className="far fa-eye" />
               </span>

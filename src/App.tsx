@@ -7,17 +7,18 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 
 import { Loader } from './components/Loader';
 import { debounce } from './_utils/debounce_generic';
 
 export const App: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-
-  const [loading, setLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isTodoModalVisibile, setTodoModalVisibility] = useState(false);
 
   const loadTodos = async () => {
     setLoading(true);
@@ -37,20 +38,21 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  console.log(todos, 'normal');
-
   const handleFilter = useCallback((term: string) => {
-    const debouncedFilter = debounce((bouncedTerm: string) => {
-      if (bouncedTerm.trim() === '') {
-        setFilteredTodos(todos);
-      } else {
-        const newFilteredTodos = todos.filter(
-          todo => todo.title.includes(bouncedTerm),
-        );
+    setSearchQuery(term);
+    if (term.trim() === '') {
+      setFilteredTodos(todos);
 
-        setFilteredTodos(newFilteredTodos);
-      }
-    }, 300);
+      return;
+    }
+
+    const debouncedFilter = debounce((debouncedTerm: string) => {
+      const newFilteredTodos = todos.filter(
+        todo => todo.title.includes(debouncedTerm),
+      );
+
+      setFilteredTodos(newFilteredTodos);
+    }, 600);
 
     debouncedFilter(term);
   }, [todos]);
@@ -59,7 +61,24 @@ export const App: React.FC = () => {
     setFilteredTodos(todos);
   }, [todos]);
 
-  console.log(filteredTodos, 'filtered');
+  const handleResetSearch = () => {
+    setSearchQuery('');
+    setFilteredTodos(todos);
+  };
+
+  const handleTodoModalVisibility = () => {
+    setTodoModalVisibility(!isTodoModalVisibile);
+  };
+
+  const handleTodoSelect = (todo: Todo) => {
+    setSelectedTodo(todo);
+    handleTodoModalVisibility();
+  };
+
+  // console.log(todos, 'normal');
+  // console.log(filteredTodos, 'filtered');
+  console.log(selectedTodo, 'selected todo');
+  console.log('isTodoModalVisible', isTodoModalVisibile);
 
   return (
     <>
@@ -69,7 +88,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onFilter={handleFilter} />
+              <TodoFilter
+                onFilter={handleFilter}
+                onResetSearch={handleResetSearch}
+                searchQuery={searchQuery}
+              />
             </div>
 
             <div className="block">
@@ -79,13 +102,19 @@ export const App: React.FC = () => {
 
               <TodoList
                 todos={filteredTodos}
+                onTodoSelect={handleTodoSelect}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {isTodoModalVisibile && selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onVisible={handleTodoModalVisibility}
+        />
+      )}
     </>
   );
 };

@@ -1,10 +1,14 @@
 import React from 'react';
 
 type TodoFilterProps = {
+  searchQuery: string;
   onFilter: (term: string) => void;
+  onResetSearch: () => void;
 };
 
-export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilter }) => {
+export const TodoFilter: React.FC<TodoFilterProps> = (
+  { onFilter, onResetSearch, searchQuery },
+) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -23,6 +27,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilter }) => {
           type="text"
           className="input"
           placeholder="Search..."
+          value={searchQuery}
           onChange={e => onFilter(e.target.value)}
         />
         <span className="icon is-left">
@@ -30,12 +35,16 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilter }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {searchQuery && (
+            <button
+              data-cy="clearSearchButton"
+              aria-label="Clear Search"
+              type="button"
+              className="delete"
+              onClick={onResetSearch}
+            />
+          )}
+
         </span>
       </p>
     </form>
