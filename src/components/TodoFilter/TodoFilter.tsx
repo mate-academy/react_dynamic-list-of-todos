@@ -4,16 +4,27 @@ type TodoFilterProps = {
   searchQuery: string;
   onFilter: (term: string) => void;
   onResetSearch: () => void;
+  sortOptionChange: (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => void;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = (
-  { onFilter, onResetSearch, searchQuery },
+  {
+    onFilter,
+    onResetSearch,
+    sortOptionChange,
+    searchQuery,
+  },
 ) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select
+            data-cy="statusSelect"
+            onChange={sortOptionChange}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>

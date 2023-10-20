@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -41,7 +42,7 @@ export const TodoModal: React.FC<TodoModalprops> = (
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {todo?.id}
+              {`Todo#${todo?.id}`}
             </div>
 
             <button
@@ -59,12 +60,18 @@ export const TodoModal: React.FC<TodoModalprops> = (
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={cn({
+                  'has-text-success': todo?.completed,
+                  'has-text-danger': !todo?.completed,
+                })}
+              >
+                {todo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${user?.email}`}>
                 {user?.name}
               </a>
             </p>
