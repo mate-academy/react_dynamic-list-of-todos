@@ -8,10 +8,11 @@ import { getUser } from '../../api';
 type TodoModalprops = {
   todo: Todo | null;
   onVisible: () => void;
+  onTodoSelect: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<TodoModalprops> = (
-  { todo, onVisible },
+  { todo, onVisible, onTodoSelect },
 ) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
@@ -42,7 +43,7 @@ export const TodoModal: React.FC<TodoModalprops> = (
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo#${todo?.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             <button
@@ -50,7 +51,10 @@ export const TodoModal: React.FC<TodoModalprops> = (
               className="delete"
               data-cy="modal-close"
               aria-label="Close modal"
-              onClick={onVisible}
+              onClick={() => {
+                onVisible();
+                onTodoSelect(null);
+              }}
             />
           </header>
 

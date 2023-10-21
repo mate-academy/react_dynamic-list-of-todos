@@ -44,10 +44,12 @@ export const App: React.FC = () => {
 
   const updateFilteredTodos = useCallback(
     (term: string, sortOption: string) => {
-      let updatedTodos = todos;
+      let updatedTodos = [...todos];
 
       if (term.trim() !== '') {
-        updatedTodos = updatedTodos.filter(todo => todo.title.includes(term));
+        updatedTodos = updatedTodos.filter(
+          todo => todo.title.toLowerCase().includes(term.toLowerCase()),
+        );
       }
 
       switch (sortOption) {
@@ -87,13 +89,12 @@ export const App: React.FC = () => {
     setFilteredTodos(todos);
   };
 
-  const handleTodoModalVisibility = () => {
-    setTodoModalVisibility(!isTodoModalVisibile);
+  const handleTodoSelect = (todo: Todo | null) => {
+    setSelectedTodo(todo);
   };
 
-  const handleTodoSelect = (todo: Todo) => {
-    setSelectedTodo(todo);
-    handleTodoModalVisibility();
+  const handleTodoModalVisibility = () => {
+    setTodoModalVisibility(!isTodoModalVisibile);
   };
 
   // console.log(todos, 'normal');
@@ -125,16 +126,18 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 onTodoSelect={handleTodoSelect}
+                selectedTodo={selectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {isTodoModalVisibile && selectedTodo && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           onVisible={handleTodoModalVisibility}
+          onTodoSelect={handleTodoSelect}
         />
       )}
     </>

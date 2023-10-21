@@ -5,10 +5,11 @@ import { Todo } from '../../types/Todo';
 type TodoListProps = {
   todos: Todo[];
   onTodoSelect: (todo: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<TodoListProps> = (
-  { todos, onTodoSelect },
+  { todos, onTodoSelect, selectedTodo },
 ) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -30,7 +31,7 @@ export const TodoList: React.FC<TodoListProps> = (
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed ? (
-              <span className="icon">
+              <span className="icon" data-cy="iconCompleted">
                 <i className="fas fa-check" />
               </span>
             ) : null}
@@ -51,9 +52,15 @@ export const TodoList: React.FC<TodoListProps> = (
               className="button"
               onClick={() => onTodoSelect(todo)}
             >
-              <span className="icon">
-                <i className="far fa-eye" />
-              </span>
+              {selectedTodo && selectedTodo.id === todo.id ? (
+                <span className="icon">
+                  <i className="fas fa-eye-slash" />
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="far fa-eye" />
+                </span>
+              )}
             </button>
           </td>
         </tr>
