@@ -11,7 +11,6 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -21,19 +20,18 @@ export const App: React.FC = () => {
 
     getTodos()
       .then((data) => {
-        setTodos(data);
         setFilteredTodos(data);
       })
       .finally(() => setLoading(false));
   }, []);
 
   const handleFilter = (status: string, query: string) => {
-    let filtered = todos;
+    let filtered = filteredTodos;
 
     if (status === 'completed') {
-      filtered = todos.filter((todo) => todo.completed);
+      filtered = filteredTodos.filter((todo) => todo.completed);
     } else if (status === 'active') {
-      filtered = todos.filter((todo) => !todo.completed);
+      filtered = filteredTodos.filter((todo) => !todo.completed);
     }
 
     if (query) {
@@ -69,6 +67,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
