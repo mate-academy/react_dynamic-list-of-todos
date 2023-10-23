@@ -77,8 +77,6 @@ export const App: React.FC = () => {
         filteredTodos={filteredTodos}
         checkId={checkId}
         userId={userId}
-        loading={loading}
-        setLoading={setLoading}
       />
     </>
   );

@@ -10,8 +10,6 @@ type Props = {
   setIsCheck: React.Dispatch<React.SetStateAction<boolean>>;
   filteredTodos: Todo[];
   checkId: number;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
   userId: number;
 };
 
@@ -21,8 +19,6 @@ export const TodoModal: React.FC<Props> = ({
   setIsCheck,
   filteredTodos,
   checkId,
-  loading,
-  setLoading,
   userId,
 }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -30,14 +26,12 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (isCheck && checkId > 0) {
-      setLoading(true);
       getUser(userId)
         .then((userData) => {
           setUser(userData);
-        })
-        .finally(() => setLoading(false));
+        });
     }
-  }, [userId, checkId, isCheck, setLoading]);
+  }, [userId, checkId, isCheck]);
 
   const handleModalClose = () => {
     setUser(null);
@@ -45,11 +39,11 @@ export const TodoModal: React.FC<Props> = ({
     setCheckId(0);
   };
 
-  return user !== null ? (
+  return isCheck ? (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading && checkId ? (
+      {user === null ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -82,11 +76,9 @@ export const TodoModal: React.FC<Props> = ({
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
-
               {' by '}
-
               <a href={user.email}>
-                { user !== null && user.name}
+                {user.name}
               </a>
             </p>
           </div>
