@@ -61,7 +61,9 @@ export const TodoModal: React.FC<Props> = ({
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
-              {' by '}
+              <span>
+                {' by '}
+              </span>
 
               {user && (
                 <a href={`mailto: ${user.email}`}>

@@ -10,7 +10,14 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
+enum StatusFilter {
+  Completed = 'completed',
+  Active = 'active',
+  All = 'all',
+}
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -20,18 +27,26 @@ export const App: React.FC = () => {
 
     getTodos()
       .then((data) => {
+        setTodos(data);
         setFilteredTodos(data);
       })
       .finally(() => setLoading(false));
   }, []);
 
   const handleFilter = (status: string, query: string) => {
-    let filtered = filteredTodos;
+    let filtered = [...todos];
 
-    if (status === 'completed') {
-      filtered = filteredTodos.filter((todo) => todo.completed);
-    } else if (status === 'active') {
-      filtered = filteredTodos.filter((todo) => !todo.completed);
+    switch (status) {
+      case StatusFilter.Completed:
+        filtered = filtered.filter((todo) => todo.completed);
+        break;
+      case StatusFilter.Active:
+        filtered = filtered.filter((todo) => !todo.completed);
+        break;
+      case StatusFilter.All:
+        break;
+      default:
+        break;
     }
 
     if (query) {
