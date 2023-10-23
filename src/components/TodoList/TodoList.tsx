@@ -10,7 +10,7 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSelect = () => {},
+  onSelect = () => { },
   selectedTodo,
 }) => {
   return (
@@ -33,19 +33,23 @@ export const TodoList: React.FC<Props> = ({
           <tr
             data-cy="todo"
             key={todo.id}
-            className={cn({ "has-background-info-light": selectedTodo === todo })}
+            className={cn({
+              'has-background-info-light': selectedTodo === todo,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                <i className={cn("fas", { "fa-check": todo.completed })} />
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                <i className='fas fa-check' />
               </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p
                 className={cn({
-                  "has-text-success": todo.completed,
-                  "has-text-danger": !todo.completed,
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
                 })}
               >
                 {todo.title}
@@ -60,9 +64,9 @@ export const TodoList: React.FC<Props> = ({
               >
                 <span className="icon">
                   <i
-                    className={cn("far", {
-                      "fa-eye-slash": selectedTodo === todo,
-                      "fa-eye": selectedTodo !== todo,
+                    className={cn('far', {
+                      'fa-eye-slash': selectedTodo === todo,
+                      'fa-eye': selectedTodo !== todo,
                     })}
                   />
                 </span>

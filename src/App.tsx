@@ -26,11 +26,10 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter((todo) => {
     return (
-      (status === 'all' || (status === 'completed' && todo.completed) || (status === 'active' && !todo.completed)) &&
-      todo.title.toLowerCase().includes(query.toLowerCase())
+      (status === 'all' || (status === 'completed' && todo.completed) || (status === 'active' && !todo.completed))
+      && todo.title.toLowerCase().includes(query.toLowerCase())
     );
   });
-
 
   return (
     <>

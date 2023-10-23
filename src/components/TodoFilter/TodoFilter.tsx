@@ -11,9 +11,8 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
   status,
-  setStatus
+  setStatus,
 }) => {
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -56,5 +55,5 @@ export const TodoFilter: React.FC<Props> = ({
         )}
       </p>
     </form>
-  )
+  );
 };
