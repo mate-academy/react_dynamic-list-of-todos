@@ -22,26 +22,27 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => {
+        throw Error('There are no todos');
+      })
       .finally(() => setLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
-    let visible = [];
+    let visible = todos;
 
-    switch (filter) {
-      case Filter.Active:
-        visible = todos.filter(todo => !todo.completed);
-        break;
+    visible = visible.filter(todo => {
+      switch (filter) {
+        case Filter.Active:
+          return !todo.completed;
 
-      case Filter.Completed:
-        visible = todos.filter(todo => todo.completed);
-        break;
+        case Filter.Completed:
+          return todo.completed;
 
-      default:
-      case Filter.All:
-        visible = todos;
-        break;
-    }
+        default:
+          return true;
+      }
+    });
 
     if (query) {
       visible = visible
@@ -68,14 +69,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && (<Loader />)}
-              {!loading && (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
-                />
-              )}
+              {loading
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={visibleTodos}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>

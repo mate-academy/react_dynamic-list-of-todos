@@ -20,6 +20,9 @@ export const TodoModal: React.FC<Props> = ({
     setLoading(true);
     getUser(selectedTodo.userId)
       .then(setUser)
+      .catch(() => {
+        throw Error('There is no user');
+      })
       .finally(() => setLoading(false));
   }, [selectedTodo.userId]);
 
