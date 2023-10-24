@@ -10,26 +10,32 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 
+enum FilterStatus {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<string>(FilterStatus.All);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredTodos = todos.filter((todo) => {
-    return (
-      (status === 'all' || (status === 'completed' && todo.completed) || (status === 'active' && !todo.completed))
-      && todo.title.toLowerCase().includes(query.toLowerCase())
-    );
-  });
+  const filteredTodos = todos.filter((todo) => (
+    (status === FilterStatus.All
+      || (status === FilterStatus.Completed && todo.completed)
+      || (status === FilterStatus.Active && !todo.completed))
+    && todo.title.toLowerCase().includes(query.toLowerCase())
+  ));
 
   return (
     <>
@@ -48,9 +54,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
-              {!loading && filteredTodos.length > 0 && (
+              {!isLoading && filteredTodos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
                   onSelect={setSelectedTodo}
