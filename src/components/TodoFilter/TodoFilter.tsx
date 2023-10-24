@@ -11,6 +11,19 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeQuery,
   onChangeFilter,
 }) => {
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeFilter(event.target.value as Filter);
+  };
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeQuery(event.target.value);
+  };
+
+  const resetQuery = () => {
+    onChangeQuery('');
+  };
+  
   return (
     <form
       className="field has-addons"
@@ -20,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => onChangeFilter(event.target.value as Filter)}
+            onChange={handleFilterChange}
           >
             <option value={Filter.All}>All</option>
             <option value={Filter.Active}>Active</option>
@@ -36,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => onChangeQuery(event.target.value)}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -48,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onChangeQuery('')}
+              onClick={resetQuery}
             />
           </span>
         )}
