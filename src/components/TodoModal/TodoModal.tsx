@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type TodoModalprops = {
-  todo: Todo | null;
+  todo: Todo;
   onTodoSelect: (todo: Todo | null) => void;
 };
 
