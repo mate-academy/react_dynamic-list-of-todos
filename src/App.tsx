@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bulma/css/bulma.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -91,12 +90,6 @@ export const App: React.FC = () => {
   const handleTodoSelect = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
-
-  // console.log(todos, 'normal');
-  // console.log(filteredTodos, 'filtered');
-  // console.log(selectedTodo, 'selected todo');
-  // console.log('isTodoModalVisible', isTodoModalVisibile);
-  console.log('current filter option', currentFilterOption);
 
   return (
     <>
