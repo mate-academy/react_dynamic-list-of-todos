@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
   const [currentFilterOption, setFilterOption]
-   = useState<FilterOption>(FilterOption.All);
+    = useState<FilterOption>(FilterOption.All);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
     }, [todos],
   );
 
-  const handleFilter = useCallback((term: string) => {
+  const handleSearch = useCallback((term: string) => {
     setSearchQuery(term);
 
     const debouncedUpdate = debounce(() => {
@@ -107,7 +107,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilter={handleFilter}
+                onFilter={handleSearch}
                 onResetSearch={handleResetSearch}
                 searchQuery={searchQuery}
                 sortOptionChange={handleSortChange}
@@ -132,7 +132,6 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          // onVisible={handleTodoModalVisibility}
           onTodoSelect={handleTodoSelect}
         />
       )}
