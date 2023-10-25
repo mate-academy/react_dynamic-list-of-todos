@@ -30,11 +30,11 @@ export const TodoList: React.FC<TodoListProps> = (
         <tr data-cy="todo" className="" key={todo.id}>
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
-            {todo.completed ? (
+            {todo.completed && (
               <span className="icon" data-cy="iconCompleted">
                 <i className="fas fa-check" />
               </span>
-            ) : null}
+            )}
           </td>
           <td className="is-vcentered is-expanded">
             <p className={cn({

@@ -20,9 +20,7 @@ export const TodoModal: React.FC<TodoModalprops> = (
     if (todo) {
       setIsLoading(true);
       getUser(todo.userId)
-        .then(fetchedUser => {
-          setUser(fetchedUser);
-        })
+        .then(fetchedUser => setUser(fetchedUser))
         .finally(() => {
           setIsLoading(false);
         });
