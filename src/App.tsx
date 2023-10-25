@@ -1,24 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import 'bulma/css/bulma.css';
+/* eslint-disable no-console */
 import '@fortawesome/fontawesome-free/css/all.css';
+import 'bulma/css/bulma.css';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterOption, TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
+import { Todo } from './types/Todo';
 
-import { Loader } from './components/Loader';
 import { debounce } from './_utils/debounce_generic';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-  const [currentSortOption, setSortOption] = useState('all');
+  const [currentFilterOption, setFilterOption]
+   = useState<FilterOption>(FilterOption.All);
+
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isTodoModalVisibile, setTodoModalVisibility] = useState(false);
 
   const loadTodos = async () => {
     setLoading(true);
@@ -27,6 +29,7 @@ export const App: React.FC = () => {
       const loadedTodos = await getTodos();
 
       setTodos(loadedTodos);
+      setFilteredTodos(loadedTodos);
     } catch (error) {
       setLoading(false);
     } finally {
@@ -38,25 +41,21 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
-
   const updateFilteredTodos = useCallback(
-    (term: string, sortOption: string) => {
+    (term: string, filterOption: FilterOption) => {
       let updatedTodos = [...todos];
 
-      if (term.trim() !== '') {
+      if (term.trim()) {
         updatedTodos = updatedTodos.filter(
           todo => todo.title.toLowerCase().includes(term.toLowerCase()),
         );
       }
 
-      switch (sortOption) {
-        case 'active':
+      switch (filterOption) {
+        case FilterOption.Active:
           updatedTodos = updatedTodos.filter(todo => !todo.completed);
           break;
-        case 'completed':
+        case FilterOption.Completed:
           updatedTodos = updatedTodos.filter(todo => todo.completed);
           break;
         default:
@@ -71,16 +70,16 @@ export const App: React.FC = () => {
     setSearchQuery(term);
 
     const debouncedUpdate = debounce(() => {
-      updateFilteredTodos(term, currentSortOption);
+      updateFilteredTodos(term, currentFilterOption);
     }, 600);
 
     debouncedUpdate();
-  }, [currentSortOption, updateFilteredTodos]);
+  }, [currentFilterOption, updateFilteredTodos]);
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSortOption = event.target.value;
+    const newSortOption = event.target.value as FilterOption;
 
-    setSortOption(newSortOption);
+    setFilterOption(newSortOption);
     updateFilteredTodos(searchQuery, newSortOption);
   };
 
@@ -93,14 +92,11 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   };
 
-  const handleTodoModalVisibility = () => {
-    setTodoModalVisibility(!isTodoModalVisibile);
-  };
-
   // console.log(todos, 'normal');
   // console.log(filteredTodos, 'filtered');
   // console.log(selectedTodo, 'selected todo');
   // console.log('isTodoModalVisible', isTodoModalVisibile);
+  console.log('current filter option', currentFilterOption);
 
   return (
     <>
@@ -136,7 +132,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onVisible={handleTodoModalVisibility}
+          // onVisible={handleTodoModalVisibility}
           onTodoSelect={handleTodoSelect}
         />
       )}

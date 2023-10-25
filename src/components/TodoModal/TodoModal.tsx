@@ -7,12 +7,11 @@ import { getUser } from '../../api';
 
 type TodoModalprops = {
   todo: Todo | null;
-  onVisible: () => void;
   onTodoSelect: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<TodoModalprops> = (
-  { todo, onVisible, onTodoSelect },
+  { todo, onTodoSelect },
 ) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
@@ -52,7 +51,6 @@ export const TodoModal: React.FC<TodoModalprops> = (
               data-cy="modal-close"
               aria-label="Close modal"
               onClick={() => {
-                onVisible();
                 onTodoSelect(null);
               }}
             />

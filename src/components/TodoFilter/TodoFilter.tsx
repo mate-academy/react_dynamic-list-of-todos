@@ -9,6 +9,12 @@ type TodoFilterProps = {
   ) => void;
 };
 
+export enum FilterOption {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoFilter: React.FC<TodoFilterProps> = (
   {
     onFilter,
@@ -25,9 +31,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
             data-cy="statusSelect"
             onChange={sortOptionChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterOption.All}>All</option>
+            <option value={FilterOption.Active}>Active</option>
+            <option value={FilterOption.Completed}>Completed</option>
           </select>
         </span>
       </p>
