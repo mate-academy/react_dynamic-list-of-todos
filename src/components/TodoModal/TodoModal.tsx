@@ -15,14 +15,14 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setLoading(true);
+    setErrorMessage('');
     getUser(selectedTodo.userId)
       .then(setUser)
-      .catch(() => {
-        throw Error('There is no user');
-      })
+      .catch(() => setErrorMessage('There is no user'))
       .finally(() => setLoading(false));
   }, [selectedTodo.userId]);
 
@@ -68,6 +68,12 @@ export const TodoModal: React.FC<Props> = ({
               </a>
             </p>
           </div>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="notification is-danger is-light">
+          <strong>{errorMessage}</strong>
         </div>
       )}
     </div>

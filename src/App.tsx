@@ -17,14 +17,14 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(Filter.All);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setLoading(true);
+    setErrorMessage('');
     getTodos()
       .then(setTodos)
-      .catch(() => {
-        throw Error('There are no todos');
-      })
+      .catch(() => setErrorMessage('There are no todos'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -88,6 +88,12 @@ export const App: React.FC = () => {
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
+      )}
+
+      {errorMessage && (
+        <div className="notification is-danger is-light">
+          <strong>{errorMessage}</strong>
+        </div>
       )}
     </>
   );
