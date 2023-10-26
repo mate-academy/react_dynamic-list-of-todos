@@ -15,15 +15,15 @@ import { filteredTodos } from './services/fiteredTodos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(Status.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
@@ -46,9 +46,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={visibleTodos}
                   setSeletedUsers={setSelectedTodo}
