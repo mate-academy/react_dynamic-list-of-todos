@@ -14,25 +14,25 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isSelected, setIsSelected] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState(Status.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(item => setTodos(item))
       .catch(() => {
         throw new Error('something wrong');
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos: Todo[] = useMemo(() => {
     let todoList = [...todos];
 
-    if (query.trim()) {
+    if (query) {
       todoList = todoList.filter(
         todo => todo.title.toLowerCase().includes(query.toLowerCase()),
       );
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
