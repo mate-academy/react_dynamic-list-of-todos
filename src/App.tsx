@@ -10,17 +10,18 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
+import { FilterParams } from './types/FilterParams';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingTodos, setLoadingTodos] = useState(false);
 
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState<FilterParams>(FilterParams.all);
   const [querry, setQuerry] = useState('');
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const handlefilterParChange = (event: React.ChangeEvent<HTMLSelectElement>) => setFilterBy(event.target.value);
+  const handlefilterParChange = (event: React.ChangeEvent<HTMLSelectElement>) => setFilterBy(event.target.value as FilterParams);
   const handleQuerryChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuerry(event.target.value);
 
   useEffect(() => {
@@ -35,9 +36,9 @@ export const App: React.FC = () => {
   const filtredTodos = todos
     .filter(todo => {
       switch (filterBy) {
-        case 'completed':
+        case FilterParams.completed:
           return todo.completed;
-        case 'active':
+        case FilterParams.active:
           return !todo.completed;
         default:
           return true;
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
       if (querry) {
         // const searchValue = querry.split(' ').filter(word => word).join(' ');
 
-        return todo.title.includes(querry);
+        return todo.title.toLowerCase().includes(querry.toLowerCase());
       }
 
       return true;

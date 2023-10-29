@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[],
   selectedTodo: Todo | null,
-  changeSelectedTodo?: (item: Todo) => void,
+  changeSelectedTodo: (item: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = React.memo(({
