@@ -24,6 +24,11 @@ export const App: React.FC = () => {
   const handlefilterParChange = (event: React.ChangeEvent<HTMLSelectElement>) => setFilterBy(event.target.value as FilterParams);
   const handleQuerryChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuerry(event.target.value);
 
+  const clearQuerryFild = () => {
+    setQuerry('');
+    setFilterBy(FilterParams.all);
+  };
+
   useEffect(() => {
     setLoadingTodos(true);
 
@@ -67,7 +72,7 @@ export const App: React.FC = () => {
                 changeParams={handlefilterParChange}
                 querry={querry}
                 querryChange={handleQuerryChange}
-                deletequerry={() => setQuerry('')}
+                deletequerry={clearQuerryFild}
               />
             </div>
 
