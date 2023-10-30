@@ -26,7 +26,8 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
         })
         .catch(error => {
           setErrorMessage(error.message);
-        });
+        })
+        .finally(() => setIsLoading(false));
     } else {
       setErrorMessage('No selected todo');
     }

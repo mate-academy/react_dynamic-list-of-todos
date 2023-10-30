@@ -26,11 +26,11 @@ export const App: React.FC = () => {
     getTodos()
       .then(todos => {
         setTodosFromServer(todos);
-        setIsLoading(false);
       })
       .catch(error => {
         setErrorMessage(error.message);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const onSelectTodo = (todo: Todo | null) => {
