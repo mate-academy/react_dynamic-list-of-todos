@@ -18,7 +18,6 @@ export const App: React.FC = () => {
     todos: [],
     loading: false,
   });
-  const [modalShowing, setModalShowing] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [filter, setFilter] = useState({
@@ -44,10 +43,6 @@ export const App: React.FC = () => {
         loading: false,
       })));
   }, []);
-
-  const handleModalShowing = () => {
-    setModalShowing(prevStatus => !prevStatus);
-  };
 
   const handleFilterTypeChange = (newType: FilterType) => {
     setFilter(prevFilter => ({
@@ -84,8 +79,6 @@ export const App: React.FC = () => {
               {!todos.loading && (
                 <TodoList
                   todos={preparedTodos}
-                  modalShowing={modalShowing}
-                  handleModalShowing={handleModalShowing}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                   setSelectedUserId={setSelectedUserId}
@@ -96,11 +89,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalShowing && (
+      {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
           selectedUserId={selectedUserId}
-          handleModalShowing={handleModalShowing}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

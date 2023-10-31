@@ -5,8 +5,6 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  modalShowing: boolean,
-  handleModalShowing: () => void,
   selectedTodo: Todo | null,
   setSelectedTodo: (todo: Todo) => void,
   setSelectedUserId: (id: number) => void,
@@ -14,8 +12,6 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  modalShowing,
-  handleModalShowing,
   selectedTodo,
   setSelectedTodo,
   setSelectedUserId,
@@ -45,7 +41,7 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             className={cn({
               'has-background-info-light': (
-                modalShowing && selectedTodo?.id === id
+                selectedTodo?.id === id
               ),
             })}
             key={id}
@@ -76,13 +72,12 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  handleModalShowing();
                   setSelectedTodo(todo);
                   setSelectedUserId(userId);
                 }}
               >
                 <span className="icon">
-                  <i className={modalShowing && selectedTodo?.id === id
+                  <i className={selectedTodo?.id === id
                     ? 'far fa-eye-slash'
                     : 'far fa-eye'}
                   />
