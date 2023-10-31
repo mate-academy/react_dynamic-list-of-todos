@@ -13,6 +13,8 @@ import { Todo } from './types/Todo';
 import { prepareTodos } from './utils/prepareTodos';
 import { FilterType } from './types/FilterType';
 
+// comment just to reset test on GitHub
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todos>({
     todos: [],
