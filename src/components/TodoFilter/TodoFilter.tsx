@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={filter}
           data-cy="statusSelect"
           onChange={
-            (event: React.ChangeEvent<HTMLSelectElement>) => onSetFilter(
+            (event) => onSetFilter(
               event.target.value,
             )
           }
