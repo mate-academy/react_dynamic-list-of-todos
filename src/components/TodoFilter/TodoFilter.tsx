@@ -6,19 +6,19 @@ import { FilterBy } from '../../utils/enums';
 
 type Props = {
   onFilterChange: Dispatch<SetStateAction<FilterBy>>;
-  onQueryChange: Dispatch<SetStateAction<string>>;
+  onQueryChange: (query: React.ChangeEvent<HTMLInputElement>) => void;
   query: string;
+  onClear: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onFilterChange,
   onQueryChange,
   query,
+  onClear,
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilterBy = event.target.value as FilterBy;
-
-    onFilterChange(newFilterBy);
+    onFilterChange(event.target.value as FilterBy);
   };
 
   return (
@@ -43,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
+          onChange={(event) => onQueryChange(event)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -57,7 +57,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQueryChange('')}
+              onClick={onClear}
             />
           )}
         </span>

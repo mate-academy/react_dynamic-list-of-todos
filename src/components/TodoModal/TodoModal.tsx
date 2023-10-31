@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -24,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({ onSelect, todoSelected }) => {
         setTodoUser(givenUser);
       })
       .finally(() => setTodoLoading(false));
-  });
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -57,13 +58,14 @@ export const TodoModal: React.FC<Props> = ({ onSelect, todoSelected }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todoSelected.completed
-                ? (
-                  <strong className="has-text-success">Done</strong>
-                )
-                : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
+              <strong
+                className={cn({
+                  'has-text-success': todoSelected.completed,
+                  'has-text-danger': !todoSelected.completed,
+                })}
+              >
+                {todoSelected.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

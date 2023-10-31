@@ -40,19 +40,34 @@ function filterTodos(
 export const App: React.FC = () => {
   const [filter, setFilter] = useState(FilterBy.All);
   const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
   const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    setQuery(event.target.value);
+
+    setTimeout(() => {
+      setAppliedQuery(event.target.value);
+    }, 1000);
+  };
+
+  const handleClearInputButton = () => {
+    setQuery('');
+    setAppliedQuery('');
+  };
 
   useEffect(() => {
     setLoading(true);
 
     getTodos()
       .then((todosFromServer) => {
-        setVisibleTodos(filterTodos(todosFromServer, query, filter));
+        setVisibleTodos(filterTodos(todosFromServer, appliedQuery, filter));
       })
       .finally(() => setLoading(false));
-  }, [filter, query]);
+  }, [filter, appliedQuery]);
 
   return (
     <>
@@ -64,8 +79,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onFilterChange={setFilter}
-                onQueryChange={setQuery}
+                onQueryChange={handleInputChange}
                 query={query}
+                onClear={handleClearInputButton}
               />
             </div>
 
