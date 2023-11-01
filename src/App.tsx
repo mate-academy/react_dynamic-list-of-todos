@@ -18,13 +18,18 @@ interface TodosFilterOptions {
   filterBy: FilterType;
 }
 
-const getVisibleTodos = ({ todos, query, filterBy }: TodosFilterOptions): Todo[] => {
+const getVisibleTodos = (options: TodosFilterOptions): Todo[] => {
+  const { todos, query, filterBy } = options;
+
   let visibleTodos = [...todos];
 
   if (query) {
     const normalizedQuery = query.trim().toLowerCase();
 
-    visibleTodos = visibleTodos.filter((todo) => todo.title.toLowerCase().includes(normalizedQuery));
+    visibleTodos = visibleTodos
+      .filter((todo) => todo.title
+        .toLowerCase()
+        .includes(normalizedQuery));
   }
 
   if (filterBy) {
@@ -45,18 +50,21 @@ const getVisibleTodos = ({ todos, query, filterBy }: TodosFilterOptions): Todo[]
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.All);
 
   const visibleTodos = getVisibleTodos({ todos, query, filterBy });
 
+  const shouldDisplayLoader = isLoading;
+  const shouldDisplayTodoList = !isLoading && todos.length > 0;
+
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -75,9 +83,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {shouldDisplayLoader && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {shouldDisplayTodoList && (
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
