@@ -9,8 +9,9 @@ type Props = {
   selectedPost: Todo | null;
 };
 
-export const TodoModal: React.FC<Props> = ({ setSelectedPost, selectedPost },
-) => {
+export const TodoModal: React.FC<Props> = ({
+  setSelectedPost, selectedPost,
+}) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,7 +21,9 @@ export const TodoModal: React.FC<Props> = ({ setSelectedPost, selectedPost },
         setSelectedUser(user);
         setIsLoading(false);
       })
-      .catch(error => { throw new Error(error) });
+      .catch(error => {
+        throw new Error(error);
+      });
   }
 
   return (

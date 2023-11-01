@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -39,6 +40,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
 
     setFilteredTodos(newTodos);
   }, [filterBy, query, todos, setFilteredTodos]);
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -68,15 +70,18 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setQuery('')}
-          />
+
+          {query
+            && (
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={() => setQuery('')}
+              />
+            )}
+
         </span>
       </p>
     </form>

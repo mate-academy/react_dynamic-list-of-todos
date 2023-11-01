@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedPost, setSelectedPost] = useState<Todo | null>(null);
-  console.log(selectedPost);
+
   useEffect(() => {
     getTodos()
       .then(serverTodos => {
@@ -23,9 +23,11 @@ export const App: React.FC = () => {
         setFilteredTodos(serverTodos);
         setIsLoading(false);
       })
-      .catch(error => { throw new Error(error) })
+      .catch(error => {
+        throw new Error(error);
+      });
   },
-    []);
+  []);
 
   return (
     <>
