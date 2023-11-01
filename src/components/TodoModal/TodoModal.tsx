@@ -7,6 +7,7 @@ type Props = {
   setShowModal: (value: boolean) => void;
   selectedUser: User | null;
   selectedTodo: Todo | null;
+  setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const TodoModal: React.FC<Props> = ({
   isLoadingUser,
   selectedUser,
   selectedTodo,
+  setSelectedTodo,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,7 +38,10 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setSelectedTodo(null);
+              }}
             />
           </header>
 

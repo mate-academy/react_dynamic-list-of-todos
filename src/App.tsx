@@ -94,6 +94,7 @@ export const App: React.FC = () => {
           isLoadingUser={isLoadingUser}
           selectedUser={selectedUser}
           selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

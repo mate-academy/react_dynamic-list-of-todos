@@ -5,12 +5,14 @@ type Props = {
   todos: Todo[];
   handleShowTodo: (value: Todo) => void;
   selectedTodo: Todo | null;
+
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   handleShowTodo,
   selectedTodo,
+
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
