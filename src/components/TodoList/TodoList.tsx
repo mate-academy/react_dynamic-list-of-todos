@@ -1,6 +1,6 @@
-import React from "react";
-import { Todo } from "../../types/Todo";
-import cn from "classnames";
+import React from 'react';
+import cn from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map((todo) => (
-          <tr data-cy="todo" className="">
+          <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -44,8 +44,8 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={cn({
-                  "has-text-success": todo.completed,
-                  "has-text-danger": !todo.completed,
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
                 })}
               >
                 {todo.title}
@@ -57,7 +57,8 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  onSelectedTodo(todo), changeShowModal(true);
+                  onSelectedTodo(todo);
+                  changeShowModal(true);
                 }}
               >
                 <span className="icon">

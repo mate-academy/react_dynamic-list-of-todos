@@ -1,4 +1,4 @@
-import { ShowType } from "../../types/ShowType";
+import { ShowType } from '../../types/ShowType';
 
 interface Props {
   show: ShowType;
@@ -42,14 +42,15 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: "all" }}>
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {filter && (
             <button
               data-cy="clearSearchButton"
+              aria-label="clear"
               type="button"
               className="delete"
-              onClick={() => onChangeFilter("")}
+              onClick={() => onChangeFilter('')}
             />
           )}
         </span>
