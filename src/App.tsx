@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
               {!loading && todos.length > 0 && (
                 <TodoList
-                  todos={visibleTodos.slice(0, 10)}
+                  todos={visibleTodos}
                   selectedTodo={selectedTodo}
                   onSelectClick={setSelectedTodo}
                 />
