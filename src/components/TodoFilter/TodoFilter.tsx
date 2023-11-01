@@ -15,64 +15,21 @@ export const TodoFilter: React.FC<Props> = ({
 
   const getIncludesTodos = useCallback(
     (val: string, currTodos: Todo[]) => {
-      return currTodos.filter((todo) => todo.title.includes(val));
+      return currTodos.filter((todo) => todo.title
+        .toLowerCase()
+        .includes(val));
     },
     [],
   );
-
-  // const handleFilterChange = async (
-  //   selectedValue: string,
-  //   inputValue: string,
-  // ) => {
-  //   setSelectedOption(selectedValue);
-
-  //   let filteredTodos;
-
-  //   switch (selectedValue) {
-  //     case Selected.All:
-  //       filteredTodos = await getTodos();
-  //       break;
-  //     case Selected.Active:
-  //       filteredTodos = await getFilteredTodos(false);
-  //       break;
-  //     case Selected.Completed:
-  //       filteredTodos = await getFilteredTodos(true);
-  //       break;
-  //     default:
-  //       filteredTodos = await getTodos();
-  //   }
-
-  //   if (inputValue) {
-  //     filteredTodos = getIncludesTodos(inputValue, filteredTodos);
-  //   }
-
-  //   setTodos(filteredTodos);
-  // };
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const searchValue = e.target.value;
-
-  //   setValue(searchValue);
-  //   handleFilterChange(selectedOption, searchValue);
-  // };
-
-  // const handleSelectChange = async (
-  //   event: React.ChangeEvent<HTMLSelectElement>,
-  // ) => {
-  //   const selectedValue = event.target.value;
-
-  //   handleFilterChange(selectedValue, value);
-  // };
 
   const handleFilterChange = useCallback(
     async (selectedValue: string, inputValue: string) => {
       setSelectedOption(selectedValue);
 
-      let filteredTodos;
+      let filteredTodos = await getTodos();
 
       switch (selectedValue) {
         case Selected.All:
-          filteredTodos = await getTodos();
           break;
         case Selected.Active:
           filteredTodos = await getFilteredTodos(false);
@@ -81,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
           filteredTodos = await getFilteredTodos(true);
           break;
         default:
-          filteredTodos = await getTodos();
+          break;
       }
 
       if (inputValue) {
@@ -93,12 +50,15 @@ export const TodoFilter: React.FC<Props> = ({
     [getIncludesTodos, setTodos],
   );
 
-  const handleInputChange = useCallback((e: React
+  const handleInputChange = useCallback((event: React
     .ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value;
+    const searchValue = event.target.value;
+    const preparedInputValue = searchValue
+      .toLowerCase()
+      .trim();
 
     setValue(searchValue);
-    handleFilterChange(selectedOption, searchValue);
+    handleFilterChange(selectedOption, preparedInputValue);
   }, [selectedOption, handleFilterChange]);
 
   const handleSelectChange = useCallback(async (event: React
