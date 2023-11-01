@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -10,7 +10,7 @@ interface Props {
   onSelectedTodo: (value: Todo | null) => void;
 }
 
-let loadedUser = false;
+
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
@@ -18,11 +18,12 @@ export const TodoModal: React.FC<Props> = ({
   onSelectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
+  const loadedUser = useRef(false);
 
   useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId).then((data: User) => {
-        loadedUser = true;
+        loadedUser.current = true;
         setUser(data);
       });
     }
@@ -32,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!loadedUser ? (
+      {!loadedUser.current ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                loadedUser = false;
+                loadedUser.current = false;
                 changeShowModal(false);
                 onSelectedTodo(null);
               }}
