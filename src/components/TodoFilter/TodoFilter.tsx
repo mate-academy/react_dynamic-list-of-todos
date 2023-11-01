@@ -1,17 +1,12 @@
 import React from 'react';
+import { Option } from '../../types/Option';
 
 type Props = {
-  setOption: (val: any) => void
-  option: string
+  option: Option
   query: string
-  setQuery: (val: any) => void
+  setOption: (val: Option) => void
+  setQuery: (val: string) => void
 };
-
-const enum Option {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 
 export const TodoFilter: React.FC<Props> = ({
   setOption,
@@ -20,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
 }) => {
   const handleChooseOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setOption(event.target.value);
+    setOption(event.target.value as Option);
   };
 
   return (

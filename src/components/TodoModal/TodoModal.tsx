@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
@@ -11,14 +13,14 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, setSelectedTodo }) => {
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
-      getUser(selectedTodo.userId)
-        .finally(() => setLoading(false));
-    }, 300);
-  }, []);
+    getUser(selectedTodo.userId)
+      .then(setUser)
+      .finally(() => setLoading(false));
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -51,16 +53,21 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, setSelectedTodo }) =>
               </p>
 
               <p className="block" data-cy="modal-user">
-                {selectedTodo.completed
-                  ? (<strong className="has-text-success">Done</strong>)
-                  : (<strong className="has-text-danger">Planned</strong>)}
+                <strong
+                  className={classNames({
+                    'has-text-success': selectedTodo.completed,
+                    'has-text-danger': !selectedTodo.completed,
+                  })}
+                >
+                  {selectedTodo.completed
+                    ? 'Done'
+                    : 'Planned'}
+                </strong>
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz">
-                  {selectedTodo.completed
-                    ? ('Ervin Howell')
-                    : ('Leanne Graham')}
+                <a href={`mailto:${user?.email}`}>
+                  {user?.name}
                 </a>
               </p>
             </div>

@@ -8,15 +8,14 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
+import { Option } from './types/Option';
 import { Todo } from './types/Todo';
 
-export enum Option {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
-
-const filteredTodos = (todos: Todo[], query: string, option: string) => {
+const filteredTodos = (
+  todos: Todo[],
+  query: string,
+  option: string,
+) => {
   let filteredByOption: Todo[] = [];
 
   if (option) {
@@ -49,15 +48,14 @@ export const App: React.FC = () => {
   const [option, setOption] = useState(Option.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
   const visibleTodos = filteredTodos(todos, query, option);
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
-      getTodos()
-        .then(todo => setTodos(todo))
-        .finally(() => setLoading(false));
-    }, 300);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
