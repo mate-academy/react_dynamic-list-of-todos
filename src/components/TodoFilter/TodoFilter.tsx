@@ -1,8 +1,4 @@
-enum Select {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Select } from '../../types/Select';
 
 interface Props {
   setFilterBy: (filter: Select) => void;
