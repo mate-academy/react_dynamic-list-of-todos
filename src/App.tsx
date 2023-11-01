@@ -57,7 +57,6 @@ export const App: React.FC = () => {
 
   const visibleTodos = getVisibleTodos({ todos, query, filterBy });
 
-  const shouldDisplayLoader = isLoading;
   const shouldDisplayTodoList = !isLoading && todos.length > 0;
 
   useEffect(() => {
@@ -83,7 +82,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {shouldDisplayLoader && <Loader />}
+              {isLoading && <Loader />}
 
               {shouldDisplayTodoList && (
                 <TodoList
