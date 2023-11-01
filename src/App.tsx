@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,21 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [selectedPost, setSelectedPost] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    getTodos().then(todosFromServer => {
+      setTodos(todosFromServer);
+      setFilteredTodos(todosFromServer);
+    });
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +30,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                todos={todos}
+                setFilteredTodos={setFilteredTodos}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+
+              {todos.length !== 0
+                ? (
+                  <TodoList
+                    todos={filteredTodos}
+                    setSelectedPost={setSelectedPost}
+                    selectedPost={selectedPost}
+                  />
+                )
+                : (<Loader />)}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedPost && (
+        <TodoModal
+          setSelectedPost={setSelectedPost}
+          selectedPost={selectedPost}
+        />
+      )}
     </>
   );
 };
