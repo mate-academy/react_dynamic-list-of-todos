@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,69 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
+export enum Option {
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
+interface FilterOptions {
+  select: string;
+  query: string;
+}
+
+function filterBy(todos: Todo[], { select, query }: FilterOptions): Todo[] {
+  let filtered = todos;
+
+  if (select) {
+    switch (select) {
+      case Option.ACTIVE:
+        filtered = filtered.filter(todo => !todo.completed);
+        break;
+
+      case Option.COMPLETED:
+        filtered = filtered.filter(todo => todo.completed);
+        break;
+
+      default:
+        return filtered;
+    }
+  }
+
+  if (query) {
+    const normilizeQuery = query.toLowerCase().trim();
+
+    filtered = filtered
+      .filter(todo => todo.title.toLowerCase().includes(normilizeQuery));
+  }
+
+  return filtered;
+}
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [select, setSelect] = useState('');
+  const [query, setQuery] = useState('');
+  const [userId, setUserId] = useState(0);
+  const [buttonId, setButtonId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [post, setPost] = useState<Todo>(todos[0]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+
+    getTodos()
+      .then(setTodos)
+      .catch();
+  }, [setTodos, setIsLoading]);
+
+  const filteredTodos = filterBy(todos, { select, query });
+
   return (
     <>
       <div className="section">
@@ -17,18 +77,39 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                select={select}
+                query={query}
+                setSelect={setSelect}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && (
+                <Loader />
+              )}
+              <TodoList
+                todos={filteredTodos}
+                setIsVisibleModal={setIsVisibleModal}
+                setUserId={setUserId}
+                setPost={setPost}
+                buttonId={buttonId}
+                setButtonId={setButtonId}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isVisibleModal && (
+        <TodoModal
+          userId={userId}
+          post={post}
+          setIsVisibleModal={setIsVisibleModal}
+          setButtonId={setButtonId}
+        />
+      )}
     </>
   );
 };
