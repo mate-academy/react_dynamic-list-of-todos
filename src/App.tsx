@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodoContext } from './TodoContext';
 
 export const App: React.FC = () => {
+  const { loader, todo } = useContext(TodoContext);
+
   return (
     <>
       <div className="section">
@@ -19,16 +22,21 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter />
             </div>
-
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loader && (
+                <Loader />
+              )}
+              {!loader && (
+                <TodoList />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todo && (
+        <TodoModal />
+      )}
     </>
   );
 };
