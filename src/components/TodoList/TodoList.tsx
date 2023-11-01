@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   modalTodo: Todo | null;
-  setShowModal: (value: boolean) => void;
+  setIsModalVisible: (value: boolean) => void;
   setModalTodo: (value: Todo) => void;
 };
 
@@ -14,12 +14,12 @@ export const TodoList: React.FC<Props> = (
     todos,
     modalTodo,
     setModalTodo,
-    setShowModal,
+    setIsModalVisible,
   },
 ) => {
   const handleClick = (todo: Todo) => {
     setModalTodo(todo);
-    setShowModal(true);
+    setIsModalVisible(true);
   };
 
   return (

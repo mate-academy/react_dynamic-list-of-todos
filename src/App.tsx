@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [sortBy, setSortBy] = useState(SortType.All);
-  const [showModal, setShowModal] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalTodo, setModalTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
                   <TodoList
                     todos={visibleTodos}
                     modalTodo={modalTodo}
-                    setShowModal={setShowModal}
+                    setIsModalVisible={setIsModalVisible}
                     setModalTodo={setModalTodo}
                   />
                 )}
@@ -63,10 +63,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {isModalVisible && (
         <TodoModal
           todo={modalTodo}
-          setShowModal={setShowModal}
+          setIsModalVisible={setIsModalVisible}
           setModalTodo={setModalTodo}
         />
       )}

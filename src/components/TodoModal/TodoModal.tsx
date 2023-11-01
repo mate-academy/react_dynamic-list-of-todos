@@ -5,14 +5,16 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  todo?: Todo | null;
-  setShowModal: (value: boolean) => void;
+  todo: Todo | null;
+  setIsModalVisible: (value: boolean) => void;
   setModalTodo: (value: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = (
-  { todo, setShowModal, setModalTodo },
-) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  setIsModalVisible,
+  setModalTodo,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -25,7 +27,7 @@ export const TodoModal: React.FC<Props> = (
   }, [todo]);
 
   const handleReset = (): void => {
-    setShowModal(false);
+    setIsModalVisible(false);
     setModalTodo(null);
   };
 

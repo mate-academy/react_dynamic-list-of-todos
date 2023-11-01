@@ -27,20 +27,17 @@ export const TodoFilter: React.FC<Props> = (
           }}
         >
           <option
-            value="all"
-
+            value={SortType.All}
           >
             All
           </option>
           <option
-            value="active"
-
+            value={SortType.Active}
           >
             Active
           </option>
           <option
-            value="completed"
-
+            value={SortType.Completed}
           >
             Completed
           </option>
