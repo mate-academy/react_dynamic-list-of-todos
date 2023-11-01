@@ -25,6 +25,7 @@ export const App: React.FC = () => {
     });
     loaded.current = true;
   }, []);
+
   const onChangeShow = (value: ShowType) => {
     setShow(value);
   };
@@ -33,9 +34,16 @@ export const App: React.FC = () => {
     setFilter(value);
   };
 
+  const onSelectedTodo = (value: Todo | null) => {
+    setSelectedTodo(value);
+  };
+
+  const changeShowModal = (value: boolean) => {
+    setShowModal(value);
+  };
+
   const getFilteredTodos = (newFilter: string, newShow: ShowType) => {
     let todoCopy: Todo[] = [...todosFromServer];
-    const lowerCaseFilter = newFilter.toLowerCase();
 
     if (newShow === ShowType.active) {
       todoCopy = todosFromServer.filter((todo) => !todo.completed);
@@ -45,22 +53,16 @@ export const App: React.FC = () => {
       todoCopy = todosFromServer.filter((todo) => todo.completed);
     }
 
-    if (newShow === ShowType.all) {
-      todoCopy = [...todosFromServer];
+    if (newFilter) {
+      const lowerCaseFilter = newFilter.toLowerCase();
+      return todoCopy.filter((todo) =>
+        todo.title.toLowerCase().includes(lowerCaseFilter));
     }
 
-    return todoCopy.filter((todo) => todo.title.toLowerCase().includes(lowerCaseFilter));
+    return todoCopy;
   };
 
   const todos = getFilteredTodos(filter, show);
-
-  const onSelectedTodo = (value: Todo | null) => {
-    setSelectedTodo(value);
-  };
-
-  const changeShowModal = (value: boolean) => {
-    setShowModal(value);
-  };
 
   return (
     <>

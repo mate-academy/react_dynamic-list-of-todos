@@ -10,8 +10,6 @@ interface Props {
   onSelectedTodo: (value: Todo | null) => void;
 }
 
-
-
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   changeShowModal,
