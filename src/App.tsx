@@ -14,7 +14,7 @@ import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo []>([]);
-  const [todosLoading, setTodosLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [filter, setFilter] = useState(FilterType.All);
@@ -23,11 +23,11 @@ export const App: React.FC = () => {
   const preparedTodos = prepareTodos(filter, query, todos);
 
   useEffect(() => {
-    setTodosLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
-      .finally(() => setTodosLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleFilterTypeChange = (newType: FilterType) => {
@@ -55,8 +55,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosLoading && <Loader />}
-              {!todosLoading && (
+              {isLoading && <Loader />}
+              {!isLoading && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}
