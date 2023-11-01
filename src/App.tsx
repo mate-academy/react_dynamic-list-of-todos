@@ -1,20 +1,20 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useRef } from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import React, { useState, useEffect, useRef } from "react";
+import "bulma/css/bulma.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
-import { ShowType } from './types/ShowType';
+import { TodoList } from "./components/TodoList";
+import { TodoFilter } from "./components/TodoFilter";
+import { TodoModal } from "./components/TodoModal";
+import { Loader } from "./components/Loader";
+import { getTodos } from "./api";
+import { Todo } from "./types/Todo";
+import { ShowType } from "./types/ShowType";
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [show, setShow] = useState<ShowType>(ShowType.all);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState("");
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [showModal, setShowModal] = useState(false);
   const loaded = useRef(false);
@@ -25,16 +25,15 @@ export const App: React.FC = () => {
     });
     loaded.current = true;
   }, []);
-
-  function onChangeShow(value: ShowType) {
+  const onChangeShow = (value: ShowType) => {
     setShow(value);
-  }
+  };
 
-  function onChangeFilter(value: string) {
+  const onChangeFilter = (value: string) => {
     setFilter(value);
-  }
+  };
 
-  function getFilteredTodos(newFilter:string, newShow:ShowType) {
+  const getFilteredTodos = (newFilter: string, newShow: ShowType) => {
     let todoCopy: Todo[] = [...todosFromServer];
     const lowerCaseFilter = newFilter.toLowerCase();
 
@@ -50,18 +49,20 @@ export const App: React.FC = () => {
       todoCopy = [...todosFromServer];
     }
 
-    return todoCopy.filter((todo) => todo.title.toLowerCase().includes(lowerCaseFilter));
-  }
+    return todoCopy.filter((todo) =>
+      todo.title.toLowerCase().includes(lowerCaseFilter)
+    );
+  };
 
   const todos = getFilteredTodos(filter, show);
 
-  function onSelectedTodo(value: Todo | null) {
+  const onSelectedTodo = (value: Todo | null) => {
     setSelectedTodo(value);
-  }
+  };
 
-  function changeShowModal(value: boolean) {
+  const changeShowModal = (value: boolean) => {
     setShowModal(value);
-  }
+  };
 
   return (
     <>
@@ -74,8 +75,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 show={show}
                 filter={filter}
-                onChangeShow={() => onChangeShow}
-                onChangeFilter={() => onChangeFilter}
+                onChangeShow={onChangeShow}
+                onChangeFilter={onChangeFilter}
               />
             </div>
 
@@ -84,8 +85,8 @@ export const App: React.FC = () => {
               <TodoList
                 todos={todos}
                 selectedTodo={selectedTodo}
-                onSelectedTodo={() => onSelectedTodo}
-                changeShowModal={() => changeShowModal}
+                onSelectedTodo={onSelectedTodo}
+                changeShowModal={changeShowModal}
               />
             </div>
           </div>
