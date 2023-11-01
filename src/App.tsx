@@ -8,56 +8,34 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
-import { Todos } from './types/Todos';
 import { Todo } from './types/Todo';
 import { prepareTodos } from './utils/prepareTodos';
 import { FilterType } from './types/FilterType';
 
-// comment just to reset test on GitHub
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todos>({
-    todos: [],
-    loading: false,
-  });
+  const [todos, setTodos] = useState<Todo []>([]);
+  const [todosLoading, setTodosLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedUserId, setSelectedUserId] = useState<number>(0);
-  const [filter, setFilter] = useState({
-    type: FilterType.All,
-    query: '',
-  });
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [filter, setFilter] = useState(FilterType.All);
+  const [query, setQuery] = useState('');
 
-  const preparedTodos = prepareTodos(filter, todos);
+  const preparedTodos = prepareTodos(filter, query, todos);
 
   useEffect(() => {
-    setTodos((prevTodos) => ({
-      ...prevTodos,
-      loading: true,
-    }));
+    setTodosLoading(true);
 
     getTodos()
-      .then((data) => setTodos((prevTodos) => ({
-        ...prevTodos,
-        todos: data,
-      })))
-      .finally(() => setTodos((prevTodos) => ({
-        ...prevTodos,
-        loading: false,
-      })));
+      .then(setTodos)
+      .finally(() => setTodosLoading(false));
   }, []);
 
   const handleFilterTypeChange = (newType: FilterType) => {
-    setFilter(prevFilter => ({
-      ...prevFilter,
-      type: newType,
-    }));
+    setFilter(newType);
   };
 
   const handleFilterQueryChange = (newQuery: string) => {
-    setFilter(prevFilter => ({
-      ...prevFilter,
-      query: newQuery,
-    }));
+    setQuery(newQuery);
   };
 
   return (
@@ -69,16 +47,16 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={filter.query}
-                type={filter.type}
+                query={query}
+                type={filter}
                 onTypeChange={handleFilterTypeChange}
                 onQueryChange={handleFilterQueryChange}
               />
             </div>
 
             <div className="block">
-              {todos.loading && <Loader />}
-              {!todos.loading && (
+              {todosLoading && <Loader />}
+              {!todosLoading && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}

@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   selectedTodo: Todo | null,
-  selectedUserId: number,
+  selectedUserId: number | null,
   setSelectedTodo: (todo: Todo | null) => void,
 };
 
@@ -18,8 +18,10 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedUserId).then(setUser);
-  }, []);
+    if (selectedUserId) {
+      getUser(selectedUserId).then(setUser);
+    }
+  }, [selectedUserId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
