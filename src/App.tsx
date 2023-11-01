@@ -13,6 +13,7 @@ import { Filter } from './types/Filter';
 
 const getVisibleTodos = (filter: Filter, todos: Todo[], query: string) => {
   let filteredTodos = [...todos];
+
   switch (filter) {
     case (Filter.Active):
       filteredTodos = todos.filter(todo => !todo.completed);
@@ -20,8 +21,9 @@ const getVisibleTodos = (filter: Filter, todos: Todo[], query: string) => {
     case (Filter.Completed):
       filteredTodos = todos.filter(todo => todo.completed);
       break;
+
     default:
-      filteredTodos;
+      break;
   }
 
   if (query) {
