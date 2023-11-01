@@ -7,6 +7,12 @@ type Props = {
   setFilterBy: (value: FilterType) => void;
 };
 
+const filterOptions = [
+  { value: FilterType.All, label: 'All' },
+  { value: FilterType.Active, label: 'Active' },
+  { value: FilterType.Completed, label: 'Completed' },
+];
+
 export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
@@ -25,9 +31,11 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleSelectChange}>
-            <option value={FilterType.All}>{FilterType.All}</option>
-            <option value={FilterType.Active}>{FilterType.Active}</option>
-            <option value={FilterType.Completed}>{FilterType.Completed}</option>
+            {filterOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
