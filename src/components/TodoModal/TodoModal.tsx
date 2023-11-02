@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({ onClose, todo }) => {
               data-cy="modal-header"
             >
               Todo #
-              {user?.id}
+              {todo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
