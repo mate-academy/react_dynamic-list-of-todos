@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     }
 
     if (input !== '') {
-      listCopy = listCopy.filter(todo => todo.title.includes(input));
+      listCopy = listCopy.filter(todo => todo.title.toLowerCase().includes(input.toLowerCase()));
     }
 
     return listCopy;
