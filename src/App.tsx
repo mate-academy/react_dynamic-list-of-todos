@@ -1,14 +1,53 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
+import { StatusSelect } from './types/StatusSelect';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
+  const [statusSelect, setStatusSelect] = useState<string>('all');
+  const [loader, setLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    setLoader(true);
+    getTodos()
+      .then((data) => setTodos(data))
+      .catch((error) => setErrorMessage(error.message))
+      .finally(() => setLoader(false));
+  }, []);
+
+  function filterTodos() {
+    const searchFilterTodos = todos.filter((todo) => {
+      const queryNormalize = query.toLowerCase();
+
+      return todo.title.toLowerCase().includes(queryNormalize);
+    });
+
+    return searchFilterTodos.filter((todo) => {
+      switch (statusSelect) {
+        case StatusSelect.All:
+          return todo;
+        case StatusSelect.Active:
+          return todo.completed === false;
+        case StatusSelect.Completed:
+          return todo.completed === true;
+        default:
+          return todo;
+      }
+    });
+  }
+
   return (
     <>
       <div className="section">
@@ -17,18 +56,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                setStatusSelect={setStatusSelect}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loader && <Loader />}
+
+              {todos.length > 0 && (
+                <TodoList
+                  todos={filterTodos()}
+                  currentTodo={currentTodo}
+                  setCurrentTodo={setCurrentTodo}
+                />
+              )}
+
+              {errorMessage && <p>{errorMessage}</p>}
+
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {currentTodo && (
+        <TodoModal
+          setCurrentTodo={setCurrentTodo}
+          currentTodo={currentTodo}
+        />
+      )}
     </>
   );
 };
