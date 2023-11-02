@@ -10,12 +10,12 @@ import { Loader } from '../Loader';
 
 type Props = {
   isTodoSelected: Todo,
-  setIsTodoSelected: (value: Todo | null) => void,
+  onTodoSelect: (value: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   isTodoSelected,
-  setIsTodoSelected = () => { },
+  onTodoSelect = () => { },
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -43,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               type="button"
               className="delete"
-              onClick={() => setIsTodoSelected(null)}
+              onClick={() => onTodoSelect(null)}
             />
           </header>
 
