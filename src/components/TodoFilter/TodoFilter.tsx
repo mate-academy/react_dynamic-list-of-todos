@@ -8,6 +8,12 @@ type Props = {
   setSortBy: (value: SortType) => void;
 };
 
+const selectOptions = [
+  { value: SortType.All, title: 'All' },
+  { value: SortType.Active, title: 'Active' },
+  { value: SortType.Completed, title: 'Completed' },
+];
+
 export const TodoFilter: React.FC<Props> = (
   {
     sortBy,
@@ -26,21 +32,13 @@ export const TodoFilter: React.FC<Props> = (
             setSortBy(event.target.value as SortType);
           }}
         >
-          <option
-            value={SortType.All}
-          >
-            All
-          </option>
-          <option
-            value={SortType.Active}
-          >
-            Active
-          </option>
-          <option
-            value={SortType.Completed}
-          >
-            Completed
-          </option>
+          {selectOptions.map((option) => (
+            <option
+              value={option.value}
+            >
+              {option.title}
+            </option>
+          ))}
         </select>
       </span>
     </p>
