@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(FilterStatus.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const filteringTodos: Todo[] = useMemo(() => {
     let filteredTodos = [...todos];
@@ -41,19 +41,15 @@ export const App: React.FC = () => {
     }
   }, [todos, query, selectedStatus]);
 
-  const handelCloseModal = () => {
+  const handleCloseModal = () => {
     setSelectedTodo(null);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-
-    setInterval(() => {
-      getTodos()
-        .then(setTodos)
-        .catch((error) => setTodosError(error.message))
-        .finally(() => setIsLoading(false));
-    }, 1000);
+    getTodos()
+      .then(setTodos)
+      .catch((error) => setTodosError(error.message))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -73,20 +69,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && (
+              {isLoading ? (
                 <Loader />
-              )}
-
-              {todosError && (
-                <p>{todosError}</p>
-              )}
-
-              {todos.length > 0 && (
+              ) : (
                 <TodoList
                   todos={filteringTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
+              )}
+
+              {todosError && (
+                <p>{todosError}</p>
               )}
             </div>
           </div>
@@ -96,7 +90,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          handelCloseModal={handelCloseModal}
+          handleCloseModal={handleCloseModal}
         />
       )}
     </>

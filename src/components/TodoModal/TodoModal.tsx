@@ -8,23 +8,30 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo,
-  handelCloseModal: () => void,
+  handleCloseModal: () => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  handelCloseModal,
+  handleCloseModal,
 }) => {
   const [user, setUser] = useState<User>();
   const [isLoadingModal, setIsLoadingModal] = useState(true);
 
-  useEffect(() => {
-    getUser(selectedTodo.userId)
-      .then(setUser)
-      .finally(() => setIsLoadingModal(false));
-  }, []);
+  const {
+    id,
+    userId,
+    title,
+    completed,
+  } = selectedTodo;
 
-  const status = selectedTodo.completed ? 'Done' : 'Planned';
+  useEffect(() => {
+    getUser(userId)
+      .then((userData) => setUser(userData))
+      .finally(() => setIsLoadingModal(false));
+  }, [userId]);
+
+  const status = completed ? 'Done' : 'Planned';
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo.id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -47,19 +54,19 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handelCloseModal}
+              onClick={handleCloseModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong className={cn({
-                'has-text-danger': selectedTodo.completed === false,
-                'has-text-success': selectedTodo.completed === true,
+                'has-text-danger': !completed,
+                'has-text-success': completed,
               })}
               >
                 {status}
