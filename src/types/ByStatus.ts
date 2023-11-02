@@ -1,6 +1,6 @@
 export enum ByStatus {
   all = 'all',
-  activ = 'activ',
+  activ = 'active',
   completed = 'completed',
 
 }

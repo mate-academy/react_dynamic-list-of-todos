@@ -55,7 +55,7 @@ export const App: React.FC = () => {
         return true;
     }
   }).filter(todo => {
-    return todo.title.includes(query.trim().toLowerCase());
+    return todo.title.toLowerCase().includes(query.trim().toLowerCase());
   });
 
   return (
