@@ -40,12 +40,14 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
 
     getTodos()
       .then(todos => setTodosFromServer(todos))
+      .catch(newError => setErrorMessage(newError.message))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -70,7 +72,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading
                   && <Loader />}
-              {!isLoading
+              {!isLoading && !errorMessage
                 && (
                   <TodoList
                     todos={filteredTodo}
@@ -87,7 +89,7 @@ export const App: React.FC = () => {
         && (
           <TodoModal
             selectedTodo={selectedTodo}
-            onSelectTodo={todo => setSelectedTodo(todo)}
+            selectNewTodo={todo => setSelectedTodo(todo)}
           />
         )}
     </>

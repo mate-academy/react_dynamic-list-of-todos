@@ -6,10 +6,10 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   selectedTodo: Todo | null;
-  onSelectTodo(todo: null): void;
+  selectNewTodo(todo: null): void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,6 +24,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
           setUser(userFromServer);
           setIsLoading(false);
         })
+        .catch(newError => setErrorMessage(newError.message))
         .finally(() => setIsLoading(false));
     } else {
       setErrorMessage('No selected todo');
@@ -51,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
               <button
                 type="button"
                 className="delete"
-                onClick={() => onSelectTodo(null)}
+                onClick={() => selectNewTodo(null)}
                 data-cy="modal-close"
               />
             </header>
