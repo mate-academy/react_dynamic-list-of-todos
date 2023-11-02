@@ -1,19 +1,14 @@
 import { ChangeEvent, FC } from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
+import { TodoFilterProps } from '../../types/TodoFilterProps';
 
-type TodoFilterProps = {
-  setFilterStatus: (status: string) => void;
-  setSearchQuery: (query: string) => void;
-  searchQuery: string;
-};
-
-export const TodoFilter: FC<TodoFilterProps> = (
-  {
-    setFilterStatus, setSearchQuery, searchQuery,
-  },
-) => {
+export const TodoFilter: FC<TodoFilterProps> = ({
+  setFilterStatus,
+  setSearchQuery,
+  searchQuery,
+}) => {
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilterStatus(event.target.value);
+    setFilterStatus(event.target.value as TodoStatus);
   };
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {

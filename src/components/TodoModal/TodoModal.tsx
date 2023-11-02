@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import { TodoModalProps } from '../../types/TodoModalProps';
 
-type Props = {
-  onClose: () => void;
-  todo: Todo;
-};
-
-export const TodoModal: React.FC<Props> = ({ onClose, todo }) => {
+export const TodoModal: React.FC<TodoModalProps> = ({ onClose, todo }) => {
   const {
     userId,
     id,
