@@ -16,11 +16,11 @@ export const TodoModal: React.FC<Props> = ({
   setIsOpenTodo = () => { },
   setTodo = () => { },
 }) => {
-  const [loader, setLoader] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
-      setLoader(false);
+      setIsLoading(false);
     }, 300);
   }, []);
 
@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

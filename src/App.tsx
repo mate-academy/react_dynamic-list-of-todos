@@ -28,10 +28,13 @@ function getFilteredTodos(items: Todo[], filter: string, query: string) {
     switch (filter) {
       case Filter.ALL:
         return item;
+
       case Filter.ACTIVE:
         return !item.completed;
+
       case Filter.COMPLETED:
         return item.completed;
+
       default:
         return 0;
     }
@@ -42,18 +45,18 @@ function getFilteredTodos(items: Todo[], filter: string, query: string) {
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
-  const [isLoaded, setIsloaded] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterSelect, setFilterSelect] = useState('all');
   const [searchValue, setSearchValue] = useState('');
   const [isOpenTodo, setIsOpenTodo] = useState(false);
   const [userId, setUserId] = useState(0);
   const [user, setUser] = useState<User>(Object);
-  const [todo, setTodo] = useState<Todo | null >(null);
+  const [todo, setTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(todos => setTodosList(todos));
     setTimeout(() => {
-      setIsloaded(false);
+      setIsLoading(false);
     }, 300);
   }, []);
 
@@ -80,7 +83,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded
+              {isLoading
                 ? (
                   <Loader />
                 ) : (
