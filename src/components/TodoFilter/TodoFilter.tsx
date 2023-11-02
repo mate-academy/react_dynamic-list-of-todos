@@ -2,15 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
-const filter = (todos: Todo[], sortBy: string, query: string) => {
+enum SortOptions {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
+
+const filterTodo = (todos: Todo[], sortBy: string, query: string) => {
   let fiteredTodos = [...todos];
 
   switch (sortBy) {
-    case 'active':
+    case SortOptions.Active:
       fiteredTodos = todos.filter(todo => !todo.completed);
       break;
 
-    case 'completed':
+    case SortOptions.Completed:
       fiteredTodos = todos.filter(todo => todo.completed);
       break;
 
@@ -36,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
   const [filterBy, setFilterBy] = useState('');
 
   useEffect(() => {
-    const newTodos = filter(todos, filterBy, query);
+    const newTodos = filterTodo(todos, filterBy, query);
 
     setFilteredTodos(newTodos);
   }, [filterBy, query, todos, setFilteredTodos]);
@@ -49,11 +55,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
             data-cy="statusSelect"
             onChange={(e) => setFilterBy(e.target.value)}
           >
-            <option value="all">All</option>
+            <option value={SortOptions.All}>All</option>
 
-            <option value="active">Active</option>
+            <option value={SortOptions.Active}>Active</option>
 
-            <option value="completed">Completed</option>
+            <option value={SortOptions.Completed}>Completed</option>
           </select>
         </span>
       </p>

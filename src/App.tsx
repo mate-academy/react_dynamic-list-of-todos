@@ -20,7 +20,6 @@ export const App: React.FC = () => {
     getTodos()
       .then(serverTodos => {
         setTodos(serverTodos);
-        setFilteredTodos(serverTodos);
         setIsLoading(false);
       })
       .catch(error => {
@@ -44,7 +43,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading || todos.length === 0
+              {isLoading || !todos.length
                 ? <Loader />
                 : (
                   <TodoList

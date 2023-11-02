@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
+
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -10,13 +12,16 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({
-  setSelectedPost, selectedPost,
+  setSelectedPost,
+  selectedPost,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  if (selectedPost) {
-    getUser(selectedPost.userId)
+  const isCompleted = !!selectedPost?.completed;
+
+  useEffect(() => {
+    getUser(selectedPost?.userId || 0)
       .then(user => {
         setSelectedUser(user);
         setIsLoading(false);
@@ -24,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({
       .catch(error => {
         throw new Error(error);
       });
-  }
+  }, [selectedPost?.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -58,12 +63,17 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedPost?.completed
-                ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
+              <strong className={cn({
+                'has-text-success': isCompleted,
+                'has-text-danger': !isCompleted,
+              })}
+              >
+                {
+                  isCompleted
+                    ? 'Done'
+                    : 'Planned'
+                }
+              </strong>
 
               {' by '}
 
