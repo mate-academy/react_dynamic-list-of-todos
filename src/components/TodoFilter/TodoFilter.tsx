@@ -1,9 +1,10 @@
 import React, { } from 'react';
+import { Option } from '../../types/Option';
 
 type Props = {
   select: string;
   query: string;
-  setSelect: (query: string) => void;
+  setSelect: (select: string) => void;
   setQuery: (query: string) => void;
 };
 
@@ -13,12 +14,6 @@ export const TodoFilter: React.FC<Props> = ({
   setSelect,
   setQuery,
 }) => {
-  const isVisibleDeleteButton = query || select;
-  const reset = () => {
-    setQuery('');
-    setSelect('');
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -28,15 +23,15 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={event => setSelect(event.target.value)}
           >
-            <option value="all">
+            <option value={Option.ALL}>
               All
             </option>
 
-            <option value="active">
+            <option value={Option.ACTIVE}>
               Active
             </option>
 
-            <option value="completed">
+            <option value={Option.COMPLETED}>
               Completed
             </option>
           </select>
@@ -57,13 +52,13 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {isVisibleDeleteButton && (
+          {query && (
             // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={reset}
+              onClick={() => setQuery('')}
             />
           )}
         </span>

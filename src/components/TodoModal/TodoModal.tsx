@@ -6,24 +6,17 @@ import { User } from '../../types/User';
 
 type Props = {
   userId: number;
-  post: Todo;
-  setIsVisibleModal: (value: boolean) => void;
-  setButtonId: (value: number) => void;
+  post: Todo | null;
+  resetModal: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   userId,
   post,
-  setIsVisibleModal,
-  setButtonId,
+  resetModal,
 }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const handleClick = () => {
-    setIsVisibleModal(false);
-    setButtonId(0);
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${post.id}`}
+              {`Todo #${post?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -54,17 +47,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleClick}
+              onClick={resetModal}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {post.title}
+              {post?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {post.completed ? (
+              {post?.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
@@ -72,7 +65,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
+              <a href={`mailto:${user?.email}`}>
                 {user?.name}
               </a>
             </p>

@@ -1,18 +1,17 @@
 import React, { } from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
   setIsVisibleModal: (value: boolean) => void;
-  setUserId: (value: number) => void;
-  setPost: (value: Todo) => void;
-  setButtonId: (value: number) => void;
-  buttonId: number,
+  setUserId: (id: number) => void;
+  setPost: (post: Todo) => void;
+  selectedPostId: number;
 };
 
 interface HandleClick {
   boolean: boolean;
-  id: number;
   userId: number;
   todo: Todo;
 }
@@ -22,19 +21,16 @@ export const TodoList: React.FC<Props> = ({
   setIsVisibleModal,
   setUserId,
   setPost,
-  setButtonId,
-  buttonId,
+  selectedPostId,
 }) => {
   function handleClick(values: HandleClick) {
     const {
-      id,
       boolean,
       userId,
       todo,
     } = values;
 
     setIsVisibleModal(boolean);
-    setButtonId(id);
     setUserId(userId);
     setPost(todo);
   }
@@ -68,7 +64,9 @@ export const TodoList: React.FC<Props> = ({
             <tr
               key={id}
               data-cy="todo"
-              className=""
+              className={cn({
+                'has-background-info-light': selectedPostId === id,
+              })}
             >
               <td className="is-vcentered">
                 {id}
@@ -82,46 +80,30 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={completed ? 'has-text-success' : 'has-text-danger'}
+                  className={cn({
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  })}
                 >
                   {title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                {buttonId === id ? (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                  >
-                    <span className="icon">
-                      <i
-                        className="far fa-eye-slash"
-                      />
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => {
-                      // setIsVisibleModal(true);
-                      // setButtonId(id);
-                      // setUserId(userId);
-                      // setPost(todo);
-                      handleClick({
-                        boolean: true, id, userId, todo,
-                      });
-                    }}
-                  >
-                    <span className="icon">
-                      <i
-                        className="far fa-eye"
-                      />
-                    </span>
-                  </button>
-                )}
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => handleClick({ boolean: true, userId, todo })}
+                >
+                  <span className="icon">
+                    <i
+                      className={cn('far', {
+                        'fa-eye': selectedPostId !== id,
+                        'fa-eye-slash': selectedPostId === id,
+                      })}
+                    />
+                  </span>
+                </button>
               </td>
             </tr>
           );

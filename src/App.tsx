@@ -8,11 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-export enum Option {
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { Option } from './types/Option';
 
 interface FilterOptions {
   select: string;
@@ -53,9 +49,8 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState('');
   const [query, setQuery] = useState('');
   const [userId, setUserId] = useState(0);
-  const [buttonId, setButtonId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [post, setPost] = useState<Todo>(todos[0]);
+  const [post, setPost] = useState<Todo | null>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,6 +63,11 @@ export const App: React.FC = () => {
   }, [setTodos, setIsLoading]);
 
   const filteredTodos = filterBy(todos, { select, query });
+
+  const resetModal = () => {
+    setIsVisibleModal(false);
+    setPost(null);
+  };
 
   return (
     <>
@@ -94,8 +94,7 @@ export const App: React.FC = () => {
                 setIsVisibleModal={setIsVisibleModal}
                 setUserId={setUserId}
                 setPost={setPost}
-                buttonId={buttonId}
-                setButtonId={setButtonId}
+                selectedPostId={post?.id || 0}
               />
             </div>
           </div>
@@ -106,8 +105,7 @@ export const App: React.FC = () => {
         <TodoModal
           userId={userId}
           post={post}
-          setIsVisibleModal={setIsVisibleModal}
-          setButtonId={setButtonId}
+          resetModal={() => resetModal()}
         />
       )}
     </>
