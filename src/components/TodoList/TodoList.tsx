@@ -13,10 +13,7 @@ export const TodoList: React
   filter, setChosenTodo, handleToggleModal, chosenTodo,
 }) => {
   const handleChosenTodo = (todo: Todo) => {
-    setChosenTodo({
-      ...todo,
-      clicked: true,
-    });
+    setChosenTodo(todo);
     handleToggleModal();
   };
 
