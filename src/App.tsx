@@ -24,10 +24,10 @@ function getFilteredTodos(todos: Todo[], { quary, filterBy }: Props): Todo[] {
       case FILTEREDBY.All:
         break;
       case FILTEREDBY.Active:
-        copieTodos = copieTodos.filter(todo => todo.completed);
+        copieTodos = copieTodos.filter(todo => !todo.completed);
         break;
       case FILTEREDBY.Completed:
-        copieTodos = copieTodos.filter(todo => !todo.completed);
+        copieTodos = copieTodos.filter(todo => todo.completed);
         break;
       default:
         break;
