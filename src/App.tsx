@@ -16,10 +16,17 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('Error. Please try again later');
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos: Todo[] = useMemo(() => {
@@ -59,16 +66,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+              {isLoading && <Loader />}
+
               <TodoList
                 todos={filteredTodos}
+                selectedTodo={selectedTodo}
+                setSelectedTodo={setSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
