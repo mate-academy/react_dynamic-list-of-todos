@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -15,17 +15,22 @@ export const TodoModal: React.FC<Props> = ({
   selectedPost,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (selectedPost) {
-    getUser(selectedPost.userId)
-      .then(user => setSelectedUser(user));
-  }
+  useEffect(() => {
+    setIsLoading(true);
+    if (selectedPost) {
+      getUser(selectedPost.userId)
+        .then(user => setSelectedUser(user))
+        .finally(() => setIsLoading(false));
+    }
+  }, [selectedPost]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

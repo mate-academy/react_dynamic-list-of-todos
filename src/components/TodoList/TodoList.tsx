@@ -12,66 +12,70 @@ export const TodoList: React.FC<Props> = ({
   todos,
   setSelectedPost,
   selectedPost,
-}) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+}) => {
+  const isSelected = (todo: Todo) => selectedPost?.id === todo.id;
 
-    <tbody>
-
-      {todos.map(todo => (
-        <tr
-          key={todo.id}
-          data-cy="todo"
-          className={cn({
-            'has-background-info-light': selectedPost?.id === todo.id,
-          })}
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={cn({
-              'has-text-danger': !todo.completed,
-              'has-text-success': todo.completed,
-            })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => setSelectedPost(todo)}
-            >
-              <span className="icon">
-                <i className={cn('far', {
-                  'fa-eye': !selectedPost || selectedPost.id !== todo.id,
-                  'fa-eye-slash': selectedPost && selectedPost.id === todo.id,
-                })}
-                />
-              </span>
-            </button>
-          </td>
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-);
+      </thead>
+
+      <tbody>
+
+        {todos.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className={cn({
+              'has-background-info-light': isSelected(todo),
+            })}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p className={cn({
+                'has-text-danger': !todo.completed,
+                'has-text-success': todo.completed,
+              })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => setSelectedPost(todo)}
+              >
+                <span className="icon">
+                  <i className={cn('far', {
+                    'fa-eye': !isSelected(todo),
+                    'fa-eye-slash': isSelected(todo),
+                  })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};

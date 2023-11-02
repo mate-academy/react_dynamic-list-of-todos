@@ -38,7 +38,7 @@ export const App: React.FC = () => {
 
             <div className="block">
 
-              {todos.length !== 0
+              {todos.length
                 ? (
                   <TodoList
                     todos={filteredTodos}

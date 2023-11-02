@@ -1,29 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
-
-const filter = (todos: Todo[], sort: string, query: string) => {
-  let fiteredTodos = [...todos];
-
-  switch (sort) {
-    case 'active':
-      fiteredTodos = todos.filter(todo => !todo.completed);
-      break;
-
-    case 'completed':
-      fiteredTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  if (query) {
-    fiteredTodos = fiteredTodos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  }
-
-  return fiteredTodos;
-};
+import { filter } from '../../helpers';
+import { Filters } from '../../types/Filters';
 
 type Props = {
   todos: Todo[],
@@ -35,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
   setFilteredTodos,
 }) => {
   const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState<Filters>(Filters.all);
 
   useEffect(() => {
     const newTodos = filter(todos, filterBy, query);
@@ -43,25 +21,27 @@ export const TodoFilter: React.FC<Props> = ({
     setFilteredTodos(newTodos);
   }, [filterBy, query, todos, setFilteredTodos]);
 
+  const handleFilterBy = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterBy(event.target.value as Filters);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => setFilterBy(e.target.value)}
+            onChange={handleFilterBy}
+            className="is-capitalized"
           >
-            <option value="all">
-              All
-            </option>
-
-            <option value="active">
-              Active
-            </option>
-
-            <option value="completed">
-              Completed
-            </option>
+            {Object.keys(Filters).map(filterCategory => (
+              <option
+                value={filterCategory}
+                className="is-capitalized"
+              >
+                {filterCategory}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -73,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(event) => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
