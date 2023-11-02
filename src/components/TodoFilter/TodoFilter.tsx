@@ -57,14 +57,10 @@ export const TodoFilter: FC<TodoFilterProps> = (
         {searchQuery && (
           <span
             className="icon is-right"
-            style={{ pointerEvents: 'all' }}
-            onClick={handleClearSearch}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleClearSearch()}
           >
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              onClick={handleClearSearch}
+              onKeyDown={handleClearSearch}
               data-cy="clearSearchButton"
               type="button"
               className="delete"

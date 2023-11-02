@@ -1,49 +1,77 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { Loader } from '../Loader';
+import { getUser } from '../../api';
 
-interface TodoModalProps {
-  todo: Todo;
+type Props = {
   onClose: () => void;
-  user: User;
-  loadingUser: boolean;
-}
+  todo: Todo;
+};
 
-export const TodoModal: React.FC<TodoModalProps> = ({
-  todo: { id, title, completed },
-  onClose,
-  user: { name, email },
-  loadingUser,
-}) => {
-  if (loadingUser) {
-    return <Loader data-cy="loader" />;
-  }
+export const TodoModal: React.FC<Props> = ({ onClose, todo }) => {
+  const {
+    userId,
+    id,
+    title,
+    completed,
+  } = todo;
+
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getUser(userId)
+      .then((userData: User) => setUser(userData))
+      .finally(() => setLoading(false));
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <div className="modal-card-title" data-cy="modal-header">{`Todo #${id}`}</div>
-          <button
-            type="button"
-            className="delete"
-            data-cy="modal-close"
-            onClick={onClose}
-            aria-label="Close modal"
-          />
-        </header>
-        <div className="modal-card-body">
-          <>
-            <p className="block" data-cy="modal-title">{title}</p>
-            <p data-cy="modal-user">
-              {completed ? `Done by ${name}` : `Planned by ${name}`}
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              Todo #
+              {id}
+            </div>
+
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
+          </header>
+
+          <div className="modal-card-body">
+            <p className="block" data-cy="modal-title">
+              {title}
             </p>
-            <p>{email}</p>
-          </>
+
+            <p className="block" data-cy="modal-user">
+              <strong className={completed
+                ? 'has-text-success'
+                : 'has-text-danger'}
+              >
+                {completed ? 'Done' : 'Planned'}
+              </strong>
+              {' by '}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
+              </a>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

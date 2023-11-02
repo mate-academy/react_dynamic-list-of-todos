@@ -6,60 +6,37 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { filterAndSearchTodos } from './Filters/filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [todosError, setTodosError] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
     getTodos()
-      .then(data => {
-        setTodos(data);
-        setFilteredTodos(data);
-        setLoading(false);
+      .then((todosData) => {
+        setTodos(todosData);
       })
-      .catch(() => {
-        setError('Error downloading todos');
+      .catch((error) => setTodosError(error.message))
+      .finally(() => {
         setLoading(false);
       });
   }, []);
 
-  useEffect(() => {
-    setFilteredTodos(filterAndSearchTodos(todos, filterStatus, searchQuery));
-  }, [todos, filterStatus, searchQuery]);
-
-  const onSelectTodo = async (todo: Todo) => {
+  const onSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setLoadingUser(true);
-    try {
-      const user = await getUser(todo.userId);
-
-      setSelectedUser(user);
-    } catch (e) {
-      setError('Error downloading user');
-    } finally {
-      setLoadingUser(false);
-    }
   };
+
+  const currentFilteredTodos
+  = filterAndSearchTodos(todos, filterStatus, searchQuery);
 
   return (
     <>
-      {error && (
-        <div className="notification is-danger">
-          {error}
-        </div>
-      )}
       <div className="section">
         <div className="container">
           <div className="box">
@@ -76,28 +53,24 @@ export const App: React.FC = () => {
                 ? <Loader />
                 : (
                   <TodoList
-                    todos={filteredTodos}
+                    todos={currentFilteredTodos}
                     onSelectTodo={onSelectTodo}
-                    selectedTodoId={selectedTodo?.id || null}
+                    selectedTodoId={selectedTodo?.id ?? null}
                   />
                 )}
+
+              {todosError && (
+                <p>{todosError}</p>
+              )}
             </div>
           </div>
         </div>
       </div>
       {selectedTodo && (
-        loadingUser ? (
-          <Loader />
-        ) : (
-          selectedUser && (
-            <TodoModal
-              todo={selectedTodo}
-              onClose={() => setSelectedTodo(null)}
-              user={selectedUser}
-              loadingUser={false}
-            />
-          )
-        )
+        <TodoModal
+          todo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
+        />
       )}
     </>
   );
