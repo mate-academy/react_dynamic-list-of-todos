@@ -8,13 +8,14 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { filterAndSearchTodos } from './Filters/filters';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosError, setTodosError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [todosError, setTodosError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>(TodoStatus.All);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {

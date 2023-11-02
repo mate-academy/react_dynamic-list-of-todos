@@ -13,7 +13,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ onClose, todo }) => {
   } = todo;
 
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getUser(userId)
