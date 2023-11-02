@@ -13,6 +13,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosError, setTodosError] = useState('');
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(FilterStatus.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
       case FilterStatus.ACTIVE:
         return filteredTodos.filter(todo => todo.completed === false);
         break;
-      case FilterStatus.COMPLITED:
+      case FilterStatus.COMPLETED:
         return filteredTodos.filter(todo => todo.completed === true);
         break;
 
@@ -50,6 +51,7 @@ export const App: React.FC = () => {
     setInterval(() => {
       getTodos()
         .then(setTodos)
+        .catch((error) => setTodosError(error.message))
         .finally(() => setIsLoading(false));
     }, 1000);
   }, []);
@@ -75,7 +77,11 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {!isLoading && (
+              {todosError && (
+                <p>{todosError}</p>
+              )}
+
+              {todos.length > 0 && (
                 <TodoList
                   todos={filteringTodos}
                   selectedTodo={selectedTodo}

@@ -29,11 +29,14 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             onChange={handleSelectedStatus}
+            style={{ textTransform: 'capitalize' }}
             value={selectedStatus}
           >
-            {Object.values(FilterStatus).map((status, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <option value={status} key={index}>
+            {Object.values(FilterStatus).map(status => (
+              <option
+                value={status}
+                key={status}
+              >
                 {status}
               </option>
             ))}
