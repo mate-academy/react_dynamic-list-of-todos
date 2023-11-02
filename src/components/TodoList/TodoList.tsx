@@ -48,7 +48,7 @@ export const TodoList: React.FC<Props> = ({
               }}
             >
               <span className="icon" data-cy="iconCompleted">
-                <i id="eyeButton" className="far fa-eye" />
+                <i id="eyeButton" className={`far ${selectedTodoId === todo.id ? 'fa-eye-slash' : 'fa-eye'}`} />
               </span>
             </button>
           </td>
