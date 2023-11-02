@@ -16,20 +16,20 @@ interface T {
 
 export const TodoModal: React.FC<T> = ({ thisTodo, setShow }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getUser(thisTodo.userId).then((data) => (
       setUser(data)
-    )).finally(() => setLoading(false));
+    )).finally(() => setIsLoading(false));
   }, [thisTodo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<T> = ({ thisTodo, setShow }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${thisTodo.userId}`}
+              {`Todo #${thisTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

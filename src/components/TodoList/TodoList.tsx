@@ -5,7 +5,7 @@ interface T {
   todos: Todo[];
   filterType: string;
   input: string;
-  setVisibility: Dispatch<SetStateAction<number>>;
+  setIsDedicatedUser: Dispatch<SetStateAction<number>>;
   setShow: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -13,7 +13,7 @@ export const TodoList: React.FC<T> = ({
   input,
   todos,
   filterType,
-  setVisibility,
+  setIsDedicatedUser,
   setShow,
 }) => {
   const filterTodos = (array: Todo[], type: string) => {
@@ -30,9 +30,13 @@ export const TodoList: React.FC<T> = ({
   };
 
   const onClick = (id: number) => {
-    setVisibility(id);
+    setIsDedicatedUser(id);
     setShow(true);
   };
+
+  const filter = filterTodos(todos, filterType);
+
+  // ігнорувати регістр при фільтрації
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -50,7 +54,8 @@ export const TodoList: React.FC<T> = ({
       </thead>
 
       <tbody>
-        {filterTodos(todos, filterType).map(todo => todo.title.includes(input)
+        {filter.map(todo => todo.title.toLowerCase()
+          .includes(input.toLowerCase())
           && (
             <tr data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>

@@ -14,17 +14,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [input, setInput] = useState('');
-  const [visibility, setVisibility] = useState(1);
+  const [isDedicatedUser, setIsDedicatedUser] = useState(1);
   const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const thisTodo = todos.find(todo => todo.userId === visibility) as Todo;
+  const thisTodo = todos.find(todo => todo.id === isDedicatedUser) as Todo;
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos().then((data) => (
       setTodos(data)
-    )).finally(() => setLoading(false));
+    )).finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -39,8 +39,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader />
-                : <TodoList input={input} todos={todos} filterType={filterType} setVisibility={setVisibility} setShow={setShow} />}
+              {isLoading ? <Loader />
+                : <TodoList input={input} todos={todos} filterType={filterType} setIsDedicatedUser={setIsDedicatedUser} setShow={setShow} />}
             </div>
           </div>
         </div>
