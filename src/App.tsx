@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -14,11 +14,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [input, setInput] = useState('');
+  const [visibility, setVisibility] = useState(1);
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const thisTodo = todos.find(todo => todo.userId === visibility) as Todo;
 
   useEffect(() => {
+    setLoading(true);
     getTodos().then((data) => (
       setTodos(data)
-    ));
+    )).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -33,14 +39,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList input={input} todos={todos} filterType={filterType} />
+              {loading ? <Loader />
+                : <TodoList input={input} todos={todos} filterType={filterType} setVisibility={setVisibility} setShow={setShow} />}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {show && <TodoModal thisTodo={thisTodo} setShow={setShow} />}
     </>
   );
 };

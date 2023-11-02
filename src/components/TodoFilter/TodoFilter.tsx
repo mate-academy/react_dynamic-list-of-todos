@@ -6,7 +6,11 @@ interface T {
   setInput: Dispatch<SetStateAction<string>>;
 }
 
-export const TodoFilter: React.FC<T> = ({ input, setInput, setFilterType }) => {
+export const TodoFilter: React.FC<T> = ({
+  input,
+  setFilterType,
+  setInput,
+}) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterType(event.target.value);
   };
@@ -48,14 +52,17 @@ export const TodoFilter: React.FC<T> = ({ input, setInput, setFilterType }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {input !== '' && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setInput('')}
+            />
+          </span>
+        )}
       </p>
     </form>
   );
