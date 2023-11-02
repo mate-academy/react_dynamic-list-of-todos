@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Loader } from '../Loader';
-import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
-import { getUser } from '../../api';
+import React, { useState, useEffect } from "react";
+import { Loader } from "../Loader";
+import { Todo } from "../../types/Todo";
+import { User } from "../../types/User";
+import { getUser } from "../../api";
 
 interface Props {
   selectedTodo: Todo | null;
@@ -16,14 +16,17 @@ export const TodoModal: React.FC<Props> = ({
   onSelectedTodo,
 }) => {
   const [user, setUser] = useState<User>();
-  const loadedUser = useRef(false);
+  const [loading, setLoading] = useState(true);
+  const [userError, setUserError] = useState("");
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then((data: User) => {
-        loadedUser.current = true;
-        setUser(data);
-      });
+      getUser(selectedTodo.userId)
+        .then((data: User) => {
+          setUser(data);
+        })
+        .catch((error) => setUserError(error.message))
+        .finally(() => setLoading(false));
     }
   }, [selectedTodo]);
 
@@ -31,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!loadedUser.current ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -49,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                loadedUser.current = false;
+                setLoading(true);
                 changeShowModal(false);
                 onSelectedTodo(null);
               }}
@@ -68,9 +71,12 @@ export const TodoModal: React.FC<Props> = ({
                 <strong className="has-text-danger">Planned</strong>
               )}
 
-              {' by '}
-
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              {" by "}
+              {userError ? (
+                <p> {userError} </p>
+              ) : (
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              )}
             </p>
           </div>
         </div>

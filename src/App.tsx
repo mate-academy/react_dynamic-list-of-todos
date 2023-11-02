@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,13 +17,18 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const loaded = useRef(false);
+  const [loading, setLoading] = useState(true)
+  const [todoError, setTodoError] = useState('')
+
 
   useEffect(() => {
-    getTodos().then((value) => {
+    getTodos()
+    .then((value) => {
       setTodosFromServer(value);
-    });
-    loaded.current = true;
+    })
+    .catch((error) => setTodoError(error.message))
+    .finally(() => setLoading(false))
+
   }, []);
 
   const onChangeShow = (value: ShowType) => {
@@ -55,8 +60,8 @@ export const App: React.FC = () => {
 
     if (newFilter) {
       const lowerCaseFilter = newFilter.toLowerCase();
-      return todoCopy.filter((todo) =>
-        todo.title.toLowerCase().includes(lowerCaseFilter));
+
+      return todoCopy.filter((todo) => todo.title.toLowerCase().includes(lowerCaseFilter));
     }
 
     return todoCopy;
@@ -81,7 +86,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!loaded.current && <Loader />}
+              {loading && <Loader />}
+              {(!loading && todoError) && <p> {todoError} </p>}
               <TodoList
                 todos={todos}
                 selectedTodo={selectedTodo}
