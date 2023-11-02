@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
+import { TodoModalMessage } from '../TodoModalMessage/TodoModalMessage';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  selectedTodo: Todo,
+  changeSelectedTodo: (value: null) => void,
+};
+
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  changeSelectedTodo,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    id, title, userId, completed,
+  } = selectedTodo;
+
+  useEffect(() => {
+    setIsLoading(true);
+    getUser(userId)
+      .then((foundUser) => setUser(foundUser))
+      // eslint-disable-next-line
+      .catch((error) => console.warn(error))
+      .finally(() => setIsLoading(false));
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +43,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,25 +51,15 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => changeSelectedTodo(null)}
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
-            </p>
-          </div>
+          <TodoModalMessage
+            title={title}
+            completed={completed}
+            user={user}
+          />
         </div>
       )}
     </div>
