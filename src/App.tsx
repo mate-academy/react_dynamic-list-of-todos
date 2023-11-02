@@ -37,7 +37,6 @@ const getFilteredTodos = (
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [errorMessage, setErrorMessage] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
@@ -49,18 +48,6 @@ export const App: React.FC = () => {
       .then(todos => setTodosFromServer(todos))
       .finally(() => setIsLoading(false));
   }, []);
-
-  // const onSelectTodo = (todo: Todo | null) => {
-  //   setSelectedTodo(todo);
-  // };
-
-  // const onSetQuery = (newQuery: string) => {
-  //   setQuery(newQuery.trim());
-  // };
-
-  // const onSetFilter = (newFilter: string) => {
-  //   setFilter(newFilter);
-  // };
 
   const filteredTodo = getFilteredTodos(filter, query, todosFromServer);
 
