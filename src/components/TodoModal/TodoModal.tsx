@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { getUser } from '../../api/api';
 
 type Props = {
   todos: Todo[],
@@ -12,6 +12,7 @@ type Props = {
   loader: boolean,
   setLoader: (val: boolean) => void,
   userId: number,
+  onError: (val: string) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -22,28 +23,27 @@ export const TodoModal: React.FC<Props> = ({
   loader,
   setLoader,
   userId,
+  onError,
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setLoader(true);
-
     getUser(userId)
       .then((userData) => {
         setUser(userData);
       })
-      .catch(() => {})
+      .catch((error) => onError(error))
       .finally(() => setLoader(false));
-  }, [setLoader, userId]);
+  }, [setLoader, userId, onError]);
 
-  const handleCloseModal = useCallback(() => {
+  const handleCloseModal = () => {
     setModal(false);
     setId(0);
-  }, [setModal, setId]);
+  };
 
-  const getTodoById = useCallback((todoId: number) => {
+  const getTodoById = (todoId: number) => {
     return todos.find(todo => todo.id === todoId);
-  }, [todos]);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -73,7 +73,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {getTodoById(id)?.completed === false ? (
                 <strong className="has-text-danger">Planned</strong>
               ) : (

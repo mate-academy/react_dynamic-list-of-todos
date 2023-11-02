@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -18,23 +19,12 @@ export const TodoList: React.FC<Props> = ({
   setLoader,
   setUserId,
 }) => {
-  const getClass = useCallback(
-    (todo: Todo, todoId: number) => {
-      if (todoId === todo.id) {
-        return 'far fa-eye-slash';
-      }
-
-      return 'far fa-eye';
-    },
-    [],
-  );
-
-  const handleClick = useCallback((todo) => {
+  const handleClick = (todo: Todo) => {
     setModal(true);
     setId(todo.id);
     setLoader(true);
     setUserId(todo.userId);
-  }, [setModal, setId, setLoader, setUserId]);
+  };
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -55,7 +45,9 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className=""
+            className={cn({
+              'has-background-info-light': todo.id === id,
+            })}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -82,7 +74,11 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  <i className={getClass(todo, id)} />
+                  <i className={id === todo.id
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
+                  />
+
                 </span>
               </button>
             </td>

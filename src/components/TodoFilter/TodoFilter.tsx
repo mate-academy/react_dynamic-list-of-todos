@@ -1,73 +1,19 @@
-import React, { useState, useCallback } from 'react';
-import { getTodos, getFilteredTodos } from '../../api';
-import { Todo } from '../../types/Todo';
-import { Selected } from '../../types/Enum';
+import React from 'react';
+import { Selected } from '../../types/Selected';
 
 type Props = {
-  setTodos: (value: Todo[]) => void,
+  selectedOption: string,
+  onSelect: (val: string) => void,
+  query: string,
+  onInput: (val: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  setTodos,
+  selectedOption,
+  onSelect,
+  query,
+  onInput,
 }) => {
-  const [selectedOption, setSelectedOption] = useState('all');
-  const [value, setValue] = useState('');
-
-  const getIncludesTodos = useCallback(
-    (val: string, currTodos: Todo[]) => {
-      return currTodos.filter((todo) => todo.title
-        .toLowerCase()
-        .includes(val));
-    },
-    [],
-  );
-
-  const handleFilterChange = useCallback(
-    async (selectedValue: string, inputValue: string) => {
-      setSelectedOption(selectedValue);
-
-      let filteredTodos = await getTodos();
-
-      switch (selectedValue) {
-        case Selected.All:
-          break;
-        case Selected.Active:
-          filteredTodos = await getFilteredTodos(false);
-          break;
-        case Selected.Completed:
-          filteredTodos = await getFilteredTodos(true);
-          break;
-        default:
-          break;
-      }
-
-      if (inputValue) {
-        filteredTodos = getIncludesTodos(inputValue, filteredTodos);
-      }
-
-      setTodos(filteredTodos);
-    },
-    [getIncludesTodos, setTodos],
-  );
-
-  const handleInputChange = useCallback((event: React
-    .ChangeEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value;
-    const preparedInputValue = searchValue
-      .toLowerCase()
-      .trim();
-
-    setValue(searchValue);
-    handleFilterChange(selectedOption, preparedInputValue);
-  }, [selectedOption, handleFilterChange]);
-
-  const handleSelectChange = useCallback(async (event: React
-    .ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-
-    handleFilterChange(selectedValue, value);
-  }, [value, handleFilterChange]);
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -75,11 +21,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectedOption}
-            onChange={handleSelectChange}
+            onChange={(event) => onSelect(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Selected.All}>All</option>
+            <option value={Selected.Active}>Active</option>
+            <option value={Selected.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -88,10 +34,10 @@ export const TodoFilter: React.FC<Props> = ({
         <input
           data-cy="searchInput"
           type="text"
-          value={value}
+          value={query}
           className="input"
           placeholder="Search..."
-          onChange={handleInputChange}
+          onChange={(event) => onInput(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -99,15 +45,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable jsx-a11y/control-has-associated-label */}
-          {value && (
+          {query && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={async () => {
-                setValue('');
-                handleFilterChange(selectedOption, '');
-              }}
+              onClick={() => onInput('')}
             />
           )}
 
