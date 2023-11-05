@@ -1,5 +1,5 @@
 import React, { } from 'react';
-import { Option } from '../../types/Option';
+import { Option } from '../../types/FilterOptions';
 
 type Props = {
   select: string;
@@ -14,6 +14,14 @@ export const TodoFilter: React.FC<Props> = ({
   setSelect,
   setQuery,
 }) => {
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelect(event.target.value);
+  };
+
+  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             value={select}
             data-cy="statusSelect"
-            onChange={event => setSelect(event.target.value)}
+            onChange={handleSelect}
           >
             <option value={Option.ALL}>
               All
@@ -45,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleChangeQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

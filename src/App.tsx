@@ -8,7 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { Option } from './types/Option';
+import { Option } from './types/FilterOptions';
 
 interface FilterOptions {
   select: string;
@@ -16,31 +16,31 @@ interface FilterOptions {
 }
 
 function filterBy(todos: Todo[], { select, query }: FilterOptions): Todo[] {
-  let filtered = todos;
+  let filteredTodos = [...todos];
 
   if (select) {
     switch (select) {
       case Option.ACTIVE:
-        filtered = filtered.filter(todo => !todo.completed);
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
 
       case Option.COMPLETED:
-        filtered = filtered.filter(todo => todo.completed);
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
 
       default:
-        return filtered;
+        return filteredTodos;
     }
   }
 
   if (query) {
     const normilizeQuery = query.toLowerCase().trim();
 
-    filtered = filtered
+    filteredTodos = filteredTodos
       .filter(todo => todo.title.toLowerCase().includes(normilizeQuery));
   }
 
-  return filtered;
+  return filteredTodos;
 }
 
 export const App: React.FC = () => {
@@ -48,25 +48,23 @@ export const App: React.FC = () => {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [select, setSelect] = useState('');
   const [query, setQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [userId, setUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [post, setPost] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
-
     getTodos()
       .then(setTodos)
-      .catch();
+      .catch(() => setErrorMessage('Error! Please try later'))
+      .finally(() => setIsLoading(false));
   }, [setTodos, setIsLoading]);
 
   const filteredTodos = filterBy(todos, { select, query });
 
   const resetModal = () => {
     setIsVisibleModal(false);
-    setPost(null);
+    setSelectedTodo(null);
   };
 
   return (
@@ -89,13 +87,18 @@ export const App: React.FC = () => {
               {isLoading && (
                 <Loader />
               )}
-              <TodoList
-                todos={filteredTodos}
-                setIsVisibleModal={setIsVisibleModal}
-                setUserId={setUserId}
-                setPost={setPost}
-                selectedPostId={post?.id || 0}
-              />
+
+              {errorMessage ? (
+                <p>{errorMessage}</p>
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  setIsVisibleModal={setIsVisibleModal}
+                  setUserId={setUserId}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id || 0}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -104,7 +107,7 @@ export const App: React.FC = () => {
       {isVisibleModal && (
         <TodoModal
           userId={userId}
-          post={post}
+          selectedTodo={selectedTodo}
           resetModal={() => resetModal()}
         />
       )}

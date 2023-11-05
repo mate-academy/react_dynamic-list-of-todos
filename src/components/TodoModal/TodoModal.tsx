@@ -6,24 +6,22 @@ import { User } from '../../types/User';
 
 type Props = {
   userId: number;
-  post: Todo | null;
+  selectedTodo: Todo | null;
   resetModal: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   userId,
-  post,
+  selectedTodo,
   resetModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
-
-    getUser(userId).then(setUser);
+    getUser(userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
   }, [userId]);
 
   return (
@@ -39,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${post?.id}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -53,11 +51,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {post?.title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {post?.completed ? (
+              {selectedTodo?.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
