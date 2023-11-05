@@ -47,7 +47,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     id: 0,
     userId: 0,
   });
-  const [isTodoSelected, setIsTodoSelected] = useState(true);
+  const [isTodoSelected, setIsTodoSelected] = useState(false);
 
   function prepareTodos(
     todosList: Todo[],
