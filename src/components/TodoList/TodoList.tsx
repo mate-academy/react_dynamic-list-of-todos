@@ -5,7 +5,9 @@ interface T {
   todos: Todo[];
   filterType: string;
   input: string;
+  isDedicatedUser: number;
   setIsDedicatedUser: Dispatch<SetStateAction<number>>;
+  show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -13,7 +15,9 @@ export const TodoList: React.FC<T> = ({
   input,
   todos,
   filterType,
+  isDedicatedUser,
   setIsDedicatedUser,
+  show,
   setShow,
 }) => {
   const filterTodos = (array: Todo[], type: string) => {
@@ -57,7 +61,7 @@ export const TodoList: React.FC<T> = ({
         {filter.map(todo => todo.title.toLowerCase()
           .includes(input.toLowerCase())
           && (
-            <tr data-cy="todo" className="">
+            <tr data-cy="todo" key={todo.id} className="">
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
@@ -77,7 +81,11 @@ export const TodoList: React.FC<T> = ({
                   onClick={() => onClick(todo.id)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={
+                      show && todo.id === isDedicatedUser
+                        ? 'far fa-eye-slash' : 'far fa-eye'
+                    }
+                    />
                   </span>
                 </button>
               </td>

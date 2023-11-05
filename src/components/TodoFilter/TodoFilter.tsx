@@ -15,6 +15,14 @@ export const TodoFilter: React.FC<T> = ({
     setFilterType(event.target.value);
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  const handleDelete = () => {
+    setInput('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -46,20 +54,22 @@ export const TodoFilter: React.FC<T> = ({
           className="input"
           placeholder="Search..."
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
         {input !== '' && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setInput('')}
+              onClick={handleDelete}
+              aria-label="Clear Search"
             />
           </span>
         )}

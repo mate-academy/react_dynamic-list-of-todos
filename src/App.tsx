@@ -40,7 +40,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading ? <Loader />
-                : <TodoList input={input} todos={todos} filterType={filterType} setIsDedicatedUser={setIsDedicatedUser} setShow={setShow} />}
+                : <TodoList input={input} todos={todos} filterType={filterType} setIsDedicatedUser={setIsDedicatedUser} isDedicatedUser={isDedicatedUser} show={show} setShow={setShow} />}
             </div>
           </div>
         </div>
