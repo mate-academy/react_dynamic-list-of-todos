@@ -1,3 +1,5 @@
+import { Sorttype } from '../../types/Sorttype';
+
 interface Props {
   sortType: string,
   setSortType: (value: string) => void,
@@ -22,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={sortType}
             onChange={(event) => setSortType(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{Sorttype.all}</option>
+            <option value="active">{Sorttype.active}</option>
+            <option value="completed">{Sorttype.completed}</option>
           </select>
         </span>
       </p>

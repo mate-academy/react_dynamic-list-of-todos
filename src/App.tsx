@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Sorttype } from './types/Sorttype';
 
 export const App: React.FC = () => {
   const [loadOn, setLoadOn] = useState(false);
   const [todos, setToDos] = useState<Todo[]>([]);
   const [modalOn, setmodalOn] = useState(false);
   const [modalToDo, setmodalTodo] = useState<Todo | null>(null);
-  const [sortType, setSortType] = useState<string>('');
+  const [sortType, setSortType] = useState<string>(Sorttype.all);
   const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const App: React.FC = () => {
     getTodos().then(todoos => setToDos(todoos)).finally(() => setLoadOn(false));
   }, []);
 
-  function preparedTodos() {
+  const preparedTodos = () => {
     let displayTodos = [...todos];
 
     if (query) {
@@ -34,19 +35,18 @@ export const App: React.FC = () => {
     }
 
     switch (sortType) {
-      case 'active':
+      case Sorttype.active:
         return displayTodos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case Sorttype.completed:
         return displayTodos.filter(todo => todo.completed);
 
-      case 'all':
       default:
         break;
     }
 
     return displayTodos;
-  }
+  };
 
   return (
     <>

@@ -14,7 +14,7 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ modalToDo, setmodalOn, setmodalTodo }) => {
   const [showLoader, setshowLoader] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User | null>();
 
   useEffect(() => {
     if (modalToDo) {
@@ -58,17 +58,12 @@ export const TodoModal: React.FC<Props> = ({ modalToDo, setmodalOn, setmodalTodo
             </p>
 
             <p className="block" data-cy="modal-user">
-
               {
                 modalToDo?.completed
-
                   ? (<strong className="has-text-success">Done</strong>)
-
                   : (<strong className="has-text-danger">Planned</strong>)
               }
-
               {' by '}
-
               <a href={`mailto:${currentUser?.email}`}>
                 {currentUser?.name}
               </a>
