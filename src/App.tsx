@@ -25,8 +25,8 @@ export const App: React.FC = () => {
       .then((response) => response.json())
       .then((data) => {
         setTodos(data);
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
