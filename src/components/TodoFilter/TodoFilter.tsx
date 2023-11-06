@@ -4,6 +4,12 @@ interface Props {
   changeInput: (string: string) => void;
 }
 
+enum FilterOptions {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({
   value,
   changeFilter,
@@ -16,21 +22,14 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           onChange={(event) => changeFilter(event.target.value)}
         >
-          <option
-            value="all"
-          >
-            All
-          </option>
-          <option
-            value="active"
-          >
-            Active
-          </option>
-          <option
-            value="completed"
-          >
-            Completed
-          </option>
+          {Object.keys(FilterOptions).map(key => (
+            <option
+              value={key}
+              key={key}
+            >
+              {key}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -50,8 +49,8 @@ export const TodoFilter: React.FC<Props> = ({
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        {value !== ''
-          ? (
+        {value
+          && (
             <button
               data-cy="clearSearchButton"
               aria-label="delete"
@@ -59,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
               className="delete"
               onClick={() => changeInput('')}
             />
-          ) : ''}
+          )}
       </span>
     </p>
   </form>

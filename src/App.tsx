@@ -10,6 +10,11 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum FilterChecker {
+  active = 'Active',
+  completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [listOfTodos, setListOFTodos] = useState<Todo[]>([]);
   const [loadingTodos, setLoadingTodos] = useState(false);
@@ -29,17 +34,17 @@ export const App: React.FC = () => {
     let listCopy = list;
 
     switch (filter) {
-      case 'active':
-        listCopy = listCopy.filter(todo => todo.completed !== true);
+      case FilterChecker.active:
+        listCopy = listCopy.filter(todo => !todo.completed);
         break;
-      case 'completed':
-        listCopy = listCopy.filter(todo => todo.completed === true);
+      case FilterChecker.completed:
+        listCopy = listCopy.filter(todo => todo.completed);
         break;
       default:
         break;
     }
 
-    if (input !== '') {
+    if (input) {
       listCopy = listCopy.filter(todo => todo.title.toLowerCase().includes(input.toLowerCase()));
     }
 
