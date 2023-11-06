@@ -1,44 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-
-function filterTodos(
-  todos: Todo[],
-  filterMethod: string,
-  query: string,
-): Todo[] {
-  let copy = [...todos];
-
-  if (query) {
-    (copy = [...todos]
-      .filter(todo => todo.title
-        .toLowerCase()
-        .includes(query.toLowerCase())));
-  }
-
-  if (filterMethod === 'active') {
-    (copy = copy.filter(todo => !todo.completed));
-  }
-
-  if (filterMethod === 'completed') {
-    (copy = copy.filter(todo => todo.completed));
-  }
-
-  return copy;
-}
+import React from 'react';
+import { Method } from '../../types/Method';
 
 type Props = {
-  todos: Todo[];
-  setFilteredTodos: (todos: Todo[]) => void,
+  setFilterMethod: (method: string) => void,
+  query: string,
+  setQuery: (quary :string) => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
-  const [filterMethod, setFilterMethod] = useState('');
-  const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    setFilteredTodos(filterTodos(todos, filterMethod, query));
-  }, [query, filterMethod, todos, setFilteredTodos]);
-
+export const TodoFilter: React.FC<Props> = ({
+  setFilterMethod,
+  query,
+  setQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -47,9 +20,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
             data-cy="statusSelect"
             onChange={event => setFilterMethod(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Method.all}>All</option>
+            <option value={Method.active}>Active</option>
+            <option value={Method.completed}>Completed</option>
           </select>
         </span>
       </p>

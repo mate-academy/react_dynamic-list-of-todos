@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { Method } from './types/Method';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -10,14 +11,46 @@ import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
+function filterTodos(
+  todos: Todo[],
+  filterMethod: string,
+  query: string,
+): Todo[] {
+  let result: Todo[] = todos;
+
+  if (query) {
+    result = todos
+      .filter(todo => todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase()));
+  }
+
+  if (filterMethod === Method.active) {
+    (result = result.filter(todo => !todo.completed));
+  }
+
+  if (filterMethod === Method.completed) {
+    (result = result.filter(todo => todo.completed));
+  }
+
+  return result;
+}
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [filterMethod, setFilterMethod] = useState<string>('');
+  const [query, setQuery] = useState('');
+
+  const filteredTodos: Todo[] = useMemo(() => {
+    return filterTodos(todos, filterMethod, query);
+  }, [todos, query, filterMethod]);
 
   useEffect(() => {
-    getTodos().then(setTodos).finally(() => setIsLoading(false));
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -27,8 +60,9 @@ export const App: React.FC = () => {
 
         <div className="block">
           <TodoFilter
-            todos={todos}
-            setFilteredTodos={setFilteredTodos}
+            setFilterMethod={setFilterMethod}
+            query={query}
+            setQuery={setQuery}
           />
         </div>
 
