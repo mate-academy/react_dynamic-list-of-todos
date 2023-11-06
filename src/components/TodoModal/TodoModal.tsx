@@ -14,21 +14,18 @@ type Props = {
 export const TodoModal: React.FC<Props> = (
   { todos, selectedTodoId, handleCloseTodoModalClick },
 ) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>({} as User);
   const [isLoading, setIsLoading] = useState(true);
 
   const selectedTodo = todos.filter(todo => todo.id === selectedTodoId)[0];
 
   useEffect(() => {
     getUser(selectedTodo.userId)
-      .then(foundUser => setUser(foundUser))
+      .then(setUser)
       .catch((error) => {
         throw new Error(error);
-      });
-
-    if (user) {
-      setIsLoading(false);
-    }
+      })
+      .finally(() => setIsLoading(false));
   }, [selectedTodo, user]);
 
   return (
@@ -44,7 +41,7 @@ export const TodoModal: React.FC<Props> = (
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo?.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -58,25 +55,25 @@ export const TodoModal: React.FC<Props> = (
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong className={cn({
-                'has-text-danger': !selectedTodo?.completed,
-                'has-text-success': selectedTodo?.completed,
+                'has-text-danger': !selectedTodo.completed,
+                'has-text-success': selectedTodo.completed,
               })}
               >
-                {selectedTodo?.completed
+                {selectedTodo.completed
                   ? 'Done'
                   : 'Planned'}
               </strong>
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
