@@ -11,6 +11,8 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+import { Select } from './helpers/Select';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
@@ -19,7 +21,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .catch(error => error);
   }, []);
 
   const normalizeQuery = query.toLowerCase().trim();
@@ -29,13 +32,13 @@ export const App: React.FC = () => {
   ));
 
   switch (select) {
-    case 'all':
+    case Select.all:
       filteredTodos = filteredTodos.filter(todo => todo);
       break;
-    case 'active':
+    case Select.active:
       filteredTodos = filteredTodos.filter(todo => todo.completed === false);
       break;
-    case 'completed':
+    case Select.completed:
       filteredTodos = filteredTodos.filter(todo => todo.completed === true);
       break;
     default:

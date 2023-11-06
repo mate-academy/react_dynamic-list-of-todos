@@ -1,3 +1,5 @@
+import { Select } from '../../helpers/Select';
+
 type Props = {
   query: string,
   onQueryChange: (value: string) => void,
@@ -22,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
               onSelectChange(event.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Select.all}>All</option>
+            <option value={Select.active}>Active</option>
+            <option value={Select.completed}>Completed</option>
           </select>
         </span>
       </p>
