@@ -19,21 +19,14 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           onChange={(event) => changeFilter(event.target.value)}
         >
-          <option
-            value="all"
-          >
-            All
-          </option>
-          <option
-            value={Filters.active}
-          >
-            Active
-          </option>
-          <option
-            value={Filters.complited}
-          >
-            Completed
-          </option>
+          {Object.entries(Filters).map(filter => (
+            <option
+              value={filter[0]}
+              key={filter[0]}
+            >
+              {filter[1]}
+            </option>
+          ))}
         </select>
       </span>
     </p>
