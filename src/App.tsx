@@ -11,8 +11,8 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 enum FilterChecker {
-  active = 'Active',
-  completed = 'Completed',
+  active = 'active',
+  completed = 'completed',
 }
 
 export const App: React.FC = () => {

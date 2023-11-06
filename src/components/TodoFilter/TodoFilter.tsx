@@ -5,9 +5,9 @@ interface Props {
 }
 
 enum FilterOptions {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -22,12 +22,12 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           onChange={(event) => changeFilter(event.target.value)}
         >
-          {Object.keys(FilterOptions).map(key => (
+          {Object.entries(FilterOptions).map(key => (
             <option
-              value={key}
-              key={key}
+              value={key[0]}
+              key={key[0]}
             >
-              {key}
+              {key[1]}
             </option>
           ))}
         </select>
