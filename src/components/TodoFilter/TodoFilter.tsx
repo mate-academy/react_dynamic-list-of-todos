@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { filter } from '../../helpers';
+import React from 'react';
 import { Filters } from '../../types/Filters';
 
 type Props = {
-  todos: Todo[],
-  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
+  query: string,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  setFilterBy: React.Dispatch<React.SetStateAction<Filters>>
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos,
-  setFilteredTodos,
+  query,
+  setQuery,
+  setFilterBy,
 }) => {
-  const [query, setQuery] = useState('');
-  const [filterBy, setFilterBy] = useState<Filters>(Filters.all);
-
-  useEffect(() => {
-    const newTodos = filter(todos, filterBy, query);
-
-    setFilteredTodos(newTodos);
-  }, [filterBy, query, todos, setFilteredTodos]);
-
   const handleFilterBy = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterBy(event.target.value as Filters);
   };
@@ -37,6 +28,7 @@ export const TodoFilter: React.FC<Props> = ({
             {Object.keys(Filters).map(filterCategory => (
               <option
                 value={filterCategory}
+                key={filterCategory}
                 className="is-capitalized"
               >
                 {filterCategory}

@@ -9,18 +9,23 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filters } from './types/Filters';
+import { filter } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedPost, setSelectedPost] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [filterBy, setFilterBy] = useState<Filters>(Filters.all);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setFilteredTodos(todosFromServer);
-    });
+    getTodos()
+      .then(todosFromServer => setTodos(todosFromServer))
+      .catch(error => setErrorMessage(error));
   }, []);
+
+  const filteredTodos = filter(todos, filterBy, query);
 
   return (
     <>
@@ -31,23 +36,33 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setFilteredTodos={setFilteredTodos}
+                query={query}
+                setQuery={setQuery}
+                setFilterBy={setFilterBy}
               />
             </div>
 
-            <div className="block">
+            {errorMessage
+              ? (
+                <p className="block">
+                  {errorMessage}
+                </p>
+              )
+              : (
+                <div className="block">
 
-              {todos.length
-                ? (
-                  <TodoList
-                    todos={filteredTodos}
-                    setSelectedPost={setSelectedPost}
-                    selectedPost={selectedPost}
-                  />
-                )
-                : (<Loader />)}
-            </div>
+                  {todos.length
+                    ? (
+                      <TodoList
+                        todos={filteredTodos}
+                        setSelectedPost={setSelectedPost}
+                        selectedPost={selectedPost}
+                      />
+                    )
+                    : (<Loader />)}
+                </div>
+              )}
+
           </div>
         </div>
       </div>

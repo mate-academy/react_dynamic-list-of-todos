@@ -16,12 +16,14 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
     if (selectedPost) {
       getUser(selectedPost.userId)
         .then(user => setSelectedUser(user))
+        .catch(error => setErrorMessage(error))
         .finally(() => setIsLoading(false));
     }
   }, [selectedPost]);
@@ -52,25 +54,33 @@ export const TodoModal: React.FC<Props> = ({
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {selectedPost?.title}
-            </p>
+            {errorMessage ? (
+              <p className="block">
+                {errorMessage}
+              </p>
+            ) : (
+              <div>
+                <p className="block" data-cy="modal-title">
+                  {selectedPost?.title}
+                </p>
 
-            <p className="block" data-cy="modal-user">
-              <strong className={cn({
-                'has-text-success': selectedPost?.completed,
-                'has-text-danger': !selectedPost?.completed,
-              })}
-              >
-                {selectedPost?.completed ? 'Done' : 'Planned'}
-              </strong>
+                <p className="block" data-cy="modal-user">
+                  <strong className={cn({
+                    'has-text-success': selectedPost?.completed,
+                    'has-text-danger': !selectedPost?.completed,
+                  })}
+                  >
+                    {selectedPost?.completed ? 'Done' : 'Planned'}
+                  </strong>
 
-              {' by '}
+                  {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>
-                {selectedUser?.name}
-              </a>
-            </p>
+                  <a href={`mailto:${selectedUser?.email}`}>
+                    {selectedUser?.name}
+                  </a>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
