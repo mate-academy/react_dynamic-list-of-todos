@@ -5,10 +5,16 @@ type Props = {
   children: React.ReactNode,
 };
 
+export enum Status {
+  'all' = 'all',
+  'active' = 'active',
+  'completed' = 'completed',
+}
+
 interface Context {
   prepareTodos: (
     todosList: Todo[],
-    status: string,
+    status: Status,
     query?: string,
   ) => Todo[]
   setFilteredToods: (value: React.SetStateAction<Todo[]>) => void
@@ -51,26 +57,26 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   function prepareTodos(
     todosList: Todo[],
-    status: string,
+    status: Status,
     query?: string,
   ): Todo[] {
     return todosList.filter(todo => {
       switch (status) {
-        case 'all':
+        case Status.all:
           if (query) {
             return (todo.completed || !todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());
           }
 
           return (todo.completed || !todo.completed);
-        case 'active':
+        case Status.active:
           if (query) {
             return (!todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());
           }
 
           return !todo.completed;
-        case 'completed':
+        case Status.completed:
           if (query) {
             return (todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());

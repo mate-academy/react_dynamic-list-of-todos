@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { TodosContext } from '../../TodosProvider';
+import { TodosContext, Status } from '../../TodosProvider';
 import { getTodos } from '../../api';
 
 export const TodoFilter: React.FC = () => {
@@ -9,11 +9,11 @@ export const TodoFilter: React.FC = () => {
     searchValue,
     setSearchValue,
   } = useContext(TodosContext);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState(Status.all);
   const handleOptionChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setSelectedOption(event.target.value);
+    setSelectedOption(event.target.value as Status);
   };
 
   useEffect(() => {
