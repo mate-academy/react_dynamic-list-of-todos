@@ -11,6 +11,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 const getFilteredTodos = (
   param: string,
@@ -38,7 +39,7 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
   const [query, setQuery] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -63,7 +64,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setNewQuery={newQuery => setQuery(newQuery.toLowerCase())}
-                setNewFilter={newFilter => setFilter(newFilter)}
+                setNewFilter={newFilter => setFilter(newFilter as Filter)}
                 query={query}
                 filter={filter}
               />

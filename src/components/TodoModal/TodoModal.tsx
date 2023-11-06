@@ -15,14 +15,12 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setErrorMessage('');
     setIsLoading(true);
 
     if (selectedTodo) {
-      getUser(selectedTodo?.userId)
+      getUser(selectedTodo.userId)
         .then(userFromServer => {
           setUser(userFromServer);
-          setIsLoading(false);
         })
         .catch(newError => setErrorMessage(newError.message))
         .finally(() => setIsLoading(false));
@@ -37,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
 
       {isLoading && !user
         && <Loader />}
-      {!isLoading && !errorMessage
+      {!isLoading && !errorMessage && selectedTodo && user
         && (
           <div className="modal-card">
             <header className="modal-card-head">
@@ -45,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo?.id}`}
+                {`Todo #${selectedTodo.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -64,11 +62,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
 
               <p className="block" data-cy="modal-user">
                 <strong
-                  className={selectedTodo?.completed
+                  className={selectedTodo.completed
                     ? 'has-text-success'
                     : 'has-text-danger'}
                 >
-                  {selectedTodo?.completed
+                  {selectedTodo.completed
                     ? 'Done'
                     : 'Planned'}
                 </strong>
@@ -76,7 +74,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectNewTodo }) => {
                 {' by '}
 
                 <a href="mailto:Sincere@april.biz">
-                  {user?.name}
+                  {user.name}
                 </a>
               </p>
             </div>
