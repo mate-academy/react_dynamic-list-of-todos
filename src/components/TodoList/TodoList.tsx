@@ -10,7 +10,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectedTodoId,
+  selectedTodoId: isSelectedTodo,
   onTodoSelected,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
           data-cy="todo"
           key={todo.id}
           className={cn({
-            'has-background-info-light': selectedTodoId === todo.id,
+            'has-background-info-light': isSelectedTodo === todo.id,
           })}
         >
           <td className="is-vcentered">{todo.id}</td>
@@ -64,8 +64,8 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i
                   className={cn('far', {
-                    'fa-eye-slash': selectedTodoId === todo.id,
-                    'fa-eye': selectedTodoId !== todo.id,
+                    'fa-eye-slash': isSelectedTodo === todo.id,
+                    'fa-eye': isSelectedTodo !== todo.id,
                   })}
                 />
               </span>
