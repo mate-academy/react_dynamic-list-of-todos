@@ -12,7 +12,7 @@ export const TodoModal: React.FC = () => {
   const [isLoad, setIsLoad] = useState(true);
 
   useEffect(() => {
-    if (selectedTodo !== null) {
+    if (selectedTodo) {
       getUser(selectedTodo.userId).then(u => setUser(u))
         .finally(() => setIsLoad(false));
     }

@@ -38,10 +38,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const visibleTodos = todos.filter(todo => {
     switch (filter) {
       case Status.ACTIVE:
-        return todo.completed === true;
+        return todo.completed;
 
       case Status.COMPLETED:
-        return todo.completed === false;
+        return !todo.completed;
 
       case Status.ALL:
       default:
