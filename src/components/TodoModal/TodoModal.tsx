@@ -13,7 +13,7 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then(u => setUser(u))
+      getUser(selectedTodo.userId).then(setUser)
         .finally(() => setIsLoad(false));
     }
   }, [selectedTodo]);
@@ -55,7 +55,7 @@ export const TodoModal: React.FC = () => {
                 'has-text-success': selectedTodo?.completed,
               })}
               >
-                {selectedTodo?.completed ? ('Done') : ('Planned')}
+                {selectedTodo?.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

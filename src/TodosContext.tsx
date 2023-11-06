@@ -9,7 +9,7 @@ type TodosContextType = {
   todos: Todo[];
   visibleTodos: Todo[];
   selectedTodo: Todo | null;
-  setSelectedTodo: (_todo: Todo) => void;
+  setSelectedTodo: (_todo: Todo | null) => void;
   setFilter: React.Dispatch<React.SetStateAction<Status>>;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   query: string;
@@ -60,7 +60,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }), [todos, selectedTodo, visibleTodos, query]);
 
   useEffect(() => {
-    getTodos().then(ts => setTodos(ts));
+    getTodos().then(setTodos);
   }, []);
 
   return (
