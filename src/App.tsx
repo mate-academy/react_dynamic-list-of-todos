@@ -15,16 +15,16 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-  const [statusSelect, setStatusSelect] = useState<string>('all');
-  const [loader, setLoader] = useState(false);
+  const [statusSelect, setStatusSelect] = useState<string>(StatusSelect.All);
+  const [isLoader, setIsLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setLoader(true);
+    setIsLoader(true);
     getTodos()
       .then((data) => setTodos(data))
       .catch((error) => setErrorMessage(error.message))
-      .finally(() => setLoader(false));
+      .finally(() => setIsLoader(false));
   }, []);
 
   function filterTodos() {
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loader && <Loader />}
+              {isLoader && <Loader />}
 
               {todos.length > 0 && (
                 <TodoList

@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusSelect } from '../../types/StatusSelect';
 
 type Props = {
   query: string;
@@ -11,8 +12,6 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   setStatusSelect,
 }) => {
-  // console.log(query);
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,9 +20,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={(e) => setStatusSelect(e.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={StatusSelect.All}>All</option>
+            <option value={StatusSelect.Active}>Active</option>
+            <option value={StatusSelect.Completed}>Completed</option>
           </select>
         </span>
       </p>

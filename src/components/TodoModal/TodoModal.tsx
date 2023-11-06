@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  currentTodo: Todo ;
+  currentTodo: Todo;
   setCurrentTodo: (value: Todo | null) => void;
 };
 
@@ -19,7 +19,11 @@ export const TodoModal: React.FC<Props> = ({ currentTodo, setCurrentTodo }) => {
 
   useEffect(() => {
     if (currentTodo) {
-      getUser(currentTodo.userId).then((data) => setUser(data));
+      getUser(currentTodo.userId)
+        .then((data) => setUser(data))
+        .catch((error) => {
+          throw new Error(error);
+        });
     }
   }, [currentTodo]);
 
