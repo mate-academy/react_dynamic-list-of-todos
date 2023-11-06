@@ -4,10 +4,10 @@ import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 
-type Props = {
+interface Props {
   todo: Todo;
   setSelectedTodo: (todo: null) => void,
-};
+}
 
 export const TodoModal: React.FC<Props> = ({
   todo,

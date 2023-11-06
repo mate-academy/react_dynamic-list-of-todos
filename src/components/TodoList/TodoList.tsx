@@ -1,11 +1,12 @@
+import cn from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[],
   onSelectedTodo: (todo: Todo | null) => void,
   selectedTodoId: number,
-};
+}
 
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -26,9 +27,14 @@ export const TodoList: React.FC<Props> = ({
       </tr>
     </thead>
 
-    {todos.map(todo => (
-      <tbody key={todo.id}>
-        <tr data-cy="todo" className={`${selectedTodoId === todo.id && 'has-background-info-light'}`}>
+    <tbody>
+      {todos.map(todo => (
+        <tr
+          data-cy="todo"
+          className={cn({
+            'has-background-info-light': selectedTodoId === todo.id,
+          })}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
@@ -38,7 +44,13 @@ export const TodoList: React.FC<Props> = ({
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p className={`${todo.completed ? 'has-text-success' : 'has-text-danger'}`}>{todo.title}</p>
+            <p className={cn({
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed,
+            })}
+            >
+              {todo.title}
+            </p>
           </td>
           <td className="has-text-right is-vcentered">
             <button
@@ -50,12 +62,18 @@ export const TodoList: React.FC<Props> = ({
               }}
             >
               <span className="icon" data-cy="iconCompleted">
-                <i id="eyeButton" className={`far ${selectedTodoId === todo.id ? 'fa-eye-slash' : 'fa-eye'}`} />
+                <i
+                  id="eyeButton"
+                  className={cn('far', {
+                    'fa-eye-slash': selectedTodoId === todo.id,
+                    'fa-eye': selectedTodoId !== todo.id,
+                  })}
+                />
               </span>
             </button>
           </td>
         </tr>
-      </tbody>
-    ))}
+      ))}
+    </tbody>
   </table>
 );

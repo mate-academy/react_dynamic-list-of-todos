@@ -1,15 +1,15 @@
 import { FILTEREDBY } from '../../types/SortedBy';
 
-type Props = {
-  setQuary: (text: string) => void,
-  quary: string,
+interface Props {
+  setQuery: (text: string) => void,
+  query: string,
   setFilterBy: (type: string) => void,
   filterBy: string,
-};
+}
 
 export const TodoFilter: React.FC<Props> = ({
-  setQuary,
-  quary,
+  setQuery,
+  query,
   setFilterBy,
   filterBy,
 }) => (
@@ -37,11 +37,11 @@ export const TodoFilter: React.FC<Props> = ({
       <input
         data-cy="searchInput"
         type="text"
-        value={quary}
+        value={query}
         className="input"
         placeholder="Search..."
         onChange={(event) => {
-          setQuary(event.target.value);
+          setQuery(event.target.value);
         }}
       />
       <span className="icon is-left">
@@ -49,13 +49,13 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {quary && (
+        {query && (
           /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuary('')}
+            onClick={() => setQuery('')}
           />
         )}
       </span>

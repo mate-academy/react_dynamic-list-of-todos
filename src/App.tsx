@@ -12,11 +12,11 @@ import { Todo } from './types/Todo';
 import { FILTEREDBY } from './types/SortedBy';
 
 type Props = {
-  quary: string,
+  query: string,
   filterBy: string,
 };
 
-function getFilteredTodos(todos: Todo[], { quary, filterBy }: Props): Todo[] {
+function getFilteredTodos(todos: Todo[], { query, filterBy }: Props): Todo[] {
   let copieTodos = [...todos];
 
   if (filterBy) {
@@ -34,11 +34,11 @@ function getFilteredTodos(todos: Todo[], { quary, filterBy }: Props): Todo[] {
     }
   }
 
-  if (quary) {
-    const normalizedQuary = quary.trim().toLowerCase();
+  if (query) {
+    const normalizedquery = query.trim().toLowerCase();
 
     copieTodos = copieTodos.filter(
-      todo => todo.title.toLowerCase().includes(normalizedQuary),
+      todo => todo.title.toLowerCase().includes(normalizedquery),
     ) || null;
 
     return copieTodos;
@@ -51,10 +51,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [quary, setQuary] = useState('');
+  const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState('');
 
-  const filteredTodos = getFilteredTodos(todos, { quary, filterBy });
+  const filteredTodos = getFilteredTodos(todos, { query, filterBy });
 
   useEffect(() => {
     getTodos()
@@ -71,20 +71,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setQuary={setQuary}
-                quary={quary}
+                setQuery={setQuery}
+                query={query}
                 setFilterBy={setFilterBy}
                 filterBy={filterBy}
               />
             </div>
 
             <div className="block">
-              {loading && (<Loader />)}
-              <TodoList
-                todos={filteredTodos}
-                onSelectedTodo={setSelectedTodo}
-                selectedTodoId={selectedTodo?.id ?? 0}
-              />
+              {loading
+                ? (<Loader />)
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onSelectedTodo={setSelectedTodo}
+                    selectedTodoId={selectedTodo?.id ?? 0}
+                  />
+                )}
             </div>
           </div>
         </div>
