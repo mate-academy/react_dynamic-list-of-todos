@@ -40,8 +40,6 @@ export const TodoList: React.FC<T> = ({
 
   const filter = filterTodos(todos, filterType);
 
-  // ігнорувати регістр при фільтрації
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -58,31 +56,31 @@ export const TodoList: React.FC<T> = ({
       </thead>
 
       <tbody>
-        {filter.map(todo => todo.title.toLowerCase()
+        {filter.map(({ title, id, completed }) => title.toLowerCase()
           .includes(input.toLowerCase())
           && (
-            <tr data-cy="todo" key={todo.id} className="">
-              <td className="is-vcentered">{todo.id}</td>
+            <tr data-cy="todo" key={id} className="">
+              <td className="is-vcentered">{id}</td>
               <td className="is-vcentered">
-                {todo.completed && (
+                {completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={`has-text-${todo.completed ? 'success' : 'danger'}`}>{todo.title}</p>
+                <p className={`has-text-${completed ? 'success' : 'danger'}`}>{title}</p>
               </td>
               <td className="has-text-right is-vcentered">
                 <button
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onClick(todo.id)}
+                  onClick={() => onClick(id)}
                 >
                   <span className="icon">
                     <i className={
-                      show && todo.id === isDedicatedUser
+                      show && id === isDedicatedUser
                         ? 'far fa-eye-slash' : 'far fa-eye'
                     }
                     />

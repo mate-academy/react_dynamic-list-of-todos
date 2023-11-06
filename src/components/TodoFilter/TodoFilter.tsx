@@ -62,7 +62,7 @@ export const TodoFilter: React.FC<T> = ({
 
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
 
-        {input.length && (
+        {input !== '' && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
