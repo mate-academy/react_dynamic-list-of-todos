@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filters } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [listOfTodos, setListOFTodos] = useState<Todo[]>([]);
@@ -29,17 +30,17 @@ export const App: React.FC = () => {
     let listCopy = list;
 
     switch (filter) {
-      case 'active':
-        listCopy = listCopy.filter(todo => todo.completed !== true);
+      case Filters.active:
+        listCopy = listCopy.filter(todo => !todo.completed);
         break;
-      case 'completed':
-        listCopy = listCopy.filter(todo => todo.completed === true);
+      case Filters.complited:
+        listCopy = listCopy.filter(todo => todo.completed);
         break;
       default:
         break;
     }
 
-    if (input !== '') {
+    if (input) {
       listCopy = listCopy.filter(todo => todo.title.toLowerCase().includes(input.toLowerCase()));
     }
 

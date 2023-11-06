@@ -1,4 +1,5 @@
 import React from 'react';
+import { Filters } from '../../types/FilterEnum';
 
 interface Props {
   value: string;
@@ -24,12 +25,12 @@ export const TodoFilter: React.FC<Props> = ({
             All
           </option>
           <option
-            value="active"
+            value={Filters.active}
           >
             Active
           </option>
           <option
-            value="completed"
+            value={Filters.complited}
           >
             Completed
           </option>
@@ -53,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {value !== ''
-          ? (
+          && (
             <button
               data-cy="clearSearchButton"
               aria-label="delete"
@@ -61,7 +62,7 @@ export const TodoFilter: React.FC<Props> = ({
               className="delete"
               onClick={() => changeInput('')}
             />
-          ) : ''}
+          )}
       </span>
     </p>
   </form>
