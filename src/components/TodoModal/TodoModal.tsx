@@ -4,7 +4,6 @@ import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { TodosContext } from '../../TodosContext';
-import { Todo } from '../../types/Todo';
 
 export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,7 +38,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null as unknown as Todo)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
