@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -6,7 +7,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 interface Props {
-  activeTodo: Todo | null,
+  activeTodo: Todo,
   setActiveTodo: (todo: Todo | null) => void,
 }
 
@@ -17,11 +18,11 @@ export const TodoModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [activeUser, setActiveUser] = useState<User | null>(null);
 
-  if (activeTodo) {
-    (getUser(activeTodo.userId)
-      .then(setActiveUser)
-      .finally(() => setIsLoading(false)));
-  }
+  useEffect(() => {
+    getUser(activeTodo.userId)
+      .then(() => setActiveUser)
+      .finally(() => setIsLoading(false));
+  }, [activeTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -55,9 +56,13 @@ export const TodoModal: React.FC<Props> = ({
               </p>
 
               <p className="block" data-cy="modal-user">
-                {activeTodo?.completed
-                  ? (<strong className="has-text-success">Done</strong>)
-                  : (<strong className="has-text-danger">Planned</strong>)}
+                <strong className={classNames({
+                  'has-text-success': activeTodo?.completed,
+                  'has-text-danger': !activeTodo?.completed,
+                })}
+                >
+                  {activeTodo?.completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
 

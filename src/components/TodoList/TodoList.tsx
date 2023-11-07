@@ -14,6 +14,8 @@ export const TodoList: React.FC<Props> = ({
   activeTodo,
   setActiveTodo,
 }) => {
+  const activeTodoId = activeTodo?.id;
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -35,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
             <tr
               data-cy="todo"
               className={classNames(
-                { 'has-background-info-light': todo.id === activeTodo?.id },
+                { 'has-background-info-light': todo.id === activeTodoId },
               )}
               key={todo.id}
             >
@@ -68,8 +70,8 @@ export const TodoList: React.FC<Props> = ({
                 >
                   <span className="icon">
                     <i className={classNames('far', {
-                      'fa-eye-slash': todo.id === activeTodo?.id,
-                      'fa-eye': todo.id !== activeTodo?.id,
+                      'fa-eye-slash': todo.id === activeTodoId,
+                      'fa-eye': todo.id !== activeTodoId,
                     })}
                     />
                   </span>
