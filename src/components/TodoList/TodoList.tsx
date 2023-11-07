@@ -34,6 +34,8 @@ export const TodoList: React.FC<Props> = (
             completed,
           } = todo;
 
+          const isSelectedTodo = id === selectedTodoId;
+
           return (
             <tr
               data-cy="todo"
@@ -68,8 +70,8 @@ export const TodoList: React.FC<Props> = (
                 >
                   <span className="icon">
                     <i className={cn('far', {
-                      'fa-eye': id !== selectedTodoId,
-                      'fa-eye-slash': id === selectedTodoId,
+                      'fa-eye': !isSelectedTodo,
+                      'fa-eye-slash': isSelectedTodo,
                     })}
                     />
                   </span>

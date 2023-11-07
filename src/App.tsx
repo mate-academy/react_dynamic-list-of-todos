@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { Options, TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -13,7 +13,7 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState<string>(Options.All);
   const [query, setQuery] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
@@ -42,10 +42,10 @@ export const App: React.FC = () => {
       .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
 
     switch (selectedOption) {
-      case 'active':
+      case Options.Active:
         return filteredByQuery.filter(todo => !todo.completed);
 
-      case 'completed':
+      case Options.Completed:
         return filteredByQuery.filter(todo => todo.completed);
 
       default:

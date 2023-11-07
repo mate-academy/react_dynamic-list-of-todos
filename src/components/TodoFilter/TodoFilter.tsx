@@ -4,6 +4,12 @@ type Props = {
   setQuery: (value: string) => void;
 };
 
+export enum Options {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoFilter: React.FC<Props> = (
   { setSelectedOption, query, setQuery },
 ) => (
@@ -14,9 +20,9 @@ export const TodoFilter: React.FC<Props> = (
           data-cy="statusSelect"
           onChange={(event) => setSelectedOption(event.target.value)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.entries(Options).map(option => (
+            <option value={option[1]}>{option[0]}</option>
+          ))}
         </select>
       </span>
     </p>
