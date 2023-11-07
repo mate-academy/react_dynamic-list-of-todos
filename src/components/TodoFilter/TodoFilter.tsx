@@ -31,17 +31,16 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleSelect}
           >
-            <option value={Option.ALL}>
-              All
-            </option>
+            {Object.values(Option).map(option => {
+              const normalizeOptionText = option
+                .replace(option[0], option[0].toUpperCase());
 
-            <option value={Option.ACTIVE}>
-              Active
-            </option>
-
-            <option value={Option.COMPLETED}>
-              Completed
-            </option>
+              return (
+                <option value={option} key={option}>
+                  {normalizeOptionText}
+                </option>
+              );
+            })}
           </select>
         </span>
       </p>

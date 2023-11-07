@@ -21,6 +21,8 @@ export const TableRowTodo: React.FC<Props> = ({
     userId,
   } = todo;
 
+  const isSelectedTodo = selectedTodoId === id;
+
   return (
     <tr
       data-cy="todo"
@@ -62,8 +64,8 @@ export const TableRowTodo: React.FC<Props> = ({
           <span className="icon">
             <i
               className={cn('far', {
-                'fa-eye': selectedTodoId !== id,
-                'fa-eye-slash': selectedTodoId === id,
+                'fa-eye': !isSelectedTodo,
+                'fa-eye-slash': isSelectedTodo,
               })}
             />
           </span>
