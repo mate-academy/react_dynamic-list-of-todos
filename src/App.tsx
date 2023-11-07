@@ -13,39 +13,19 @@ import { ShowType } from './types/ShowType';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [show, setShow] = useState<ShowType>(ShowType.all);
-  const [filter, setFilter] = useState('');
+  const [todosShowMode, setTodosShowMode] = useState<ShowType>(ShowType.all);
+  const [todosFilterByTitle, setTodosFilterByTitle] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(true)
-  const [todoError, setTodoError] = useState('')
-
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [todoError, setTodoError] = useState('');
 
   useEffect(() => {
     getTodos()
-    .then((value) => {
-      setTodosFromServer(value);
-    })
-    .catch((error) => setTodoError(error.message))
-    .finally(() => setLoading(false))
-
+      .then(setTodosFromServer)
+      .catch((error) => setTodoError(error.message))
+      .finally(() => setIsLoading(false));
   }, []);
-
-  const onChangeShow = (value: ShowType) => {
-    setShow(value);
-  };
-
-  const onChangeFilter = (value: string) => {
-    setFilter(value);
-  };
-
-  const onSelectedTodo = (value: Todo | null) => {
-    setSelectedTodo(value);
-  };
-
-  const changeShowModal = (value: boolean) => {
-    setShowModal(value);
-  };
 
   const getFilteredTodos = (newFilter: string, newShow: ShowType) => {
     let todoCopy: Todo[] = [...todosFromServer];
@@ -59,7 +39,7 @@ export const App: React.FC = () => {
     }
 
     if (newFilter) {
-      const lowerCaseFilter = newFilter.toLowerCase();
+      const lowerCaseFilter = newFilter.trim().toLowerCase();
 
       return todoCopy.filter((todo) => todo.title.toLowerCase().includes(lowerCaseFilter));
     }
@@ -67,7 +47,7 @@ export const App: React.FC = () => {
     return todoCopy;
   };
 
-  const todos = getFilteredTodos(filter, show);
+  const todos = getFilteredTodos(todosFilterByTitle, todosShowMode);
 
   return (
     <>
@@ -78,31 +58,37 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                show={show}
-                filter={filter}
-                onChangeShow={onChangeShow}
-                onChangeFilter={onChangeFilter}
+                show={todosShowMode}
+                filter={todosFilterByTitle}
+                onChangeShow={setTodosShowMode}
+                onChangeFilter={setTodosFilterByTitle}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {(!loading && todoError) && <p> {todoError} </p>}
+              {isLoading && <Loader />}
+              {(!isLoading && todoError) && (
+                <p>
+                  {' '}
+                  {todoError}
+                  {' '}
+                </p>
+              )}
               <TodoList
                 todos={todos}
                 selectedTodo={selectedTodo}
-                onSelectedTodo={onSelectedTodo}
-                changeShowModal={changeShowModal}
+                onSelectedTodo={setSelectedTodo}
+                changeShowModal={setIsShowModal}
               />
             </div>
           </div>
         </div>
       </div>
-      {showModal && selectedTodo && (
+      {isShowModal && selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onSelectedTodo={onSelectedTodo}
-          changeShowModal={changeShowModal}
+          onSelectedTodo={setSelectedTodo}
+          changeShowModal={setIsShowModal}
         />
       )}
     </>

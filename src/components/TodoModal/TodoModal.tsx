@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Loader } from "../Loader";
-import { Todo } from "../../types/Todo";
-import { User } from "../../types/User";
-import { getUser } from "../../api";
+import React, { useState, useEffect } from 'react';
+import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 interface Props {
   selectedTodo: Todo | null;
@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
 }) => {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
-  const [userError, setUserError] = useState("");
+  const [userError, setUserError] = useState('');
 
   useEffect(() => {
     if (selectedTodo) {
@@ -71,9 +71,13 @@ export const TodoModal: React.FC<Props> = ({
                 <strong className="has-text-danger">Planned</strong>
               )}
 
-              {" by "}
+              {' by '}
               {userError ? (
-                <p> {userError} </p>
+                <p>
+                  {' '}
+                  {userError}
+                  {' '}
+                </p>
               ) : (
                 <a href={`mailto:${user?.email}`}>{user?.name}</a>
               )}
