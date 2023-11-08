@@ -9,47 +9,54 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodosFilter } from './types/TodosFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState<TodosFilter>(TodosFilter.all);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [modalIsShown, setModalIsShown] = useState(false);
   const [todoModalId, setTodoModalId] = useState(0);
+
+  const filteredTodos = (todosToFilter: Todo[]) => {
+    return todosToFilter.filter((todo) => {
+      const titleMatch = todo.title
+        .toLowerCase()
+        .includes(query.trim().toLowerCase());
+
+      switch (selectedFilter) {
+        case 'active':
+          return titleMatch && !todo.completed;
+        case 'completed':
+          return titleMatch && todo.completed;
+        default:
+          return titleMatch;
+      }
+    });
+  };
 
   useEffect(() => {
     setIsLoading(true);
 
     getTodos()
       .then(todosList => {
-        const todoFilter = todosList
-          .filter(todo => todo.title
-            .toLowerCase()
-            .includes(query.trim().toLowerCase()))
-          .filter(todo => {
-            switch (selectedFilter) {
-              case 'active':
-                return !todo.completed;
-              case 'completed':
-                return todo.completed;
-              default:
-                return true;
-            }
-          });
-
-        setTodos(todoFilter);
+        setTodos(filteredTodos(todosList));
+      })
+      .catch((e) => {
+        throw new Error(e);
       })
       .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, selectedFilter]);
 
   const handleShowModalClick = (todoId: number) => {
-    setShowModal(true);
+    setModalIsShown(true);
     setTodoModalId(todoId);
   };
 
   const handleHideModalClick = () => {
-    setShowModal(false);
+    setModalIsShown(false);
     setTodoModalId(0);
   };
 
@@ -83,7 +90,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {modalIsShown && (
         <TodoModal
           todos={todos}
           todoModalId={todoModalId}
