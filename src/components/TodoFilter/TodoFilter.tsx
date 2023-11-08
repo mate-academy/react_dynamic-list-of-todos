@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
+enum FilterOption {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 type Props = {
   todos: Todo[];
   setFilter: (filter: Todo[]) => void,
@@ -17,18 +23,24 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
   };
 
   useEffect(() => {
-    let filteredTodos = todos.filter((todo) => todo
-      .title.toLowerCase().includes(searchInput.trim().toLowerCase()));
+    const filterTodos = () => {
+      return todos.filter((todo) => todo.title.toLowerCase()
+        .includes(searchInput.trim().toLowerCase()));
+    };
 
-    if (option === 'active') {
-      filteredTodos = filteredTodos.filter((todo) => !todo.completed);
+    switch (option) {
+      case 'active':
+        setFilter(filterTodos().filter((todo) => !todo.completed));
+        break;
+
+      case 'completed':
+        setFilter(filterTodos().filter((todo) => todo.completed));
+        break;
+
+      default:
+        setFilter(filterTodos());
+        break;
     }
-
-    if (option === 'completed') {
-      filteredTodos = filteredTodos.filter((todo) => todo.completed);
-    }
-
-    setFilter(filteredTodos);
   }, [searchInput, todos, setFilter, option]);
 
   const reset = () => {
@@ -42,11 +54,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => setOption(e.target.value)}
+            onChange={(e) => setOption(e.target.value as FilterOption)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterOption.All}>All</option>
+            <option value={FilterOption.Active}>Active</option>
+            <option value={FilterOption.Completed}>Completed</option>
           </select>
         </span>
       </p>

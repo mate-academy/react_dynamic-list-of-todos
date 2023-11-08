@@ -2,7 +2,7 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  filter: Todo[];
+  filteredTodos: Todo[];
   setChosenTodo: (chosenTodo: Todo) => void,
   handleToggleModal: () => void,
   chosenTodo: Todo | null,
@@ -10,7 +10,7 @@ type Props = {
 
 export const TodoList: React
   .FC<Props> = ({
-  filter, setChosenTodo, handleToggleModal, chosenTodo,
+  filteredTodos, setChosenTodo, handleToggleModal, chosenTodo,
 }) => {
   const handleChosenTodo = (todo: Todo) => {
     setChosenTodo(todo);
@@ -32,7 +32,7 @@ export const TodoList: React
         </tr>
       </thead>
       <tbody>
-        {filter.map((todo: Todo) => (
+        {filteredTodos.map((todo: Todo) => (
           <tr
             data-cy="todo"
             className=""

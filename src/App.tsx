@@ -9,9 +9,9 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const [filter, setFilter] = useState<Todo[]>(todos);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
   const [chosenTodo, setChosenTodo] = useState<Todo | null>(null);
   const [toggleModal, setToggleModal] = useState(false);
 
@@ -22,11 +22,21 @@ export const App: React.FC = () => {
   useEffect(() => {
     /* eslint-disable max-len */
     fetch('https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response) {
+          throw new Error('No network response');
+        }
+
+        return response.json();
+      })
       .then((data) => {
+        if (!data) {
+          throw new Error('No data');
+        }
+
         setTodos(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -39,19 +49,29 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 todos={todos}
-                setFilter={setFilter}
+                setFilter={setFilteredTodos}
               />
             </div>
 
             <div className="block">
-              {loading && (<Loader />)}
-              <TodoList filter={filter} setChosenTodo={setChosenTodo} handleToggleModal={handleToggleModal} chosenTodo={chosenTodo} />
+              {isLoading ? ((<Loader />)) : null}
+              <TodoList
+                filteredTodos={filteredTodos}
+                setChosenTodo={setChosenTodo}
+                handleToggleModal={handleToggleModal}
+                chosenTodo={chosenTodo}
+              />
             </div>
           </div>
         </div>
       </div>
       {chosenTodo && (
-        <TodoModal chosenTodo={chosenTodo} toggleModal={toggleModal} setChosenTodo={setChosenTodo} setToggleModal={setToggleModal} />
+        <TodoModal
+          chosenTodo={chosenTodo}
+          toggleModal={toggleModal}
+          setChosenTodo={setChosenTodo}
+          setToggleModal={setToggleModal}
+        />
       )}
     </>
   );
