@@ -54,7 +54,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? ((<Loader />)) : null}
+              {isLoading ? <Loader /> : null}
               <TodoList
                 filteredTodos={filteredTodos}
                 setChosenTodo={setChosenTodo}

@@ -7,6 +7,12 @@ enum FilterOption {
   Completed = 'completed',
 }
 
+const dropList = [
+  { value: FilterOption.All, label: 'All' },
+  { value: FilterOption.Active, label: 'Active' },
+  { value: FilterOption.Completed, label: 'Completed' },
+];
+
 type Props = {
   todos: Todo[];
   setFilter: (filter: Todo[]) => void,
@@ -14,7 +20,7 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
   const [searchInput, setSearchInput] = useState('');
-  const [option, setOption] = useState('all');
+  const [option, setOption] = useState(FilterOption.All);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -29,11 +35,11 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
     };
 
     switch (option) {
-      case 'active':
+      case FilterOption.Active:
         setFilter(filterTodos().filter((todo) => !todo.completed));
         break;
 
-      case 'completed':
+      case FilterOption.Completed:
         setFilter(filterTodos().filter((todo) => todo.completed));
         break;
 
@@ -45,7 +51,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
 
   const reset = () => {
     setSearchInput('');
-    setOption('all');
+    setOption(FilterOption.All);
   };
 
   return (
@@ -56,9 +62,9 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
             data-cy="statusSelect"
             onChange={(e) => setOption(e.target.value as FilterOption)}
           >
-            <option value={FilterOption.All}>All</option>
-            <option value={FilterOption.Active}>Active</option>
-            <option value={FilterOption.Completed}>Completed</option>
+            {dropList.map(optionList => (
+              <option value={optionList.value}>{optionList.label}</option>
+            ))}
           </select>
         </span>
       </p>

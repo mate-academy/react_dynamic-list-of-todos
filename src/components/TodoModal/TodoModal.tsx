@@ -53,15 +53,18 @@ export const TodoModal: React.FC<Props> = ({
           </header>
 
           <div className="modal-card-body">
-            {chosenTodo ? (
+            {chosenTodo && (
               <p className="block" data-cy="modal-title">
                 {chosenTodo?.title}
               </p>
-            ) : null}
+            )}
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">
+              <strong className={
+                chosenTodo?.completed ? 'has-text-success' : 'has-text-danger'
+              }
+              >
                 {chosenTodo?.completed ? 'Done' : 'Planned'}
               </strong>
 
