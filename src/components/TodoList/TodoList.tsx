@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -9,7 +8,11 @@ type Props = {
   setSelectedTodo: (todo: Todo) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectedTodo, setSelectedTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -27,7 +30,13 @@ export const TodoList: React.FC<Props> = ({ todos, selectedTodo, setSelectedTodo
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className={classNames('', { 'has-background-info-light': todo.id === selectedTodo?.id })}>
+          <tr
+            data-cy="todo"
+            className={
+              classNames('',
+                { 'has-background-info-light': todo.id === selectedTodo?.id })
+            }
+          >
             <td className="is-vcentered">{todo.id}</td>
             {todo.completed ? (
               <td className="is-vcentered">
