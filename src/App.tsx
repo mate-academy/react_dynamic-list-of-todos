@@ -39,9 +39,9 @@ export const App: React.FC = () => {
         case StatusSelect.All:
           return todo;
         case StatusSelect.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case StatusSelect.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           return todo;
       }
