@@ -63,7 +63,12 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilter }) => {
             onChange={(e) => setOption(e.target.value as FilterOption)}
           >
             {dropList.map(optionList => (
-              <option value={optionList.value}>{optionList.label}</option>
+              <option
+                value={optionList.value}
+                key={optionList.value}
+              >
+                {optionList.label}
+              </option>
             ))}
           </select>
         </span>
