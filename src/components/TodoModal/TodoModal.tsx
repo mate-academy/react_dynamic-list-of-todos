@@ -37,9 +37,7 @@ export const TodoModal: React.FC<Props> = (
   useEffect(() => {
     if (selectedTodo && selectedTodo.userId) {
       getUser(selectedTodo.userId)
-        .then((data) => {
-          setUser(data);
-        })
+        .then(setUser)
         .catch((error) => {
           throw new Error(error);
         });
@@ -61,9 +59,7 @@ export const TodoModal: React.FC<Props> = (
                 data-cy="modal-header"
               >
                 <span>
-                  Todo
-                  {' '}
-                  {selectedTodo.id}
+                  {`Todo ${selectedTodo.id}`}
                 </span>
               </div>
 
