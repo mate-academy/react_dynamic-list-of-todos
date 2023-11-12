@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+
 /* eslint-disable max-len */
 
 interface Props {
@@ -58,11 +60,15 @@ export const TodoModal: React.FC<Props> = ({ modalToDo, setmodalOn, setmodalTodo
             </p>
 
             <p className="block" data-cy="modal-user">
-              {
+              {/* {
                 modalToDo?.completed
                   ? (<strong className="has-text-success">Done</strong>)
                   : (<strong className="has-text-danger">Planned</strong>)
-              }
+              } */}
+              <strong className={cn({ 'has-text-success': modalToDo?.completed, 'has-text-danger': !modalToDo?.completed })}>
+                {modalToDo?.completed ? ('Done') : ('Planned')}
+              </strong>
+
               {' by '}
               <a href={`mailto:${currentUser?.email}`}>
                 {currentUser?.name}
