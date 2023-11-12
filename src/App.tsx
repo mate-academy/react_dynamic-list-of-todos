@@ -69,9 +69,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      getTodos().then((todos) => {
-        setTodos(todos);
-        setOriginalTodos(todos);
+      getTodos().then((data) => {
+        setTodos(data);
+        setOriginalTodos(data);
         setLoading(false);
         setModalVisible(false);
       });
