@@ -111,8 +111,6 @@ export const App: React.FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           handleCloseModal={handleCloseModal}
-          loading={loading}
-          setLoading={setLoading}
           setModalVisible={setModalVisible}
         />
       )}

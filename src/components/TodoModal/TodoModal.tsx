@@ -6,8 +6,6 @@ import { User } from '../../types/User';
 
 type Props = {
   handleCloseModal: () => void;
-  loading: boolean;
-  setLoading: (con: boolean) => void;
   setModalVisible: (con: boolean) => void;
   selectedTodo: Todo;
 };
@@ -15,40 +13,44 @@ type Props = {
 export const TodoModal: React.FC<Props> = (
   {
     handleCloseModal,
-    loading,
-    setLoading,
     setModalVisible,
     selectedTodo,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    let timeout: NodeJS.Timeout;
+
+    if (selectedTodo && selectedTodo.userId) {
+      setLoadingUser(true);
+
+      getUser(selectedTodo.userId)
+        .then((userData) => {
+          setUser(userData);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        })
+        .finally(() => {
+          timeout = setTimeout(() => {
+            setLoadingUser(false);
+            setModalVisible(true);
+          }, 500);
+        });
+    }
 
     return () => {
       clearTimeout(timeout);
-      setModalVisible(false);
     };
-  }, [setLoading, setModalVisible]);
-
-  useEffect(() => {
-    if (selectedTodo && selectedTodo.userId) {
-      getUser(selectedTodo.userId)
-        .then(setUser)
-        .catch((error) => {
-          throw new Error(error);
-        });
-    }
-  }, [selectedTodo]);
+  }, [selectedTodo, setLoadingUser, setModalVisible]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {loadingUser ? (
         <Loader />
       ) : (
         <div>
@@ -59,7 +61,7 @@ export const TodoModal: React.FC<Props> = (
                 data-cy="modal-header"
               >
                 <span>
-                  {`Todo ${selectedTodo.id}`}
+                  {`Todo #${selectedTodo.id}`}
                 </span>
               </div>
 
@@ -84,7 +86,7 @@ export const TodoModal: React.FC<Props> = (
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz">
+                <a href="mailto:Sincere@april.biz" data-cy="todo">
                   {user?.name}
                 </a>
               </p>
