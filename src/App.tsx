@@ -10,36 +10,48 @@ import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
-function getPreparedTodos(todos: Todo[], query: string) {
-  let preparedTodos = [...todos];
+enum FilterValue {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
 
-  if (query) {
-    const prepQuery = query.trim().toLowerCase();
+function getPreparedTodos(todos: Todo[], query: string, filterValue: FilterValue) {
+  return todos.filter(todo => {
+    switch (filterValue) {
+      case FilterValue.Completed:
+        return todo.completed === true;
+      case FilterValue.Active:
+        return todo.completed === false;
+      case FilterValue.All:
+        return true;
+      default:
+        return false;
+    }
+  }).filter(todo => {
+    if (query) {
+      const prepQuery = query.trim().toLowerCase();
 
-    preparedTodos = preparedTodos.filter(
-      todo => todo.title.toLowerCase().includes(prepQuery),
-    );
-  }
+      return todo.title.toLowerCase().includes(prepQuery);
+    }
 
-  return preparedTodos;
+    return true;
+  });
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const visibleTodos = getPreparedTodos(todos, query);
-  const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterValue, setFilterValue] = useState('all');
+  const [filterValue, setFilterValue] = useState(FilterValue.All);
+  const visibleTodos = getPreparedTodos(todos, query, filterValue);
 
   const handleOpenModal = (todo: Todo) => {
-    setModalVisible(true);
     setSelectedTodo(todo);
   };
 
   const handleCloseModal = () => {
-    setModalVisible(false);
     setSelectedTodo(null);
   };
 
@@ -52,33 +64,26 @@ export const App: React.FC = () => {
   };
 
   const handleFilterCompleted = () => {
-    setFilterValue('completed');
+    setFilterValue(FilterValue.Completed);
   };
 
   const handleFilterActive = () => {
-    setFilterValue('active');
+    setFilterValue(FilterValue.Active);
   };
 
   const handleFilterAll = () => {
-    setFilterValue('all');
+    setFilterValue(FilterValue.All);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     setTimeout(() => {
       getTodos().then((data) => {
-        setLoading(false);
-        setModalVisible(false);
-
-        if (filterValue === 'completed') {
-          setTodos(data.filter((todo) => todo.completed === true));
-        } else if (filterValue === 'active') {
-          setTodos(data.filter((todo) => todo.completed === false));
-        } else {
-          setTodos(data);
-        }
+        setIsLoading(false);
+        setTodos(data);
       });
     }, 500);
-  }, [filterValue]);
+  }, []);
 
   return (
     <>
@@ -99,7 +104,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading
+              {isLoading
                 ? <Loader />
                 : <TodoList todos={visibleTodos} handleOpenModal={handleOpenModal} selectedTodo={selectedTodo} />}
             </div>
@@ -107,11 +112,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && modalVisible && !loading && (
+      {selectedTodo && !isLoading && (
         <TodoModal
           selectedTodo={selectedTodo}
           handleCloseModal={handleCloseModal}
-          setModalVisible={setModalVisible}
         />
       )}
     </>

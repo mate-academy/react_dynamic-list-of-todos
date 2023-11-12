@@ -6,51 +6,43 @@ import { User } from '../../types/User';
 
 type Props = {
   handleCloseModal: () => void;
-  setModalVisible: (con: boolean) => void;
   selectedTodo: Todo;
 };
 
 export const TodoModal: React.FC<Props> = (
   {
     handleCloseModal,
-    setModalVisible,
     selectedTodo,
   },
 ) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loadingUser, setLoadingUser] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (selectedTodo && selectedTodo.userId) {
-      setLoadingUser(true);
-
-      getUser(selectedTodo.userId)
-        .then((userData) => {
-          setUser(userData);
-        })
-        .catch((error) => {
-          throw new Error(error);
-        })
-        .finally(() => {
-          timeout = setTimeout(() => {
-            setLoadingUser(false);
-            setModalVisible(true);
-          }, 500);
-        });
-    }
+    const timeout = setTimeout(() => {
+      setIsUserLoading(false);
+    }, 500);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [selectedTodo, setLoadingUser, setModalVisible]);
+  }, [setIsUserLoading]);
+
+  useEffect(() => {
+    if (selectedTodo && selectedTodo.userId) {
+      getUser(selectedTodo.userId)
+        .then(setUser)
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadingUser ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div>
@@ -86,9 +78,13 @@ export const TodoModal: React.FC<Props> = (
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz" data-cy="todo">
-                  {user?.name}
-                </a>
+                {user ? (
+                  <a href={`mailto:${user.email}`} data-cy="todo">
+                    {user.name}
+                  </a>
+                ) : (
+                  <Loader />
+                )}
               </p>
             </div>
           </div>

@@ -17,23 +17,29 @@ export const TodoFilter: React.FC<Props> = (
     handleFilterAll,
   },
 ) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+
+    switch (selectedValue) {
+      case 'active':
+        handleFilterActive();
+        break;
+      case 'completed':
+        handleFilterCompleted();
+        break;
+      default:
+        handleFilterAll();
+        break;
+    }
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(e) => {
-              const selectedValue = e.target.value;
-
-              if (selectedValue === 'active') {
-                handleFilterActive();
-              } else if (selectedValue === 'completed') {
-                handleFilterCompleted();
-              } else {
-                handleFilterAll();
-              }
-            }}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
