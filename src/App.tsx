@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable max-len */
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Sort } from './types/Sort';
 import { getTodos } from './api';
+import { filterTodos } from './services/filterTodos';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(Sort.All);
+
+  const visibleTodos = useMemo(() => {
+    return filterTodos(todos, filter, query);
+  }, [todos, query, filter]);
 
   useEffect(() => {
     getTodos()
-      .then(serverTodos => {
-        setTodos(serverTodos);
-        setFilteredTodos(serverTodos);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        throw new Error(error);
-      });
+      .then(setTodos);
   }, []);
 
   return (
@@ -36,29 +36,30 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setFilteredTodos={setFilteredTodos}
+                query={query}
+                setQuery={setQuery}
+                filter={filter}
+                setFilter={setFilter}
               />
             </div>
 
             <div className="block">
-              {isLoading ? (
+              {!todos.length ? (
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredTodos}
-                  setSelectedTodo={setSelectedTodo}
+                  todos={visibleTodos}
                   selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-
       {selectedTodo && (
         <TodoModal
-          todo={selectedTodo}
+          selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
       )}

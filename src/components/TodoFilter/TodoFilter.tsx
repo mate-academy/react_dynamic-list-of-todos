@@ -1,50 +1,30 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React from 'react';
+import { Sort } from '../../types/Sort';
 
 type Props = {
-  todos: Todo[],
-  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
-};
-
-const COMPLETED_FILTER = 'completed';
-const ACTIVE_FILTER = 'active';
-
-const filterTodos = (todos: Todo[], sortBy: string, query: string) => {
-  let fiteredTodos = [...todos];
-
-  switch (sortBy) {
-    case ACTIVE_FILTER:
-      fiteredTodos = todos.filter(todo => !todo.completed);
-      break;
-
-    case COMPLETED_FILTER:
-      fiteredTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  if (query) {
-    fiteredTodos = fiteredTodos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  }
-
-  return fiteredTodos;
+  query: string;
+  setQuery: (query: string) => void;
+  filter: Sort;
+  setFilter: (filter: Sort) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos,
-  setFilteredTodos,
+  query,
+  setQuery,
+  filter,
+  setFilter,
 }) => {
-  const [filterBy, setFilterBy] = useState('');
-  const [query, setQuery] = useState('');
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(event.target.value as Sort);
+  };
 
-  useEffect(() => {
-    const filteredTodos = filterTodos(todos, filterBy, query);
+  const handleQuaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
-    setFilteredTodos(filteredTodos);
-  }, [filterBy, query, todos, setFilteredTodos]);
+  const handleDelete = () => {
+    setQuery('');
+  };
 
   return (
     <form className="field has-addons">
@@ -52,13 +32,12 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setFilterBy(event.target.value)}
+            value={filter}
+            onChange={handleFilterChange}
           >
-            <option value="all">All</option>
-
-            <option value="active">Active</option>
-
-            <option value="completed">Completed</option>
+            <option value={Sort.All}>All</option>
+            <option value={Sort.Active}>Active</option>
+            <option value={Sort.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -70,21 +49,19 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={handleQuaryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
-        {query.length !== 0
-        && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={handleDelete}
             />
           </span>
         )}
