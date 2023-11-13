@@ -1,4 +1,5 @@
 import { ShowType } from '../../types/ShowType';
+import { capitalLetter } from '../../utils/capitalLetter';
 
 interface Props {
   show: ShowType;
@@ -22,9 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={show}
             onChange={(event) => onChangeShow(event.target.value as ShowType)}
           >
-            <option value={ShowType.all}>All</option>
-            <option value={ShowType.active}>Active</option>
-            <option value={ShowType.completed}>Completed</option>
+            {Object.keys(ShowType).map((key) => (
+              <option value={key} key={key}>{capitalLetter(key)}</option>
+            ))}
           </select>
         </span>
       </p>
