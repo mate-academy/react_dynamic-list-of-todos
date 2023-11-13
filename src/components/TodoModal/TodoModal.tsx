@@ -14,10 +14,10 @@ export const TodoModal: React.FC<Props> = ({
   closeModal,
 }) => {
   const [user, setUser] = useState<User>();
-  const { id, title } = selectedTodo;
+  const { id, userId, title } = selectedTodo;
 
   useEffect(() => {
-    getUser(id)
+    getUser(userId)
       .then(setUser);
   }, []);
 
