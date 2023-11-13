@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -16,49 +16,37 @@ export const App: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<TodosFilter>(TodosFilter.all);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [modalIsShown, setModalIsShown] = useState(false);
-  const [todoModalId, setTodoModalId] = useState(0);
-
-  const filteredTodos = (todosToFilter: Todo[]) => {
-    return todosToFilter.filter((todo) => {
-      const titleMatch = todo.title
-        .toLowerCase()
-        .includes(query.trim().toLowerCase());
-
-      switch (selectedFilter) {
-        case 'active':
-          return titleMatch && !todo.completed;
-        case 'completed':
-          return titleMatch && todo.completed;
-        default:
-          return titleMatch;
-      }
-    });
-  };
+  const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
 
     getTodos()
       .then(todosList => {
-        setTodos(filteredTodos(todosList));
+        setTodos(todosList);
       })
       .catch((e) => {
         throw new Error(e);
       })
       .finally(() => setIsLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, selectedFilter]);
+  }, []);
 
-  const handleShowModalClick = (todoId: number) => {
-    setModalIsShown(true);
-    setTodoModalId(todoId);
-  };
+  const filteredTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      const titleMatch = todo.title
+        .toLowerCase()
+        .includes(query.trim().toLowerCase());
 
-  const handleHideModalClick = () => {
-    setModalIsShown(false);
-    setTodoModalId(0);
-  };
+      switch (selectedFilter) {
+        case TodosFilter.active:
+          return titleMatch && !todo.completed;
+        case TodosFilter.completed:
+          return titleMatch && todo.completed;
+        default:
+          return titleMatch;
+      }
+    });
+  }, [todos, query, selectedFilter]);
 
   return (
     <>
@@ -80,9 +68,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
-                  todoModalId={todoModalId}
-                  handleShowModalClick={handleShowModalClick}
+                  todos={filteredTodos || todos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -90,11 +78,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalIsShown && (
+      {selectedTodo && (
         <TodoModal
-          todos={todos}
-          todoModalId={todoModalId}
-          handleHideModalClick={handleHideModalClick}
+          todos={filteredTodos || todos}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

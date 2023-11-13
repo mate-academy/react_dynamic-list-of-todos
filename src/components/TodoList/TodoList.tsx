@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  todoModalId: number;
-  handleShowModalClick: (userId: number) => void;
+  selectedTodo: (number | null);
+  setSelectedTodo: (id: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  todoModalId,
-  handleShowModalClick,
+  selectedTodo,
+  setSelectedTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
             data-cy="todo"
             key={todo.id}
             className={cn({
-              'has-background-info-light': todoModalId === todo.id,
+              'has-background-info-light': selectedTodo === todo.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -61,12 +61,12 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleShowModalClick(todo.id)}
+                onClick={() => setSelectedTodo(todo.id)}
               >
                 <span className="icon">
                   <i className={cn('far', {
-                    'fa-eye': todo.id !== todoModalId,
-                    'fa-eye-slash': todo.id === todoModalId,
+                    'fa-eye': todo.id !== selectedTodo,
+                    'fa-eye-slash': todo.id === selectedTodo,
                   })}
                   />
                 </span>
