@@ -10,11 +10,11 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const {
-    id, title, completed, userId,
+    id, title, completed,
   } = todo;
 
   const handleCloseClick = () => {
@@ -23,20 +23,15 @@ export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-
-    getUser(userId)
-      .then(userFromServer => {
-        setSelectedUser(userFromServer);
-      })
-      .finally(() => setLoading(false));
+    getUser(todo.userId)
+      .then(response => setSelectedUser(response));
   }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {!selectedUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
