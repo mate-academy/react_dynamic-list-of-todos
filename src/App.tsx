@@ -15,11 +15,10 @@ import { ByStatus } from './types/ByStatus';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [filtredByStatus, setFiltredByStatus] = useState<ByStatus>(
+  const [filteredByStatus, setFilteredByStatus] = useState<ByStatus>(
     ByStatus.all,
   );
   const [query, setQuery] = useState<string>('');
-  const [showModal, setShowModal] = useState<boolean>(false);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
@@ -34,7 +33,6 @@ export const App: React.FC = () => {
 
   const handleShowTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setShowModal(true);
     setIsLoadingUser(true);
 
     getUser(todo.userId).then((user) => {
@@ -44,7 +42,7 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter((todo) => {
-    switch (filtredByStatus) {
+    switch (filteredByStatus) {
       case ByStatus.all:
         return true;
       case ByStatus.activ:
@@ -67,7 +65,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFiltredByStatus={setFiltredByStatus}
+                setFiltredByStatus={setFilteredByStatus}
                 setQuery={setQuery}
                 query={query}
               />
@@ -88,9 +86,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {selectedTodo && (
         <TodoModal
-          setShowModal={setShowModal}
           isLoadingUser={isLoadingUser}
           selectedUser={selectedUser}
           selectedTodo={selectedTodo}

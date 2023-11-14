@@ -4,14 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   isLoadingUser: boolean;
-  setShowModal: (value: boolean) => void;
   selectedUser: User | null;
   selectedTodo: Todo | null;
   setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  setShowModal,
   isLoadingUser,
   selectedUser,
   selectedTodo,
@@ -39,7 +37,6 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setShowModal(false);
                 setSelectedTodo(null);
               }}
             />

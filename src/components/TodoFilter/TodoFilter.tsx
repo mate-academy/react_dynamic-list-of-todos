@@ -11,6 +11,12 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   query,
 }) => {
+  const statusOptions = [
+    { value: ByStatus.all, title: 'All' },
+    { value: ByStatus.activ, title: 'Active' },
+    { value: ByStatus.completed, title: 'Completed' },
+  ];
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -19,9 +25,11 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={(e) => setFiltredByStatus(e.target.value as ByStatus)}
           >
-            <option value={ByStatus.all}>All</option>
-            <option value={ByStatus.activ}>Active</option>
-            <option value={ByStatus.completed}>Completed</option>
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.title}
+              </option>
+            ))}
           </select>
         </span>
       </p>
