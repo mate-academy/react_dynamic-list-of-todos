@@ -42,7 +42,7 @@ export const App: React.FC = () => {
         break;
       case Status.All:
       default:
-       break;
+        break;
     }
 
     return todosCopy;
@@ -65,24 +65,27 @@ export const App: React.FC = () => {
 
             <div className="block">
 
-             {isLoading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filteredTodos}
                   setSelectedTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
-                />)}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo &&
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />}
+      {selectedTodo
+        && (
+          <TodoModal
+            selectedTodo={selectedTodo}
+            setSelectedTodo={setSelectedTodo}
+          />
+        )}
 
     </>
   );

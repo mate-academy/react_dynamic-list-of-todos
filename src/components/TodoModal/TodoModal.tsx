@@ -7,11 +7,11 @@ import { Loader } from '../Loader';
 type Props = {
   selectedTodo: Todo;
   setSelectedTodo: (todo:Todo | null) => void;
-}
+};
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodo
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,9 +19,9 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     setIsLoading(true);
     getUser(selectedTodo.userId)
-      .then(user => setUser(user))
+      .then(userData => setUser(userData))
       .finally(() => setIsLoading(false));
-  }, [selectedTodo.userId])
+  }, [selectedTodo.userId]);
 
   const statusMsg = selectedTodo.completed ? 'Done' : 'Planned';
 
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({
             >
               {`Todo #${selectedTodo.id}`}
             </div>
-
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -57,14 +57,14 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-user">
               <strong className={
                 `has-text-${selectedTodo.completed ? 'success' : 'danger'
-                }`}>
+                }`
+              }
+              >
                 {statusMsg}
               </strong>
-
               {' by '}
-
               <a href={user?.email}>
-              {user?.name}
+                {user?.name}
               </a>
             </p>
           </div>
