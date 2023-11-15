@@ -25,7 +25,6 @@ export const TodoModal: React.FC<Props> = ({
       getUser(todo?.userId)
         .then(userFromServer => {
           setUser(userFromServer);
-          setIsLoading(false);
         })
         .catch(error => {
           setErrorMessage(error.message);

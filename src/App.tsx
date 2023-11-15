@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,24 +8,45 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [filterBy, setFilterBy] = useState(Filter.All);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(serverTodos => {
         setTodos(serverTodos);
-        setFilteredTodos(serverTodos);
-        setIsLoading(false);
       })
       .catch(error => {
         throw new Error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
+  const filteredTodos = useMemo(() => (
+    todos
+      .filter(todo => {
+        switch (filterBy) {
+          case Filter.Active:
+            return !todo.completed;
+          case Filter.Completed:
+            return todo.completed;
+          case Filter.All:
+          default:
+            return true;
+        }
+      })
+      .filter(todo => {
+        return todo.title.toLowerCase().includes(query.toLowerCase());
+      })
+  ), [query, filterBy, todos]);
 
   return (
     <>
@@ -36,8 +57,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                setFilteredTodos={setFilteredTodos}
+                query={query}
+                onQueryChange={setQuery}
+                filterBy={filterBy}
+                onFilterByChange={setFilterBy}
               />
             </div>
 

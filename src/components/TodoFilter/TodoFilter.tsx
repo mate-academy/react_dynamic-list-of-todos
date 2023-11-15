@@ -1,50 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
 
 type Props = {
-  todos: Todo[],
-  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
-};
-
-const COMPLETED_FILTER = 'completed';
-const ACTIVE_FILTER = 'active';
-
-const filterTodos = (todos: Todo[], sortBy: string, query: string) => {
-  let fiteredTodos = [...todos];
-
-  switch (sortBy) {
-    case ACTIVE_FILTER:
-      fiteredTodos = todos.filter(todo => !todo.completed);
-      break;
-
-    case COMPLETED_FILTER:
-      fiteredTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  if (query) {
-    fiteredTodos = fiteredTodos
-      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-  }
-
-  return fiteredTodos;
+  query: string;
+  onQueryChange: (query: string) => void;
+  filterBy: Filter;
+  onFilterByChange: (filter: Filter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos,
-  setFilteredTodos,
+  query,
+  onQueryChange,
+  filterBy,
+  onFilterByChange,
 }) => {
-  const [filterBy, setFilterBy] = useState('');
-  const [query, setQuery] = useState('');
+  const getTextForOption = (option: string) => {
+    const correctedOption = option.split('');
 
-  useEffect(() => {
-    const filteredTodos = filterTodos(todos, filterBy, query);
+    correctedOption[0] = correctedOption[0].toUpperCase();
 
-    setFilteredTodos(filteredTodos);
-  }, [filterBy, query, todos, setFilteredTodos]);
+    return correctedOption.join('');
+  };
 
   return (
     <form className="field has-addons">
@@ -52,13 +27,14 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => setFilterBy(event.target.value)}
+            value={filterBy}
+            onChange={(event) => onFilterByChange(event.target.value as Filter)}
           >
-            <option value="all">All</option>
-
-            <option value="active">Active</option>
-
-            <option value="completed">Completed</option>
+            {Object.values(Filter).map((value) => (
+              <option key={value} value={value}>
+                {getTextForOption(value)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -70,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => onQueryChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -84,7 +60,9 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => {
+                onQueryChange('');
+              }}
             />
           </span>
         )}
