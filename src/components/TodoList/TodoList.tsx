@@ -13,6 +13,10 @@ export const TodoList: React.FC<Props> = ({
   setSelectedTodo,
   selectedTodo,
 }) => {
+  const isTodoSelected = (todo: Todo) => {
+    return todo === selectedTodo;
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -68,8 +72,8 @@ export const TodoList: React.FC<Props> = ({
                   <span className="icon">
                     <i
                       className={classNames('far', {
-                        'fa-eye-slash': todo === selectedTodo,
-                        'fa-eye': todo !== selectedTodo,
+                        'fa-eye-slash': isTodoSelected(todo),
+                        'fa-eye': !isTodoSelected(todo),
                       })}
                     />
                   </span>
