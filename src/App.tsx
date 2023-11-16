@@ -22,13 +22,24 @@ export const App: React.FC = () => {
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
+
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    getTodos().then((fetchedTodos) => {
-      setTodos(fetchedTodos);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then((fetchedTodos) => {
+        setTodos(fetchedTodos);
+      })
+      .catch(() => {
+        setError(
+          'An error occurred while fetching todos. Please try again later.',
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const handleShowTodo = (todo: Todo) => {
@@ -45,7 +56,7 @@ export const App: React.FC = () => {
     switch (filteredByStatus) {
       case ByStatus.all:
         return true;
-      case ByStatus.activ:
+      case ByStatus.active:
         return !todo.completed;
       case ByStatus.completed:
         return todo.completed;
@@ -70,7 +81,7 @@ export const App: React.FC = () => {
                 query={query}
               />
             </div>
-
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="block">
               {isLoading ? (
                 <Loader />

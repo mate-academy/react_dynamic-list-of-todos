@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const statusOptions = [
     { value: ByStatus.all, title: 'All' },
-    { value: ByStatus.activ, title: 'Active' },
+    { value: ByStatus.active, title: 'Active' },
     { value: ByStatus.completed, title: 'Completed' },
   ];
 
