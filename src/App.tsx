@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { Loader } from './components/Loader';
+import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterBy } from './types/Filter';
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
+              <Loader />
               <TodoList
                 todos={visibleTodos}
                 selectedTodo={selectedTodo?.id}
@@ -70,8 +70,8 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          selectedTodo={selectedTodo}
-          // setSelectedTodo={setSelectedTodo}
+          todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

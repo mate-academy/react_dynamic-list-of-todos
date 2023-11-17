@@ -5,31 +5,32 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  selectedTodo: Todo;
-  // setSelectedTodo: (value: Todo) => void
+  todo: Todo;
+  setSelectedTodo: (value: Todo | null) => void
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  // setSelectedTodo,
+  todo,
+  setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-
-  const {
-    id, title, completed, userId,
-  } = selectedTodo;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getUser(userId).then(setUser);
-  }, [userId]);
+    setLoading(true);
 
-  const statusTask = completed ? 'Done' : 'Planned';
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => setLoading(false));
+  }, [todo.userId, loading]);
+
+  const { id, title, completed } = todo;
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {false ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -47,6 +48,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
@@ -56,8 +58,9 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">{statusTask}</strong>
+              {completed
+                ? <strong className="has-text-success">Done</strong>
+                : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
 
