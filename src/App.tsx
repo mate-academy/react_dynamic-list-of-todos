@@ -24,9 +24,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(response => {
-        setTodos(response);
-      });
+      .then(setTodos);
   }, []);
 
   return (

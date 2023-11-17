@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -31,13 +32,9 @@ export const TodoList: React.FC<Props> = ({
         {visibleTodos.map(todo => (
           <tr
             data-cy="todo"
-            className={
-              todo.id === selectedTodo?.id ? (
-                'has-background-info-light'
-              ) : (
-                ''
-              )
-            }
+            className={classNames({
+              'has-background-info-light': todo.id === selectedTodo?.id,
+            })}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -51,13 +48,10 @@ export const TodoList: React.FC<Props> = ({
               <td className="is-vcentered" />
             )}
             <td className="is-vcentered is-expanded">
-              <p className={
-                todo.completed ? (
-                  'has-text-success'
-                ) : (
-                  'has-text-danger'
-                )
-              }
+              <p className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
               >
                 {todo.title}
               </p>
@@ -70,13 +64,10 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => setSelectedTodo(todo)}
               >
                 <span className="icon">
-                  <i className={
-                    todo.id === selectedTodo?.id ? (
-                      'far fa-eye-slash'
-                    ) : (
-                      'far fa-eye'
-                    )
-                  }
+                  <i className={classNames({
+                    'far fa-eye-slash': todo.id === selectedTodo?.id,
+                    'far fa-eye': todo.id !== selectedTodo?.id,
+                  })}
                   />
                 </span>
               </button>
