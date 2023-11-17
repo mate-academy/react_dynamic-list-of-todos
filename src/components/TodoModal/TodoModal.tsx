@@ -10,7 +10,12 @@ interface TodoModalProps {
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
-  const { id, title, userId } = todo;
+  const {
+    id,
+    title,
+    userId,
+    completed,
+  } = todo;
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +38,6 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   }, [userId]);
 
   const resetIdAndCloseModal = () => {
-    // Additional logic if needed
     onClose();
   };
 
@@ -66,12 +70,19 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
             <p className="block" data-cy="modal-title">
               {title}
             </p>
-
-            <p className="block" data-cy="modal-user">
-              <strong className="has-text-danger">Planned</strong>
-              {' by '}
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
-            </p>
+            {completed ? (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-success">Done</strong>
+                {' by '}
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              </p>
+            ) : (
+              <p className="block" data-cy="modal-user">
+                <strong className="has-text-danger">Planned</strong>
+                {' by '}
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              </p>
+            )}
           </div>
         </div>
       )}

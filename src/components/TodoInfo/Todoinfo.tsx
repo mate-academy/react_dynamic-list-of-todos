@@ -48,7 +48,6 @@ export const TodoInfo: React.FC<TodoInfoProps> = ({ todo }) => {
             {title}
           </p>
         </td>
-        {/* Кнопка око */}
         <td className="has-text-right is-vcentered">
           <button
             onClick={handleSelectButton}
