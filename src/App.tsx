@@ -19,17 +19,27 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
-    getTodos()
-      .then(data => setTodos(data))
-      .finally(() => setLoading(false));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getTodos();
+
+        setTodos(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const filteredTodos = useMemo(() => {
     let todosCopy = [...todos];
 
     if (query) {
-      todosCopy = todosCopy.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
+      todosCopy = todosCopy.filter((todo) => (
+        todo.title.toLowerCase().includes(query.toLowerCase())
+      ));
     }
 
     switch (filter) {
