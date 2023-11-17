@@ -9,17 +9,8 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
-
-export enum Status {
-  All,
-  Active,
-  Completed
-}
-
-export type FilterQuery = {
-  pattern: string,
-  status: Status,
-};
+import { Status } from './types/Status';
+import { FilterQuery } from './types/FilterQuery';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -79,11 +70,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo &&
-      (<TodoModal
-        selected={selectedTodo}
-        setSelected={setSelectedTodo}
-      />)}
+      {selectedTodo
+        && (
+          <TodoModal
+            selected={selectedTodo}
+            setSelected={setSelectedTodo}
+          />
+        )}
     </>
   );
 };

@@ -1,5 +1,6 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { FilterQuery, Status } from "../../App";
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { FilterQuery } from '../../types/FilterQuery';
+import { Status } from '../../types/Status';
 
 type Props = {
   setQuery: React.Dispatch<React.SetStateAction<FilterQuery>>,
@@ -11,13 +12,13 @@ export const TodoFilter: React.FC<Props> = ({ setQuery }) => {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newPattern = event.target.value;
+
     setSearched(newPattern);
     setQuery((prevFilterQuery) => ({
       ...prevFilterQuery,
       pattern: newPattern,
     }));
   };
-
 
   const handleSelect = (status: string) => {
     let selectedStatus: Status;
@@ -45,18 +46,21 @@ export const TodoFilter: React.FC<Props> = ({ setQuery }) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  }
+  };
 
   const handleDelete = () => {
     setSearched('');
     setQuery({ pattern: '', status: statusSelected });
-  }
+  };
 
   return (
     <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={(e) => handleSelect(e.target.value)}>
+          <select
+            data-cy="statusSelect"
+            onChange={(e) => handleSelect(e.target.value)}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -91,4 +95,4 @@ export const TodoFilter: React.FC<Props> = ({ setQuery }) => {
       </p>
     </form>
   );
-}
+};
