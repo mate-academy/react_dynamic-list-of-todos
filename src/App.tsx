@@ -16,9 +16,14 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(FilterBy.ALL);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
   function getVisibleTodo(tasks: Todo[], filterOption: FilterBy, searchInput: string) {
@@ -35,7 +40,9 @@ export const App: React.FC = () => {
             return todo;
         }
       })
-      .filter(todo => todo.title.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase()));
+      .filter(todo => todo.title
+        .toLocaleLowerCase()
+        .includes(searchInput.trim().toLocaleLowerCase()));
   }
 
   const visibleTodos = getVisibleTodo(todos, filter, query);
@@ -57,7 +64,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+
+              {loading && (<Loader />)}
+
               <TodoList
                 todos={visibleTodos}
                 selectedTodo={selectedTodo?.id}

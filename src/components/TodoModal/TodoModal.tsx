@@ -22,7 +22,7 @@ export const TodoModal: React.FC<Props> = ({
     getUser(todo.userId)
       .then(setUser)
       .finally(() => setLoading(false));
-  }, [todo.userId, loading]);
+  }, [todo.userId]);
 
   const { id, title, completed } = todo;
 
@@ -64,8 +64,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                {user}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>
