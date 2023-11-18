@@ -1,19 +1,7 @@
 import React, { createContext, useState } from 'react';
-import { Filter } from '../types/Filter';
-import { Todo } from '../types/Todo';
-
-type Context = {
-  loading: boolean;
-  setLoading: (v: boolean) => void;
-  todos: Todo[];
-  setTodos: (todo: Todo[]) => void;
-  query: string;
-  setQuery: (v: string) => void;
-  filter: Filter;
-  setFilter: (v: Filter) => void;
-  activeTodo: Todo | null,
-  setActiveTodo : (v : Todo | null) => void
-};
+import { Filter } from '../../types/Filter';
+import { Todo } from '../../types/Todo';
+import { Context } from '../../types/TodoContext';
 
 export const TodoContext = createContext<Context>({
   loading: false,

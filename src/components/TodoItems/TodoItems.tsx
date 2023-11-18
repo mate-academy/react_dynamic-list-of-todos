@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
-import { TodoContext } from '../TodoContext';
+import { TodoContext } from '../TodoContext/TodoContext';
 
 type Props = {
   todo: Todo;
@@ -22,13 +22,19 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
       data-cy="todo"
       className={
         cn({
-          'has-background-info-light': todo.completed,
+          'has-background-info-light': completed,
         })
       }
 
     >
       <td className="is-vcentered">{id}</td>
-      <td className="is-vcentered" />
+      <td className="is-vcentered">
+        {completed ? (
+          <span className="icon" data-cy="iconCompleted">
+            <i className="fas fa-check" />
+          </span>
+        ) : ''}
+      </td>
       <td className="is-vcentered is-expanded">
         <p className={`has-text-${completed ? 'success' : 'danger'}`}>
           {title}
@@ -45,7 +51,7 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
         >
           <span className="icon">
             <i className={
-              `far ${activeTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`
+              `far ${activeTodo?.id === id ? 'fa-eye-slash' : 'fa-eye'}`
             }
             />
           </span>

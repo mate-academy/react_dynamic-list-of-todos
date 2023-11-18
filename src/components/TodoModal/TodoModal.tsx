@@ -1,21 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
-import { TodoContext } from '../TodoContext';
 
 type Props = {
-  activeTodo: Todo | null;
-  setActiveTodo: (todo: Todo) => void;
+  activeTodo: Todo ;
+  setActiveTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = () => {
+export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { activeTodo, setActiveTodo } = useContext(TodoContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,7 +21,7 @@ export const TodoModal: React.FC<Props> = () => {
       .finally(() => setIsLoading(false));
   }, [activeTodo?.userId]);
 
-  const message = activeTodo.completed ? 'Done' : 'Planned';
+  const message = activeTodo?.completed ? 'Done' : 'Planned';
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,7 +36,7 @@ export const TodoModal: React.FC<Props> = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${activeTodo.id}`}
+              {`Todo #${activeTodo?.id}`}
             </div>
 
             <button
@@ -52,12 +49,12 @@ export const TodoModal: React.FC<Props> = () => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {activeTodo.title}
+              {activeTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong className={
-                `has-text-${activeTodo.completed ? 'success' : 'danger'
+                `has-text-${activeTodo?.completed ? 'success' : 'danger'
                 }`
               }
               >

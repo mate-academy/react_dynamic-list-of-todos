@@ -1,16 +1,12 @@
+import { useContext } from 'react';
 import { Filter } from '../../types/Filter';
+import { TodoContext } from '../TodoContext/TodoContext';
 
-type Props = {
-  query: string;
-  setQuery: (v: string) => void;
-  setFilter: (v: Filter) => void;
-};
+type Props = {};
 
-export const TodoFilter: React.FC<Props> = ({
-  query,
-  setQuery,
-  setFilter,
-}) => {
+export const TodoFilter: React.FC<Props> = () => {
+  const { query, setQuery, setFilter } = useContext(TodoContext);
+
   const filters = [
     { name: 'All', value: Filter.All },
     { name: 'Active', value: Filter.Active },

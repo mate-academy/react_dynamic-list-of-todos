@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './app.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -10,16 +13,18 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import { TodoContext, TodoProvider } from './components/TodoContext';
+import { TodoContext } from './components/TodoContext/TodoContext';
 
 export const App: React.FC = () => {
-  const { activeTodo, setActiveTodo } = useContext(TodoContext);
+  const {
+    activeTodo,
+    setActiveTodo,
+    query,
+    filter,
+  } = useContext(TodoContext);
 
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [query, setQuery] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -54,44 +59,36 @@ export const App: React.FC = () => {
     }
 
     return todosCopy;
-  }, [todos, query, filter])
+  }, [todos, query, filter]);
 
   return (
-    <TodoProvider>
-      <>
-        <div className="section">
-          <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+    <>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-              <div className="block">
-                <TodoFilter
-                  setFilter={setFilter}
-                  setQuery={setQuery}
-                  query={query}
+            <div className="block">
+              <TodoFilter />
+            </div>
+
+            <div className="block">
+
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredItems}
                 />
-              </div>
+              )}
 
-              <div className="block">
-                {loading && (
-                  <Loader />
-                )}
-
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <TodoList
-                    todos={filteredItems}
-                  />
-                )}
-
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {activeTodo && <TodoModal activeTodo={activeTodo} setActiveTodo={setActiveTodo} />}
-      </>
-    </TodoProvider>
+      {activeTodo && <TodoModal activeTodo={activeTodo} setActiveTodo={setActiveTodo} />}
+    </>
+
   );
 };
