@@ -20,21 +20,17 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (userId !== null) {
-        getUser(userId)
-          .then((fetchUser) => {
-            setUser(fetchUser);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    if (userId !== null) {
+      getUser(userId)
+        .then((fetchUser) => {
+          setUser(fetchUser);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
   }, [userId]);
 
   const resetIdAndCloseModal = () => {

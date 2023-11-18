@@ -9,6 +9,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum FilterStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,23 +22,19 @@ export const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      getTodos()
-        .then((todosData) => {
-          setTodos(todosData);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
-
-    fetchData();
+    getTodos()
+      .then((todosData) => {
+        setTodos(todosData);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const filteredTodos = todos.filter((todo) => {
-    const statusMatch = filterStatus === 'all'
-    || (filterStatus === 'active' && !todo.completed)
-    || (filterStatus === 'completed' && todo.completed);
+    const statusMatch = filterStatus === FilterStatus.All
+    || (filterStatus === FilterStatus.Active && !todo.completed)
+    || (filterStatus === FilterStatus.Completed && todo.completed);
 
     const searchMatch = searchTerm
       ? todo.title.toLowerCase().includes(searchTerm.toLowerCase())
