@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,19 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { FilterContext } from './components/Contex/FilterContex';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const { filter } = useContext(FilterContext);
+  const { modalOn } = filter;
+  const [listLoader, setListLoader] = useState(false);
+
+  useEffect(() => {
+    setListLoader(true);
+    getTodos().finally(() => setListLoader(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -21,14 +32,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {listLoader ? <Loader />
+                : <TodoList />}
             </div>
           </div>
         </div>
       </div>
+      {modalOn && <TodoModal />}
 
-      <TodoModal />
     </>
   );
 };
