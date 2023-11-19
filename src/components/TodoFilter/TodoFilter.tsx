@@ -4,9 +4,10 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   filter: Filter;
+  setFilter: (filter: Filter) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter }) => {
+export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
   const filterInput = useRef<HTMLInputElement>(null);
 
   const filterOptionChangeHandler
@@ -15,19 +16,31 @@ export const TodoFilter: React.FC<Props> = ({ filter }) => {
 
       switch (newFilterOption) {
         case 'active':
-          filter.save(filter.filterText, FilterOption.ACTIVE);
+          setFilter({
+            filterText: filter.filterText,
+            filterOption: FilterOption.ACTIVE,
+          });
           break;
         case 'completed':
-          filter.save(filter.filterText, FilterOption.COMPLETED);
+          setFilter({
+            filterText: filter.filterText,
+            filterOption: FilterOption.COMPLETED,
+          });
           break;
         default:
-          filter.save(filter.filterText, FilterOption.ALL);
+          setFilter({
+            filterText: filter.filterText,
+            filterOption: FilterOption.ALL,
+          });
       }
     };
 
   const filterTextChangeHandler
     = (event: React.FormEvent<HTMLInputElement>) => {
-      filter.save(event.currentTarget.value, filter.filterOption);
+      setFilter({
+        filterText: event.currentTarget.value,
+        filterOption: filter.filterOption,
+      });
     };
 
   return (
@@ -67,7 +80,10 @@ export const TodoFilter: React.FC<Props> = ({ filter }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => filter.save('', filter.filterOption)}
+              onClick={() => setFilter({
+                filterText: '',
+                filterOption: filter.filterOption,
+              })}
             />
           </span>
         )}
