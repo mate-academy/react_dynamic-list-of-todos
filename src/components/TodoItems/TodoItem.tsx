@@ -8,7 +8,7 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoItems: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     id,
     title,
@@ -29,11 +29,11 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
     >
       <td className="is-vcentered">{id}</td>
       <td className="is-vcentered">
-        {completed ? (
+        {completed && (
           <span className="icon" data-cy="iconCompleted">
             <i className="fas fa-check" />
           </span>
-        ) : ''}
+        )}
       </td>
       <td className="is-vcentered is-expanded">
         <p className={`has-text-${completed ? 'success' : 'danger'}`}>

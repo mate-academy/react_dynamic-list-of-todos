@@ -1,5 +1,5 @@
 import React from 'react';
-import { TodoItems } from '../TodoItems';
+import { TodoItem } from '../TodoItems';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
 
     <tbody>
       {todos.map(todo => (
-        <TodoItems
+        <TodoItem
           todo={todo}
           key={todo.id}
         />
