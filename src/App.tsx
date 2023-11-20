@@ -11,32 +11,32 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
 
+const filterTodos = (currentTodos: Todo[], filterType: Status, query: string) => {
+  let filteredTodos = [...currentTodos];
+
+  if (filterType !== Status.All) {
+    if (filterType !== Status.Active) {
+      filteredTodos = filteredTodos.filter(item => item.completed);
+    } else {
+      filteredTodos = filteredTodos.filter(item => !item.completed);
+    }
+  }
+
+  if (query) {
+    const trimmedQuery = query.trim().toLowerCase();
+
+    filteredTodos = filteredTodos.filter(item => item.title.toLowerCase().includes(trimmedQuery));
+  }
+
+  return filteredTodos;
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState(Status.All);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
-  const filterTodos = (currentTodos: Todo[], filterType: Status) => {
-    let filteredTodos = [...currentTodos];
-
-    if (filterType !== Status.All) {
-      if (filterType !== Status.Active) {
-        filteredTodos = filteredTodos.filter(item => item.completed);
-      } else {
-        filteredTodos = filteredTodos.filter(item => !item.completed);
-      }
-    }
-
-    if (query) {
-      const trimmedQuery = query.trim().toLowerCase();
-
-      filteredTodos = filteredTodos.filter(item => item.title.toLowerCase().includes(trimmedQuery));
-    }
-
-    return filteredTodos;
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredTodos = filterTodos(todos, filter);
+  const filteredTodos = filterTodos(todos, filter, query);
 
   return (
     <>
