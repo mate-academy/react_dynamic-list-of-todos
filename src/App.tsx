@@ -9,33 +9,30 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [query, setQuery] = useState({ filter: 'all', input: '' });
+  const [query, setQuery] = useState({ filter: Filter.ALL, input: '' });
 
-  const handleSelectTodo = (todo: Todo) => {
+  const handleTodoSelect = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
-  const handleUnselectTodo = () => {
-    setSelectedTodo(null);
-  };
-
-  const handleUseFilter = (f: string) => {
+  const handleFilterChange = (f: Filter) => {
     setQuery(prevState => {
       return { ...prevState, filter: f };
     });
   };
 
-  const handleUseInput = (i: string) => {
+  const handleInputChange = (i: string) => {
     setQuery(prevState => {
       return { ...prevState, input: i };
     });
   };
 
-  const handleClearInput = () => {
+  const handleInputClear = () => {
     setQuery(prevState => {
       return { ...prevState, input: '' };
     });
@@ -51,11 +48,11 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (query.filter) {
-        case 'all':
+        case Filter.ALL:
           return todo.title.toLowerCase().includes(query.input.toLowerCase());
-        case 'active':
+        case Filter.ACTIVE:
           return !todo.completed && todo.title.toLowerCase().includes(query.input.toLowerCase());
-        case 'completed':
+        case Filter.COMPLETED:
           return todo.completed && todo.title.toLowerCase().includes(query.input.toLowerCase());
         default:
           return todo.title.toLowerCase().includes(query.input.toLowerCase());
@@ -73,19 +70,19 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                useFilter={handleUseFilter}
-                useInput={handleUseInput}
-                clearInput={handleClearInput}
+                onFilterChange={handleFilterChange}
+                onInputChange={handleInputChange}
+                onInputClear={handleInputClear}
               />
             </div>
 
             <div className="block">
-              {todos.length === 0
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList
                     todos={filteredTodos}
-                    selectTodo={handleSelectTodo}
+                    onTodoSelect={handleTodoSelect}
                     selectedTodo={selectedTodo}
                   />
                 )}
@@ -94,7 +91,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} unselectTodo={handleUnselectTodo} />
+        <TodoModal selectedTodo={selectedTodo} onTodoSelect={handleTodoSelect} />
       )}
     </>
   );
