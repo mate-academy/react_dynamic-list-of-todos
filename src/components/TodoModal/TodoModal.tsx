@@ -22,14 +22,11 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     setIsLoading(true);
 
-    setTimeout(() => {
-      getUser(userId)
-        .then(setUser)
-        // .catch((err) => console.error(err))
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }, 500);
+    getUser(userId)
+    .then(setUser)
+    .finally(() => {
+      setIsLoading(false);
+    });
   }, [userId]);
 
   return (
@@ -63,7 +60,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
                 {completed ? 'Done' : 'Planned'}
               </strong>

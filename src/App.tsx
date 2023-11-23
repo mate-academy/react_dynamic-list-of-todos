@@ -16,22 +16,20 @@ const getVisibleTodos = (
   query: Todo['title'],
   filter: Filter,
 ) => {
-  const preparedTodos = [...todos];
-
   switch (filter) {
     case Filter.ACTIVE:
-      return preparedTodos.filter(
+      return todos.filter(
         todo => !todo.completed && todo.title.includes(query),
       );
 
     case Filter.COMPLETED:
-      return preparedTodos.filter(
+      return todos.filter(
         todo => todo.completed && todo.title.includes(query),
       );
 
     case Filter.ALL:
     default:
-      return preparedTodos.filter(
+      return todos.filter(
         todo => todo.title.includes(query),
       );
   }
@@ -52,7 +50,6 @@ export const App: React.FC = () => {
         .then(todos => {
           setVisibleTodos(getVisibleTodos(todos, appliedQuery, filter));
         })
-        // .catch((err) => console.error(err))
         .finally(() => {
           setIsLoading(false);
         });
@@ -80,6 +77,7 @@ export const App: React.FC = () => {
                 && (
                   <TodoList
                     todos={visibleTodos}
+                    selectedTodo={selectedTodo}
                     onSelectedTodo={setSelectedTodo}
                   />
                 )}

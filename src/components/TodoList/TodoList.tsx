@@ -4,11 +4,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  selectedTodo: Todo | null;
   onSelectedTodo?: (val: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  selectedTodo,
   onSelectedTodo = () => { },
 }) => {
   return (
@@ -47,9 +49,7 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={todo.completed
-                    ? 'has-text-success'
-                    : 'has-text-danger'}
+                  className={`has-text-${todo.completed ? 'success' : 'danger'}`}
                 >
                   {todo.title}
                 </p>
@@ -62,7 +62,8 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => onSelectedTodo(todo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={`far fa-eye${selectedTodo?.id === todo.id ? '-slash' : ''}`}
+                    />
                   </span>
                 </button>
               </td>
