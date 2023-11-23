@@ -69,8 +69,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filter={filter}
-                onFilter={(val: Filter) => setFilter(val)}
-                onAppliedQuery={(val: string) => setAppliedQuery(val)}
+                onFilter={setFilter}
+                onAppliedQuery={setAppliedQuery}
               />
             </div>
 
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
                 && (
                   <TodoList
                     todos={visibleTodos}
-                    onSelectedTodo={(val: Todo) => setSelectedTodo(val)}
+                    onSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
