@@ -5,6 +5,7 @@ import { TodosContext } from '../../TodosProvider';
 export const TodoList: React.FC = () => {
   const {
     filteredToods,
+    selectedTodo,
     setSelectedTodo,
     setIsTodoSelected,
   } = useContext(TodosContext);
@@ -27,9 +28,19 @@ export const TodoList: React.FC = () => {
       <tbody>
         {filteredToods.map(todo => {
           return (
-            <tr data-cy="todo" className="">
+            <tr
+              data-cy="todo"
+              className=""
+              key={todo.id}
+            >
               <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered" />
+              <td className="is-vcentered">
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
               <td className="is-vcentered is-expanded">
                 <p className={
                   cn({
@@ -52,7 +63,12 @@ export const TodoList: React.FC = () => {
                   }}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={cn('far',
+                      {
+                        'fa-eye': selectedTodo.id !== todo.id,
+                        'fa-eye-slash': selectedTodo.id === todo.id,
+                      })}
+                    />
                   </span>
                 </button>
               </td>

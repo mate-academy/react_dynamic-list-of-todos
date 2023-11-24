@@ -17,19 +17,24 @@ export const TodoFilter: React.FC = () => {
   };
 
   useEffect(() => {
-    const loadTodos = async () => {
-      const todos = await getTodos();
-
-      setFilteredToods(prepareTodos(todos, selectedOption, searchValue));
-    };
-
-    loadTodos();
-  }, [selectedOption, prepareTodos, setFilteredToods, searchValue]);
+    getTodos()
+      .then((todosFromServer) => {
+        setFilteredToods(prepareTodos(
+          todosFromServer,
+          selectedOption,
+          searchValue,
+        ));
+      });
+  }, [selectedOption, prepareTodos, searchValue, setFilteredToods]);
 
   const handleSearchValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchValue(event.target.value);
+  };
+
+  const clearSearch = () => {
+    setSearchValue('');
   };
 
   return (
@@ -73,13 +78,17 @@ export const TodoFilter: React.FC = () => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setSearchValue('')}
-          />
+          {searchValue && (
+            <>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={clearSearch}
+              />
+            </>
+          )}
         </span>
       </p>
     </form>
