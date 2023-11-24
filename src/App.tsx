@@ -10,7 +10,7 @@ import { TodosContext } from './TodosProvider';
 import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
-  const { isTodoSelected } = useContext(TodosContext);
+  const { selectedTodo } = useContext(TodosContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
             <div className="block">
               {loading ? <Loader /> : <TodoList />}
             </div>
-            {isTodoSelected && <TodoModal />}
+            {selectedTodo && <TodoModal />}
           </div>
         </div>
       </div>

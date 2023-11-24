@@ -21,10 +21,8 @@ interface Context {
   filteredToods: Todo[]
   searchValue: string,
   setSearchValue: React.Dispatch<React.SetStateAction<string>>,
-  selectedTodo: Todo,
-  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo>>,
-  isTodoSelected: boolean,
-  setIsTodoSelected: React.Dispatch<React.SetStateAction<boolean>>,
+  selectedTodo: Todo | null,
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
 }
 
 export const TodosContext = React.createContext<Context>({
@@ -33,27 +31,14 @@ export const TodosContext = React.createContext<Context>({
   filteredToods: [],
   searchValue: '',
   setSearchValue: () => {},
-  selectedTodo: {
-    title: '',
-    completed: false,
-    id: 0,
-    userId: 0,
-  },
+  selectedTodo: null,
   setSelectedTodo: () => {},
-  isTodoSelected: false,
-  setIsTodoSelected: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [filteredToods, setFilteredToods] = useState<Todo[]>([]);
   const [searchValue, setSearchValue] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo>({
-    title: '',
-    completed: false,
-    id: 0,
-    userId: 0,
-  });
-  const [isTodoSelected, setIsTodoSelected] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   function prepareTodos(
     todosList: Todo[],
@@ -98,8 +83,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       setSearchValue,
       selectedTodo,
       setSelectedTodo,
-      isTodoSelected,
-      setIsTodoSelected,
     }}
     >
       {children}

@@ -7,7 +7,6 @@ export const TodoList: React.FC = () => {
     filteredToods,
     selectedTodo,
     setSelectedTodo,
-    setIsTodoSelected,
   } = useContext(TodosContext);
 
   return (
@@ -59,14 +58,13 @@ export const TodoList: React.FC = () => {
                   type="button"
                   onClick={() => {
                     setSelectedTodo(todo);
-                    setIsTodoSelected(true);
                   }}
                 >
                   <span className="icon">
                     <i className={cn('far',
                       {
-                        'fa-eye': selectedTodo.id !== todo.id,
-                        'fa-eye-slash': selectedTodo.id === todo.id,
+                        'fa-eye': selectedTodo?.id !== todo.id,
+                        'fa-eye-slash': selectedTodo?.id === todo.id,
                       })}
                     />
                   </span>

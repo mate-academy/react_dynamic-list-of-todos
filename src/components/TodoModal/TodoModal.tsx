@@ -8,7 +8,6 @@ export const TodoModal: React.FC = () => {
   const {
     selectedTodo,
     setSelectedTodo,
-    setIsTodoSelected,
   } = useContext(TodosContext);
 
   const [user, setUser] = useState<User | null>(null);
@@ -17,24 +16,19 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(selectedTodo.userId)
-      .then((userData) => {
-        setIsTodoSelected(true);
-        setUser(userData);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [selectedTodo.userId, setIsTodoSelected]);
+    if (selectedTodo) {
+      getUser(selectedTodo.userId)
+        .then((userData) => {
+          setUser(userData);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [selectedTodo]);
 
   const clearSelectedTodo = () => {
-    setSelectedTodo({
-      title: '',
-      completed: false,
-      id: 0,
-      userId: 0,
-    });
-    setIsTodoSelected(false);
+    setSelectedTodo(null);
   };
 
   return (
