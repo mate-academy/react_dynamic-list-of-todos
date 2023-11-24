@@ -10,13 +10,30 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { Status } from './types/Statuses';
+
+const applyFilter = (todos: Todo[], filter: Status) => {
+  const conditions = {
+    [Status.All]: () => {
+      return todos;
+    },
+    [Status.Active]: () => {
+      return todos.filter(todo => !todo.completed);
+    },
+    [Status.Completed]: () => {
+      return todos.filter(todo => todo.completed);
+    },
+  };
+
+  return conditions[filter]();
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [loadingTodos, setLoadingTodos] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Status.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -32,15 +49,7 @@ export const App: React.FC = () => {
       .then(setUser);
   }
 
-  let filteredTodos = todos;
-
-  if (filter === 'active') {
-    filteredTodos = todos.filter(todo => !todo.completed);
-  }
-
-  if (filter === 'completed') {
-    filteredTodos = todos.filter(todo => todo.completed);
-  }
+  let filteredTodos = applyFilter(todos, filter);
 
   if (query) {
     filteredTodos = filteredTodos.filter(
@@ -92,7 +101,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal user={user} selectedTodo={selectedTodo} onClose={handleModalClose} />}
+      {selectedTodo && (
+        <TodoModal
+          user={user}
+          selectedTodo={selectedTodo}
+          onClose={handleModalClose}
+        />
+      )}
     </>
   );
 };
