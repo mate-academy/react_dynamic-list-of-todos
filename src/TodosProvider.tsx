@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 type Props = {
   children: React.ReactNode,
 };
-
-export enum Status {
-  'all' = 'all',
-  'active' = 'active',
-  'completed' = 'completed',
-}
 
 interface Context {
   prepareTodos: (
@@ -25,7 +20,7 @@ interface Context {
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
 }
 
-export const TodosContext = React.createContext<Context>({
+const contextValues: Context = {
   prepareTodos: () => [],
   setFilteredToods: () => {},
   filteredToods: [],
@@ -33,7 +28,9 @@ export const TodosContext = React.createContext<Context>({
   setSearchValue: () => {},
   selectedTodo: null,
   setSelectedTodo: () => {},
-});
+};
+
+export const TodosContext = React.createContext(contextValues);
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [filteredToods, setFilteredToods] = useState<Todo[]>([]);
@@ -47,27 +44,30 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   ): Todo[] {
     return todosList.filter(todo => {
       switch (status) {
-        case Status.all:
+        case Status.All:
           if (query) {
             return (todo.completed || !todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());
           }
 
           return (todo.completed || !todo.completed);
-        case Status.active:
+
+        case Status.Active:
           if (query) {
             return (!todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());
           }
 
           return !todo.completed;
-        case Status.completed:
+
+        case Status.Completed:
           if (query) {
             return (todo.completed)
             && todo.title.toLowerCase().includes(query.toLowerCase());
           }
 
           return todo.completed;
+
         default:
           return true;
       }
