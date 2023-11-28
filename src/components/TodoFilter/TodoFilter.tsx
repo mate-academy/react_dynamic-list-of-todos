@@ -12,34 +12,29 @@ export const TodoFilter: React.FC<Props> = ({
   setTitle,
   setFilteredStatus,
 }) => {
-  const handleReset = () => {
-    setTitle('');
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilteredStatus(event.target.value as Status);
   };
 
-  const handleFilterChange = (filter: Status) => {
-    setFilteredStatus(filter);
-  };
+  const validInput = title !== '';
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select data-cy="statusSelect" onChange={handleFilterChange}>
             <option
-              value="all"
-              onClick={() => handleFilterChange(Status.All)}
+              value={Status.All}
             >
               All
             </option>
             <option
-              value="all"
-              onClick={() => handleFilterChange(Status.Active)}
+              value={Status.Active}
             >
               Active
             </option>
             <option
-              value="all"
-              onClick={() => handleFilterChange(Status.Completed)}
+              value={Status.Completed}
             >
               Completed
             </option>
@@ -60,15 +55,17 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            onClick={() => handleReset()}
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {validInput && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              onClick={() => setTitle('')}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+            />
+          </span>
+        )}
       </p>
     </form>
   );

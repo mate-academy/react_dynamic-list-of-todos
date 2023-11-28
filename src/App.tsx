@@ -33,10 +33,10 @@ export const App: React.FC = () => {
   };
 
   const filteredItems: Todo[] = useMemo(() => {
-    const todosCopy = [...todos];
+    let todosCopy = [...todos];
 
     if (title) {
-      return todosCopy.filter((todo) => todo
+      todosCopy = todosCopy.filter((todo) => todo
         .title.toLowerCase().includes(title.toLowerCase()));
     }
 
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading && <Loader /> }
               {!isLoading
-              && <TodoList filteredItems={filteredItems} setSelectedTodo={setSelectedTodo} />}
+              && <TodoList filteredItems={filteredItems} setSelectedTodo={setSelectedTodo} selectedTodo={selectedTodo} />}
             </div>
           </div>
         </div>
