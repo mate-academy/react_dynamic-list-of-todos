@@ -1,55 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { Loader } from '../Loader';
-import { Todo } from '../../types/Todo';
+import React, { useContext, useEffect, useState } from 'react';
+import { TodoContext } from '../TodoContext';
+
 import { getUser } from '../../api';
 import { User } from '../../types/User';
+import { Loader } from '../Loader';
 
 type Props = {
-  todo: Todo;
-  setSelectedTodo: (arg0: Todo | undefined) => void;
+  setModel: (isOpen: boolean) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todo,
-  setSelectedTodo,
-}) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMesage, setErrorMesage] = useState('');
+export const TodoModal: React.FC<Props> = ({ setModel }) => {
+  const { todos, selectedIdTodo, setSelectedIdTodo } = useContext(TodoContext);
+  const [selectedUser, setSelectedUser] = useState<User>();
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const selectedTodo = todos.find(todo => todo.id === selectedIdTodo);
 
   useEffect(() => {
-    setErrorMesage('');
-    setIsLoading(true);
+    getUser(selectedTodo?.userId as number)
+      .then((userFromServer) => {
+        setSelectedUser(userFromServer);
+        setIsLoadingUser(false);
+      });
+  }, [selectedTodo]);
 
-    if (todo) {
-      getUser(todo?.userId).then(userFromServer => {
-        setUser(userFromServer);
-        setIsLoading(false);
-      })
-        .catch(error => {
-          setErrorMesage(error.message);
-        })
-        .finally(() => setIsLoading(false));
-    } else {
-      setErrorMesage('No selected todo');
-    }
-  }, [todo]);
+  const closeTodoModel = () => {
+    setSelectedIdTodo(0);
+    setModel(false);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading && !user
-        && <Loader />}
-      {!isLoading && !errorMesage
-        && (
+      {
+        isLoadingUser ? (
+          <Loader />
+        ) : (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${todo.id}`}
+                {`Todo #${selectedTodo?.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -57,38 +50,34 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setSelectedTodo(undefined)}
+                onClick={closeTodoModel}
               />
             </header>
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {todo.title}
+                {selectedTodo?.title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                <strong
-                  className={`has-text-${todo.completed
-                    ? 'success'
-                    : 'danger'}`}
+                {/* <strong className="has-text-success">Done</strong> */}
+                <strong className={selectedTodo?.completed
+                  ? 'has-text-success'
+                  : 'has-text-danger'}
                 >
-                  {todo.completed
-                    ? 'Done'
-                    : 'Planned'}
+                  {selectedTodo?.completed ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}
 
-                {!isLoading && user
-                && (
-                  <a href={`mailto: ${user.email}`}>
-                    {user.name}
-                  </a>
-                )}
+                <a href={`"mailto:${selectedUser?.email}`}>
+                  {selectedUser?.name}
+                </a>
               </p>
             </div>
           </div>
-        )}
+        )
+      }
     </div>
   );
 };

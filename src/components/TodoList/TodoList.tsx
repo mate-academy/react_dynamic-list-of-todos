@@ -1,17 +1,48 @@
-import React from 'react';
-import { Todo } from '../../types/Todo';
+import React, { useContext } from 'react';
+import { TodoContext } from '../TodoContext';
+import { FilterOption } from '../../types/FilterOption';
 
 type Props = {
-  todos: Todo[];
-  selctedTodo: Todo | undefined;
-  setSelctedTodo: (arg0: Todo) => void;
+  setModel: (isOpen: boolean) => void,
 };
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  selctedTodo,
-  setSelctedTodo,
-}) => {
+export const TodoList: React.FC<Props> = ({ setModel }) => {
+  const {
+    todos,
+    filterOption,
+    query,
+    selectedIdTodo,
+    setSelectedIdTodo,
+  } = useContext(TodoContext);
+
+  const getVisibleTodos = () => {
+    switch (filterOption) {
+      case FilterOption.Active:
+        return todos.filter(todo => !todo.completed
+          && todo.title.toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase()));
+
+      case FilterOption.Completed:
+        return todos.filter(todo => todo.completed
+          && todo.title.toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase()));
+
+      case FilterOption.All:
+        return todos.filter(todo => todo
+          .title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+
+      default:
+        return todos;
+    }
+  };
+
+  const visibleTodos = getVisibleTodos();
+
+  const handleClickSelectBtn = (id: number) => {
+    setModel(true);
+    setSelectedIdTodo(id);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -28,25 +59,23 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <>
+        {
+          visibleTodos.map(todo => (
             <tr
               data-cy="todo"
-              className={todo === selctedTodo
-                ? 'has-background-info-light'
-                : ''}
+              className=""
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered">
-                {todo.completed
-                && (
+              {todo.completed ? (
+                <td className="is-vcentered">
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
-                )}
-              </td>
-              <td className="is-vcentered" />
+                </td>
+              ) : (
+                <td className="is-vcentered" />
+              )}
               <td className="is-vcentered is-expanded">
                 <p className={todo.completed
                   ? 'has-text-success'
@@ -60,19 +89,19 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelctedTodo(todo)}
+                  onClick={() => handleClickSelectBtn(todo.id)}
                 >
                   <span className="icon">
-                    <i className={`far ${todo === selctedTodo
-                      ? 'fa-eye-slash'
-                      : 'fa-eye'}`}
+                    <i className={selectedIdTodo !== todo.id
+                      ? 'far fa-eye'
+                      : 'far fa-eye-slash'}
                     />
                   </span>
                 </button>
               </td>
             </tr>
-          </>
-        ))}
+          ))
+        }
       </tbody>
     </table>
   );
