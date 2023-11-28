@@ -1,24 +1,38 @@
-import { useContext } from 'react';
-import { TodoContext } from '../TodoContext';
-import { FilterOption } from '../../types/FilterOption';
+import { Filter } from '../../types/Filter';
 
-export const TodoFilter = () => {
-  const { setFilterOption, query, setQuery } = useContext(TodoContext);
-  const isDeleteBtnVisible = query.length > 0;
+type Props = {
+  query: string;
+  setQuery: (query: string) => void;
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  setQuery,
+  filter,
+  setFilter,
+}) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(event.target.value as Filter);
+  };
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            onChange={(event) => (
-              setFilterOption(event.target.value as FilterOption)
-            )}
             data-cy="statusSelect"
+            value={filter}
+            onChange={handleFilterChange}
           >
-            <option value={FilterOption.All}>ALL</option>
-            <option value={FilterOption.Active}>Active</option>
-            <option value={FilterOption.Completed}>Completed</option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.Active}>Active</option>
+            <option value={Filter.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -30,13 +44,13 @@ export const TodoFilter = () => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {isDeleteBtnVisible && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
