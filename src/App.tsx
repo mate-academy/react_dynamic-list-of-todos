@@ -7,40 +7,48 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { Status } from './types/Filtered';
-// import { User } from './types/User';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
+import { Status } from './types/Filtered';
+import { TodoModal } from './components/TodoModal';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  // const [users, setUsers] = useState<User[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
-  // const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
-
-  // const visibleTodos = useMemo(() => {
-  //   switch (filterStatus) {
-  //     case Status.Active:
-  //       return todos.filter((todo) => todo.status !== Status.Completed);
-  //     case Status.Completed:
-  //       return todos.filter((todo) => todo.status === Status.Completed);
-  //     default:
-  //       return todos;
-  //   }
-  // }, [todos, filterStatus]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filteredStatus, setFilteredStatus] = useState<Status>(Status.All);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      });
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('Failed to load users');
+      })
+      .finally(() => setIsLoading(false));
   }, []);
+
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const filteredItems = useMemo(() => todos.filter(todo => todo
-    .title.toLowerCase().includes(title.toLowerCase())), [title, todos]);
+  const filteredItems: Todo[] = useMemo(() => {
+    const todosCopy = [...todos];
+
+    if (title) {
+      return todosCopy.filter((todo) => todo
+        .title.toLowerCase().includes(title.toLowerCase()));
+    }
+
+    switch (filteredStatus) {
+      case Status.Active:
+        return todosCopy.filter((todo) => !todo.completed);
+      case Status.Completed:
+        return todosCopy.filter((todo) => todo.completed);
+      default:
+        return todosCopy;
+    }
+  }, [todos, title, filteredStatus]);
 
   return (
     <>
@@ -54,18 +62,22 @@ export const App: React.FC = () => {
                 title={title}
                 setTitle={setTitle}
                 handleChangeInput={handleChangeInput}
+                setFilteredStatus={setFilteredStatus}
               />
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
-              <TodoList filteredItems={filteredItems} />
+              {isLoading && <Loader /> }
+              {!isLoading
+              && <TodoList filteredItems={filteredItems} setSelectedTodo={setSelectedTodo}/>}
             </div>
           </div>
         </div>
       </div>
 
-      {/* <TodoModal /> */}
+      {selectedTodo && (
+        <TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+      )}
     </>
   );
 };

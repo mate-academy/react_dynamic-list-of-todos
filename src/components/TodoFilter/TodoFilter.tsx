@@ -1,19 +1,23 @@
-// import { useEffect, useState } from 'react';
-// import { Todo } from '../../types/Todo';
-// import { getTodos } from '../../api';
+import { Status } from '../../types/Filtered';
+
 type Props = {
   title: string,
   handleChangeInput: (value: React.ChangeEvent<HTMLInputElement>) => void;
   setTitle: (value: string) => void;
+  setFilteredStatus: (status: Status) => void;
 };
-
 export const TodoFilter: React.FC<Props> = ({
   title,
   handleChangeInput,
   setTitle,
+  setFilteredStatus,
 }) => {
   const handleReset = () => {
     setTitle('');
+  };
+
+  const handleFilterChange = (filter: Status) => {
+    setFilteredStatus(filter);
   };
 
   return (
@@ -21,9 +25,24 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option
+              value="all"
+              onClick={() => handleFilterChange(Status.All)}
+            >
+              All
+            </option>
+            <option
+              value="all"
+              onClick={() => handleFilterChange(Status.Active)}
+            >
+              Active
+            </option>
+            <option
+              value="all"
+              onClick={() => handleFilterChange(Status.Completed)}
+            >
+              Completed
+            </option>
           </select>
         </span>
       </p>
