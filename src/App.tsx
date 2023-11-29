@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +7,50 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { getTodos } from './api';
+
+import { Todo } from './types/Todo';
+import { FilterStatus } from './types/Filter';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
+  const [filterQuery, setFilterQuery] = useState('');
+
+  const getTodosFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodos(todosFromServer);
+    } catch {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const visibleTodos = todos.filter(todo => {
+    const lowerCasedTitle = todo.title.toLowerCase();
+    const lowerCasedQuery = filterQuery.toLowerCase();
+
+    if (filterStatus === FilterStatus.Active && todo.completed) {
+      return false;
+    }
+
+    if (filterStatus === FilterStatus.Completed && !todo.completed) {
+      return false;
+    }
+
+    return lowerCasedTitle.includes(lowerCasedQuery);
+  });
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,43 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+                filterQuery={filterQuery}
+                setFilterQuery={setFilterQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {hasError && (
+                <h2 style={{ color: 'red' }}>
+                  An error found while loading todos
+                </h2>
+              )}
+
+              {isLoading && (
+                <Loader />
+              )}
+
+              {!hasError && !isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
