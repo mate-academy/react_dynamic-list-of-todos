@@ -9,17 +9,36 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [items, setItems] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterByStatus, setFilterByStatus] = useState(FilterStatus.All);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    getTodos().then(todos => {
+    getTodos().then(items => {
       setIsLoading(false);
-      setItems(todos);
+      setTodos(items);
     });
   }, []);
+
+  const visibleTodos = todos
+    .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter(todo => {
+      switch (filterByStatus) {
+        case FilterStatus.Active:
+          return !todo.completed;
+
+        case FilterStatus.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
 
   return (
     <>
@@ -29,18 +48,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filteredBy={filterByStatus}
+                setFilteredValue={setFilterByStatus}
+                setAppliedQuery={setSearchQuery}
+              />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              {items && <TodoList todos={items} />}
+              { visibleTodos && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo ? selectedTodo.id : 0}
+                  selectTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {false && <TodoModal />}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          deleteSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
