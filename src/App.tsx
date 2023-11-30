@@ -44,12 +44,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                setSelectedTodo={setSelectedTodo}
-                selectTodoId={(selectedTodo ? selectedTodo.id : -1)}
-              />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectTodoId={selectedTodo ? selectedTodo.id : -1}
+                />
+              )}
             </div>
           </div>
         </div>
