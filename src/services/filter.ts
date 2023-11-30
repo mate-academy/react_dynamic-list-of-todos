@@ -3,7 +3,7 @@ import { Filter } from '../types/Filter';
 
 export const filterByQuery = (todosToFilter: Todo[], query: string) => {
   return todosToFilter.filter(
-    todo => todo.title.toLowerCase().includes(query.toLowerCase()),
+    todo => todo.title.toLowerCase().includes(query.trim().toLowerCase()),
   );
 };
 
