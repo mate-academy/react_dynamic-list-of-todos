@@ -26,7 +26,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = todos
-    .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim()))
     .filter(todo => {
       switch (filterByStatus) {
         case FilterStatus.Active:
