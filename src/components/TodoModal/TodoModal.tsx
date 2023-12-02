@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     getUser(selectedTodo.userId)
-      .then(res => setSelectedUser(res));
+      .then(setSelectedUser);
   }, [selectedTodo]);
 
   return (
@@ -34,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo?.id}`}
+                {`Todo #${selectedTodo.id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -65,8 +65,8 @@ export const TodoModal: React.FC<Props> = ({
 
                 {' by '}
 
-                <a href={`mailto:${selectedUser?.email}`}>
-                  {selectedUser?.name}
+                <a href={`mailto:${selectedUser.email}`}>
+                  {selectedUser.name}
                 </a>
               </p>
             </div>

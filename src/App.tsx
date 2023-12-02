@@ -35,8 +35,13 @@ export const App: React.FC = () => {
       }
 
       return true;
-    });
-  }, [todos, status]);
+    }).filter(todo => todo.title.toLowerCase().trim().includes(searchInput));
+  }, [todos, status, searchInput]);
+
+  // const visibleTodos = () => {
+  //   return filteredTodosByStatus.filter(todo => todo.title.toLowerCase().trim().includes(searchInput))
+  //     || filteredTodosByStatus;
+  // };
 
   useEffect(() => {
     getTodos().then(todoList => setTodos(todoList)).finally(() => setIsLoad(false));
@@ -46,11 +51,6 @@ export const App: React.FC = () => {
     setSearchInput(event.target.value.trimStart());
 
     return filteredTodosByStatus.filter(todo => todo.title.includes(event.target.value.toLowerCase().trim()));
-  };
-
-  const visibleTodos = () => {
-    return filteredTodosByStatus.filter(todo => todo.title.toLowerCase().trim().includes(searchInput))
-      || filteredTodosByStatus;
   };
 
   const resetSearchInput = () => {
@@ -72,14 +72,14 @@ export const App: React.FC = () => {
               <TodoFilter
                 onChangeStatus={event => setStatus(event.target.value)}
                 inputValue={searchInput}
-                onChangeInput={(event) => filteredByMatch(event)}
+                onChangeInput={filteredByMatch}
                 onClickReset={resetSearchInput}
               />
             </div>
 
             <div className="block">
               <TodoList
-                todos={visibleTodos()}
+                todos={filteredTodosByStatus}
                 getUserAction={setSelectedModalTodo}
                 selectedTodo={selectedModalTodo}
               />

@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => onChangeStatus(event)}
+            onChange={onChangeStatus}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           value={inputValue}
-          onChange={event => onChangeInput(event)}
+          onChange={onChangeInput}
           placeholder="Search..."
         />
 
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onClickReset()}
+              onClick={onClickReset}
             />
           </span>
         )}
