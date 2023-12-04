@@ -4,12 +4,31 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 import * as API from './api';
 
-export const TodoContext = React.createContext({
+type Context = {
+  getTodosAPI: (cb: () => {}) => void,
+  getUserAPI: (userId: number) => void,
+  todos: Todo[] | null,
+  setTodos: (todos: Todo[]) => void,
+  loading: boolean,
+  setLoading: (loading: boolean) => void,
+  showModal: boolean,
+  setShowModal: (showModal: boolean) => void,
+  todo: Todo | null,
+  setTodo: (todo: Todo | null) => void,
+  user: User | null,
+  setUser: (user: User | null) => void,
+  status: string,
+  setStatus: (status: string) => void,
+  searchField: string,
+  setSearchField: (searchField: string) => void,
+};
+
+export const TodoContext = React.createContext<Context>({
   /* eslint-disable-next-line */
   getTodosAPI: (_cb: () => {}) => {},
   /* eslint-disable-next-line */
   getUserAPI: (_userId: number) => {},
-  todos: [] as Todo[],
+  todos: [],
   /* eslint-disable-next-line */
   setTodos: (_todos: Todo[]) => {},
   loading: false,
@@ -18,12 +37,12 @@ export const TodoContext = React.createContext({
   showModal: false,
   /* eslint-disable-next-line */
   setShowModal: (_showModal: boolean) => {},
-  todo: {} as Todo,
+  todo: null,
   /* eslint-disable-next-line */
-  setTodo: (_todo: Todo) => {},
-  user: {} as User,
+  setTodo: (_todo: Todo | null) => {},
+  user: null,
   /* eslint-disable-next-line */
-  setUser: (_user: User) => {},
+  setUser: (_user: User | null) => {},
   status: '',
   /* eslint-disable-next-line */
   setStatus: (_status: string) => {},
@@ -37,18 +56,18 @@ type Props = {
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState([] as Todo[]);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [todo, setTodo] = useState({} as Todo);
-  const [user, setUser] = useState({} as User);
-  const [status, setStatus] = useState('all');
+  const [todo, setTodo] = useState<Todo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [status, setStatus] = useState('');
   const [searchField, setSearchField] = useState('');
 
   const getTodosAPI = async (cb: () => {}) => {
-    const todoItem = await API.getTodos();
+    const todoItems: Todo[] = await API.getTodos();
 
-    setTodos(todoItem);
+    setTodos(todoItems);
     cb();
   };
 

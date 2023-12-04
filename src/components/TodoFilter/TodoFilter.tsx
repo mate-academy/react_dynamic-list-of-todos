@@ -4,25 +4,14 @@ import { TodoContext } from '../../context';
 export const TodoFilter: React.FC = () => {
   const { setStatus, searchField, setSearchField } = useContext(TodoContext);
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(event.target.value);
-  };
-
-  const handleSearchFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchField(event.target.value);
-  };
-
-  const handleClearSearchFieldClick = () => {
-    setSearchField('');
-  };
-
   return (
     <form className="field has-addons" onSubmit={(e) => e.preventDefault()}>
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleStatusChange}>
+          <select
+            data-cy="statusSelect"
+            onChange={(event) => setStatus(event.target.value)}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -36,7 +25,7 @@ export const TodoFilter: React.FC = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={handleSearchFieldChange}
+          onChange={(event) => setSearchField(event.target.value)}
           value={searchField}
         />
         <span className="icon is-left">
@@ -50,7 +39,7 @@ export const TodoFilter: React.FC = () => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClearSearchFieldClick}
+              onClick={() => setSearchField('')}
             />
           </span>
         )}

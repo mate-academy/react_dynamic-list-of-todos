@@ -23,7 +23,7 @@ export const TodoList: React.FC = () => {
   const [filterTodos, setFilterTodos] = useState(todos);
 
   useEffect(() => {
-    if (Object.keys(todo).length) {
+    if (todo && Object.keys(todo).length) {
       getUserAPI(todo.userId);
     } else {
       setSelectedTodo(0);
@@ -31,21 +31,23 @@ export const TodoList: React.FC = () => {
   }, [todo, getUserAPI]);
 
   useEffect(() => {
-    let filteredTodos: Todo[] = [];
+    let filteredTodos: Todo[] | null = [];
 
-    switch (status) {
-      case ACTIVE:
-        filteredTodos = todos.filter(item => !item.completed);
-        break;
+    if (todos) {
+      switch (status) {
+        case ACTIVE:
+          filteredTodos = todos.filter(item => !item.completed);
+          break;
 
-      case COMPLETED:
-        filteredTodos = todos.filter(item => item.completed);
-        break;
+        case COMPLETED:
+          filteredTodos = todos.filter(item => item.completed);
+          break;
 
-      case ALL:
-      default:
-        filteredTodos = todos;
-        break;
+        case ALL:
+        default:
+          filteredTodos = todos;
+          break;
+      }
     }
 
     setFilterTodos(filteredTodos
@@ -54,10 +56,10 @@ export const TodoList: React.FC = () => {
   }, [status, searchField, todos]);
 
   const handleSelectButtonClick = (todoItem: Todo) => {
-    setSelectedTodo(todoItem.id);
-    setShowModal(true);
     setTodo(todoItem);
+    setSelectedTodo(todoItem.id);
     setLoading(true);
+    setShowModal(true);
   };
 
   return (
@@ -76,7 +78,7 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {filterTodos.map(todoItem => {
+        {filterTodos && filterTodos.map(todoItem => {
           const {
             id,
             title,

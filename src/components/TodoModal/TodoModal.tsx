@@ -2,9 +2,6 @@ import React, { useContext } from 'react';
 import { Loader } from '../Loader';
 import { TodoContext } from '../../context';
 
-import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
-
 export const TodoModal: React.FC = () => {
   const {
     todo,
@@ -18,17 +15,9 @@ export const TodoModal: React.FC = () => {
 
   const handleModalCloseClick = () => {
     setShowModal(false);
-    setTodo({} as Todo);
-    setUser({} as User);
+    setTodo(null);
+    setUser(null);
   };
-
-  const {
-    id,
-    title,
-    completed,
-  } = todo;
-
-  const { name, email } = user;
 
   return (
     <>
@@ -45,7 +34,7 @@ export const TodoModal: React.FC = () => {
                   className="modal-card-title has-text-weight-medium"
                   data-cy="modal-header"
                 >
-                  {`Todo #${id}`}
+                  {`Todo #${todo?.id}`}
                 </div>
 
                 {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -59,20 +48,20 @@ export const TodoModal: React.FC = () => {
 
               <div className="modal-card-body">
                 <p className="block" data-cy="modal-title">
-                  {title}
+                  {todo?.title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
                   {
-                    completed
+                    todo?.completed
                       ? <strong className="has-text-success">Done</strong>
                       : <strong className="has-text-danger">Planned</strong>
                   }
 
                   {' by '}
 
-                  <a href={`mailto:${email}`}>
-                    {name}
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.name}
                   </a>
                 </p>
               </div>
