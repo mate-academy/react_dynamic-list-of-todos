@@ -35,14 +35,15 @@ export const App: React.FC = () => {
 
     switch (filter) {
       case Status.Active:
-        todosCopy = todosCopy.filter(todo => todo.completed === false);
+        todosCopy = todosCopy.filter(todo => !todo.completed);
         break;
       case Status.Completed:
-        todosCopy = todosCopy.filter(todo => todo.completed === true);
+        todosCopy = todosCopy.filter(todo => todo.completed);
         break;
       case Status.All:
-      default:
         break;
+      default:
+        throw new Error('Filter not find');
     }
 
     return todosCopy;
