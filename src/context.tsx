@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import * as API from './api';
 
 export const TodoContext = React.createContext({
+  /* eslint-disable-next-line */
+  getTodosAPI: (_cb: () => {}) => {},
+  /* eslint-disable-next-line */
+  getUserAPI: (_userId: number) => {},
   todos: [] as Todo[],
   /* eslint-disable-next-line */
   setTodos: (_todos: Todo[]) => {},
@@ -40,7 +45,23 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [status, setStatus] = useState('all');
   const [searchField, setSearchField] = useState('');
 
+  const getTodosAPI = async (cb: () => {}) => {
+    const todoItem = await API.getTodos();
+
+    setTodos(todoItem);
+    cb();
+  };
+
+  const getUserAPI = async (userId: number) => {
+    const userItem: User = await API.getUser(userId);
+
+    setUser(userItem);
+    setLoading(false);
+  };
+
   const value = {
+    getTodosAPI,
+    getUserAPI,
     todos,
     setTodos,
     loading,

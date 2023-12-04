@@ -1,10 +1,7 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useState } from 'react';
 import { TodoContext } from '../../context';
-import * as API from '../../api';
-
 import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
 
 const ALL = 'all';
 const ACTIVE = 'active';
@@ -12,10 +9,10 @@ const COMPLETED = 'completed';
 
 export const TodoList: React.FC = () => {
   const {
+    getUserAPI,
     todos,
     todo,
     setTodo,
-    setUser,
     setShowModal,
     setLoading,
     status,
@@ -27,15 +24,11 @@ export const TodoList: React.FC = () => {
 
   useEffect(() => {
     if (Object.keys(todo).length) {
-      API.getUser(todo.userId)
-        .then((userItem: User) => {
-          setUser(userItem);
-          setLoading(false);
-        });
+      getUserAPI(todo.userId);
     } else {
       setSelectedTodo(0);
     }
-  }, [todo, setUser, setLoading]);
+  }, [todo, getUserAPI]);
 
   useEffect(() => {
     let filteredTodos: Todo[] = [];
