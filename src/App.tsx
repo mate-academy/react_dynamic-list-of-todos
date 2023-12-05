@@ -18,8 +18,9 @@ export const App: React.FC = () => {
   const [isLoadingModal, setIsLoadingModal] = useState(false);
   const [todoModal, setTodoModal] = useState<Todo | null>(null);
   const [userDetails, setUserDetails] = useState<User | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.ALL);
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.all);
   const [query, setQuery] = useState('');
+  const [selectedId, setSelectedId] = useState(-1);
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,17 +47,18 @@ export const App: React.FC = () => {
 
   const closeModal = () => {
     setTodoModal(null);
+    setSelectedId(-1);
   };
 
   const todosFiltered = () => {
     switch (selectedStatus) {
-      case Status.Completed: {
+      case Status.completed: {
         const filtered = todos.filter((todo) => todo.completed);
 
         return filtered.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
       }
 
-      case Status.Active: {
+      case Status.active: {
         const filtered = todos.filter((todo) => !todo.completed);
 
         return filtered.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
@@ -87,7 +89,12 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList todos={todosFiltered()} showTodo={handleShowTodo} />
+              <TodoList
+                todos={todosFiltered()}
+                showTodo={handleShowTodo}
+                selected={selectedId}
+                setSelectedId={setSelectedId}
+              />
             </div>
           </div>
         </div>

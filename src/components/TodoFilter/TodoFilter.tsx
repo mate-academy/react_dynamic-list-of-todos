@@ -30,7 +30,7 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleReset = () => {
     setQuery('');
-    setStatus(Status.ALL);
+    setStatus(Status.all);
     setTodos(todos);
   };
 
@@ -43,9 +43,9 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleStatusChange}
             value={status}
           >
-            <option value={Status.ALL}>All</option>
-            <option value={Status.Active}>Active</option>
-            <option value={Status.Completed}>Completed</option>
+            <option value={Status.all}>All</option>
+            <option value={Status.active}>Active</option>
+            <option value={Status.completed}>Completed</option>
           </select>
         </span>
       </p>
