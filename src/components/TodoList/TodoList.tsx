@@ -31,9 +31,9 @@ export const TodoList: React.FC = () => {
   }, [todo, getUserAPI]);
 
   useEffect(() => {
-    let filteredTodos: Todo[] | null = [];
+    let filteredTodos: Todo[] = [];
 
-    if (todos) {
+    if (todos.length > 0) {
       switch (status) {
         case ACTIVE:
           filteredTodos = todos.filter(item => !item.completed);
@@ -48,11 +48,11 @@ export const TodoList: React.FC = () => {
           filteredTodos = todos;
           break;
       }
-    }
 
-    setFilterTodos(filteredTodos
-      .filter(item => item.title.toUpperCase().trim()
-        .includes(searchField.toUpperCase().trim())));
+      setFilterTodos(filteredTodos
+        .filter(item => item.title.toUpperCase().trim()
+          .includes(searchField.toUpperCase().trim())));
+    }
   }, [status, searchField, todos]);
 
   const handleSelectButtonClick = (todoItem: Todo) => {
