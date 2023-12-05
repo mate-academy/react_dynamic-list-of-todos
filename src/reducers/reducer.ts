@@ -1,27 +1,27 @@
 import { State } from '../types/State';
-import { Action } from '../types/Action';
+import { Action, ActionType } from '../types/Action';
 
 export function stateReducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'setTodos':
+    case ActionType.setTodos:
       return {
         ...state,
         todos: action.payload,
       };
 
-    case 'setOpenedTodo':
+    case ActionType.setOpenedTodo:
       return {
         ...state,
         openedTodo: action.payload,
       };
 
-    case 'setUser':
+    case ActionType.setUser:
       return {
         ...state,
         user: action.payload,
       };
 
-    case 'setFilterOption':
+    case ActionType.setFilterOption:
       return {
         ...state,
         filter: {
@@ -30,7 +30,7 @@ export function stateReducer(state: State, action: Action): State {
         },
       };
 
-    case 'setFilterQuery':
+    case ActionType.setFilterQuery:
       return {
         ...state,
         filter: {
@@ -39,19 +39,19 @@ export function stateReducer(state: State, action: Action): State {
         },
       };
 
-    case 'setIsModalOpened':
+    case ActionType.setIsModalOpened:
       return {
         ...state,
         isModalOpened: action.payload,
       };
 
-    case 'setIsLoadingTodos':
+    case ActionType.setIsLoadingTodos:
       return {
         ...state,
         isLoadingTodos: action.payload,
       };
 
-    case 'setIsLoadingUser':
+    case ActionType.setIsLoadingUser:
       return {
         ...state,
         isLoadingUser: action.payload,

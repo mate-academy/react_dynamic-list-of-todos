@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 import { DispatchContext, StateContext } from '../../Store';
 import { Todo } from '../../types/Todo';
+import { ActionType } from '../../types/Action';
 
 type Props = {
   todos: Todo[];
@@ -12,8 +13,8 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   const { openedTodo, isModalOpened } = useContext(StateContext);
 
   const handleSelectButton = (todo: Todo) => {
-    dispatch({ type: 'setOpenedTodo', payload: todo });
-    dispatch({ type: 'setIsModalOpened', payload: true });
+    dispatch({ type: ActionType.setOpenedTodo, payload: todo });
+    dispatch({ type: ActionType.setIsModalOpened, payload: true });
   };
 
   return (

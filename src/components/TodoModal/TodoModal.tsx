@@ -5,6 +5,7 @@ import { Loader } from '../Loader';
 import { getUser } from '../../api/user';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { ActionType } from '../../types/Action';
 
 type Props = {
   todo: Todo;
@@ -16,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({ todo }) => {
 
   const handleModalClose = () => {
     dispatch({
-      type: 'setOpenedTodo',
+      type: ActionType.setOpenedTodo,
       payload: {
         id: 0,
         title: '',
@@ -24,14 +25,14 @@ export const TodoModal: React.FC<Props> = ({ todo }) => {
         userId: 0,
       },
     });
-    dispatch({ type: 'setIsModalOpened', payload: false });
-    dispatch({ type: 'setIsLoadingUser', payload: true });
+    dispatch({ type: ActionType.setIsModalOpened, payload: false });
+    dispatch({ type: ActionType.setIsLoadingUser, payload: true });
   };
 
   useEffect(() => {
     getUser(todo.userId).then((userFromServer: User) => {
-      dispatch({ type: 'setUser', payload: userFromServer });
-      dispatch({ type: 'setIsLoadingUser', payload: false });
+      dispatch({ type: ActionType.setUser, payload: userFromServer });
+      dispatch({ type: ActionType.setIsLoadingUser, payload: false });
     });
   }, [todo, dispatch]);
 

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../Store';
 import { Filter } from '../../types/Filter';
+import { ActionType } from '../../types/Action';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
@@ -12,14 +13,14 @@ export const TodoFilter = () => {
 
   const handleFilterOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
-      type: 'setFilterOption',
+      type: ActionType.setFilterOption,
       payload: event.target.value as Filter,
     });
   };
 
   const handleFilterQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
-      type: 'setFilterQuery',
+      type: ActionType.setFilterQuery,
       payload: event.target.value,
     });
   };
@@ -62,7 +63,10 @@ export const TodoFilter = () => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => dispatch({ type: 'setFilterQuery', payload: '' })}
+              onClick={() => dispatch({
+                type: ActionType.setFilterQuery,
+                payload: '',
+              })}
             />
           </span>
         )}

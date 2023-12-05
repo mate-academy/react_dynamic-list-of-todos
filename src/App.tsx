@@ -16,6 +16,7 @@ import { getTodos } from './api/todos';
 import { filterByOption, filterByQuery } from './services/filter';
 import { DispatchContext, StateContext } from './Store';
 import { Todo } from './types/Todo';
+import { ActionType } from './types/Action';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
@@ -33,12 +34,13 @@ export const App: React.FC = () => {
     return filterByQuery(filterByOption(todosToFilter, option), query);
   }, [filter]);
 
-  const [filteredTodos, setFilteredTodos] = useState(filterTodos(todos));
+  const applyedFilterTodos = filterTodos(todos);
+  const [filteredTodos, setFilteredTodos] = useState(applyedFilterTodos);
 
   useEffect(() => {
     getTodos().then(todosFromServer => {
-      dispatch({ type: 'setTodos', payload: todosFromServer });
-      dispatch({ type: 'setIsLoadingTodos', payload: false });
+      dispatch({ type: ActionType.setTodos, payload: todosFromServer });
+      dispatch({ type: ActionType.setIsLoadingTodos, payload: false });
     });
   }, [dispatch]);
 

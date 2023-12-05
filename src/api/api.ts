@@ -12,7 +12,9 @@ function wait(delay: number): Promise<void> {
 export async function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
+  // const fetchResult = await fetch(fullURL);
 
+  // return fetchResult.json();
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
