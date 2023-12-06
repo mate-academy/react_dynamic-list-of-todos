@@ -25,18 +25,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then((todo) => {
-        setTodos(todo);
-      })
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
   const loadUserDetails = (userId: number) => {
     setIsLoadingModal(true);
     getUser(userId)
-      .then((user) => {
-        setUserDetails(user);
-      })
+      .then(setUserDetails)
       .finally(() => setIsLoadingModal(false));
   };
 
