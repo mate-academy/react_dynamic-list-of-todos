@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo;
-  setSelectedTodo: (value: Todo | null) => void
+  setSelectedTodo: (value: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -58,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               {completed
-                ? <strong className="has-text-succes">Done</strong>
+                ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
 
               {' by '}
