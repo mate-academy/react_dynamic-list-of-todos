@@ -43,8 +43,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Close Modal"
               type="button"
               className="delete"
               data-cy="modal-close"

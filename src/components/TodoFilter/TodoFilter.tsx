@@ -19,26 +19,22 @@ const todoFilter = (
 ): Todo[] => {
   let filteredTodos = [...todos];
 
-  switch (sortType) {
-    case SortType.Active:
-      filteredTodos = filteredTodos.filter(todo => !todo.completed);
-      break;
-
-    case SortType.Completed:
-      filteredTodos = filteredTodos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
   if (query) {
     filteredTodos = filteredTodos.filter(todo => (
       todo.title.toLowerCase().includes(query.trim().toLowerCase())
     ));
   }
 
-  return filteredTodos;
+  switch (sortType) {
+    case SortType.Active:
+      return filteredTodos.filter(todo => !todo.completed);
+
+    case SortType.Completed:
+      return filteredTodos.filter(todo => todo.completed);
+
+    default:
+      return filteredTodos;
+  }
 };
 
 export const TodoFilter: FC<Props> = ({
@@ -84,8 +80,8 @@ export const TodoFilter: FC<Props> = ({
 
         {query && (
           <span className="icon is-right">
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Clear Search"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
