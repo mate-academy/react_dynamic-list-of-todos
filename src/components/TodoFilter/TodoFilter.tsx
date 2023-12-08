@@ -81,7 +81,7 @@ export const TodoFilter: FC<Props> = ({
         {query && (
           <span className="icon is-right">
             <button
-              aria-label="Clear Search"
+              aria-label="Search Clear"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
