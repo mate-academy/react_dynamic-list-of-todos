@@ -22,13 +22,13 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
           >
-            <option value={Filter.ALL}>
+            <option value={Filter.all}>
               All
             </option>
-            <option value={Filter.ACTIVE}>
+            <option value={Filter.active}>
               Active
             </option>
-            <option value={Filter.COMPLETED}>
+            <option value={Filter.completed}>
               Completed
             </option>
           </select>

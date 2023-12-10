@@ -14,8 +14,8 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setTodoId] = useState<number | null>(null);
-  const [filter, setFilter] = useState<string>(Filter.ALL);
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<string>(Filter.all);
+  const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
     getTodos()
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         <TodoModal
           todos={todos}
           selectedTodo={selectedTodoId}
-          unselectTodo={() => setTodoId(null)}
+          unselectTodo={() => setTodoId(0)}
         />
       )}
     </>
