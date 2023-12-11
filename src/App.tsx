@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,7 +15,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import './App.scss';
-import { Filters } from './types/Filters';
+import { prepareTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -22,30 +27,15 @@ export const App: React.FC = () => {
     getTodos().then(setTodos);
   }, []);
 
-  const preparedTodos: Todo[] = useMemo(() => {
-    let filteredTodos = todos;
+  const render = useRef(null);
 
-    if (query) {
-      filteredTodos = filteredTodos.filter(todo => (
-        todo.title.toLowerCase().includes(query.toLowerCase().trim())
-      ));
-    }
+  const isFirstRender = render.current === null;
 
-    if (filter) {
-      switch (filter) {
-        case Filters.completed:
-          return filteredTodos.filter(todo => todo.completed);
-
-        case Filters.active:
-          return filteredTodos.filter(todo => !todo.completed);
-
-        default:
-          return filteredTodos;
-      }
-    }
-
-    return filteredTodos;
-  }, [todos, filter, query]);
+  const preparedTodos = useMemo(() => prepareTodos({
+    todos,
+    query,
+    filter,
+  }), [todos, filter, query]);
 
   return (
     <>
@@ -62,8 +52,11 @@ export const App: React.FC = () => {
               />
             </div>
 
-            <div className="block">
-              {!preparedTodos.length ? (
+            <div
+              className="block"
+              ref={render}
+            >
+              {!preparedTodos.length && isFirstRender ? (
                 <Loader />
               ) : (
                 <TodoList
