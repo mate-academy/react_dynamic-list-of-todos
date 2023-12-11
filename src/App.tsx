@@ -21,7 +21,6 @@ export const App: React.FC = () => {
       .then(serverTodos => {
         setTodos(serverTodos);
         setFilteredTodos(serverTodos);
-        setIsLoading(false);
       })
       .finally(() => setIsLoading(false));
   }, []);
