@@ -61,11 +61,16 @@ export const TodoModal: React.FC<TodoModalProps> = ({
                 <strong className="has-text-danger">Planned</strong>
               )}
 
-              {' by '}
-
-              <a href={author?.email}>
-                {author?.name}
-              </a>
+              {author ? (
+                <span>
+                  {' by '}
+                  <a href={`mailto:${author.email}`}>
+                    {author.name}
+                  </a>
+                </span>
+              ) : (
+                'Author not found'
+              )}
             </p>
           </div>
         </div>

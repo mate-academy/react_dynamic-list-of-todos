@@ -15,7 +15,7 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [hasLoader, setHasLoader] = useState(false);
-  const [modalTodo, setModalTodo] = useState<Todo>();
+  const [modalTodo, setModalTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
 
@@ -29,14 +29,12 @@ export const App: React.FC = () => {
   }, []);
 
   const preparedTodos: Todo[] = useMemo(() => {
-    let filteredList: Todo[];
+    let filteredList: Todo[] = todoList;
 
     if (query.length) {
-      filteredList = todoList.filter((todo) => {
+      filteredList = filteredList.filter((todo) => {
         return todo.title.toLowerCase().includes(query.toLowerCase());
       });
-    } else {
-      filteredList = todoList;
     }
 
     switch (filter) {
@@ -82,7 +80,7 @@ export const App: React.FC = () => {
       {modalTodo && (
         <TodoModal
           todo={modalTodo}
-          clearModal={() => setModalTodo(undefined)}
+          clearModal={() => setModalTodo(null)}
         />
       )}
     </>

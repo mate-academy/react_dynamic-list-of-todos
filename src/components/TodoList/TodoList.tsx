@@ -5,8 +5,8 @@ import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos: Todo[];
-  setTodo: (todo: Todo | undefined) => void;
-  modalTodo: Todo | undefined;
+  setTodo: (todo: Todo | null) => void;
+  modalTodo: Todo | null;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
