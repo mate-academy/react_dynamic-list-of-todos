@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,53 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
+enum SelectOption {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState('');
+  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  let filteredTodos = [...todos];
+
+  if (query) {
+    filteredTodos = filteredTodos
+      .filter(todo => todo.title
+        .toLowerCase().includes(query.toLowerCase()));
+  }
+
+  switch (selectFilter) {
+    case SelectOption.All:
+      break;
+    case SelectOption.Active:
+      filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+      break;
+    case SelectOption.Completed:
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
+  }
+
+  const loadTodos = async () => {
+    const loadedTodos = await getTodos();
+
+    setTodos(loadedTodos);
+  };
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +62,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                inputValue={query}
+                onUserInput={setQuery}
+                onUserSelect={setSelectFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={filteredTodos}
+                    onShow={setSelectedTodo}
+                    isShlashedEye={selectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal todo={selectedTodo} onExit={setSelectedTodo} /> }
     </>
   );
 };
