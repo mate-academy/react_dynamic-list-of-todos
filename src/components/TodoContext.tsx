@@ -15,7 +15,7 @@ type Prop = {
   selectedUser: User | null,
   setSelectedUser: (selectedUser: User) => void,
   selectedSelect: string,
-  setSelect: (selectedSelect: string) => void
+  setSelect: (selectedSelect: string) => void,
 };
 
 export const TodoContext = React.createContext<Prop>({
@@ -51,13 +51,18 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       .then((result => {
         setTodos(result);
       }))
-      .finally(() => setLoader(false));
-
+      .finally(() => {
+        setLoader(false);
+      });
     if (selectedTodo) {
+      setLoader(true);
       getUser(selectedTodo.userId)
         .then((response => {
           setSelectedUser(response);
-        }));
+        }))
+        .finally(() => {
+          setLoader(false);
+        });
     }
   }, [selectedTodo]);
 
@@ -75,7 +80,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     selectedSelect,
     setSelect,
   }
-  ), [loader, query, selectedSelect, selectedTodo, selectedUser, todos]);
+  ), [loader, query, selectedSelect, selectedTodo,
+    selectedUser, todos]);
 
   return (
     <TodoContext.Provider value={value}>

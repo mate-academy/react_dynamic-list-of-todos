@@ -8,12 +8,9 @@ export const TodoModal: React.FC = () => {
   } = useContext(TodoContext);
 
   return (
-    (loader)
+    loader
       ? <Loader />
-      : (selectedTodo)
-    && (
-      <>
-        <Loader />
+      : (selectedTodo) && (
         <div className="modal is-active" data-cy="modal">
           <div className="modal-background" />
           <div className="modal-card">
@@ -35,7 +32,6 @@ export const TodoModal: React.FC = () => {
                 }}
               />
             </header>
-
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
                 {selectedTodo?.title}
@@ -54,7 +50,6 @@ export const TodoModal: React.FC = () => {
             </div>
           </div>
         </div>
-      </>
-    )
+      )
   );
 };

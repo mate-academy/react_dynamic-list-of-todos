@@ -37,10 +37,14 @@ export const TodoElement:React.FC<TodoElementProps> = ({ todo }) => {
             setSelectedTodo(todo);
           }}
         >
-          <span className="icon">
-            <i className={cn('far fa-eye',
+          <span
+            className="icon"
+            data-cy={cn('', { iconCompleted: todo.completed })}
+          >
+            <i className={cn('far',
               {
                 'fa-eye-slash': isSelectedTodo,
+                'fa-eye': !isSelectedTodo,
               })}
             />
           </span>
