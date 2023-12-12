@@ -1,6 +1,5 @@
 import { Select } from '../../types/Select';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   onQuery: (query: string) => void;
   query: string;
@@ -50,13 +49,15 @@ export const TodoFilter: React.FC<Props> = (
       </span>
 
       {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right">
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
             onClick={() => onQuery('')}
-          />
+          >
+            Clear
+          </button>
         </span>
       )}
     </p>

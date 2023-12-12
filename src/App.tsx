@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -29,7 +28,8 @@ export const App: React.FC = () => {
   }, []);
 
   const todosToRender: Todo[] = useMemo(
-    () => filterTodos(todosFromAPI, query, status as Select), [todosFromAPI, query, status],
+    () => filterTodos(todosFromAPI, query, status as Select),
+    [todosFromAPI, query, status],
   );
 
   const handleQuery = (newQuery: string) => {
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     setStatus(givenStatus);
   };
 
-  const todoReset = () => {
+  const resetTodo = () => {
     setTodoChosen(null);
   };
 
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
       {todoChosen && (
         <TodoModal
           todo={todoChosen}
-          onClose={todoReset}
+          onClose={resetTodo}
         />
       )}
     </>
