@@ -21,21 +21,15 @@ export const TodoFilter: React.FC<Props> = (
           value={status}
           onChange={(event) => onStatus(event.target.value as Select)}
         >
-          <option
-            value="all"
-          >
+          <option value="all">
             All
           </option>
 
-          <option
-            value="active"
-          >
+          <option value="active">
             Active
           </option>
 
-          <option
-            value="completed"
-          >
+          <option value="completed">
             Completed
           </option>
         </select>
@@ -55,7 +49,6 @@ export const TodoFilter: React.FC<Props> = (
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           <button

@@ -11,10 +11,11 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Select } from './types/Select';
+import { filterTodos } from './components/helpers/helper';
 
 export const App: React.FC = () => {
   const [todosFromAPI, setTodosFromAPI] = useState<Todo[]>([]);
-  const [loadedData, isLoadedData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [todoChosen, setTodoChosen] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<string>('');
@@ -24,39 +25,12 @@ export const App: React.FC = () => {
       .then((todos) => {
         setTodosFromAPI(todos);
       })
-      .finally(() => isLoadedData(true));
+      .finally(() => setIsLoading(true));
   }, []);
 
-  const todosToRender: Todo[] = useMemo(() => {
-    let todosToProceed = [...todosFromAPI];
-
-    if (query) {
-      todosToProceed = todosToProceed.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
-    }
-
-    if (status) {
-      switch (status) {
-        case Select.ALL: {
-          break;
-        }
-
-        case Select.ACTIVE: {
-          todosToProceed = todosToProceed.filter((todo) => !todo.completed);
-          break;
-        }
-
-        case Select.COMPLETED: {
-          todosToProceed = todosToProceed.filter((todo) => todo.completed);
-          break;
-        }
-
-        default:
-          break;
-      }
-    }
-
-    return todosToProceed;
-  }, [todosFromAPI, query, status]);
+  const todosToRender: Todo[] = useMemo(
+    () => filterTodos(todosFromAPI, query, status as Select), [todosFromAPI, query, status],
+  );
 
   const handleQuery = (newQuery: string) => {
     setQuery(newQuery);
@@ -87,7 +61,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadedData ? (
+              {isLoading ? (
                 <TodoList
                   todos={todosToRender}
                   onSelectTodo={setTodoChosen}
