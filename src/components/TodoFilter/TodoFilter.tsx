@@ -5,16 +5,20 @@ type Props = {
   onQuery: (query: string) => void;
   query: string;
   onStatus: (value: Select) => void;
+  status: string;
 };
 
 export const TodoFilter: React.FC<Props> = (
-  { onQuery, query, onStatus },
+  {
+    onQuery, query, onStatus, status,
+  },
 ) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
+          value={status}
           onChange={(event) => onStatus(event.target.value as Select)}
         >
           <option
@@ -58,7 +62,7 @@ export const TodoFilter: React.FC<Props> = (
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={() => onQuery('')}
           />
         </span>
       )}

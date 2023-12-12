@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './App.scss';
@@ -14,7 +14,6 @@ import { Select } from './types/Select';
 
 export const App: React.FC = () => {
   const [todosFromAPI, setTodosFromAPI] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [loadedData, isLoadedData] = useState(false);
   const [todoChosen, setTodoChosen] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -24,20 +23,19 @@ export const App: React.FC = () => {
     getTodos()
       .then((todos) => {
         setTodosFromAPI(todos);
-        setFilteredTodos(todos);
       })
       .finally(() => isLoadedData(true));
   }, []);
 
-  const filterTodos = (newQuery: string, newStatus: string) => {
+  const todosToRender: Todo[] = useMemo(() => {
     let todosToProceed = [...todosFromAPI];
 
-    if (newQuery) {
-      todosToProceed = todosToProceed.filter((todo) => todo.title.includes(newQuery.toLowerCase()));
+    if (query) {
+      todosToProceed = todosToProceed.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase().trim()));
     }
 
-    if (newStatus) {
-      switch (newStatus) {
+    if (status) {
+      switch (status) {
         case Select.ALL: {
           break;
         }
@@ -57,17 +55,19 @@ export const App: React.FC = () => {
       }
     }
 
-    setFilteredTodos(todosToProceed);
-  };
+    return todosToProceed;
+  }, [todosFromAPI, query, status]);
 
   const handleQuery = (newQuery: string) => {
     setQuery(newQuery);
-    filterTodos(newQuery, status);
   };
 
   const handleSelect = (givenStatus: string) => {
     setStatus(givenStatus);
-    filterTodos(query, givenStatus);
+  };
+
+  const todoReset = () => {
+    setTodoChosen(null);
   };
 
   return (
@@ -82,12 +82,17 @@ export const App: React.FC = () => {
                 onQuery={handleQuery}
                 query={query}
                 onStatus={handleSelect}
+                status={status}
               />
             </div>
 
             <div className="block">
               {loadedData ? (
-                <TodoList todos={filteredTodos} onSelectTodo={setTodoChosen} />
+                <TodoList
+                  todos={todosToRender}
+                  onSelectTodo={setTodoChosen}
+                  todoSelected={todoChosen}
+                />
               ) : (
                 <Loader />
               )}
@@ -96,7 +101,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoChosen && <TodoModal />}
+      {todoChosen && (
+        <TodoModal
+          todo={todoChosen}
+          onClose={todoReset}
+        />
+      )}
     </>
   );
 };
