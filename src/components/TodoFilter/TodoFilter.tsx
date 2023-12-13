@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string,
@@ -21,9 +22,9 @@ export const TodoFilter: React.FC<Props> = ({
           value={filterByStatus}
           onChange={(event) => setFilterByStatus(event.target.value)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterType.All}>All</option>
+          <option value={FilterType.Active}>Active</option>
+          <option value={FilterType.Completed}>Completed</option>
         </select>
       </span>
     </p>

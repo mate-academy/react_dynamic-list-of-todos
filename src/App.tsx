@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 const baseTodo: Todo = {
   id: 0,
@@ -17,15 +18,15 @@ const baseTodo: Todo = {
   userId: 0,
 };
 
-const filterTodos = (sourceTodos: Todo[], filterBy: string, currentQuery: string) => {
+const filterTodos = (sourceTodos: Todo[], filterBy: FilterType | string, currentQuery: string) => {
   let filteredTodos: Todo[];
 
   switch (filterBy) {
-    case 'active':
+    case FilterType.Active:
       filteredTodos = sourceTodos.filter(todo => !todo.completed);
       break;
 
-    case 'completed':
+    case FilterType.Completed:
       filteredTodos = sourceTodos.filter(todo => todo.completed);
       break;
 
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState(baseTodo);
   const [isListLoading, setIsListLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [filterByStatus, setFilterByStatus] = useState('all');
+  const [filterByStatus, setFilterByStatus] = useState<string>(FilterType.All);
 
   useEffect(() => {
     setIsListLoading(true);
