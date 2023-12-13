@@ -17,16 +17,17 @@ export const TodoModal: React.FC<Props> = ({
     id,
     title,
     completed,
+    userId,
   } = selectedTodo;
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getUser(id)
+    getUser(userId)
       .then(setUser)
       .finally(() => setIsLoaded(true));
-  }, [id]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -67,8 +68,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
