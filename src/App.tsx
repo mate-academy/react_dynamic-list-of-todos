@@ -10,12 +10,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import type { Todo } from './types/Todo';
+import { StatusFilter } from './types/StatusFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(StatusFilter.ALL);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(
@@ -31,14 +32,14 @@ export const App: React.FC = () => {
     let hasToBeRendered = true;
 
     switch (statusFilter) {
-      case 'all':
+      case StatusFilter.ALL:
         break;
 
-      case 'active':
+      case StatusFilter.ACTIVE:
         hasToBeRendered = !todo.completed;
         break;
 
-      case 'completed':
+      case StatusFilter.COMPLETED:
         hasToBeRendered = todo.completed;
         break;
 
