@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -47,8 +46,8 @@ export const TodoModal: React.FC<Props> = (props) => {
               {`Todo #${todo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-labelledby="button-label"
               type="button"
               className="delete"
               data-cy="modal-close"

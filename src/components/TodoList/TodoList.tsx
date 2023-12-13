@@ -60,12 +60,16 @@ export const TodoList: React.FC<Props> = (props) => {
 
               <td className="has-text-right is-vcentered">
                 <button
+                  aria-labelledby="button-label"
                   data-cy="selectButton"
                   className="button"
                   type="button"
                   onClick={() => setSelectedTodo(todo)}
                 >
-                  <span className="icon">
+                  <span
+                    className="icon"
+                    id="button-label"
+                  >
                     <i className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`} />
                   </span>
                 </button>

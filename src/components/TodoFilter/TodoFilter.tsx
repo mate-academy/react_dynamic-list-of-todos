@@ -1,4 +1,5 @@
 import { ProgressStatus } from '../../types/ProgressEnum';
+import './TodoFilter.scss';
 
 interface Props {
   searchQuery: string,
@@ -47,11 +48,11 @@ export const TodoFilter: React.FC<Props> = (props) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right pointer-all">
           {searchQuery
           && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
+              aria-labelledby="button-label"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
