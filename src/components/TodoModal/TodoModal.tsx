@@ -26,6 +26,7 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     getUser(userId)
       .then(setUser)
+      .catch(error => error.message)
       .finally(() => setIsLoaded(true));
   }, [userId]);
 
