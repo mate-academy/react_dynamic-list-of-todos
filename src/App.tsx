@@ -1,14 +1,61 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './App.scss';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import type { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(
+    () => {
+      getTodos()
+        .then((todosFromServer) => setTodos(todosFromServer))
+        .finally(() => setIsLoading(false));
+    },
+    [],
+  );
+
+  const todosToRender = useMemo(() => todos.filter(todo => {
+    let hasToBeRendered = true;
+
+    switch (statusFilter) {
+      case 'all':
+        break;
+
+      case 'active':
+        hasToBeRendered = !todo.completed;
+        break;
+
+      case 'completed':
+        hasToBeRendered = todo.completed;
+        break;
+
+      default:
+        break;
+    }
+
+    if (hasToBeRendered && searchQuery) {
+      const preparedQuery = searchQuery.trim().toLowerCase();
+      const preparedTitle = todo.title.toLowerCase();
+
+      hasToBeRendered = preparedTitle.includes(preparedQuery);
+    }
+
+    return hasToBeRendered;
+  }), [todos, searchQuery, statusFilter]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +64,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                status={statusFilter}
+                setStatus={setStatusFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading
+                ? <Loader />
+                : (
+                  <TodoList
+                    todos={todosToRender}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo
+        && (
+          <TodoModal
+            todo={selectedTodo}
+            onClose={() => setSelectedTodo(null)}
+          />
+        )}
     </>
   );
 };
