@@ -18,7 +18,7 @@ const baseTodo: Todo = {
   userId: 0,
 };
 
-const filterTodos = (sourceTodos: Todo[], filterBy: FilterType | string, currentQuery: string) => {
+const filterTodos = (sourceTodos: Todo[], filterBy: FilterType, currentQuery: string) => {
   let filteredTodos: Todo[];
 
   switch (filterBy) {
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState(baseTodo);
   const [isListLoading, setIsListLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [filterByStatus, setFilterByStatus] = useState<string>(FilterType.All);
+  const [filterByStatus, setFilterByStatus] = useState<FilterType>(FilterType.All);
 
   useEffect(() => {
     setIsListLoading(true);
