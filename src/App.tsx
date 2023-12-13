@@ -1,20 +1,20 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-// console.log(getTodos().then(data => console.log(data)));
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedValue, setSelectedValue] = useState('all');
   const isDataReady = !isLoading;
 
   useEffect(
@@ -32,6 +32,20 @@ export const App: React.FC = () => {
     [],
   );
 
+  const todosToRender = useMemo(
+    () => {
+      return todos.filter(todo => {
+        const titleMatches = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const statusMatches
+          = selectedValue === 'all'
+            || (selectedValue === 'completed' ? todo.completed : !todo.completed);
+
+        return titleMatches && statusMatches;
+      });
+    },
+    [todos, searchQuery, selectedValue],
+  );
+
   return (
     <>
       <div className="section">
@@ -40,7 +54,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedValue={selectedValue}
+                setSelectedValue={setSelectedValue}
+              />
             </div>
 
             <div className="block">
@@ -50,7 +69,7 @@ export const App: React.FC = () => {
 
               {isDataReady && (
                 <TodoList
-                  todos={todos}
+                  todos={todosToRender}
                 />
               )}
             </div>
@@ -58,7 +77,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal />
+      {/* <TodoModal /> */}
     </>
   );
 };
