@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { TodoElement } from './TodoElement';
 import { TodoContext } from '../TodoContext';
-import { Loader } from '../Loader';
 
 export const TodoList: React.FC = () => {
   const {
-    todos, query, selectedSelect, loader,
+    todos, query, selectedSelect,
   } = useContext(TodoContext);
 
   const filteredTodos = () => {
@@ -27,31 +26,29 @@ export const TodoList: React.FC = () => {
   };
 
   return (
-    loader ? <Loader />
-      : (
-        <table className="table is-narrow is-fullwidth">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>
-                <span className="icon">
-                  <i className="fas fa-check" />
-                </span>
-              </th>
-              <th>Title</th>
-              <th> </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredTodos().map(todo => (
-              <TodoElement
-                todo={todo}
-                key={todo.id}
-              />
-            ))}
-          </tbody>
-        </table>
-      )
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          filteredTodos().map(todo => (
+            <TodoElement
+              todo={todo}
+              key={todo.id}
+            />
+          ))
+        }
+      </tbody>
+    </table>
   );
 };
