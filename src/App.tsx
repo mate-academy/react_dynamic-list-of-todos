@@ -9,22 +9,23 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { getfilteredTodos } from './helpers';
+import { getFilteredTodos } from './helpers';
+import { Option } from './types/Types';
 
 export const App: React.FC = () => {
-  const [renderedTodos, setRenderedList] = useState<Todo[]>([]);
+  const [renderedTodos, setRenderedTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [selectedOption, setSelectedOption] = useState('All');
-  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const [selectedOption, setSelectedOption] = useState<string>(Option.All);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getTodos()
-      .then(setRenderedList)
-      .finally(() => setIsLoaded(false));
+      .then(setRenderedTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredList = getfilteredTodos(renderedTodos, query, selectedOption);
+  const filteredList = getFilteredTodos(renderedTodos, query, selectedOption);
 
   return (
     <>
@@ -42,7 +43,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList

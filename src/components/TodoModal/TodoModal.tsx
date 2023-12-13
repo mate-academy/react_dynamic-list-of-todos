@@ -26,7 +26,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
         <Loader />
       ) : (
         <div className="modal-card">
-          <header className="modal-card-head">
+          <header id="modal-card-label" className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
@@ -34,8 +34,8 @@ export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-labelledby="modal-card-label"
               type="button"
               className="delete"
               data-cy="modal-close"

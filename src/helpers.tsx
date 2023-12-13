@@ -1,23 +1,24 @@
 import { Todo } from './types/Todo';
+import { Option } from './types/Types';
 
-export const getfilteredTodos = (
+export const getFilteredTodos = (
   renderedTodos: Todo[],
   query: string,
-  selectValue: string,
+  selectOption: string,
 ): Todo[] => {
   let filteredByQuery = renderedTodos.filter(todo => {
     const { title } = todo;
     const preparedQuery = query.trim().toLowerCase();
-    const preparedTirle = title.toLowerCase();
+    const preparedTitle = title.toLowerCase();
 
-    return preparedTirle.includes(preparedQuery);
+    return preparedTitle.includes(preparedQuery);
   });
 
-  switch (selectValue) {
-    case 'completed':
+  switch (selectOption) {
+    case Option.Completed:
       filteredByQuery = filteredByQuery.filter(todo => todo.completed);
       break;
-    case 'active':
+    case Option.Active:
       filteredByQuery = filteredByQuery.filter(todo => !todo.completed);
       break;
     default:
