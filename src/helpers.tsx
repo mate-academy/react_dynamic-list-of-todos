@@ -1,5 +1,4 @@
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 
 type FilterType = string;
 
@@ -14,37 +13,21 @@ export function filteredTodoList(
   filterBy: FilterType,
   query: string,
 ) {
+  let filteredTodos = [...todos];
+
   if (query) {
-    // eslint-disable-next-line no-param-reassign
-    todos = todos.filter(
+    filteredTodos = filteredTodos.filter(
       todo => todo.title.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
   switch (filterBy) {
     case FilteredBy.Active:
-      return todos.filter(todo => !todo.completed);
+      return filteredTodos.filter(todo => !todo.completed);
     case FilteredBy.Completed:
-      return todos.filter(todo => todo.completed);
+      return filteredTodos.filter(todo => todo.completed);
     case FilteredBy.All:
     default:
-      return todos;
+      return filteredTodos;
   }
-}
-
-export function getUserTodos(todos: Todo[], users: User[]): Todo[] {
-  const userTodos = todos.map(todo => {
-    const user = users.find(u => u.id === todo.userId);
-
-    if (user) {
-      return {
-        ...todo,
-        user,
-      };
-    }
-
-    return todo;
-  });
-
-  return userTodos;
 }

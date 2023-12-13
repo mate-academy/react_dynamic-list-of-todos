@@ -54,7 +54,6 @@ export const App: React.FC = () => {
                   ? (
                     <Loader />
                   )
-                  // eslint-disable-next-line react/jsx-wrap-multilines
                   : (
                     <TodoList
                       todos={visibleTodos}
