@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [progress, setProgress] = useState<ProgressStatus | string>(ProgressStatus.All);
+  const [progress, setProgress] = useState<ProgressStatus>(ProgressStatus.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const closeModal = () => setSelectedTodo(null);
@@ -27,6 +27,7 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
+      .catch()
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null
+      {selectedTodo
       && (
         <TodoModal
           selectedTodo={selectedTodo}

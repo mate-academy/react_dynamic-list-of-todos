@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 interface Props {
-  selectedTodo: Todo | null,
+  selectedTodo: Todo,
   onClose: () => void,
 }
 
@@ -22,8 +22,9 @@ export const TodoModal: React.FC<Props> = (props) => {
   useEffect(() => {
     setIsModalloading(true);
 
-    getUser(selectedTodo?.userId ?? 0)
+    getUser(selectedTodo.userId)
       .then(setCurrentUser)
+      .catch()
       .finally(() => setIsModalloading(false));
   }, [selectedTodo]);
 

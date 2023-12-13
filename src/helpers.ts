@@ -4,7 +4,7 @@ import { Todo } from './types/Todo';
 export function getTodosToRender(
   todos: Todo[],
   searchQuery: string,
-  progress: string,
+  progress: ProgressStatus,
 ): Todo[] {
   const preparedQuery = searchQuery.toLowerCase();
 
@@ -20,6 +20,5 @@ export function getTodosToRender(
         return true;
     }
   })
-
     .filter(todo => todo.title.toLowerCase().includes(preparedQuery));
 }

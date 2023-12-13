@@ -3,8 +3,8 @@ import { ProgressStatus } from '../../types/ProgressEnum';
 interface Props {
   searchQuery: string,
   setSearchQuery: (searchValue: string) => void,
-  progress: string,
-  setProgress: (value: ProgressStatus | string) => void;
+  progress: ProgressStatus,
+  setProgress: (value: ProgressStatus) => void;
 }
 
 export const TodoFilter: React.FC<Props> = (props) => {
@@ -22,7 +22,9 @@ export const TodoFilter: React.FC<Props> = (props) => {
           <select
             data-cy="statusSelect"
             value={progress}
-            onChange={(event) => setProgress(event.target.value)}
+            onChange={(event) => setProgress(
+              event.target.value as ProgressStatus,
+            )}
           >
             <option value={ProgressStatus.All}>All</option>
             <option value={ProgressStatus.Active}>Active</option>
