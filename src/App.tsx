@@ -44,8 +44,7 @@ const filterTodos = (sourceTodos: Todo[], filterBy: string, currentQuery: string
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([baseTodo]);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
-  const [isModalLoading, setIsModalLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState(baseTodo);
   const [isListLoading, setIsListLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('all');
@@ -79,22 +78,19 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  selectedTodoId={selectedTodoId}
-                  setSelectedTodoId={setSelectedTodoId}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {(selectedTodoId !== 0) && (
+      {(selectedTodo !== baseTodo) && (
         <TodoModal
-          todos={todos}
-          selectedTodoId={selectedTodoId}
-          isModalLoading={isModalLoading}
-          setIsModalLoading={setIsModalLoading}
+          selectedTodo={selectedTodo}
           onClose={() => {
-            setSelectedTodoId(0);
+            setSelectedTodo(baseTodo);
           }}
         />
       )}

@@ -1,6 +1,4 @@
 import React, {
-  Dispatch,
-  SetStateAction,
   useMemo,
   useState,
 } from 'react';
@@ -11,25 +9,16 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  todos: Todo[],
-  isModalLoading: boolean;
-  selectedTodoId: number;
-  setIsModalLoading: Dispatch<SetStateAction<boolean>>;
+  selectedTodo: Todo;
   onClose: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  todos,
-  selectedTodoId,
-  isModalLoading,
-  setIsModalLoading,
+  selectedTodo,
   onClose,
 }) => {
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
-  const selectedTodo: Todo = todos.find(
-    todo => todo.id === selectedTodoId,
-  ) || todos[0];
 
   useMemo(() => {
     setIsModalLoading(true);
@@ -54,8 +43,8 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="modal-close"
               type="button"
               className="delete"
               data-cy="modal-close"
