@@ -55,6 +55,10 @@ export const App: React.FC = () => {
     }, [],
   );
 
+  const handleReset = () => {
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -72,7 +76,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList todos={visibleTodos} onSelectedTodo={setSelectedTodo} />
+              <TodoList
+                todos={visibleTodos}
+                selectedTodo={selectedTodo}
+                onSelectedTodo={setSelectedTodo}
+              />
             </div>
           </div>
         </div>
@@ -81,7 +89,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onClosing={setSelectedTodo}
+          onClosing={handleReset}
         />
       )}
     </>

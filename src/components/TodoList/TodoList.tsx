@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  selectedTodo: Todo | null
   onSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelectedTodo }) => {
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
+export const TodoList: React.FC<Props> = ({
+  todos, selectedTodo, onSelectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -29,7 +30,9 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectedTodo }) => {
         {todos.map((todo) => (
           <tr
             data-cy="todo"
-            className="has-background-info-light"
+            className={cn({
+              'has-background-info-light': todo === selectedTodo,
+            })}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -60,7 +63,6 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectedTodo }) => {
                 type="button"
                 onClick={() => {
                   onSelectedTodo(todo);
-                  setSelectedTodo(todo);
                 }}
               >
                 <span className="icon">

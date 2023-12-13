@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo,
-  onClosing: React.Dispatch<React.SetStateAction<Todo | null>>,
+  onClosing: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClosing }) => {
@@ -44,9 +44,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClosing }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                onClosing(null);
-              }}
+              onClick={onClosing}
             />
           </header>
 
