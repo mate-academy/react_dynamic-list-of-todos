@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import './TodoFilter.scss';
 import { filteredTodoList } from '../../helpers';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api';
@@ -74,14 +75,14 @@ export const TodoFilter: React.FC<Props> = (props) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right reset__icon">
           {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={resetQueryForm}
+              aria-labelledby="button-label"
             />
           )}
         </span>
