@@ -17,9 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handlerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    setSearchQuery(value);
+    setSearchQuery(event.target.value);
   };
 
   const handlerClearSearch = () => {
@@ -55,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {searchQuery && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className="icon is-right clearSearchButton">
             <button
               data-cy="clearSearchButton"
               type="button"
