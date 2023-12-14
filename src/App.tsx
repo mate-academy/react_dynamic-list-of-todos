@@ -20,9 +20,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then((todos) => {
-        setTodosFromAPI(todos);
-      })
+      .then(setTodosFromAPI)
       .finally(() => setIsLoading(true));
   }, []);
 
