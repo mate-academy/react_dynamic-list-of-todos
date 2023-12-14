@@ -1,4 +1,4 @@
-import { Data, SortBy, Options } from './types/types';
+import { Data, Options } from './types/types';
 
 export const getCurrentData = <T>(
   data: Array<T & Data>,
@@ -14,12 +14,10 @@ export const getCurrentData = <T>(
     });
   }
 
-  if (sortBy) {
-    if (typeof SortBy[sortBy] === 'number') {
-      copiedData = copiedData.filter(({ completed }) => {
-        return completed === Boolean(SortBy[sortBy]);
-      });
-    }
+  if (typeof sortBy === 'number') {
+    copiedData = copiedData.filter(({ completed }) => {
+      return completed === Boolean(sortBy);
+    });
   }
 
   return copiedData;
