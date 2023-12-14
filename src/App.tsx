@@ -1,14 +1,37 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { getTodos } from './api';
+import { SortBy, getCurrentData } from './helper';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import './App.scss';
+
+export const TodoContext = createContext<number | null>(null);
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<keyof typeof SortBy>('All');
+  const [currentTodoId, setCurrentTodoId] = useState<null | number>(null);
+  const [currentTodo, setCurrentTodo] = useState<null | Todo>(null);
+
+  const currentTodos = getCurrentData<Todo>(todos, { query, sortBy });
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  useEffect(() => {
+    setCurrentTodo(todos.find(todo => todo.id === currentTodoId) || null);
+  }, [currentTodoId]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +40,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                getQuery={setQuery}
+                getSortBy={setSortBy}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoContext.Provider value={currentTodoId}>
+                  <TodoList
+                    todos={currentTodos}
+                    getCurrentTodoId={setCurrentTodoId}
+                  />
+                </TodoContext.Provider>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {currentTodo && <TodoModal currentTodo={currentTodo} onClose={setCurrentTodoId} />}
     </>
   );
 };
