@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
-import { User } from '../types/User';
-import { getTodos, getUser } from '../api';
-// import { Todo } from '../types/Todo';
+import { getTodos } from '../api';
+
 type Prop = {
   selectedTodo: Todo | null,
   setSelectedTodo: (isSelected: Todo | null) => void,
@@ -12,8 +11,6 @@ type Prop = {
   setLoader: (loader: boolean) => void,
   query: string,
   setQuery: (query: string) => void,
-  selectedUser: User | null,
-  setSelectedUser: (selectedUser: User) => void,
   selectedSelect: string,
   setSelect: (selectedSelect: string) => void,
 };
@@ -27,8 +24,6 @@ export const TodoContext = React.createContext<Prop>({
   setLoader: () => {},
   query: '',
   setQuery: () => {},
-  selectedUser: null,
-  setSelectedUser: () => {},
   selectedSelect: '',
   setSelect: () => {},
 });
@@ -42,7 +37,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState(false);
   const [query, setQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedSelect, setSelect] = useState('');
 
   useEffect(() => {
@@ -54,17 +48,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       .finally(() => {
         setLoader(false);
       });
-    if (selectedTodo) {
-      setLoader(true);
-      getUser(selectedTodo.userId)
-        .then((response => {
-          setSelectedUser(response);
-        }))
-        .finally(() => {
-          setLoader(false);
-        });
-    }
-  }, [selectedTodo]);
+  }, []);
 
   const value = useMemo(() => ({
     selectedTodo,
@@ -75,13 +59,11 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setLoader,
     query,
     setQuery,
-    selectedUser,
-    setSelectedUser,
     selectedSelect,
     setSelect,
   }
   ), [loader, query, selectedSelect, selectedTodo,
-    selectedUser, todos]);
+    todos]);
 
   return (
     <TodoContext.Provider value={value}>
