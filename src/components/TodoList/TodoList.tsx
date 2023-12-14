@@ -1,21 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import cn from 'classnames';
-// eslint-disable-next-line import/no-cycle
-import { TodoContext } from '../../App';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
   getCurrentTodoId: (arg: number) => void;
+  currentTodoId: number | null;
 };
 
 export const TodoList: React.FC<Props> = (
   {
     todos,
     getCurrentTodoId,
+    currentTodoId,
   },
 ) => {
-  const contextValue = useContext<number | null>(TodoContext);
   const handleOnClick = (value: number) => {
     getCurrentTodoId(value);
   };
@@ -64,7 +63,7 @@ export const TodoList: React.FC<Props> = (
                 onClick={() => handleOnClick(id)}
               >
                 <span className="icon">
-                  {contextValue === id ? (
+                  {currentTodoId === id ? (
                     <i className="far fa-eye-slash" />
                   ) : (
                     <i className="far fa-eye" />

@@ -1,6 +1,5 @@
-/* eslint-disable import/no-cycle */
 /* eslint-disable max-len */
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
@@ -12,8 +11,6 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import './App.scss';
-
-export const TodoContext = createContext<number | null>(null);
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
@@ -50,12 +47,11 @@ export const App: React.FC = () => {
               {todos.length === 0 ? (
                 <Loader />
               ) : (
-                <TodoContext.Provider value={currentTodoId}>
-                  <TodoList
-                    todos={currentTodos}
-                    getCurrentTodoId={setCurrentTodoId}
-                  />
-                </TodoContext.Provider>
+                <TodoList
+                  todos={currentTodos}
+                  getCurrentTodoId={setCurrentTodoId}
+                  currentTodoId={currentTodoId}
+                />
               )}
             </div>
           </div>
