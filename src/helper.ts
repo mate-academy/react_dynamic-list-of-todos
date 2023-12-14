@@ -1,18 +1,4 @@
-type Data = {
-  title: string;
-  completed: boolean;
-};
-
-export enum SortBy {
-  All = '',
-  Active = 0,
-  Completed = 1,
-}
-
-type Options = {
-  query: string;
-  sortBy: keyof typeof SortBy;
-};
+import { Data, SortBy, Options } from './types/types';
 
 export const getCurrentData = <T>(
   data: Array<T & Data>,
@@ -20,23 +6,21 @@ export const getCurrentData = <T>(
     query,
     sortBy,
   }: Options): T[] => {
-  let copyedData = [...data];
+  let copiedData = [...data];
 
   if (query) {
-    const queryStr = query.toLowerCase();
-
-    copyedData = copyedData.filter(item => {
-      const title = item.title.toLowerCase();
-
-      return title.includes(queryStr);
+    copiedData = copiedData.filter(({ title }) => {
+      return title.toLowerCase().includes(query.toLowerCase());
     });
   }
 
-  if (SortBy[sortBy] === SortBy.Active || SortBy[sortBy] === SortBy.Completed) {
-    copyedData = copyedData.filter(item => {
-      return item.completed === Boolean(SortBy[sortBy]);
-    });
+  if (sortBy) {
+    if (typeof SortBy[sortBy] === 'number') {
+      copiedData = copiedData.filter(({ completed }) => {
+        return completed === Boolean(SortBy[sortBy]);
+      });
+    }
   }
 
-  return copyedData;
+  return copiedData;
 };

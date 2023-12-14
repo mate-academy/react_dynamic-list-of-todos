@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
+import { SortBy } from '../../types/types';
 
 type Props = {
   getQuery: (arg: string) => void;
-  getSortBy: (arg: any) => void;
+  query: string;
+  getSortBy: (arg: SortBy) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ getQuery, getSortBy }) => {
-  const [query, setQuery] = useState('');
+const mapGetSortBy = (sortBy: string): SortBy => {
+  switch (sortBy) {
+    case 'completed':
+      return SortBy.Completed;
 
-  const handleSortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value[0].toUpperCase() + e.target.value.slice(1);
+    case 'active':
+      return SortBy.Active;
 
-    getSortBy(value);
-  };
+    case 'all':
+      return SortBy.All;
+
+    default:
+      return SortBy.All;
+  }
+};
+
+export const TodoFilter: React.FC<Props> = ({ getQuery, query, getSortBy }) => {
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    setQuery(value);
+    setShowDeleteBtn(true);
     getQuery(value);
   };
 
   const handleOndelete = () => {
-    setQuery('');
+    setShowDeleteBtn(false);
     getQuery('');
   };
 
@@ -31,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({ getQuery, getSortBy }) => {
       <p className="control">
         <span className="select">
           <select
-            onChange={handleSortBy}
+            onChange={e => getSortBy(mapGetSortBy(e.target.value))}
             data-cy="statusSelect"
           >
             <option value="all">All</option>
@@ -54,11 +66,11 @@ export const TodoFilter: React.FC<Props> = ({ getQuery, getSortBy }) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        {showDeleteBtn && (
+          <span className="icon is-right btn-icon">
             <button
               data-cy="clearSearchButton"
+              aria-label="clear search"
               type="button"
               className="delete"
               onClick={handleOndelete}

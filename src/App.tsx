@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { getTodos } from './api';
-import { SortBy, getCurrentData } from './helper';
+import { getCurrentData } from './helper';
+import { SortBy } from './types/types';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -13,9 +14,9 @@ import { Todo } from './types/Todo';
 import './App.scss';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState<keyof typeof SortBy>('All');
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.All);
   const [currentTodoId, setCurrentTodoId] = useState<null | number>(null);
   const [currentTodo, setCurrentTodo] = useState<null | Todo>(null);
 
@@ -39,6 +40,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 getQuery={setQuery}
+                query={query}
                 getSortBy={setSortBy}
               />
             </div>
