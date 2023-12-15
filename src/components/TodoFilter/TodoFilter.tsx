@@ -1,7 +1,9 @@
+import { Status } from '../../types/Status';
+
 interface Props {
   statusFilter: string;
   titleFilter: string;
-  setStatusFilter: (status: string) => void;
+  setStatusFilter: (status: Status) => void;
   setTitleFilter: (title: string) => void;
 }
 
@@ -11,6 +13,26 @@ export const TodoFilter = ({
   setStatusFilter,
   setTitleFilter,
 }: Props) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (event.target.value) {
+      case Status.All:
+        setStatusFilter(Status.All);
+        break;
+
+      case Status.Active:
+        setStatusFilter(Status.Active);
+        break;
+
+      case Status.Completed:
+        setStatusFilter(Status.Completed);
+        break;
+
+      default:
+        setStatusFilter(Status.All);
+        break;
+    }
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -18,11 +40,11 @@ export const TodoFilter = ({
           <select
             data-cy="statusSelect"
             value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value)}
+            onChange={handleFilterChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -34,7 +56,7 @@ export const TodoFilter = ({
           className="input"
           placeholder="Search..."
           value={titleFilter}
-          onChange={(event) => setTitleFilter(event.target.value)}
+          onChange={event => setTitleFilter(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

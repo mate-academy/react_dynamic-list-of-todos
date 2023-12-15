@@ -1,3 +1,4 @@
+import { Status } from './types/Status';
 import { Todo } from './types/Todo';
 
 export const filterTodos = (
@@ -8,13 +9,13 @@ export const filterTodos = (
   return todos
     .filter(todo => {
       switch (statusFilter) {
-        case 'all':
+        case Status.All:
           return true;
 
-        case 'active':
+        case Status.Active:
           return !todo.completed;
 
-        case 'completed':
+        case Status.Completed:
           return todo.completed;
 
         default:

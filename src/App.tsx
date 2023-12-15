@@ -11,11 +11,12 @@ import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { filterTodos } from './helper';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodos] = useState<Todo[]>([]);
-  const [todosLoading, setTodosLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [isTodosLoading, setIsTodosLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<Status>(Status.All);
   const [titleFilter, setTitleFilter] = useState('');
   const [todoSelected, setTodoSelected] = useState<Todo | null>(null);
 
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setTodosLoading(false));
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
   return (
@@ -44,7 +45,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosLoading
+              {isTodosLoading
                 ? <Loader />
                 : (
                   <TodoList
