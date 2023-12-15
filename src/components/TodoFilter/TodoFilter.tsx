@@ -1,8 +1,15 @@
-export const TodoFilter = () => (
+interface TodoFilterProps {
+  completed: (sortType: string) => void
+}
+
+export const TodoFilter: React.FC<TodoFilterProps> = ({ completed }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={(event) => completed(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>

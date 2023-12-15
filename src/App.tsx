@@ -1,16 +1,9 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
-
 import { getTodos, getUser } from './api';
-
-// import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 interface Todo {
@@ -22,7 +15,8 @@ interface Todo {
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [TodosFromServer, setAllTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     getTodos().then(allTodos => {
@@ -37,10 +31,31 @@ export const App: React.FC = () => {
 
       Promise.all(todoPromises)
         .then(todoWithUser => {
+          setAllTodos(todoWithUser);
           setTodos(todoWithUser);
         });
     });
   }, []);
+
+  const handleCompletedTodos = (sortType: string) => {
+    let completedTodos: Todo[] = todos;
+
+    switch (sortType) {
+      case 'all':
+        setTodos(TodosFromServer);
+        break;
+      case 'active':
+        completedTodos = TodosFromServer?.filter(todo => !todo.completed);
+        setTodos(completedTodos);
+        break;
+      case 'completed':
+        completedTodos = TodosFromServer?.filter(todo => todo.completed);
+        setTodos(completedTodos);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -50,18 +65,15 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter completed={handleCompletedTodos} />
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
               <TodoList todos={todos} />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
     </>
   );
 };
