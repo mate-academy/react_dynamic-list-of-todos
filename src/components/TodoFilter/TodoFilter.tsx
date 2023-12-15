@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { TypeOfFilter } from '../../types/typeOfFilter';
+import './TodoFilter.scss';
 
 interface Props {
   querry: string;
@@ -9,11 +10,6 @@ interface Props {
 
 export const TodoFilter: FC<Props> = (props) => {
   const { querry, setQuerry, setTypeFilter } = props;
-
-  const reset = () => {
-    setQuerry('');
-    setTypeFilter(TypeOfFilter.All);
-  };
 
   return (
     <form className="field has-addons">
@@ -45,15 +41,15 @@ export const TodoFilter: FC<Props> = (props) => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right click">
 
           {querry && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
+              aria-label="deleteQuery"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={reset}
+              onClick={() => setQuerry('')}
             />
           )}
         </span>

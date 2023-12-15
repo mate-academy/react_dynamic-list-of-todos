@@ -9,9 +9,9 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { User } from './types/User';
 import './App.scss';
 import { TypeOfFilter } from './types/typeOfFilter';
+import { filterTodos } from './helper';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,21 +21,7 @@ export const App: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<TypeOfFilter>(TypeOfFilter.All);
 
   const filteredTodos = useMemo(() => {
-    let copy = [...todos];
-
-    if (querry) {
-      copy = copy.filter(todo => todo.title.toLowerCase().includes(querry.toLowerCase()));
-    }
-
-    if (typeFilter === TypeOfFilter.Active) {
-      copy = copy.filter(todo => !todo.completed);
-    }
-
-    if (typeFilter === TypeOfFilter.Complited) {
-      copy = copy.filter(todo => todo.completed);
-    }
-
-    return copy;
+    return filterTodos(todos, typeFilter, querry);
   }, [todos, querry, typeFilter]);
 
   useEffect(() => {
