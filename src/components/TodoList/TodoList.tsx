@@ -1,6 +1,18 @@
 import React from 'react';
 
-export const TodoList: React.FC = () => (
+interface TodoListProps {
+  todos: Todo[] | undefined;
+}
+
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+  userId: number;
+  user?: any;
+}
+
+export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,6 +28,22 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
+      {todos?.map(todo => (
+        <tr data-cy="todo" className="" key={todo.id}>
+          <td className="is-vcentered">1</td>
+          <td className="is-vcentered" />
+          <td className="is-vcentered is-expanded">
+            <p className="has-text-danger">{todo.title}</p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button data-cy="selectButton" className="button" type="button">
+              <span className="icon">
+                <i className="far fa-eye" />
+              </span>
+            </button>
+          </td>
+        </tr>
+      ))}
       <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
