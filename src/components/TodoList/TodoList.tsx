@@ -31,15 +31,28 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
     <tbody>
       {todos?.map(todo => (
         <tr data-cy="todo" className="" key={todo.id}>
-          <td className="is-vcentered">1</td>
-          <td className="is-vcentered" />
+          <td className="is-vcentered">{todo.id}</td>
+          <td className="is-vcentered">
+            {todo.completed && (
+              <span className="icon" data-cy="iconCompleted">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
           <td className="is-vcentered is-expanded">
-            <p className="has-text-danger">{todo.title}</p>
+            <p
+              className={todo.completed
+                ? 'has-text-success'
+                : 'has-text-danger'}
+            >
+              {todo.title}
+            </p>
           </td>
           <td className="has-text-right is-vcentered">
             <button data-cy="selectButton" className="button" type="button">
               <span className="icon">
-                <i className="far fa-eye" />
+                { /* logic here  */ }
+                <i className="far fa-eye fa-eye-slash" />
               </span>
             </button>
           </td>
