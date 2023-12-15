@@ -3,13 +3,13 @@ import { Status } from '../../types/Status';
 
 type Props = {
   query: string,
-  setFilter: (value: Status) => void,
+  setFilterStatus: (value: Status) => void,
   setQuery: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  setFilter,
+  setFilterStatus,
   setQuery,
 }) => (
   <form className="field has-addons">
@@ -17,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event) => setFilter(event.target.value as Status)}
+          onChange={(event) => setFilterStatus(event.target.value as Status)}
         >
           <option value={Status.All}>All</option>
           <option value={Status.Active}>Active</option>
@@ -40,17 +40,15 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-
         {query && (
-          // eslint-disable-next-line jsx-a11y/control-has-associated-label
           <button
+            aria-label="Delete query"
             data-cy="clearSearchButton"
             type="button"
             className="delete"
             onClick={() => setQuery('')}
           />
         )}
-
       </span>
     </p>
   </form>

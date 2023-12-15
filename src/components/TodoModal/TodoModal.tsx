@@ -5,23 +5,23 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectTodo: Todo,
-  setSelectTodo: (todo: Todo | null) => void,
+  selectedTodo: Todo,
+  setSelectedTodo: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectTodo,
-  setSelectTodo,
+  selectedTodo,
+  setSelectedTodo,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(selectTodo.userId)
+    getUser(selectedTodo.userId)
       .then(userData => setUser(userData))
       .finally(() => setIsLoading(false));
-  }, [selectTodo]);
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,15 +36,16 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectTodo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
-            {selectTodo && (
-              /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+
+            {selectedTodo && (
               <button
+                aria-label="close-modal"
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setSelectTodo(null)}
+                onClick={() => setSelectedTodo(null)}
               />
             )}
 
@@ -52,12 +53,12 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {`${selectTodo.title}`}
+              {`${selectedTodo.title}`}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong className="has-text-danger">
-                {selectTodo.completed ? 'Done' : 'Planned'}
+                {selectedTodo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

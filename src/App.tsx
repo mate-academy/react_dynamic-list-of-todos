@@ -10,44 +10,21 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
+import { filterTodos } from './helper';
 
 export const App: React.FC = () => {
-  const [isLoadTodos, setIsLoadTodos] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Status>(Status.All);
-  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
+  const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setIsLoadTodos(true);
-    getTodos().then(setTodos).finally(() => setIsLoadTodos(false));
+    setIsLoading(true);
+    getTodos().then(setTodos).finally(() => setIsLoading(false));
   }, []);
 
-  const filterTodos = () => {
-    let todosCopy = [...todos];
-
-    if (query) {
-      todosCopy = todosCopy
-        .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
-    }
-
-    switch (filter) {
-      case Status.Active:
-        todosCopy = todosCopy.filter(todo => !todo.completed);
-        break;
-      case Status.Completed:
-        todosCopy = todosCopy.filter(todo => todo.completed);
-        break;
-      case Status.All:
-        break;
-      default:
-        throw new Error('not filter');
-    }
-
-    return todosCopy;
-  };
-
-  const todosVisible:Todo[] = filterTodos();
+  const todosVisible: Todo[] = filterTodos(todos, query, filterStatus);
 
   return (
     <>
@@ -59,30 +36,30 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setFilter={setFilter}
+                setFilterStatus={setFilterStatus}
                 setQuery={setQuery}
 
               />
             </div>
 
             <div className="block">
-              {isLoadTodos
+              {isLoading
                 ? <Loader />
                 : (
                   <TodoList
                     todos={todosVisible}
-                    selectTodo={selectTodo}
-                    setSelectTodo={setSelectTodo}
+                    selectedTodo={selectedTodo}
+                    setSelectedTodo={setSelectedTodo}
                   />
                 )}
             </div>
           </div>
         </div>
       </div>
-      {selectTodo && (
+      {selectedTodo && (
         <TodoModal
-          selectTodo={selectTodo}
-          setSelectTodo={setSelectTodo}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
