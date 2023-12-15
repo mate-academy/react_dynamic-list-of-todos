@@ -1,4 +1,5 @@
 import React from 'react';
+import { User } from '../../types/User';
 
 interface TodoListProps {
   todos: Todo[] | undefined;
@@ -9,7 +10,7 @@ interface Todo {
   title: string;
   completed: boolean;
   userId: number;
-  user?: any;
+  user: User;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({ todos }) => (

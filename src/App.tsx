@@ -11,14 +11,14 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos, getUser } from './api';
 
 // import { Todo } from './types/Todo';
-// import { User } from './types/User';
+import { User } from './types/User';
 
 interface Todo {
   id: number;
   title: string;
   completed: boolean;
   userId: number;
-  user?: any;
+  user: User;
 }
 
 export const App: React.FC = () => {
