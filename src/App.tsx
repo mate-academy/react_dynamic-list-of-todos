@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,41 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { Select } from './types/Select';
+import { filterTodos } from './components/Helpers/helper';
 
 export const App: React.FC = () => {
+  const [todosFromAPI, setTodosFromAPI] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [todoChosen, setTodoChosen] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<string>('');
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodosFromAPI)
+      .finally(() => setIsLoading(true));
+  }, []);
+
+  const todosToRender: Todo[] = useMemo(
+    () => filterTodos(todosFromAPI, query, status as Select),
+    [todosFromAPI, query, status],
+  );
+
+  const handleQuery = (newQuery: string) => {
+    setQuery(newQuery);
+  };
+
+  const handleSelect = (givenStatus: string) => {
+    setStatus(givenStatus);
+  };
+
+  const resetTodo = () => {
+    setTodoChosen(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +49,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                onQuery={handleQuery}
+                query={query}
+                onStatus={handleSelect}
+                status={status}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <TodoList
+                  todos={todosToRender}
+                  onSelectTodo={setTodoChosen}
+                  todoSelected={todoChosen}
+                />
+              ) : (
+                <Loader />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {todoChosen && <TodoModal todo={todoChosen} onClose={resetTodo} />}
     </>
   );
 };
