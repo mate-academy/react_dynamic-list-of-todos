@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
@@ -10,17 +11,17 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [emailLink, setEmailLink] = useState<string>('');
+  let emailLink = '';
 
   const fetchUser = async () => {
     setLoading(true);
     try {
       const userData = await getUser(todo.userId);
 
-      setUser([userData]);
-      setEmailLink(`mailto:${userData.email}`);
+      setUser(userData);
+      emailLink = `mailto:${userData.email}`;
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -39,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       {loading ? (
         <Loader />
       ) : (
-        user.map((item) => (
+        user && (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -72,12 +73,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
                 {' by '}
 
-                <a href={emailLink}>{item.name}</a>
+                <a href={emailLink}>{user.name}</a>
               </p>
             </div>
           </div>
-        ))
-      )}
+        ))}
     </div>
   );
 };
