@@ -12,6 +12,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
 
   useEffect(() => {
     search(qwerty);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qwerty]);
 
   return (
