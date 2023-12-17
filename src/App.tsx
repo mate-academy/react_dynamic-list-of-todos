@@ -79,6 +79,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filterTodos}
                 onEyeClick={saveTodoId}
+                selectedTodoId={todoChosenId}
               />
             </div>
           </div>
