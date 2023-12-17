@@ -57,6 +57,16 @@ export const App: React.FC = () => {
     }
   };
 
+  const SearchTodo = (value: string) => {
+    const modifiedValue = value.toLocaleLowerCase().trim();
+
+    const searchedValue = TodosFromServer.filter(
+      todo => todo.title.toLocaleLowerCase().includes(modifiedValue),
+    );
+
+    setTodos(searchedValue);
+  };
+
   return (
     <>
       <div className="section">
@@ -65,7 +75,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter completed={handleCompletedTodos} />
+              <TodoFilter
+                completed={handleCompletedTodos}
+                search={SearchTodo}
+              />
             </div>
 
             <div className="block">
