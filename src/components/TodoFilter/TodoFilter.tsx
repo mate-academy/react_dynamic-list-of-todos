@@ -8,14 +8,14 @@ interface Props {
 }
 
 const getFiltredTodosByStatus = (todos: Todo[], query: TodosStatusQuery) => {
-  if (query === TodosStatusQuery.all) {
+  if (query === TodosStatusQuery.All) {
     return todos;
   }
 
   switch (query) {
-    case TodosStatusQuery.active:
+    case TodosStatusQuery.Active:
       return todos.filter(todo => !todo.completed);
-    case TodosStatusQuery.completed:
+    case TodosStatusQuery.Completed:
       return todos.filter(todo => todo.completed);
     default:
       return todos;
@@ -33,15 +33,15 @@ export const TodoFilter: React.FC<Props> = ({
   setPreparedTodos,
 }) => {
   const [textQuery, setTextQuery] = useState('');
-  const [statusQuery, setStatusQuery] = useState(TodosStatusQuery.all);
+  const [statusQuery, setStatusQuery] = useState(TodosStatusQuery.All);
 
   useEffect(() => {
-    let filtredTodos = getFiltredTodosByStatus(todos, statusQuery);
+    let filteredTodos = getFiltredTodosByStatus(todos, statusQuery);
 
-    filtredTodos = getFiltredTodosByText(filtredTodos, textQuery);
+    filteredTodos = getFiltredTodosByText(filteredTodos, textQuery);
 
-    setPreparedTodos(filtredTodos);
-  }, [todos, textQuery, statusQuery]);
+    setPreparedTodos(filteredTodos);
+  }, [todos, textQuery, statusQuery, setPreparedTodos]);
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusQuery(event.target.value as TodosStatusQuery);
@@ -55,9 +55,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleSelectChange}
           >
-            <option value={TodosStatusQuery.all}>All</option>
-            <option value={TodosStatusQuery.active}>Active</option>
-            <option value={TodosStatusQuery.completed}>Completed</option>
+            <option value={TodosStatusQuery.All}>All</option>
+            <option value={TodosStatusQuery.Active}>Active</option>
+            <option value={TodosStatusQuery.Completed}>Completed</option>
           </select>
         </span>
       </p>
