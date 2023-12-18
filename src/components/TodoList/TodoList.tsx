@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  user: number,
-  userInfo: (id: number) => void,
+  selectedTodo: Todo | undefined,
+  userInfo: (selectedtodo: Todo) => void,
 };
 
 export const TodoList: React.FC<Props> = (
   {
     todos,
-    user,
+    selectedTodo,
     userInfo,
   },
 ) => {
@@ -58,12 +58,12 @@ export const TodoList: React.FC<Props> = (
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => userInfo(todo.id)}
+                onClick={() => userInfo(todo)}
               >
                 <span className="icon">
                   <i className={cn('far', {
-                    'fa-eye': user !== todo.id,
-                    'fa-eye-slash': user === todo.id,
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
                   })}
                   />
                 </span>

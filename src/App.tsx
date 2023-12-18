@@ -18,10 +18,10 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState('');
   const [hasClear, setHasClear] = useState(true);
-  const [userDetailsId, setUserDetailsId] = useState(0);
+  const [selectedtodo, setSelectedTodo] = useState<Todo | undefined>();
 
-  const handleUserInfo = (todoId: number) => {
-    setUserDetailsId(todoId);
+  const getTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
   const handleValue = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,12 +42,8 @@ export const App: React.FC = () => {
     setHasClear(true);
   };
 
-  const handleDetailsLoading = () => {
-    setIsLoading(false);
-  };
-
   const handleCloseButton = () => {
-    setUserDetailsId(0);
+    setSelectedTodo(undefined);
   };
 
   useEffect(() => {
@@ -79,19 +75,18 @@ export const App: React.FC = () => {
 
               <TodoList
                 todos={FilterTodo(todos, text, selectedValue)}
-                user={userDetailsId}
-                userInfo={handleUserInfo}
+                selectedTodo={selectedtodo}
+                userInfo={getTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {!!userDetailsId
+      {!!selectedtodo
         && (
           <TodoModal
-            detailsId={userDetailsId}
-            loading={handleDetailsLoading}
+            selectedTodo={selectedtodo}
             close={handleCloseButton}
           />
         )}

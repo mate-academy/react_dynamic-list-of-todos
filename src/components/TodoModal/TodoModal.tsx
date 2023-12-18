@@ -3,37 +3,27 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 import { getUserDetail } from '../../service/user';
-import { getTodos } from '../../service/todo';
 
 type Props = {
-  detailsId: number,
-  loading: () => void,
+  selectedTodo: Todo,
   close: () => void,
 };
 
 export const TodoModal: React.FC<Props> = (
   {
-    detailsId,
-    loading,
+    selectedTodo,
     close,
   },
 ) => {
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
-  const [selectedtodo, setSelectedTodo] = useState<Todo | undefined>();
-
-  function getUserById() {
-    return getTodos()
-      .then(todos => todos.find(todo => todo.id === detailsId))
-      .then(setSelectedTodo);
-  }
+  const [isLoadingDetails, setIsLoadingDetails] = useState(true);
 
   useEffect(() => {
-    getUserById();
     getUserDetail()
-      .then(users => users.find(user => user.id === selectedtodo?.userId))
+      .then(users => users.find(user => user.id === selectedTodo?.userId))
       .then(setSelectedUser)
       .finally(() => setTimeout(() => {
-        loading();
+        setIsLoadingDetails(false);
       }, 1000));
   }, [selectedUser]);
 
@@ -41,7 +31,7 @@ export const TodoModal: React.FC<Props> = (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {false ? (
+      {isLoadingDetails ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,7 +40,7 @@ export const TodoModal: React.FC<Props> = (
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedtodo?.id}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -64,13 +54,13 @@ export const TodoModal: React.FC<Props> = (
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedtodo?.title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               {
-                selectedtodo?.completed
+                selectedTodo?.completed
                   ? <strong className="has-text-success">Done</strong>
                   : <strong className="has-text-danger">Planned</strong>
               }
