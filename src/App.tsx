@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,45 +8,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filter } from './types/Filter';
+import { filterTodo } from './utils/filterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState<Filter | string>(Filter.all);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  let visibleTodos = todos;
-
-  if (searchQuery) {
-    visibleTodos = visibleTodos.filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  }
-
-  if (filter) {
-    switch (filter) {
-      case 'all': {
-        break;
-      }
-
-      case 'active': {
-        visibleTodos = visibleTodos.filter(todo => todo.completed === false);
-        break;
-      }
-
-      case 'completed': {
-        visibleTodos = visibleTodos.filter(todo => todo.completed === true);
-        break;
-      }
-
-      default:
-        break;
-    }
-  }
+  const visibleTodos = filterTodo(todos, searchQuery, filter);
 
   useEffect(
     () => {
       setIsLoading(true);
+
       getTodos().then(setTodos)
         // eslint-disable-next-line no-console
         .catch(console.log)

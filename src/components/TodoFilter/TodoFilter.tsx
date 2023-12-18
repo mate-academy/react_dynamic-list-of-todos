@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   onSearchQuery: React.Dispatch<React.SetStateAction<string>>,
-  filter: string,
-  onFilter: React.Dispatch<React.SetStateAction<string>>
+  filter: Filter | string,
+  onFilter: (React.Dispatch<React.SetStateAction<Filter | string>>)
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,6 +14,16 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const [query, setQuery] = useState('');
 
+  const handleInput = (value: string) => {
+    setQuery(value);
+    onSearchQuery(value);
+  };
+
+  const handleClearButton = () => {
+    setQuery('');
+    onSearchQuery('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -20,13 +31,11 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={event => {
-              onFilter(event.target.value);
-            }}
+            onChange={event => onFilter(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{Filter.all}</option>
+            <option value="active">{Filter.active}</option>
+            <option value="completed">{Filter.completed}</option>
           </select>
         </span>
       </p>
@@ -38,10 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => {
-            setQuery(event.target.value);
-            onSearchQuery(event.target.value);
-          }}
+          onChange={event => handleInput(event.target.value)}
 
         />
         <span className="icon is-left">
@@ -50,15 +56,12 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="Clear Button"
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setQuery('');
-                onSearchQuery('');
-              }}
+              onClick={() => handleClearButton()}
             />
           </span>
         )}
