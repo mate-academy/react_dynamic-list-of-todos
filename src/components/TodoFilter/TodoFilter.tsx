@@ -3,7 +3,7 @@ import { FilterBy } from '../../types/FilterBy';
 
 interface Props {
   searchQuery: string,
-  filter: FilterBy
+  // filter: FilterBy
   onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleClearQuery: () => void
   onFilterSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
@@ -11,7 +11,7 @@ interface Props {
 
 export const TodoFilter: React.FC<Props> = ({
   searchQuery,
-  filter,
+  // filter,
   onQueryChange,
   handleClearQuery,
   onFilterSelect,
@@ -22,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           onChange={event => onFilterSelect(event)}
-          defaultValue={filter}
+          defaultValue={FilterBy.all}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

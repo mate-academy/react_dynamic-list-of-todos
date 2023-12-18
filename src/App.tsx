@@ -10,25 +10,10 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
+import { filterBy } from './helpers';
 
 const prepareTodos = (todos: Todo[], filter = FilterBy.all, query: string) => {
-  let todosToPrepare = [...todos];
-
-  if (filter) {
-    switch (filter) {
-      case FilterBy.active:
-        todosToPrepare = todosToPrepare.filter(todo => !todo.completed);
-        break;
-      case FilterBy.completed:
-        todosToPrepare = todosToPrepare.filter(todo => todo.completed);
-        break;
-      case FilterBy.all:
-        todosToPrepare = [...todos];
-        break;
-      default:
-        break;
-    }
-  }
+  let todosToPrepare = filterBy(todos, filter);
 
   if (query) {
     const lowerQuery = query.toLowerCase();
@@ -42,8 +27,8 @@ const prepareTodos = (todos: Todo[], filter = FilterBy.all, query: string) => {
 };
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [areTodosLoading, setAreTodosLoading] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<FilterBy>(FilterBy.all);
@@ -58,7 +43,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos().then(result => {
-      setAreTodosLoading(false);
+      setIsLoading(false);
       setTodos(result);
     });
   }, []);
@@ -75,11 +60,7 @@ export const App: React.FC = () => {
     setFilter(event.target.value as FilterBy);
   };
 
-  let todosToRender;
-
-  if (todos) {
-    todosToRender = prepareTodos(todos, filter, searchQuery);
-  }
+  const todosToRender = prepareTodos(todos, filter, searchQuery);
 
   return (
     <>
@@ -91,7 +72,6 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 searchQuery={searchQuery}
-                filter={filter}
                 onQueryChange={handleQueryChange}
                 handleClearQuery={handleClearQuery}
                 onFilterSelect={handleFilterSelect}
@@ -99,9 +79,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {areTodosLoading && <Loader />}
+              {isLoading && <Loader />}
               {
-                !!todosToRender
+                !!todosToRender.length
                 && (
                   <TodoList
                     todos={todosToRender}
