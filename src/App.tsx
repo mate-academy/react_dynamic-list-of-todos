@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const [selectedValue, setSelectedValue] = useState(Status.All);
   const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState('');
-  const [hasClear, setHasClear] = useState(true);
   const [selectedtodo, setSelectedTodo] = useState<Todo | undefined>();
 
   const getTodo = (todo: Todo) => {
@@ -30,16 +29,14 @@ export const App: React.FC = () => {
     setSelectedValue(newValue);
   };
 
+  const handleClear = () => {
+    setText('');
+  };
+
   const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newText = event.target.value;
 
     setText(newText);
-    setHasClear(false);
-  };
-
-  const handleClearButton = () => {
-    setText('');
-    setHasClear(true);
   };
 
   const handleCloseButton = () => {
@@ -65,8 +62,7 @@ export const App: React.FC = () => {
                 value={selectedValue}
                 handleText={handleText}
                 text={text}
-                handleClear={handleClearButton}
-                hasClear={hasClear}
+                hasClear={handleClear}
               />
             </div>
 

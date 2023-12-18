@@ -4,16 +4,14 @@ import { Status } from '../../types/Status';
 type Props = {
   handleOption: (event: React.ChangeEvent<HTMLSelectElement>) => void,
   handleText: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  handleClear: () => void,
   value: Status,
   text: string,
-  hasClear: boolean,
+  hasClear: () => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   handleOption,
   handleText,
-  handleClear,
   value,
   text,
   hasClear,
@@ -48,13 +46,13 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {!hasClear && (
+          {text.trim() && (
             // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClear}
+              onClick={hasClear}
             />
           )}
 
