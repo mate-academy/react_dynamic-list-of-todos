@@ -11,8 +11,7 @@ export const TodoList: React.FC<Props> = ({
   todos,
   setModalTodo,
   setModalActive,
-  }) => {
-
+}) => {
   const modalActive = (todo: Todo) => {
     setModalTodo(todo);
     setModalActive(true);
@@ -37,7 +36,7 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => (
           <tr data-cy="todo" className="">
             <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered" >
+            <td className="is-vcentered">
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
@@ -48,7 +47,8 @@ export const TodoList: React.FC<Props> = ({
               <p
                 className={`${todo.completed ? 'has-text-success' : 'has-text-danger'}`}
               >
-                {todo.title}</p>
+                {todo.title}
+              </p>
             </td>
             <td className="has-text-right is-vcentered">
               <button
@@ -67,4 +67,4 @@ export const TodoList: React.FC<Props> = ({
       </tbody>
     </table>
   );
-}
+};

@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, setModalActive }) => {
   useEffect(() => {
     getUser(modalTodo.userId).then(setUser)
       .finally(() => setLoader(false));
-  },[modalTodo]);
+  }, [modalTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -49,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, setModalActive }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {modalTodo.completed 
+              {modalTodo.completed
                 ? (<strong className="has-text-success">Done</strong>)
                 : (<strong className="has-text-danger">Planned</strong>)}
               {' by '}

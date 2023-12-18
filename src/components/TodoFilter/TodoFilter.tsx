@@ -1,17 +1,14 @@
-import { useState } from "react";
-import { Todo } from "../../types/Todo";
-
 type Props = {
   setFilters: (value: string) => void;
   setFilterInput: (value: string) => void;
   filterInput: string;
-}
+};
 
 export const TodoFilter: React.FC<Props> = ({
   setFilters,
   setFilterInput,
   filterInput,
-  }) => {
+}) => {
   const filterTodos = (e:React.MouseEvent<HTMLSelectElement>) => {
     setFilters(e.currentTarget.value);
   };
@@ -64,4 +61,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-}
+};

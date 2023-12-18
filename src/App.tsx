@@ -17,7 +17,6 @@ enum Filter {
 }
 
 export const App: React.FC = () => {
-
   const [todos, setTodo] = useState<Todo[]>([]);
   const [handleFilter, setHandleFilter] = useState('');
   const [filterInput, setFilterInput] = useState('');
@@ -28,11 +27,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos().then(setTodo)
       .finally(() => setLoading(false));
-  },[]);
+  }, []);
 
   const filterTodos = () => {
     const newTodo = [...todos].filter(todo => {
-      switch(handleFilter) {
+      switch (handleFilter) {
         case Filter.Active:
           return todo.completed === false;
         case Filter.Completed:
@@ -47,8 +46,8 @@ export const App: React.FC = () => {
 
   const handleInput = () => {
     const newTodo = filterTodos()
-      .filter(todo =>
-        todo.title.toLowerCase().includes(filterInput.toLowerCase()));
+      .filter(todo => todo.title.toLowerCase().includes(filterInput.toLowerCase()));
+
     return newTodo;
   };
 
@@ -78,11 +77,13 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {modalActive && modalTodo &&
-       ( <TodoModal
-          modalTodo={modalTodo}
-          setModalActive={setModalActive}
-        />)}
+      {modalActive && modalTodo
+       && (
+         <TodoModal
+           modalTodo={modalTodo}
+           setModalActive={setModalActive}
+         />
+       )}
     </>
   );
 };
