@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useMyContext } from '../../context/myContext';
 
-interface TodoFilterProps {
-  completed: (sortType: string) => void
-  search: (sortType: string) => void
-}
-
-export const TodoFilter: React.FC<TodoFilterProps> = (
-  { completed, search },
-) => {
+export const TodoFilter: React.FC = () => {
   const [qwerty, setQwerty] = useState<string>('');
 
+  const { searchTodo, handleCompletedTodos } = useMyContext();
+
   useEffect(() => {
-    search(qwerty);
+    searchTodo(qwerty);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qwerty]);
 
@@ -21,7 +17,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = (
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => completed(event.target.value)}
+            onChange={(event) => handleCompletedTodos(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

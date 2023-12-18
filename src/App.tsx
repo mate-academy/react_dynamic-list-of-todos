@@ -1,92 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import MyContextProvider, { useMyContext } from './context/myContext';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
-
-interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-  user: User;
-}
+import { TodoModal } from './components/TodoModal';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [TodosFromServer, setAllTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    getTodos().then(allTodos => {
-      const todoPromises = allTodos.map(todo => {
-        return getUser(todo.userId)
-          .then(user => {
-            const updatedTodo: Todo = { ...todo, user };
-
-            return updatedTodo;
-          });
-      });
-
-      Promise.all(todoPromises)
-        .then(todoWithUser => {
-          setAllTodos(todoWithUser);
-          setTodos(todoWithUser);
-        });
-    });
-  }, []);
-
-  const handleCompletedTodos = (sortType: string) => {
-    let completedTodos: Todo[] = todos;
-
-    switch (sortType) {
-      case 'all':
-        setTodos(TodosFromServer);
-        break;
-      case 'active':
-        completedTodos = TodosFromServer?.filter(todo => !todo.completed);
-        setTodos(completedTodos);
-        break;
-      case 'completed':
-        completedTodos = TodosFromServer?.filter(todo => todo.completed);
-        setTodos(completedTodos);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const SearchTodo = (value: string) => {
-    const modifiedValue = value.toLocaleLowerCase().trim();
-
-    const searchedValue = TodosFromServer.filter(
-      todo => todo.title.toLocaleLowerCase().includes(modifiedValue),
-    );
-
-    setTodos(searchedValue);
-  };
+  const {
+    isLoad,
+    activeTodo,
+  } = useMyContext();
 
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+    <MyContextProvider>
+      <>
+        <div className="section">
+          <div className="container">
+            <div className="box">
+              <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                completed={handleCompletedTodos}
-                search={SearchTodo}
-              />
-            </div>
+              <div className="block">
+                <TodoFilter />
+              </div>
 
-            <div className="block">
-              <TodoList todos={todos} />
+              <div className="block">
+                {isLoad && <Loader />}
+                <TodoList />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+        {activeTodo
+        && <TodoModal />}
+      </>
+    </MyContextProvider>
   );
 };
