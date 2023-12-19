@@ -66,7 +66,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+              {!loadingDone
+              && (<Loader />)}
               <TodoList
                 todos={filterTodos(todos, todosActivityFilter, todosQuery)}
               />

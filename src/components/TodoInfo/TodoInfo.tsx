@@ -9,13 +9,14 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{id}</td>
-      <td className="is-vcentered" />
       {completed
-      && (
-        <span className="icon" data-cy="iconCompleted">
-          <i className="fas fa-check" />
-        </span>
-      )}
+        ? (
+          <td className="is-vcentered">
+            <span className="icon" data-cy="iconCompleted">
+              <i className="fas fa-check" />
+            </span>
+          </td>
+        ) : (<td className="is-vcentered" />)}
       <td className="is-vcentered is-expanded">
         <p className={
           completed ? 'has-text-success'
