@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import MyContextProvider, { useMyContext } from './context/myContext';
@@ -8,33 +8,35 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  const {
-    isLoad,
-    activeTodo,
-  } = useMyContext();
+  const { isLoading } = useMyContext();
+  const [isTodo, setIsTodo] = useState<boolean>(false);
 
   return (
     <MyContextProvider>
-      <>
-        <div className="section">
-          <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-              <div className="block">
-                <TodoFilter />
-              </div>
+            <div className="block">
+              <TodoFilter />
+            </div>
 
-              <div className="block">
-                {isLoad && <Loader />}
-                <TodoList />
-              </div>
+            <div className="block">
+              {isLoading && <Loader />}
+              <TodoList
+                setIsTodo={setIsTodo}
+              />
             </div>
           </div>
         </div>
-        {activeTodo
-        && <TodoModal />}
-      </>
+      </div>
+      {isTodo
+        && (
+          <TodoModal
+            setIsTodo={setIsTodo}
+          />
+        )}
     </MyContextProvider>
   );
 };

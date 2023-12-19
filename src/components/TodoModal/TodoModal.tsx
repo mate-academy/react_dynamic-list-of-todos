@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Loader } from '../Loader';
 import { useMyContext } from '../../context/myContext';
 
-export const TodoModal: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const { activeTodo, setActiveTodo } = useMyContext();
+interface TodoModalProps {
+  setIsTodo: Dispatch<SetStateAction<boolean>>;
+}
 
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => {
-      clearTimeout(loadingTimeout);
-    };
-  }, []);
+const Modal: React.FC<TodoModalProps> = (
+  { setIsTodo },
+) => {
+  const {
+    activeUser, isUserLoading, activeTodo, setActiveTodo, setActiveUser,
+  } = useMyContext();
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -37,7 +34,11 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setActiveTodo(null)}
+              onClick={() => {
+                setIsTodo(false);
+                setActiveTodo(null);
+                setActiveUser(null);
+              }}
             />
           </header>
 
@@ -53,8 +54,8 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href={`mailto:${activeTodo?.user?.email}`}>
-                Leanne Graham
+              <a href={`mailto:${activeUser?.email}`}>
+                {activeUser?.name}
               </a>
             </p>
           </div>
@@ -63,3 +64,5 @@ export const TodoModal: React.FC = () => {
     </div>
   );
 };
+
+export const TodoModal = React.memo(Modal);

@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React from 'react';
 import { useMyContext } from '../../context/myContext';
 
 export const TodoFilter: React.FC = () => {
-  const [qwerty, setQwerty] = useState<string>('');
-
-  const { searchTodo, handleCompletedTodos } = useMyContext();
-
-  useEffect(() => {
-    searchTodo(qwerty);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qwerty]);
+  const { qwerty, setQwerty, setSortType } = useMyContext();
 
   return (
     <form className="field has-addons">
@@ -17,7 +11,7 @@ export const TodoFilter: React.FC = () => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={(event) => handleCompletedTodos(event.target.value)}
+            onChange={(event) => setSortType(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -43,7 +37,6 @@ export const TodoFilter: React.FC = () => {
 
         {qwerty && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"

@@ -1,28 +1,25 @@
-import
-React, {
+import React, {
   createContext, useContext, useEffect, useState, ReactNode,
-}
-  from 'react';
+} from 'react';
 import { getTodos, getUser } from '../api';
 import { User } from '../types/User';
-
-interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-  user?: User;
-}
+import { Todo } from '../types/Todo';
 
 interface MyContextProps {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   TodosFromServer: Todo[];
-  isLoad: boolean;
-  handleCompletedTodos: (sortType: string) => void;
-  searchTodo: (value: string) => void;
-  activeTodo: Todo | null;
-  setActiveTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
+  isLoading: boolean;
+  qwerty: string;
+  setQwerty: React.Dispatch<React.SetStateAction<string>>;
+  sortType: string | null,
+  setSortType: React.Dispatch<React.SetStateAction<string>>;
+  activeUser: User | null;
+  setActiveUser: React.Dispatch<React.SetStateAction<User | null>>;
+  isUserLoading: boolean;
+  setIsUserLoading: React.Dispatch<React.SetStateAction<boolean>>
+  activeTodo: Todo | null
+  setActiveTodo: React.Dispatch<React.SetStateAction<Todo | null>>
 }
 
 const MyContext = createContext<MyContextProps | undefined>(undefined);
@@ -32,68 +29,76 @@ interface MyContextProviderProps {
 }
 
 const MyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [TodosFromServer, setAllTodos] = useState<Todo[]>([]);
-  const [isLoad, setIsLoad] = useState(true);
+  const [todosFromServer, setAllTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [qwerty, setQwerty] = useState<string>('');
+  const [sortType, setSortType] = useState<string>('all');
+  const [activeUser, setActiveUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then((allTodos: Todo[]) => {
-      const todoPromises = allTodos.map(todo => {
-        return getUser(todo.userId)
-          .then((user: User) => {
-            const updatedTodo = { ...todo, user };
-
-            return updatedTodo;
-          });
-      });
-
-      Promise.all(todoPromises)
-        .then(todoWithUser => {
-          setAllTodos(todoWithUser);
-          setTodos(todoWithUser);
-          setIsLoad(false);
-        });
-    });
+    getTodos()
+      .then((allTodos: Todo[]) => {
+        setAllTodos(allTodos);
+        setFilteredTodos(allTodos);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const handleCompletedTodos = (sortType: string) => {
-    let completedTodos: Todo[] = todos;
+  // zustand
+
+  useEffect(() => {
+    setIsUserLoading(true);
+    if (activeTodo?.userId) {
+      getUser(activeTodo?.userId)
+        .then(setActiveUser)
+        .finally(() => {
+          setIsUserLoading(false);
+        });
+    }
+  }, [activeTodo]);
+
+  useEffect(() => {
+    let modifiedTodo: Todo[] = [];
 
     switch (sortType) {
       case 'all':
-        setTodos(TodosFromServer);
+        modifiedTodo = todosFromServer;
         break;
       case 'active':
-        completedTodos = TodosFromServer.filter(todo => !todo.completed);
-        setTodos(completedTodos);
+        modifiedTodo = todosFromServer.filter((todo) => !todo.completed);
         break;
       case 'completed':
-        completedTodos = TodosFromServer.filter(todo => todo.completed);
-        setTodos(completedTodos);
+        modifiedTodo = todosFromServer.filter((todo) => todo.completed);
         break;
       default:
         break;
     }
-  };
 
-  const searchTodo = (value: string) => {
-    const modifiedValue = value.toLocaleLowerCase().trim();
+    const modifiedValue = qwerty.toLocaleLowerCase();
 
-    const searchedValue = TodosFromServer.filter(
-      todo => todo.title.toLocaleLowerCase().includes(modifiedValue),
-    );
+    const filtered = modifiedTodo.filter((todo) => {
+      return todo.title.toLocaleLowerCase().includes(modifiedValue);
+    });
 
-    setTodos(searchedValue);
-  };
+    setFilteredTodos(filtered);
+  }, [qwerty, sortType, todosFromServer]);
 
   const contextValue: MyContextProps = {
-    todos,
-    setTodos,
-    TodosFromServer,
-    isLoad,
-    handleCompletedTodos,
-    searchTodo,
+    todos: filteredTodos,
+    setTodos: setFilteredTodos,
+    TodosFromServer: todosFromServer,
+    isLoading,
+    qwerty,
+    setQwerty,
+    sortType,
+    setSortType,
+    activeUser,
+    setActiveUser,
+    isUserLoading,
+    setIsUserLoading,
     activeTodo,
     setActiveTodo,
   };
@@ -109,7 +114,7 @@ export const useMyContext = () => {
   const context = useContext(MyContext);
 
   if (!context) {
-    throw new Error('useMyContext must be used within a MyContextProvider');
+    throw new Error('');
   }
 
   return context;

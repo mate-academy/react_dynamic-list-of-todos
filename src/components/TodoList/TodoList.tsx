@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useMyContext } from '../../context/myContext';
 
-export const TodoList: React.FC = () => {
-  const { todos, setActiveTodo } = useMyContext();
+interface TodoListProps {
+  setIsTodo: Dispatch<SetStateAction<boolean>>;
+}
+
+const List: React.FC<TodoListProps> = (
+  { setIsTodo },
+) => {
+  const {
+    todos, activeTodo, setActiveTodo,
+  } = useMyContext();
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -27,7 +35,6 @@ export const TodoList: React.FC = () => {
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
-                  {/* <i className="far fa-eye" /> */}
                 </span>
               )}
             </td>
@@ -45,12 +52,21 @@ export const TodoList: React.FC = () => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setActiveTodo(todo)}
+                onClick={() => {
+                  setActiveTodo(todo);
+                  setIsTodo(true);
+                }}
               >
-                <span className="icon">
-                  { /* logic here  */ }
-                  <i className="far fa-eye fa-eye-slash" />
-                </span>
+                {activeTodo?.id === todo.id ? (
+                  <span className="icon">
+                    <i className="far fa-eye-slash" />
+                  </span>
+                )
+                  : (
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  )}
               </button>
             </td>
           </tr>
@@ -59,3 +75,5 @@ export const TodoList: React.FC = () => {
     </table>
   );
 };
+
+export const TodoList = React.memo(List);
