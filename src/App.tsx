@@ -37,6 +37,10 @@ export const App: React.FC = () => {
   const [todoShownId, setTodoShownId] = useState(-1);
   const [loadingDone, setLoadingDone] = useState(false);
 
+  function setActivityFilter(filterValue: string) {
+    setTodosActivityFilter(filterValue);
+  }
+
   useEffect(() => {
     const loadTodos = async () => {
       const data = await getTodos();
@@ -56,12 +60,14 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setActivityFilter={setActivityFilter}
+              />
             </div>
 
             <div className="block">
               <Loader />
-              <TodoList />
+              <TodoList todos={filterTodos(todos, todosActivityFilter, todosQuery)}/>
             </div>
           </div>
         </div>
