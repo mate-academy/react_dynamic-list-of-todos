@@ -4,9 +4,16 @@ import { Filter } from '../../types/Filter';
 type Props = {
   filter: Filter;
   setFilter: ((filter: Filter) => void);
+  query: string;
+  setQuery: ((query: string) => void);
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => (
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  setFilter,
+  query,
+  setQuery,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -28,6 +35,9 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
