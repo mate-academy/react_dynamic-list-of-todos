@@ -1,6 +1,6 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
@@ -62,8 +62,9 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i className={classNames('far ', {
                     'fa-eye-slash': modalTodo?.id === todo.id,
-                    'fa-eye' : modalTodo?.id !== todo.id
-                  })} />
+                    'fa-eye': modalTodo?.id !== todo.id,
+                  })}
+                  />
                 </span>
               </button>
             </td>

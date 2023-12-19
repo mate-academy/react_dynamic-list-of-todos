@@ -13,9 +13,8 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({
   modalTodo,
   setIsModalActive,
-  setModalTodo
-  }) => {
-
+  setModalTodo,
+}) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,8 +25,8 @@ export const TodoModal: React.FC<Props> = ({
 
   const delitModal = () => {
     setModalTodo(undefined);
-    setIsModalActive(false)
-  }
+    setIsModalActive(false);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -42,7 +41,8 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{modalTodo.id}
+              Todo #
+              {modalTodo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

@@ -37,13 +37,13 @@ export const App: React.FC = () => {
     });
 
     return newTodo;
-  },[filter, todos]);
+  }, [filter, todos]);
 
   const handleInput = useMemo(() => {
     const newTodo = filterTodos
       .filter(todo => todo.title.toLowerCase().includes(inputQuery.toLowerCase()));
 
-    return newTodo
+    return newTodo;
   }, [filterTodos, inputQuery]);
 
   return (
@@ -73,13 +73,14 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {isModalActive && modalTodo &&
-        (<TodoModal
-          setModalTodo={setModalTodo}
-          modalTodo={modalTodo}
-          setIsModalActive={setIsModalActive}
-        />
-      )}
+      {isModalActive && modalTodo
+        && (
+          <TodoModal
+            setModalTodo={setModalTodo}
+            modalTodo={modalTodo}
+            setIsModalActive={setIsModalActive}
+          />
+        )}
     </>
   );
 };

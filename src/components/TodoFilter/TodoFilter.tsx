@@ -1,4 +1,4 @@
-import { Filter } from "../../enum/Filter";
+import { Filter } from '../../enum/Filter';
 
 type Props = {
   setFilter: (value: Filter) => void;
@@ -50,18 +50,17 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {inputQuery && (
+        {inputQuery && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={() => setInputQuery('')}
             />
-          )}
-        </span>
+          </span>
+        )}
       </p>
     </form>
   );
