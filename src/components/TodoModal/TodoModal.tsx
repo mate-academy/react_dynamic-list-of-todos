@@ -1,12 +1,25 @@
-import React from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  isLoadingUser: boolean;
+  selectedUser: User | null;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (value: Todo | null) => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  isLoadingUser,
+  selectedUser,
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +28,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,23 +36,33 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                setSelectedTodo(null);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo && selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
+              {selectedTodo && (
+                <strong
+                  className={
+                    selectedTodo.completed
+                      ? 'has-text-success'
+                      : 'has-text-danger'
+                  }
+                >
+                  {selectedTodo.completed ? 'Done' : 'Planned'}
+                </strong>
+              )}
               {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              {selectedUser && (
+                <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
+              )}
             </p>
           </div>
         </div>
