@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,47 +9,42 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Filter } from './enum/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const [handleFilter, setHandleFilter] = useState('');
-  const [filterInput, setFilterInput] = useState('');
-  const [modalActive, setModalActive] = useState(false);
-  const [modalTodo, setModalTodo] = useState<Todo>();
-  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [inputQuery, setInputQuery] = useState('');
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalTodo, setModalTodo] = useState<Todo | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos().then(setTodo)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const filterTodos = () => {
+  const filterTodos = useMemo(() => {
     const newTodo = [...todos].filter(todo => {
-      switch (handleFilter) {
+      switch (filter) {
         case Filter.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case Filter.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           return todo;
       }
     });
 
     return newTodo;
-  };
+  },[filter, todos]);
 
-  const handleInput = () => {
-    const newTodo = filterTodos()
-      .filter(todo => todo.title.toLowerCase().includes(filterInput.toLowerCase()));
+  const handleInput = useMemo(() => {
+    const newTodo = filterTodos
+      .filter(todo => todo.title.toLowerCase().includes(inputQuery.toLowerCase()));
 
-    return newTodo;
-  };
+    return newTodo
+  }, [filterTodos, inputQuery]);
 
   return (
     <>
@@ -60,30 +55,31 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilters={setHandleFilter}
-                setFilterInput={setFilterInput}
-                filterInput={filterInput}
+                setFilter={setFilter}
+                setInputQuery={setInputQuery}
+                inputQuery={inputQuery}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
-                todos={handleInput()}
+                todos={handleInput}
+                modalTodo={modalTodo}
                 setModalTodo={setModalTodo}
-                setModalActive={setModalActive}
+                setIsModalActive={setIsModalActive}
               />
             </div>
           </div>
         </div>
       </div>
-      {modalActive && modalTodo
-       && (
-         <TodoModal
-           modalTodo={modalTodo}
-           setModalActive={setModalActive}
-         />
-       )}
+      {isModalActive && modalTodo &&
+        (<TodoModal
+          setModalTodo={setModalTodo}
+          modalTodo={modalTodo}
+          setIsModalActive={setIsModalActive}
+        />
+      )}
     </>
   );
 };

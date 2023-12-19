@@ -1,20 +1,22 @@
+import { Filter } from "../../enum/Filter";
+
 type Props = {
-  setFilters: (value: string) => void;
-  setFilterInput: (value: string) => void;
-  filterInput: string;
+  setFilter: (value: Filter) => void;
+  setInputQuery: (value: string) => void;
+  inputQuery: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  setFilters,
-  setFilterInput,
-  filterInput,
+  setFilter,
+  setInputQuery,
+  inputQuery,
 }) => {
   const filterTodos = (e:React.MouseEvent<HTMLSelectElement>) => {
-    setFilters(e.currentTarget.value);
+    setFilter(e.currentTarget.value as Filter);
   };
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterInput(e.target.value);
+    setInputQuery(e.target.value);
   };
 
   return (
@@ -42,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={filterInput}
+          value={inputQuery}
           onChange={searchInput}
         />
         <span className="icon is-left">
@@ -51,12 +53,14 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setFilterInput('')}
-          />
+          {inputQuery && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setInputQuery('')}
+            />
+          )}
         </span>
       </p>
     </form>

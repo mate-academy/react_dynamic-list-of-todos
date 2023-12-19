@@ -1,20 +1,23 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[],
+  modalTodo: Todo | undefined,
   setModalTodo: (todo: Todo) => void,
-  setModalActive: (value: boolean) => void,
+  setIsModalActive: (value: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  modalTodo,
   setModalTodo,
-  setModalActive,
+  setIsModalActive,
 }) => {
   const modalActive = (todo: Todo) => {
     setModalTodo(todo);
-    setModalActive(true);
+    setIsModalActive(true);
   };
 
   return (
@@ -31,9 +34,8 @@ export const TodoList: React.FC<Props> = ({
           <th> </th>
         </tr>
       </thead>
-
-      <tbody>
-        {todos.map(todo => (
+      {todos.map(todo => (
+        <tbody key={todo.id}>
           <tr data-cy="todo" className="">
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -58,13 +60,17 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => modalActive(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={classNames('far ', {
+                    'fa-eye-slash': modalTodo?.id === todo.id,
+                    'fa-eye' : modalTodo?.id !== todo.id
+                  })} />
                 </span>
               </button>
             </td>
           </tr>
-        ))}
-      </tbody>
+        </tbody>
+      ))}
+
     </table>
   );
 };

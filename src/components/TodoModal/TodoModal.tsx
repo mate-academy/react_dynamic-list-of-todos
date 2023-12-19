@@ -6,23 +6,34 @@ import { User } from '../../types/User';
 
 type Props = {
   modalTodo: Todo,
-  setModalActive: (value: boolean) => void,
+  setModalTodo: (value: Todo | undefined) => void,
+  setIsModalActive: (value: boolean) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ modalTodo, setModalActive }) => {
+export const TodoModal: React.FC<Props> = ({
+  modalTodo,
+  setIsModalActive,
+  setModalTodo
+  }) => {
+
   const [user, setUser] = useState<User>();
-  const [loader, setLoader] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getUser(modalTodo.userId).then(setUser)
-      .finally(() => setLoader(false));
+      .finally(() => setIsLoading(false));
   }, [modalTodo]);
+
+  const delitModal = () => {
+    setModalTodo(undefined);
+    setIsModalActive(false)
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -31,7 +42,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, setModalActive }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{modalTodo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -39,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, setModalActive }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModalActive(false)}
+              onClick={delitModal}
             />
           </header>
 
