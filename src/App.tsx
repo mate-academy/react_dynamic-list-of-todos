@@ -5,13 +5,14 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
@@ -31,13 +32,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               <Loader />
-              <TodoList todos={todos} />
+              <TodoList todos={todos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
+      {selectedTodo
+        && <TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />}
     </>
   );
 };
