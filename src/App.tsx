@@ -26,7 +26,8 @@ function finalTodos(todos: Todo[], filter:Filter, query:string):Todo[] {
       break;
   }
 
-  result = result.filter(todo => todo.title.includes(query) || todo.id === +query);
+  result = result.filter(todo => todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+    || todo.id === +query);
 
   return result;
 }
