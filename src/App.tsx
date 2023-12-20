@@ -11,19 +11,12 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
-const EMPTY_TODO = {
-  id: 0,
-  title: 'testtesttest',
-  completed: true,
-  userId: 0,
-};
-
 export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  // const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo>(EMPTY_TODO);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedModel, setSelectedModel] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
 
@@ -54,9 +47,12 @@ export const App: React.FC = () => {
     return result;
   }
 
-  useEffect(() => {
-    setVisibleTodos(TodosToRender(todos, query, selectedFilter));
-  }, [query, selectedFilter, todos]);
+  // useEffect(() => {
+  //   setVisibleTodos(TodosToRender(todos, query, selectedFilter));
+  // }, [query, selectedFilter, todos]);
+  const todosToShow = TodosToRender(todos, query, selectedFilter);
+
+  // console.log(query.length, todosToShow.length);
 
   return (
     <>
@@ -78,7 +74,7 @@ export const App: React.FC = () => {
               {loadingTodos
                 && <Loader />}
               <TodoList
-                todos={visibleTodos}
+                todos={todosToShow}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
                 selectedModel={selectedModel}
@@ -88,11 +84,12 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedModel
+      {selectedTodo && selectedModel
         && (
           <TodoModal
             selectedTodo={selectedTodo}
             setSelectedModel={setSelectedModel}
+            setSelectedTodo={setSelectedTodo}
           />
         )}
     </>

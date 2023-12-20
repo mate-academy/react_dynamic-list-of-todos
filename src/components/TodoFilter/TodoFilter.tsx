@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { Dispatch, SetStateAction } from 'react';
 import { Filter } from '../../types/Filter';
 
@@ -54,7 +55,6 @@ export const TodoFilter = (
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"

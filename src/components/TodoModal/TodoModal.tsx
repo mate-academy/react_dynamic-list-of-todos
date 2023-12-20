@@ -7,19 +7,13 @@ import { User } from '../../types/User';
 type Props = {
   selectedTodo: Todo;
   setSelectedModel: (info: boolean) => void;
-};
-
-const TEST_PERSON = {
-  id: 0,
-  name: 'Test Testowski',
-  email: 'test@test.test',
-  phone: '123456789',
+  setSelectedTodo: (arg: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = (
-  { selectedTodo, setSelectedModel },
+  { selectedTodo, setSelectedModel, setSelectedTodo },
 ) => {
-  const [selectedPerson, setSelectedPerson] = useState<User>(TEST_PERSON);
+  const [selectedPerson, setSelectedPerson] = useState<User | null>(null);
   const [loadingTodoInfo, setLoadingTodoInfo] = useState<boolean>(false);
 
   useEffect(() => {
@@ -27,11 +21,12 @@ export const TodoModal: React.FC<Props> = (
     getUser(selectedTodo.userId)
       .then(setSelectedPerson)
       .finally(() => setLoadingTodoInfo(false));
-  }, []);
+  }, [selectedTodo]);
 
-  // console.log(selectedModel, setSelectedModel);
   const handleCloseClick = () => {
     setSelectedModel(false);
+    setSelectedPerson(null);
+    setSelectedTodo(null);
   };
 
   return (
@@ -66,14 +61,13 @@ export const TodoModal: React.FC<Props> = (
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {selectedTodo.completed
                 ? (<strong className="has-text-success">Done</strong>)
                 : (<strong className="has-text-danger">Planned</strong>)}
 
               {' by '}
 
-              <a href={`mailto:${selectedPerson.email}`}>
+              <a href={`mailto:${selectedPerson?.email}`}>
                 {selectedPerson?.name}
               </a>
             </p>
