@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import { useTodo } from '../../providers/TodoProvider';
 
-type Props = {
-  todo: Todo;
-  onClose: () => void;
-};
-
-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
+  const { selectedTodo, handleClose } = useTodo();
+
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
-  }, [todo.userId]);
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(setUser);
+    }
+  }, [selectedTodo]);
+
+  if (!selectedTodo) {
+    return null;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -29,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -37,18 +40,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
+              onClick={handleClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {todo.completed
+              {selectedTodo.completed
                 ? (
                   <strong className="has-text-success">
                     Done

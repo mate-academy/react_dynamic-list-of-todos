@@ -1,15 +1,11 @@
 import { FC } from 'react';
+import { useTodo } from '../../providers/TodoProvider';
 
-type Props = {
-  query: string;
-  onQueryChange: (newQuery: string) => void;
-  filter: string;
-  onSelectFilter: (newFilter: string) => void;
-};
+export const TodoFilter: FC = () => {
+  const {
+    filter, handleSelectFilter, query, handleQueryChange,
+  } = useTodo();
 
-export const TodoFilter: FC<Props> = ({
-  query, onQueryChange, filter, onSelectFilter,
-}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -17,7 +13,7 @@ export const TodoFilter: FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={(event) => onSelectFilter(event.target.value)}
+            onChange={(event) => handleSelectFilter(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -33,7 +29,7 @@ export const TodoFilter: FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
+          onChange={(event) => handleQueryChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -45,7 +41,7 @@ export const TodoFilter: FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQueryChange('')}
+              onClick={() => handleQueryChange('')}
             />
           </span>
         )}

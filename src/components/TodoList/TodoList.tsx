@@ -1,15 +1,9 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
+import { useTodo } from '../../providers/TodoProvider';
 
-type Props = {
-  todos: Todo[];
-  selectedTodo: Todo | null;
-  onSelectTodo: (todo: Todo) => () => void;
-};
+export const TodoList: React.FC = () => {
+  const { visibleTodos, selectedTodo, handleSelectTodo } = useTodo();
 
-export const TodoList: React.FC<Props> = ({
-  todos, onSelectTodo, selectedTodo,
-}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -26,11 +20,12 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => {
+        {visibleTodos.map(todo => {
           const isSelected = selectedTodo && todo.id === selectedTodo.id;
 
           return (
             <tr
+              key={todo.id}
               data-cy="todo"
               className={isSelected ? 'has-background-info-light' : ''}
             >
@@ -52,7 +47,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={onSelectTodo(todo)}
+                  onClick={handleSelectTodo(todo)}
                 >
                   <span className="icon">
                     <i className={`far fa-eye${isSelected ? '-slash' : ''}`} />
