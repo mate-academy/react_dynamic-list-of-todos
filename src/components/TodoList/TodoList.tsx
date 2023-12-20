@@ -4,44 +4,117 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[] | null;
+  selectedTodo: Todo;
+  setSelectedTodo: (task: Todo) => void;
+  selectedModel: boolean,
+  setSelectedModel: (item: boolean) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export const TodoList: React.FC<Props> = (
+  {
+    todos, selectedTodo, setSelectedTodo, selectedModel, setSelectedModel,
+  },
+) => {
+  const handleSelectedClick = (task: Todo) => {
+    setSelectedTodo(task);
+    setSelectedModel(!selectedModel);
+  };
 
-    <tbody>
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
 
-      {todos?.map(task => (
-        <tr data-cy="todo" className="">
-          <td className="is-vcentered">{task.id}</td>
-          {task.completed
-            ? (
-              <td className="is-vcentered">
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
+      <tbody>
+
+        {todos?.map(task => (
+          <tr key={task.id} data-cy="todo" className="">
+            <td className="is-vcentered">{task.id}</td>
+            {task.completed
+              ? (
+                <td className="is-vcentered">
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                </td>
+              )
+              : (<td className="is-vcentered" />)}
+            <td className="is-vcentered is-expanded">
+              <p className={classNames({
+                'has-text-danger': !task.completed,
+                'has-text-success': task.completed,
+              })}
+              >
+                {task.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                value={task.id}
+                onClick={() => handleSelectedClick(task)}
+              >
+                <span className="icon">
+                  <i
+                    className={classNames('far', {
+                      'fa-eye-slash': selectedTodo.id === task.id,
+                      'fa-eye': selectedTodo.id !== task.id,
+                    })}
+                  />
                 </span>
-              </td>
-            )
-            : (<td className="is-vcentered" />)}
+              </button>
+            </td>
+          </tr>
+        ))}
+
+        {/* <tr data-cy="todo" className="has-background-info-light">
+          <td className="is-vcentered">2</td>
+          <td className="is-vcentered" />
           <td className="is-vcentered is-expanded">
-            <p className={classNames({
-              'has-text-danger': !task.completed,
-              'has-text-success': task.completed,
-            })}
-            >
-              {task.title}
+            <p className="has-text-danger">quis ut nam facilis et officia qui</p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button data-cy="selectButton" className="button" type="button">
+              <span className="icon">
+                <i className="far fa-eye-slash" />
+              </span>
+            </button>
+          </td>
+        </tr>
+
+        <tr data-cy="todo" className="">
+          <td className="is-vcentered">1</td>
+          <td className="is-vcentered" />
+          <td className="is-vcentered is-expanded">
+            <p className="has-text-danger">delectus aut autem</p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button data-cy="selectButton" className="button" type="button">
+              <span className="icon">
+                <i className="far fa-eye" />
+              </span>
+            </button>
+          </td>
+        </tr>
+
+        <tr data-cy="todo" className="">
+          <td className="is-vcentered">6</td>
+          <td className="is-vcentered" />
+          <td className="is-vcentered is-expanded">
+            <p className="has-text-danger">
+              qui ullam ratione quibusdam voluptatem quia omnis
             </p>
           </td>
           <td className="has-text-right is-vcentered">
@@ -52,81 +125,26 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
             </button>
           </td>
         </tr>
-      ))}
 
-      {/* <td className="is-vcentered">
-        <span className="icon" data-cy="iconCompleted">
-          <i className="fas fa-check" />
-        </span>
-      </td> */}
-
-      {/* <td className="is-vcentered" /> */}
-
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
+        <tr data-cy="todo" className="">
+          <td className="is-vcentered">8</td>
+          <td className="is-vcentered">
+            <span className="icon" data-cy="iconCompleted">
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+          </td>
+          <td className="is-vcentered is-expanded">
+            <p className="has-text-success">quo adipisci enim quam ut ab</p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button data-cy="selectButton" className="button" type="button">
+              <span className="icon">
+                <i className="far fa-eye" />
+              </span>
+            </button>
+          </td>
+        </tr> */}
+      </tbody>
+    </table>
+  );
+};
