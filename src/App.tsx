@@ -29,7 +29,7 @@ export const App: React.FC = () => {
         setTodos(data);
       } catch (err : unknown) {
         if (err instanceof Error) {
-          setError('404 Not Found');
+          setError('404 Todo Tasks Not Found');
         }
       } finally {
         setIsLoading(false);
