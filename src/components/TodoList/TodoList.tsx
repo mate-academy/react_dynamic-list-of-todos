@@ -6,18 +6,18 @@ type Props = {
   todos: Todo[] | null;
   selectedTodo: Todo | null;
   setSelectedTodo: (task: Todo) => void;
-  selectedModel: boolean,
-  setSelectedModel: (item: boolean) => void;
+  isModalOpen: boolean,
+  setIsModalOpen: (item: boolean) => void;
 };
 
 export const TodoList: React.FC<Props> = (
   {
-    todos, selectedTodo, setSelectedTodo, selectedModel, setSelectedModel,
+    todos, selectedTodo, setSelectedTodo, isModalOpen, setIsModalOpen,
   },
 ) => {
-  const handleSelectedClick = (task: Todo) => {
+  const handleSelectedClick = (task: Todo) => () => {
     setSelectedTodo(task);
-    setSelectedModel(!selectedModel);
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -64,7 +64,7 @@ export const TodoList: React.FC<Props> = (
                 className="button"
                 type="button"
                 value={task.id}
-                onClick={() => handleSelectedClick(task)}
+                onClick={handleSelectedClick(task)}
               >
                 <span className="icon">
                   <i

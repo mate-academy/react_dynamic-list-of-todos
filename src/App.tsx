@@ -11,48 +11,41 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
+function todosToRender(tasks: Todo[], wanted: string, selected: Filter) {
+  let result = tasks;
+
+  switch (selected) {
+    case 'active':
+      result = tasks.filter(task => !task.completed);
+      break;
+    case 'completed':
+      result = tasks.filter(task => task.completed);
+      break;
+    default:
+      break;
+  }
+
+  result = result.filter(task => task.title.toLowerCase().includes(wanted.toLowerCase()));
+
+  return result;
+}
+
 export const App: React.FC = () => {
-  const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
+  const [isLoadingTodos, setIsLoadingTodos] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedModel, setSelectedModel] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    setLoadingTodos(true);
+    setIsLoadingTodos(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoadingTodos(false));
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
-  function TodosToRender(tasks: Todo[], wanted: string, selected: Filter) {
-    let result;
-
-    switch (selected) {
-      case 'active':
-        result = tasks.filter(task => !task.completed);
-        break;
-      case 'completed':
-        result = tasks.filter(task => task.completed);
-        break;
-      default:
-        result = tasks;
-        break;
-    }
-
-    result = result.filter(task => task.title.toLowerCase().includes(wanted.toLowerCase()));
-
-    return result;
-  }
-
-  // useEffect(() => {
-  //   setVisibleTodos(TodosToRender(todos, query, selectedFilter));
-  // }, [query, selectedFilter, todos]);
-  const todosToShow = TodosToRender(todos, query, selectedFilter);
-
-  // console.log(query.length, todosToShow.length);
+  const todosToShow = todosToRender(todos, query, selectedFilter);
 
   return (
     <>
@@ -71,24 +64,24 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodos
+              {isLoadingTodos
                 && <Loader />}
               <TodoList
                 todos={todosToShow}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
-                selectedModel={selectedModel}
-                setSelectedModel={setSelectedModel}
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
               />
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo && selectedModel
+      {selectedTodo && isModalOpen
         && (
           <TodoModal
             selectedTodo={selectedTodo}
-            setSelectedModel={setSelectedModel}
+            setIsModalOpen={setIsModalOpen}
             setSelectedTodo={setSelectedTodo}
           />
         )}

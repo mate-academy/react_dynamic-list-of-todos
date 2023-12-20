@@ -6,12 +6,12 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setSelectedModel: (info: boolean) => void;
+  setIsModalOpen: (info: boolean) => void;
   setSelectedTodo: (arg: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = (
-  { selectedTodo, setSelectedModel, setSelectedTodo },
+  { selectedTodo, setIsModalOpen, setSelectedTodo },
 ) => {
   const [selectedPerson, setSelectedPerson] = useState<User | null>(null);
   const [loadingTodoInfo, setLoadingTodoInfo] = useState<boolean>(false);
@@ -24,7 +24,7 @@ export const TodoModal: React.FC<Props> = (
   }, [selectedTodo]);
 
   const handleCloseClick = () => {
-    setSelectedModel(false);
+    setIsModalOpen(false);
     setSelectedPerson(null);
     setSelectedTodo(null);
   };

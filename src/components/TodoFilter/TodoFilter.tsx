@@ -14,7 +14,7 @@ export const TodoFilter = (
     query, setQuery, selectedFilter, setSelectedFilter,
   }: Props,
 ) => {
-  const handleQueryChange = (text: string) => {
+  const handleInputChange = (text: string) => {
     setQuery(text);
   };
 
@@ -47,7 +47,7 @@ export const TodoFilter = (
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={(event) => handleQueryChange(event.target.value)}
+          onChange={(event) => handleInputChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -59,7 +59,7 @@ export const TodoFilter = (
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => handleQueryChange('')}
+              onClick={() => handleInputChange('')}
             />
           </span>
         )}
