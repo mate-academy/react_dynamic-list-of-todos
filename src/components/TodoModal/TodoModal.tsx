@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = (
   { selectedTodo, setIsModalOpen, setSelectedTodo },
 ) => {
   const [selectedPerson, setSelectedPerson] = useState<User | null>(null);
-  const [loadingTodoInfo, setLoadingTodoInfo] = useState<boolean>(false);
+  const [loadingTodoInfo, setLoadingTodoInfo] = useState<boolean>(true);
 
   useEffect(() => {
     setLoadingTodoInfo(true);
@@ -24,9 +24,9 @@ export const TodoModal: React.FC<Props> = (
   }, [selectedTodo]);
 
   const handleCloseClick = () => {
-    setIsModalOpen(false);
     setSelectedPerson(null);
     setSelectedTodo(null);
+    setIsModalOpen(false);
   };
 
   return (

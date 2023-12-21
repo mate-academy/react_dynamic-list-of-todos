@@ -70,7 +70,6 @@ export const App: React.FC = () => {
                 todos={todosToShow}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
-                isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
               />
             </div>

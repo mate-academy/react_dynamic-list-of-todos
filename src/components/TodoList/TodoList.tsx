@@ -6,18 +6,17 @@ type Props = {
   todos: Todo[] | null;
   selectedTodo: Todo | null;
   setSelectedTodo: (task: Todo) => void;
-  isModalOpen: boolean,
   setIsModalOpen: (item: boolean) => void;
 };
 
 export const TodoList: React.FC<Props> = (
   {
-    todos, selectedTodo, setSelectedTodo, isModalOpen, setIsModalOpen,
+    todos, selectedTodo, setSelectedTodo, setIsModalOpen,
   },
 ) => {
   const handleSelectedClick = (task: Todo) => () => {
     setSelectedTodo(task);
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen(true);
   };
 
   return (
@@ -38,7 +37,13 @@ export const TodoList: React.FC<Props> = (
       <tbody>
 
         {todos?.map(task => (
-          <tr key={task.id} data-cy="todo" className="">
+          <tr
+            key={task.id}
+            data-cy="todo"
+            className={classNames({
+              'has-background-info-light': task === selectedTodo,
+            })}
+          >
             <td className="is-vcentered">{task.id}</td>
             {task.completed
               ? (
