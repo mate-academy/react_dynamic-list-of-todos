@@ -1,24 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
-import { Todo } from '../../types/Todo';
+import { useTodoContext } from '../context';
 
-type Props = {
-  selectedTodoData: {
-    userId: number | null;
-    todo: Todo | null;
-  }
-  setSelectedTodoData: (data:
-  { userId: number | null; todo: Todo | null }) => void;
-};
-
-export const TodoModal: React.FC<Props> = ({
-  selectedTodoData,
-  setSelectedTodoData,
-}) => {
+export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { setSelectedTodoData, selectedTodoData } = useTodoContext();
 
   const { userId, todo } = selectedTodoData;
 

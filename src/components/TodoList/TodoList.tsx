@@ -1,35 +1,19 @@
-import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api';
+import { useTodoContext } from '../context';
 
-type Props = {
-  setIsLoading: (condition: boolean) => void;
-  setSelectedTodoData: (data:
-  { userId: number | null; todo: Todo | null }) => void;
-  todos: Todo[] | null;
-  setTodos: (todos: Todo[] | null) => void;
-};
-
-export const TodoList: React.FC<Props> = (
-  {
-    setIsLoading, setSelectedTodoData, todos, setTodos,
-  },
-) => {
-  useEffect(() => {
-    setIsLoading(true);
-    const loadTodos = async () => {
-      const fetchedTodos = await getTodos();
-
-      setTodos(fetchedTodos);
-    };
-
-    loadTodos().finally(() => setIsLoading(false));
-  }, [setIsLoading, setTodos]);
+export const TodoList: React.FC = () => {
+  const {
+    setSelectedTodoData,
+    visibleTodos,
+    selectedTodoData,
+  } = useTodoContext();
 
   const handleUserChange = (todo: Todo) => {
     setSelectedTodoData({ userId: todo.userId, todo });
   };
+
+  const { todo } = selectedTodoData;
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -47,12 +31,17 @@ export const TodoList: React.FC<Props> = (
       </thead>
 
       <tbody>
-        {todos?.map(todo => {
+        {visibleTodos?.map(onetodo => {
           return (
-            <tr data-cy="todo" className="">
-              <td className="is-vcentered">{todo.id}</td>
+            <tr
+              data-cy="todo"
+              className={classNames({
+                'has-background-info-light': onetodo.id === todo?.id,
+              })}
+            >
+              <td className="is-vcentered">{onetodo.id}</td>
               <td className="is-vcentered">
-                {todo.completed && (
+                {onetodo.completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
@@ -61,11 +50,11 @@ export const TodoList: React.FC<Props> = (
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames({
-                    'has-text-success': todo.completed,
-                    'has-text-danger': !todo.completed,
+                    'has-text-success': onetodo.completed,
+                    'has-text-danger': !onetodo.completed,
                   })}
                 >
-                  {todo.title}
+                  {onetodo.title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
@@ -73,10 +62,14 @@ export const TodoList: React.FC<Props> = (
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => handleUserChange(todo)}
+                  onClick={() => handleUserChange(onetodo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i className={classNames({
+                      'far fa-eye': onetodo.id !== todo?.id,
+                      'far fa-eye-slash': onetodo.id === todo?.id,
+                    })}
+                    />
                   </span>
                 </button>
               </td>

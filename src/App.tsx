@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,15 +6,10 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
+import { useTodoContext } from './components/context';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedTodoData, setSelectedTodoData] = useState<{
-    userId: number | null;
-    todo: Todo | null;
-  }>({ userId: null, todo: null });
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const { isLoading, selectedTodoData } = useTodoContext();
 
   return (
     <>
@@ -25,30 +19,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                todos={todos}
-                setTodos={setTodos}
-              />
+              <TodoFilter />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList
-                setIsLoading={setIsLoading}
-                setSelectedTodoData={setSelectedTodoData}
-                todos={todos}
-                setTodos={setTodos}
-              />
+              <TodoList />
             </div>
           </div>
         </div>
       </div>
 
       {selectedTodoData.userId && (
-        <TodoModal
-          selectedTodoData={selectedTodoData}
-          setSelectedTodoData={setSelectedTodoData}
-        />
+        <TodoModal />
       )}
     </>
   );
