@@ -16,11 +16,7 @@ function get<T>(url: string): Promise<T> {
 
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json())
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-    });
+    .then(res => res.json());
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

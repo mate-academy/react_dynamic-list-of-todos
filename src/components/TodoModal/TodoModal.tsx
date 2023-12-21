@@ -11,7 +11,12 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then(setUser);
+      getUser(selectedTodo.userId)
+        .then(setUser)
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.warn(error);
+        });
     }
   }, [selectedTodo]);
 

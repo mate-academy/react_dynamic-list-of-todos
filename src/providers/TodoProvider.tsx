@@ -1,5 +1,5 @@
 import {
-  createContext, FC, useContext, useEffect, useMemo, useState,
+  createContext, FC, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos } from '../api';
@@ -29,13 +29,12 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   const [filter, setFilter] = useState<string>('');
 
   useEffect(() => {
-    const getTodosFormApi = async () => {
-      const data: Todo[] = await getTodos();
-
-      setTodos(data);
-    };
-
-    getTodosFormApi();
+    getTodos()
+      .then(setTodos)
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.warn(error);
+      });
   }, []);
 
   const visibleTodos = useMemo(() => {
@@ -63,21 +62,21 @@ export const TodoProvider: FC<Props> = ({ children }) => {
     return todosCopy;
   }, [todos, query, filter]);
 
-  const handleSelectTodo = (todo: Todo) => () => {
+  const handleSelectTodo = useCallback((todo: Todo) => () => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const handleSelectFilter = (newFilter: string) => {
+  const handleSelectFilter = useCallback((newFilter: string) => {
     setFilter(newFilter);
-  };
+  }, []);
 
-  const handleQueryChange = (newQuery: string) => {
+  const handleQueryChange = useCallback((newQuery: string) => {
     setQuery(newQuery);
-  };
+  }, []);
 
   const value = useMemo(() => ({
     todos,
@@ -89,7 +88,8 @@ export const TodoProvider: FC<Props> = ({ children }) => {
     selectedTodo,
     handleSelectTodo,
     handleClose,
-  }), [todos, visibleTodos, query, filter, selectedTodo]);
+  }), [todos, visibleTodos, query, filter, selectedTodo,
+    handleSelectTodo, handleSelectFilter, handleQueryChange, handleClose]);
 
   return (
     <TodoContext.Provider value={value}>
