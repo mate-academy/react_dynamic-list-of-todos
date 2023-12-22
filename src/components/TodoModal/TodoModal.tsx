@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ onClose, selectedTodo }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   const {
@@ -21,7 +21,6 @@ export const TodoModal: React.FC<Props> = ({ onClose, selectedTodo }) => {
   } = selectedTodo;
 
   useEffect(() => {
-    setLoading(true);
     getUser(userId)
       .then(setUser)
       .finally(() => setLoading(false));
