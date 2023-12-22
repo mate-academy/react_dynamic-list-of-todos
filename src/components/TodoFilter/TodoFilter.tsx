@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   setSelectedStatus,
 }) => {
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setSearchQuery(event.target.value);
   };
 
   const handleQueryReset = () => setSearchQuery('');
