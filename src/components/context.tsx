@@ -57,17 +57,19 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = (
     return filtered;
   }, [filteredTodos, query]);
 
-  const value = {
-    todos,
-    visibleTodos,
-    filteredTodos,
-    query,
-    setQuery,
-    setFilteredTodos,
-    isLoading,
-    selectedTodoData,
-    setSelectedTodoData,
-  };
+  const value = useMemo(() => {
+    return {
+      todos,
+      visibleTodos,
+      filteredTodos,
+      query,
+      setQuery,
+      setFilteredTodos,
+      isLoading,
+      selectedTodoData,
+      setSelectedTodoData,
+    };
+  }, [todos, visibleTodos, filteredTodos, query, isLoading, selectedTodoData]);
 
   return (
     <TodoContext.Provider value={value}>

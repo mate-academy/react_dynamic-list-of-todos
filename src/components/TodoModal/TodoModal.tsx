@@ -6,22 +6,20 @@ import { useTodoContext } from '../context';
 
 export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { setSelectedTodoData, selectedTodoData } = useTodoContext();
 
   const { userId, todo } = selectedTodoData;
 
   useEffect(() => {
-    const loadUser = async () => {
-      setIsLoading(true);
+    const loadUser = () => {
       if (userId !== null) {
-        const pickedUser = await getUser(userId);
-
-        setUser(pickedUser);
+        getUser(userId).then(setUser)
+          .finally(() => setIsLoading(false));
       }
     };
 
-    loadUser().finally(() => setIsLoading(false));
+    loadUser();
   }, [userId]);
 
   return (
