@@ -2,23 +2,23 @@ import React from 'react';
 import { Status } from '../../types/Status';
 
 type Props = {
-  query: string;
-  setQuery: (query: string) => void;
-  status: Status;
-  setStatus: (status:Status) => void
+  searchQuery: string;
+  setSearchQuery: (searchQuery: string) => void;
+  selectedStatus: Status;
+  setSelectedStatus: (selectedStatus: Status) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  query,
-  setQuery,
-  status,
-  setStatus,
+  searchQuery,
+  setSearchQuery,
+  selectedStatus,
+  setSelectedStatus,
 }) => {
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
-  const handleQueryReset = () => setQuery('');
+  const handleQueryReset = () => setSearchQuery('');
 
   return (
     <form className="field has-addons">
@@ -26,8 +26,8 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={status}
-            onChange={event => setStatus(event.target.value as Status)}
+            value={selectedStatus}
+            onChange={event => setSelectedStatus(event.target.value as Status)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -42,14 +42,14 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={searchQuery}
           onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {searchQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

@@ -5,43 +5,43 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: Todo;
-  setSelectedTodo: (selectedTodo: Todo | null) => void;
+  selectedTodoItem: Todo;
+  setSelectedTodoItem: (selectedTodo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodo,
+  selectedTodoItem,
+  setSelectedTodoItem,
 }) => {
-  const [loadingModal, setLoadingModal] = useState(false);
-  const [user, setUser] = useState<User>();
+  const [modalLoading, setModalLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User>();
 
   useEffect(() => {
-    setLoadingModal(true);
+    setModalLoading(true);
 
-    getUser(selectedTodo.userId)
-      .then(setUser)
+    getUser(selectedTodoItem.userId)
+      .then(setSelectedUser)
       .finally(() => {
-        setLoadingModal(false);
+        setModalLoading(false);
       });
-  }, [selectedTodo.userId]);
+  }, [selectedTodoItem.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadingModal && (
+      {modalLoading && (
         <Loader />
       )}
 
-      {!loadingModal && user && (
+      {!modalLoading && selectedUser && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo.id}`}
+              {`Todo #${selectedTodoItem.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -49,17 +49,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => setSelectedTodoItem(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {selectedTodoItem.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed ? (
+              {selectedTodoItem.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
@@ -67,8 +67,8 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${selectedUser.email}`}>
+                {selectedUser.name}
               </a>
             </p>
           </div>
