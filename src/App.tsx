@@ -23,8 +23,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList />
+              {isLoading
+                ? <Loader />
+                : <TodoList />}
             </div>
           </div>
         </div>

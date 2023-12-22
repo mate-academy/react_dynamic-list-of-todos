@@ -21,7 +21,7 @@ export const TodoFilter = () => {
 
     switch (filter) {
       case 'all':
-        setFilteredTodos(todos);
+        setFilteredTodos(filtered);
         break;
       case 'completed':
         filtered = filtered.filter((todo) => todo.completed);
