@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
@@ -14,11 +14,11 @@ function filterTodos(todos: Todo[], todosActivityFilter: string, todosQuery: str
   const query = todosQuery.toLowerCase();
 
   switch (todosActivityFilter) {
-    case 'Completed':
+    case 'completed':
       resultTodos = resultTodos.filter(todo => todo.completed
       && todo.title.toLowerCase().includes(query));
       break;
-    case 'Active':
+    case 'active':
       resultTodos = resultTodos.filter(todo => !todo.completed
       && todo.title.toLowerCase().includes(query));
       break;
@@ -31,15 +31,27 @@ function filterTodos(todos: Todo[], todosActivityFilter: string, todosQuery: str
 }
 
 export const App: React.FC = () => {
+  const [todoShown, setTodoShown] = useState<Todo>();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosActivityFilter, setTodosActivityFilter] = useState('All');
   const [todosQuery, setTodosQuery] = useState('');
-  const [todoShownId, setTodoShownId] = useState(-1);
   const [loadingDone, setLoadingDone] = useState(false);
 
-  function setActivityFilter(filterValue: string) {
+  const setActivityFilter = (filterValue: string) => {
     setTodosActivityFilter(filterValue);
-  }
+  };
+
+  const setQuery = (value: string) => {
+    setTodosQuery(value);
+  };
+
+  const focusOnTodo = (todo: Todo) => {
+    setTodoShown(todo);
+  };
+
+  const unFocusOnTodo = () => {
+    setTodoShown(undefined);
+  };
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -62,6 +74,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 setActivityFilter={setActivityFilter}
+                setQuery={setQuery}
+                query={todosQuery}
               />
             </div>
 
@@ -70,13 +84,14 @@ export const App: React.FC = () => {
               && (<Loader />)}
               <TodoList
                 todos={filterTodos(todos, todosActivityFilter, todosQuery)}
+                todoFocusedOn={todoShown}
+                focusOnTodo={focusOnTodo}
               />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
+      { todoShown !== undefined && (<TodoModal todo={todoShown} unFocus={unFocusOnTodo} />)}
     </>
   );
 };

@@ -1,9 +1,17 @@
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todo: Todo;
+  todo: Todo,
+  todoFocusedOn: Todo | undefined,
+  focusOnTodo: (todo:Todo)=>void,
 };
-export const TodoInfo: React.FC<Props> = ({ todo }) => {
+export const TodoInfo: React.FC<Props> = (
+  {
+    todo,
+    todoFocusedOn,
+    focusOnTodo,
+  },
+) => {
   const { id, title, completed } = todo;
 
   return (
@@ -27,9 +35,16 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         </p>
       </td>
       <td className="has-text-right is-vcentered">
-        <button data-cy="selectButton" className="button" type="button">
+        <button
+          data-cy="selectButton"
+          className="button"
+          type="button"
+          onClick={() => focusOnTodo(todo)}
+        >
           <span className="icon">
-            <i className="far fa-eye" />
+            <i className={todoFocusedOn?.id === todo.id
+              ? 'far fa-eye-slash' : 'far fa-eye'}
+            />
           </span>
         </button>
       </td>

@@ -3,10 +3,14 @@ import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo';
 
 type Props = {
-  todos: Todo[];
+  todos: Todo[],
+  todoFocusedOn: Todo | undefined,
+  focusOnTodo: (todo:Todo)=>void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = (
+  { todos, todoFocusedOn, focusOnTodo },
+) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -23,7 +27,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
 
     <tbody>
       {todos
-        .map(todo => <TodoInfo key={todo.id} todo={todo} />)}
+        .map(todo => (
+          <TodoInfo
+            key={todo.id}
+            todoFocusedOn={todoFocusedOn}
+            todo={todo}
+            focusOnTodo={focusOnTodo}
+          />
+        ))}
     </tbody>
   </table>
 );

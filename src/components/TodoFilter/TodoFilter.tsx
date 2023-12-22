@@ -2,11 +2,22 @@ import { FC } from 'react';
 
 type Props = {
   setActivityFilter: (filterValue: string) => void;
+  setQuery: (value:string) => void;
+  query: string,
 };
 
-export const TodoFilter: FC<Props> = ({ setActivityFilter }) => {
+export const TodoFilter: FC<Props> = ({
+  setActivityFilter,
+  setQuery,
+  query,
+}) => {
   const handleStatusSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setActivityFilter(event.target.value);
+  };
+
+  const handleQueryChange: React.ChangeEventHandler<HTMLInputElement>
+  = (event) => {
+    setQuery(event.target.value);
   };
 
   return (
@@ -30,6 +41,8 @@ export const TodoFilter: FC<Props> = ({ setActivityFilter }) => {
           type="text"
           className="input"
           placeholder="Search..."
+          value={query}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -37,11 +50,16 @@ export const TodoFilter: FC<Props> = ({ setActivityFilter }) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          { query
+          && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              aria-label="clearSearchButton"
+              onClick={() => setQuery('')}
+            />
+          )}
         </span>
       </p>
     </form>
