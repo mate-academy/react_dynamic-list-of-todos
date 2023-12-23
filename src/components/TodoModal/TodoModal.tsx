@@ -1,12 +1,51 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getUser } from '../../api';
+
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  userId: number;
+  selectedTodoId: number;
+  onSetUserId: (value: number) => void;
+  onSelectedTodoId: (value: number) => void;
+  todos: Todo[];
+};
+
+export const TodoModal: React.FC<Props> = ({
+  userId,
+  todos,
+  selectedTodoId,
+  onSetUserId,
+  onSelectedTodoId,
+}) => {
+  const [user, setUser] = useState<User>();
+  const [loadingUser, setLoadingUser] = useState(false);
+
+  useEffect(() => {
+    const getUserFromServer = async () => {
+      const userFromServer = await getUser(userId);
+
+      setLoadingUser(true);
+      setUser(userFromServer);
+    };
+
+    getUserFromServer();
+  }, []);
+
+  const findClickedTodoBySelectedId = useCallback((todoId: number) => {
+    const findedTodo = todos.find(todo => todo.id === todoId);
+
+    return findedTodo;
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!loadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +54,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodoId}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +62,30 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => {
+                onSetUserId(0);
+                onSelectedTodoId(0);
+              }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {findClickedTodoBySelectedId(selectedTodoId)?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {findClickedTodoBySelectedId(selectedTodoId)?.completed && (
+                <strong className="has-text-success">Done</strong>
+              )}
 
+              {!findClickedTodoBySelectedId(selectedTodoId)?.completed && (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {user?.name}
               </a>
             </p>
           </div>
