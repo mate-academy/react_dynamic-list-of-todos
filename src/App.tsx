@@ -18,32 +18,29 @@ import { StateContext } from './components/Store';
 import { TodosType } from './types/TodosType';
 
 export const App: React.FC = () => {
-  const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [todosType, setTodosType] = useState(TodosType.all);
+  const [todosType, setTodosType] = useState(TodosType.All);
   const { selectedTodo } = useContext(StateContext);
   const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    if (todosType === TodosType.all) {
-      getAllTodos()
-        .then(setVisibleTodos)
-        .finally(() => setLoading(false));
-    } else if (todosType === TodosType.active) {
-      setVisibleTodos(allTodos.filter(todo => !todo.completed));
-    } else {
-      setVisibleTodos(allTodos.filter(todo => todo.completed));
+  const visibleTodos = useMemo(() => {
+    switch (todosType) {
+      case TodosType.Active:
+        return todos.filter(todo => !todo.completed);
+      case TodosType.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
     }
-  }, [todosType, allTodos]);
+  }, [todos, todosType]);
 
   useEffect(() => {
     getAllTodos()
-      .then(setAllTodos)
+      .then(setTodos)
       .finally(() => setLoading(false));
-  }, [allTodos]);
+  }, [todos]);
 
-  const filteredPosts: Todo[] = useMemo(() => {
+  const filteredTodos: Todo[] = useMemo(() => {
     return visibleTodos.filter(todo => todo.title.includes(query));
   }, [query, visibleTodos]);
 
@@ -63,7 +60,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && (<Loader />)}
-              {!loading && (<TodoList todos={filteredPosts} />)}
+              {!loading && (<TodoList todos={filteredTodos} />)}
             </div>
           </div>
         </div>

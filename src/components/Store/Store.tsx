@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface State {
@@ -37,18 +37,22 @@ interface Props {
 }
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  // const storedTodo = localStorage.getItem('selectedTodo');
-  // const initialTodos = (storedTodo && (storedTodo !== null)) ? {
-  //   selectedTodo: JSON.parse(storedTodo),
-  // } : initialState;
+  const storedTodo = localStorage.getItem('selectedTodo');
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  let initialTodos: State;
 
-  // useEffect(() => {
-  //   if (state.selectedTodo) {
-  //     localStorage.setItem('selectedTodo', JSON.stringify(state.selectedTodo));
-  //   }
-  // }, [state.selectedTodo]);
+  try {
+    initialTodos = storedTodo
+      ? { selectedTodo: JSON.parse(storedTodo) } : initialState;
+  } catch (error) {
+    initialTodos = initialState;
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialTodos);
+
+  useEffect(() => {
+    localStorage.setItem('selectedTodo', JSON.stringify(state.selectedTodo));
+  }, [state.selectedTodo]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
