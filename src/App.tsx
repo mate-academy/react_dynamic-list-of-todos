@@ -94,6 +94,7 @@ export const App: FC = () => {
                     <TodoList
                       todos={todos}
                       onTodoSelect={handleTodoSelected}
+                      selectedId={selectedTodo?.id}
                     />
                   )
                   : <Loader />
