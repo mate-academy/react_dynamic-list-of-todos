@@ -1,7 +1,7 @@
 export const FILTER = {
-  all: 'All',
-  active: 'Active',
-  completed: 'Completed',
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
 };
 
 export type Filter = keyof typeof FILTER;

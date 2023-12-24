@@ -21,6 +21,7 @@ export const TodoFilter: FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
+            className="is-capitalized"
             onChange={(e) => setFilter(e.target.value as Filter)}
           >
             {Object.values(FILTER).map((value) => (
