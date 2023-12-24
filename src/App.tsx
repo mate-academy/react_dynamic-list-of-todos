@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { State, reducer } from './helpers/todos.reducer';
+import { ActionTypes, State, reducer } from './helpers/todos.reducer';
 
 const initialState: State = {
   initialTodos: [],
@@ -25,11 +25,11 @@ export const App: React.FC = () => {
   }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: 'setLoading', payload: true });
+    dispatch({ type: ActionTypes.SetLoading, payload: true });
 
     getTodos()
-      .then(fetchedTodos => dispatch({ type: 'setInitialTodos', payload: fetchedTodos }))
-      .finally(() => dispatch({ type: 'setLoading', payload: false }));
+      .then(fetchedTodos => dispatch({ type: ActionTypes.SetInitialTodos, payload: fetchedTodos }))
+      .finally(() => dispatch({ type: ActionTypes.SetLoading, payload: false }));
   }, []);
 
   return (
@@ -44,10 +44,10 @@ export const App: React.FC = () => {
                 searchQuery={searchQuery}
                 filter={filter}
                 onSearchQueryChange={
-                  (newQuery) => dispatch({ type: 'setSearchQuery', payload: newQuery })
+                  (newQuery) => dispatch({ type: ActionTypes.SetSearchQuery, payload: newQuery })
                 }
                 onFilterChange={
-                  (newFilter) => dispatch({ type: 'setFilter', payload: newFilter })
+                  (newFilter) => dispatch({ type: ActionTypes.SetFilter, payload: newFilter })
                 }
               />
             </div>
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={todos}
                 currentTodoId={currentTodo?.id}
-                onCurrentTodoChange={payload => dispatch({ type: 'setCurrentTodo', payload })}
+                onCurrentTodoChange={payload => dispatch({ type: ActionTypes.SetCurrentTodo, payload })}
               />
             </div>
           </div>
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
       {currentTodo && (
         <TodoModal
           todo={currentTodo}
-          onClose={() => dispatch({ type: 'setCurrentTodo', payload: null })}
+          onClose={() => dispatch({ type: ActionTypes.SetCurrentTodo, payload: null })}
         />
       )}
     </>

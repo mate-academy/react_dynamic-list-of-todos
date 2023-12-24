@@ -10,18 +10,27 @@ export type State = {
   currentTodo: Todo | null
 };
 
+export enum ActionTypes {
+  SetInitialTodos,
+  SetTodos,
+  SetLoading,
+  SetSearchQuery,
+  SetFilter,
+  SetCurrentTodo,
+}
+
 export type Action =
-  { type: 'setInitialTodos', payload: Todo[] }
+  { type: ActionTypes.SetInitialTodos, payload: Todo[] }
   |
-  { type: 'setTodos', payload: Todo[] }
+  { type: ActionTypes.SetTodos, payload: Todo[] }
   |
-  { type: 'setLoading', payload: boolean }
+  { type: ActionTypes.SetLoading, payload: boolean }
   |
-  { type: 'setSearchQuery', payload: string }
+  { type: ActionTypes.SetSearchQuery, payload: string }
   |
-  { type: 'setFilter', payload: Filter }
+  { type: ActionTypes.SetFilter, payload: Filter }
   |
-  { type: 'setCurrentTodo', payload: Todo | null };
+  { type: ActionTypes.SetCurrentTodo, payload: Todo | null };
 
 export const prepareTodos = ({
   initialTodos, searchQuery, filter,
@@ -48,34 +57,34 @@ export const prepareTodos = ({
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'setInitialTodos':
+    case ActionTypes.SetInitialTodos:
       return {
         ...state,
         initialTodos: action.payload,
         todos: action.payload,
       };
 
-    case 'setTodos':
+    case ActionTypes.SetTodos:
       return { ...state, todos: action.payload };
 
-    case 'setLoading':
+    case ActionTypes.SetLoading:
       return { ...state, isLoading: action.payload };
 
-    case 'setSearchQuery':
+    case ActionTypes.SetSearchQuery:
       return {
         ...state,
         searchQuery: action.payload,
         todos: prepareTodos({ ...state, searchQuery: action.payload }),
       };
 
-    case 'setFilter':
+    case ActionTypes.SetFilter:
       return {
         ...state,
         filter: action.payload,
         todos: prepareTodos({ ...state, filter: action.payload }),
       };
 
-    case 'setCurrentTodo':
+    case ActionTypes.SetCurrentTodo:
       return { ...state, currentTodo: action.payload };
 
     default:
