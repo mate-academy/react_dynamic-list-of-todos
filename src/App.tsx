@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import classNames from 'classnames';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,14 +21,17 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<Filters>(Filters.all);
-  const [inputValue, SetInputValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [updatedAt, setUpdatedAt] = useState(new Date());
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => setErrorMessage('Try again later...'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [updatedAt]);
 
   const handleCloseModal = useCallback(() => setSelectedTodo(null), []);
 
@@ -73,18 +77,35 @@ export const App: React.FC = () => {
                 selectedValue={filterBy}
                 selectFilter={setFilterBy}
                 inputValue={inputValue}
-                onInputChange={SetInputValue}
+                onInputChange={setInputValue}
               />
             </div>
 
             <div className="block">
               {loading && <Loader />}
+
               {(!loading && todos.length > 0) && (
                 <TodoList
                   todos={preparedTodos}
                   selected={selectedTodo}
                   onSelected={setSelectedTodo}
                 />
+              )}
+
+              {errorMessage && (
+                <p className="is-flex is-justify-content-space-between notification is-danger is-align-content-center">
+                  {errorMessage}
+
+                  <button
+                    className={classNames('button', 'is-primary', 'is-pulled-right', '', {
+                      'is-loading': loading,
+                    })}
+                    type="button"
+                    onClick={() => setUpdatedAt(new Date())}
+                  >
+                    reload
+                  </button>
+                </p>
               )}
             </div>
           </div>

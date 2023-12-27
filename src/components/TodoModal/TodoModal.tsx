@@ -13,11 +13,13 @@ interface Props {
 export const TodoModal: React.FC<Props> = ({ selected, onClose }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setLoading(true);
     getUser(selected.userId)
       .then(setSelectedUser)
+      .catch(() => setErrorMessage('Cannot find a user, please try later'))
       .finally(() => setLoading(false));
   }, [selected]);
 
@@ -46,28 +48,36 @@ export const TodoModal: React.FC<Props> = ({ selected, onClose }) => {
             />
           </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {selected.title}
-            </p>
+          {errorMessage ? (
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {errorMessage}
+              </p>
+            </div>
+          ) : (
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {selected.title}
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={classNames({
-                'has-text-danger': !selected.completed,
-                'has-text-success': selected.completed,
-              })}
-              >
-                {selected.completed ? 'Done' : 'Planned'}
-              </strong>
+              <p className="block" data-cy="modal-user">
+                {/* <strong className="has-text-success">Done</strong> */}
+                <strong className={classNames({
+                  'has-text-danger': !selected.completed,
+                  'has-text-success': selected.completed,
+                })}
+                >
+                  {selected.completed ? 'Done' : 'Planned'}
+                </strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                {selectedUser?.name}
-              </a>
-            </p>
-          </div>
+                <a href={`mailto:${selectedUser?.email}`}>
+                  {selectedUser?.name}
+                </a>
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
