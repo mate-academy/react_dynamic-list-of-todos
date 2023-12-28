@@ -16,19 +16,16 @@ function filterTodos(todos: Todo[], todosActivityFilter: FilterTypes, todosQuery
 
   switch (todosActivityFilter) {
     case 'completed':
-      resultTodos = resultTodos.filter(todo => todo.completed
-      && todo.title.toLowerCase());
+      resultTodos = resultTodos.filter(todo => todo.completed);
       break;
     case 'active':
-      resultTodos = resultTodos.filter(todo => !todo.completed
-      && todo.title.toLowerCase());
+      resultTodos = resultTodos.filter(todo => !todo.completed);
       break;
     default:
-      resultTodos = resultTodos.filter(todo => todo.title.toLowerCase());
       break;
   }
 
-  return resultTodos.filter(todo => todo.title.includes(query));
+  return resultTodos.filter(todo => todo.title.toLowerCase().includes(query));
 }
 
 export const App: React.FC = () => {
