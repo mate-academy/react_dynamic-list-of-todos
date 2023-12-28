@@ -17,22 +17,22 @@ function filterTodos(todos: Todo[], todosActivityFilter: FilterTypes, todosQuery
   switch (todosActivityFilter) {
     case 'completed':
       resultTodos = resultTodos.filter(todo => todo.completed
-      && todo.title.toLowerCase().includes(query));
+      && todo.title.toLowerCase());
       break;
     case 'active':
       resultTodos = resultTodos.filter(todo => !todo.completed
-      && todo.title.toLowerCase().includes(query));
+      && todo.title.toLowerCase());
       break;
     default:
-      resultTodos = resultTodos.filter(todo => todo.title.toLowerCase().includes(query));
+      resultTodos = resultTodos.filter(todo => todo.title.toLowerCase());
       break;
   }
 
-  return resultTodos;
+  return resultTodos.filter(todo => todo.title.includes(query));
 }
 
 export const App: React.FC = () => {
-  const [todoShown, setTodoShown] = useState<Todo>();
+  const [todoShown, setTodoShown] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosActivityFilter, setTodosActivityFilter] = useState<FilterTypes>('All');
   const [todosQuery, setTodosQuery] = useState('');
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
   };
 
   const unFocusOnTodo = () => {
-    setTodoShown(undefined);
+    setTodoShown(null);
   };
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      { todoShown !== undefined && (<TodoModal todo={todoShown} unFocus={unFocusOnTodo} />)}
+      { todoShown !== null && (<TodoModal todo={todoShown} unFocus={unFocusOnTodo} />)}
     </>
   );
 };

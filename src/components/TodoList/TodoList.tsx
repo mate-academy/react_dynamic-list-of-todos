@@ -4,7 +4,7 @@ import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[],
-  todoFocusedOn: Todo | undefined,
+  todoFocusedOn: Todo | null,
   focusOnTodo: (todo:Todo)=>void,
 };
 

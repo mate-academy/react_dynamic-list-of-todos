@@ -2,7 +2,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  todoFocusedOn: Todo | undefined,
+  todoFocusedOn: Todo | null,
   focusOnTodo: (todo:Todo)=>void,
 };
 export const TodoInfo: React.FC<Props> = (
