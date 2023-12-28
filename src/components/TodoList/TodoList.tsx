@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,7 +8,8 @@ type Props = {
   selectedId?: number,
 };
 
-export const TodoList: FC<Props> = ({ todos, onTodoSelect, selectedId }) => (
+export const TodoList: FC<Props>
+= memo(({ todos, onTodoSelect, selectedId }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -69,4 +70,4 @@ export const TodoList: FC<Props> = ({ todos, onTodoSelect, selectedId }) => (
       }
     </tbody>
   </table>
-);
+));

@@ -1,4 +1,6 @@
-import { ChangeEvent, FC } from 'react';
+import {
+  ChangeEvent, FC, memo, useCallback,
+} from 'react';
 import { FilterType } from '../../types';
 
 type Props = {
@@ -7,20 +9,22 @@ type Props = {
   queryValue: string,
 };
 
-export const TodoFilter: FC<Props> = ({
+export const TodoFilter: FC<Props> = memo(({
   onFilterChange, onQueryChange, queryValue,
 }) => {
-  const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterChange
+  = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     const selectedFilter = event.target.value as FilterType;
 
     return onFilterChange(selectedFilter);
-  };
+  }, [onFilterChange]);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange
+  = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     return onQueryChange(value);
-  };
+  }, [onQueryChange]);
 
   return (
     <form className="field has-addons">
@@ -65,4 +69,4 @@ export const TodoFilter: FC<Props> = ({
       </p>
     </form>
   );
-};
+});

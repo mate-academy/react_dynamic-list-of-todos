@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useCallback, useEffect, useState,
+} from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,66 +14,71 @@ import { TodoFilter } from './components/TodoFilter';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [query, setQuery] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     const loadTodos = async () => {
       try {
         const allTodos = await getTodos();
-        let filteredTodos: Todo[] | null = null;
 
-        switch (filterType) {
-          case 'all':
-            filteredTodos = allTodos;
-            break;
-          case 'active':
-            filteredTodos = allTodos.filter(todo => !todo.completed);
-            break;
-          case 'completed':
-            filteredTodos = allTodos.filter(todo => todo.completed);
-            break;
-          default:
-            filteredTodos = allTodos;
-            break;
-        }
-
-        if (query.trim().length) {
-          filteredTodos = filteredTodos
-            .filter(todo => todo.title.toLocaleLowerCase()
-              .includes(query.toLocaleLowerCase()));
-        }
-
-        setTodos(filteredTodos);
+        setTodos(allTodos);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos:', error);
+        setErrorMessage(`Failed to fetch todos: ${error}`);
       }
     };
 
     loadTodos();
-  }, [filterType, query]);
+  }, []);
 
-  const handleTodoSelected = (todo: Todo) => {
+  useEffect(() => {
+    let filteredTodos = todos;
+
+    if (todos) {
+      switch (filterType) {
+        case 'active':
+          filteredTodos = todos.filter(todo => !todo.completed);
+          break;
+        case 'completed':
+          filteredTodos = todos.filter(todo => todo.completed);
+          break;
+        default:
+          filteredTodos = todos;
+          break;
+      }
+
+      if (query.trim().length) {
+        filteredTodos = filteredTodos
+          .filter(todo => todo.title.toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase()));
+      }
+
+      setVisibleTodos(filteredTodos);
+    }
+  }, [filterType, query, todos]);
+
+  const handleTodoSelected = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-  };
+  }, []);
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setSelectedTodo(null);
-  };
+  }, []);
 
-  const handleFilterChange = (newFilterType: FilterType) => {
+  const handleFilterChange = useCallback((newFilterType: FilterType) => {
     if (newFilterType === filterType) {
       return;
     }
 
     setFilterType(newFilterType);
-  };
+  }, [filterType]);
 
-  const handleQueryChange = (input: string) => {
+  const handleQueryChange = useCallback((input: string) => {
     setQuery(input);
-  };
+  }, []);
 
   return (
     <>
@@ -87,17 +94,21 @@ export const App: FC = () => {
               />
             </div>
 
+            {
+              errorMessage && <p>{errorMessage}</p>
+            }
+
             <div className="block">
               {
                 todos
                   ? (
                     <TodoList
-                      todos={todos}
+                      todos={visibleTodos}
                       onTodoSelect={handleTodoSelected}
                       selectedId={selectedTodo?.id}
                     />
                   )
-                  : <Loader />
+                  : !errorMessage && <Loader />
               }
             </div>
           </div>

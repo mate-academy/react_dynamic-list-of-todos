@@ -1,4 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, memo, useEffect, useState,
+} from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -9,7 +11,7 @@ type Props = {
   onModalClose: () => void;
 };
 
-export const TodoModal: FC<Props> = ({ selectedTodo, onModalClose }) => {
+export const TodoModal: FC<Props> = memo(({ selectedTodo, onModalClose }) => {
   const [todoUser, setTodoUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -65,4 +67,4 @@ export const TodoModal: FC<Props> = ({ selectedTodo, onModalClose }) => {
       )}
     </div>
   );
-};
+});
