@@ -1,7 +1,8 @@
 import { FC } from 'react';
+import { FilterTypes } from '../../types/FilterTypes';
 
 type Props = {
-  setActivityFilter: (filterValue: string) => void;
+  setActivityFilter: (filterValue: FilterTypes) => void;
   setQuery: (value:string) => void;
   query: string,
 };
@@ -12,7 +13,7 @@ export const TodoFilter: FC<Props> = ({
   query,
 }) => {
   const handleStatusSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setActivityFilter(event.target.value);
+    setActivityFilter(event.target.value as FilterTypes);
   };
 
   const handleQueryChange: React.ChangeEventHandler<HTMLInputElement>

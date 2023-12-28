@@ -8,8 +8,9 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterTypes } from './types/FilterTypes';
 
-function filterTodos(todos: Todo[], todosActivityFilter: string, todosQuery: string) {
+function filterTodos(todos: Todo[], todosActivityFilter: FilterTypes, todosQuery: string) {
   let resultTodos = [...todos];
   const query = todosQuery.toLowerCase();
 
@@ -33,11 +34,11 @@ function filterTodos(todos: Todo[], todosActivityFilter: string, todosQuery: str
 export const App: React.FC = () => {
   const [todoShown, setTodoShown] = useState<Todo>();
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosActivityFilter, setTodosActivityFilter] = useState('All');
+  const [todosActivityFilter, setTodosActivityFilter] = useState<FilterTypes>('All');
   const [todosQuery, setTodosQuery] = useState('');
-  const [loadingDone, setLoadingDone] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const setActivityFilter = (filterValue: string) => {
+  const setActivityFilter = (filterValue: FilterTypes) => {
     setTodosActivityFilter(filterValue);
   };
 
@@ -58,7 +59,7 @@ export const App: React.FC = () => {
       const data = await getTodos();
 
       setTodos(data);
-      setLoadingDone(true);
+      setIsLoading(true);
     };
 
     loadTodos();
@@ -80,13 +81,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!loadingDone
-              && (<Loader />)}
-              <TodoList
-                todos={filterTodos(todos, todosActivityFilter, todosQuery)}
-                todoFocusedOn={todoShown}
-                focusOnTodo={focusOnTodo}
-              />
+              {!isLoading ? <Loader /> : (
+                <TodoList
+                  todos={filterTodos(todos, todosActivityFilter, todosQuery)}
+                  todoFocusedOn={todoShown}
+                  focusOnTodo={focusOnTodo}
+                />
+              )}
             </div>
           </div>
         </div>
