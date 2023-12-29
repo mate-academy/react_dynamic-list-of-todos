@@ -11,9 +11,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
 
   const onSearchFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    setTimeout(() => {
-      onChange(todos.filter(todo => todo.title.includes(event.target.value)));
-    }, 1000);
+    onChange(todos.filter(todo => todo.title.includes(event.target.value)));
   };
 
   const onClearSearchButtonClick = () => {
