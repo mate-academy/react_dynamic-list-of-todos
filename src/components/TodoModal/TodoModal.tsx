@@ -1,12 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { useTodos } from '../../context/TodoProvider';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 export const TodoModal: React.FC = () => {
+  const {
+    activeTodo, setActiveTodo, setIsPressed, isLoading, setIsLoading,
+  } = useTodos();
+
+  const [userOfTodo, setUserOfTodo] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!activeTodo) {
+      return;
+    }
+
+    getUser(activeTodo.userId).then(data => {
+      setUserOfTodo(data);
+      setIsLoading(false);
+    });
+  }, [activeTodo]);
+
+  const handleDelete = () => {
+    setIsPressed(false);
+    setActiveTodo(null);
+  };
+
+  if (!activeTodo) {
+    return (
+      <div>
+        Error
+      </div>
+    );
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +48,8 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #
+              {activeTodo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +57,23 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={handleDelete}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {activeTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
+              {activeTodo.completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
               {' by '}
 
               <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+                {userOfTodo?.name}
               </a>
             </p>
           </div>
