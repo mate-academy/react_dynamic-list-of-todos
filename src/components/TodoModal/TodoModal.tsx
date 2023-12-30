@@ -3,6 +3,7 @@ import React, { useState, useEffect, SetStateAction } from 'react';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader/Loader';
+import { getUser } from '../../api';
 
 interface Props {
   todoCard: Todo | undefined;
@@ -20,15 +21,9 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setIsUserLoad(true);
-    setTimeout(() => {
-      return fetch('https://mate-academy.github.io/'
-        + `react_dynamic-list-of-todos/api/users/${todoCard?.userId}.json`)
-        .then((response) => {
-          return response.json();
-        }).then((user) => {
-          setsSelectedUser(user);
-        }).finally(() => setIsUserLoad(false));
-    }, 300);
+    getUser(todoCard?.userId).then((user) => {
+      setsSelectedUser(user);
+    }).finally(() => setIsUserLoad(false));
   }, [todoCard]);
 
   const handleCloseCard = () => {
@@ -73,19 +68,10 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               {todoCard?.completed ? (
-                <strong
-                  className="has-text-success"
-                >
-                  Done
-                </strong>
+                <strong className="has-text-success">Done</strong>
               ) : (
-                <strong
-                  className="has-text-danger"
-                >
-                  Planned
-                </strong>
+                <strong className="has-text-danger">Done</strong>
               )}
-
               {' by '}
               <a key={todoCard?.userId} href={`mailto:${selectedUser?.email}`}>
                 {selectedUser?.name}

@@ -43,6 +43,9 @@ export const TodoList: React.FC<Props> = ({
     setIconId(todo.id);
   };
 
+  const preparedTodos = title.trim().length > 0
+    ? findMatches : filtering;
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -59,11 +62,10 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {title.trim().length > 0 ? (
-          findMatches.map((todoItem) => (
+        {
+          preparedTodos.map((todoItem) => (
             <tr
               data-cy="todo"
-              className=""
               key={todoItem.id}
             >
               <td className="is-vcentered">{todoItem.id}</td>
@@ -96,46 +98,7 @@ export const TodoList: React.FC<Props> = ({
               </td>
             </tr>
           ))
-        ) : (
-
-          filtering.map((todoItem) => (
-            <tr
-              data-cy="todo"
-              className=""
-              key={todoItem.id}
-            >
-              <td className="is-vcentered">{todoItem.id}</td>
-              <td className="is-vcentered">
-                {todoItem.completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={todoItem.completed
-                    ? 'has-text-success' : 'has-text-danger'}
-                >
-                  {todoItem.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => handleEyeButton(todoItem)}
-                >
-                  <span className="icon">
-                    <i className={`far ${todoItem.id !== iconId ? 'fa-eye' : 'fa-eye-slash'}`} />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          ))
-        )}
-
+        }
       </tbody>
     </table>
   );

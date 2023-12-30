@@ -8,8 +8,8 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos } from './services/getTodos';
 import { FilteringType } from './types/FilteringType';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -22,12 +22,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setTodosLoading(true);
-    setTimeout(() => {
-      getTodos().then((todo) => {
-        setTodos(todo);
-      })
-        .finally(() => setTodosLoading(false));
-    }, 300);
+    getTodos().then((todo) => {
+      setTodos(todo);
+    })
+      .finally(() => setTodosLoading(false));
   }, []);
 
   return (
