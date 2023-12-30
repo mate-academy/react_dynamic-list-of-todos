@@ -24,17 +24,18 @@ interface MyContextProps {
 
 const MyContext = createContext<MyContextProps | undefined>(undefined);
 
-interface MyContextProviderProps {
+interface TodoContextProviderProps {
   children: ReactNode;
 }
 
 enum SortType {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
 }
 
-const MyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
+const TodoContextProvider: React.FC<TodoContextProviderProps>
+= ({ children }) => {
   const [todosFromServer, setAllTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -70,13 +71,13 @@ const MyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
     let modifiedTodo: Todo[] = [];
 
     switch (sortType) {
-      case SortType.all:
+      case SortType.ALL:
         modifiedTodo = todosFromServer;
         break;
-      case SortType.active:
+      case SortType.ACTIVE:
         modifiedTodo = todosFromServer.filter((todo) => !todo.completed);
         break;
-      case SortType.completed:
+      case SortType.COMPLETED:
         modifiedTodo = todosFromServer.filter((todo) => todo.completed);
         break;
       default:
@@ -126,4 +127,4 @@ export const useMyContext = () => {
   return context;
 };
 
-export default MyContextProvider;
+export default TodoContextProvider;

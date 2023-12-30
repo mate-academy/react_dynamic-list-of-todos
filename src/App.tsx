@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import MyContextProvider, { useMyContext } from './context/myContext';
+import TodoContextProvider, { useMyContext } from './context/myContext';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -12,7 +12,7 @@ export const App: React.FC = () => {
   const [isTodo, setIsTodo] = useState<boolean>(false);
 
   return (
-    <MyContextProvider>
+    <TodoContextProvider>
       <div className="section">
         <div className="container">
           <div className="box">
@@ -37,6 +37,6 @@ export const App: React.FC = () => {
             setIsTodo={setIsTodo}
           />
         )}
-    </MyContextProvider>
+    </TodoContextProvider>
   );
 };

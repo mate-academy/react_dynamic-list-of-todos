@@ -1,11 +1,11 @@
 import ReactDOM from 'react-dom';
 import { App } from './App';
-import MyContextProvider from './context/myContext';
+import TodoContextProvider from './context/myContext';
 
 ReactDOM.render(
-  <MyContextProvider>
+  <TodoContextProvider>
     <App />
-  </MyContextProvider>,
+  </TodoContextProvider>,
 
   document.getElementById('root'),
 );
