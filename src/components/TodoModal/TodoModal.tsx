@@ -7,14 +7,12 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todoId: number
   setTodoId: (currentTodoId: number | null) => void
-  todos: Todo[]
+  todo: Todo
 }
 
-export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todos }) => {
+export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todo }) => {
   const [user, setUser] = useState<null | User>(null);
   const [loading, setLoading] = useState(false);
-
-  const todo = todos[todoId - 1];
 
   useEffect(() => {
     if (todoId !== null) {

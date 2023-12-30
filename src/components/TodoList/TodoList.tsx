@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { TodosState } from '../../types/TodosState';
 import { Filter } from '../../types/enum/Filter';
+import { Todo } from '../../types/Todo';
 
 interface Props {
-  todosState: TodosState
+  todos: Todo[]
   setTodoId: (currentTodoId: number | null) => void
   todoId: number | null
+  query: string,
+  filter: Filter
 }
 
 export const TodoList: React.FC<Props> = ({
-  todosState,
+  todos,
   setTodoId,
   todoId,
+  query,
+  filter,
 }) => {
   const [hoveredItemId, setHoveredItemId] = useState<null | number>(null);
 
-  const { todos, query, filter } = todosState;
+  const filteredTodo = todos
+    .filter(todo => {
+      switch (filter) {
+        case Filter.All:
+          return todo;
+
+        case Filter.Active:
+          return !todo.completed;
+
+        case Filter.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    })
+    .filter(todo => todo
+      .title.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -35,24 +56,7 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {
-          todos
-            .filter(todo => {
-              switch (filter) {
-                case Filter.All:
-                  return todo;
-
-                case Filter.Active:
-                  return !todo.completed;
-
-                case Filter.Completed:
-                  return todo.completed;
-
-                default:
-                  return todo;
-              }
-            })
-            .filter(todo => todo
-              .title.toLowerCase().includes(query.toLowerCase()))
+          filteredTodo
             .map(todo => (
               <tr
                 data-cy="todo"

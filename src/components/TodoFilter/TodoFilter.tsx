@@ -1,40 +1,19 @@
 import React from 'react';
-import { TodosState } from '../../types/TodosState';
 import { Filter } from '../../types/enum/Filter';
 
 interface Props {
-  setTodosState: React.Dispatch<React.SetStateAction<TodosState>>
-  todosState: TodosState
+  setFilter: (c: Filter) => void,
+  filter: Filter,
+  query: string
+  setQuery: (c: string) => void,
 }
 
-export const TodoFilter: React.FC<Props> = ({ setTodosState, todosState }) => {
-  const { filter, query } = todosState;
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-
-    setTodosState((currentTodosState) => ({
-      ...currentTodosState,
-      filter: value as Filter,
-    }));
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
-    setTodosState((currentTodosState) => ({
-      ...currentTodosState,
-      query: value,
-    }));
-  };
-
-  const handleCleanSearch = () => {
-    setTodosState((currentTodosState) => ({
-      ...currentTodosState,
-      query: '',
-    }));
-  };
-
+export const TodoFilter: React.FC<Props> = ({
+  setFilter,
+  filter,
+  query,
+  setQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -42,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({ setTodosState, todosState }) => {
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={handleSelectChange}
+            onChange={(e) => setFilter(e.target.value as Filter)}
           >
             <option value={Filter.All}>All</option>
             <option value={Filter.Active}>Active</option>
@@ -58,7 +37,7 @@ export const TodoFilter: React.FC<Props> = ({ setTodosState, todosState }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleSearchChange}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -72,7 +51,7 @@ export const TodoFilter: React.FC<Props> = ({ setTodosState, todosState }) => {
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={handleCleanSearch}
+                onClick={() => setQuery('')}
               />
             </span>
           )
