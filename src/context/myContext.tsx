@@ -10,8 +10,8 @@ interface MyContextProps {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   TodosFromServer: Todo[];
   isLoading: boolean;
-  qwerty: string;
-  setQwerty: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
   sortType: string | null,
   setSortType: React.Dispatch<React.SetStateAction<string>>;
   activeUser: User | null;
@@ -28,11 +28,17 @@ interface MyContextProviderProps {
   children: ReactNode;
 }
 
+enum SortType {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 const MyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
   const [todosFromServer, setAllTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [qwerty, setQwerty] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
   const [sortType, setSortType] = useState<string>('all');
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
@@ -64,35 +70,35 @@ const MyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
     let modifiedTodo: Todo[] = [];
 
     switch (sortType) {
-      case 'all':
+      case SortType.all:
         modifiedTodo = todosFromServer;
         break;
-      case 'active':
+      case SortType.active:
         modifiedTodo = todosFromServer.filter((todo) => !todo.completed);
         break;
-      case 'completed':
+      case SortType.completed:
         modifiedTodo = todosFromServer.filter((todo) => todo.completed);
         break;
       default:
         break;
     }
 
-    const modifiedValue = qwerty.toLocaleLowerCase();
+    const modifiedValue = query.toLocaleLowerCase();
 
     const filtered = modifiedTodo.filter((todo) => {
       return todo.title.toLocaleLowerCase().includes(modifiedValue);
     });
 
     setFilteredTodos(filtered);
-  }, [qwerty, sortType, todosFromServer]);
+  }, [query, sortType, todosFromServer]);
 
   const contextValue: MyContextProps = {
     todos: filteredTodos,
     setTodos: setFilteredTodos,
     TodosFromServer: todosFromServer,
     isLoading,
-    qwerty,
-    setQwerty,
+    query,
+    setQuery,
     sortType,
     setSortType,
     activeUser,

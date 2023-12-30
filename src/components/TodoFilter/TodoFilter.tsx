@@ -3,7 +3,7 @@ import React from 'react';
 import { useMyContext } from '../../context/myContext';
 
 export const TodoFilter: React.FC = () => {
-  const { qwerty, setQwerty, setSortType } = useMyContext();
+  const { query, setQuery, setSortType } = useMyContext();
 
   return (
     <form className="field has-addons">
@@ -26,22 +26,22 @@ export const TodoFilter: React.FC = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          value={qwerty}
+          value={query}
           onChange={(event) => {
-            setQwerty(event.target.value);
+            setQuery(event.target.value);
           }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {qwerty && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQwerty('')}
+              onClick={() => setQuery('')}
             />
           </span>
         )}
