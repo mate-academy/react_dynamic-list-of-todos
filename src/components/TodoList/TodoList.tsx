@@ -51,7 +51,8 @@ export const TodoList: React.FC<Props> = ({
                   return todo;
               }
             })
-            .filter(todo => todo.title.includes(query))
+            .filter(todo => todo
+              .title.toLowerCase().includes(query.toLowerCase()))
             .map(todo => (
               <tr
                 data-cy="todo"

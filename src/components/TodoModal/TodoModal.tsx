@@ -14,21 +14,23 @@ export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todos }) => {
   const [user, setUser] = useState<null | User>(null);
   const [loading, setLoading] = useState(false);
 
+  const todo = todos[todoId - 1];
+
   useEffect(() => {
     if (todoId !== null) {
       setLoading(true);
 
-      getUser(todoId)
+      getUser(todo.userId)
         .then(setUser)
         .finally(() => setLoading(false));
     }
-  }, [todoId]);
+  }, [todo, todoId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {(loading || user === null) ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -37,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todos }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${user?.id}`}
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -51,12 +53,12 @@ export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todos }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todos[todoId - 1].title}
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {
-                todos[todoId - 1].completed ? (
+                todo.completed ? (
                   <strong className="has-text-success">Done</strong>
                 ) : (
                   <strong className="has-text-danger">Planned</strong>
@@ -65,8 +67,8 @@ export const TodoModal: React.FC<Props> = ({ todoId, setTodoId, todos }) => {
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>
-                {user?.name}
+              <a href={`mailto:${user.email}`}>
+                {user.name}
               </a>
             </p>
           </div>
