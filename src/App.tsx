@@ -29,28 +29,24 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const filterTodosByStatus = (statusTodos: Todo[], status: Status) => {
-    switch (status) {
-      case Status.all:
-        return statusTodos;
-      case Status.completed:
-        return statusTodos.filter(todo => todo.completed);
-      case Status.active:
-        return statusTodos.filter(todo => !todo.completed);
-      default:
-        return statusTodos;
-    }
-  };
-
-  const filterTodosByQuery = (queryTodos: Todo[], givenQuery: string) => {
-    return queryTodos.filter(todo => todo.title.toLowerCase().includes(givenQuery.toLowerCase()));
-  };
-
   const displayedTodos = useMemo(() => {
-    const todosByStatus = filterTodosByStatus(todos, filter);
-    const todosByQuery = filterTodosByQuery(todosByStatus, query);
+    const filteredTodos = todos.filter(todo => {
+      // Filter by status
+      switch (filter) {
+        case Status.all:
+          return true;
+        case Status.completed:
+          return todo.completed;
+        case Status.active:
+          return !todo.completed;
+        default:
+          return true;
+      }
+    }).filter(todo => {
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    });
 
-    return todosByQuery;
+    return filteredTodos;
   }, [todos, filter, query]);
 
   return (
