@@ -28,29 +28,21 @@ export const App: React.FC = () => {
     setTodo(selectedTodo);
   };
 
-  let selectedTodos;
-  let visibleTodos;
+  const filteredTodos = () => {
+    switch (filterByStatus) {
+      case Status.Active:
+        return todos.filter(currentTodo => !currentTodo.completed);
+      case Status.Completed:
+        return todos.filter(currentTodo => currentTodo.completed);
+      default:
+        return todos;
+    }
+  };
 
-  switch (filterByStatus) {
-    case Status.Active:
-      selectedTodos = todos.filter(currentTodo => !currentTodo.completed);
-      break;
-
-    case Status.Completed:
-      selectedTodos = todos.filter(currentTodo => currentTodo.completed);
-      break;
-
-    default:
-      selectedTodos = todos;
-      break;
-  }
-
-  if (query) {
-    // eslint-disable-next-line max-len
-    visibleTodos = selectedTodos.filter(currentTodo => searchInTitle(currentTodo.title, query));
-  } else {
-    visibleTodos = selectedTodos;
-  }
+  const visibleTodos = query
+    ? filteredTodos()
+      .filter(currentTodo => searchInTitle(currentTodo.title, query))
+    : filteredTodos();
 
   useEffect(() => {
     getTodos()
