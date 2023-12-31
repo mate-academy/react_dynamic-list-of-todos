@@ -1,37 +1,19 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import { SelectTypes } from '../../types/selectTypes';
 
 type Props = {
-  todos: Todo[],
-  onChange: (todos: Todo[]) => void
+  query: string,
+  onInputChange: (query: string) => void
+  onSelectChange: (select: SelectTypes) => void
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
-  const [query, setQuery] = useState('');
-
-  const onSearchFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-    onChange(todos.filter(todo => todo.title.includes(event.target.value)));
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onInputChange,
+  onSelectChange,
+}) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelectChange(event.target.value as SelectTypes);
   };
-
-  const onClearSearchButtonClick = () => {
-    setQuery('');
-    onChange(todos);
-  };
-
-  const onSelectChange = (todoType: string) => {
-    if (todoType === 'completed') {
-      onChange(todos.filter(todo => todo.completed));
-    } else if (todoType === 'active') {
-      onChange(todos.filter(todo => !todo.completed));
-    } else if (todoType === 'all') {
-      onChange(todos);
-    }
-  };
-
-  useEffect(() => {
-    onChange(todos);
-  }, [onChange, todos]);
 
   return (
     <form className="field has-addons">
@@ -39,9 +21,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => {
-              onSelectChange(event.target.value);
-            }}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -57,7 +37,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={onSearchFilterChange}
+          onChange={e => onInputChange(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -70,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onChange }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={onClearSearchButtonClick}
+              onClick={() => onInputChange('')}
             />
           </span>
         )}

@@ -10,22 +10,60 @@ import { getTodos } from './api';
 
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { SelectTypes } from './types/selectTypes';
+
+const filterFunction = (todos: Todo[], filterType: SelectTypes, enteredQuery: string) => {
+  let visibleTodos = [...todos];
+  const query = enteredQuery.toLowerCase();
+
+  switch (filterType) {
+    case 'completed':
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+      break;
+
+    case 'active':
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
+      break;
+
+    default:
+      break;
+  }
+
+  return visibleTodos.filter(todo => todo.title.toLowerCase().includes(query));
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisivleTodos] = useState<Todo[]>(todos);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [select, setSelect] = useState<SelectTypes>('all');
+  const [query, setQuery] = useState('');
 
-  const setAllTodos = (visibleFunction: () => Promise<Todo[]>) => {
-    setLoading(true);
-    visibleFunction()
-      .then(setTodos)
-      .finally(() => setLoading(false));
+  const setActivityFilter = (filterValue: SelectTypes) => {
+    setSelect(filterValue);
+  };
+
+  const setCurrentQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const focusOnTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const unFocusOnTodo = () => {
+    setSelectedTodo(null);
   };
 
   useEffect(() => {
-    setAllTodos(getTodos);
+    const loadTodos = async () => {
+      const data = await getTodos();
+
+      setTodos(data);
+      setIsLoading(true);
+    };
+
+    loadTodos();
   }, []);
 
   return (
@@ -37,18 +75,18 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                onChange={setVisivleTodos}
+                query={query}
+                onInputChange={setCurrentQuery}
+                onSelectChange={setActivityFilter}
               />
             </div>
 
             <div className="block">
-              {loading ? (
-                <Loader />
-              ) : (
+              {!isLoading ? <Loader /> : (
                 <TodoList
-                  todos={visibleTodos}
-                  setSelectedTodo={setSelectedTodo}
+                  todos={filterFunction(todos, select, query)}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={focusOnTodo}
                 />
               )}
             </div>
@@ -59,7 +97,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          setSelectedTodo={unFocusOnTodo}
         />
       )}
     </>
