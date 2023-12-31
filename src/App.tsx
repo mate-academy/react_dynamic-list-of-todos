@@ -31,19 +31,14 @@ export const App: React.FC = () => {
 
   const displayedTodos = useMemo(() => {
     const filteredTodos = todos.filter(todo => {
-      // Filter by status
-      switch (filter) {
-        case Status.all:
-          return true;
-        case Status.completed:
-          return todo.completed;
-        case Status.active:
-          return !todo.completed;
-        default:
-          return true;
-      }
-    }).filter(todo => {
-      return todo.title.toLowerCase().includes(query.toLowerCase());
+      const statusFilter
+      = filter === Status.all
+      || (filter === Status.completed && todo.completed)
+      || (filter === Status.active && !todo.completed);
+
+      const queryFilter = todo.title.toLowerCase().includes(query.toLowerCase());
+
+      return statusFilter && queryFilter;
     });
 
     return filteredTodos;
@@ -70,8 +65,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      { selectedTodo
-      && <TodoModal selectedTodo={selectedTodo} handleCloseModal={handleCloseModal} />}
+      {selectedTodo
+        && <TodoModal selectedTodo={selectedTodo} handleCloseModal={handleCloseModal} />}
     </>
   );
 };
+/* */
