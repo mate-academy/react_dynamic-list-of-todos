@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -28,7 +28,7 @@ export const App: React.FC = () => {
     setTodo(selectedTodo);
   };
 
-  const filteredTodos = () => {
+  const filteredTodos = useMemo(() => {
     switch (filterByStatus) {
       case Status.Active:
         return todos.filter(currentTodo => !currentTodo.completed);
@@ -37,12 +37,14 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-  };
+  }, [todos, filterByStatus]);
 
-  const visibleTodos = query
-    ? filteredTodos()
-      .filter(currentTodo => searchInTitle(currentTodo.title, query))
-    : filteredTodos();
+  const visibleTodos = useMemo(() => {
+    return query
+      ? filteredTodos
+        .filter(currentTodo => searchInTitle(currentTodo.title, query))
+      : filteredTodos;
+  }, [filteredTodos, query]);
 
   useEffect(() => {
     getTodos()
