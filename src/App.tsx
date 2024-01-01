@@ -13,7 +13,7 @@ import { TodoModal } from './components/TodoModal';
 import { TodoFilter } from './components/TodoFilter';
 
 export const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [query, setQuery] = useState<string>('');
@@ -34,7 +34,7 @@ export const App: FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    if (!todos) {
+    if (!todos.length) {
       return [];
     }
 
@@ -101,7 +101,7 @@ export const App: FC = () => {
 
             <div className="block">
               {
-                todos
+                todos.length > 0
                   ? (
                     <TodoList
                       todos={visibleTodos}

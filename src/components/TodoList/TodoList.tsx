@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[] | null,
+  todos: Todo[],
   onTodoSelect: (todo: Todo) => void,
   selectedId?: number,
 };
@@ -26,7 +26,7 @@ export const TodoList: FC<Props>
 
     <tbody>
       {
-        todos?.map(todo => (
+        todos.map(todo => (
           <tr
             key={todo.id}
             data-cy="todo"
