@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  FC, useCallback, useEffect, useState,
+  FC, useCallback, useEffect, useMemo, useState,
 } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -14,7 +14,6 @@ import { TodoFilter } from './components/TodoFilter';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [query, setQuery] = useState<string>('');
@@ -34,30 +33,32 @@ export const App: FC = () => {
     loadTodos();
   }, []);
 
-  useEffect(() => {
+  const visibleTodos = useMemo(() => {
+    if (!todos) {
+      return [];
+    }
+
     let filteredTodos = todos;
 
-    if (todos) {
-      switch (filterType) {
-        case 'active':
-          filteredTodos = todos.filter(todo => !todo.completed);
-          break;
-        case 'completed':
-          filteredTodos = todos.filter(todo => todo.completed);
-          break;
-        default:
-          filteredTodos = todos;
-          break;
-      }
-
-      if (query.trim().length) {
-        filteredTodos = filteredTodos
-          .filter(todo => todo.title.toLocaleLowerCase()
-            .includes(query.toLocaleLowerCase()));
-      }
-
-      setVisibleTodos(filteredTodos);
+    switch (filterType) {
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        filteredTodos = todos.filter(todo => todo.completed);
+        break;
+      default:
+        filteredTodos = todos;
+        break;
     }
+
+    if (query.trim().length) {
+      filteredTodos = filteredTodos
+        .filter(todo => todo.title.toLocaleLowerCase()
+          .includes(query.toLocaleLowerCase()));
+    }
+
+    return filteredTodos;
   }, [filterType, query, todos]);
 
   const handleTodoSelected = useCallback((todo: Todo) => {
