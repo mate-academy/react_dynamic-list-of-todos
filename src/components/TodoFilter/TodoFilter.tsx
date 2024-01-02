@@ -6,7 +6,7 @@ type Props = {
   setQuery: (value: string) => void;
   setFilter: (value: Status) => void;
 };
-const FILTERED_TYPES = [Status.all, Status.active, Status.completed];
+const FILTERED_TYPES = [Status.ALL, Status.ACTIVE, Status.COMPLETED];
 
 export const TodoFilter: React.FC<Props> = ({
   query,
