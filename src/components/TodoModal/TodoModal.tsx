@@ -7,28 +7,27 @@ import { getUser } from '../../api';
 
 interface Props {
   todoCard: Todo | undefined;
-  setIsModalOpen: React.Dispatch<SetStateAction<boolean>>
-  setIconId: React.Dispatch<SetStateAction<number>>
+  setTodoCard: React.Dispatch<SetStateAction<Todo | undefined>>
 }
 
 export const TodoModal: React.FC<Props> = ({
   todoCard,
-  setIsModalOpen,
-  setIconId,
+  setTodoCard,
 }) => {
   const [selectedUser, setsSelectedUser] = useState<User>();
   const [isUserLoad, setIsUserLoad] = useState(false);
 
   useEffect(() => {
     setIsUserLoad(true);
-    getUser(todoCard?.userId).then((user) => {
-      setsSelectedUser(user);
-    }).finally(() => setIsUserLoad(false));
+    if (todoCard?.userId) {
+      getUser(todoCard?.userId).then((user) => {
+        setsSelectedUser(user);
+      }).finally(() => setIsUserLoad(false));
+    }
   }, [todoCard]);
 
   const handleCloseCard = () => {
-    setIsModalOpen(false);
-    setIconId(0);
+    setTodoCard(undefined);
   };
 
   return (

@@ -16,9 +16,7 @@ export const App: React.FC = () => {
   const [todosLoading, setTodosLoading] = useState(false);
   const [filter, setFilter] = useState<FilteringType>(FilteringType.all);
   const [title, setTitle] = useState('');
-  const [todoCard, setTodoCard] = useState<Todo>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [iconId, setIconId] = useState(0);
+  const [todoCard, setTodoCard] = useState<Todo | undefined>();
 
   useEffect(() => {
     setTodosLoading(true);
@@ -53,10 +51,8 @@ export const App: React.FC = () => {
                   title={title}
                   todos={todos}
                   filter={filter}
-                  iconId={iconId}
-                  setIsModalOpen={setIsModalOpen}
+                  todoCard={todoCard}
                   setTodoCard={setTodoCard}
-                  setIconId={setIconId}
                 />
               )}
             </div>
@@ -64,11 +60,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen && (
+      {todoCard && (
         <TodoModal
           todoCard={todoCard}
-          setIsModalOpen={setIsModalOpen}
-          setIconId={setIconId}
+          setTodoCard={setTodoCard}
         />
       )}
 

@@ -6,20 +6,16 @@ type Props = {
   todos: Todo[]
   filter: FilteringType
   title: string,
-  iconId: number,
-  setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
+  todoCard: Todo | undefined,
   setTodoCard: React.Dispatch<SetStateAction<Todo | undefined>>,
-  setIconId: React.Dispatch<SetStateAction<number>>
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   filter,
   title,
-  iconId,
-  setIsModalOpen,
+  todoCard,
   setTodoCard,
-  setIconId,
 }) => {
   let filtering;
 
@@ -39,8 +35,6 @@ export const TodoList: React.FC<Props> = ({
 
   const handleEyeButton = (todo: Todo) => {
     setTodoCard(todo);
-    setIsModalOpen(true);
-    setIconId(todo.id);
   };
 
   const preparedTodos = title.trim().length > 0
@@ -92,7 +86,7 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => handleEyeButton(todoItem)}
                 >
                   <span className="icon">
-                    <i className={`far ${todoItem.id !== iconId ? 'fa-eye' : 'fa-eye-slash'}`} />
+                    <i className={`far ${todoCard?.id !== todoItem.id ? 'fa-eye' : 'fa-eye-slash'}`} />
                   </span>
                 </button>
               </td>

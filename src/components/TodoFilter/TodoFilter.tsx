@@ -45,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
           value={input}
-          onChange={(e) => handleInput(e)}
+          onChange={handleInput}
           data-cy="searchInput"
           type="text"
           className="input"
