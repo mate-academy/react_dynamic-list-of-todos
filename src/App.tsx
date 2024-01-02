@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState(Status.all);
+  const [filter, setFilter] = useState(Status.ALL);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export const App: React.FC = () => {
   const displayedTodos = useMemo(() => {
     const filteredTodos = todos.filter(todo => {
       const statusFilter
-      = filter === Status.all
-      || (filter === Status.completed && todo.completed)
-      || (filter === Status.active && !todo.completed);
+      = filter === Status.ALL
+      || (filter === Status.COMPLETED && todo.completed)
+      || (filter === Status.ACTIVE && !todo.completed);
 
       const queryFilter = todo.title.toLowerCase().includes(query.toLowerCase());
 
