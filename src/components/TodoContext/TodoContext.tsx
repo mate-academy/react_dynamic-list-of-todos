@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos, getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -63,7 +63,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     }
   }, [selectedTodo]);
 
-  const value = {
+  const value = useMemo(() => ({
     selectedTodo,
     setSelectedTodo,
     todos,
@@ -76,7 +76,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setSelectedUser,
     selectedSelect,
     setSelect,
-  };
+  }
+  ), [loader, query, selectedSelect, selectedTodo, selectedUser, todos]);
 
   return (
     <TodoContext.Provider value={value}>

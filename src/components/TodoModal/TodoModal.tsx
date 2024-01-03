@@ -5,6 +5,7 @@ import { TodoContext } from '../TodoContext/TodoContext';
 export const TodoModal: React.FC = () => {
   const {
     selectedTodo,
+    setSelectedTodo,
     setSelectedUser,
     selectedUser,
     loader,
@@ -32,6 +33,7 @@ export const TodoModal: React.FC = () => {
                 data-cy="modal-close"
                 onClick={() => {
                   setSelectedUser(null);
+                  setSelectedTodo(null)
                 }}
               />
             </header>
