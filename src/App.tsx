@@ -9,24 +9,22 @@ import { TodoProvider } from './components/TodoContext/TodoContext';
 
 export const App: React.FC = () => {
   return (
-    <>
-      <TodoProvider>
-        <div className="section">
-          <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+    <TodoProvider>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-              <div className="block">
-                <TodoFilter />
-              </div>
+            <div className="block">
+              <TodoFilter />
+            </div>
 
-              <div className="block">
-                <TodoList />
-              </div>
+            <div className="block">
+              <TodoList />
             </div>
           </div>
         </div>
-      </TodoProvider>
-    </>
+      </div>
+    </TodoProvider>
   );
 };
