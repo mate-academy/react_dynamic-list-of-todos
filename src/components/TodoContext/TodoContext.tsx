@@ -61,7 +61,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         .then((response => {
           setSelectedUser(response);
         }))
-      .finally(() => setLoader(false));
+        .finally(() => setLoader(false));
     }
   }, [selectedTodo]);
 
