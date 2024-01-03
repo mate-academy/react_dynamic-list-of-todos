@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTodos, getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -13,7 +13,7 @@ type Prop = {
   query: string,
   setQuery: (query: string) => void,
   selectedUser: User | null,
-  setSelectedUser: (selectedUser: User) => void,
+  setSelectedUser: (selectedUser: User | null) => void,
   selectedSelect: string,
   setSelect: (selectedSelect: string) => void
 };
@@ -52,7 +52,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         setTodos(result);
       }))
       .finally(() => setLoader(false));
+  }, []);
 
+  useEffect(() => {
     if (selectedTodo) {
       getUser(selectedTodo.userId)
         .then((response => {
@@ -61,7 +63,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     }
   }, [selectedTodo]);
 
-  const value = useMemo(() => ({
+  const value = {
     selectedTodo,
     setSelectedTodo,
     todos,
@@ -74,8 +76,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setSelectedUser,
     selectedSelect,
     setSelect,
-  }
-  ), [loader, query, selectedSelect, selectedTodo, selectedUser, todos]);
+  };
 
   return (
     <TodoContext.Provider value={value}>

@@ -1,18 +1,13 @@
 /* eslint-disable max-len */
-import React, { useContext } from 'react';
+import React from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { TodoContext, TodoProvider } from './components/TodoContext/TodoContext';
+import { TodoProvider } from './components/TodoContext/TodoContext';
 
 export const App: React.FC = () => {
-  const {
-    selectedUser,
-  } = useContext(TodoContext);
-
   return (
     <>
       <TodoProvider>
@@ -31,11 +26,6 @@ export const App: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {selectedUser
-      && (
-        <TodoModal />
-      )}
       </TodoProvider>
     </>
   );

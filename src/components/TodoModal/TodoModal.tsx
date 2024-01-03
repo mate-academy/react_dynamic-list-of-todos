@@ -5,7 +5,7 @@ import { TodoContext } from '../TodoContext/TodoContext';
 export const TodoModal: React.FC = () => {
   const {
     selectedTodo,
-    setSelectedTodo,
+    setSelectedUser,
     selectedUser,
     loader,
   } = useContext(TodoContext);
@@ -31,7 +31,7 @@ export const TodoModal: React.FC = () => {
                 className="delete"
                 data-cy="modal-close"
                 onClick={() => {
-                  setSelectedTodo(null);
+                  setSelectedUser(null);
                 }}
               />
             </header>

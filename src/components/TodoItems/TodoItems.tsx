@@ -16,10 +16,10 @@ export const TodoItems:React.FC<TodoElementProps> = ({ todo }) => {
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
       <td className="is-vcentered">
-        <i className={classNames('', { 'fas fa-check': todo.completed })} />
+        <i className={classNames({ 'fas fa-check': todo.completed })} />
       </td>
       <td className="is-vcentered is-expanded">
-        <p className={classNames('', {
+        <p className={classNames({
           'has-text-success': todo.completed,
           'has-text-danger': !todo.completed,
         })}
