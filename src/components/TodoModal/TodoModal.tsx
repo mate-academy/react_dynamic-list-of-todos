@@ -33,7 +33,7 @@ export const TodoModal: React.FC = () => {
                 data-cy="modal-close"
                 onClick={() => {
                   setSelectedUser(null);
-                  setSelectedTodo(null)
+                  setSelectedTodo(null);
                 }}
               />
             </header>
