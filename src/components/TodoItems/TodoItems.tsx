@@ -10,8 +10,6 @@ type TodoElementProps = {
 export const TodoItems:React.FC<TodoElementProps> = ({ todo }) => {
   const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
 
-  const isSelectedTodo = selectedTodo?.id === todo.id;
-
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
@@ -39,7 +37,7 @@ export const TodoItems:React.FC<TodoElementProps> = ({ todo }) => {
           <span className="icon">
             <i className={classNames('far fa-eye',
               {
-                'fa-eye-slash': isSelectedTodo,
+                'fa-eye-slash': selectedTodo?.id,
               })}
             />
           </span>

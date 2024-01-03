@@ -56,10 +56,12 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (selectedTodo) {
+      setLoader(true);
       getUser(selectedTodo.userId)
         .then((response => {
           setSelectedUser(response);
-        }));
+        }))
+      .finally(() => setLoader(false));
     }
   }, [selectedTodo]);
 
