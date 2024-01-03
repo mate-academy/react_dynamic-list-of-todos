@@ -48,10 +48,6 @@ export const TodoList: FC<Props> = ({
           )}
 
           <td className="is-vcentered is-expanded">
-            <p className="has-text-danger">delectus aut autem</p>
-          </td>
-
-          <td className="is-vcentered is-expanded">
             <p
               className={classNames({
                 'has-text-danger': !todo.completed,
