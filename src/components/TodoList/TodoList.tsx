@@ -31,7 +31,6 @@ export const TodoList: React.FC<TodoListProps>
           <tr
             key={todo.id}
             data-cy="todo"
-            className={todo.completed ? 'has-background-info-light' : ''}
           >
             <td className="is-vcentered">{index + 1}</td>
             <td className="is-vcentered">
