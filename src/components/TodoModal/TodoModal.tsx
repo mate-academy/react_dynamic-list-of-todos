@@ -1,13 +1,33 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type TodoModalProps = {
+  todo: Todo | null;
+  user: User | null;
+  isLoading: boolean;
+  onClose: () => void;
+};
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  todo, user, isLoading, onClose,
+}) => {
+  if (!todo) {
+    return null;
+  }
+
+  const userName = user?.name;
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div
+        className="modal-background"
+        aria-label="Close modal"
+      />
 
-      {true ? (
-        <Loader />
+      {isLoading ? (
+        <Loader data-cy="loader" />
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -15,31 +35,39 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              `Todo #
+              $
+              {todo.id}
+              `
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onClose}
+              aria-label="Close"
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
-
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              {user ? (
+                <a href={`mailto:${user.email}`}>
+                  {userName}
+                </a>
+              ) : 'Loading user...'}
             </p>
           </div>
         </div>
@@ -47,3 +75,5 @@ export const TodoModal: React.FC = () => {
     </div>
   );
 };
+
+export default TodoModal;
