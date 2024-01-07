@@ -1,14 +1,67 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [allTodo, setAllTodo] = useState<Todo[]>([]);
+  const [filterTodo, setFilterTodo] = useState(allTodo);
+  const [visibleTodo, setVisibleTodo] = useState(filterTodo);
+  const [selectUserId, setSelectUserId] = useState(0);
+  const [selectTodoId, setSelectTodoId] = useState(0);
+  const [formItems, setFormItems] = useState({ statusSelect: 'all', input: '' });
+
+  const selectItems = (UserId: number, todoId: number) => {
+    setSelectUserId(UserId);
+    setSelectTodoId(todoId);
+  };
+
+  const handleChange = (key: string, value: string) => {
+    setFormItems(prev => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleSelect = () => {
+    switch (true) {
+      case formItems.statusSelect === 'active':
+        setFilterTodo(allTodo.filter(todo => !todo.completed));
+        break;
+
+      case formItems.statusSelect === 'completed':
+        setFilterTodo(allTodo.filter(todo => todo.completed));
+        break;
+
+      default:
+        setFilterTodo(allTodo);
+    }
+  };
+
+  const handleSearch = () => {
+    setVisibleTodo(filterTodo.filter(todo => todo.title.toLocaleLowerCase()
+      .includes(formItems.input.toLocaleLowerCase())));
+  };
+
+  useEffect(() => {
+    getTodos().then(setAllTodo);
+  }, []);
+
+  useEffect(() => {
+    handleSelect();
+  }, [formItems, allTodo]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [filterTodo, formItems]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +70,32 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                valueFormItems={formItems}
+                handleChange={handleChange}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {allTodo.length !== 0 ? (
+                <TodoList
+                  todos={visibleTodo}
+                  selectTodo={selectTodoId}
+                  selectItems={selectItems}
+                />
+              ) : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectUserId && (
+        <TodoModal
+          selectUser={selectUserId}
+          selectTodo={selectTodoId}
+          selectItems={selectItems}
+        />
+      )}
     </>
   );
 };
