@@ -6,7 +6,12 @@ import { getUser } from '../../api';
 
 export const TodoModal: React.FC = () => {
   const {
-    activeTodo, setActiveTodo, setIsPressed, isLoading, setIsLoading,
+    activeTodo,
+    setActiveTodo,
+    setIsPressed,
+    setIsLoading,
+    isModalLoading,
+    setIsModalLoading,
   } = useTodos();
 
   const [userOfTodo, setUserOfTodo] = useState<User | null>(null);
@@ -18,9 +23,10 @@ export const TodoModal: React.FC = () => {
 
     getUser(activeTodo.userId).then(data => {
       setUserOfTodo(data);
+      setIsModalLoading(false);
       setIsLoading(false);
     });
-  }, [activeTodo]);
+  }, [activeTodo, setIsModalLoading, setIsLoading]);
 
   const handleDelete = () => {
     setIsPressed(false);
@@ -39,7 +45,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {isModalLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

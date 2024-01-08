@@ -15,6 +15,8 @@ type TodoProviderT = {
   setActiveTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
   isLoading: boolean,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  isModalLoading: boolean,
+  setIsModalLoading: React.Dispatch<React.SetStateAction<boolean>>,
   todos: Todo[],
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   query: string,
@@ -31,6 +33,8 @@ const TodoContext = createContext<TodoProviderT>({
   setActiveTodo: () => {},
   isLoading: false,
   setIsLoading: () => {},
+  isModalLoading: false,
+  setIsModalLoading: () => {},
   todos: [],
   setTodos: () => {},
   query: '',
@@ -44,6 +48,7 @@ const TodoProvider: FC<Props> = ({ children }) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalLoading, setIsModalLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [option, setOption] = useState('all');
@@ -79,6 +84,8 @@ const TodoProvider: FC<Props> = ({ children }) => {
     setActiveTodo,
     isLoading,
     setIsLoading,
+    isModalLoading,
+    setIsModalLoading,
     todos,
     setTodos,
     query,
@@ -86,7 +93,15 @@ const TodoProvider: FC<Props> = ({ children }) => {
     visibleTodos,
     option,
     setOption,
-  }), [isPressed, activeTodo, isLoading, todos, query, visibleTodos, option]);
+  }), [
+    isPressed,
+    activeTodo,
+    isLoading,
+    todos,
+    query,
+    visibleTodos,
+    option,
+    isModalLoading]);
 
   return (
     <TodoContext.Provider value={value}>
