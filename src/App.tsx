@@ -11,14 +11,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Options } from './types/FilteredOption';
 
-function getFilteredTodos(todos: Todo[], filteredBy: Options) {
+function getFilteredTodos(todos: Todo[], filteredBy: string) {
   switch (filteredBy) {
     case Options.all:
       return todos;
     case Options.active:
-      return todos.filter((todo) => todo.completed === false);
+      return todos.filter((todo) => !todo.completed);
     case Options.completed:
-      return todos.filter((todo) => todo.completed === true);
+      return todos.filter((todo) => todo.completed);
 
     default:
       return todos;
@@ -31,8 +31,7 @@ export const App: React.FC = () => {
   const [filter, setField] = useState(Options.all);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
-  const filteredTodos = getFilteredTodos(todos, filter);
-  const searchedTodo = filteredTodos.filter((todo) => (
+  const filteredTodos = getFilteredTodos(todos, filter).filter((todo) => (
     todo.title.toLowerCase().includes(title.toLowerCase())));
 
   useEffect(() => {
@@ -62,7 +61,7 @@ export const App: React.FC = () => {
 
               {!loading && (
                 <TodoList
-                  todos={searchedTodo}
+                  todos={filteredTodos}
                   selected={selectedTodo}
                   selectTodo={setSelectedTodo}
                 />
