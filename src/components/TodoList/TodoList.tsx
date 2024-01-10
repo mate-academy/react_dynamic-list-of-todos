@@ -5,18 +5,18 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[]
-  setTodoId: (currentTodoId: number | null) => void
-  todoId: number | null
+  setActiveTodo: (currentTodo: Todo | null) => void
+  activeTodo: Todo | null
   query: string,
   filter: Filter
 }
 
 export const TodoList: React.FC<Props> = ({
-  todos,
-  setTodoId,
-  todoId,
   query,
   filter,
+  todos,
+  setActiveTodo,
+  activeTodo,
 }) => {
   const [hoveredItemId, setHoveredItemId] = useState<null | number>(null);
 
@@ -61,7 +61,7 @@ export const TodoList: React.FC<Props> = ({
                 onMouseLeave={() => setHoveredItemId(null)}
                 className={classNames({
                   'has-background-info-light':
-                    (todoId === todo.id) || (hoveredItemId === todo.id),
+                    (activeTodo?.id === todo.id) || (hoveredItemId === todo.id),
                 })}
                 key={todo.id}
               >
@@ -87,7 +87,7 @@ export const TodoList: React.FC<Props> = ({
                 </td>
                 <td className="has-text-right is-vcentered">
                   <button
-                    onClick={() => setTodoId(todo.id)}
+                    onClick={() => setActiveTodo(todo)}
                     data-cy="selectButton"
                     className="button"
                     type="button"
@@ -95,8 +95,8 @@ export const TodoList: React.FC<Props> = ({
                     <span className="icon">
                       <i
                         className={classNames('far', {
-                          'fa-eye': !(todoId === todo.id),
-                          'fa-eye-slash': todoId === todo.id,
+                          'fa-eye': !(activeTodo?.id === todo.id),
+                          'fa-eye-slash': activeTodo?.id === todo.id,
                         })}
                       />
                     </span>

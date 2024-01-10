@@ -21,11 +21,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [todoId, setTodoId] = useState<number | null>(null);
-
-  const findTodoById = (id: number, arrayTodos: Todo[]): Todo => {
-    return arrayTodos.find(todo => todo.id === id) as Todo;
-  };
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -59,8 +55,8 @@ export const App: React.FC = () => {
                   query={query}
                   filter={filter}
                   todos={todos}
-                  setTodoId={setTodoId}
-                  todoId={todoId}
+                  setActiveTodo={setActiveTodo}
+                  activeTodo={activeTodo}
                 />
               )}
             </div>
@@ -68,11 +64,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== null && (
+      {activeTodo && (
         <TodoModal
-          todo={findTodoById(todoId, todos)}
-          todoId={todoId}
-          setTodoId={setTodoId}
+          activeTodo={activeTodo}
+          setActiveTodo={setActiveTodo}
         />
       )}
     </>
