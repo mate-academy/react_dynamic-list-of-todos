@@ -15,8 +15,10 @@ function getFilteredTodos(todos: Todo[], filteredBy: string) {
   switch (filteredBy) {
     case Options.all:
       return todos;
+
     case Options.active:
       return todos.filter((todo) => !todo.completed);
+
     case Options.completed:
       return todos.filter((todo) => todo.completed);
 
