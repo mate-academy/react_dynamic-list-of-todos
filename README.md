@@ -20,9 +20,9 @@ loaded and show them using `TodoList` (check the code in the `api.ts`); -->
 <!-- 1. Show the Loader while waiting for the user; -->
 <!-- 1. `x` button should close the modal; -->
 <!-- 1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos; -->
-1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
+<!-- 1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
     - show the `x` button when the `query` is entered;
-    - the `x` button should clear the `query` and reset the todos;
+    - the `x` button should clear the `query` and reset the todos; -->
 
 ## Instructions
 

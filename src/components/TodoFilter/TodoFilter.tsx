@@ -3,12 +3,16 @@ import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
   setFilterBy: Dispatch<SetStateAction<FilterBy>>,
-  handleFilterInput: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleFilterInput: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  setFilterInput: Dispatch<SetStateAction<string>>,
+  filterInput: string,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
   handleFilterInput,
+  setFilterInput,
+  filterInput,
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFilter = event.target.value as FilterBy;
@@ -35,6 +39,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           onChange={handleFilterInput}
+          value={filterInput}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -46,6 +51,8 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            style={{ visibility: filterInput ? 'visible' : 'hidden' }}
+            onClick={() => setFilterInput('')}
           />
         </span>
       </p>

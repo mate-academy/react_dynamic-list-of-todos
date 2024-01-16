@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -22,34 +22,27 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [filterInput, setFilterInput] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState(todos);
-  const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+  const filteredTodos = useMemo(() => {
+    switch (filterBy) {
+      case FilterBy.All:
+        return todos;
+      case FilterBy.Active:
+        return todos.filter(toddo => !toddo.completed);
+      case FilterBy.Completed:
+        return todos.filter(toddo => toddo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filterBy]);
+  const [filteredTodosState, setFilteredTodosState] = useState(filteredTodos);
 
-    setFilterInput(value);
+  const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterInput(e.target.value);
   };
 
   useEffect(() => {
-    switch (filterBy) {
-      case FilterBy.All:
-        setFilteredTodos(todos);
-        break;
-      case FilterBy.Active:
-        setFilteredTodos(todos.filter(toddo => !toddo.completed));
-        break;
-      case FilterBy.Completed:
-        setFilteredTodos(todos.filter(toddo => toddo.completed));
-        break;
-      default:
-        break;
-    }
-  }, [todos, filterBy]);
-
-  useEffect(() => {
-    setFilteredTodos((prevTodos) => {
-      return prevTodos.filter(todo => todo.title.includes(filterInput));
-    });
-  }, [filterInput]);
+    setFilteredTodosState(filteredTodos.filter(todo => todo.title.toLowerCase().includes(filterInput.toLowerCase())));
+  }, [filterInput, filteredTodos]);
 
   const loadAllTodds = async () => {
     const allGoods = await getTodos();
@@ -81,7 +74,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setFilterBy={setFilterBy} handleFilterInput={handleFilterInput} />
+              <TodoFilter
+                setFilterBy={setFilterBy}
+                handleFilterInput={handleFilterInput}
+                setFilterInput={setFilterInput}
+                filterInput={filterInput}
+              />
             </div>
 
             <div className="block">
@@ -90,7 +88,7 @@ export const App: React.FC = () => {
                   <Loader />
                 ) : (
                   <TodoList
-                    todos={filteredTodos}
+                    todos={filteredTodosState}
                     setTodoModal={setTodoModal}
                     setModalLoading={setModalLoading}
                   />
