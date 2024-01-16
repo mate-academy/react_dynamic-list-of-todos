@@ -8,14 +8,12 @@ export const TodoList: React.FC = () => {
     setIsPressed,
     activeTodo,
     setActiveTodo,
-    setIsLoading,
     setIsModalLoading,
     visibleTodos,
   } = useTodos();
 
   const handleSelect = (todo: Todo) => () => {
     setIsPressed(true);
-    setIsLoading(true);
     setIsModalLoading(true);
     setActiveTodo(todo);
   };
