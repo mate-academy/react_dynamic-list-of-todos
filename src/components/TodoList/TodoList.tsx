@@ -5,9 +5,10 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[]
   activeTodo: (todo: Todo) => void
+  openTodo?: Todo
 };
 
-export const TodoList: React.FC<Props> = ({ todos, activeTodo }) => {
+export const TodoList: React.FC<Props> = ({ todos, activeTodo, openTodo }) => {
   const handleButton = (todo: Todo): void => {
     activeTodo(todo);
   };
@@ -32,12 +33,11 @@ export const TodoList: React.FC<Props> = ({ todos, activeTodo }) => {
           <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                <i className={classNames({
-                  'fas fa-check': todo.completed,
-                })}
-                />
-              </span>
+              {todo.completed ? (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              ) : null}
             </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames({
@@ -58,7 +58,10 @@ export const TodoList: React.FC<Props> = ({ todos, activeTodo }) => {
                 }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i className={openTodo?.id === todo.id
+                    ? 'far fa-eye-slash'
+                    : 'far fa-eye'}
+                  />
                 </span>
               </button>
             </td>

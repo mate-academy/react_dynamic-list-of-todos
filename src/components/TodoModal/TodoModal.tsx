@@ -8,6 +8,7 @@ type Props = {
   todo?: Todo
   hide: (b: boolean) => void
   activeUser:(user: undefined) => void
+  activeTodo:(todo: undefined) => void
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -15,10 +16,12 @@ export const TodoModal: React.FC<Props> = ({
   todo,
   hide,
   activeUser,
+  activeTodo,
 }) => {
   const handleClose = () => {
     hide(false);
     activeUser(undefined);
+    activeTodo(undefined);
   };
 
   return (

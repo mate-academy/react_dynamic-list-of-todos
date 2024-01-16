@@ -17,12 +17,21 @@ export const App: React.FC = () => {
   const [activeUser, setAciverUser] = useState<User>();
   const [todoActive, setTodoActive] = useState<Todo>();
   const [filter, setActiveFilter] = useState('all');
+  const [searchFilter, setSearchFilter] = useState('');
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
 
-  const filteredTodos = todos.filter((todo) => {
+  const searchTodo = todos.filter((todo) => {
+    if (searchFilter !== '') {
+      return todo.title.toLowerCase().includes(searchFilter.toLowerCase());
+    }
+
+    return true;
+  });
+
+  const filteredTodos = searchTodo.filter((todo) => {
     if (filter === 'all') {
       return true;
     }
@@ -55,18 +64,18 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={setActiveFilter} />
+              <TodoFilter filter={setActiveFilter} searchFilter={searchFilter} setSearchFilter={setSearchFilter} />
             </div>
 
             <div className="block">
-              {todos.length ? <TodoList todos={filteredTodos} activeTodo={activeTodo} /> : <Loader />}
+              {todos.length ? <TodoList todos={filteredTodos} activeTodo={activeTodo} openTodo={todoActive} /> : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
       {activeModal
-        ? <TodoModal user={activeUser} todo={todoActive} activeUser={setAciverUser} hide={setActiveModal} />
+        ? <TodoModal user={activeUser} todo={todoActive} activeUser={setAciverUser} hide={setActiveModal} activeTodo={setTodoActive} />
         : null}
     </>
   );
