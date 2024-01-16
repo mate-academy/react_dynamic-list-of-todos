@@ -72,7 +72,7 @@ export const App: FC = () => {
                 <Loader />
               )}
 
-              {(!loading && TodoList.length > 0) && (
+              {(!loading && prepTodos.length > 0) && (
                 <TodoList
                   todos={prepTodos}
                   selected={selectedTodos}
