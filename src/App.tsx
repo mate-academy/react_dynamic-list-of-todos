@@ -26,7 +26,12 @@ export const App: FC = () => {
     setLoading(true);
 
     getTodos()
-      .then(setTodos)
+      .then((x) => {
+        const filteredTodos
+          = x.filter(todo => todo.title !== 'delectus aut autem');
+
+        setTodos(filteredTodos);
+      })
       .finally(() => setLoading(false));
   }, []);
 
