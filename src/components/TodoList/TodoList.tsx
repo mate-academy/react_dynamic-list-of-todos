@@ -27,16 +27,21 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(todo => (
+      {todos.map(({
+        id,
+        title,
+        completed,
+        userId,
+      }) => (
         <tr
-          key={todo.id}
+          key={id}
           data-cy="todo"
           className={classNames({
-            'has-background-info-light': selected?.id === todo.id,
+            'has-background-info-light': selected?.id === id,
           })}
         >
-          <td className="is-vcentered">{todo.id}</td>
-          {todo.completed ? (
+          <td className="is-vcentered">{id}</td>
+          {completed ? (
             <td className="is-vcentered">
               <span className="icon" data-cy="iconCompleted">
                 <i className="fas fa-check" />
@@ -46,12 +51,12 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered" />
           )}
           <td className="is-vcentered is-expanded">
-            <p className={`${todo.completed
-              ? 'has-text-success'
-              : 'has-text-danger'
-            }`}
+            <p className={classNames({
+              'has-text-success': completed,
+              'has-text-danger': !completed,
+            })}
             >
-              {todo.title}
+              {title}
             </p>
           </td>
           <td className="has-text-right is-vcentered">
@@ -59,12 +64,17 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => onSelected(todo)}
+              onClick={() => onSelected({
+                id,
+                title,
+                completed,
+                userId,
+              })}
             >
               <span className="icon">
                 <i className={classNames('far', {
-                  'fa-eye': selected?.id !== todo.id,
-                  'fa-eye-slash': selected?.id === todo.id,
+                  'fa-eye': selected?.id !== id,
+                  'fa-eye-slash': selected?.id === id,
                 })}
                 />
               </span>
@@ -72,7 +82,6 @@ export const TodoList: React.FC<Props> = ({
           </td>
         </tr>
       ))}
-
     </tbody>
   </table>
 );
