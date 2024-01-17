@@ -11,7 +11,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { id, title, completed } = selectedTodo;
 
   useEffect(() => {
