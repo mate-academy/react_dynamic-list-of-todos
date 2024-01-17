@@ -8,17 +8,10 @@ interface LoadingProps {
   onClose: () => void;
 }
 
-const LoadingContent: FC<LoadingProps> = ({ onClose }) => (
+const LoadingContent: FC<LoadingProps> = () => (
   <div className="modal is-active" data-cy="modal">
     <div className="modal-background" />
     <Loader />
-    <button
-      type="button"
-      className="delete"
-      data-cy="modal-close"
-      aria-label="Close Modal"
-      onClick={onClose}
-    />
   </div>
 );
 
