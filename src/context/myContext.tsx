@@ -54,8 +54,6 @@ const TodoContextProvider: React.FC<TodoContextProviderProps>
       .finally(() => setIsLoading(false));
   }, []);
 
-  // zustand
-
   useEffect(() => {
     setIsUserLoading(true);
     if (activeTodo?.userId) {
@@ -117,7 +115,7 @@ const TodoContextProvider: React.FC<TodoContextProviderProps>
   );
 };
 
-export const useMyContext = () => {
+export const useTodoContext = () => {
   const context = useContext(MyContext);
 
   if (!context) {

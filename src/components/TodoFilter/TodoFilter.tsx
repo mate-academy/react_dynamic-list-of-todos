@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { useMyContext } from '../../context/myContext';
+import { useTodoContext } from '../../context/myContext';
 
 export const TodoFilter: React.FC = () => {
-  const { query, setQuery, setSortType } = useMyContext();
+  const { query, setQuery, setSortType } = useTodoContext();
 
   return (
     <form className="field has-addons">

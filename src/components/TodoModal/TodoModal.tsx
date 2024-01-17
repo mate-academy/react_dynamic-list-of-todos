@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Loader } from '../Loader';
-import { useMyContext } from '../../context/myContext';
+import { useTodoContext } from '../../context/myContext';
 
 interface TodoModalProps {
   setIsTodo: Dispatch<SetStateAction<boolean>>;
@@ -11,7 +11,7 @@ const Modal: React.FC<TodoModalProps> = (
 ) => {
   const {
     activeUser, isUserLoading, activeTodo, setActiveTodo, setActiveUser,
-  } = useMyContext();
+  } = useTodoContext();
 
   return (
     <div className="modal is-active" data-cy="modal">

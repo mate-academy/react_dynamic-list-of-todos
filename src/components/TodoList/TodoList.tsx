@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { useMyContext } from '../../context/myContext';
+import { useTodoContext } from '../../context/myContext';
 
 interface TodoListProps {
   setIsTodo: Dispatch<SetStateAction<boolean>>;
@@ -10,7 +10,7 @@ const List: React.FC<TodoListProps> = (
 ) => {
   const {
     todos, activeTodo, setActiveTodo,
-  } = useMyContext();
+  } = useTodoContext();
 
   return (
     <table className="table is-narrow is-fullwidth">
