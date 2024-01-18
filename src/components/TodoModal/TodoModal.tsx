@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({
   onClose,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
