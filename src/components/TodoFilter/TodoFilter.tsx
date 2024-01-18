@@ -1,9 +1,14 @@
-import { useContext } from 'react';
+import { ChangeEvent, useContext } from 'react';
+import debonce from 'lodash.debounce';
 import { DispatchContext } from '../../State/State';
 import { Filter } from '../../types/Filter';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
+
+  const applyQuery = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'query', payload: event.target.value });
+  };
 
   return (
     <form className="field has-addons">
@@ -31,9 +36,7 @@ export const TodoFilter = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={event => {
-            dispatch({ type: 'query', payload: event.target.value });
-          }}
+          onChange={debonce(applyQuery, 1000)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
