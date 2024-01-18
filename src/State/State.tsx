@@ -4,11 +4,13 @@ import { Filter } from '../types/Filter';
 type State = {
   filterBy: Filter;
   query: string;
+  appliedQuery: string;
 };
 
 type Action
 = { type: 'setFilter', payload: Filter }
-| { type: 'query', payload: string };
+| { type: 'query', payload: string }
+| { type: 'appliedQuery', payload: string };
 
 type Props = {
   children: React.ReactNode;
@@ -17,6 +19,7 @@ type Props = {
 const initialState: State = {
   filterBy: Filter.all,
   query: '',
+  appliedQuery: '',
 };
 
 function reducer(state: State, action: Action) {
@@ -32,6 +35,12 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         query: action.payload,
+      };
+
+    case 'appliedQuery':
+      return {
+        ...state,
+        appliedQuery: action.payload,
       };
 
     default:

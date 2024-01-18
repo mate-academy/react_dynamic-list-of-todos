@@ -4,7 +4,7 @@ import { Todo } from '../types/Todo';
 
 export function getPreperedTodos(
   todos: Todo[],
-  { query, filterBy }: ControlParams,
+  { appliedQuery, filterBy }: ControlParams,
 ): Todo[] {
   const preperedTodos = todos.filter(todo => {
     switch (filterBy) {
@@ -17,5 +17,5 @@ export function getPreperedTodos(
     }
   });
 
-  return preperedTodos.filter(todo => todo.title.includes(query));
+  return preperedTodos.filter(todo => todo.title.includes(appliedQuery));
 }

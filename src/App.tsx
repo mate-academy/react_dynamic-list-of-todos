@@ -16,9 +16,9 @@ export const App: React.FC = () => {
   const [showModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const { filterBy, query } = useContext(StateContext);
+  const { filterBy, appliedQuery } = useContext(StateContext);
 
-  const filteredTodos = getPreperedTodos(todos, { filterBy, query });
+  const filteredTodos = getPreperedTodos(todos, { filterBy, appliedQuery });
 
   useEffect(() => {
     setLoading(true);

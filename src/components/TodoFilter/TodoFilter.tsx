@@ -1,13 +1,26 @@
-import { ChangeEvent, useContext } from 'react';
-import debonce from 'lodash.debounce';
-import { DispatchContext } from '../../State/State';
+import {
+  ChangeEvent,
+  useContext,
+} from 'react';
+import debounce from 'lodash.debounce';
+import { DispatchContext, StateContext } from '../../State/State';
 import { Filter } from '../../types/Filter';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
+  const { query } = useContext(StateContext);
 
-  const applyQuery = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'query', payload: event.target.value });
+  const applyQuery = debounce((event: ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'appliedQuery', payload: event.target.value });
+  }, 1000);
+
+  const deleteQuery = () => {
+    dispatch({ type: 'query', payload: '' });
+    dispatch({ type: 'appliedQuery', payload: '' });
+  };
+
+  const handleQuery = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'query', payload: event?.target.value });
   };
 
   return (
@@ -36,7 +49,11 @@ export const TodoFilter = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={debonce(applyQuery, 1000)}
+          value={query}
+          onChange={event => {
+            applyQuery(event);
+            handleQuery(event);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -48,6 +65,7 @@ export const TodoFilter = () => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={deleteQuery}
           />
         </span>
       </p>
