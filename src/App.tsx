@@ -13,10 +13,9 @@ import { StateContext } from './State/State';
 import { getPreperedTodos } from './servises/todos';
 
 export const App: React.FC = () => {
-  const [showModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const { filterBy, appliedQuery } = useContext(StateContext);
+  const { filterBy, appliedQuery, selectedTodo } = useContext(StateContext);
 
   const filteredTodos = getPreperedTodos(todos, { filterBy, appliedQuery });
 
@@ -45,7 +44,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && <TodoModal />}
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} />}
 
     </>
   );
