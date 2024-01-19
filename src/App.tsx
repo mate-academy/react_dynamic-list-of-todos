@@ -35,7 +35,7 @@ export const App: React.FC = () => {
 
     setTimeout(() => {
       getTodos()
-        .then((todoss: Todo[]) => setTodos(todoss))
+        .then(setTodos)
         .finally(() => setLoader(false));
     }, 100);
   }, []);

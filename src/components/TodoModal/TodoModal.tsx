@@ -17,27 +17,17 @@ export const TodoModal: React.FC<Props> = ({
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-
     setLoader(true);
 
     setTimeout(() => {
       getUser(selectedTodo.userId)
         .then((userData: User) => {
-          if (isMounted) {
-            setUser(userData);
-          }
+          setUser(userData);
         })
         .finally(() => {
-          if (isMounted) {
-            setLoader(false);
-          }
+          setLoader(false);
         });
     }, 100);
-
-    return () => {
-      isMounted = false; // Cleanup to avoid memory leaks
-    };
   }, [selectedTodo?.userId]);
 
   return (
