@@ -12,13 +12,15 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ selectedTodo }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const { id, title } = selectedTodo;
+  const { id, title, userId } = selectedTodo;
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
     setLoading(true);
-    getUser(id).then(setUser).finally(() => setLoading(false));
-  }, [id]);
+    getUser(userId)
+      .then(setUser)
+      .finally(() => setLoading(false));
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
