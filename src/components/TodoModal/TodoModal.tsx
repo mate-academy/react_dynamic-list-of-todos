@@ -12,8 +12,11 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ selectedTodo }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const { id, title, userId } = selectedTodo;
   const dispatch = useContext(DispatchContext);
+
+  const {
+    id, title, userId, completed,
+  } = selectedTodo;
 
   useEffect(() => {
     setLoading(true);
@@ -55,8 +58,9 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {completed
+                ? (<strong className="has-text-success">Done</strong>)
+                : (<strong className="has-text-danger">Planned</strong>)}
 
               {' by '}
 

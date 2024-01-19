@@ -11,7 +11,7 @@ export const TodoFilter = () => {
   const { query } = useContext(StateContext);
 
   const applyQuery = debounce((event: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'appliedQuery', payload: event.target.value });
+    dispatch({ type: 'appliedQuery', payload: event.target.value.trim() });
   }, 1000);
 
   const deleteQuery = () => {
@@ -20,7 +20,7 @@ export const TodoFilter = () => {
   };
 
   const handleQuery = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'query', payload: event?.target.value });
+    dispatch({ type: 'query', payload: event?.target.value.trim() });
   };
 
   return (

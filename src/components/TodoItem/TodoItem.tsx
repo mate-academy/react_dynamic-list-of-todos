@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Todo } from '../../types/Todo';
-import { DispatchContext } from '../../State/State';
+import { DispatchContext, StateContext } from '../../State/State';
 
 type Props = {
   todo: Todo;
@@ -8,16 +8,21 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
+  const { selectedTodo } = useContext(StateContext);
   const { title, id, completed } = todo;
 
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{id}</td>
+
       <td className="is-vcentered">
-        <span className="icon" data-cy="iconCompleted">
-          {completed && <i className="fas fa-check" />}
-        </span>
+        {completed && (
+          <span className="icon" data-cy="iconCompleted">
+            <i className="fas fa-check" />
+          </span>
+        )}
       </td>
+
       <td className="is-vcentered is-expanded">
         <p
           className={completed ? 'has-text-success' : 'has-text-danger'}
@@ -33,8 +38,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={() => dispatch({ type: 'getSelectedTodo', payload: todo })}
         >
           <span className="icon">
-            {/* <i className="far fa-eye-slash" /> */}
-            <i className="far fa-eye" />
+            {selectedTodo
+              ? (<i className="far fa-eye-slash" />)
+              : (<i className="far fa-eye" />)}
           </span>
         </button>
       </td>

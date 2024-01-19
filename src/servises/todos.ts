@@ -20,7 +20,9 @@ export function getPreperedTodos(
     }
   });
 
-  return preperedTodos.filter(todo => todo.title.includes(appliedQuery));
+  return preperedTodos.filter(todo => {
+    return todo.title.toLowerCase().includes(appliedQuery.toLowerCase());
+  });
 }
 
 export function getSelectedTodo(
