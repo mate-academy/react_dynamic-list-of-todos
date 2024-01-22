@@ -1,14 +1,34 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { TodosContext } from './components/TodosContext';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(originalTodos);
+  const [loading, setLoading] = useState(false);
+
+  const { selectedTodo } = useContext(TodosContext);
+
+  useEffect(() => {
+    setLoading(true);
+    getTodos()
+      .then((date) => {
+        setOriginalTodos(date);
+        setVisibleTodos(date);
+      })
+      .catch(() => setOriginalTodos([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +37,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setTodos={(newTodos) => setVisibleTodos(newTodos)}
+                originalTodos={originalTodos}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading && (<Loader />)}
+              {!loading && !!visibleTodos.length && (
+                <TodoList visibleTodos={visibleTodos} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal />
+      )}
     </>
   );
 };
