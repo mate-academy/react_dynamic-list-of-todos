@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/FIlter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,20 +24,20 @@ export const App: React.FC = () => {
   }, []);
 
   function getFilterTodos() {
-    return todos
-      .filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()))
-      .filter((todo) => {
-        switch (filter) {
-          case 'active':
-            return todo.completed === false;
+    switch (filter) {
+      case Filter.Active:
+        return todos
+          .filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()))
+          .filter((todo) => !todo.completed);
 
-          case 'completed':
-            return todo.completed === true;
+      case Filter.Completed:
+        return todos
+          .filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()))
+          .filter((todo) => todo.completed);
 
-          default:
-            return todo;
-        }
-      });
+      default:
+        return todos.filter((todo) => todo.title.toLowerCase().includes(query.toLowerCase()));
+    }
   }
 
   return (

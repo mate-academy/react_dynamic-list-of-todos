@@ -13,15 +13,7 @@ export const TodoItem: React.FC<Props> = ({
   selectedTodo,
 }) => {
   const isSlashIcon = () => {
-    if (selectedTodo === null) {
-      return false;
-    }
-
-    if (selectedTodo.id === todo.id) {
-      return true;
-    }
-
-    return false;
+    return selectedTodo?.id === todo.id;
   };
 
   const { id, title, completed } = todo;
@@ -39,8 +31,8 @@ export const TodoItem: React.FC<Props> = ({
       <td className="is-vcentered is-expanded">
         <p
           className={cn({
-            'has-text-danger': completed === false,
-            'has-text-success': completed === true,
+            'has-text-danger': !completed,
+            'has-text-success': completed,
           })}
         >
           {title}
