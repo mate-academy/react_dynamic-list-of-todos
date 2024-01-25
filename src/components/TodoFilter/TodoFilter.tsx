@@ -17,7 +17,7 @@ export const TodoFilter = React.memo(() => {
 
   const filteredTodos = useCallback(() => {
     return getFilteredTodos(todos, filter, title);
-  }, [filter, title]);
+  }, [todos, filter, title]);
 
   useEffect(() => {
     setFilteredTodos(filteredTodos());
