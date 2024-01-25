@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { TodosContext } from '../../context/TodosContext';
+import { Select } from '../../types/Select';
 
 export const TodoFilter = () => {
   const { setFilterField, query, setQuery } = useContext(TodosContext);
@@ -12,9 +13,9 @@ export const TodoFilter = () => {
             onChange={event => setFilterField(event.target.value)}
             data-cy="statusSelect"
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Select.All}>All</option>
+            <option value={Select.Active}>Active</option>
+            <option value={Select.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -32,7 +33,7 @@ export const TodoFilter = () => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query.trim() && (
+        {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

@@ -27,10 +27,10 @@ export const App: React.FC = () => {
     preparedTodos = preparedTodos.filter(todo => {
       switch (filterField) {
         case Select.Active:
-          return todo.completed === false;
+          return !todo.completed;
 
         case Select.Completed:
-          return todo.completed === true;
+          return todo.completed;
 
         default:
           return todo;
@@ -38,7 +38,7 @@ export const App: React.FC = () => {
     });
 
     if (query) {
-      const queryNormalize = query.toLowerCase().trim();
+      const queryNormalize = query.toLowerCase();
 
       preparedTodos = preparedTodos
         .filter(todo => todo.title.toLowerCase().includes(queryNormalize));
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
     return preparedTodos;
   }
 
-  const preparedTodos = prepareTodos(todos);
+  const visibleTodos = prepareTodos(todos);
 
   return (
     <>
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
             <div className="block">
               {!todos.length
                 ? <Loader />
-                : <TodoList todos={preparedTodos} />}
+                : <TodoList todos={visibleTodos} />}
             </div>
           </div>
         </div>
