@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { FilterParams } from '../../types/filterParams';
 import { TodosContext } from '../Store/Store';
 import { getFilteredTodos } from '../../services/getfilteredTodos';
@@ -13,11 +15,13 @@ export const TodoFilter = () => {
   const [title, setTitle] = useState('');
   const [filter, setFilter] = useState(FilterParams.All);
 
-  const filteredTodos = getFilteredTodos(todos, filter, title);
+  const filteredTodos = useCallback(() => {
+    return getFilteredTodos(todos, filter, title);
+  }, [todos, filter, title]);
 
   useEffect(() => {
-    setFilteredTodos(filteredTodos);
-  }, [filter, title]);
+    setFilteredTodos(filteredTodos());
+  }, [todos, filter, title]);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value.toLowerCase());
