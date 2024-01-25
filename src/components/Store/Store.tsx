@@ -40,7 +40,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         .finally(() => {
           setLoading(false);
         });
-    }, 100);
+    }, 50);
   }, []);
 
   useEffect(() => {

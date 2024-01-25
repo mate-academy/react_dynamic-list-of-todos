@@ -21,7 +21,7 @@ export const TodoFilter = React.memo(() => {
 
   useEffect(() => {
     setFilteredTodos(filteredTodos());
-  }, [filter, title]);
+  }, [todos, filter, title]);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value.toLowerCase());
