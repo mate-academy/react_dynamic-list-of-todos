@@ -33,12 +33,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     setLoading(true);
 
-    getTodos()
-      .then(setTodos)
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-      });
+    setTimeout(() => {
+      getTodos()
+        .then(setTodos)
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 100);
   }, []);
 
   useEffect(() => {
