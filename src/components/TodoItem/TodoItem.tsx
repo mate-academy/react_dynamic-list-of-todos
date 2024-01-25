@@ -53,7 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           <span className="icon">
             <i className={cn('far',
               {
-                'fa-eye-slash': selectedTodo?.id === todo?.id,
+                'fa-eye-slash': selectedTodo?.id === todo?.id, // is it possible to simplify these lines?
                 'fa-eye': selectedTodo?.id !== todo?.id,
               })}
             />
