@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { FilterParams } from '../../types/filterParams';
 import { TodosContext } from '../Store/Store';
 import { getFilteredTodos } from '../../services/getfilteredTodos';
 
-export const TodoFilter = () => {
+export const TodoFilter = React.memo(() => {
   const {
     todos,
     setFilteredTodos,
@@ -13,10 +15,12 @@ export const TodoFilter = () => {
   const [title, setTitle] = useState('');
   const [filter, setFilter] = useState(FilterParams.All);
 
-  const filteredTodos = getFilteredTodos(todos, filter, title);
+  const filteredTodos = useCallback(() => {
+    return getFilteredTodos(todos, filter, title);
+  }, [filter, title]);
 
   useEffect(() => {
-    setFilteredTodos(filteredTodos);
+    setFilteredTodos(filteredTodos());
   }, [filter, title]);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,4 +78,4 @@ export const TodoFilter = () => {
       </p>
     </form>
   );
-};
+});

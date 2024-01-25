@@ -6,7 +6,7 @@ import { getUser } from '../../utils/users';
 
 type Props = {};
 
-export const TodoModal: React.FC<Props> = () => {
+export const TodoModal: React.FC<Props> = React.memo(() => {
   const { selectedTodo, setSelectedTodo } = useContext(TodosContext);
 
   const {
@@ -37,9 +37,6 @@ export const TodoModal: React.FC<Props> = () => {
       }, 100);
     }
   }, [userId]);
-
-  // eslint-disable-next-line no-console
-  console.log('TodoModal');
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -88,4 +85,4 @@ export const TodoModal: React.FC<Props> = () => {
       )}
     </div>
   );
-};
+});

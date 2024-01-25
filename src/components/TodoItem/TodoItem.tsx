@@ -7,13 +7,10 @@ interface Props {
   todo: Todo;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const { selectedTodo, setSelectedTodo } = useContext(TodosContext);
 
   const { id, title, completed } = todo;
-
-  // eslint-disable-next-line no-console
-  console.log('TodoItem');
 
   return (
     <tr
@@ -62,4 +59,4 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </td>
     </tr>
   );
-};
+});

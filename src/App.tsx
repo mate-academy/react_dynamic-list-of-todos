@@ -20,9 +20,6 @@ export const App: React.FC = () => {
     selectedTodo,
   } = useContext(TodosContext);
 
-  // eslint-disable-next-line no-console
-  console.log('App');
-
   return (
     <>
       <div className="section">

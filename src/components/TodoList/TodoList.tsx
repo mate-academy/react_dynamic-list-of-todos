@@ -6,10 +6,7 @@ interface Props {
   filteredTodos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ filteredTodos }) => {
-  // eslint-disable-next-line no-console
-  console.log('TodoList');
-
+export const TodoList: React.FC<Props> = React.memo(({ filteredTodos }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -35,4 +32,4 @@ export const TodoList: React.FC<Props> = ({ filteredTodos }) => {
       </tbody>
     </table>
   );
-};
+});
