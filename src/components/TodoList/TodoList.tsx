@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 
 export const TodoList: React.FC = () => {
   const {
-    visibleTodos, setModal, setUserTodo, modal,
+    visibleTodos, setModal, setSelectedTodo, modal,
   } = useContext(TodosContext);
   const [select, setSelect] = useState<number | null>(null);
 
@@ -21,7 +21,7 @@ export const TodoList: React.FC = () => {
   const handliClick = (todo: Todo) => {
     setSelect(todo.id);
     setModal(true);
-    setUserTodo({ ...todo });
+    setSelectedTodo({ ...todo });
   };
 
   return (

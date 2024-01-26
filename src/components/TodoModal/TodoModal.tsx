@@ -4,7 +4,7 @@ import { TodosContext } from '../../context/TodosContext';
 
 export const TodoModal: React.FC = () => {
   const {
-    loadingModal, user, userTodo, setModal,
+    loadingModal, user, selectedTodo, setModal,
   } = useContext(TodosContext);
 
   const handliClick = () => {
@@ -24,7 +24,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${userTodo.id}`}
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -38,17 +38,17 @@ export const TodoModal: React.FC = () => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {userTodo.title}
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {userTodo.completed
+              {selectedTodo?.completed
                 ? <strong className="has-text-success">Done</strong>
                 : <strong className="has-text-danger">Planned</strong>}
               {' by '}
 
-              <a href={`mailto:${user.email}`}>
-                {user.name}
+              <a href={`mailto:${user?.email}`}>
+                {user?.name}
               </a>
             </p>
           </div>

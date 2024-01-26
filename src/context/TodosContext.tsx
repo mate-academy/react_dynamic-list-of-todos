@@ -4,6 +4,12 @@ import { getTodos, getUser } from '../api';
 import { Filter } from '../types/Filter';
 import { User } from '../types/User';
 
+const FilterSelect = {
+  All: 'all',
+  Active: 'active',
+  Completed: 'completed',
+};
+
 export const TodosContext = React.createContext<{
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
@@ -14,10 +20,10 @@ export const TodosContext = React.createContext<{
   filter: Filter;
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
   visibleTodos: Todo[];
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
-  userTodo: Todo;
-  setUserTodo: React.Dispatch<React.SetStateAction<Todo>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  selectedTodo: Todo | null;
+  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
   loadingModal: boolean;
   setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
@@ -30,24 +36,13 @@ export const TodosContext = React.createContext<{
   filter: {
     select: 'all',
     input: '',
-    submit: false,
   },
   setFilter: () => { },
   visibleTodos: [],
-  user: {
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  },
+  user: null,
   setUser: () => { },
-  userTodo: {
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  },
-  setUserTodo: () => null,
+  selectedTodo: null,
+  setSelectedTodo: () => { },
   loadingModal: false,
   setLoadingModal: () => { },
 });
@@ -63,28 +58,17 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [filter, setFilter] = useState({
     select: 'all',
     input: '',
-    submit: false,
   });
-  const [user, setUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
-  const [userTodo, setUserTodo] = useState<Todo>({
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loadingModal, setLoadingModal] = useState<boolean>(false);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       const matchesFilterSelect
-        = filter.select === 'all'
-        || (filter.select === 'active' && !todo.completed)
-        || (filter.select === 'completed' && todo.completed);
+        = filter.select === FilterSelect.All
+        || (filter.select === FilterSelect.Active && !todo.completed)
+        || (filter.select === FilterSelect.Completed && todo.completed);
 
       const matchesFilterInput = todo.title
         .toLowerCase()
@@ -101,20 +85,15 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (userTodo !== null) {
-      getUser(userTodo.id)
+    if (selectedTodo !== null) {
+      getUser(selectedTodo.id)
         .then(setUser)
         .finally(() => setLoading(false));
     } else {
-      setUser({
-        id: 0,
-        name: '',
-        email: '',
-        phone: '',
-      });
+      setUser(null);
       setLoading(false);
     }
-  }, [userTodo]);
+  }, [selectedTodo]);
 
   const value = useMemo(() => {
     return {
@@ -131,8 +110,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       setUser,
       loadingModal,
       setLoadingModal,
-      userTodo,
-      setUserTodo,
+      selectedTodo,
+      setSelectedTodo,
     };
   }, [
     todos,
@@ -148,8 +127,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setUser,
     loadingModal,
     setLoadingModal,
-    userTodo,
-    setUserTodo,
+    selectedTodo,
+    setSelectedTodo,
   ]);
 
   return (
