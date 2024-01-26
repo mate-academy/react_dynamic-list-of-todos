@@ -13,7 +13,7 @@ import { getTodos } from './api';
 
 interface FilterProps {
   query: string;
-  filterBy: string;
+  filterBy: Filter;
 }
 
 function getFilteredTodos(
