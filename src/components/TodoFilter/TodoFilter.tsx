@@ -1,30 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {
-  useCallback, useContext, useEffect, useState,
-} from 'react';
+import React, { useContext } from 'react';
 import { FilterParams } from '../../types/filterParams';
 import { TodosContext } from '../Store/Store';
-import { getFilteredTodos } from '../../services/getfilteredTodos';
 
 export const TodoFilter = React.memo(() => {
   const {
-    todos,
-    setFilteredTodos,
+    title,
+    setTitle,
+    filter,
+    setFilter,
   } = useContext(TodosContext);
 
-  const [title, setTitle] = useState('');
-  const [filter, setFilter] = useState(FilterParams.All);
-
-  const filteredTodos = useCallback(() => {
-    return getFilteredTodos(todos, filter, title);
-  }, [todos, filter, title]);
-
-  useEffect(() => {
-    setFilteredTodos(filteredTodos());
-  }, [todos, filter, title]);
-
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value.toLowerCase());
+    setTitle(event.target.value);
   };
 
   return (

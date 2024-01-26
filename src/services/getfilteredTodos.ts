@@ -18,14 +18,14 @@ export function getFilteredTodos(
           return todo.completed;
 
         default:
-          return todo;
+          return true;
       }
     });
   }
 
   if (title) {
     filteredTodos = filteredTodos.filter(
-      todo => todo.title.toLowerCase().includes(title),
+      todo => todo.title.toLowerCase().includes(title.toLowerCase()),
     );
   }
 

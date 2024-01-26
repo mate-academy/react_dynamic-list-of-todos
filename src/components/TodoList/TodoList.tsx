@@ -3,10 +3,10 @@ import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
-  filteredTodos: Todo[];
+  todos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = React.memo(({ filteredTodos }) => {
+export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = React.memo(({ filteredTodos }) => {
       </thead>
 
       <tbody>
-        {filteredTodos.map(todo => (
+        {todos.map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}

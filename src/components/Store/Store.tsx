@@ -1,14 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../utils/todos';
+import { FilterParams } from '../../types/filterParams';
+import { getFilteredTodos } from '../../services/getfilteredTodos';
 
 type TodosContextType = {
   todos: Todo[];
   loading: boolean;
-  filteredTodos: Todo[];
-  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   selectedTodo: Todo | null;
-  setSelectedTodo: React.Dispatch<Todo | null>
+  setSelectedTodo: React.Dispatch<Todo | null>;
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  filter: FilterParams
+  setFilter: React.Dispatch<React.SetStateAction<FilterParams>>
 };
 
 type Props = {
@@ -18,44 +22,48 @@ type Props = {
 export const TodosContext = React.createContext<TodosContextType>({
   todos: [],
   loading: false,
-  filteredTodos: [],
-  setFilteredTodos: () => {},
   selectedTodo: null,
   setSelectedTodo: () => {},
+  title: '',
+  setTitle: () => {},
+  filter: FilterParams.All,
+  setFilter: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [title, setTitle] = useState('');
+  const [filter, setFilter] = useState(FilterParams.All);
 
   useEffect(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      getTodos()
-        .then(setTodos)
-        .catch(() => {})
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 50);
-  }, []);
+    getTodos()
+      .then(response => {
+        const result = getFilteredTodos(response, filter, title);
 
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
+        setTodos(result);
+      })
+      .catch(() => { })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [filter, title]);
 
   const value = useMemo(() => ({
     todos,
     loading,
-    filteredTodos,
-    setFilteredTodos,
     selectedTodo,
     setSelectedTodo,
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [todos, loading, filteredTodos, selectedTodo]);
+    title,
+    setTitle,
+    filter,
+    setFilter,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [todos, loading, selectedTodo, title, filter]);
 
   return (
     <TodosContext.Provider value={value}>

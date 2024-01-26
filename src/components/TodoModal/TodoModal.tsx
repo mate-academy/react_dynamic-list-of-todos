@@ -27,14 +27,12 @@ export const TodoModal: React.FC<Props> = React.memo(() => {
     if (userId) {
       setLoadingUser(true);
 
-      setTimeout(() => { // loading too fast
-        getUser(userId)
-          .then((userData: User) => setUser(userData))
-          .catch(() => {})
-          .finally(() => {
-            setLoadingUser(false);
-          });
-      }, 100);
+      getUser(userId)
+        .then((userData: User) => setUser(userData))
+        .catch(() => { })
+        .finally(() => {
+          setLoadingUser(false);
+        });
     }
   }, [userId]);
 

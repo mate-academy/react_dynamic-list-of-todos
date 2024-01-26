@@ -1,9 +1,5 @@
 /* eslint-disable max-len */
-import React, {
-  useContext,
-  // useEffect,
-  // useState,
-} from 'react';
+import React, { useContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -15,8 +11,8 @@ import { TodosContext } from './components/Store/Store';
 
 export const App: React.FC = () => {
   const {
+    todos,
     loading,
-    filteredTodos,
     selectedTodo,
   } = useContext(TodosContext);
 
@@ -33,7 +29,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && (<Loader />)}
-              <TodoList filteredTodos={filteredTodos} />
+              <TodoList todos={todos} />
             </div>
           </div>
         </div>
