@@ -5,12 +5,12 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 type Props = {
-  todo?: Todo | null,
+  todo: Todo,
   onSelect: (todo: Todo | null) => void,
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onSelect = () => {} }) => {
-  const [modalLoading, setModalLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -45,7 +45,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect = () => {} }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo?.id}`}
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -59,11 +59,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect = () => {} }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo?.completed ? (
+              {todo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

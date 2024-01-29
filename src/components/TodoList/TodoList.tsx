@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -30,7 +31,9 @@ export const TodoList: React.FC<Props> = ({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={`${selectedTodoId === todo.id && ('has-background-info-light')}`}
+          className={cn(
+            { 'has-background-info-light': selectedTodoId === todo.id },
+          )}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
