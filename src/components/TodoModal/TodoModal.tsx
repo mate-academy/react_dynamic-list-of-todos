@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { TodoContext } from '../../TodoContext/TodoContext';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
+import classNames from 'classnames';
 
 export const TodoModal: React.FC = () => {
+  const { selectedTodo, selectTodo } = useContext(TodoContext);
+  const [author, setAuthor] = useState<User | null >(null);
+
+  useEffect(() => {
+    if (selectedTodo) {
+      getUser(selectedTodo.userId)
+        .then((user) => setAuthor(user));
+    }
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {author === null ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +29,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${selectedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -23,22 +37,28 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={() => selectTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={classNames({
+                'has-text-danger': !selectedTodo?.completed,
+                'has-text-success': selectedTodo?.completed,
+              })}>
+                {selectedTodo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${author?.email}`}>
+                {author?.name}
               </a>
             </p>
           </div>
