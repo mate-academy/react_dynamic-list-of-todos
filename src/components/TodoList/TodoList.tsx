@@ -1,6 +1,12 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
-export const TodoList: React.FC = () => (
+type Props = {
+  todos: Todo[],
+};
+
+export const TodoList: React.FC<Props> = React.memo(({ todos }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,7 +22,22 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
+      {todos.map(todo => {
+        const {
+          completed, id, title, userId,
+        } = todo;
+
+        return (
+          <TodoItem
+            completed={completed}
+            id={id}
+            title={title}
+            userId={userId}
+            key={id}
+          />
+        );
+      })}
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -94,7 +115,7 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
     </tbody>
   </table>
-);
+));
