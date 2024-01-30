@@ -10,24 +10,26 @@ type Props = {
   todos: Todo[] | null,
 };
 
-export const TodoModal: React.FC<Props> = ({ currentUser, todos }) => {
-  const { handleShowModal, currentTodo } = useContext(TodosContext);
+export const TodoModal: React.FC<Props> = ({
+  currentUser: currentUserId, todos,
+}) => {
+  const { handleShowModal, currentTodoId } = useContext(TodosContext);
 
-  const [cu, setCU] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [cT, setCT] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getUser(currentUser).then((user) => {
-      setCU(user);
+    getUser(currentUserId).then((user) => {
+      setCurrentUser(user);
     });
-    let todo;
+    let currTodo;
 
     if (todos !== null) {
-      todo = todos.find(t => t.id === currentTodo);
+      currTodo = todos.find(todo => todo.id === currentTodoId);
     }
 
-    if (todo !== undefined) {
-      setCT(todo);
+    if (currTodo !== undefined) {
+      setCT(currTodo);
     }
   }, []);
 
@@ -35,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ currentUser, todos }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!cu ? (
+      {!currentUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -70,8 +72,8 @@ export const TodoModal: React.FC<Props> = ({ currentUser, todos }) => {
               )}
               {' by '}
 
-              <a href={`mailto:${cu.email}`}>
-                {cu.name}
+              <a href={`mailto:${currentUser.email}`}>
+                {currentUser.name}
               </a>
             </p>
           </div>

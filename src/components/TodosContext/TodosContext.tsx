@@ -2,8 +2,8 @@ import React, { ChangeEvent, useState } from 'react';
 
 type TodosContextProps = {
   showModal: boolean,
-  currentUser: number,
-  currentTodo: number,
+  currentUserId: number,
+  currentTodoId: number,
   selectValue: string,
   searchValue: string,
   handleShowModal: () => void,
@@ -16,8 +16,8 @@ type TodosContextProps = {
 
 export const TodosContext = React.createContext<TodosContextProps>({
   showModal: false,
-  currentUser: 0,
-  currentTodo: 0,
+  currentUserId: 0,
+  currentTodoId: 0,
   selectValue: '',
   searchValue: '',
   handleShowModal: () => { },
@@ -35,7 +35,7 @@ type Props = {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(0);
-  const [currentTodo, setCurrentTodo] = useState(0);
+  const [currentTodoId, setCurrentTodo] = useState(0);
   const [selectValue, setSelectValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
@@ -65,8 +65,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const value = {
     showModal,
-    currentUser: currentUserId,
-    currentTodo,
+    currentUserId,
+    currentTodoId,
     selectValue,
     searchValue,
     handleShowModal,

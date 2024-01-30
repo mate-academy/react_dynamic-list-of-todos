@@ -15,25 +15,27 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
 
   const {
-    showModal, currentUser, selectValue, searchValue,
+    showModal, currentUserId: currentUser, selectValue, searchValue,
   } = useContext(TodosContext);
 
   useEffect(() => {
     getTodos().then((todosFromServer) => {
-      const t = todosFromServer.filter(todo => {
+      const filteredTodos = todosFromServer.filter(todo => {
         switch (selectValue) {
           case 'completed':
-            return todo.completed === true;
+            return todo.completed;
           case 'active':
-            return todo.completed === false;
+            return !todo.completed;
           default:
             return true;
         }
       });
 
-      const tt = t.filter((todo) => todo.title.toLowerCase().includes(searchValue.toLowerCase().trim()));
+      const searchedTodos = filteredTodos.filter((todo) => (
+        todo.title.toLowerCase().includes(searchValue.toLowerCase().trim())
+      ));
 
-      setTodos(tt);
+      setTodos(searchedTodos);
     });
   }, [selectValue, searchValue]);
 
