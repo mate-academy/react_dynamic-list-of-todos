@@ -16,6 +16,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const { setShow, setSelectedTodo, selectedTodo } = useContext(TodosContext);
 
+  const handlerClick = () => {
+    setShow(true);
+    setSelectedTodo(todo);
+  };
+
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{id}</td>
@@ -37,10 +42,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </td>
       <td className="has-text-right is-vcentered">
         <button
-          onClick={() => {
-            setShow(true);
-            setSelectedTodo(todo);
-          }}
+          onClick={handlerClick}
           data-cy="selectButton"
           className="button"
           type="button"

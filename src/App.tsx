@@ -11,15 +11,17 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodosContext } from './context/TodosContext';
 import { Select } from './types/Select';
+import { useDebounce } from './hooks/useDebounce';
 
 export const App: React.FC = () => {
+  const { show, filterField, query } = useContext(TodosContext);
+
   const [todos, setTodos] = useState<Todo[]>([]);
+  const debouncedQuery = useDebounce(query);
 
   useEffect(() => {
     getTodos().then(todosFromSetver => setTodos(todosFromSetver));
   });
-
-  const { show, filterField, query } = useContext(TodosContext);
 
   function prepareTodos(listOfTodos: Todo[]) {
     let preparedTodos = [...listOfTodos];
@@ -37,8 +39,8 @@ export const App: React.FC = () => {
       }
     });
 
-    if (query) {
-      const queryNormalize = query.toLowerCase();
+    if (debouncedQuery) {
+      const queryNormalize = debouncedQuery.toLowerCase();
 
       preparedTodos = preparedTodos
         .filter(todo => todo.title.toLowerCase().includes(queryNormalize));
