@@ -57,7 +57,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && <TodoModal currentUser={currentUser} todos={todos} />}
+      {showModal && <TodoModal currentUserId={currentUser} todos={todos} />}
     </>
   );
 };

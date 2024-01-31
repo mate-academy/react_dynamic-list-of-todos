@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 type Props = {
@@ -14,10 +14,13 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const {
     showModal,
+    currentTodoId,
     handleShowModal,
     handleChangeUser,
     handleCurrentTodo,
   } = useContext(TodosContext);
+
+  useEffect(() => {}, [currentTodoId]);
 
   const handleClick = () => {
     handleCurrentTodo(id);
@@ -62,8 +65,8 @@ export const TodoItem: React.FC<Props> = ({
         >
           <span className="icon">
             <i className={classNames('far', {
-              'fa-eye': !showModal,
-              'fa-eye-slash': showModal,
+              'fa-eye': currentTodoId !== id,
+              'fa-eye-slash': currentTodoId === id,
             })}
             />
           </span>

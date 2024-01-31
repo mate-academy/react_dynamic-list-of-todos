@@ -6,22 +6,25 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  currentUser: number,
+  currentUserId: number | null,
   todos: Todo[] | null,
 };
 
 export const TodoModal: React.FC<Props> = ({
-  currentUser: currentUserId, todos,
+  currentUserId, todos,
 }) => {
   const { handleShowModal, currentTodoId } = useContext(TodosContext);
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [cT, setCT] = useState<Todo | null>(null);
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getUser(currentUserId).then((user) => {
-      setCurrentUser(user);
-    });
+    if (currentUserId) {
+      getUser(currentUserId).then((user) => {
+        setCurrentUser(user);
+      });
+    }
+
     let currTodo;
 
     if (todos !== null) {
@@ -29,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({
     }
 
     if (currTodo !== undefined) {
-      setCT(currTodo);
+      setCurrentTodo(currTodo);
     }
   }, []);
 
@@ -46,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${cT?.id}`}
+              {`Todo #${currentTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -60,12 +63,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {cT?.title}
+              {currentTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {cT?.completed ? (
+              {currentTodo?.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
