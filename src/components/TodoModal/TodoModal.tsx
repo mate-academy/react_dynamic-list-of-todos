@@ -4,10 +4,6 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { TodosContext } from '../context/TodosContext';
 
-// interface Props {
-//   todos: Todo[],
-// }
-
 export const TodoModal: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -53,7 +49,6 @@ export const TodoModal: React.FC = () => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {selectedTodo?.completed ? (
                 <strong className="has-text-success">
                   Done

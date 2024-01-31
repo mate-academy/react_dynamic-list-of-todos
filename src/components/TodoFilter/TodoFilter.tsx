@@ -9,11 +9,11 @@ export const TodoFilter: React.FC = () => {
     setQuery,
   } = useContext(TodosContext);
 
-  // const {
-  //   all,
-  //   active,
-  //   completed,
-  // } = Status;
+  const {
+    all,
+    active,
+    completed,
+  } = Status;
 
   const handleFilter = (eventFilter: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterTodos(eventFilter.target.value as Status);
@@ -35,9 +35,9 @@ export const TodoFilter: React.FC = () => {
             data-cy="statusSelect"
             onChange={handleFilter}
           >
-            <option value={Status.all}>All</option>
-            <option value={Status.active}>Active</option>
-            <option value={Status.completed}>Completed</option>
+            <option value={all}>All</option>
+            <option value={active}>Active</option>
+            <option value={completed}>Completed</option>
           </select>
         </span>
       </p>
