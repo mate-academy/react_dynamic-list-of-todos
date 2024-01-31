@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+const TodoModal: React.FC = () => {
+  const [loadingUser, setLoadingUser] = useState(false);
+
+  useEffect(() => {
+    setLoadingUser(true);
+    getUser(1).then(() => {
+      setLoadingUser(false);
+    });
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -47,3 +57,5 @@ export const TodoModal: React.FC = () => {
     </div>
   );
 };
+
+export default TodoModal;
