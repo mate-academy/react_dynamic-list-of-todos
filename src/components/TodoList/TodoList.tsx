@@ -18,7 +18,8 @@ function prepareList(
   let copy = [...tdL];
 
   if (searchQuery) {
-    copy = copy.filter((todo) => todo.title.includes(searchQuery));
+    copy = copy.filter((todo) => todo.title.toLowerCase()
+      .includes(searchQuery.toLowerCase()));
   }
 
   switch (sortBy) {
