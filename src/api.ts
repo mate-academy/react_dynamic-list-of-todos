@@ -22,6 +22,22 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+// варіант функції get з використанням async/await
+// export async function getAsync<T>(url: string): Promise<T> {
+//   // eslint-disable-next-line prefer-template
+//   const fullURL = BASE_URL + url + '.json';
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+//   // we add some delay to see how the loader works
+//   await wait(300);
+//   const response = await fetch(fullURL);
+
+//   return response.ok ? response.json() : Promise.reject(response.status);
+// }
+
+export function getTodos() {
+  return get<Todo[]>('/todos');
+}
+
+export function getUser(userId: number) {
+  return get<User>(`/users/${userId}`);
+}
