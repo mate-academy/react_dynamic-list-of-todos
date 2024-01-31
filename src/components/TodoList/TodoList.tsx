@@ -1,22 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-type Props = {
-  todos: Todo[];
-  selectedTodo: Todo | null;
-  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
-};
-
-export const TodoList: React.FC<Props> = ({
+interface TodosProps {
+  todos: Todo[] | undefined
+  onTodoSelected: (item: Todo) => void
+  todoId?: number | undefined
+}
+export const TodoList: React.FC<TodosProps> = ({
   todos,
-  selectedTodo,
-  setSelectedTodo,
+  onTodoSelected,
+  todoId,
 }) => {
-  const handleSelectedTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -31,13 +27,13 @@ export const TodoList: React.FC<Props> = ({
         </tr>
       </thead>
       <tbody>
-        {todos.map(todo => (
+        {todos?.map(todo => (
           <tr
-            data-cy="todo"
-            className={classNames({
-              'has-background-info-light': selectedTodo?.id === todo.id,
-            })}
             key={todo.id}
+            data-cy="todo"
+            className={classNames(
+              { 'has-background-info-light': todo.id === todoId },
+            )}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -48,10 +44,12 @@ export const TodoList: React.FC<Props> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
-              })}
+              <p className={classNames(
+                {
+                  'has-text-danger': todo.completed === false,
+                  'has-text-success': todo.completed === true,
+                },
+              )}
               >
                 {todo.title}
               </p>
@@ -61,14 +59,14 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleSelectedTodo(todo)}
+                onClick={() => onTodoSelected(todo)}
               >
                 <span className="icon">
-                  {selectedTodo?.id === todo.id ? (
-                    <i className="far fa-eye-slash" />
-                  ) : (
-                    <i className="far fa-eye" />
-                  )}
+                  <i className={classNames('far', {
+                    'fa-eye-slash': todo.id === todoId,
+                    'fa-eye': todo.id !== todoId,
+                  })}
+                  />
                 </span>
               </button>
             </td>

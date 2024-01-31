@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,101 +8,91 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { Filter } from './types/Filter';
-
-interface FilterParams {
-  filterBy: string;
-  query: string;
-}
-
-function getFilteredTodos(
-  todos: Todo[],
-  { filterBy, query }: FilterParams,
-) {
-  let filteredTodos = [...todos];
-  const adaptedQuery = query.trim().toLowerCase();
-
-  switch (filterBy) {
-    case Filter.Active:
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
-
-    case Filter.Completed:
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      break;
-  }
-
-  if (adaptedQuery) {
-    return filteredTodos.filter(
-      todo => todo.title.toLowerCase().includes(adaptedQuery),
-    );
-  }
-
-  return filteredTodos;
-}
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [filterBy, setFilterBy] = useState(Filter.All);
+  const [todos, setTodos] = useState<Todo[]>();
+  const [selected, setSelected] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState('all');
 
-  const filteredTodos = getFilteredTodos(todos, { filterBy, query });
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, [todos]);
 
-  const handleQueryChange = (qu: string) => {
-    if (qu.trim() !== '' || qu === '') {
-      setQuery(qu);
+  const filtredTodos = () => {
+    switch (filter) {
+      case 'all':
+        return todos;
+
+      case 'active':
+        return todos?.filter(todo => todo.completed === false);
+
+      case 'completed':
+        return todos?.filter(todo => todo.completed === true);
+
+      default:
+        return todos;
     }
   };
 
-  useEffect(() => {
-    setLoading(true);
-    getTodos()
-      .then(setTodos)
-      .finally(() => setLoading(false));
-  }, []);
+  const queryFilter = (todoList: Todo[] | undefined) => {
+    return todoList
+      ?.filter(todo => todo
+        .title.toLowerCase().includes(query.toLowerCase().trim()));
+  };
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(event.target.value);
+  };
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleDeleteQuery = () => {
+    setQuery('');
+  };
+
+  const handleSelectedChange = (item: Todo) => {
+    setSelected(item);
+  };
+
+  const handleCloseTodo = () => {
+    setSelected(null);
+  };
 
   return (
     <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+      <div className="section" />
+      <div className="container">
+        <div className="box">
+          <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                query={query}
-                filterOption={setFilterBy}
-                setQuery={handleQueryChange}
-              />
-            </div>
+          <div className="block">
+            <TodoFilter
+              onQueryChange={handleQueryChange}
+              onFilterChange={handleFilterChange}
+              onDelete={handleDeleteQuery}
+              query={query}
+              filter={filter}
+            />
+          </div>
 
-            <div className="block">
-              {loading && (
-                <Loader />
-              )}
-
-              {!loading && todos.length > 0 && (
+          <div className="block">
+            {!todos
+              ? <Loader />
+              : (
                 <TodoList
-                  todos={filteredTodos}
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  todos={queryFilter(filtredTodos())}
+                  onTodoSelected={handleSelectedChange}
+                  todoId={selected?.id}
                 />
               )}
-            </div>
+
           </div>
         </div>
       </div>
-      {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
-      )}
+      {selected && <TodoModal todo={selected} onClose={handleCloseTodo} />}
     </>
   );
 };
