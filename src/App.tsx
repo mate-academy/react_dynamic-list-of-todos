@@ -71,11 +71,11 @@ export const App: React.FC = () => {
     <>
       <div className="section">
         <div className="container">
-            <div className="box">
-              <h1 className="title">Todos:</h1>
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-              <div className="block">
-                <TodoFilter
+            <div className="block">
+              <TodoFilter
                 query={query}
                 filterOption={setFilterBy}
                 setQuery={handleQueryChange}
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-            {loading && (
+              {loading && (
                 <Loader />
               )}
 

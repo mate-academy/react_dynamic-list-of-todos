@@ -26,6 +26,7 @@ export const TodoModal: React.FC<Props> = ({
     setSelectedTodo(null);
     setUser(null);
   };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -37,8 +38,8 @@ export const TodoModal: React.FC<Props> = ({
             <div
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
-            ></div>
-              {`Todo #${selectedTodo.id}`}
+            />
+            {`Todo #${selectedTodo.id}`}
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
@@ -50,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title"></p>
+            <p className="block" data-cy="modal-title" />
             {selectedTodo.title}
 
             <p className="block" data-cy="modal-user">

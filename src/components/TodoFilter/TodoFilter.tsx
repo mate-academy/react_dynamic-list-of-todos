@@ -14,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-      <select
+        <select
           data-cy="statusSelect"
           onChange={event => filterOption(event.target.value as Filter)}
         >
