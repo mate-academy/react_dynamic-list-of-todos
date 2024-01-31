@@ -3,27 +3,31 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { Status } from './types/Status';
+import { FilterParams } from './types/FilterParams';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
-import { getTodos } from './api';
-import { Status } from './types/Status';
 import { getFilteredTodos } from './getFilteredTodos/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<Status>(Status.All);
-  const filteredTodos = getFilteredTodos(todos, query, status);
+  const [filterParams, setFilterParams] = useState<FilterParams>({
+    query: '',
+    status: Status.All,
+  });
+  const filteredTodos = getFilteredTodos(todos, filterParams);
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => new Error('Try again later'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -36,10 +40,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                onChangeQuery={setQuery}
-                status={status}
-                onChangeStatus={setStatus}
+                filterParams={filterParams}
+                setFilterParams={setFilterParams}
               />
             </div>
 

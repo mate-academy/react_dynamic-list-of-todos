@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
@@ -22,7 +23,9 @@ export const TodoModal: React.FC<Props> = ({
   } = selectedTodo;
 
   useEffect(() => {
-    getUser(userId).then(setUser);
+    getUser(userId)
+      .then(setUser)
+      .catch(() => new Error('Failed to install user'));
   }, [userId]);
 
   return (
@@ -41,7 +44,6 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -64,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={user.email}>
+              <a href={`mailto:${user.email}`}>
                 {user.name}
               </a>
             </p>

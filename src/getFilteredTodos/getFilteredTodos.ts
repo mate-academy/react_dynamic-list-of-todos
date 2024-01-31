@@ -1,11 +1,11 @@
+import { FilterParams } from '../types/FilterParams';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export function getFilteredTodos(
+export const getFilteredTodos = (
   todos: Todo[],
-  query: string,
-  status: Status,
-) {
+  { query, status }: FilterParams,
+) => {
   return todos
     .filter(todo => {
       return todo.title.toLowerCase().includes(query.trim().toLowerCase());
@@ -20,4 +20,4 @@ export function getFilteredTodos(
           return true;
       }
     });
-}
+};

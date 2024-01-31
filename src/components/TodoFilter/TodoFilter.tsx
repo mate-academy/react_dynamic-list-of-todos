@@ -1,20 +1,40 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Status } from '../../types/Status';
+import { FilterParams } from '../../types/FilterParams';
 
 type Props = {
-  query: string,
-  onChangeQuery: (query: string) => void,
-  status: Status,
-  onChangeStatus: (status: Status) => void,
+  filterParams: FilterParams,
+  setFilterParams: React.Dispatch<React.SetStateAction<FilterParams>>,
 };
 
 export const TodoFilter: React.FC<Props> = React.memo(({
-  query,
-  onChangeQuery = () => {},
-  status,
-  onChangeStatus = () => {},
+  filterParams,
+  setFilterParams = () => {},
 }) => {
+  const { query, status } = filterParams;
+
+  const handleChangeStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterParams(params => ({
+      ...params,
+      status: event.target.value as Status,
+    }));
+  };
+
+  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterParams(params => ({
+      ...params,
+      query: event.target.value,
+    }));
+  };
+
+  const handleResetQuery = () => {
+    setFilterParams(params => ({
+      ...params,
+      query: '',
+    }));
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -22,7 +42,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={event => onChangeStatus(event.target.value as Status)}
+            onChange={handleChangeStatus}
           >
             <option value={Status.All}>All</option>
             <option value={Status.Active}>Active</option>
@@ -38,7 +58,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => onChangeQuery(event.target.value)}
+          onChange={handleChangeQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +73,7 @@ export const TodoFilter: React.FC<Props> = React.memo(({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onChangeQuery('')}
+              onClick={handleResetQuery}
             />
           </span>
         )}
