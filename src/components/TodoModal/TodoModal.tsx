@@ -23,16 +23,16 @@ export const TodoModal: React.FC<Props> = ({
       getUser(currentUserId).then((user) => {
         setCurrentUser(user);
       });
-    }
 
-    let currTodo;
+      let currTodo;
 
-    if (todos !== null) {
-      currTodo = todos.find(todo => todo.id === currentTodoId);
-    }
+      if (todos !== null) {
+        currTodo = todos.find(todo => todo.id === currentTodoId);
+      }
 
-    if (currTodo !== undefined) {
-      setCurrentTodo(currTodo);
+      if (currTodo !== undefined) {
+        setCurrentTodo(currTodo);
+      }
     }
   }, []);
 
