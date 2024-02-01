@@ -42,13 +42,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     }
   }, [selectedTodo]);
 
-  useEffect(() => {
-    setTodos(filterData(todos, query, status));
-  }, [query, status]);
-
   const value = useMemo(
     () => ({
-      todos,
+      todos: filterData(todos, query, status),
       user,
       setUser,
       selectedTodo,
