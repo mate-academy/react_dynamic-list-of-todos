@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -10,15 +11,19 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
-  // const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const { id, title, completed } = todo;
+  const {
+    id,
+    title,
+    completed,
+    userId,
+  } = todo;
 
   useEffect(() => {
-    getUser(todo.userId)
+    getUser(userId)
       .then(setSelectedUser);
-  }, [todo.userId]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -53,7 +58,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelectTodo }) => {
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
                 {completed
                   ? (
                     <strong className="has-text-success">Done</strong>
