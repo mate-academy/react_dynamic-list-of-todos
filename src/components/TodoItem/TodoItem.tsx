@@ -9,7 +9,6 @@ interface Props {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
-    setIsShow,
     selectedTodo,
     setSelectedTodo,
   } = useContext(TodosContext);
@@ -21,7 +20,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   } = todo;
 
   const handleOnClick = () => {
-    setIsShow(true);
     setSelectedTodo(todo);
   };
 

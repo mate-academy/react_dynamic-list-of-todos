@@ -4,7 +4,7 @@ import { Todo } from './Todo';
 export interface Context {
   isShow: boolean,
   setIsShow: (value: boolean) => void,
-  selectedTodo: null | Todo,
+  selectedTodo: Todo | null,
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
   filterTodos: Status,
   setFilterTodos: (filterField: Status) => void,

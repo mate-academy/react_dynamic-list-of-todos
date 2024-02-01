@@ -10,8 +10,10 @@ export const TodoModal: React.FC = () => {
   const { setIsShow, selectedTodo, setSelectedTodo } = useContext(TodosContext);
 
   useEffect(() => {
-    getUser(selectedTodo?.userId).then(user => setSelectedUser(user));
-  }, [selectedTodo?.userId]);
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(user => setSelectedUser(user));
+    }
+  }, [selectedTodo]);
 
   const handleClose = () => {
     setIsShow(false);
@@ -22,7 +24,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser ? (
+      {!selectedTodo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -31,7 +33,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo?.id}`}
+              {`Todo #${selectedTodo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -45,11 +47,11 @@ export const TodoModal: React.FC = () => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo?.completed ? (
+              {selectedTodo.completed ? (
                 <strong className="has-text-success">
                   Done
                 </strong>
@@ -61,8 +63,8 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href={`mailto:${selectedUser.email}`}>
-                {selectedUser.name}
+              <a href={`mailto:${selectedUser?.email}`}>
+                {selectedUser?.name}
               </a>
             </p>
           </div>

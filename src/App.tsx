@@ -16,13 +16,13 @@ import { TodosContext } from './components/context/TodosContext';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const { isShow, filterTodos, query } = useContext(TodosContext);
+  const { selectedTodo, filterTodos, query } = useContext(TodosContext);
 
   useEffect(() => {
     getTodos().then(dataFromAPI => setTodos(dataFromAPI));
   }, []);
 
-  const newTodos = data(todos, filterTodos, query);
+  const preparedTodos = data(todos, filterTodos, query);
 
   return (
     <>
@@ -41,14 +41,14 @@ export const App: React.FC = () => {
               )}
 
               {!!todos.length && (
-                <TodoList todos={newTodos} />
+                <TodoList todos={preparedTodos} />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {isShow && (
+      {selectedTodo?.userId && (
         <TodoModal />
       )}
     </>

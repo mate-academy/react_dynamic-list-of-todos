@@ -6,9 +6,13 @@ export function data(
   filterValues: Status,
   query: string,
 ): Todo[] {
-  let preparedTodos = [...todos];
+  const queryNormalize = query.toLowerCase();
 
-  preparedTodos = preparedTodos.filter((todo: Todo) => {
+  const preparedTodos = [...todos].filter(todo => (
+    todo.title.toLowerCase().includes(queryNormalize)
+  ));
+
+  return preparedTodos.filter((todo: Todo) => {
     switch (filterValues) {
       case Status.active:
         return !todo.completed;
@@ -20,15 +24,4 @@ export function data(
         return todo;
     }
   });
-
-  if (query) {
-    const queryNormalize = query.toLowerCase();
-
-    preparedTodos = preparedTodos
-      .filter(todo => (
-        todo.title.toLowerCase().includes(queryNormalize)
-      ));
-  }
-
-  return preparedTodos;
 }
