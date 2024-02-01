@@ -13,17 +13,12 @@ import { handleTodoFilter } from './services/handleTodoFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosLoading, setTodosLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterOptionValue, setFilterOptionValue] = useState('all');
   const [filterInputValue, setFilterInputValue] = useState('');
 
   useEffect(() => {
-    setTodosLoading(true);
-
-    getTodos()
-      .then(setTodos)
-      .finally(() => setTodosLoading(false));
+    getTodos().then(setTodos);
   }, []);
 
   const visibleTodos = handleTodoFilter(todos, filterOptionValue, filterInputValue);
@@ -44,7 +39,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosLoading
+              {!todos.length
                 ? <Loader />
                 : (
                   <TodoList

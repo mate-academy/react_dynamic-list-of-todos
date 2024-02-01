@@ -9,9 +9,6 @@ export function handleTodoFilter(
     .filter(todo => todo.title.toLowerCase().includes(title.toLowerCase()));
 
   switch (filterBy) {
-    case 'all':
-      return filteredTodo;
-
     case 'active':
       return filteredTodo.filter(todo => !todo.completed);
 
