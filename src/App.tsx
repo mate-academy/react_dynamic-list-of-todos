@@ -10,8 +10,8 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
-  const [selected, setSelected] = useState<Todo | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedAction, setSelectedAction] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -25,17 +25,17 @@ export const App: React.FC = () => {
         return todos;
 
       case 'active':
-        return todos?.filter(todo => todo.completed === false);
+        return todos?.filter(todo => !todo.completed);
 
       case 'completed':
-        return todos?.filter(todo => todo.completed === true);
+        return todos?.filter(todo => todo.completed);
 
       default:
         return todos;
     }
   };
 
-  const queryFilter = (todoList: Todo[] | undefined) => {
+  const queryFilter = (todoList: Todo[]) => {
     return todoList
       ?.filter(todo => todo
         .title.toLowerCase().includes(query.toLowerCase().trim()));
@@ -54,11 +54,11 @@ export const App: React.FC = () => {
   };
 
   const handleSelectedChange = (item: Todo) => {
-    setSelected(item);
+    setSelectedAction(item);
   };
 
   const handleCloseTodo = () => {
-    setSelected(null);
+    setSelectedAction(null);
   };
 
   return (
@@ -80,19 +80,20 @@ export const App: React.FC = () => {
 
           <div className="block">
             {!todos
-              ? <Loader />
+              ? <Loader data-cy="loader" />
               : (
                 <TodoList
                   todos={queryFilter(filtredTodos())}
                   onTodoSelected={handleSelectedChange}
-                  todoId={selected?.id}
+                  todoId={selectedAction?.id}
                 />
               )}
 
           </div>
         </div>
       </div>
-      {selected && <TodoModal todo={selected} onClose={handleCloseTodo} />}
+      {selectedAction
+      && <TodoModal todo={selectedAction} onClose={handleCloseTodo} />}
     </>
   );
 };

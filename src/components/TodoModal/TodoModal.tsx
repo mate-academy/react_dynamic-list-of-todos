@@ -10,7 +10,7 @@ interface TodoModalProps {
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(todo.userId).then(setUser);
