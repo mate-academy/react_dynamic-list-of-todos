@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputQuery = e.target.value.toLowerCase().trim();
 
-    setQuery(inputQuery);
+    setQuery(e.target.value);
     setFilter(prev => ({ ...prev, title: inputQuery }));
   };
 
