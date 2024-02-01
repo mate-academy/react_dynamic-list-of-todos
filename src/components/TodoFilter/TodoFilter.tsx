@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
     <p className="control">
       <span className="select">
         <select
-          id="statusSelect"
+          data-cy="statusSelect"
           onChange={event => setSort(event.target.value)}
         >
           <option value="all">All</option>
