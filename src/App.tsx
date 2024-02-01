@@ -10,8 +10,8 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodosContext } from './context/TodosContext';
-import { Select } from './types/Select';
 import { useDebounce } from './hooks/useDebounce';
+import { prepareTodos } from './prepareTodos';
 
 export const App: React.FC = () => {
   const { show, filterField, query } = useContext(TodosContext);
@@ -23,33 +23,7 @@ export const App: React.FC = () => {
     getTodos().then(todosFromSetver => setTodos(todosFromSetver));
   });
 
-  function prepareTodos(listOfTodos: Todo[]) {
-    let preparedTodos = [...listOfTodos];
-
-    preparedTodos = preparedTodos.filter(todo => {
-      switch (filterField) {
-        case Select.Active:
-          return !todo.completed;
-
-        case Select.Completed:
-          return todo.completed;
-
-        default:
-          return todo;
-      }
-    });
-
-    if (debouncedQuery) {
-      const queryNormalize = debouncedQuery.toLowerCase();
-
-      preparedTodos = preparedTodos
-        .filter(todo => todo.title.toLowerCase().includes(queryNormalize));
-    }
-
-    return preparedTodos;
-  }
-
-  const visibleTodos = prepareTodos(todos);
+  const visibleTodos = prepareTodos(todos, filterField, debouncedQuery);
 
   return (
     <>
