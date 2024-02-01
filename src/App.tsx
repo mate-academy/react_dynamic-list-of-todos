@@ -54,7 +54,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onResetTodo={resetTodo} />}
+      {!!selectedTodo && <TodoModal selectedTodo={selectedTodo} onResetTodo={resetTodo} />}
     </>
   );
 };
