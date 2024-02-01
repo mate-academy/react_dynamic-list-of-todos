@@ -1,18 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  query: string;
+  sortBy: string;
   selectedTodo?: Todo | null;
-  onTodoSelected?: (todo: Todo) => void;
+  setSelectedTodo: (todo: Todo) => void;
 };
+
+function prepareList(
+  tdL: Todo[],
+  searchQuery: string,
+  sortBy: string,
+): Todo[] | [] {
+  let copy = [...tdL];
+
+  if (searchQuery) {
+    copy = copy.filter((todo) => todo.title.toLowerCase()
+      .includes(searchQuery.toLowerCase()));
+  }
+
+  switch (sortBy) {
+    case 'active':
+      copy = copy.filter((todo) => !todo.completed);
+      break;
+
+    case 'completed':
+      copy = copy.filter((todo) => todo.completed);
+      break;
+
+    default:
+      return copy;
+  }
+
+  return copy;
+}
 
 export const TodoList: React.FC<Props> = ({
   todos = [],
-  selectedTodo,
-  onTodoSelected = () => {},
+  query = '',
+  sortBy = 'All',
+  selectedTodo = null,
+  setSelectedTodo = () => { },
 }) => {
+  const [todoListToShow, setTodoListToShow] = useState<Todo[]>(todos);
+
+  useEffect(() => {
+    const listToShow = prepareList(todos, query, sortBy);
+
+    setTodoListToShow(listToShow);
+  }, [query, todos, sortBy]);
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -29,7 +69,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {todoListToShow.map(todo => (
           <tr
             data-cy="todo"
             className={cn({
@@ -58,7 +98,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onTodoSelected(todo)}
+                onClick={() => setSelectedTodo(todo)}
               >
                 <span className="icon">
                   {todo.id === selectedTodo?.id ? (

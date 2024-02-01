@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo;
-  onClose?: (todo: Todo) => void;
+  onClose?: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
@@ -14,15 +14,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
   useEffect(() => {
     getUser(todo.userId).then(setUser);
-
-    return () => setUser(null);
   }, [todo.userId]);
-
-  const handleClose = () => {
-    if (onClose) {
-      onClose(todo);
-    }
-  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -37,8 +29,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #
-              {todo.id}
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -46,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleClose}
+              onClick={onClose}
             />
           </header>
 

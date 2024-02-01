@@ -16,17 +16,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('All');
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
-
-  const filteredTodos = todos.filter(todo => {
-    // const statusFilter = query === 'all' || !query;
-    const textFilter = todo.title.toLowerCase().includes(query.toLowerCase());
-
-    return textFilter;
-  });
 
   return (
     <>
@@ -37,17 +31,20 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onFilterChange={setQuery}
-                onClearSearch={() => setQuery('')}
+                query={query}
+                setQuery={setQuery}
+                setSort={setSortBy}
               />
             </div>
 
             <div className="block">
-              {filteredTodos.length > 0 ? (
+              {todos.length > 0 ? (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={todos}
+                  query={query}
                   selectedTodo={selectedTodo}
-                  onTodoSelected={setSelectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                  sortBy={sortBy}
                 />
               ) : (
                 <Loader />
