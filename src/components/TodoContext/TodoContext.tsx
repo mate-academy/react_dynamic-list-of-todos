@@ -4,6 +4,7 @@ import { User } from '../../types/User';
 import { Context } from '../../types/Context';
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
+import { filterData } from '../services';
 
 type Props = {
   children: React.ReactNode;
@@ -35,6 +36,16 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     getTodos().then(setTodos);
   }, []);
 
+  useEffect(() => {
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(setUser);
+    }
+  }, [selectedTodo]);
+
+  useEffect(() => {
+    setTodos(filterData(todos, query, status));
+  }, [query, status]);
+
   const value = useMemo(
     () => ({
       todos,
@@ -51,12 +62,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     }),
     [todos, user, showModal, selectedTodo, status, query],
   );
-
-  useEffect(() => {
-    if (selectedTodo) {
-      getUser(selectedTodo.userId).then(setUser);
-    }
-  }, [selectedTodo]);
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
