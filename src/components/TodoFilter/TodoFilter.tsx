@@ -1,34 +1,84 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React, { ChangeEvent, useState } from 'react';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+// eslint-disable-next-line import/no-cycle
+import { Filter } from '../../App';
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
+interface Props {
+  onFilter: (filters: Filter) => void,
+}
+
+export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [titleFilter, setTitleFilter] = useState('');
+
+  const handleChangeStatus = (event: ChangeEvent<HTMLSelectElement>) => {
+    setStatusFilter(event.target.value);
+    onFilter({ status: event.target.value, title: titleFilter });
+  };
+
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitleFilter(event.target.value);
+    onFilter({
+      status: statusFilter,
+      title: event.target.value.toLowerCase().trim(),
+    });
+  };
+
+  const handleClear = () => {
+    setStatusFilter('all');
+    setTitleFilter('');
+    onFilter({ status: 'all', title: '' });
+  };
+
+  const statusOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'active', label: 'Active' },
+    { value: 'completed', label: 'Completed' },
+  ];
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={statusFilter}
+            onChange={handleChangeStatus}
+          >
+            {statusOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={titleFilter}
+          onChange={handleChangeInput}
         />
-      </span>
-    </p>
-  </form>
-);
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {titleFilter && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClear}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
