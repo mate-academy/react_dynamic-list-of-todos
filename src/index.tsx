@@ -1,7 +1,10 @@
 import ReactDOM from 'react-dom';
 import { App } from './App';
+import { TodoProvider } from './context/TodosContext';
 
 ReactDOM.render(
-  <App />,
+  <TodoProvider>
+    <App />
+  </TodoProvider>,
   document.getElementById('root'),
 );
