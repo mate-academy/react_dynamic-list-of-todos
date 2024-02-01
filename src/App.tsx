@@ -10,22 +10,19 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+// eslint-disable-next-line import/no-cycle
+import { getFilteredTodos } from './getFilteredTodos';
 
 export interface Filter {
   title: string,
   status: string;
 }
 
-function getFilteredTodos(todos:Todo[], filter: Filter) {
-  return todos.filter(todo => todo.title.toLowerCase().includes(filter.title.toLowerCase())
-  && (filter.status === 'all' || (filter.status === 'active' && !todo.completed) || (filter.status === 'completed' && todo.completed)));
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sort, setSort] = useState<Filter>({ status: 'all', title: '' });
   const [loading, setLoading] = useState(false);
-  const [onSelected, setSelected] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -46,14 +43,14 @@ export const App: React.FC = () => {
             <div className="block">
               {loading
                 ? <Loader />
-                : (<TodoList todos={getFilteredTodos(todos, sort)} selectedTodoId={onSelected?.id} onSelect={(todo) => setSelected(todo)} />
+                : (<TodoList todos={getFilteredTodos(todos, sort)} selectedTodoId={selectedTodo?.id} onSelect={(todo) => setSelectedTodo(todo)} />
                 )}
             </div>
           </div>
         </div>
       </div>
 
-      {onSelected && <TodoModal selectedTodo={onSelected} onClose={() => setSelected(null)} />}
+      {selectedTodo && <TodoModal selectedTodo={selectedTodo} onClose={() => setSelectedTodo(null)} />}
     </>
   );
 };

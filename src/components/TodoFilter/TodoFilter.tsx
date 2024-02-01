@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
+
 // eslint-disable-next-line import/no-cycle
 import { Filter } from '../../App';
 
@@ -17,7 +18,10 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
 
   const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTitleFilter(event.target.value);
-    onFilter({ status: statusFilter, title: event.target.value });
+    onFilter({
+      status: statusFilter,
+      title: event.target.value.toLowerCase().trim(),
+    });
   };
 
   const handleClear = () => {
@@ -25,6 +29,12 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
     setTitleFilter('');
     onFilter({ status: 'all', title: '' });
   };
+
+  const statusOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'active', label: 'Active' },
+    { value: 'completed', label: 'Completed' },
+  ];
 
   return (
     <form className="field has-addons">
@@ -35,9 +45,11 @@ export const TodoFilter: React.FC<Props> = ({ onFilter }) => {
             value={statusFilter}
             onChange={handleChangeStatus}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {statusOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
