@@ -10,7 +10,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>();
   const [selectedAction, setSelectedAction] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
@@ -35,7 +35,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const queryFilter = (todoList: Todo[]) => {
+  const queryFilter = (todoList: Todo[] | undefined) => {
     return todoList
       ?.filter(todo => todo
         .title.toLowerCase().includes(query.toLowerCase().trim()));

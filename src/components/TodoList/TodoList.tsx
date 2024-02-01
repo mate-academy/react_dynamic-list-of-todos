@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface TodosProps {
-  todos: Todo[]
+  todos: Todo[] | undefined
   onTodoSelected: (item: Todo) => void
   todoId?: number | undefined
 }
