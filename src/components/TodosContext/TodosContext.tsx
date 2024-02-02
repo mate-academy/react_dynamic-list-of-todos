@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 
-type TodosContextProps = {
+interface TodosContextProps {
   showModal: boolean,
   currentUserId: number | null,
   currentTodoId: number | null,
@@ -12,7 +12,7 @@ type TodosContextProps = {
   handleSelectValue: (value: string) => void,
   handleChangeSearch: (value: ChangeEvent<HTMLInputElement>) => void,
   clearSearchValue: () => void,
-};
+}
 
 export const TodosContext = React.createContext<TodosContextProps>({
   showModal: false,
@@ -28,9 +28,9 @@ export const TodosContext = React.createContext<TodosContextProps>({
   clearSearchValue: () => { },
 });
 
-type Props = {
+interface Props {
   children: React.ReactNode;
-};
+}
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [showModal, setShowModal] = useState(false);

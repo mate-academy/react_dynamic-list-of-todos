@@ -5,10 +5,10 @@ import { TodosContext } from '../TodosContext/TodosContext';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   currentUserId: number | null,
   todos: Todo[] | null,
-};
+}
 
 export const TodoModal: React.FC<Props> = ({
   currentUserId, todos,
@@ -24,16 +24,14 @@ export const TodoModal: React.FC<Props> = ({
         setCurrentUser(user);
       });
 
-      let currTodo;
+      const currTodo = todos !== null
+        ? todos.find(todo => todo.id === currentTodoId) : null;
 
-      if (todos !== null) {
-        currTodo = todos.find(todo => todo.id === currentTodoId);
-      }
-
-      if (currTodo !== undefined) {
+      if (currTodo) {
         setCurrentTodo(currTodo);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

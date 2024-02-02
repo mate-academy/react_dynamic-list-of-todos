@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React, { useContext, useEffect } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 
-type Props = {
+interface Props {
   completed: boolean,
   id: number,
   title: string,
   userId: number,
-};
+}
 
 export const TodoItem: React.FC<Props> = ({
   completed, id, title, userId,
@@ -42,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({
           <span className="icon" data-cy="iconCompleted">
             <i className="fas fa-check" />
           </span>
-        ) : ''}
+        ) : null}
       </td>
       <td className="is-vcentered is-expanded">
         <p className={classNames({
