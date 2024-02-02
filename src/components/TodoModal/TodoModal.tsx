@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { TodoContext } from '../../TodoContext/TodoContext';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
-import classNames from 'classnames';
 
 export const TodoModal: React.FC = () => {
   const { selectedTodo, selectTodo } = useContext(TodoContext);
@@ -14,6 +14,7 @@ export const TodoModal: React.FC = () => {
       getUser(selectedTodo.userId)
         .then((user) => setAuthor(user));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -51,7 +52,8 @@ export const TodoModal: React.FC = () => {
               <strong className={classNames({
                 'has-text-danger': !selectedTodo?.completed,
                 'has-text-success': selectedTodo?.completed,
-              })}>
+              })}
+              >
                 {selectedTodo?.completed ? 'Done' : 'Planned'}
               </strong>
 

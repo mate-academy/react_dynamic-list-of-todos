@@ -11,31 +11,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoContext } from './TodoContext/TodoContext';
 import { Filter } from './types/Filter';
-
-function prepareTodos(todos: Todo[], querry = '', filter = Filter.All): Todo[] {
-  let copy = [...todos];
-  const normalizedQerry = querry.trim().toLowerCase();
-
-  if (normalizedQerry) {
-    copy = copy.filter(todo => todo.title.toLowerCase().includes(normalizedQerry));
-  }
-
-  if (filter !== Filter.All) {
-    copy = copy.filter(todo => {
-      if (filter === Filter.Active) {
-        return todo.completed === false;
-      }
-
-      if (filter === Filter.Completed) {
-        return todo.completed === true;
-      }
-
-      return true;
-    });
-  }
-
-  return copy;
-}
+import { prepareTodos } from './utils/prepareTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -78,7 +54,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {shownTodo && (<TodoModal />)}
+      {!!shownTodo && (<TodoModal />)}
     </>
   );
 };
