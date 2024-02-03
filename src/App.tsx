@@ -1,14 +1,26 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodosContext } from './contexts/TodoProvider';
+import { TodoModal } from './components/TodoModal';
+import { filterTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
+  const {
+    todos,
+    filterOptions: { query, status },
+    selectedTodo,
+  } = useContext(TodosContext);
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, { query, status }),
+    [todos, query, status],
+  );
+
   return (
     <>
       <div className="section">
@@ -21,14 +33,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length
+                ? <TodoList todos={filteredTodos} />
+                : <Loader />}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {!!selectedTodo && (<TodoModal />)}
     </>
   );
 };
