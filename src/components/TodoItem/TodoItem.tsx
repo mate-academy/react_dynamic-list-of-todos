@@ -3,9 +3,9 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../contexts/TodoProvider';
 
-type Props = {
+interface Props {
   todo: Todo,
-};
+}
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { selectTodo: onTodoSelect, selectedTodo } = useContext(TodosContext);

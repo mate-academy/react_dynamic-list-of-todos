@@ -13,6 +13,7 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     getUser(selectedTodo.userId).then(setTodoOwner);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleModalClosed = () => {

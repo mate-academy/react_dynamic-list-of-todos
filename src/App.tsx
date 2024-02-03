@@ -7,35 +7,8 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { TodosContext } from './contexts/TodoProvider';
-import { FilterOptions } from './types/FilterOptions';
-import { FilterStatus } from './types/FilterStatus';
-import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
-
-function filterTodos(todos: Todo[], { query, status }: FilterOptions) {
-  let filteredTodos = [];
-
-  switch (status) {
-    case FilterStatus.Active:
-      filteredTodos = todos.filter(({ completed }) => !completed);
-      break;
-    case FilterStatus.Completed:
-      filteredTodos = todos.filter(({ completed }) => completed);
-      break;
-    default:
-      filteredTodos = [...todos];
-      break;
-  }
-
-  if (query) {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    filteredTodos = filteredTodos
-      .filter(({ title }) => title.toLowerCase().includes(normalizedQuery));
-  }
-
-  return filteredTodos;
-}
+import { filterTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
   const {
@@ -68,7 +41,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (<TodoModal />)}
+      {!!selectedTodo && (<TodoModal />)}
     </>
   );
 };
