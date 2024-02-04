@@ -1,14 +1,17 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
+import { TodoContext, TodoProvider } from './components/TodoContext';
 import { Loader } from './components/Loader';
 
-export const App: React.FC = () => {
+export const AppContent: React.FC = () => {
+  const { todos, selectedTodo } = useContext(TodoContext);
+
   return (
     <>
       <div className="section">
@@ -21,14 +24,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              { todos.length ? (<TodoList />) : (<Loader />)}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      { selectedTodo && (<TodoModal />)}
     </>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <TodoProvider>
+      <AppContent />
+    </TodoProvider>
   );
 };
