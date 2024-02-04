@@ -13,22 +13,10 @@ export const TodoModal: React.FC<Props> = (
   {
     selectedTodo,
     setSelectedTodo,
-  }
+  },
 ) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setLoading(true);
-
-  //   if (selectedTodo.userId) {
-  //     setTimeout(() => {
-  //       getUser(selectedTodo.userId)
-  //         .then(currentUser => setUser(currentUser))
-  //         .finally(() => setLoading(false));
-  //     }, 0);
-  //   }
-  // }, [selectedTodo.userId]);
 
   useEffect(() => {
     setLoading(true);
