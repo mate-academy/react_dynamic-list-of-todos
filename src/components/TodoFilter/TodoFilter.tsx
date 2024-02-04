@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TodosContext } from '../../TodosContext/TodosContext';
+import { TodosContext } from '../../variables/TodosContext.1';
 
 export const TodoFilter = () => {
   const { query, setQuery, setStatus } = useContext(TodosContext);
@@ -33,7 +33,7 @@ export const TodoFilter = () => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query && (
+          {!!query && (
             // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"

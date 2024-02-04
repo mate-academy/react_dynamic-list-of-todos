@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../../TodosContext/TodosContext';
+import { TodosContext } from '../../variables/TodosContext.1';
 import { Todo } from '../../types/Todo';
 
 export const TodoList: React.FC = () => {

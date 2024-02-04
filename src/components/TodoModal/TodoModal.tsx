@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { TODO_FOR_START, TodosContext } from '../../TodosContext/TodosContext';
+import { TodosContext } from '../../variables/TodosContext.1';
+import { TODO_FOR_START } from '../../variables/TODO_FOR_START';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 
@@ -20,6 +21,11 @@ export const TodoModal: React.FC = () => {
       user => setUserForModal(user),
     );
   });
+
+  const handleOnClickDelete = () => {
+    setIsModal(false);
+    setModaledTodo(TODO_FOR_START);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -42,10 +48,7 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setIsModal(false);
-                setModaledTodo(TODO_FOR_START);
-              }}
+              onClick={handleOnClickDelete}
             />
           </header>
 

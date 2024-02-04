@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { TodosContext } from './TodosContext/TodosContext';
+import { TodosContext } from './variables/TodosContext.1';
 
 export const App: React.FC = () => {
   const { isModal, todos } = useContext(TodosContext);
