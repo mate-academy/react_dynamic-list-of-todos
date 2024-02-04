@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
     setFilter(event.target.value);
   };
 
-  const preparedTodos = () => {
+  const preparedTodos = useMemo(() => {
     const filteredBy = (() => {
       switch (filter) {
         case 'completed':
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
     })();
 
     return filteredBy.filter(todo => todo.title.toLowerCase().includes(query.trim().toLowerCase())) || [];
-  };
+  }, [todos, filter, query]);
 
   return (
     <>
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={preparedTodos()}
+                  todos={preparedTodos}
                   selectedTodo={selectedTodo}
                   onSelectTodo={setSelectedTodo}
                 />
