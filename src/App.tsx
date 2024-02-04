@@ -10,11 +10,17 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
+enum FilterStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(FilterStatus.All);
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -29,16 +35,18 @@ export const App: React.FC = () => {
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value as FilterStatus);
   };
 
   const preparedTodos = useMemo(() => {
     const filteredBy = (() => {
       switch (filter) {
-        case 'completed':
+        case FilterStatus.Completed:
           return todos.filter(todo => todo.completed);
-        case 'active':
+
+        case FilterStatus.Active:
           return todos.filter(todo => !todo.completed);
+
         default:
           return todos;
       }
