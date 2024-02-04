@@ -1,27 +1,15 @@
-import React, { useState, ChangeEvent } from 'react';
-import { Filter } from '../../types/Filter';
+import { useContext } from 'react';
+import { Status } from '../../types/Status';
+import { TodoContext } from '../TodoContext';
 
-interface Props {
-  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
-}
-
-export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
-  const [query, setQuery] = useState('');
-
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(prev => ({ ...prev, status: e.target.value }));
+export const TodoFilter = () => {
+  const { setStatus, query, setQuery } = useContext(TodoContext);
+  const handleFilter = (eventFilter: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(eventFilter.target.value as Status);
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputQuery = e.target.value.toLowerCase().trim();
-
-    setQuery(e.target.value);
-    setFilter(prev => ({ ...prev, title: inputQuery }));
-  };
-
-  const handleClick = () => {
-    setQuery('');
-    setFilter(prev => ({ ...prev, title: '' }));
+  const handleQuery = (eventQuery: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(eventQuery.target.value);
   };
 
   return (
@@ -30,11 +18,11 @@ export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={handleSelectChange}
+            onChange={handleFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -46,27 +34,24 @@ export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={handleInputChange}
+          onChange={handleQuery}
         />
         <span className="icon is-left">
-          <i className="fas fa-search" />
+          <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ cursor: 'pointer' }}>
-          {query && (
-            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClick}
+              onClick={() => setQuery('')}
             />
-          )}
-
-        </span>
+          </span>
+        )}
       </p>
     </form>
   );
 };
-
-export default TodoFilter;
