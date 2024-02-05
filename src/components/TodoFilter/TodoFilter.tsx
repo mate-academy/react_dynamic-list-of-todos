@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { Status } from '../../types/Status';
 
 type Props = {
-  setFilter: (item: string) => void;
+  setFilter: (item: Status) => void;
   query: string;
   setQuery: (item: string) => void;
 };
@@ -16,20 +17,20 @@ export const TodoFilter: React.FC<Props> = (
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => setFilter(e.target.value as Status)}
         >
           <option
-            value="all"
+            value={Status.All}
           >
             All
           </option>
           <option
-            value="active"
+            value={Status.Active}
           >
             Active
           </option>
           <option
-            value="completed"
+            value={Status.Completed}
           >
             Completed
           </option>

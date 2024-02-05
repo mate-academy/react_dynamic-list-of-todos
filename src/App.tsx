@@ -8,28 +8,29 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Status>(Status.All);
   const [query, setQuery] = useState('');
 
   let filteredTodos: Todo[] = todos;
 
   switch (filter) {
-    case 'all':
+    case Status.All:
       filteredTodos = todos;
 
       break;
 
-    case 'completed':
-      filteredTodos = todos.filter(todo => todo.completed === true);
+    case Status.Completed:
+      filteredTodos = todos.filter(todo => todo.completed);
 
       break;
 
-    case 'active':
-      filteredTodos = todos.filter(todo => todo.completed === false);
+    case Status.Active:
+      filteredTodos = todos.filter(todo => !todo.completed);
 
       break;
 
@@ -69,7 +70,7 @@ export const App: React.FC = () => {
               {loading && (
                 <Loader />
               )}
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList todos={filteredTodos} />
               )}
             </div>
