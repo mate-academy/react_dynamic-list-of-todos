@@ -7,7 +7,6 @@ export const TodoModal: React.FC = React.memo(() => {
   const {
     user,
     selectTodo,
-    setUser,
     setSelectTodo,
     isLoadingModal,
   } = useContext(TodosContext);
@@ -20,7 +19,6 @@ export const TodoModal: React.FC = React.memo(() => {
   const { email, name } = user;
 
   const handleUser = () => {
-    setUser(null);
     setSelectTodo(null);
   };
 

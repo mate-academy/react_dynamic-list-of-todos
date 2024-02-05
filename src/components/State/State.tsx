@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { getTodos, getUser } from '../../api';
 import { ContextTodo } from '../../types/ContextTodo';
 import { Todo } from '../../types/Todo';
@@ -12,13 +12,10 @@ export const TodosContext = React.createContext<ContextTodo>({
   allTodos: [],
   setAllTodos: () => {},
   filteredTodos: [],
-  setFilteredTodos: () => {},
-  // isLoading: false,
-  // setIsLoading: () => {},
   isLoading: false,
-  // isLoadingModal: false,
-  // setIsLoadingModal: () => {},
+  setIsLoading: () => {},
   isLoadingModal: false,
+  setIsLoadingModal: () => {},
   query: '',
   setQuery: () => {},
   selectOption: '',
@@ -26,66 +23,52 @@ export const TodosContext = React.createContext<ContextTodo>({
   selectTodo: null,
   setSelectTodo: () => {},
   user: null,
-  setUser: () => {},
 });
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectOption, setSelectOption] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
-
-  let isLoading = false;
-  let isLoadingModal = false;
+  const [isLoadingModal, setIsLoadingModal] = useState(false);
 
   useEffect(() => {
-    isLoading = true;
+    setIsLoading(true);
     getTodos()
       .then(setAllTodos)
       .catch(error => {
         throw new Error(error);
       })
-      .finally(() => {
-        isLoading = false;
-      });
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
     if (selectTodo) {
-      isLoadingModal = true;
+      setIsLoadingModal(true);
 
       getUser(selectTodo.userId)
         .then(setUser)
         .catch(error => {
           throw new Error(error);
         })
-        .finally(() => {
-          isLoadingModal = false;
-        });
+        .finally(() => setIsLoadingModal(false));
     }
   }, [selectTodo]);
 
-  useEffect(() => {
-    const filterTodos = () => {
-      let filtered = [...allTodos];
+  const filteredTodos = useMemo(() => {
+    let filtered = [...allTodos];
 
-      if (selectOption === 'active') {
-        filtered = filtered.filter((todo) => !todo.completed);
-      } else if (selectOption === 'completed') {
-        filtered = filtered.filter((todo) => todo.completed);
-      }
+    if (selectOption === 'active') {
+      filtered = filtered.filter((todo) => !todo.completed);
+    } else if (selectOption === 'completed') {
+      filtered = filtered.filter((todo) => todo.completed);
+    }
 
-      filtered = filtered.filter(
-        (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-
-      setFilteredTodos(filtered);
-    };
-
-    filterTodos();
+    return filtered.filter(
+      (todo) => todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
   }, [allTodos, query, selectOption]);
 
   return (
@@ -93,17 +76,17 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       allTodos,
       setAllTodos,
       isLoading,
+      setIsLoading,
       query,
       setQuery,
       filteredTodos,
-      setFilteredTodos,
       selectOption,
       setSelectOption,
       selectTodo,
       setSelectTodo,
       user,
-      setUser,
       isLoadingModal,
+      setIsLoadingModal,
     }}
     >
       {children}

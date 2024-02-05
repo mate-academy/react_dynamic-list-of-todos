@@ -27,6 +27,9 @@ export const App: React.FC = () => {
               {isLoading && (
                 <Loader />
               )}
+            </div>
+
+            <div className="block">
               <TodoList />
             </div>
           </div>
