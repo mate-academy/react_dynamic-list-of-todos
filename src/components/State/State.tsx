@@ -10,12 +10,9 @@ type Props = {
 
 export const TodosContext = React.createContext<ContextTodo>({
   allTodos: [],
-  setAllTodos: () => {},
   filteredTodos: [],
   isLoading: false,
-  setIsLoading: () => {},
   isLoadingModal: false,
-  setIsLoadingModal: () => {},
   query: '',
   setQuery: () => {},
   selectOption: '',
@@ -74,9 +71,7 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   return (
     <TodosContext.Provider value={{
       allTodos,
-      setAllTodos,
       isLoading,
-      setIsLoading,
       query,
       setQuery,
       filteredTodos,
@@ -86,7 +81,6 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       setSelectTodo,
       user,
       isLoadingModal,
-      setIsLoadingModal,
     }}
     >
       {children}
