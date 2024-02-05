@@ -7,9 +7,7 @@ export interface ContextTodo {
   filteredTodos: Todo[];
   setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  isLoadingModal: boolean;
-  setIsLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoadingModal: boolean,
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   selectOption: string;

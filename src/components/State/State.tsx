@@ -13,10 +13,12 @@ export const TodosContext = React.createContext<ContextTodo>({
   setAllTodos: () => {},
   filteredTodos: [],
   setFilteredTodos: () => {},
+  // isLoading: false,
+  // setIsLoading: () => {},
   isLoading: false,
-  setIsLoading: () => {},
+  // isLoadingModal: false,
+  // setIsLoadingModal: () => {},
   isLoadingModal: false,
-  setIsLoadingModal: () => {},
   query: '',
   setQuery: () => {},
   selectOption: '',
@@ -32,29 +34,36 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [query, setQuery] = useState('');
   const [selectOption, setSelectOption] = useState('');
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
+
+  let isLoading = false;
+  let isLoadingModal = false;
 
   useEffect(() => {
-    setIsLoading(true);
+    isLoading = true;
     getTodos()
       .then(setAllTodos)
+      .catch(error => {
+        throw new Error(error);
+      })
       .finally(() => {
-        setIsLoading(false);
+        isLoading = false;
       });
   }, []);
 
   useEffect(() => {
     if (selectTodo) {
-      setIsLoadingModal(true);
+      isLoadingModal = true;
 
       getUser(selectTodo.userId)
         .then(setUser)
+        .catch(error => {
+          throw new Error(error);
+        })
         .finally(() => {
-          setIsLoadingModal(false);
+          isLoadingModal = false;
         });
     }
   }, [selectTodo]);
@@ -84,7 +93,6 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       allTodos,
       setAllTodos,
       isLoading,
-      setIsLoading,
       query,
       setQuery,
       filteredTodos,
@@ -96,7 +104,6 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       user,
       setUser,
       isLoadingModal,
-      setIsLoadingModal,
     }}
     >
       {children}

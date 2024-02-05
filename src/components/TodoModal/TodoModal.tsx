@@ -12,12 +12,12 @@ export const TodoModal: React.FC = React.memo(() => {
     isLoadingModal,
   } = useContext(TodosContext);
 
-  if (!selectTodo && !user) {
+  if (!selectTodo || !user) {
     return null;
   }
 
-  const { title, id, completed } = selectTodo || {};
-  const { email, name } = user || {};
+  const { title, id, completed } = selectTodo;
+  const { email, name } = user;
 
   const handleUser = () => {
     setUser(null);
