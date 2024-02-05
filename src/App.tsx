@@ -9,30 +9,17 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-
-export interface Filter {
-  title: string,
-  status: string;
-}
-
-function getFilteredTodos(todos:Todo[], filter: Filter) {
-  return todos.filter(todo => todo.title.toLowerCase().includes(filter.title.toLowerCase())
-  && (filter.status === 'all'
-  || (filter.status === 'active' && !todo.completed)
-  || (filter.status === 'completed' && todo.completed)));
-}
+import { Filter } from './types/Filter';
+import { getFilteredTodos } from './services/filtredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [sorting, setSorting] = useState<Filter>({ status: 'all', title: '' });
 
-
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos().then(setTodos).catch();
   }, [todos]);
-
 
   return (
     <>
@@ -46,7 +33,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
+              {todos.length ? (
                 <TodoList
                   todos={getFilteredTodos(todos, sorting)}
                   selectedTodo={selectedTodo}
@@ -61,11 +48,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo &&
-        <TodoModal
-          todo={selectedTodo}
-          onClose={() => setSelectedTodo(null)}
-        />}
+      {selectedTodo
+        && (
+          <TodoModal
+            todo={selectedTodo}
+            onClose={() => setSelectedTodo(null)}
+          />
+        )}
     </>
   );
 };

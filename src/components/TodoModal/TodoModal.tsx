@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 interface Props {
   todo: Todo;
   onClose?: () => void;
-};
+}
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     getUser(todo.userId).then(setUser);
 
     return () => setUser(null);
-  }, [todo.userId])
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -31,7 +31,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo.id}
+              Todo #
+              {todo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

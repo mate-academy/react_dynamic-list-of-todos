@@ -1,10 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
-import { Filter } from "../../App";
+import React, { ChangeEvent, useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 interface Props {
   filterBy: (filters: Filter) => void,
 }
-
 
 export const TodoFilter: React.FC<Props> = ({ filterBy }) => {
   const [status, setStatus] = useState('all');
@@ -12,12 +11,12 @@ export const TodoFilter: React.FC<Props> = ({ filterBy }) => {
 
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setStatus(event.target.value);
-    filterBy({ status: event.target.value, title: title });
+    filterBy({ status: event.target.value, title });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    filterBy({ status: status, title: event.target.value });
+    filterBy({ status, title: event.target.value });
   };
 
   const onClear = () => {
@@ -56,19 +55,19 @@ export const TodoFilter: React.FC<Props> = ({ filterBy }) => {
             <i className="fas fa-magnifying-glass" />
           </span>
 
-          {title && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="clearSearchButton"
-              type="button"
-              className="delete"
-              onClick={onClear}
-            />
-          </span>
-        )}
+          {!!title && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={onClear}
+              />
+            </span>
+          )}
         </p>
       </form>
     </>
-  )
+  );
 };
