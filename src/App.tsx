@@ -29,18 +29,19 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter((todo) => {
+      const includesSearch = todo.title.toLowerCase()
+        .includes(search.toLowerCase());
+
       switch (status) {
-        case Status.All:
-          return true;
         case Status.Active:
-          return !todo.completed;
+          return !todo.completed && includesSearch;
         case Status.Completed:
-          return todo.completed;
+          return todo.completed && includesSearch;
+        case Status.All:
         default:
-          return true;
+          return includesSearch;
       }
-    })
-    .filter((todo) => todo.title.toLowerCase().includes(search.toLowerCase()));
+    });
 
   return (
     <>
