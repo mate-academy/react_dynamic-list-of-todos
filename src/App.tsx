@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodosContext, TodosContextProvider } from './components/State';
+import { TodosContext } from './components/State';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   const { isLoading } = useContext(TodosContext);
 
   return (
-    <TodosContextProvider>
+    <>
       <div className="section">
         <div className="container">
           <div className="box">
@@ -37,6 +37,6 @@ export const App: React.FC = () => {
       </div>
 
       <TodoModal />
-    </TodosContextProvider>
+    </>
   );
 };
