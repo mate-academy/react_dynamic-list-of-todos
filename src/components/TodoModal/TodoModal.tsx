@@ -9,7 +9,7 @@ import { User } from '../../types/User';
 interface Props {
   todo: Todo;
   onClose?: () => void;
-};
+}
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);

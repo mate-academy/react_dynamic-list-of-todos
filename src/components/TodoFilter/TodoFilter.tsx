@@ -4,7 +4,7 @@ interface Props {
   query: string;
   setQuery: (value: string) => void;
   setSort: (value: string) => void;
-};
+}
 
 export const TodoFilter: React.FC<Props> = ({
   query,

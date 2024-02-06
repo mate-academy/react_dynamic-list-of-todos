@@ -8,7 +8,7 @@ interface Props {
   sortBy: string;
   selectedTodo?: Todo | null;
   setSelectedTodo: (todo: Todo) => void;
-};
+}
 
 function prepareList(
   tdL: Todo[],
