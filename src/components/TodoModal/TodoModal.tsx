@@ -6,7 +6,7 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
-type Props = {
+interface Props {
   todo: Todo;
   onClose?: () => void;
 };

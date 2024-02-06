@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[];
   query: string;
   sortBy: string;
@@ -23,7 +23,6 @@ function prepareList(
   }
 
   switch (sortBy) {
-    // case 'All':
     case 'active':
       copy = copy.filter((todo) => !todo.completed);
       break;
