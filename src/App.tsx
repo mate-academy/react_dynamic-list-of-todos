@@ -10,14 +10,14 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedAction, setSelectedAction] = useState<Todo | null>(null);
-  const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState<string>('');
+  const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
     getTodos().then(setTodos);
-  }, [todos]);
+  }, []);
 
   const filtredTodos = () => {
     switch (filter) {
@@ -25,20 +25,20 @@ export const App: React.FC = () => {
         return todos;
 
       case 'active':
-        return todos?.filter(todo => !todo.completed);
+        return todos.filter(todo => !todo.completed);
 
       case 'completed':
-        return todos?.filter(todo => todo.completed);
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
   };
 
-  const queryFilter = (todoList: Todo[] | undefined) => {
+  const queryFilter = (todoList: Todo[]) => {
     return todoList
-      ?.filter(todo => todo
-        .title.toLowerCase().includes(query.toLowerCase().trim()));
+      .filter(todo => todo.title.toLowerCase()
+        .includes(query.toLowerCase().trim()));
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -79,15 +79,13 @@ export const App: React.FC = () => {
           </div>
 
           <div className="block">
-            {!todos
-              ? <Loader data-cy="loader" />
-              : (
-                <TodoList
-                  todos={queryFilter(filtredTodos())}
-                  onTodoSelected={handleSelectedChange}
-                  todoId={selectedAction?.id}
-                />
-              )}
+            {!todos.length ? <Loader data-cy="loader" /> : (
+              <TodoList
+                todos={queryFilter(filtredTodos())}
+                onTodoSelected={handleSelectedChange}
+                todoId={selectedAction?.id}
+              />
+            )}
 
           </div>
         </div>
