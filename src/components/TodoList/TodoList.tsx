@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setModalTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>,
+  setModalTodoHandler: (v:Todo | undefined) => void,
   modalTodo: Todo | undefined,
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, setModalTodo, modalTodo,
+  todos, setModalTodoHandler, modalTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -39,12 +39,13 @@ export const TodoList: React.FC<Props> = ({
           });
 
           const selectTodoHandler = (todoForModal:Todo) => {
-            setModalTodo(todoForModal);
+            setModalTodoHandler(todoForModal);
           };
 
           return (
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
+
               <td className="is-vcentered">
                 {todo.completed && (
                   <span className="icon" data-cy="iconCompleted">
@@ -52,9 +53,11 @@ export const TodoList: React.FC<Props> = ({
                   </span>
                 )}
               </td>
+
               <td className="is-vcentered is-expanded">
                 <p className={todoTitleClass}>{todo.title}</p>
               </td>
+
               <td className="has-text-right is-vcentered">
                 <button
                   data-cy="selectButton"

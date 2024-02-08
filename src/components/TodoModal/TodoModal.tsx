@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  setModalTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>,
-  modalTodo: Todo | undefined,
+  setModalTodoHandler: (v:Todo | undefined) => void,
+  modalTodo?: Todo,
 };
 
-export const TodoModal: React.FC<Props> = ({ setModalTodo, modalTodo }) => {
+export const TodoModal: FC<Props> = ({
+  setModalTodoHandler, modalTodo,
+}) => {
   const [todoUser, setTodoUser] = useState<User>();
 
   useEffect(() => {
@@ -18,7 +20,11 @@ export const TodoModal: React.FC<Props> = ({ setModalTodo, modalTodo }) => {
         setTodoUser(data);
       });
     }
-  }, []);
+  }, [modalTodo]);
+
+  const closeModalHandler = () => {
+    setModalTodoHandler(undefined);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,7 +46,7 @@ export const TodoModal: React.FC<Props> = ({ setModalTodo, modalTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModalTodo(undefined)}
+              onClick={closeModalHandler}
             />
           </header>
 
