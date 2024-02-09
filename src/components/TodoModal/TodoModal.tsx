@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   setModalTodoHandler: (v:Todo | undefined) => void,
-  modalTodo?: Todo,
+  modalTodo: Todo,
 };
 
 export const TodoModal: FC<Props> = ({
@@ -52,7 +52,7 @@ export const TodoModal: FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {modalTodo?.title}
+              {modalTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
@@ -64,8 +64,8 @@ export const TodoModal: FC<Props> = ({
 
               {' by '}
 
-              <a href={todoUser?.email}>
-                {todoUser?.name}
+              <a href={todoUser.email}>
+                {todoUser.name}
               </a>
             </p>
           </div>

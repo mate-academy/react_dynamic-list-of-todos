@@ -9,34 +9,32 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Sorted } from './types/Sorted';
+
+const preparingTodos = (todos:Todo[], query:string, sorted:Sorted) => {
+  switch (sorted) {
+    case Sorted.Active:
+      return (todos.filter(todo => !todo.completed && todo.title.includes(query.toLowerCase())));
+    case Sorted.Completed:
+      return (todos.filter(todo => todo.completed && todo.title.includes(query.toLowerCase())));
+    default:
+      return (todos.filter(todo => todo.title.includes(query.toLowerCase())));
+  }
+};
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [preparedTodos, setPreparedTodos] = useState<Todo[]>([]);
-  const [sorted, setSorted] = useState('');
+  const [sorted, setSorted] = useState(Sorted.All);
   const [query, setQuery] = useState('');
   const [modalTodo, setModalTodo] = useState<Todo | undefined>();
 
   useEffect(() => {
     getTodos().then(data => {
       setTodos(data);
-      setPreparedTodos(data);
     });
   }, []);
 
-  useEffect(() => {
-    const preparingTodos = () => {
-      if (sorted === 'active') {
-        setPreparedTodos(todos.filter(todo => !todo.completed && todo.title.includes(query.toLowerCase())));
-      } else if (sorted === 'completed') {
-        setPreparedTodos(todos.filter(todo => todo.completed && todo.title.includes(query.toLowerCase())));
-      } else {
-        setPreparedTodos(todos.filter(todo => todo.title.includes(query.toLowerCase())));
-      }
-    };
-
-    preparingTodos();
-  }, [query, sorted, todos]);
+  const preparedTodos = preparingTodos(todos, query, sorted);
 
   const setModalTodoHandler = (value:Todo | undefined) => {
     setModalTodo(value);
@@ -46,7 +44,7 @@ export const App: FC = () => {
     setQuery(value);
   };
 
-  const setSortedHandler = (value:string) => {
+  const setSortedHandler = (value:Sorted) => {
     setSorted(value);
   };
 
