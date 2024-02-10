@@ -9,12 +9,18 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [showUser, setShowUser] = useState<Todo | null>(null);
+  const [displayedTodo, setDisplayedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
-  const [isLook, setIsLook] = useState(0);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   useEffect(() => {
     getTodos().then((array: Todo[]) => {
@@ -22,21 +28,21 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const handleShowUser = (todo: Todo): void => {
-    setShowUser(todo);
+  const handleDisplayedTodo = (todo: Todo): void => {
+    setDisplayedTodo(todo);
   };
 
-  const handleFilter = (param: string): Todo[] => {
-    switch (param) {
-      case 'active':
+  const handleFilter = (status: string): Todo[] => {
+    switch (status) {
+      case Filter.Active:
         return todos.filter((todo) => {
           return todo.completed === false;
         });
-      case 'completed':
+      case Filter.Completed:
         return todos.filter((todo) => {
           return todo.completed === true;
         });
-      case 'all':
+      case Filter.All:
         return todos;
       default:
         return todos;
@@ -76,9 +82,9 @@ export const App: React.FC = () => {
               {todos.length > 0 ? (
                 <TodoList
                   resultTodos={resultTodos}
-                  handleShowUser={handleShowUser}
-                  isLook={isLook}
-                  setIsLook={setIsLook}
+                  handleShowUser={handleDisplayedTodo}
+                  isLook={selectedTodoId}
+                  setIsLook={setSelectedTodoId}
                 />
               ) : (
                 <Loader />
@@ -88,11 +94,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showUser ? (
+      {displayedTodo ? (
         <TodoModal
-          showUser={showUser}
-          setShowUser={setShowUser}
-          setIsLook={setIsLook}
+          showUser={displayedTodo}
+          setShowUser={setDisplayedTodo}
+          setSelectedTodoId={setSelectedTodoId}
         />
       ) : ''}
     </>

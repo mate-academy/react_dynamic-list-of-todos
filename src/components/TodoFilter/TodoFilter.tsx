@@ -1,10 +1,12 @@
 import React from 'react';
 
-export const TodoFilter: React.FC<{
+interface Props {
   setQuery: (query: string) => void,
   setFilter: (filter: string) => void,
   query: string,
-}> = ({ setQuery, setFilter, query }) => (
+}
+
+export const TodoFilter: React.FC<Props> = ({ setQuery, setFilter, query }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
@@ -36,7 +38,7 @@ export const TodoFilter: React.FC<{
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {query ? (
+      {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
@@ -48,7 +50,7 @@ export const TodoFilter: React.FC<{
             }}
           />
         </span>
-      ) : ''}
+      )}
 
     </p>
   </form>

@@ -4,15 +4,20 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC<{ showUser: Todo, setShowUser:
-(todo: Todo | null) => void, setIsLook: (id: number) => void }>
-= ({ showUser, setShowUser, setIsLook }) => {
+interface Props {
+  showUser: Todo,
+  setShowUser: (todo: Todo | null) => void,
+  setSelectedTodoId: (id: number) => void,
+}
+
+export const TodoModal: React.FC<Props>
+= ({ showUser, setShowUser, setSelectedTodoId }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(showUser.userId).then((us: User | null) => {
-      if (us) {
-        setUser(us);
+    getUser(showUser.userId).then((userToShow: User | null) => {
+      if (userToShow) {
+        setUser(userToShow);
       }
     });
   });
@@ -40,7 +45,7 @@ export const TodoModal: React.FC<{ showUser: Todo, setShowUser:
               data-cy="modal-close"
               onClick={() => {
                 setShowUser(null);
-                setIsLook(0);
+                setSelectedTodoId(0);
               }}
             />
           </header>
