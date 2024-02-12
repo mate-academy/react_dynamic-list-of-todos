@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { useState, ChangeEvent } from 'react';
+import { Filter } from '../../types/Filter';
 
 interface Props {
-  query: string;
-  setQuery: (query: string) => void;
-  setStatus: (event: string) => void;
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
 }
 
-export const TodoFilter: React.FC<Props> = ({
-  query,
-  setQuery,
-  setStatus,
-}) => {
-  const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(event.target.value);
+export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
+  const [query, setQuery] = useState('');
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFilter(prev => ({ ...prev, status: e.target.value }));
   };
 
-  const queryHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputQuery = e.target.value.toLowerCase().trim();
+
+    setQuery(e.target.value);
+    setFilter(prev => ({ ...prev, title: inputQuery }));
   };
 
-  const deleteHandler = () => {
+  const handleClick = () => {
     setQuery('');
+    setFilter(prev => ({ ...prev, title: '' }));
   };
 
   return (
@@ -29,7 +30,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={selectHandler}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -40,29 +41,32 @@ export const TodoFilter: React.FC<Props> = ({
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
-          value={query}
           data-cy="searchInput"
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={queryHandler}
+          value={query}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
+          <i className="fas fa-search" />
         </span>
 
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right" style={{ cursor: 'pointer' }}>
+          {!!query && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={deleteHandler}
+              onClick={handleClick}
             />
-          </span>
-        )}
+          )}
+
+        </span>
       </p>
     </form>
   );
 };
+
+export default TodoFilter;
