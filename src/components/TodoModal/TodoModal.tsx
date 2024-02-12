@@ -4,10 +4,10 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   selectedTodo: Todo,
   setSelectedTodo: (param: Todo | null) => void,
-};
+}
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
@@ -24,7 +24,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {selectedUser === null ? (
+      {!selectedUser ? (
         <Loader />
       ) : (
         <div className="modal-card">

@@ -18,7 +18,8 @@ export const App: React.FC = () => {
   const [filterInputValue, setFilterInputValue] = useState('');
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos);
   }, []);
 
   const visibleTodos = handleTodoFilter(todos, filterOptionValue, filterInputValue);

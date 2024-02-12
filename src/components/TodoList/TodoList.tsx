@@ -2,11 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[],
   setSelectedTodo: (param: Todo) => void,
   selectedTodo: Todo | null,
-};
+}
 
 export const TodoList: React.FC<Props> = ({
   todos,
