@@ -1,11 +1,8 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext';
-// import { Todo } from '../../types/Todo';
 
-type Props = {};
-
-export const TodoList: React.FC<Props> = () => {
+export const TodoList: React.FC = () => {
   const {
     todos,
     selectedTodo,
@@ -33,14 +30,10 @@ export const TodoList: React.FC<Props> = () => {
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className={
-              classNames(
-                {
-                  'has-background-info-light':
+            className={classNames({
+              'has-background-info-light':
                 selectedTodo?.id === todo.id,
-                },
-              )
-            }
+            })}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -58,6 +51,7 @@ export const TodoList: React.FC<Props> = () => {
               })}
               >
                 {todo.title}
+
               </p>
             </td>
             <td className="has-text-right is-vcentered">

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
 
 export const TodoModal: React.FC = () => {
   const {
@@ -15,6 +16,14 @@ export const TodoModal: React.FC = () => {
   }
   = useContext(TodoContext);
 
+  const { id, title, completed } = selectedTodo as Todo;
+
+  const handleResetModal = () => {
+    setShowModal(!showModal);
+    setUser(null);
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       {user ? (
@@ -26,7 +35,7 @@ export const TodoModal: React.FC = () => {
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                {`Todo #${selectedTodo?.id}`}
+                {`Todo #${id}`}
               </div>
 
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -34,28 +43,23 @@ export const TodoModal: React.FC = () => {
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => {
-                  setShowModal(!showModal);
-                  setUser(null);
-                  setSelectedTodo(null);
-                }}
+                onClick={handleResetModal}
               />
             </header>
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {selectedTodo?.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
                 <strong
                   className={classNames({
-                    'has-text-danger': !selectedTodo?.completed,
-                    'has-text-success': selectedTodo?.completed,
+                    'has-text-danger': !completed,
+                    'has-text-success': completed,
                   })}
                 >
-                  {selectedTodo?.completed ? 'Done' : 'Planned'}
+                  {completed ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}

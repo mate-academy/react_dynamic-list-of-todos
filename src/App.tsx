@@ -10,7 +10,7 @@ import { TodoContext, TodoProvider } from './components/TodoContext';
 import { Loader } from './components/Loader';
 
 export const AppContent: React.FC = () => {
-  const { todos, selectedTodo } = useContext(TodoContext);
+  const { todos, selectedTodo, query } = useContext(TodoContext);
 
   return (
     <>
@@ -24,7 +24,10 @@ export const AppContent: React.FC = () => {
             </div>
 
             <div className="block">
-              { todos.length ? (<TodoList />) : (<Loader />)}
+              { todos.length ? (<TodoList />
+              ) : (
+                query === '' && <Loader />
+              )}
             </div>
           </div>
         </div>
@@ -34,10 +37,8 @@ export const AppContent: React.FC = () => {
   );
 };
 
-export const App: React.FC = () => {
-  return (
-    <TodoProvider>
-      <AppContent />
-    </TodoProvider>
-  );
-};
+export const App: React.FC = () => (
+  <TodoProvider>
+    <AppContent />
+  </TodoProvider>
+);
