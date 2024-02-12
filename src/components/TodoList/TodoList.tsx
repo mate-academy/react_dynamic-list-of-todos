@@ -17,6 +17,12 @@ export const TodoList: React.FC<Props> = ({
   // eslint-disable-next-line max-len
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | null>(null);
 
+  const handleButtonClick = (todo: Todo, index:number) => {
+    selectTodo(todo);
+    setViewChecker(true);
+    setSelectedButtonIndex(index);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -63,9 +69,7 @@ export const TodoList: React.FC<Props> = ({
             <td className="has-text-right is-vcentered">
               <button
                 onClick={() => {
-                  selectTodo(todo);
-                  setViewChecker(true);
-                  setSelectedButtonIndex(index);
+                  handleButtonClick(todo, index);
                 }}
                 data-cy="selectButton"
                 className="button"

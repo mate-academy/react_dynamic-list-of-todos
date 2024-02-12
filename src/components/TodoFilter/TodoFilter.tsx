@@ -1,4 +1,5 @@
 import React from 'react';
+import { FilterEnum } from '../../utils/utils';
 
 type Props = {
   setFilter: (value:React.ChangeEvent<HTMLSelectElement>) => void,
@@ -22,17 +23,17 @@ export const TodoFilter:React.FC<Props> = ({
             data-cy="statusSelect"
           >
             <option
-              value="all"
+              value={FilterEnum.ALL}
             >
               All
             </option>
             <option
-              value="active"
+              value={FilterEnum.ACTIVE}
             >
               Active
             </option>
             <option
-              value="completed"
+              value={FilterEnum.COMPLETE}
             >
               Completed
             </option>

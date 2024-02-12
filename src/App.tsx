@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import { FilterEnum, getFilterTodos, inputFilterTodos } from './utils/utils';
 import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -10,46 +11,11 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
-export const FILTER_ALL = 'all';
-export const FILTER_COMPLETE = 'completed';
-export const FILTER_ACTIVE = 'active';
-
-function getFilterTodos(todos:Todo[], filter:string):Todo[] {
-  const preparedTodos = [...todos];
-
-  if (filter === FILTER_ALL) {
-    return preparedTodos;
-  }
-
-  if (filter === FILTER_COMPLETE) {
-    return preparedTodos.filter(todo => todo.completed);
-  }
-
-  if (filter === FILTER_ACTIVE) {
-    return preparedTodos.filter(todo => !todo.completed);
-  }
-
-  return preparedTodos;
-}
-
-function inputFilterTodos(todos:Todo[], query:string) {
-  const normalizedQuery = query.trim().toLowerCase();
-  let copyTodos = [...todos];
-
-  if (normalizedQuery) {
-    copyTodos = copyTodos.filter(
-      todo => todo.title.toLowerCase().includes(normalizedQuery),
-    );
-  }
-
-  return copyTodos;
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState(FILTER_ALL);
+  const [filter, setFilter] = useState<FilterEnum>(FilterEnum.ALL);
   const [inputFilter, setInputFilter] = useState('');
   const [viewChecker, setViewChecker] = useState(false);
 
@@ -65,7 +31,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filterChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value as FilterEnum);
   };
 
   const selectTodo = (item: Todo) => {
