@@ -26,7 +26,7 @@ export const AppContent: React.FC = () => {
             <div className="block">
               { todos.length ? (<TodoList />
               ) : (
-                query === '' && <Loader />
+                !query && <Loader />
               )}
             </div>
           </div>

@@ -6,9 +6,9 @@ import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 import { filterData } from '../services';
 
-type Props = {
+interface Props {
   children: React.ReactNode;
-};
+}
 
 export const TodoContext = React.createContext<Context>({
   todos: [] as Todo[],
