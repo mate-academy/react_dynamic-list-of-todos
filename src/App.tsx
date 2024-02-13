@@ -10,11 +10,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { handleTodoFilter } from './services/handleTodoFilter';
+import { FilterBy } from './enums/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterOptionValue, setFilterOptionValue] = useState('all');
+  const [filterOptionValue, setFilterOptionValue] = useState(FilterBy.All);
   const [filterInputValue, setFilterInputValue] = useState('');
 
   useEffect(() => {
