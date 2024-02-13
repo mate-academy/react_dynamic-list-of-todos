@@ -1,45 +1,38 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable max-len */
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-import Loader from './components/Loader';
-import { getTodos, getUser } from './api';
+import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { getFilteredTodos } from './services/getFilteredTodos';
+import { Filter } from './types/Filter';
 
-const App: React.FC = () => {
-  const [todos, setTodos] = useState([]);
-  const [selectedTodo, setSelectedTodo] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState<Filter>({ status: 'all', title: '' });
+
+  const filteredTodos = getFilteredTodos(todos, filter);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        await getTodos();
-        await getUser(1);
-
-        const todosData = await getTodos();
-
-        setTodos(todosData);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    setLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleShowButtonClick = async (todo) => {
+  const handleTodoSelect = (todo: Todo) => {
     setSelectedTodo(todo);
+  };
 
-    setIsLoading(true);
-    const user = await getUser(todo.userId);
-
-    setUserDetails(user);
-    setIsLoading(false);
+  const resetTodo = () => {
+    setSelectedTodo(null);
   };
 
   return (
@@ -50,23 +43,18 @@ const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter setFilter={setFilter} />
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={todos}
-                handleShowButtonClick={handleShowButtonClick}
-              />
+              {loading ? <Loader /> : (
+                <TodoList todos={filteredTodos} selectedTodoId={selectedTodo?.id} onTodoSelect={handleTodoSelect} />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal selectedTodo={selectedTodo} userDetails={userDetails} />
+      {!!selectedTodo && <TodoModal selectedTodo={selectedTodo} onResetTodo={resetTodo} />}
     </>
   );
 };
-
-export default App;

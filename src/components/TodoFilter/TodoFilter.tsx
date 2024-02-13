@@ -1,69 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
+import { Filter } from '../../types/Filter';
 
-const TodoFilter: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+interface Props {
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+}
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatusFilter(event.target.value);
+export const TodoFilter: React.FC<Props> = ({ setFilter }) => {
+  const [query, setQuery] = useState('');
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFilter(prev => ({ ...prev, status: e.target.value }));
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputQuery = e.target.value.toLowerCase().trim();
+
+    setQuery(e.target.value);
+    setFilter(prev => ({ ...prev, title: inputQuery }));
   };
 
-  const handleClearSearch = () => {
-    setSearchQuery('');
+  const handleClick = () => {
+    setQuery('');
+    setFilter(prev => ({ ...prev, title: '' }));
   };
 
   return (
     <form className="field has-addons">
-      <div className="control">
-        <label htmlFor="statusSelect" className="label">
-          Filter by Status:
-        </label>
+      <p className="control">
         <span className="select">
           <select
-            id="statusSelect"
             data-cy="statusSelect"
-            value={statusFilter}
-            onChange={handleStatusChange}
+            onChange={handleSelectChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
         </span>
-      </div>
+      </p>
 
-      <div className="control is-expanded has-icons-left has-icons-right">
-        <label htmlFor="searchInput" className="label visually-hidden">
-          Search:
-        </label>
+      <p className="control is-expanded has-icons-left has-icons-right">
         <input
-          id="searchInput"
           data-cy="searchInput"
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchQuery}
-          onChange={handleSearchChange}
+          value={query}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
+          <i className="fas fa-search" />
         </span>
 
-        {searchQuery && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right" style={{ cursor: 'pointer' }}>
+          {!!query && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleClearSearch}
+              onClick={handleClick}
             />
-          </span>
-        )}
-      </div>
+          )}
+
+        </span>
+      </p>
     </form>
   );
 };

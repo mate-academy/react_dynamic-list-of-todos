@@ -1,22 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
-const TodoModal: React.FC = () => {
-  const [loadingUser, setLoadingUser] = useState(false);
+interface Props {
+  selectedTodo: Todo;
+  onResetTodo: () => void
+}
+
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onResetTodo }) => {
+  const [loading, setLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const { id, title, completed } = selectedTodo;
 
   useEffect(() => {
-    setLoadingUser(true);
-    getUser(1).then(() => {
-      setLoadingUser(false);
-    });
-  }, []);
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .finally(() => setLoading(false));
+  }, [selectedTodo?.userId]);
 
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+    >
       <div className="modal-background" />
 
-      {loadingUser ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -25,7 +37,7 @@ const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -33,22 +45,25 @@ const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
+              onClick={onResetTodo}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
+              {completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
+              <a href={`mailto:${selectedUser?.email}`}>
+                {selectedUser?.name}
               </a>
             </p>
           </div>
@@ -57,5 +72,3 @@ const TodoModal: React.FC = () => {
     </div>
   );
 };
-
-export default TodoModal;
