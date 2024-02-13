@@ -55,7 +55,6 @@ export const TodoModal: React.FC<Props> = ({
               {/* <strong className="has-text-success">Done</strong> */}
               {selectedtodo.completed ? (
                 <strong className="has-text-success">Done</strong>
-
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}

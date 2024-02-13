@@ -82,7 +82,6 @@ export const TodoList: React.FC<Props> = ({
             </td>
           </tr>
         ))}
-
       </tbody>
     </table>
   );

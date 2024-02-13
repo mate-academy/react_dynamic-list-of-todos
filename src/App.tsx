@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { FilterEnum, getFilterTodos, inputFilterTodos } from './utils/utils';
+import { getFilterTodos, inputFilterTodos } from './utils/utils';
 import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilterEnum } from './enums/EnumFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

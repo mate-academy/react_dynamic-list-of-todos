@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterEnum } from '../../utils/utils';
+import { FilterEnum } from '../../enums/EnumFilter';
 
 type Props = {
   setFilter: (value:React.ChangeEvent<HTMLSelectElement>) => void,
@@ -7,6 +7,7 @@ type Props = {
   inputFilter: (event: string) => void,
   inputFilterValue:string,
 };
+
 export const TodoFilter:React.FC<Props> = ({
   setFilter,
   filter,
