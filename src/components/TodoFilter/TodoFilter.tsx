@@ -1,9 +1,10 @@
 import React from 'react';
+import { SortByAction } from '../../types/SortByAction';
 
 type Props = {
   query: string;
   setQuery: (value: string) => void;
-  setSort: (value: string) => void;
+  setSort: (value: SortByAction) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -16,11 +17,11 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={event => setSort(event.target.value)}
+          onChange={(event) => setSort(event.target.value as SortByAction)} // Cast event.target.value to SortByAction
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={SortByAction.All}>All</option>
+          <option value={SortByAction.Active}>Active</option>
+          <option value={SortByAction.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -46,6 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
             type="button"
             className="delete"
             onClick={() => setQuery('')}
+            aria-label="Clear Search"
           />
         </span>
       )}

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { SortByAction } from '../../types/SortByAction';
 
 type Props = {
   todos: Todo[];
   query: string;
-  sortBy: string;
-  selectedTodo?: Todo | null;
+  sortBy: SortByAction;
+  selectedTodo: Todo | null;
   setSelectedTodo: (todo: Todo) => void;
 };
 
 function prepareList(
-  tdL: Todo[],
+  todoList: Todo[],
   searchQuery: string,
-  sortBy: string,
+  sortBy: SortByAction,
 ): Todo[] | [] {
-  let copy = [...tdL];
+  let copy = [...todoList];
 
   if (searchQuery) {
     copy = copy.filter((todo) => todo.title.toLowerCase()
@@ -23,14 +24,12 @@ function prepareList(
   }
 
   switch (sortBy) {
-    case 'active':
+    case SortByAction.Active:
       copy = copy.filter((todo) => !todo.completed);
       break;
-
-    case 'completed':
+    case SortByAction.Completed:
       copy = copy.filter((todo) => todo.completed);
       break;
-
     default:
       return copy;
   }
@@ -41,7 +40,7 @@ function prepareList(
 export const TodoList: React.FC<Props> = ({
   todos = [],
   query = '',
-  sortBy = 'All',
+  sortBy = SortByAction.All,
   selectedTodo = null,
   setSelectedTodo = () => { },
 }) => {
@@ -75,8 +74,10 @@ export const TodoList: React.FC<Props> = ({
             className={cn({
               'has-background-info-light': todo.id === selectedTodo?.id,
             })}
+            key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
+
             <td className="is-vcentered">
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -84,6 +85,7 @@ export const TodoList: React.FC<Props> = ({
                 </span>
               )}
             </td>
+
             <td className="is-vcentered is-expanded">
               <p className={cn({
                 'has-text-danger': !todo.completed,
@@ -93,6 +95,7 @@ export const TodoList: React.FC<Props> = ({
                 {todo.title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 data-cy="selectButton"
