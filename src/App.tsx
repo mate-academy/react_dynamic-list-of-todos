@@ -13,23 +13,19 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = React.useState<Todo[]>([]);
   const [filtredTodos, setFiltredTodos] = React.useState<Todo[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [modal, setModal] = React.useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = React.useState<Todo | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
     getTodos()
       .then((res) => {
-        setLoading(false);
         setTodosFromServer(res);
         setFiltredTodos(res);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
-
-  const handleModal = (value: boolean, todo: Todo) => {
-    setModal(value);
-    setSelectedTodo(todo);
-  };
 
   return (
     <>
@@ -41,26 +37,25 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 todosFromServer={todosFromServer}
-                setFiltredTodos={(v) => setFiltredTodos(v)}
+                setFiltredTodos={setFiltredTodos}
               />
             </div>
 
             <div className="block">
               {loading && <Loader />}
               <TodoList
-                modal={modal}
                 selectedTodo={selectedTodo}
                 todosFromServer={filtredTodos}
-                handleModal={(v, t) => handleModal(v, t)}
+                setSelectedTodo={setSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
-      {modal && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          setModal={(v) => setModal(v)}
+          closeModal={() => setSelectedTodo(null)}
         />
       )}
     </>

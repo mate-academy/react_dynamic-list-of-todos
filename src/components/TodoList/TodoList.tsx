@@ -1,14 +1,14 @@
 import React from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todosFromServer: Todo[];
-  modal: boolean;
   selectedTodo: Todo | null;
-  handleModal: (v:boolean, t:Todo) => void;
+  setSelectedTodo: (t:Todo) => void;
 };
 export const TodoList: React.FC<Props> = ({
-  todosFromServer, handleModal, modal, selectedTodo,
+  todosFromServer, selectedTodo, setSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -51,14 +51,12 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => handleModal(true, todo)}
+              onClick={() => setSelectedTodo(todo)}
             >
               <span className="icon">
-                <i className={
-                  (modal && (todo.id === selectedTodo?.id))
-                    ? 'far fa-eye-slash'
-                    : 'far fa-eye'
-                }
+                <i className={cn('far',
+                  (selectedTodo && (todo.id === selectedTodo?.id))
+                    ? 'fa-eye-slash' : 'fa-eye')}
                 />
               </span>
             </button>

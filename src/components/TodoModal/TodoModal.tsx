@@ -6,16 +6,18 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo | null;
-  setModal: (v: boolean) => void;
+  closeModal: () => void;
 };
-export const TodoModal: React.FC<Props> = ({ todo, setModal }) => {
+export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   const [curentUser, setCurentUser] = React.useState<User>();
   const [loading, setLoading] = React.useState<boolean>(true);
 
   getUser(todo?.userId || 0)
     .then((user) => {
-      setLoading(false);
       setCurentUser(user);
+    })
+    .finally(() => {
+      setLoading(false);
     });
 
   return (
@@ -39,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModal(false)}
+              onClick={() => closeModal()}
             />
           </header>
 
