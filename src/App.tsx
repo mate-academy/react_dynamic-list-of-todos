@@ -10,80 +10,27 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterType } from './types/Filter';
-import { filterActiveOrCompletedTodosBySearchQuery, filterTodosBySearchQuery } from './services/Filtration';
+import { FilterParams } from './types/FilterParams';
+import { getFilteredTodos } from './services/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filterParams, setFilterParams] = useState<FilterParams>({
+    query: '',
+    status: FilterType.ALL,
+  });
+
+  const filteredTodos = getFilteredTodos(todos, filterParams);
 
   useEffect(() => {
     setLoading(true);
     getTodos().then((todosList) => {
       setTodos(todosList);
-      setFilteredTodos(todosList);
       setLoading(false);
     });
   }, []);
-
-  useEffect(() => {
-    let filtered;
-
-    if (searchQuery === '') {
-      switch (filter) {
-        case FilterType.ALL:
-          filtered = todos;
-          break;
-
-        case FilterType.COMPLETED:
-          filtered = todos.filter(todo => todo.completed);
-          break;
-
-        case FilterType.ACTIVE:
-          filtered = todos.filter(todo => !todo.completed);
-          break;
-
-        default:
-          filtered = todos;
-          break;
-      }
-    } else {
-      switch (filter) {
-        case FilterType.ALL:
-          filtered = filterTodosBySearchQuery(todos, searchQuery);
-          break;
-
-        case FilterType.COMPLETED:
-          filtered = filterActiveOrCompletedTodosBySearchQuery(todos, searchQuery, true);
-          break;
-
-        case FilterType.ACTIVE:
-          filtered = filterActiveOrCompletedTodosBySearchQuery(todos, searchQuery, false);
-          break;
-
-        default:
-          filtered = filterTodosBySearchQuery(todos, searchQuery);
-          break;
-      }
-    }
-
-    setFilteredTodos(filtered);
-  }, [todos, filter, searchQuery]);
-
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(e.target.value);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleClearSearch = () => {
-    setSearchQuery('');
-  };
 
   const handleShowModal = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -102,11 +49,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={filter}
-                onFilterChange={handleFilterChange}
-                searchQuery={searchQuery}
-                onSearchChange={handleSearchChange}
-                onClearSearch={handleClearSearch}
+                filterParams={filterParams}
+                setFilterParams={setFilterParams}
               />
             </div>
 

@@ -1,5 +1,5 @@
-export const FilterType = {
-  ALL: 'all',
-  COMPLETED: 'completed',
-  ACTIVE: 'active',
-};
+export enum FilterType {
+  ALL = 'all',
+  COMPLETED = 'completed',
+  ACTIVE = 'active',
+}
