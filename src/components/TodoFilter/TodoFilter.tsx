@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({ setQuery, setFilter, query }) => (
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {query && (
+      {!!query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
