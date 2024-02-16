@@ -19,11 +19,7 @@ export const TodoModal: React.FC = () => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-            />
+            <button type="button" className="delete" data-cy="modal-close" />
           </header>
 
           <div className="modal-card-body">
@@ -37,9 +33,7 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">
-                Leanne Graham
-              </a>
+              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
             </p>
           </div>
         </div>
