@@ -42,6 +42,7 @@ export const TodoModal: React.FC<Props> = ({
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
             <button
               type="button"
               className="delete"
@@ -51,6 +52,8 @@ export const TodoModal: React.FC<Props> = ({
                 setLoading(false);
               }}
             />
+
+
           </header>
 
           <div className="modal-card-body">
@@ -67,9 +70,12 @@ export const TodoModal: React.FC<Props> = ({
               )}
               {' by '}
 
+
               <a href={currentUser?.email}>
                 {currentUser?.name}
               </a>
+
+
             </p>
           </div>
         </div>
