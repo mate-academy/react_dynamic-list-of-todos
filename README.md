@@ -14,7 +14,7 @@ and `Loader` components. Load data from the API and show it using the given comp
 1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is
 loaded and show them using `TodoList` (check the code in the `api.ts`);
 1. Show the `Loader` when waiting any data from the server (check the `components` folder);
-1. Check how the `wait` function is used in the `api.ts` to ensure that `Loader` works as expected;
+1. Check how the `wait` function used in the `api.ts` to ensure that `Loader` works as expected;
 1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
 1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);
 1. Show the Loader while waiting for the user;
@@ -29,4 +29,5 @@ loaded and show them using `TodoList` (check the code in the `api.ts`);
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://
+P-Nazar.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
