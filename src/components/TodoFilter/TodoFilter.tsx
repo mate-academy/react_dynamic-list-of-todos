@@ -1,8 +1,26 @@
-export const TodoFilter = () => (
+type Props = {
+  onFilterSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  filterValue: string,
+  queryValue: string,
+  onQueryDelete: () => void,
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  onFilterSelect,
+  filterValue,
+  onQueryChange,
+  queryValue,
+  onQueryDelete,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filterValue}
+          onChange={onFilterSelect}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,19 +34,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={queryValue}
+        onChange={onQueryChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="clearSearchButton"
-          type="button"
-          className="delete"
-        />
-      </span>
+      {queryValue && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={onQueryDelete}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
