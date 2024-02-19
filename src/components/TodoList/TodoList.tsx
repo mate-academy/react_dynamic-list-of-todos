@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({
 
     return (
       todo.title.toLowerCase().includes(query.trim().toLowerCase())
-      && filterResult);
+&& filterResult);
   });
 
   const openModalWindow = (todo: Todo) => {
