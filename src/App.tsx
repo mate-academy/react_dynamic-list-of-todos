@@ -46,7 +46,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading === true ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

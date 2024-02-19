@@ -14,8 +14,10 @@ export const getFilteredTodos = (
       switch (filter) {
         case Filter.Active:
           return !completed;
+
         case Filter.Completed:
           return completed;
+
         default:
           return true;
       }
