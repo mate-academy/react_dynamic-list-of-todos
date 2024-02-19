@@ -34,6 +34,7 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, unsetTodo }) => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+
             <button
               type="button"
               className="delete"
@@ -60,6 +61,7 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, unsetTodo }) => {
               {" by "}
 
               <a href={`mailto:${user.email}`}>{user.name}</a>
+
             </p>
           </div>
         </div>
