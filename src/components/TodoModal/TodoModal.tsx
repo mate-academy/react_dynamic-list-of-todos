@@ -56,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={closeModalWindow}
             />
-        
+
           </header>
 
           <div className="modal-card-body">
