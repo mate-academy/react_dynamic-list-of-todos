@@ -12,7 +12,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [AllTodos, setAllTodods] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterValue, setFilterValue] = useState('all');
   const [selectedTodo, setSelectedTodo] = useState({
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoader(true);
     getTodos()
-      .then(setAllTodods)
+      .then(setTodos)
       .finally(() => setLoader(false));
   }, []);
 
@@ -53,9 +53,9 @@ export const App: React.FC = () => {
                 <Loader />
               )}
 
-              {!loader && AllTodos.length > 0 && (
+              {!loader && todos.length > 0 && (
                 <TodoList
-                  todos={AllTodos}
+                  todos={todos}
                   query={query}
                   filterValue={filterValue}
                   setSelectedTodo={setSelectedTodo}

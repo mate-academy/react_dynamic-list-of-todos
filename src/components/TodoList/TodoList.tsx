@@ -21,12 +21,18 @@ export const TodoList: React.FC<Props> = ({
   const findedTodos = todos.filter(todo => {
     let filterResult;
 
-    if (filterValue === Status.All) {
-      filterResult = true;
-    } else if (filterValue === Status.Active) {
-      filterResult = todo.completed === false;
-    } else if (filterValue === Status.Completed) {
-      filterResult = todo.completed === true;
+    switch (filterValue) {
+      case Status.All:
+        filterResult = true;
+        break;
+      case Status.Active:
+        filterResult = todo.completed === false;
+        break;
+      case Status.Completed:
+        filterResult = todo.completed === true;
+        break;
+      default:
+        filterResult = true;
     }
 
     return (
@@ -62,7 +68,7 @@ export const TodoList: React.FC<Props> = ({
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              {todo.completed === true && (
+              {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -70,8 +76,8 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p className={cn({
-                'has-text-danger': todo.completed === false,
-                'has-text-success': todo.completed === true,
+                'has-text-danger': !todo.completed,
+                'has-text-success': todo.completed,
               })}
               >
                 {todo.title}
