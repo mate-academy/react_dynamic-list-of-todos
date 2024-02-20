@@ -29,13 +29,13 @@ export const TodoList: React.FC<Props> = ({ todos, modal, setModal }) => {
       <thead>
         <tr>
           <th>#</th>
-          <th>
+          <th aria-label="check">
             <span className="icon">
               <i className="fas fa-check" />
             </span>
           </th>
           <th>Title</th>
-          <th> </th>
+          <th aria-label="line"> </th>
         </tr>
       </thead>
 
@@ -67,12 +67,16 @@ export const TodoList: React.FC<Props> = ({ todos, modal, setModal }) => {
                 {todo.title}
               </p>
             </td>
-            <td className="has-text-right is-vcentered">
+            <td
+              className="has-text-right is-vcentered"
+              aria-label="Task Actions"
+            >
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={e => handleIconClick(e, todo)}
+                aria-label="select Todo"
               >
                 <span className="icon" data-cy="iconCompleted">
                   <i
