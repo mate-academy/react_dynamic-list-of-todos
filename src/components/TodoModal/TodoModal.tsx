@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
-import { getTodos, getUser, wait } from '../../api';
+import { getTodos, getUser } from '../../api';
 
 type Props = {
   modal: boolean;
@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setLoading(true);
-    wait(100);
+    // wait(100);
     if (modal && userId) {
       getUser(userId).then(users => {
         getTodos()
