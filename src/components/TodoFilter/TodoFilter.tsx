@@ -1,17 +1,11 @@
-import { Option } from '../../types/Option';
+import { Status } from '../../types/Status';
 
 type Props = {
-  filterTodos: string;
-  setFilterTodos: (value: string) => void;
+  filterTodos: Status;
+  setFilterTodos: (v: Status) => void;
   searchTodos: string;
   setSearchTodos: (value: string) => void;
 };
-
-const options: Option[] = [
-  { id: 0, value: 'all', title: 'All' },
-  { id: 1, value: 'active', title: 'Active' },
-  { id: 2, value: 'completed', title: 'Completed' },
-];
 
 export const TodoFilter: React.FC<Props> = ({
   filterTodos,
@@ -25,13 +19,11 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filterTodos}
-          onChange={e => setFilterTodos(e.target.value)}
+          onChange={e => setFilterTodos(e.target.value as Status)}
         >
-          {options.map(option => (
-            <option key={option.id} value={option.value}>
-              {option.title}
-            </option>
-          ))}
+          <option value={Status.all}>All</option>
+          <option value={Status.active}>Active</option>
+          <option value={Status.completed}>Completed</option>
         </select>
       </span>
     </p>

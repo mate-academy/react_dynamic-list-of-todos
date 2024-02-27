@@ -9,53 +9,32 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
-function getPreparedTodo(todoList: Todo[], select: string, query: string) {
+function getPreparedTodo(todoList: Todo[], select: Status, query: string) {
   const visibleTodos = [...todoList];
 
-  switch (true) {
-    case select === 'all': {
-      if (query) {
-        return visibleTodos.filter(todo =>
-          todo.title.toLowerCase().includes(query.toLowerCase()),
-        );
+  return visibleTodos
+    .filter(todo =>
+      todo.title.toLowerCase().includes(query.trim().toLowerCase()),
+    )
+    .filter(({ completed }) => {
+      switch (select) {
+        case Status.active:
+          return !completed;
+
+        case Status.completed:
+          return completed;
+
+        default:
+          return visibleTodos;
       }
-
-      return visibleTodos;
-    }
-
-    case select === 'completed': {
-      if (query) {
-        return visibleTodos
-          .filter(todo => todo.completed)
-          .filter(todo =>
-            todo.title.toLowerCase().includes(query.toLowerCase()),
-          );
-      }
-
-      return visibleTodos.filter(todo => todo.completed);
-    }
-
-    case select === 'active': {
-      if (query) {
-        return visibleTodos
-          .filter(todo => !todo.completed)
-          .filter(todo =>
-            todo.title.toLowerCase().includes(query.toLowerCase()),
-          );
-      }
-
-      return visibleTodos.filter(todo => !todo.completed);
-    }
-
-    default:
-      return visibleTodos;
-  }
+    });
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterTodos, setFilterTodos] = useState('all');
+  const [filterTodos, setFilterTodos] = useState(Status.all);
   const [searchTodos, setSearchTodos] = useState('');
   const [loading, setLoading] = useState(false);
   const [modalInfo, setModalInfo] = useState<Todo | null>(null);
