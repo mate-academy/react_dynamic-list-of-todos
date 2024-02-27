@@ -54,7 +54,7 @@ export const TodoList: React.FC<Props> = ({ todos, todoInfo, setTodoInfo }) => {
                   onClick={() => setTodoInfo(todo)}
                 >
                   <span className="icon">
-                    {todoInfo ? (
+                    {todoInfo && todoInfo.id === todo.id ? (
                       <i className="far fa-eye-slash" />
                     ) : (
                       <i className="far fa-eye" />
