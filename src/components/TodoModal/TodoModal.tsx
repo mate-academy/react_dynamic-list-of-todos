@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todoInfo, setTodoInfo }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<User | null>(null);
 
   useEffect(() => {
