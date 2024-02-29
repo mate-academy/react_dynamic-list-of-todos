@@ -19,10 +19,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    getTodos().then(todosList => {
-      setTodos(todosList);
-      setLoading(false);
-    });
+    getTodos()
+      .then(todosList => {
+        setTodos(todosList);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const handleFilterChange = (newFilter: string) => {
