@@ -1,16 +1,16 @@
 type Props = {
   onQueryChange: (query: string) => void;
   onClear: () => void;
-  query: string;
+  hasQuery: string;
   onStatusChange: React.ChangeEventHandler<HTMLSelectElement>;
-  status: string;
+  hasStatus: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   onQueryChange,
-  query,
+  hasQuery,
   onStatusChange,
-  status,
+  hasStatus,
   onClear,
 }) => {
   return (
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={status}
+            value={hasStatus}
             onChange={onStatusChange}
           >
             <option value="all">All</option>
@@ -35,13 +35,13 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={hasQuery}
           onChange={e => onQueryChange(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {query && (
+        {hasQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button

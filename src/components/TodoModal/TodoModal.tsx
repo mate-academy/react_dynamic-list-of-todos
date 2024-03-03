@@ -10,17 +10,17 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ onClear, todo }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loadingUser, setLoadingUser] = useState(true);
+  const [hasUser, setHasUser] = useState<User | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
-      setLoadingUser(true);
+      setIsLoadingUser(true);
       const userData = await getUser(todo.userId);
 
-      setUser(userData);
+      setHasUser(userData);
 
-      setLoadingUser(false);
+      setIsLoadingUser(false);
     };
 
     fetchUser();
@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({ onClear, todo }) => {
     >
       <div className="modal-background" />
 
-      {loadingUser ? (
+      {isLoadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -68,7 +68,7 @@ export const TodoModal: React.FC<Props> = ({ onClear, todo }) => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{user?.name}</a>
+              <a href="mailto:Sincere@april.biz">{hasUser?.name}</a>
             </p>
           </div>
         </div>

@@ -16,22 +16,22 @@ enum Status {
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadingTodos, setLoadingTodos] = useState(false);
-  const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('');
+  const [isTodos, setIsTodos] = useState<Todo[]>([]);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
+  const [hasQuery, setHasQuery] = useState('');
+  const [isSelectedTodo, setIsSelectedTodo] = useState<Todo | null>(null);
+  const [hasStatus, setHasStatus] = useState('All');
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(e.target.value);
+    setHasStatus(e.target.value);
   };
 
-  const filteredTodos = todos.filter(todo =>
-    todo.title.includes(query.toLowerCase()),
+  const filteredTodos = isTodos.filter(todo =>
+    todo.title.toLowerCase().includes(hasQuery.toLowerCase()),
   );
 
   const filteredTodosByStatus = filteredTodos.filter(todo => {
-    switch (status) {
+    switch (hasStatus) {
       case Status.all:
         return true;
 
@@ -47,16 +47,16 @@ export const App: React.FC = () => {
   });
 
   const handleClear = () => {
-    setSelectedTodo(null);
-    setQuery('');
+    setIsSelectedTodo(null);
+    setHasQuery('');
   };
 
   useEffect(() => {
-    setLoadingTodos(true);
+    setIsLoadingTodos(true);
 
     getTodos()
-      .then(setTodos)
-      .finally(() => setLoadingTodos(false));
+      .then(setIsTodos)
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
   return (
@@ -68,26 +68,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQueryChange={setQuery}
+                onQueryChange={setHasQuery}
                 onClear={handleClear}
-                query={query}
+                hasQuery={hasQuery}
                 onStatusChange={handleStatusChange}
-                status={status}
+                hasStatus={hasStatus}
               />
             </div>
 
             <div className="block">
-              {loadingTodos && <Loader />}
+              {isLoadingTodos && <Loader />}
               <TodoList
-                todos={filteredTodosByStatus}
-                onShowModal={setSelectedTodo}
-                selectedTodo={selectedTodo}
+                isTodos={filteredTodosByStatus}
+                onShowModal={setIsSelectedTodo}
+                selectedTodo={isSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo && <TodoModal onClear={handleClear} todo={selectedTodo} />}
+      {isSelectedTodo && (
+        <TodoModal onClear={handleClear} todo={isSelectedTodo} />
+      )}
     </>
   );
 };
