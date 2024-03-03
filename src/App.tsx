@@ -10,9 +10,9 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 enum Status {
-  all = 'All',
-  active = 'Active',
-  completed = 'Completed',
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
 }
 
 export const App: React.FC = () => {
