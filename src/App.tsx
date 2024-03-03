@@ -9,6 +9,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+enum Status {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingTodos, setLoadingTodos] = useState(false);
@@ -21,36 +27,28 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter(todo =>
-    todo.title.toLowerCase().includes(query),
+    todo.title.includes(query.toLowerCase()),
   );
 
   const filteredTodosByStatus = filteredTodos.filter(todo => {
-    if (status === 'all') {
-      return true;
-    }
+    switch (status) {
+      case Status.all:
+        return true;
 
-    if (status === 'active') {
-      return todo.completed === false;
-    }
+      case Status.active:
+        return todo.completed === false;
 
-    if (status === 'completed') {
-      return todo.completed === true;
-    }
+      case Status.completed:
+        return todo.completed === true;
 
-    return true;
+      default:
+        return true;
+    }
   });
-
-  const handleAllTodos = (input: string) => {
-    setQuery(input.toLowerCase());
-  };
 
   const handleClear = () => {
     setSelectedTodo(null);
     setQuery('');
-  };
-
-  const handleShowModal = (todo: Todo) => {
-    setSelectedTodo(todo);
   };
 
   useEffect(() => {
@@ -70,7 +68,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQueryChange={handleAllTodos}
+                onQueryChange={setQuery}
                 onClear={handleClear}
                 query={query}
                 onStatusChange={handleStatusChange}
@@ -82,7 +80,7 @@ export const App: React.FC = () => {
               {loadingTodos && <Loader />}
               <TodoList
                 todos={filteredTodosByStatus}
-                onShowModal={handleShowModal}
+                onShowModal={setSelectedTodo}
                 selectedTodo={selectedTodo}
               />
             </div>
