@@ -1,13 +1,13 @@
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  isTodos: Todo[];
+  todos: Todo[];
   onShowModal: (todo: Todo) => void;
   selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
-  isTodos,
+  todos,
   onShowModal,
   selectedTodo,
 }) => {
@@ -27,8 +27,8 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {isTodos.map(todo => (
-          <tr key={todo.id} data-cy="todo" className="">
+        {todos.map(todo => (
+          <tr key={todo.id} data-cy="todo">
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (

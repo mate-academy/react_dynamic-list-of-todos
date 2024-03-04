@@ -16,17 +16,17 @@ enum Status {
 }
 
 export const App: React.FC = () => {
-  const [isTodos, setIsTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
   const [hasQuery, setHasQuery] = useState('');
-  const [isSelectedTodo, setIsSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [hasStatus, setHasStatus] = useState('All');
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setHasStatus(e.target.value);
   };
 
-  const filteredTodos = isTodos.filter(todo =>
+  const filteredTodos = todos.filter(todo =>
     todo.title.toLowerCase().includes(hasQuery.toLowerCase()),
   );
 
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
   });
 
   const handleClear = () => {
-    setIsSelectedTodo(null);
+    setSelectedTodo(null);
     setHasQuery('');
   };
 
@@ -55,7 +55,7 @@ export const App: React.FC = () => {
     setIsLoadingTodos(true);
 
     getTodos()
-      .then(setIsTodos)
+      .then(setTodos)
       .finally(() => setIsLoadingTodos(false));
   }, []);
 
@@ -77,19 +77,20 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadingTodos && <Loader />}
-              <TodoList
-                isTodos={filteredTodosByStatus}
-                onShowModal={setIsSelectedTodo}
-                selectedTodo={isSelectedTodo}
-              />
+              {isLoadingTodos ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodosByStatus}
+                  onShowModal={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-      {isSelectedTodo && (
-        <TodoModal onClear={handleClear} todo={isSelectedTodo} />
-      )}
+      {selectedTodo && <TodoModal onClear={handleClear} todo={selectedTodo} />}
     </>
   );
 };
