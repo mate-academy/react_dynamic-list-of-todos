@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,22 +17,31 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [type, setType] = useState(Filter.ALL);
 
-  const filter = async (filterType: string) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const dataFetch = await getTodos();
+
+      setData(dataFetch);
+    };
+
+    fetchData();
+  }, []);
+
+  const filter = (filterType: string) => {
     let dataFromServer: undefined | Todo[];
-    const dataFetch = await getTodos();
 
     switch (filterType) {
       case Filter.ALL:
-        dataFromServer = dataFetch;
+        dataFromServer = data;
         break;
       case Filter.ACTIVE:
-        dataFromServer = dataFetch.filter(elem => !elem.completed);
+        dataFromServer = data.filter(elem => !elem.completed);
         break;
       case Filter.COMPLETED:
-        dataFromServer = dataFetch.filter(elem => elem.completed);
+        dataFromServer = data.filter(elem => elem.completed);
         break;
       default:
-        dataFromServer = dataFetch;
+        dataFromServer = data;
         break;
     }
 
@@ -45,14 +54,7 @@ export const App: React.FC = () => {
     return dataFromServer;
   };
 
-  const values = {
-    query,
-    setQuery,
-    filter,
-    setData,
-    type,
-    setType,
-  };
+  const filteredTodos = filter(type);
 
   return (
     <>
@@ -62,13 +64,20 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter values={values} />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                filter={filteredTodos}
+                // setData={setData}
+                // type={type}
+                setType={setType}
+              />
             </div>
 
             <div className="block">
               {data.length > 0 ? (
                 <TodoList
-                  data={data}
+                  data={filteredTodos}
                   setActiveTodo={setActiveTodo}
                   activeTodo={activeTodo}
                 />
