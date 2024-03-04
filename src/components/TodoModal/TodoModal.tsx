@@ -25,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {selectedUser === null ? (
+      {!selectedUser ? (
         <Loader />
       ) : (
         <div className="modal-card">

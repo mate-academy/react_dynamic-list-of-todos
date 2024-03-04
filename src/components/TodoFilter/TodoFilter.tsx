@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { SelectedOptions } from '../../types/SelectedOptions';
 
 type Props = {
   selectedOption: string;
@@ -40,9 +41,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleOptionChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectedOptions.all}>All</option>
+            <option value={SelectedOptions.active}>Active</option>
+            <option value={SelectedOptions.completed}>Completed</option>
           </select>
         </span>
       </p>

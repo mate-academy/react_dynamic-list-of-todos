@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SelectedOptions } from './types/SelectedOptions';
 
 function getFilteredTodos(
   allTodos: Todo[],
@@ -23,10 +24,10 @@ function getFilteredTodos(
   }
 
   switch (selectedOption) {
-    case 'active':
-      return filteredTodos.filter(({ completed }) => completed === false);
+    case SelectedOptions.active:
+      return filteredTodos.filter(({ completed }) => !completed);
 
-    case 'completed':
+    case SelectedOptions.completed:
       return filteredTodos.filter(({ completed }) => completed);
 
     default:
@@ -37,7 +38,9 @@ function getFilteredTodos(
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>('all');
+  const [selectedOption, setSelectedOption] = useState<string>(
+    SelectedOptions.all,
+  );
   const [query, setQuery] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
