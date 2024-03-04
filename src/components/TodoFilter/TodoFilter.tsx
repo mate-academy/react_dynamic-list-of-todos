@@ -1,71 +1,35 @@
-import React, { useCallback, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React, { useCallback } from 'react';
 
 type Props = {
-  todos: Todo[];
-  setViewableTodos: (param: Todo[]) => void;
+  selectedOption: string;
+  query: string;
+  handleSetOption: (option: string) => void;
+  handleSetQuery: (text: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, setViewableTodos }) => {
-  const [selectedOption, setSelectedOption] = useState('all');
-  const [query, setQuery] = useState('');
-
-  const filterTodos = useCallback(
-    (chosenOption: string, inputValue: string): void => {
-      switch (chosenOption) {
-        case 'active':
-          setViewableTodos(
-            todos
-              .filter(({ completed }) => completed === false)
-              .filter(({ title }) =>
-                title.toLowerCase().includes(inputValue.toLowerCase()),
-              ),
-          );
-
-          return;
-
-        case 'completed':
-          setViewableTodos(
-            todos
-              .filter(({ completed }) => completed)
-              .filter(({ title }) =>
-                title.toLowerCase().includes(inputValue.toLowerCase()),
-              ),
-          );
-
-          return;
-
-        default:
-          setViewableTodos(
-            todos.filter(({ title }) =>
-              title.toLowerCase().includes(inputValue.toLowerCase()),
-            ),
-          );
-      }
-    },
-    [todos, setViewableTodos],
-  );
-
+export const TodoFilter: React.FC<Props> = ({
+  selectedOption,
+  query,
+  handleSetOption,
+  handleSetQuery,
+}) => {
   const handleOptionChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedOption(event.target.value);
-      filterTodos(event.target.value, query);
+      handleSetOption(event.target.value);
     },
-    [filterTodos, query],
+    [handleSetOption],
   );
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(e.target.value);
-      filterTodos(selectedOption, e.target.value);
+      handleSetQuery(e.target.value);
     },
-    [filterTodos, selectedOption],
+    [handleSetQuery],
   );
 
   const onButtonDelete = useCallback(() => {
-    setQuery('');
-    filterTodos(selectedOption, '');
-  }, [filterTodos, selectedOption]);
+    handleSetQuery('');
+  }, [handleSetQuery]);
 
   return (
     <form className="field has-addons">

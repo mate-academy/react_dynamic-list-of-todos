@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
-  user: User | null;
   todo: Todo | null;
   reset: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ user, todo, reset }) => {
-  const { name, email } = user || {};
+export const TodoModal: React.FC<Props> = ({ todo, reset }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  if (todo) {
+    const { userId } = todo;
+
+    getUser(userId).then(setSelectedUser);
+  }
+
+  const { name, email } = selectedUser || {};
   const { id, title, completed } = todo || {};
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user === null ? (
+      {selectedUser === null ? (
         <Loader />
       ) : (
         <div className="modal-card">
