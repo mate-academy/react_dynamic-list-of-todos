@@ -30,8 +30,6 @@ export const App: React.FC = () => {
       (todos || [])
         .filter(todo => {
           switch (groupFilter) {
-            case Status.All:
-              return true;
             case Status.Active:
               return !todo.completed;
             case Status.Completed:
@@ -55,7 +53,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={(value: string) => setFilter(value)}
+                setFilter={setFilter}
                 setGroupFilter={setGroupFilter}
               />
             </div>
@@ -65,7 +63,7 @@ export const App: React.FC = () => {
               {!loading && preparedTodos && (
                 <TodoList
                   todos={preparedTodos}
-                  setSelectedPost={todo => setSelectedPost(todo)}
+                  setSelectedPost={setSelectedPost}
                   selectedPostId={selectedPost?.id}
                 />
               )}
@@ -76,7 +74,7 @@ export const App: React.FC = () => {
       {selectedPost && (
         <TodoModal
           selectedPost={selectedPost}
-          setSelectedPost={todo => setSelectedPost(todo)}
+          setSelectedPost={setSelectedPost}
         />
       )}
     </>

@@ -39,7 +39,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setGroupFilter }) => {
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={event => onSelect(event)}>
+          <select data-cy="statusSelect" onChange={onSelect}>
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -54,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setGroupFilter }) => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={event => handleOnChange(event)}
+          onChange={handleOnChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
