@@ -1,48 +1,51 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
 import Filter from '../../types/Filter';
-import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  setData: Dispatch<SetStateAction<[] | Todo[]>>;
+  values: Values;
 }
 
-export const TodoFilter: React.FC<Props> = ({ setData }) => {
-  const [query, setQuery] = useState('');
-  const [type, setType] = useState(Filter.ALL);
-  const filter = async (filterType: string) => {
-    let dataFromServer: undefined | Todo[];
-    const data = await getTodos();
+interface Values {
+  query: string;
+  setQuery: Dispatch<SetStateAction<string>>;
+  filter: (arg: string) => Promise<Todo[]>;
+  setData: Dispatch<SetStateAction<Todo[]>>;
+  type: Filter;
+  setType: Dispatch<SetStateAction<Filter>>;
+}
 
-    switch (filterType) {
-      case Filter.ALL:
-        dataFromServer = data;
-        break;
-      case Filter.ACTIVE:
-        dataFromServer = data.filter(elem => !elem.completed);
-        break;
-      case Filter.COMPLETED:
-        dataFromServer = data.filter(elem => elem.completed);
-        break;
-      default:
-        dataFromServer = data;
-        break;
-    }
+export const TodoFilter: React.FC<Props> = ({ values }) => {
+  const { query, setQuery, filter, setData, setType, type } = values;
+  // const [query, setQuery] = useState('');
+  // const [type, setType] = useState(Filter.ALL);
+  // const filter = async (filterType: string) => {
+  //   let dataFromServer: undefined | Todo[];
+  //   const data = await getTodos();
 
-    if (query.trim() !== '' && query) {
-      return dataFromServer.filter(elem => {
-        return elem.title.toLowerCase().includes(query.toLowerCase());
-      });
-    }
+  //   switch (filterType) {
+  //     case Filter.ALL:
+  //       dataFromServer = data;
+  //       break;
+  //     case Filter.ACTIVE:
+  //       dataFromServer = data.filter(elem => !elem.completed);
+  //       break;
+  //     case Filter.COMPLETED:
+  //       dataFromServer = data.filter(elem => elem.completed);
+  //       break;
+  //     default:
+  //       dataFromServer = data;
+  //       break;
+  //   }
 
-    return dataFromServer;
-  };
+  //   if (query.trim() !== '' && query) {
+  //     return dataFromServer.filter(elem => {
+  //       return elem.title.toLowerCase().includes(query.toLowerCase());
+  //     });
+  //   }
+
+  //   return dataFromServer;
+  // };
 
   const handlechange = (event: ChangeEvent<HTMLSelectElement>) => {
     setType(event.currentTarget.value as Filter);
