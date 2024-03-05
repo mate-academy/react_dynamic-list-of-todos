@@ -1,14 +1,34 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getFilteredTodos } from './taskFilter';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [tasks, setTasks] = useState<Todo[] | null>(null);
+  const [mode, setMode] = useState('all');
+  const [search, setSearch] = useState('');
+  const [isLoading, setisLoading] = useState(false);
+  const [taskInfo, settaskInfo] = useState<Todo | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  useEffect(() => {
+    setisLoading(true);
+    getTodos()
+      .then(setTasks)
+      .catch(() => setErrorMessage('Try Again Later'))
+      .finally(() => setisLoading(false));
+  }, []);
+
+  const filteredTodos = getFilteredTodos(tasks, mode, search);
+
   return (
     <>
       <div className="section">
@@ -17,18 +37,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setMode={setMode}
+                setSearch={setSearch}
+                search={search}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              {!isLoading && !errorMessage && (
+                <TodoList
+                  tasks={filteredTodos}
+                  selectTask={settaskInfo}
+                  taskinfo={taskInfo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {taskInfo && (
+        <TodoModal onClose={() => settaskInfo(null)} taskInfo={taskInfo} />
+      )}
     </>
   );
 };
