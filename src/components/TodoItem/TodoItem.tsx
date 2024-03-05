@@ -13,7 +13,8 @@ export const TodoItem: React.FC<Props> = ({
   activeTodo,
   setActiveTodo,
 }) => {
-  const active = item.id === activeTodo?.id;
+  const { id, completed, title } = item;
+  const active = id === activeTodo?.id;
 
   const handleClick = () => {
     setActiveTodo(item);
@@ -22,10 +23,10 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <tr
       data-cy="todo"
-      className={classNames({ 'has-background-info-light': item.completed })}
+      className={classNames({ 'has-background-info-light': completed })}
     >
-      <td className="is-vcentered">{item.id}</td>
-      {!item.completed ? (
+      <td className="is-vcentered">{id}</td>
+      {!completed ? (
         <td className="is-vcentered" />
       ) : (
         <td className="is-vcentered">
@@ -37,11 +38,11 @@ export const TodoItem: React.FC<Props> = ({
       <td className="is-vcentered is-expanded">
         <p
           className={classNames({
-            'has-text-success': item.completed,
-            'has-text-danger': !item.completed,
+            'has-text-success': completed,
+            'has-text-danger': !completed,
           })}
         >
-          {item.title}
+          {title}
         </p>
       </td>
       <td className="has-text-right is-vcentered">

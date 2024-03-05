@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -6,10 +6,13 @@ import { getUser } from '../../api';
 
 interface Props {
   activeTodo: Todo;
-  setActiveTodo: Dispatch<SetStateAction<Todo | undefined>>;
+  handleSetActiveTodo: (arg: Todo | undefined) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  activeTodo,
+  handleSetActiveTodo,
+}) => {
   const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
@@ -19,7 +22,7 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
   }, []);
 
   const handleClick = () => {
-    setActiveTodo(undefined);
+    handleSetActiveTodo(undefined);
   };
 
   return (

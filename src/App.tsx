@@ -13,9 +13,12 @@ import Filter from './types/Filter';
 
 export const App: React.FC = () => {
   const [data, setData] = useState<Todo[] | []>([]);
-  const [activeTodo, setActiveTodo] = useState<undefined | Todo>(undefined);
+
+  const [activeTodo, setActiveTodo] = useState<Todo | undefined>(undefined);
   const [query, setQuery] = useState('');
   const [type, setType] = useState(Filter.ALL);
+
+  const hasTodo = data.length > 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +29,18 @@ export const App: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const handleSetQuery = (arg: string) => {
+    setQuery(arg);
+  };
+
+  const handleSetType = (arg: Filter) => {
+    setType(arg);
+  };
+
+  const handleSetActiveTodo = (arg: Todo | undefined) => {
+    setActiveTodo(arg);
+  };
 
   const filter = (filterType: string) => {
     let dataFromServer: undefined | Todo[];
@@ -66,16 +81,14 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                handleSetQuery={handleSetQuery}
                 filter={filteredTodos}
-                // setData={setData}
-                // type={type}
-                setType={setType}
+                handleSetType={handleSetType}
               />
             </div>
 
             <div className="block">
-              {data.length > 0 ? (
+              {hasTodo ? (
                 <TodoList
                   data={filteredTodos}
                   setActiveTodo={setActiveTodo}
@@ -90,7 +103,10 @@ export const App: React.FC = () => {
       </div>
 
       {activeTodo && (
-        <TodoModal activeTodo={activeTodo} setActiveTodo={setActiveTodo} />
+        <TodoModal
+          activeTodo={activeTodo}
+          handleSetActiveTodo={handleSetActiveTodo}
+        />
       )}
     </>
   );

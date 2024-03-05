@@ -4,7 +4,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   data: Todo[];
-  activeTodo: undefined | Todo;
+  activeTodo?: Todo;
   setActiveTodo: Dispatch<SetStateAction<undefined | Todo>>;
 }
 

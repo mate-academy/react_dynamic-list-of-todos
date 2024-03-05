@@ -1,37 +1,30 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent } from 'react';
 import Filter from '../../types/Filter';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   query: string;
-  setQuery: Dispatch<SetStateAction<string>>;
+  handleSetQuery: (arg: string) => void;
   filter: Todo[];
-  // setData: Dispatch<SetStateAction<Todo[]>>;
-  // type: Filter;
-  setType: Dispatch<SetStateAction<Filter>>;
+  handleSetType: (arg: Filter) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  setQuery,
-  // filter,
-  setType,
+  handleSetQuery,
+  handleSetType,
 }) => {
   const handlechange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setType(event.currentTarget.value as Filter);
+    handleSetType(event.currentTarget.value as Filter);
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    handleSetQuery(event.target.value);
   };
 
   const clearQuery = () => {
-    setQuery('');
+    handleSetQuery('');
   };
-
-  // useEffect(() => {
-  //   filter;
-  // }, []);
 
   return (
     <form className="field has-addons">
