@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import Filter from '../../types/Filter';
+import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
 
 interface Props {

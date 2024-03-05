@@ -9,16 +9,16 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import Filter from './types/Filter';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [data, setData] = useState<Todo[] | []>([]);
+  const [data, setData] = useState<Todo[]>([]);
 
   const [activeTodo, setActiveTodo] = useState<Todo | undefined>(undefined);
   const [query, setQuery] = useState('');
   const [type, setType] = useState(Filter.ALL);
 
-  const hasTodo = data.length > 0;
+  const hasTodo = !!data;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,9 +46,6 @@ export const App: React.FC = () => {
     let dataFromServer: undefined | Todo[];
 
     switch (filterType) {
-      case Filter.ALL:
-        dataFromServer = data;
-        break;
       case Filter.ACTIVE:
         dataFromServer = data.filter(elem => !elem.completed);
         break;
@@ -91,7 +88,7 @@ export const App: React.FC = () => {
               {hasTodo ? (
                 <TodoList
                   data={filteredTodos}
-                  setActiveTodo={setActiveTodo}
+                  handleSetActiveTodo={handleSetActiveTodo}
                   activeTodo={activeTodo}
                 />
               ) : (

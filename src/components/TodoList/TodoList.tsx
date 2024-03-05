@@ -1,17 +1,17 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   data: Todo[];
   activeTodo?: Todo;
-  setActiveTodo: Dispatch<SetStateAction<undefined | Todo>>;
+  handleSetActiveTodo: (arg: Todo | undefined) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   data,
   activeTodo,
-  setActiveTodo,
+  handleSetActiveTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             item={elem}
             activeTodo={activeTodo}
-            setActiveTodo={setActiveTodo}
+            handleSetActiveTodo={handleSetActiveTodo}
             key={elem.id}
           />
         ))}

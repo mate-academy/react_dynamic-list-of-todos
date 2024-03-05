@@ -1,23 +1,22 @@
 import classNames from 'classnames';
-import { Dispatch, SetStateAction } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   item: Todo;
   activeTodo: undefined | Todo;
-  setActiveTodo: Dispatch<SetStateAction<undefined | Todo>>;
+  handleSetActiveTodo: (arg: Todo | undefined) => void;
 }
 
 export const TodoItem: React.FC<Props> = ({
   item,
   activeTodo,
-  setActiveTodo,
+  handleSetActiveTodo,
 }) => {
   const { id, completed, title } = item;
   const active = id === activeTodo?.id;
 
   const handleClick = () => {
-    setActiveTodo(item);
+    handleSetActiveTodo(item);
   };
 
   return (
