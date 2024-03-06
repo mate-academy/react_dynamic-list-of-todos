@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
   useEffect(() => {
     getTodos()
@@ -37,13 +38,25 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader /> : <TodoList todos={filteredTodos} />}
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  chosenTodo={selectedTodo}
+                  handleSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handleSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
