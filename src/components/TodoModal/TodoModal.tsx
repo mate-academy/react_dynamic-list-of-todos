@@ -16,6 +16,7 @@ export const TodoModal: React.FC<Props> = ({ taskInfo, onClose }) => {
   const { id, title, completed, userId } = taskInfo;
 
   useEffect(() => {
+    setUser(null);
     setisLoading(true);
     getUser(userId)
       .then(setUser)
@@ -42,7 +43,10 @@ export const TodoModal: React.FC<Props> = ({ taskInfo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                setUser(null);
+              }}
             />
           </header>
 

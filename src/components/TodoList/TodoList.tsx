@@ -3,7 +3,7 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  tasks: Todo[] | null;
+  tasks: Todo[];
   selectTask: (arg0: Todo) => void;
   taskinfo: Todo | null;
 };

@@ -29,6 +29,14 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos(tasks, mode, search);
 
+  const onClose = () => {
+    settaskInfo(null);
+  };
+
+  const onActive: (task: Todo) => void = task => {
+    settaskInfo(task);
+  };
+
   return (
     <>
       <div className="section">
@@ -48,8 +56,8 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               {!isLoading && !errorMessage && (
                 <TodoList
-                  tasks={filteredTodos}
-                  selectTask={settaskInfo}
+                  tasks={filteredTodos || []}
+                  selectTask={onActive}
                   taskinfo={taskInfo}
                 />
               )}
@@ -57,9 +65,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {taskInfo && (
-        <TodoModal onClose={() => settaskInfo(null)} taskInfo={taskInfo} />
-      )}
+      {taskInfo && <TodoModal onClose={onClose} taskInfo={taskInfo} />}
     </>
   );
 };
