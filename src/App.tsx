@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [tasks, setTasks] = useState<Todo[] | null>(null);
   const [mode, setMode] = useState('all');
   const [search, setSearch] = useState('');
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
   const [taskInfo, settaskInfo] = useState<Todo | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
