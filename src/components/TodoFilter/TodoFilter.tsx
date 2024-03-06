@@ -17,6 +17,8 @@ function getPreparedTodos(
       case 'active':
         preparedTodos = preparedTodos.filter(todo => todo.completed === false);
         break;
+      case 'all':
+        break;
       default:
         return preparedTodos;
     }
@@ -41,11 +43,16 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
   const [query, setQuery] = useState<string>('');
 
   const changeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     setQuery(e.target.value);
   };
 
   const handleSortingField = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortingField(e.target.value as SortingField);
+  };
+
+  const handleClearInput = () => {
+    setQuery('');
   };
 
   useEffect(() => {
@@ -84,8 +91,15 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button data-cy="clearSearchButton" type="button" className="delete" />
+          {query.length > 0 && (
+            // eslint-disable-next-line jsx-a11y/control-has-associated-label
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClearInput}
+            />
+          )}
         </span>
       </p>
     </form>
