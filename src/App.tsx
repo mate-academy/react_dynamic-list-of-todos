@@ -46,7 +46,6 @@ export const App: React.FC = () => {
             <Loader />
           ) : (
             <div className="block">
-              {isLoading && <Loader />}
               <TodoList todos={vsibleTodos} />
             </div>
           )}

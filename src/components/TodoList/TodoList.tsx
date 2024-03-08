@@ -8,11 +8,9 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const [isModal, setIsModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleOnClick = (todo: Todo) => {
-    setIsModal(true);
     setSelectedTodo(todo);
   };
 
@@ -36,7 +34,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           {todos.map(todo => (
             <tr
               data-cy="todo"
-              className={cn({ 'has-background-info-light': isModal })}
+              className={cn({ 'has-background-info-light': selectedTodo })}
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
@@ -80,10 +78,9 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         </tbody>
       </table>
 
-      {isModal && (
+      {selectedTodo && (
         <TodoModal
-          todo={selectedTodo as Todo}
-          setIsModal={setIsModal}
+          todo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
       )}

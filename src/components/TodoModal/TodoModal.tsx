@@ -7,13 +7,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  setIsModal,
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -25,10 +23,9 @@ export const TodoModal: React.FC<Props> = ({
     getUsers(todo.userId)
       .then(setUser)
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [todo.userId]);
 
   const handleCloseModal = () => {
-    setIsModal(false);
     setSelectedTodo(null);
   };
 
