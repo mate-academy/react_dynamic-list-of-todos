@@ -53,7 +53,7 @@ export const App: React.FC = () => {
   const handleInput = (value?: string) => {
     if (value) {
       setFilteredTodos(
-        todos.filter((t: Todo) => t.title.includes(value.trim())),
+        todos.filter((t: Todo) => t.title.includes(value.trim().toLowerCase())),
       );
     } else {
       setFilteredTodos(todos);
