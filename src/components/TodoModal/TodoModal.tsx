@@ -16,6 +16,8 @@ export const TodoModal: React.FC<Props> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const { title, completed, id } = selectTodo;
+
   useEffect(() => {
     getUser(selectTodo?.userId)
       .then(setUser)
@@ -36,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-header"
             >
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              {`Todo #${selectTodo?.id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -50,11 +52,11 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectTodo?.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectTodo.completed === true ? (
+              {completed === true ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
@@ -62,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{user?.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

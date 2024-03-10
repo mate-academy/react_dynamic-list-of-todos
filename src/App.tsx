@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(Filter.ALL);
   const [queryFilter, setQueryFilter] = useState('');
-  // const [viewChecker, setViewChecker] = useState(false)
 
   function getFilterTodos(todose: Todo[], filters: string, query: string) {
     let preparedTodos = [...todose];
@@ -79,7 +78,9 @@ export const App: React.FC = () => {
             <div className="block">
               {todosLoading && <Loader />}
 
-              <TodoList todos={visibleTodos} onSelect={setSelectTodo} />
+							{!todosLoading && (<TodoList todos={visibleTodos} onSelect={setSelectTodo} selectedTodo ={selectTodo}/>)}
+
+              
             </div>
           </div>
         </div>

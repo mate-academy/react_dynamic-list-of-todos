@@ -5,9 +5,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onSelect?: (tod: Todo) => void;
+	selectedTodo: Todo | null
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect = () => {} }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelect = () => {},
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -25,18 +30,26 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect = () => {} }) => {
 
       <tbody>
         {todos.map((todo) => {
+          const { id, completed, title } = todo;
+
           return (
-            <tr data-cy="todo" className="" key={todo.id}>
-              <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered" />
+            <tr data-cy="todo" className="" key={id}>
+              <td className="is-vcentered">{id}</td>
+              <td className="is-vcentered">
+                <i
+                  className={classNames('fas', {
+                    'fa-check': completed === true,
+                  })}
+                />
+              </td>
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames({
-                    'has-text-danger': !todo.completed,
-                    'has-text-success': todo.completed,
+                    'has-text-danger': !completed,
+                    'has-text-success': completed,
                   })}
                 >
-                  {todo.title}
+                  {title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
@@ -47,7 +60,11 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect = () => {} }) => {
                   type="button"
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    {selectedTodo?.id === id ? (
+                      <i className="far fa-eye-slash" />
+                    ) : (
+                      <i className="far fa-eye" />
+                    )}
                   </span>
                 </button>
               </td>
