@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onSelect?: (tod: Todo) => void;
-	selectedTodo: Todo | null
+  selectedTodo: Todo | null
 };
 
 export const TodoList: React.FC<Props> = ({

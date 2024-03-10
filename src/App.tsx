@@ -78,9 +78,8 @@ export const App: React.FC = () => {
             <div className="block">
               {todosLoading && <Loader />}
 
-							{!todosLoading && (<TodoList todos={visibleTodos} onSelect={setSelectTodo} selectedTodo ={selectTodo}/>)}
+              {!todosLoading && (<TodoList todos={visibleTodos} onSelect={setSelectTodo} selectedTodo={selectTodo} />)}
 
-              
             </div>
           </div>
         </div>
