@@ -24,15 +24,17 @@ export const TodoList: React.FC<Props> = ({ tasks, selectTask, taskinfo }) => (
     </thead>
     <tbody>
       {tasks?.map(task => {
+        const { id, completed, title } = task;
+
         return (
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': taskinfo?.id === task.id,
+              'has-background-info-light': taskinfo?.id === id,
             })}
-            key={task.id}
+            key={id}
           >
-            <td className="is-vcentered">{task.id}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
               {task.completed && (
                 <span className="icon" data-cy="iconCompleted">
@@ -41,12 +43,8 @@ export const TodoList: React.FC<Props> = ({ tasks, selectTask, taskinfo }) => (
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  task.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {task.title}
+              <p className={completed ? 'has-text-success' : 'has-text-danger'}>
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -59,8 +57,8 @@ export const TodoList: React.FC<Props> = ({ tasks, selectTask, taskinfo }) => (
                 <span className="icon">
                   <i
                     className={classNames({
-                      'far fa-eye': taskinfo?.id !== task.id,
-                      'far fa-eye-slash': taskinfo?.id === task.id,
+                      'far fa-eye': taskinfo?.id !== id,
+                      'far fa-eye-slash': taskinfo?.id === id,
                     })}
                   />
                 </span>

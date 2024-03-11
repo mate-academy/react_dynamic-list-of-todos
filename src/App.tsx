@@ -10,13 +10,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getFilteredTodos } from './taskFilter';
 import { Todo } from './types/Todo';
+import { State } from './types/enumState';
 
 export const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Todo[] | null>(null);
-  const [mode, setMode] = useState('all');
+  const [tasks, setTasks] = useState<Todo[]>([]);
+  const [mode, setMode] = useState<State | string>(State.all);
   const [search, setSearch] = useState('');
   const [isLoading, setisLoading] = useState(true);
-  const [taskInfo, settaskInfo] = useState<Todo | null>(null);
+  const [taskInfo, setTaskInfo] = useState<Todo | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
@@ -30,11 +31,11 @@ export const App: React.FC = () => {
   const filteredTodos = getFilteredTodos(tasks, mode, search);
 
   const onClose = () => {
-    settaskInfo(null);
+    setTaskInfo(null);
   };
 
   const onActive: (task: Todo) => void = task => {
-    settaskInfo(task);
+    setTaskInfo(task);
   };
 
   return (

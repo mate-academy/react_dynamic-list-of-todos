@@ -1,21 +1,22 @@
 import { Todo } from './types/Todo';
+import { State } from './types/enumState';
 
 export const getFilteredTodos = (
-  tasks: Todo[] | null,
-  mode: string,
+  tasks: Todo[],
+  mode: State | string,
   search: string,
 ) => {
   return tasks
-    ?.filter(todo =>
+    .filter(todo =>
       todo.title.toLowerCase().includes(search.trim().toLowerCase()),
     )
     .filter(({ completed }) => {
       switch (mode) {
-        case 'active':
+        case State.active:
           return !completed;
-        case 'completed':
+        case State.completed:
           return completed;
-        case 'all':
+        case State.all:
         default:
           return tasks;
       }
