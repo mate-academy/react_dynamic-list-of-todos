@@ -18,9 +18,14 @@ export const TodoModal: React.FC<Props> = ({ modalInfo, setModal }) => {
       getUser(modalInfo?.userId)
         .then(setUser)
         .finally(() => setLoading(false));
-      console.log(setModal);
     }
   }, [modalInfo, setModal]);
+
+  let id: number | undefined;
+
+  if (modalInfo) {
+    ({ id } = modalInfo);
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -35,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({ modalInfo, setModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{modalInfo?.id}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

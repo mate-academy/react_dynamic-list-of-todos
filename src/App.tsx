@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(elemt => {
+        setLoading(true);
         setPosts(elemt);
       })
       .catch(() => setLoading(true))
@@ -31,7 +32,17 @@ export const App: React.FC = () => {
     return getPreparedTodos(posts, filter, query);
   }, [posts, filter, query]);
 
-  console.log(modalInfo);
+  const handlerFilter = (value: Status) => {
+    setFilter(value);
+  };
+
+  const handlerQuery = (value: string) => {
+    setQuery(value);
+  };
+
+  const handlerModal = (value: Todo) => {
+    setModalInfo(value);
+  };
 
   return (
     <>
@@ -44,8 +55,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 filter={filter}
                 query={query}
-                setFilter={setFilter}
-                setQuery={setQuery}
+                setFilter={handlerFilter}
+                setQuery={handlerQuery}
               />
             </div>
 
@@ -54,7 +65,7 @@ export const App: React.FC = () => {
               <TodoList
                 posts={visableTodos}
                 modalInfo={modalInfo}
-                setModal={setModalInfo}
+                setModal={handlerModal}
               />
             </div>
           </div>
