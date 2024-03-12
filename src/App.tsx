@@ -7,12 +7,13 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './utils/todos';
+
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [todosLoading, setTodosLoading] = useState(false);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(Filter.ALL);
@@ -48,14 +49,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setTodosLoading(true);
-    setTimeout(() => {
-      getTodos()
-        .then((todo) => {
-          setTodos(todo);
-        })
-        .catch(() => {})
-        .finally(() => setTodosLoading(false));
-    }, 1000);
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => setTodosLoading(true))
+      .finally(() => setTodosLoading(false));
   }, []);
 
   const visibleTodos = getFilterTodos(todos, filter, queryFilter);
