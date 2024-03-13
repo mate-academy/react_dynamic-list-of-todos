@@ -5,20 +5,12 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 type Props = {
-  handleModalActive: () => void;
   modalTodo: Todo;
+  unSetModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  handleModalActive,
-  modalTodo,
-}) => {
-  const [user, setUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
+export const TodoModal: React.FC<Props> = ({ modalTodo, unSetModal }) => {
+  const [user, setUser] = useState<User | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({
 
         {loading && <Loader />}
 
-        {!loading && userId === user.id && (
+        {!loading && userId === user?.id && (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -55,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={handleModalActive}
+                onClick={unSetModal}
               />
             </header>
 
@@ -79,7 +71,7 @@ export const TodoModal: React.FC<Props> = ({
           </div>
         )}
 
-        {!loading && userId !== user.id && (
+        {!loading && userId !== user?.id && (
           <div className="modal-card">
             <header className="modal-card-head">
               <div
@@ -94,7 +86,7 @@ export const TodoModal: React.FC<Props> = ({
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={handleModalActive}
+                onClick={unSetModal}
               />
             </header>
           </div>

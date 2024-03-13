@@ -19,13 +19,7 @@ export const App: React.FC = () => {
   const [appliedQuery, setAppliedQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [modalTodo, setModalTodo] = useState<Todo>({
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  });
+  const [modalTodo, setModalTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -53,13 +47,13 @@ export const App: React.FC = () => {
     setFilterBy(newFilter);
   }, []);
 
-  const handleModalActive = useCallback(() => {
-    setIsModalActive(!isModalActive);
-  }, [isModalActive]);
-
   const hanldeModalTodo = useCallback((todo: Todo) => {
     setModalTodo(todo);
   }, []);
+
+  const unSetModal = () => {
+    setModalTodo(null);
+  };
 
   const reset = () => {
     setAppliedQuery('');
@@ -110,10 +104,9 @@ export const App: React.FC = () => {
             <div className="block">
               {!loading && !!todos.length && (
                 <TodoList
-                  isModalActive={isModalActive}
                   todos={getFilteredTodos()}
-                  handleModalActive={handleModalActive}
                   hanldeModalTodo={hanldeModalTodo}
+                  modalTodo={modalTodo}
                 />
               )}
 
@@ -127,12 +120,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalActive && (
-        <TodoModal
-          handleModalActive={handleModalActive}
-          modalTodo={modalTodo}
-        />
-      )}
+      {modalTodo && <TodoModal unSetModal={unSetModal} modalTodo={modalTodo} />}
     </>
   );
 };

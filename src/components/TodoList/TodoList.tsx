@@ -3,19 +3,16 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  isModalActive: boolean;
-  handleModalActive: () => void;
+  modalTodo: Todo | null;
   hanldeModalTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  isModalActive,
-  handleModalActive,
   hanldeModalTodo,
+  modalTodo,
 }) => {
   const setModal = (todo: Todo) => {
-    handleModalActive();
     hanldeModalTodo(todo);
   };
 
@@ -54,7 +51,7 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={`${completed ? 'has-text-success' : 'has-text-danger'}`}
+                  className={completed ? 'has-text-success' : 'has-text-danger'}
                 >
                   {title}
                 </p>
@@ -68,7 +65,7 @@ export const TodoList: React.FC<Props> = ({
                 >
                   <span className="icon">
                     <i
-                      className={`far ${isModalActive ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={`far ${modalTodo ? 'fa-eye-slash' : 'fa-eye'}`}
                     />
                   </span>
                 </button>
