@@ -47,7 +47,6 @@ export const TodoFilter: React.FC<Props> = ({
           placeholder="Search..."
           value={query}
           onChange={handleInputChange}
-          onBlur={reset}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
