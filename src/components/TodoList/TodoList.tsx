@@ -3,12 +3,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  isModalActive: boolean;
   handleModalActive: () => void;
   hanldeModalTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  isModalActive,
   handleModalActive,
   hanldeModalTodo,
 }) => {
@@ -65,7 +67,9 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => setModal(todo)}
                 >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i
+                      className={`far ${isModalActive ? 'fa-eye-slash' : 'fa-eye'}`}
+                    />
                   </span>
                 </button>
               </td>

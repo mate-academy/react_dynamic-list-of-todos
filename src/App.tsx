@@ -110,6 +110,7 @@ export const App: React.FC = () => {
             <div className="block">
               {!loading && !!todos.length && (
                 <TodoList
+                  isModalActive={isModalActive}
                   todos={getFilteredTodos()}
                   handleModalActive={handleModalActive}
                   hanldeModalTodo={hanldeModalTodo}
