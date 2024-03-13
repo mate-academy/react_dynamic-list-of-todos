@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    // ... other options
+    "types": ["node", "lodash"]
+  },
   "extends": "@mate-academy/students-ts-config",
   "include": [
     "src"
