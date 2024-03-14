@@ -35,22 +35,22 @@ export const App: React.FC = () => {
     setQuery(filterQuery);
   };
 
-  const filteredTodos = todos
-    .filter(todo => {
-      switch (filter) {
-        case 'active':
-          return !todo.completed;
+  const filteredTodos = todos.filter(todo => {
+    const searchTodo = todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase().trim());
 
-        case 'completed':
-          return todo.completed;
+    switch (filter) {
+      case 'active':
+        return !todo.completed && searchTodo;
 
-        default:
-          return true;
-      }
-    })
-    .filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase().trim()),
-    );
+      case 'completed':
+        return todo.completed && searchTodo;
+
+      default:
+        return searchTodo;
+    }
+  });
 
   const handleShowModal = (todo: Todo) => {
     setShowModal(true);
