@@ -11,22 +11,24 @@ import { getTodos } from './utils/getTodos';
 import { Todo } from './types/Todo';
 
 import { getPreparedTodos } from './utils/getPrepearedTodos';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isTodosLoading, setIsTodosLoading] = useState(false);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filteredType, setFilteredType] = useState('all');
-
+  const [filterType, setFilterType] = useState(FilterType.All);
+  const [errorMessage, setErrorMessage] = useState('');
   const visibleTodos = useMemo(() => {
-    return getPreparedTodos(todos, filteredType, query);
-  }, [todos, filteredType, query]);
+    return getPreparedTodos(todos, filterType, query);
+  }, [todos, filterType, query]);
 
   useEffect(() => {
     setIsTodosLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => setErrorMessage('Try again later'))
       .finally(() => setIsTodosLoading(false));
   }, []);
 
@@ -41,8 +43,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onSetQuery={setQuery}
-                filteredType={filteredType}
-                onSetFilteredType={setFilteredType}
+                filterType={filterType}
+                onSetFilterType={setFilterType}
               />
             </div>
 
@@ -55,6 +57,7 @@ export const App: React.FC = () => {
                   currentTodo={currentTodo}
                 />
               )}
+              {errorMessage && <p>{errorMessage}</p>}
             </div>
           </div>
         </div>

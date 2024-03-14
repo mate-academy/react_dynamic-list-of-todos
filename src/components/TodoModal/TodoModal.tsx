@@ -38,8 +38,8 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{currentTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
+              aria-label="close modal"
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -49,7 +49,7 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {currentTodo?.title}
+              {currentTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">

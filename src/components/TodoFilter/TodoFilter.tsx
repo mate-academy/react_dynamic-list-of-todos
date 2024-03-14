@@ -3,16 +3,16 @@ import { FilterType } from '../../types/FilterType';
 
 type Props = {
   query: string;
-  filteredType: string;
+  filterType: FilterType;
   onSetQuery: React.Dispatch<React.SetStateAction<string>>;
-  onSetFilteredType: React.Dispatch<React.SetStateAction<string>>;
+  onSetFilterType: React.Dispatch<React.SetStateAction<FilterType>>;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   onSetQuery,
-  filteredType,
-  onSetFilteredType,
+  filterType,
+  onSetFilterType,
 }) => {
   return (
     <form className="field has-addons">
@@ -20,8 +20,10 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            defaultValue={filteredType}
-            onChange={event => onSetFilteredType(event.target.value)}
+            defaultValue={filterType}
+            onChange={event =>
+              onSetFilterType(event.target.value as FilterType)
+            }
           >
             {Object.entries(FilterType).map(type => {
               const [key, value] = type;
@@ -49,8 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right is-right--pointer">
           {query && (
             <button
               aria-label="Clear query"
