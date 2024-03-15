@@ -6,22 +6,21 @@ import { getUser } from '../../api';
 
 interface Props {
   selectedTodo: Todo;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onSelectTodo: (todo: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodo,
-}) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+  const { id, userId, title, completed } = selectedTodo;
+  const handleModalClose = () => onSelectTodo(null);
 
   useEffect(() => {
     setLoading(true);
-    getUser(selectedTodo.userId)
+    getUser(userId)
       .then(setUser)
       .finally(() => setLoading(false));
-  }, [selectedTodo.userId]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,7 +35,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectedTodo.id}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -44,17 +43,17 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={handleModalClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed ? (
+              {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

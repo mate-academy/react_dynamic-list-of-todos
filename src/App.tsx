@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,24 +18,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('All');
 
-  const visibleTodos = [...todos].filter(todo => {
-    const querySearch = todo.title
-      .toLocaleLowerCase()
-      .includes(query.toLocaleLowerCase());
-
-    if (!querySearch) {
-      return false;
-    }
-
-    switch (filter) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+  const visibleTodos = getVisibleTodos(todos, filter, query);
 
   useEffect(() => {
     setLoading(true);
@@ -66,7 +50,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  onSelectTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -74,10 +58,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
+        <TodoModal selectedTodo={selectedTodo} onSelectTodo={setSelectedTodo} />
       )}
     </>
   );
