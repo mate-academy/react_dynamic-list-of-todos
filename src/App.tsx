@@ -57,7 +57,7 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
                   filteredTodos={filteredTodos}
                   modalHandler={modalHandler}

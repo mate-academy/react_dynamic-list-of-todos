@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface PropsList {
@@ -27,45 +28,49 @@ export const TodoList: React.FC<PropsList> = ({
       </thead>
 
       <tbody>
-        {filteredTodos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
-            <td className="is-vcentered">{todo.id}</td>
-            <td className={`is-vcentered ${todo.completed ? 'completed' : ''}`}>
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => modalHandler(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={
-                      todo.id === selectedTodo?.id
-                        ? 'far fa-eye-slash'
-                        : 'far fa-eye'
-                    }
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
-        ))}
+        {filteredTodos.map(todo => {
+          const { title, id, completed } = todo;
+
+          return (
+            <tr data-cy="todo" className="" key={id}>
+              <td className="is-vcentered">{id}</td>
+              <td className={classNames('is-vcentered', { completed })}>
+                {completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p
+                  className={classNames({
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  })}
+                >
+                  {title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => modalHandler(todo)}
+                >
+                  <span className="icon">
+                    <i
+                      className={classNames('far', {
+                        'fa-eye-slash': id === selectedTodo?.id,
+                        'fa-eye': id !== selectedTodo?.id,
+                      })}
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
