@@ -4,30 +4,46 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   todos: Todo[];
-  setFilteredTodos: (filteredTodos: Todo[]) => void;
+  currentFilter: Filter;
+  setFilteredTodos: (todos: Todo[]) => void;
   handleFilterChange: (filter: Filter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   todos,
+  currentFilter,
   setFilteredTodos,
   handleFilterChange,
 }) => {
   const [query, setQuery] = useState('');
 
-  const filterTodos = (newQuery: string) => {
-    const filteredTodos = todos.filter(todo =>
-      todo.title.toLowerCase().includes(newQuery.toLowerCase()),
-    );
+  const filterTodos = (newQuery: string, filter: Filter) => {
+    let filteredTodos = todos;
 
-    setFilteredTodos(filteredTodos);
+    if (filter === Filter.All) {
+      setFilteredTodos(filteredTodos);
+    } else if (filter === Filter.Active) {
+      filteredTodos = todos.filter(todo => !todo.completed);
+      setFilteredTodos(filteredTodos);
+    } else if (filter === Filter.Completed) {
+      filteredTodos = todos.filter(todo => todo.completed);
+      setFilteredTodos(filteredTodos);
+    }
+
+    if (query) {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(newQuery.toLowerCase()),
+      );
+
+      setFilteredTodos(filteredTodos);
+    }
   };
 
   const handleSearchOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = event.target.value;
 
     setQuery(newQuery);
-    filterTodos(newQuery);
+    filterTodos(newQuery, currentFilter);
   };
 
   return (
@@ -36,7 +52,10 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={e => handleFilterChange(e.target.value as Filter)}
+            onChange={e => {
+              handleFilterChange(e.target.value as Filter);
+              filterTodos(query, e.target.value as Filter);
+            }}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

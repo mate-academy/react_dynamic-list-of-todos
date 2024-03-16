@@ -8,9 +8,14 @@ import { getUser } from '../../api';
 type Props = {
   selectedTodo: Todo;
   handleModal: (isOpen: boolean) => void;
+  handleSelectedTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, handleModal }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  handleModal,
+  handleSelectedTodo,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,6 +28,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, handleModal }) => {
         setIsLoading(false);
       });
   }, [selectedTodo]);
+
+  const handleCloseButton = () => {
+    handleModal(false);
+    handleSelectedTodo(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -45,7 +55,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, handleModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => handleModal(false)}
+              onClick={handleCloseButton}
             />
           </header>
 

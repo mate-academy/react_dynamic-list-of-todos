@@ -4,12 +4,16 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
+  modalState: boolean;
+  selectedTodo: Todo | null;
   handleModal: (isOpen: boolean) => void;
   handleSelectedTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  modalState,
+  selectedTodo,
   handleModal,
   handleSelectedTodo,
 }) => {
@@ -35,7 +39,7 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="">
+          <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -62,7 +66,13 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => handleSelectButtonClick(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={classNames('far', {
+                      'fa-eye': !modalState || todo.id !== selectedTodo?.id,
+                      'fa-eye-slash':
+                        modalState && todo.id === selectedTodo?.id,
+                    })}
+                  />
                 </span>
               </button>
             </td>

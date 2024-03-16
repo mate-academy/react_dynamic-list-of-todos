@@ -13,10 +13,11 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [currentFilter, setCurrentFilter] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     setIsLoading(true);
@@ -31,16 +32,6 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleFilterChange = (filter: Filter) => {
-    if (filter === Filter.All) {
-      setFilteredTodos(todos);
-    } else if (filter === Filter.Completed) {
-      setFilteredTodos(todos.filter(todo => todo.completed));
-    } else {
-      setFilteredTodos(todos.filter(todo => !todo.completed));
-    }
-  };
-
   return (
     <>
       <div className="section">
@@ -51,8 +42,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 todos={todos}
+                currentFilter={currentFilter}
                 setFilteredTodos={setFilteredTodos}
-                handleFilterChange={handleFilterChange}
+                handleFilterChange={setCurrentFilter}
               />
             </div>
 
@@ -61,6 +53,8 @@ export const App: React.FC = () => {
 
               <TodoList
                 todos={filteredTodos}
+                modalState={isModal}
+                selectedTodo={selectedTodo}
                 handleModal={setIsModal}
                 handleSelectedTodo={setSelectedTodo}
               />
@@ -70,7 +64,11 @@ export const App: React.FC = () => {
       </div>
 
       {isModal && selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} handleModal={setIsModal} />
+        <TodoModal
+          selectedTodo={selectedTodo}
+          handleModal={setIsModal}
+          handleSelectedTodo={setSelectedTodo}
+        />
       )}
     </>
   );
