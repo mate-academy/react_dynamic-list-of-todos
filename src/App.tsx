@@ -47,7 +47,6 @@ export const App: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
 
   const [query, setQuery] = useState('');
-  const [error, setError] = useState('');
 
   const visibleTodos = getFilteredTodos(todos, selectedOption, query);
 
@@ -55,7 +54,6 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(() => setError('Failed to fetch todos'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -92,7 +90,6 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodo={selectedTodo}
-                  error={error}
                   selectTodo={selectTodo}
                 />
               )}
