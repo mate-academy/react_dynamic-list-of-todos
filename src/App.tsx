@@ -13,11 +13,41 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [currentFilter, setCurrentFilter] = useState<Filter>(Filter.All);
+  const [query, setQuery] = useState('');
+
+  const filterTodos = (newQuery: string, filter: Filter): Todo[] => {
+    let filteredTodos = todos;
+
+    switch (filter) {
+      case Filter.All:
+        break;
+
+      case Filter.Active:
+        filteredTodos = todos.filter(todo => !todo.completed);
+        break;
+
+      case Filter.Completed:
+        filteredTodos = todos.filter(todo => todo.completed);
+        break;
+
+      default:
+        return filteredTodos;
+    }
+
+    if (query) {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(newQuery.toLowerCase()),
+      );
+    }
+
+    return filteredTodos;
+  };
+
+  const filteredTodos = filterTodos(query, currentFilter);
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,7 +55,6 @@ export const App: React.FC = () => {
     getTodos()
       .then(fetchedTodos => {
         setTodos(fetchedTodos);
-        setFilteredTodos(fetchedTodos);
       })
       .finally(() => {
         setIsLoading(false);
@@ -41,9 +70,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todos={todos}
-                currentFilter={currentFilter}
-                setFilteredTodos={setFilteredTodos}
+                searchQuery={query}
+                handleQuery={setQuery}
                 handleFilterChange={setCurrentFilter}
               />
             </div>
