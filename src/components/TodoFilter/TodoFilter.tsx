@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { Dispatch, SetStateAction } from 'react';
 import { Status } from '../../services/filter-types';
 
@@ -54,10 +55,8 @@ export const TodoFilter: React.FC<PropsFilter> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {titles && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
