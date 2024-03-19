@@ -31,6 +31,7 @@ export const TodoList: React.FC<Props> = ({
       <tbody>
         {todos.map(todo => (
           <TodoItem
+            key={todo.id}
             todo={todo}
             todoID={todoID}
             onTodoSelected={onTodoSelected}
