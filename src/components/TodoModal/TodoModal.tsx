@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
@@ -6,11 +6,14 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  modalInfo: Todo;
-  setModalInfo: (todoInfo: Todo | null) => void;
+  modalInfo: Todo,
+  setModalInfo: (todoInfo: Todo | null) => void,
 };
 
-export const TodoModal: React.FC<Props> = ({ modalInfo, setModalInfo }) => {
+export const TodoModal: React.FC<Props> = ({
+  modalInfo,
+  setModalInfo
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
