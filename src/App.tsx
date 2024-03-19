@@ -9,41 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { Status } from './types/Status';
-
-interface Options {
-  [key: string]: string;
-}
-
-const prepareTodos = (todos: Todo[], options: Options): Todo[] => {
-  const { query, filterStatus } = options;
-  let todosCopy = [...todos];
-
-  if (query) {
-    todosCopy = todosCopy.filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase()),
-    );
-  }
-
-  if (filterStatus) {
-    todosCopy = todosCopy.filter(todo => {
-      switch (filterStatus) {
-        case Status.Active: {
-          return !todo.completed;
-        }
-
-        case Status.Completed: {
-          return todo.completed;
-        }
-
-        default:
-          return true;
-      }
-    });
-  }
-
-  return todosCopy;
-};
+import { Status } from './enums/Status';
+import { prepareTodos } from './helpers/prepareTodos';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);

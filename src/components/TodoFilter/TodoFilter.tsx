@@ -1,4 +1,4 @@
-import { Status } from '../../types/Status';
+import { Status } from '../../enums/Status';
 
 type Props = {
   query: string;
@@ -21,9 +21,15 @@ export const TodoFilter: React.FC<Props> = ({
           value={filterStatus}
           onChange={event => setFilterStatus(event.target.value as Status)}
         >
-          <option value={Status.All}>All</option>
-          <option value={Status.Active}>Active</option>
-          <option value={Status.Completed}>Completed</option>
+          {Object.entries(Status).map(type => {
+            const [key, value] = type;
+
+            return (
+              <option key={key} value={value}>
+                {key}
+              </option>
+            );
+          })}
         </select>
       </span>
     </p>
