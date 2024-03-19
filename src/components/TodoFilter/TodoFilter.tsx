@@ -1,45 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-
-type FilterOptions = 'all' | 'active' | 'completed';
-type FilterConfig = {
-  query: string;
-  filterOption: FilterOptions;
-};
-
-function createFilterFn(config: FilterConfig) {
-  const { filterOption, query } = config;
-
-  return (value: Todo): boolean => {
-    if (!value.title.toLowerCase().includes(query.toLowerCase())) {
-      return false;
-    }
-
-    switch (filterOption) {
-      case 'active':
-        return !value.completed;
-
-      case 'completed':
-        return value.completed;
-
-      case 'all':
-      default:
-        return true;
-    }
-  };
-}
+import React from 'react';
+import { FilterConfig } from '../../types/FilterConfig';
 
 type Props = {
-  todos: Todo[];
-  onFilter: (todo: Todo[]) => void;
+  filterConfig: FilterConfig;
+  setFilterConfig: React.Dispatch<React.SetStateAction<FilterConfig>>;
 };
 
-export const TodoFilter: React.FC<Props> = ({ onFilter, todos }) => {
-  const [filterConfig, setFilterConfig] = useState<FilterConfig>({
-    filterOption: 'all',
-    query: '',
-  });
-
+export const TodoFilter: React.FC<Props> = ({
+  filterConfig,
+  setFilterConfig,
+}) => {
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -50,10 +20,6 @@ export const TodoFilter: React.FC<Props> = ({ onFilter, todos }) => {
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    onFilter(todos.filter(createFilterFn(filterConfig)));
-  }, [filterConfig, todos, onFilter]);
 
   return (
     <form className="field has-addons">
