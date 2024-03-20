@@ -10,6 +10,31 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { User } from './types/User';
+import { FilteredOptions } from './types/FilteredOptions';
+
+function handleFilteredTodos(
+  todos: Todo[],
+  optionSelected: FilteredOptions,
+  query: string,
+) {
+  let filteredTodos = [...todos];
+
+  if (query) {
+    filteredTodos = filteredTodos.filter(todo =>
+      todo.title.toLowerCase().includes(query.toLowerCase().trim()),
+    );
+  }
+
+  switch (optionSelected) {
+    case FilteredOptions.active:
+      return filteredTodos.filter(todo => !todo.completed);
+    case FilteredOptions.completed:
+      return filteredTodos.filter(todo => todo.completed);
+
+    default:
+      return filteredTodos;
+  }
+}
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -18,6 +43,9 @@ export const App: React.FC = () => {
   const [isModal, setIsModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
+  const [optionSelected, setOptionSelected] = useState<FilteredOptions>(
+    FilteredOptions.all,
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -25,7 +53,6 @@ export const App: React.FC = () => {
       .then(setTodosFromServer)
       .finally(() => setLoading(false));
   }, []);
-
   function getUserById(userId: number) {
     return usersFromServer.find(user => user.id === userId) || null;
   }
@@ -35,11 +62,9 @@ export const App: React.FC = () => {
     user: getUserById(todo.userId),
   }));
 
-  const filteredTodos = !query
-    ? todos
-    : [...todos].filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase().trim()),
-    );
+  const preparedTodos = handleFilteredTodos(todos, optionSelected, query);
+  const handleSetOption = (option: FilteredOptions) =>
+    setOptionSelected(option);
 
   return (
     <>
@@ -52,7 +77,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                addTodos={setTodosFromServer}
+                optionSelected={optionSelected}
+                handleSetOption={handleSetOption}
               />
             </div>
 
@@ -61,7 +87,7 @@ export const App: React.FC = () => {
               {!loading && todosFromServer.length > 0 && (
                 <TodoList
                   changeModal={setIsModal}
-                  todos={filteredTodos}
+                  todos={preparedTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                   isModal={isModal}

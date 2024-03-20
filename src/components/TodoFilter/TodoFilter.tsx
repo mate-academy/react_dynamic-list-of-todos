@@ -1,33 +1,21 @@
-import React, { useState } from 'react';
-import { getTodos, getComplidetTodos, getActiveTodos } from '../../api/todos';
-import { Todo } from '../../types/Todo';
-// import { event } from 'cypress/types/jquery';
+import React from 'react';
+import { FilteredOptions } from '../../types/FilteredOptions';
 
 type Props = {
   query: string;
-  addTodos: (todo: Todo[]) => void;
   setQuery: (query: string) => void;
+  optionSelected: string;
+  handleSetOption: (option: FilteredOptions) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ query, setQuery, addTodos }) => {
-  const [filterSelected, setFilterSelected] = useState('All');
-
-  const handleFiltredTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilterSelected = event.target.value;
-
-    setFilterSelected(newFilterSelected);
-
-    switch (newFilterSelected) {
-      case 'active':
-        getActiveTodos().then(addTodos);
-        break;
-      case 'completed':
-        getComplidetTodos().then(addTodos);
-
-        break;
-      default:
-        getTodos().then(addTodos);
-    }
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  setQuery,
+  optionSelected,
+  handleSetOption,
+}) => {
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    handleSetOption(event.target.value as FilteredOptions);
   };
 
   return (
@@ -36,8 +24,8 @@ export const TodoFilter: React.FC<Props> = ({ query, setQuery, addTodos }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={filterSelected}
-            onChange={handleFiltredTodos}
+            value={optionSelected}
+            onChange={handleOptionChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
