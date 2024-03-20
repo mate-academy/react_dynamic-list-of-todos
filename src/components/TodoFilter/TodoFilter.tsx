@@ -7,15 +7,9 @@ type Props = {
   query: string;
   addTodos: (todo: Todo[]) => void;
   setQuery: (query: string) => void;
-  todos: Todo[];
 };
 
-export const TodoFilter: React.FC<Props> = ({
-  query,
-  setQuery,
-  addTodos,
-  // todos,
-}) => {
+export const TodoFilter: React.FC<Props> = ({ query, setQuery, addTodos }) => {
   const [filterSelected, setFilterSelected] = useState('All');
 
   const handleFiltredTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -53,7 +53,6 @@ export const App: React.FC = () => {
                 query={query}
                 setQuery={setQuery}
                 addTodos={setTodosFromServer}
-                todos={todosFromServer}
               />
             </div>
 
