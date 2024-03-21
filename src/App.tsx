@@ -51,10 +51,11 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-
-  const preparedTodos = handleFilteredTodos(todosFromServer, optionSelected, query);
-  const handleSetOption = (option: FilteredOptions) =>
-    setOptionSelected(option);
+  const preparedTodos = handleFilteredTodos(
+    todosFromServer,
+    optionSelected,
+    query,
+  );
 
   return (
     <>
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
                 query={query}
                 setQuery={setQuery}
                 optionSelected={optionSelected}
-                handleSetOption={handleSetOption}
+                handleSetOption={option => setOptionSelected(option)}
               />
             </div>
 
