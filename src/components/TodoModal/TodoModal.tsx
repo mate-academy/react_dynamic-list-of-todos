@@ -5,11 +5,14 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  closeModal: (modal: boolean) => void;
+  setSelectedTodo: (selectedTodo: Todo | null) => void;
   selectedTodo: Todo;
 };
 
-export const TodoModal: React.FC<Props> = ({ closeModal, selectedTodo }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -37,7 +40,8 @@ export const TodoModal: React.FC<Props> = ({ closeModal, selectedTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => closeModal(false)}
+              // onClick={() => closeModal(false)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
@@ -55,10 +59,7 @@ export const TodoModal: React.FC<Props> = ({ closeModal, selectedTodo }) => {
 
               {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>
-                {/* {selectedTodo?.user?.name} */}
-                {selectedUser?.name}
-              </a>
+              <a href={`mailto:${selectedUser?.email}`}>{selectedUser?.name}</a>
             </p>
           </div>
         </div>

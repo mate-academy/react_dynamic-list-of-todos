@@ -3,21 +3,16 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
-  isModal: boolean;
-  changeModal: (isModal: boolean) => void;
   selectedTodo: Todo | null;
   setSelectedTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  changeModal,
   selectedTodo,
   setSelectedTodo,
-  isModal,
 }) => {
   const handleButtonSubmit = (todo: Todo) => {
-    changeModal(true);
     setSelectedTodo(todo);
   };
 
@@ -67,9 +62,7 @@ export const TodoList: React.FC<Props> = ({
                   <i
                     className={cn(
                       'far',
-                      selectedTodo?.id === todo.id && isModal
-                        ? 'fa-eye-slash'
-                        : 'fa-eye',
+                      selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye',
                     )}
                   />
                 </span>

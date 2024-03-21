@@ -39,8 +39,7 @@ function handleFilteredTodos(
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [usersFromServer] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [isModal, setIsModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [optionSelected, setOptionSelected] = useState<FilteredOptions>(
@@ -48,10 +47,10 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodosFromServer)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
   function getUserById(userId: number) {
     return usersFromServer.find(user => user.id === userId) || null;
@@ -83,22 +82,23 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todosFromServer.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && todosFromServer.length > 0 && (
                 <TodoList
-                  changeModal={setIsModal}
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
-                  isModal={isModal}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodo && isModal && (
-        <TodoModal closeModal={setIsModal} selectedTodo={selectedTodo} />
+      {selectedTodo && (
+        <TodoModal
+          setSelectedTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+        />
       )}
     </>
   );
