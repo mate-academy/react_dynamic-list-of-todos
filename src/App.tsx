@@ -9,7 +9,6 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { User } from './types/User';
 import { FilteredOptions } from './types/FilteredOptions';
 
 function handleFilteredTodos(
@@ -38,7 +37,6 @@ function handleFilteredTodos(
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [usersFromServer] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -52,16 +50,9 @@ export const App: React.FC = () => {
       .then(setTodosFromServer)
       .finally(() => setIsLoading(false));
   }, []);
-  function getUserById(userId: number) {
-    return usersFromServer.find(user => user.id === userId) || null;
-  }
 
-  const todos = todosFromServer.map(todo => ({
-    ...todo,
-    user: getUserById(todo.userId),
-  }));
 
-  const preparedTodos = handleFilteredTodos(todos, optionSelected, query);
+  const preparedTodos = handleFilteredTodos(todosFromServer, optionSelected, query);
   const handleSetOption = (option: FilteredOptions) =>
     setOptionSelected(option);
 

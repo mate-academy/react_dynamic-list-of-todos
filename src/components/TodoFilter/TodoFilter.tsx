@@ -27,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={optionSelected}
             onChange={handleOptionChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{ FilteredOptions.all}</option>
+            <option value="active">{ FilteredOptions.active}</option>
+            <option value="completed">{ FilteredOptions.completed}</option>
           </select>
         </span>
       </p>
