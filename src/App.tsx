@@ -10,9 +10,36 @@ import { Loader } from './components/Loader';
 import { getTodos } from './services/todo';
 import { Todo } from './types/Todo';
 
+function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
+  const preparedTodos = tododos.filter(tododo => {
+    if (query === 'active') {
+      return tododo.completed === false;
+    } else if (query === 'completed') {
+      return tododo.completed === true;
+    } else {
+      return tododos;
+    }
+  });
+
+  let readyTodos;
+
+  if (queryInput !== '') {
+    readyTodos = preparedTodos.filter(readyTodo =>
+      readyTodo.title.includes(queryInput),
+    );
+
+    return readyTodos;
+  }
+
+  return preparedTodos;
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectChecked, setSelectChecked] = useState('all');
+  const [textInput, setTextInput] = useState('');
+  //const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -20,6 +47,8 @@ export const App: React.FC = () => {
       .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
+
+  const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
 
   return (
     <>
@@ -29,13 +58,17 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                checkedQuery={setSelectChecked}
+                textInput={textInput}
+                instTextInput={setTextInput}
+              />
             </div>
 
             <div className="block">
               {loading && <Loader />}
 
-              <TodoList todos={todos} />
+              <TodoList todos={visibleTodos} />
             </div>
           </div>
         </div>
