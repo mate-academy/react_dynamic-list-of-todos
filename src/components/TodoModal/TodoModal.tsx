@@ -5,7 +5,7 @@ import { getData } from '../../utils/httpClient';
 
 type Props = {
   user: User | null;
-}
+};
 
 function getUser(user: User): Promise<User> {
   return getData(`/users/${user.id}.json`);
@@ -14,13 +14,16 @@ function getUser(user: User): Promise<User> {
 export const TodoModal: React.FC<Props> = ({ user }) => {
   const [loadingModal, setLoadingModal] = useState(false);
   const [userSt, setUserSt] = useState<User | null>(null);
+
   useEffect(() => {
     setLoadingModal(true);
     if (user !== null) {
-      getUser(user).then(setUserSt).finally(() => setLoadingModal(false));
+      getUser(user)
+        .then(setUserSt)
+        .finally(() => setLoadingModal(false));
     }
-  }, []);
-  
+  }, [user]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

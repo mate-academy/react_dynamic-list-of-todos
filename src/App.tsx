@@ -53,14 +53,11 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
-    getUsers()
-      .then(setUsers);
+    getUsers().then(setUsers);
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
   const checkedUser = getUserById(users, checkedTodoId);
-  
-  
 
   return (
     <>
@@ -80,15 +77,13 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              <TodoList todos={visibleTodos} checkedTodoId={setCheckedTodoId}/>
+              <TodoList todos={visibleTodos} checkedTodoId={setCheckedTodoId} />
             </div>
           </div>
         </div>
       </div>
 
-      {checkedTodoId > 0 && (
-        <TodoModal user={checkedUser}/>
-      )}
+      {checkedTodoId > 0 && <TodoModal user={checkedUser} />}
     </>
   );
 };

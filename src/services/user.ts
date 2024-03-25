@@ -1,4 +1,4 @@
-import { User } from "../types/User";
+import { User } from '../types/User';
 import { getData } from '../utils/httpClient';
 
 export function getUsers() {

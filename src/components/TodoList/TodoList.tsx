@@ -45,9 +45,9 @@ export const TodoList: React.FC<Props> = ({ todos, checkedTodoId }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button 
-                data-cy="selectButton" 
-                className="button" 
+              <button
+                data-cy="selectButton"
+                className="button"
                 type="button"
                 onClick={() => checkedTodoId(todo.userId)}
               >
