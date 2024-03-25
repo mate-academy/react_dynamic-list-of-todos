@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
