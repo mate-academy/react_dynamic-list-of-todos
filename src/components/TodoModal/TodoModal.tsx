@@ -15,7 +15,11 @@ function getUser(user: User): Promise<User> {
   return getData(`/users/${user.id}.json`);
 }
 
-export const TodoModal: React.FC<Props> = ({ user, checkedTodo, closeModal }) => {
+export const TodoModal: React.FC<Props> = ({
+  user,
+  checkedTodo,
+  closeModal,
+}) => {
   const [loadingModal, setLoadingModal] = useState(false);
   const [userSt, setUserSt] = useState<User | null>(null);
 
@@ -45,9 +49,9 @@ export const TodoModal: React.FC<Props> = ({ user, checkedTodo, closeModal }) =>
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button 
-              type="button" 
-              className="delete" 
+            <button
+              type="button"
+              className="delete"
               data-cy="modal-close"
               onClick={() => closeModal(null)}
             />
@@ -60,10 +64,12 @@ export const TodoModal: React.FC<Props> = ({ user, checkedTodo, closeModal }) =>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={cn({
+              <strong
+                className={cn({
                   'has-text-danger': checkedTodo?.completed === false,
                   'has-text-success': checkedTodo?.completed === true,
-                })}>
+                })}
+              >
                 Planned
               </strong>
 

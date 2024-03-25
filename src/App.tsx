@@ -57,7 +57,10 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
-  const checkedUser = checkedTodo?.userId !== undefined ? getUserById(users, checkedTodo.userId) : null;
+  const checkedUser =
+    checkedTodo?.userId !== undefined
+      ? getUserById(users, checkedTodo.userId)
+      : null;
 
   return (
     <>
@@ -83,13 +86,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {checkedTodo !== null 
-        && <TodoModal 
-             user={checkedUser} 
-             checkedTodo={checkedTodo}
-             closeModal={setCheckedTodo}
-            />
-      }
+      {checkedTodo !== null && (
+        <TodoModal
+          user={checkedUser}
+          checkedTodo={checkedTodo}
+          closeModal={setCheckedTodo}
+        />
+      )}
     </>
   );
 };
