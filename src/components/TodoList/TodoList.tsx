@@ -5,11 +5,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  activeTodoId: number | null;
-  onShown: (id: number) => void;
+  modalTodo: Todo | null;
+  setModalTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onShown, activeTodoId }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  modalTodo,
+  setModalTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -27,13 +31,13 @@ export const TodoList: React.FC<Props> = ({ todos, onShown, activeTodoId }) => {
 
       <tbody>
         {todos.map(todo => {
-          const { id, title, completed } = todo;
+          // const { id, title, completed } = todo;
 
           return (
-            <tr data-cy="todo" className="" key={id}>
-              <td className="is-vcentered">{id}</td>
+            <tr data-cy="todo" className="" key={todo.id}>
+              <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
-                {completed && (
+                {todo.completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
@@ -42,11 +46,11 @@ export const TodoList: React.FC<Props> = ({ todos, onShown, activeTodoId }) => {
               <td className="is-vcentered is-expanded">
                 <p
                   className={cn({
-                    'has-text-success': completed,
-                    'has-text-danger': !completed,
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
                   })}
                 >
-                  {title}
+                  {todo.title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
@@ -54,13 +58,13 @@ export const TodoList: React.FC<Props> = ({ todos, onShown, activeTodoId }) => {
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onShown(id)}
+                  onClick={() => setModalTodo(todo)}
                 >
                   <span className="icon">
                     <i
                       className={cn('far', {
-                        'fa-eye-slash': activeTodoId === todo.id,
-                        'fa-eye': activeTodoId !== todo.id,
+                        'fa-eye-slash': modalTodo?.id === todo.id,
+                        'fa-eye': modalTodo?.id !== todo.id,
                       })}
                     />
                   </span>

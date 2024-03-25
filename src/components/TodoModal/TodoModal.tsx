@@ -1,29 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import cn from 'classnames';
 
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
-  todo: Todo | null;
-  user: User | null;
-  isUserLoading: boolean;
-  onClose: () => void;
+  modalTodo: Todo;
+  setModalTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todo,
-  user,
-  onClose,
-  isUserLoading,
-}) => {
+export const TodoModal: React.FC<Props> = ({ modalTodo, setModalTodo }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getUser(modalTodo.userId)
+      .then(setUser)
+      // eslint-disable-next-line no-console
+      .catch(error => console.error(error))
+      .finally(() => setIsLoading(false));
+  }, [modalTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isUserLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -32,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo?.id}
+              Todo #{modalTodo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -40,23 +46,23 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
+              onClick={() => setModalTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {modalTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
                 className={cn({
-                  'has-text-success': todo?.completed,
-                  'has-text-danger': !todo?.completed,
+                  'has-text-success': modalTodo.completed,
+                  'has-text-danger': !modalTodo.completed,
                 })}
               >
-                {todo?.completed ? <>Done</> : <>Planned</>}
+                {modalTodo.completed ? <>Done</> : <>Planned</>}
               </strong>
 
               {' by '}
