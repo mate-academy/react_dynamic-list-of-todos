@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { getData } from '../../utils/httpClient';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  user: User | null;
+}
+
+function getUser(user: User): Promise<User> {
+  return getData(`/users/${user.id}.json`);
+}
+
+export const TodoModal: React.FC<Props> = ({ user }) => {
+  const [loadingModal, setLoadingModal] = useState(false);
+  const [userSt, setUserSt] = useState<User | null>(null);
+  useEffect(() => {
+    setLoadingModal(true);
+    if (user !== null) {
+      getUser(user).then(setUserSt).finally(() => setLoadingModal(false));
+    }
+  }, []);
+  
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loadingModal ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,7 +34,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${userSt?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -33,7 +52,7 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href="mailto:Sincere@april.biz">{userSt?.name}</a>
             </p>
           </div>
         </div>

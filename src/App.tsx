@@ -9,6 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './services/todo';
 import { Todo } from './types/Todo';
+import { User } from './types/User';
+import { getUsers } from './services/user';
 
 function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
   const preparedTodos = tododos.filter(tododo => {
@@ -34,21 +36,31 @@ function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
   return preparedTodos;
 }
 
+function getUserById(users: User[], userId: number): User | null {
+  return users.find(user => user.id === userId) || null;
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectChecked, setSelectChecked] = useState('all');
   const [textInput, setTextInput] = useState('');
-  //const [hasChecked, setHasChecked] = useState(false);
+  const [checkedTodoId, setCheckedTodoId] = useState(0);
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
+    getUsers()
+      .then(setUsers);
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
+  const checkedUser = getUserById(users, checkedTodoId);
+  
+  
 
   return (
     <>
@@ -68,13 +80,15 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              <TodoList todos={visibleTodos} />
+              <TodoList todos={visibleTodos} checkedTodoId={setCheckedTodoId}/>
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {checkedTodoId > 0 && (
+        <TodoModal user={checkedUser}/>
+      )}
     </>
   );
 };
