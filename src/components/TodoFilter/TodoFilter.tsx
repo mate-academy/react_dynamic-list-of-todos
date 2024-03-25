@@ -37,8 +37,7 @@ export const TodoFilter = () => {
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right pointer-events-all">
             <button
               data-cy="clearSearchButton"
               type="button"

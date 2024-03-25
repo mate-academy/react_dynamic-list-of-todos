@@ -7,13 +7,22 @@ import { TodoModal } from './components/TodoModal';
 import { useTodos } from './utils/TodosContext';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
+import { filterTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
-  const { todos, setTodos, selectedTodoId } = useTodos();
+  const { query, todos, setTodos, filter, selectedTodo } = useTodos();
 
   useEffect(() => {
-    getTodos().then(data => setTodos(data));
+    getTodos().then(setTodos);
   });
+
+  let visibleTodos = filterTodos([...todos], filter);
+
+  if (query) {
+    visibleTodos = visibleTodos.filter(item =>
+      item.title.toLowerCase().includes(query.trim().toLowerCase()),
+    );
+  }
 
   return (
     <>
@@ -27,12 +36,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? <Loader /> : <TodoList />}
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoList todos={visibleTodos} />
+              )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodoId && <TodoModal />}
+      {selectedTodo && <TodoModal />}
     </>
   );
 };

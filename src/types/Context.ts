@@ -14,6 +14,6 @@ export interface TodosContextType {
   setFilter: (filter: Filter) => void;
   query: string;
   setQuery: (query: string) => void;
-  selectedTodoId: number;
-  setSelectedTodoId: (id: number) => void;
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo | null) => void;
 }

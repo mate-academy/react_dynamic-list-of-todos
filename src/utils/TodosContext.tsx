@@ -13,8 +13,8 @@ const initialTodosContext: TodosContextType = {
   setFilter: () => {},
   query: '',
   setQuery: () => {},
-  selectedTodoId: 0,
-  setSelectedTodoId: () => {},
+  selectedTodo: null,
+  setSelectedTodo: () => {},
 };
 
 const TodosContext = createContext<TodosContextType>(initialTodosContext);
@@ -23,7 +23,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [query, setQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   return (
     <TodosContext.Provider
@@ -34,8 +34,8 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
         setFilter,
         query,
         setQuery,
-        selectedTodoId,
-        setSelectedTodoId,
+        selectedTodo,
+        setSelectedTodo,
       }}
     >
       {children}
