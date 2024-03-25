@@ -1,10 +1,11 @@
 import React from 'react';
+import { Status } from '../../types/status';
 
 type Props = {
   query: string;
   setQuery: (query: string) => void;
   filterField: string;
-  setFilterField: (sortField: string) => void;
+  setFilterField: (sortField: Status) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -19,11 +20,11 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={sortField}
-          onChange={event => setSortField(event.target.value)}
+          onChange={event => setSortField(event.target.value as Status)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Status.All}>All</option>
+          <option value={Status.Active}>Active</option>
+          <option value={Status.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -42,8 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right" style={{ pointerEvents: Status.All }}>
           <button
             data-cy="clearSearchButton"
             type="button"

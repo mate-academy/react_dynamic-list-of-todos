@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,22 +9,25 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { getPreparedTodos } from './services/getPreparedTodos';
+import { Status } from './types/status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filterField, setFilterField] = useState('all');
+  const [filterField, setFilterField] = useState(Status.All);
   const [modalTodo, setModalTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
     return getPreparedTodos(todos, filterField, query);
   }, [todos, filterField, query]);
-
-  const listIsEmpty = todos.length === 0;
 
   return (
     <>
@@ -44,7 +46,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {listIsEmpty && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={visibleTodos}
                 modalTodo={modalTodo}

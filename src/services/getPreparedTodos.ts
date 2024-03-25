@@ -1,4 +1,5 @@
 import { Todo } from '../types/Todo';
+import { Status } from '../types/status';
 
 export const getPreparedTodos = (
   todos: Todo[],
@@ -15,11 +16,11 @@ export const getPreparedTodos = (
 
   if (filterField) {
     switch (filterField) {
-      case 'active':
-        visibleTodos = visibleTodos.filter(todo => todo.completed === false);
+      case Status.Active:
+        visibleTodos = visibleTodos.filter(todo => !todo.completed);
         break;
-      case 'completed':
-        visibleTodos = visibleTodos.filter(todo => todo.completed === true);
+      case Status.Completed:
+        visibleTodos = visibleTodos.filter(todo => todo.completed);
         break;
     }
   }

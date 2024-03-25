@@ -11,22 +11,22 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ modalTodo, setModalTodo }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getUser(modalTodo.userId)
       .then(setUser)
-      .finally(() => setIsLoading(true));
-  }, [modalTodo]);
+      .finally(() => setIsLoading(false));
+  }, [modalTodo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-        <div className="modal-card">
+        <div className="modal-card" data-cy="loader">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
@@ -35,11 +35,11 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, setModalTodo }) => {
               Todo #{modalTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="Close modal"
               onClick={() => setModalTodo(null)}
             />
           </header>
