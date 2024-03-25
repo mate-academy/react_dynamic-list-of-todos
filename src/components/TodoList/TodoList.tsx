@@ -4,10 +4,10 @@ import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
-  checkedTodoId: (value: number) => void;
+  checkedTodo: (value: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, checkedTodoId }) => {
+export const TodoList: React.FC<Props> = ({ todos, checkedTodo }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -49,7 +49,7 @@ export const TodoList: React.FC<Props> = ({ todos, checkedTodoId }) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => checkedTodoId(todo.userId)}
+                onClick={() => checkedTodo(todo)}
               >
                 <span className="icon">
                   <i className="far fa-eye" />

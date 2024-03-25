@@ -46,7 +46,7 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectChecked, setSelectChecked] = useState('all');
   const [textInput, setTextInput] = useState('');
-  const [checkedTodoId, setCheckedTodoId] = useState(0);
+  const [checkedTodo, setCheckedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
-  const checkedUser = getUserById(users, checkedTodoId);
+  const checkedUser = checkedTodo?.userId !== undefined ? getUserById(users, checkedTodo.userId) : null;
 
   return (
     <>
@@ -77,13 +77,19 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              <TodoList todos={visibleTodos} checkedTodoId={setCheckedTodoId} />
+              <TodoList todos={visibleTodos} checkedTodo={setCheckedTodo} />
             </div>
           </div>
         </div>
       </div>
 
-      {checkedTodoId > 0 && <TodoModal user={checkedUser} />}
+      {checkedTodo !== null 
+        && <TodoModal 
+             user={checkedUser} 
+             checkedTodo={checkedTodo}
+             closeModal={setCheckedTodo}
+            />
+      }
     </>
   );
 };
