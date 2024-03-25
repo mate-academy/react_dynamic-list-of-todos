@@ -49,6 +49,7 @@ const getPreparedTodos = (todos: Todo[], { query, filterField }: Params) => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(false);
   const [selectFilter, setSelectFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [activeTodoId, setActiveTodoId] = useState<number | null>(null);
@@ -94,8 +95,8 @@ export const App: React.FC = () => {
       }
     }
 
+    setIsUserLoading(true);
     if (todo && todo.userId) {
-      setLoader(true);
       getUser(todo.userId)
         .then(fetchedUser => {
           setSelectedUser(fetchedUser);
@@ -105,7 +106,7 @@ export const App: React.FC = () => {
           console.error('Failed to fetch user details:', error);
           setSelectedUser(null);
         })
-        .finally(() => setLoader(false));
+        .finally(() => setIsUserLoading(false));
     }
   };
 
@@ -154,6 +155,7 @@ export const App: React.FC = () => {
           todo={selectedTodo}
           onClose={handleCloseModal}
           user={selectedUser}
+          isUserLoading={isUserLoading}
         />
       )}
     </>

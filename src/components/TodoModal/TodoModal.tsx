@@ -9,15 +9,21 @@ import { User } from '../../types/User';
 type Props = {
   todo: Todo | null;
   user: User | null;
+  isUserLoading: boolean;
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, user, onClose }) => {
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  onClose,
+  isUserLoading,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user && !todo ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,7 +56,7 @@ export const TodoModal: React.FC<Props> = ({ todo, user, onClose }) => {
                   'has-text-danger': !todo?.completed,
                 })}
               >
-                Planned
+                {todo?.completed ? <>Done</> : <>Planned</>}
               </strong>
 
               {' by '}
