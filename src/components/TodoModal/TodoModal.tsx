@@ -17,11 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userId)
-      .then(setSelectedUser)
-      .catch(error => {
-        console.error('Error fetching user:', error);
-      });
+    getUser(userId).then(setSelectedUser);
   }, [id, title, completed, userId]);
 
   return (

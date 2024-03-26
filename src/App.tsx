@@ -53,9 +53,6 @@ export const App: React.FC = () => {
     setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(error => {
-        console.error('Error fetching todos:', error);
-      })
       .finally(() => setIsLoading(false));
   }, []);
 
