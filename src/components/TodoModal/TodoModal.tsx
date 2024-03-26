@@ -8,24 +8,21 @@ import { Loader } from '../Loader';
 type Props = {
   selectedTodo: Todo | null;
   setSelectedTodo: Dispatch<SetStateAction<Todo | null>>;
-  isLoadingModal: boolean;
-  setLoadingModal: Dispatch<SetStateAction<boolean>>;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
-  isLoadingModal,
-  setLoadingModal,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoadingModal, setIsLoadingModal] = useState(false);
 
   useEffect(() => {
     if (selectedTodo) {
-      setLoadingModal(true);
+      setIsLoadingModal(true);
       getUser(selectedTodo.userId).then(userData => {
         setUser(userData);
-        setLoadingModal(false);
+        setIsLoadingModal(false);
       });
     }
   }, [selectedTodo]);

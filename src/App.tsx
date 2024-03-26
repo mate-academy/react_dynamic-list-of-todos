@@ -9,59 +9,39 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { FilterStatus } from './types/FilterStatus';
+import { filterTodos } from './utils/filteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(
     FilterStatus.ALL,
   );
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoadingModal, setLoadingModal] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then(data => {
         setTodos(data);
-        setLoading(false);
       })
       .catch(error => {
         setErrorMessage(error);
-        setLoading(false);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   function handleShowModal(todo: Todo) {
-    setLoadingModal(true);
     setSelectedTodo(todo);
   }
 
-  const filteredTodos = useMemo(() => {
-    function filterTodos(todoItems: Todo[]): Todo[] {
-      let filtered = todoItems.filter(todo => {
-        switch (filterStatus) {
-          case FilterStatus.ALL:
-            return true;
-          case FilterStatus.ACTIVE:
-            return !todo.completed;
-          case FilterStatus.COMPLETED:
-            return todo.completed;
-          default:
-            return false;
-        }
-      });
-
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-
-      return filtered;
-    }
-
-    return filterTodos(todos);
-  }, [filterStatus, todos, query]);
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, filterStatus, query),
+    [filterStatus, todos, query],
+  );
 
   function handleChangeFilterStatus(status: FilterStatus) {
     setFilterStatus(status);
@@ -93,9 +73,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
-              {!loading && filteredTodos.length > 0 && !errorMessage && (
+              {!isLoading && filteredTodos.length > 0 && !errorMessage && (
                 <TodoList
                   todos={filteredTodos}
                   onShowModal={handleShowModal}
@@ -109,8 +89,6 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          isLoadingModal={isLoadingModal}
-          setLoadingModal={setLoadingModal}
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
         />
