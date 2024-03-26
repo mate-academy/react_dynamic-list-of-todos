@@ -52,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({
                 className="delete"
                 data-cy="modal-close"
                 aria-label="Close modal window"
-                onClick={() => handleCloseTodo()}
+                onClick={handleCloseTodo}
               />
             </header>
 

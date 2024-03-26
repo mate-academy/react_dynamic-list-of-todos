@@ -3,14 +3,14 @@ import { FilterStatus } from '../../types/FilterStatus';
 
 type Filter = {
   filterStatus: string;
-  onFilter: (status: FilterStatus) => void;
+  onChangeFilter: (status: FilterStatus) => void;
   query: string;
   onChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClearSearch: () => void;
 };
 
 export const TodoFilter: React.FC<Filter> = ({
-  onFilter,
+  onChangeFilter,
   filterStatus,
   query,
   onChangeQuery,
@@ -19,7 +19,7 @@ export const TodoFilter: React.FC<Filter> = ({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const status = event.target.value as FilterStatus;
 
-    onFilter(status);
+    onChangeFilter(status);
   };
 
   return (

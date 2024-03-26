@@ -52,11 +52,12 @@ export const TodoItem: React.FC<Props> = ({
                 onClick={() => onShowModal(todo)}
               >
                 <span className="icon">
-                  {isSelected ? (
-                    <i className="far fa-eye-slash" />
-                  ) : (
-                    <i className="far fa-eye" />
-                  )}
+                  <i
+                    className={cn('far', {
+                      'fa-eye-slash': isSelected,
+                      'fa-eye': !isSelected,
+                    })}
+                  />
                 </span>
               </button>
             </td>
