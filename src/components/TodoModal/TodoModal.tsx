@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
@@ -9,6 +8,7 @@ type Props = {
   user: User | null;
   checkedTodo: Todo | null;
   closeModal: (value: Todo | null) => void;
+  resetTodoClickedState: () => void;
 };
 
 function getUser(user: User): Promise<User> {
@@ -19,6 +19,7 @@ export const TodoModal: React.FC<Props> = ({
   user,
   checkedTodo,
   closeModal,
+  resetTodoClickedState,
 }) => {
   const [loadingModal, setLoadingModal] = useState(false);
   const [userSt, setUserSt] = useState<User | null>(null);
@@ -53,7 +54,10 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => closeModal(null)}
+              onClick={() => {
+                closeModal(null);
+                resetTodoClickedState();
+              }}
             />
           </header>
 
@@ -64,14 +68,11 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong
-                className={cn({
-                  'has-text-danger': checkedTodo?.completed === false,
-                  'has-text-success': checkedTodo?.completed === true,
-                })}
-              >
-                Planned
-              </strong>
+              {checkedTodo?.completed === true ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 

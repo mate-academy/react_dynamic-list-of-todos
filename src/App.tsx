@@ -47,6 +47,7 @@ export const App: React.FC = () => {
   const [selectChecked, setSelectChecked] = useState('all');
   const [textInput, setTextInput] = useState('');
   const [checkedTodo, setCheckedTodo] = useState<Todo | null>(null);
+  const [clickedTodos, setClickedTodos] = useState<number[]>([]);
 
   useEffect(() => {
     setLoading(true);
@@ -55,6 +56,22 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
     getUsers().then(setUsers);
   }, []);
+
+  const isTodoClicked = (todoId: number) => {
+    return clickedTodos.includes(todoId);
+  };
+
+  const toggleTodoClicked = (todoId: number) => {
+    if (isTodoClicked(todoId)) {
+      setClickedTodos(prev => prev.filter(id => id !== todoId));
+    } else {
+      setClickedTodos(prev => [...prev, todoId]);
+    }
+  };
+
+  const resetTodoClickedState = () => {
+    setClickedTodos([]);
+  };
 
   const visibleTodos = getFilteredTodos(todos, selectChecked, textInput);
   const checkedUser =
@@ -80,7 +97,12 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              <TodoList todos={visibleTodos} checkedTodo={setCheckedTodo} />
+              <TodoList
+                todos={visibleTodos}
+                checkedTodo={setCheckedTodo}
+                isTodoClicked={isTodoClicked}
+                toggleTodoClicked={toggleTodoClicked}
+              />
             </div>
           </div>
         </div>
@@ -91,6 +113,7 @@ export const App: React.FC = () => {
           user={checkedUser}
           checkedTodo={checkedTodo}
           closeModal={setCheckedTodo}
+          resetTodoClickedState={resetTodoClickedState}
         />
       )}
     </>

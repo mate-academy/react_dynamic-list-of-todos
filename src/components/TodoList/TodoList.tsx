@@ -1,13 +1,19 @@
-import React from 'react';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
   checkedTodo: (value: Todo) => void;
+  isTodoClicked: (todoId: number) => boolean;
+  toggleTodoClicked: (todoId: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, checkedTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  checkedTodo,
+  isTodoClicked,
+  toggleTodoClicked,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -25,7 +31,13 @@ export const TodoList: React.FC<Props> = ({ todos, checkedTodo }) => {
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
+          <tr
+            data-cy="todo"
+            className={cn({
+              'has-background-info-light': isTodoClicked(todo.id),
+            })}
+            key={todo.id}
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed === true && (
@@ -49,10 +61,17 @@ export const TodoList: React.FC<Props> = ({ todos, checkedTodo }) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => checkedTodo(todo)}
+                onClick={() => {
+                  checkedTodo(todo);
+                  toggleTodoClicked(todo.id);
+                }}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  {isTodoClicked(todo.id) ? (
+                    <i className="far fa-eye-slash" />
+                  ) : (
+                    <i className="far fa-eye" />
+                  )}
                 </span>
               </button>
             </td>
