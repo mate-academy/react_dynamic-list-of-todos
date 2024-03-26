@@ -9,13 +9,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
-import { Options } from './types/Options';
+import { Status } from './types/Status';
 
 import { getTodos } from './api';
 
 function getFilteredTodos(
   allTodos: Todo[],
-  selectedOption: Options,
+  selectedOption: Status,
   query: string,
 ): Todo[] {
   let filteredTodos = [...allTodos];
@@ -27,10 +27,10 @@ function getFilteredTodos(
   }
 
   switch (selectedOption) {
-    case Options.active:
+    case Status.active:
       return filteredTodos.filter(({ completed }) => !completed);
 
-    case Options.completed:
+    case Status.completed:
       return filteredTodos.filter(({ completed }) => completed);
 
     default:
@@ -40,23 +40,26 @@ function getFilteredTodos(
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState<Options>(Options.all);
+  const [selectedOption, setSelectedOption] = useState<Status>(Status.all);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [query, setQuery] = useState('');
 
   const visibleTodos = getFilteredTodos(todos, selectedOption, query);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .catch(error => {
+        console.error('Error fetching todos:', error);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const handleSetOption = (option: Options) => setSelectedOption(option);
+  const handleSetOption = (option: Status) => setSelectedOption(option);
 
   const selectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -68,13 +71,13 @@ export const App: React.FC = () => {
 
   return (
     <>
-    <div className="section">
-      <div className="container">
-        <div className="box">
-          <h1 className="title">Todos:</h1>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
             <div className="block">
-            <TodoFilter
+              <TodoFilter
                 selectedOption={selectedOption}
                 query={query}
                 handleSetOption={handleSetOption}
@@ -83,7 +86,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-            {isLoading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

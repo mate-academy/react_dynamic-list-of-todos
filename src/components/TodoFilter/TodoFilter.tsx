@@ -1,10 +1,10 @@
 import React from 'react';
-import { Options } from '../../types/Options';
+import { Status } from '../../types/Status';
 
 type Props = {
   selectedOption: string;
   query: string;
-  handleSetOption: (option: Options) => void;
+  handleSetOption: (option: Status) => void;
   setQuery: (text: string) => void;
 };
 
@@ -15,11 +15,15 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
 }) => {
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    handleSetOption(event.target.value as Options);
+    handleSetOption(event.target.value as Status);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setQuery('');
   };
 
   return (
@@ -31,9 +35,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleOptionChange}
           >
-            <option value={Options.all}>All</option>
-            <option value={Options.active}>Active</option>
-            <option value={Options.completed}>Completed</option>
+            {Object.values(Status).map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -58,7 +64,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={handleClearSearch}
             />
           </span>
         )}
