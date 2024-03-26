@@ -13,7 +13,7 @@ import { Filter } from './types/Filrer';
 
 export const App: React.FC = React.memo(() => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Filter.All);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export const App: React.FC = React.memo(() => {
       .finally(() => setLoading(false));
   }, [setTodos]);
 
-  const handleFilterChange = (newFilter: string) => {
+  const handleFilterChange = (newFilter: Filter) => {
     setFilter(newFilter);
   };
 
@@ -39,7 +39,7 @@ export const App: React.FC = React.memo(() => {
   };
 
   const filterTodos = useCallback(
-    (currentTodos: Todo[], currentFilter: string) => {
+    (currentTodos: Todo[], currentFilter: Filter) => {
       if (currentFilter === Filter.Active) {
         return currentTodos.filter((todo: Todo) => !todo.completed);
       } else if (currentFilter === Filter.Completed) {

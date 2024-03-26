@@ -1,9 +1,9 @@
-import { Filter } from "../../types/Filrer";
+import { Filter } from '../../types/Filrer';
 
 type Props = {
-  filter: string;
+  filter: Filter;
   query: string;
-  onFilterChange: (newFilter: string) => void;
+  onFilterChange: (newFilter: Filter) => void;
   onQueryChange: (newQuery: string) => void;
   onQueryDelete: () => void;
 };
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
   onQueryDelete,
 }) => {
   const onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.target.value);
+    onFilterChange(event.target.value as Filter);
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select" onChange={onSelect}>
           <select data-cy="statusSelect" value={filter}>
-            <option value="all">{Filter.All}</option>
-            <option value="active">{Filter.Active}</option>
-            <option value="completed">{Filter.Completed}</option>
+            <option value={Filter.All}>{Filter.All}</option>
+            <option value={Filter.Active}>{Filter.Active}</option>
+            <option value={Filter.Completed}>{Filter.Completed}</option>
           </select>
         </span>
       </p>
