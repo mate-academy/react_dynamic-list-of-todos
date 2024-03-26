@@ -1,3 +1,5 @@
+import { Filter } from "../../types/Filrer";
+
 type Props = {
   filter: string;
   query: string;
@@ -30,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select" onChange={onSelect}>
           <select data-cy="statusSelect" value={filter}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{Filter.All}</option>
+            <option value="active">{Filter.Active}</option>
+            <option value="completed">{Filter.Completed}</option>
           </select>
         </span>
       </p>

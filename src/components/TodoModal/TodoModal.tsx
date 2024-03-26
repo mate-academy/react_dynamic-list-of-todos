@@ -5,34 +5,31 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  loading: boolean;
-  onLoading: (state: boolean) => void;
   userId: number;
   todo: Todo | null;
   onReset: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  loading,
-  onLoading = () => {},
   todo,
   userId,
   onReset = () => {},
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loadingModal, setLoadingModal] = useState(false);
 
   useEffect(() => {
-    onLoading(true);
+    setLoadingModal(true);
     getUser(userId)
       .then(currentUser => setUser(currentUser))
-      .finally(() => onLoading(false));
-  }, [userId, onLoading]);
+      .finally(() => setLoadingModal(false));
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {loadingModal ? (
         <Loader data-cy="loader" />
       ) : (
         <div className="modal-card">
@@ -43,8 +40,6 @@ export const TodoModal: React.FC<Props> = ({
             >
               Todo #{todo?.id}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -67,7 +62,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>
