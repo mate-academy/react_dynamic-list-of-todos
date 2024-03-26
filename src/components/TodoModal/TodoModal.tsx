@@ -7,7 +7,6 @@ import { Todo } from '../../types/Todo';
 type Props = {
   selectedTodo: Todo;
   setSelectedTodo: (todo: Todo | null) => void;
-  setLoading: (condition: boolean) => void;
   setIsTodoModalShown: (condition: boolean) => void;
 };
 
@@ -74,7 +73,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{userData?.name}</a>
+              <a href={userData?.email}>{userData?.name}</a>
             </p>
           </div>
         </div>

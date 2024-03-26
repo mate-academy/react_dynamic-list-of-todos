@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+// App.tsx
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -14,7 +14,8 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');
   const [isTodoModalShown, setIsTodoModalShown] = useState(false);
 
   useEffect(() => {
@@ -23,10 +24,35 @@ export const App: React.FC = () => {
     getTodos()
       .then(data => {
         setTodos(data);
-        setOriginalTodos(data);
       })
       .finally(() => setLoading(false));
   }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'all') {
+      return todo.title.toLowerCase().includes(query.trim().toLowerCase());
+    } else if (filter === 'active') {
+      return (
+        !todo.completed &&
+        todo.title.toLowerCase().includes(query.trim().toLowerCase())
+      );
+    } else if (filter === 'completed') {
+      return (
+        todo.completed &&
+        todo.title.toLowerCase().includes(query.trim().toLowerCase())
+      );
+    }
+
+    return true;
+  });
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+  };
+
+  const handleQueryChange = (newQuery: string) => {
+    setQuery(newQuery);
+  };
 
   return (
     <>
@@ -36,13 +62,18 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={originalTodos} setTodos={setTodos} />
+              <TodoFilter
+                filter={filter}
+                query={query}
+                onFilterChange={handleFilterChange}
+                onQueryChange={handleQueryChange}
+              />
             </div>
 
             <div className="block">
               {loading && <Loader />}
               <TodoList
-                todos={todos}
+                todos={filteredTodos}
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
                 setIsTodoModalShown={setIsTodoModalShown}
@@ -56,7 +87,6 @@ export const App: React.FC = () => {
         <TodoModal
           selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
-          setLoading={setLoading}
           setIsTodoModalShown={setIsTodoModalShown}
         />
       )}
