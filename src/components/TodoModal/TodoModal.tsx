@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   activeTodo: Todo;
-  setActiveTodo: (el: Todo) => void;
+  setActiveTodo: (el: Todo | null) => void;
 };
 
 /* eslint-disable react/display-name */
@@ -21,7 +21,7 @@ export const TodoModal: React.FC<Props> = React.memo(
 
       getUser(activeTodo.userId)
         .then(setCurrentUser)
-        // .catch(() => console.error('No user found'))
+        .catch(() => Promise.reject('Something went wrong!'))
         .finally(() => setLoading(false));
     }, [activeTodo.userId]);
 
@@ -46,7 +46,7 @@ export const TodoModal: React.FC<Props> = React.memo(
                 type="button"
                 className="delete"
                 data-cy="modal-close"
-                onClick={() => setActiveTodo({} as Todo)}
+                onClick={() => setActiveTodo(null)}
               />
             </header>
 

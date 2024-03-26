@@ -5,10 +5,13 @@ type Props = {
   setQuery: (e: string) => void;
   setFilter: (e: string) => void;
 };
-
 /* eslint-disable react/display-name */
 export const TodoFilter: React.FC<Props> = React.memo(
   ({ query, setQuery, setFilter }) => {
+    const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value);
+    };
+
     return (
       <form className="field has-addons">
         <p className="control">
@@ -31,7 +34,7 @@ export const TodoFilter: React.FC<Props> = React.memo(
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={handleQuery}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />

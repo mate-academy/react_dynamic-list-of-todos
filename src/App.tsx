@@ -18,16 +18,16 @@ enum Filter {
 }
 
 export const App: React.FC = () => {
-  const [loadingList, setLoadingList] = useState(false);
+  const [isLoadingList, setIsLoadingList] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
-  const [activeTodo, setActiveTodo] = useState<Todo>({} as Todo);
-  const isActiveTodo = Object.keys(activeTodo).length !== 0;
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+  const isActiveTodo = activeTodo !== null;
 
   const filterTodos = () => {
     const filtered = todos.filter(todo =>
-      todo.title.includes(query.toLocaleLowerCase()),
+      todo.title.includes(query.toLowerCase()),
     );
 
     switch (filter) {
@@ -45,12 +45,12 @@ export const App: React.FC = () => {
   const filteredTodos = useCallback(filterTodos, [filterTodos]);
 
   useEffect(() => {
-    setLoadingList(true);
+    setIsLoadingList(true);
 
     getTodos()
       .then(setTodos)
-      // .catch(() => console.error('Something went wrong!'))
-      .finally(() => setLoadingList(false));
+      .catch(() => Promise.reject('Something went wrong!'))
+      .finally(() => setIsLoadingList(false));
   }, []);
 
   return (
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingList ? (
+              {isLoadingList ? (
                 <Loader />
               ) : (
                 <TodoList
