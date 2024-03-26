@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,42 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
+  const [status, setStatus] = useState<Status>(Status.All);
+
+  useEffect(() => {
+    setLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(() => setErrorMessage('Try Again Later'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    const includesQuery = todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+
+    switch (status) {
+      case Status.Active:
+        return !todo.completed && includesQuery;
+      case Status.Completed:
+        return todo.completed && includesQuery;
+      case Status.All:
+      default:
+        return includesQuery;
+    }
+  });
+
   return (
     <>
       <div className="section">
@@ -17,18 +50,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                query={query}
+                onStatusChange={setStatus}
+                onqueryChange={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading && <Loader />}
+
+              {errorMessage && <div>{errorMessage}</div>}
+
+              {!loading && !errorMessage && (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  onSelect={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {!!selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
+        />
+      )}
     </>
   );
 };
