@@ -14,16 +14,19 @@ export const TodoModal: React.FC<Props> = ({ modalInfo, setModalInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getUser(modalInfo.userId)
-      .then(setUser)
-      .finally(() => setIsLoading(true));
+    if (modalInfo) {
+      setIsLoading(true);
+      getUser(modalInfo.userId)
+        .then(setUser)
+        .finally(() => setIsLoading(false));
+    }
   }, [modalInfo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -35,7 +38,6 @@ export const TodoModal: React.FC<Props> = ({ modalInfo, setModalInfo }) => {
               Todo #{modalInfo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"

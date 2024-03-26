@@ -6,22 +6,21 @@ export const getPreparedTodos = (
   select: Status,
   query: string,
 ) => {
-  const visibleTodos = [...todoList];
+  const trimQuery = query.trim().toLocaleLowerCase();
+  const visibleTodos = todoList.filter(
+    todo => !trimQuery || todo.title.toLocaleLowerCase().includes(trimQuery),
+  );
 
-  return visibleTodos
-    .filter(todo =>
-      todo.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
-    )
-    .filter(({ completed }) => {
-      switch (select) {
-        case Status.Active:
-          return !completed;
+  return visibleTodos.filter(({ completed }) => {
+    switch (select) {
+      case Status.Active:
+        return !completed;
 
-        case Status.Completed:
-          return completed;
+      case Status.Completed:
+        return completed;
 
-        default:
-          return visibleTodos;
-      }
-    });
+      default:
+        return true;
+    }
+  });
 };
