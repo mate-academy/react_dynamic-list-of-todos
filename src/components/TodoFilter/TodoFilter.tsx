@@ -14,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    instTextInput(event.target.value);
+    instTextInput(event.target.value.toLowerCase());
   };
 
   return (

@@ -13,6 +13,7 @@ import { User } from './types/User';
 import { getUsers } from './services/user';
 
 function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
+  const lowerCaseQueryInput = queryInput.toLowerCase();
   const preparedTodos = tododos.filter(tododo => {
     if (query === 'active') {
       return tododo.completed === false;
@@ -27,7 +28,7 @@ function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
 
   if (queryInput !== '') {
     readyTodos = preparedTodos.filter(readyTodo =>
-      readyTodo.title.includes(queryInput),
+      readyTodo.title.toLowerCase().includes(lowerCaseQueryInput),
     );
 
     return readyTodos;
