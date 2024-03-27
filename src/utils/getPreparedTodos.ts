@@ -3,7 +3,7 @@ import { FieldType } from '../types/enum';
 
 type Params = {
   query: string;
-  filterField: string;
+  filterField: FieldType;
 };
 
 export const getPreparedTodos = (

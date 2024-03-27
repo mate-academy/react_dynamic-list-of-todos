@@ -21,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
           onChange={e => setSelectFilter(e.target.value as FieldType)}
           value={selectFilter}
         >
-          {[FieldType.all, FieldType.active, FieldType.completed].map(opt => (
+          {Object.values(FieldType).map(opt => (
             <option value={opt.toLowerCase()} key={opt}>
               {opt}
             </option>

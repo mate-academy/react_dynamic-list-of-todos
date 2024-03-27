@@ -31,7 +31,7 @@ export const App: React.FC = () => {
       // eslint-disable-next-line no-console
       .catch(error => console.error('fetch error', error))
       .finally(() => setIsLoading(false));
-  }, [selectFilter, query]);
+  }, []);
 
   return (
     <>
