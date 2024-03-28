@@ -84,7 +84,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
+      {selectedTodo !== null && (
         <TodoModal
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
