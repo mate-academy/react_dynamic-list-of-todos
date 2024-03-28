@@ -25,9 +25,6 @@ type FilterTheTodos = (
 const getFilteredTodos: FilterTheTodos = (todos, filterBy, query) => {
   let filteredTodos = todos;
 
-  // eslint-disable-next-line no-console
-  console.log(filterBy, query);
-
   if (filterBy !== FilterBy.All) {
     filteredTodos = todos.filter(todo => {
       switch (filterBy) {
@@ -56,7 +53,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterBy, setFilterBy] = useState<string>(FilterBy.All);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -66,11 +63,10 @@ export const App: React.FC = () => {
       .then(newTodos => {
         setTodos(newTodos);
       })
-      .catch(error => console.log(error))
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filterTodos = getFilteredTodos(todos, filterBy, query);
+  const filteredTodos = getFilteredTodos(todos, filterBy, query);
 
   return (
     <>
@@ -81,9 +77,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleFilterBy={setFilterBy}
                 setQuery={setQuery}
                 query={query}
+                setFilterBy={setFilterBy}
               />
             </div>
 
@@ -92,9 +88,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filterTodos}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
-                  handleShowButtonClick={setSelectedTodo}
+                  onShowButtonClick={setSelectedTodo}
                 />
               )}
             </div>
@@ -105,7 +101,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          handleCloseModal={setSelectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

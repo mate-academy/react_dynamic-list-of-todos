@@ -1,6 +1,6 @@
 interface Props {
-  handleFilterBy: React.Dispatch<React.SetStateAction<string>>;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setFilterBy: (filter: FilterBy) => void;
+  setQuery: (query: string) => void;
   query: string;
 }
 
@@ -11,23 +11,26 @@ enum FilterBy {
 }
 
 export const TodoFilter: React.FC<Props> = ({
-  handleFilterBy,
-  setQuery,
+  setFilterBy,
+  setQuery = () => {},
   query,
 }) => {
   const handleResetQuery = () => setQuery('');
+
+  const handleSetQuery = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setQuery(event.target.value);
+
+  const handleFilterBy = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setFilterBy(event.target.value as FilterBy);
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select
-            data-cy="statusSelect"
-            onChange={event => handleFilterBy(event.target.value)}
-          >
-            <option value="all">{FilterBy.All}</option>
-            <option value="active">{FilterBy.Active}</option>
-            <option value="completed">{FilterBy.Completed}</option>
+          <select data-cy="statusSelect" onChange={handleFilterBy}>
+            <option value={FilterBy.All}>All</option>
+            <option value={FilterBy.Active}>Active</option>
+            <option value={FilterBy.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -39,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleSetQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
