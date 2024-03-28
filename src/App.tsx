@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Status } from './enums/Status';
 import { User } from './types/User';
@@ -22,12 +22,7 @@ export const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [usersId, setUsersId] = useState<number>(0);
   const [user, setUser] = useState<User | null>(null);
-  const [choseTodo, setChoseTodo] = useState<SetTodo>({
-    id: null,
-    title: '',
-    completed: false,
-    highlighteTodo: false,
-  });
+  const [choseTodo, setChoseTodo] = useState<SetTodo | null>(null);
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -37,7 +32,7 @@ export const App: React.FC = () => {
     setShowModal(false);
     setChoseTodo(prevState => ({
       ...prevState,
-      highlighteTodo: false,
+      highlightedTodo: false,
     }));
   };
 
@@ -77,14 +72,6 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  useEffect(() => {
-    getUser(usersId)
-      .then(response => {
-        setUser(response);
-      })
-      .finally(() => setLoadingUser(false));
-  }, [usersId]);
-
   const handleClearInput = () => {
     setText('');
   };
@@ -96,7 +83,7 @@ export const App: React.FC = () => {
       setUsersId(id);
       setChoseTodo(information);
     },
-    [setShowModal, setLoadingUser, setUsersId, setChoseTodo],
+    [],
   );
 
   return (
@@ -136,6 +123,9 @@ export const App: React.FC = () => {
           choseTodo={choseTodo}
           loading={loadingUser}
           handleCloseModal={handleCloseModal}
+          usersId={usersId}
+          setUser={setUser}
+          setLoadingUser={setLoadingUser}
         />
       )}
     </>

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   handleShowModal: (id: number, information: SetTodo) => void;
-  choseTodo: SetTodo;
+  choseTodo: SetTodo | null;
 };
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -34,7 +34,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="todo"
                 className={classNames({
                   'has-background-info-light':
-                    choseTodo.highlighteTodo && choseTodo.id === id,
+                    choseTodo?.highlightedTodo && choseTodo.id === id,
                 })}
                 key={id}
               >
@@ -65,11 +65,11 @@ export const TodoList: React.FC<Props> = ({
                         title,
                         id,
                         completed,
-                        highlighteTodo: true,
+                        highlightedTodo: true,
                       })
                     }
                   >
-                    {choseTodo.highlighteTodo && choseTodo.id == id ? (
+                    {choseTodo?.highlightedTodo && choseTodo.id == id ? (
                       <span className="icon">
                         <i className="far fa-eye-slash" />
                       </span>
