@@ -1,18 +1,14 @@
+import { FilterBy } from '../../types/FilterBy';
+
 interface Props {
   setFilterBy: (filter: FilterBy) => void;
   setQuery: (query: string) => void;
   query: string;
 }
 
-enum FilterBy {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
 export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
-  setQuery = () => {},
+  setQuery,
   query,
 }) => {
   const handleResetQuery = () => setQuery('');

@@ -9,12 +9,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-enum FilterBy {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { FilterBy } from './types/FilterBy';
 
 type FilterTheTodos = (
   todos: Todo[],
