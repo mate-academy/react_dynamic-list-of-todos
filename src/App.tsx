@@ -9,13 +9,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [status, setStatus] = useState('all');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [status, setStatus] = useState<Status>(Status.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -29,18 +29,25 @@ export const App: React.FC = () => {
     setSelectedTodo(undefined);
   };
 
-  useMemo(() => {
-    setVisibleTodos(
-      todos.filter(todo => {
-        return (
-          (status === 'completed'
-            ? todo.completed
-            : status === 'active'
-              ? !todo.completed
-              : todo) && todo.title.toLowerCase().includes(query.toLowerCase())
-        );
-      }),
-    );
+  const visibleTodos = useMemo(() => {
+    let filtredTodos = [...todos];
+
+    switch (status) {
+      case 'completed':
+        filtredTodos = filtredTodos.filter(todo => todo.completed);
+        break;
+      case 'active':
+        filtredTodos = filtredTodos.filter(todo => !todo.completed);
+        break;
+    }
+
+    if (query) {
+      filtredTodos = filtredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    return filtredTodos;
   }, [status, todos, query]);
 
   return (
