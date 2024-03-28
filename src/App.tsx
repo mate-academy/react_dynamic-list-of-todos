@@ -14,22 +14,19 @@ export const filteredQueryInput = (
   comparedTodos: Todo[],
   query: string,
 ): Todo[] => {
-  const visibleTodos = [...comparedTodos];
-
   if (query) {
-    return visibleTodos.filter(todo =>
+    return comparedTodos.filter(todo =>
       todo.title.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
-  return visibleTodos;
+  return comparedTodos;
 };
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const [eyeOnClick, setEyeOnClick] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -44,10 +41,15 @@ export const App: React.FC = () => {
 
   let comparedTodos = todos;
 
-  if (filter === Status.Active) {
-    comparedTodos = comparedTodos.filter(todo => !todo.completed);
-  } else if (filter === Status.Completed) {
-    comparedTodos = comparedTodos.filter(todo => todo.completed);
+  switch (filter) {
+    case Status.Active:
+      comparedTodos = comparedTodos.filter(todo => !todo.completed);
+      break;
+    case Status.Completed:
+      comparedTodos = comparedTodos.filter(todo => todo.completed);
+      break;
+    default:
+      break;
   }
 
   return (
@@ -70,19 +72,20 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  setEyeOnClick={setEyeOnClick}
                   todos={filteredQueryInput(comparedTodos, query)}
                   setSelectedTodo={setSelectedTodo}
-                  eyeOnClick={eyeOnClick}
-                  selectedTodoId={selectedTodo?.id}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {eyeOnClick && (
-        <TodoModal setEyeOnClick={setEyeOnClick} selectedTodo={selectedTodo} />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
       )}
     </>
   );

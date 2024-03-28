@@ -4,21 +4,16 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  setEyeOnClick: (value: boolean) => void;
   setSelectedTodo: (value: Todo) => void;
-  eyeOnClick: boolean;
-  selectedTodoId?: number;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
-  setEyeOnClick,
   todos,
   setSelectedTodo,
-  eyeOnClick,
-  selectedTodoId,
+  selectedTodo,
 }) => {
   const handlerEyeButton = (todo: Todo) => {
-    setEyeOnClick(true);
     setSelectedTodo(todo);
   };
 
@@ -38,51 +33,55 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
-          <tr
-            data-cy="todo"
-            className={classNames({
-              'has-background-info-light':
-                eyeOnClick && selectedTodoId === todo.id,
-            })}
-            key={todo.id}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                onClick={() => handlerEyeButton(todo)}
-                className="button"
-                type="button"
-              >
-                <span className="icon">
-                  {eyeOnClick && selectedTodoId === todo.id ? (
-                    <i className="far fa-eye-slash" />
-                  ) : (
-                    <i className="far fa-eye" />
-                  )}
-                </span>
-              </button>
-            </td>
-          </tr>
-        ))}
+        {todos.map(todo => {
+          const isTodosCompare = selectedTodo?.id === todo.id;
+
+          return (
+            <tr
+              data-cy="todo"
+              className={classNames({
+                'has-background-info-light': isTodosCompare,
+              })}
+              key={todo.id}
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  onClick={() => handlerEyeButton(todo)}
+                  className="button"
+                  type="button"
+                >
+                  <span className="icon">
+                    <i
+                      className={classNames('far', {
+                        'fa-eye-slash': isTodosCompare,
+                        'fa-eye': !isTodosCompare,
+                      })}
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

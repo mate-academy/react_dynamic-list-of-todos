@@ -5,26 +5,29 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
 interface Props {
-  selectedTodo: Todo | null;
-  setEyeOnClick: (v: boolean) => void;
+  selectedTodo: Todo;
+  setSelectedTodo: (value: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, setEyeOnClick }) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(false);
+  const [hasLoading, setHasLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setHasLoading(true);
     getUser(selectedTodo?.userId as number)
       .then(setUser)
-      .then(() => setLoading(false));
+      .then(() => setHasLoading(false));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {hasLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -36,12 +39,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, setEyeOnClick }) => {
               Todo #{selectedTodo?.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setEyeOnClick(false)}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
