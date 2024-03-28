@@ -16,19 +16,22 @@ enum FilterType {
   All = 'all',
 }
 
-const filterTodos = (todos: Todo[], filterType: string, filterText: string) => {
-  let filteredTodos: Todo[] = [...todos];
+const filterTodos = (
+  todos: Todo[],
+  filterType: FilterType,
+  filterText: string,
+) => {
+  let filteredTodos = [...todos];
 
-  if (filterType === FilterType.Active) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return !todo.completed;
-    });
-  }
-
-  if (filterType === FilterType.Completed) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return todo.completed;
-    });
+  switch (filterType) {
+    case FilterType.Active:
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+      break;
+    case FilterType.Completed:
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      break;
+    default:
+      break;
   }
 
   if (filterText) {
@@ -43,7 +46,7 @@ const filterTodos = (todos: Todo[], filterType: string, filterText: string) => {
 export const App: React.FC = () => {
   const [todos, setTodods] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filterType, setFilterType] = useState<string>('All');
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [filterText, setFilterText] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 

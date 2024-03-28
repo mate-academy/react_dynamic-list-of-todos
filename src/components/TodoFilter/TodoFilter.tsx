@@ -1,5 +1,11 @@
+enum FilterType {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
+
 interface Props {
-  setFilterType: (filterType: string) => void;
+  setFilterType: (filterType: FilterType) => void;
   filterText: string;
   setFilterText: (filterText: string) => void;
 }
@@ -15,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-            setFilterType(event.target.value)
+            setFilterType(event.target.value as FilterType)
           }
         >
           <option value="all">All</option>
