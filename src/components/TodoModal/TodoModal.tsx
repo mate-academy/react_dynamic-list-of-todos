@@ -8,7 +8,7 @@ import cn from 'classnames';
 
 type Props = {
   modalTodo: Todo;
-  onDeleteModal: (t: null) => void;
+  onDeleteModal: (modalTodo: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ modalTodo, onDeleteModal }) => {
@@ -41,7 +41,6 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, onDeleteModal }) => {
               Todo #{id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               onClick={() => onDeleteModal(null)}
               type="button"
@@ -56,7 +55,6 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, onDeleteModal }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={cn({
                   'has-text-danger': !completed,
@@ -68,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodo, onDeleteModal }) => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{user?.name}</a>
+              <a href={`mailto: ${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

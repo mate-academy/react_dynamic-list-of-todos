@@ -4,8 +4,8 @@ import { SortFields } from '../../types/enum';
 type Props = {
   searchValue: string;
   filterField: SortFields;
-  onSearchValue: (v: string) => void;
-  onChangeFilterField: (f: SortFields) => void;
+  onSearchValue: (searchValue: string) => void;
+  onChangeFilterField: (Filterfield: SortFields) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,8 +14,8 @@ export const TodoFilter: React.FC<Props> = ({
   filterField,
   onChangeFilterField,
 }) => {
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChangeFilterField(e.target.value as SortFields);
+  const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeFilterField(event.target.value as SortFields);
   };
 
   return (
@@ -27,9 +27,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterField}
             data-cy="statusSelect"
           >
-            <option value={SortFields.All}>{SortFields.All}</option>
-            <option value={SortFields.Active}>{SortFields.Active}</option>
-            <option value={SortFields.Comleted}>{SortFields.Comleted}</option>
+            {Object.values(SortFields).map(field => (
+              <option key={field} value={field}>
+                {field}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -48,8 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {searchValue && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             <button
               onClick={() => onSearchValue('')}
               data-cy="clearSearchButton"
