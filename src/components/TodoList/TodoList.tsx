@@ -3,41 +3,41 @@ import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 interface Props {
-  todos: Todo[],
-  selectedTodo: Todo,
-  selectTodo : (event) => void
+  todos: Todo[];
+  selectedTodo: Todo;
+  selectTodo: (event) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
-  selectTodo }) => (
-    <table className="table is-narrow is-fullwidth">
-      <thead>
-        <tr>
-          <th>#</th>
+  selectTodo,
+}) => (
+  <table className="table is-narrow is-fullwidth">
+    <thead>
+      <tr>
+        <th>#</th>
 
-          <th>
-            <span className="icon">
-              <i className="fas fa-check" />
-            </span>
-          </th>
+        <th>
+          <span className="icon">
+            <i className="fas fa-check" />
+          </span>
+        </th>
 
-          <th>Title</th>
+        <th>Title</th>
 
-          <th> </th>
-        </tr>
-      </thead>
+        <th> </th>
+      </tr>
+    </thead>
 
-      <tbody>
-        {todos.map(todo => {
-          const {title, completed, id} = todo;
+    <tbody>
+      {todos.map(todo => {
+        const {title, completed, id} = todo;
+        const isSelected = selectedTodo.id === todo.id;
 
-          return (
+        return (
           <tr data-cy="todo" className="" key={id}>
-            <td className="is-vcentered">
-              {id}
-            </td>
+            <td className="is-vcentered">{id}</td>
 
             <td className="is-vcentered">
               { completed && (
@@ -50,8 +50,8 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={cn({
-                  "has-text-danger": !completed,
-                  "has-text-success": completed,
+                  'has-text-danger': !completed,
+                  'has-text-success': completed,
                 })}
               >
                 {title}
@@ -68,16 +68,16 @@ export const TodoList: React.FC<Props> = ({
                 }}
               >
                 <span className="icon">
-                  {selectedTodo?.id === todo.id
-                    ? (<i className="far fa-eye-slash" />)
-                    : (<i className="far fa-eye" />)
-                  }
+                  <i className={cn('far', {
+                    'fa-eye-slash': isSelected,
+                    'fa-eye': !isSelected
+                  })} />
                 </span>
               </button>
             </td>
           </tr>
-        )})}
-
-      </tbody>
-    </table>
+        );
+      })}
+    </tbody>
+  </table>
 );

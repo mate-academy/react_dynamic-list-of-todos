@@ -12,19 +12,19 @@ import { getTodos } from './api';
 import { TaskStatus } from './types/types';
 
 type FilterOptions = {
-  query: string,
-  taskStatusFilter: TaskStatus,
-}
+  query: string;
+  taskStatusFilter: TaskStatus;
+};
 
 const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
-  const {query,
-    taskStatusFilter} = options;
+  const {query, taskStatusFilter} = options;
   let filteredTodos = [...todos];
 
-  const normalizeStr = (str: string): string => str.trim().toLowerCase()
+  const normalizeStr = (str: string): string => str.trim().toLowerCase();
 
   if (query) {
-    filteredTodos = todos.filter(todo => normalizeStr(todo.title).includes(normalizeStr(query)));
+    filteredTodos = todos.filter(todo =>
+       normalizeStr(todo.title).includes(normalizeStr(query)));
   }
 
   if (taskStatusFilter === 'completed') {
@@ -36,7 +36,7 @@ const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
   }
 
   return filteredTodos;
-}
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -74,13 +74,21 @@ export const App: React.FC = () => {
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   selectTodo={setSelectedTodo}
-                />) : <Loader />}
+                />
+                ) : (
+                <Loader />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal setSelectedTodo={setSelectedTodo} selectedTodo={selectedTodo} />}
+      {selectedTodo && (
+        <TodoModal
+          setSelectedTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+        />
+        )}
     </>
   );
 };
