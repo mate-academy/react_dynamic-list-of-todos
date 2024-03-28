@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -23,9 +24,22 @@ export const filteredQueryInput = (
   return comparedTodos;
 };
 
+const helperStatusButton = (filter: Status, todos: Todo[]): Todo[] => {
+  const statusFilter = todos;
+
+  switch (filter) {
+    case Status.Active:
+      return statusFilter.filter(todo => !todo.completed);
+    case Status.Completed:
+      return statusFilter.filter(todo => todo.completed);
+    default:
+      return statusFilter;
+  }
+};
+
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Status.All);
 
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -39,18 +53,7 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  let comparedTodos = todos;
-
-  switch (filter) {
-    case Status.Active:
-      comparedTodos = comparedTodos.filter(todo => !todo.completed);
-      break;
-    case Status.Completed:
-      comparedTodos = comparedTodos.filter(todo => todo.completed);
-      break;
-    default:
-      break;
-  }
+  const comparedTodos = helperStatusButton(filter, todos);
 
   return (
     <>

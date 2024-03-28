@@ -1,5 +1,8 @@
+import { Status } from '../../types/Status';
+import './TodoFilter.scss';
+
 type Props = {
-  setFilter: (value: string) => void;
+  setFilter: (value: Status) => void;
   setQuery: (value: string) => void;
   query: string;
 };
@@ -10,13 +13,13 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => (
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-            setFilter(event.target.value)
-          }
+          onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+            setFilter(event.target.value as Status);
+          }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Status.All}>All</option>
+          <option value={Status.Active}>Active</option>
+          <option value={Status.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -34,7 +37,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => (
         <i className="fas fa-magnifying-glass" />
       </span>
       {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right clickable">
           <button
             data-cy="clearSearchButton"
             type="button"
