@@ -17,14 +17,15 @@ type FilterOptions = {
 };
 
 const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
-  const {query, taskStatusFilter} = options;
+  const { query, taskStatusFilter } = options;
   let filteredTodos = [...todos];
 
   const normalizeStr = (str: string): string => str.trim().toLowerCase();
 
   if (query) {
     filteredTodos = todos.filter(todo =>
-       normalizeStr(todo.title).includes(normalizeStr(query)));
+      normalizeStr(todo.title).includes(normalizeStr(query)),
+    );
   }
 
   if (taskStatusFilter === 'completed') {
@@ -75,9 +76,9 @@ export const App: React.FC = () => {
                   selectedTodo={selectedTodo}
                   selectTodo={setSelectedTodo}
                 />
-                ) : (
+              ) : (
                 <Loader />
-                )}
+              )}
             </div>
           </div>
         </div>
@@ -88,7 +89,7 @@ export const App: React.FC = () => {
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
         />
-        )}
+      )}
     </>
   );
 };

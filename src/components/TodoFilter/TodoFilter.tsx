@@ -2,14 +2,14 @@ import React from 'react';
 
 interface Props {
   query: string;
-  setQuery: (string) => void;
-  setTaskStatusFilter: (string) => void;
+  setQuery: (arg) => void;
+  setTaskStatusFilter: (arg) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
-  setTaskStatusFilter
+  setTaskStatusFilter,
 }) => (
   <form className="field has-addons" onSubmit={event => event.preventDefault()}>
     <p className="control">
@@ -45,7 +45,8 @@ export const TodoFilter: React.FC<Props> = ({
             type="button"
             className="delete"
             onClick={() => setQuery('')}
-          />)}
+          />
+        )}
       </span>
     </p>
   </form>

@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 interface Props {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   setSelectedTodo: (arg: Todo | null) => void;
 }
 
@@ -36,7 +36,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectedTodo?.id}
+              Todo #{selectedTodo.id}
             </div>
 
             <button
@@ -44,26 +44,26 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setSelectedTodo(null)
-                setIsUserLoaded(null)
+                setSelectedTodo(null);
+                setIsUserLoaded(false);
               }}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={cn({
-                  "has-text-danger": !selectedTodo?.completed,
-                  "has-text-success": selectedTodo?.completed,
+                  'has-text-danger': !selectedTodo.completed,
+                  'has-text-success': selectedTodo.completed,
                 })}
               >
-                {selectedTodo?.completed ? 'Done' : 'Planned'}
+                {selectedTodo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
