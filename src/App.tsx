@@ -13,17 +13,17 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [query, setQuery] = useState<string>('');
   const [status, setStatus] = useState<Status>(Status.All);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Try Again Later'))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = todos.filter(todo => {
@@ -54,16 +54,16 @@ export const App: React.FC = () => {
                 status={status}
                 query={query}
                 onStatusChange={setStatus}
-                onqueryChange={setQuery}
+                onQueryChange={setQuery}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
               {errorMessage && <div>{errorMessage}</div>}
 
-              {!loading && !errorMessage && (
+              {!isLoading && !errorMessage && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}

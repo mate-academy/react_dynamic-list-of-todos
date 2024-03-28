@@ -1,16 +1,18 @@
 import React from 'react';
 import { Status } from '../../types/Status';
+
 type Props = {
   status: Status;
   query: string;
   onStatusChange: (status: Status) => void;
-  onqueryChange: (search: string) => void;
+  onQueryChange: (search: string) => void;
 };
+
 export const TodoFilter: React.FC<Props> = ({
   status,
   query,
   onStatusChange,
-  onqueryChange,
+  onQueryChange,
 }) => {
   return (
     <form className="field has-addons" onSubmit={e => e.preventDefault()}>
@@ -21,9 +23,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={status}
             onChange={e => onStatusChange(e.target.value as Status)}
           >
-            <option value={Status.All}>All</option>
-            <option value={Status.Active}>Active</option>
-            <option value={Status.Completed}>Completed</option>
+            {Object.values(Status).map(value => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -36,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
           placeholder="Search..."
           value={query}
           onChange={e => {
-            onqueryChange(e.target.value);
+            onQueryChange(e.target.value);
           }}
         />
         <span className="icon is-left">
@@ -44,13 +48,12 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {!!query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onqueryChange('')}
+              onClick={() => onQueryChange('')}
             />
           </span>
         )}

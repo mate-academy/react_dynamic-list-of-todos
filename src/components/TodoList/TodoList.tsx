@@ -1,11 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | null;
   onSelect: (todo: Todo) => void;
 };
+
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
@@ -29,12 +31,14 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => {
           const { id, completed, title } = todo;
 
+          const selectedId = selectedTodo?.id === id;
+
           return (
             <tr
               key={id}
               data-cy="todo"
               className={classNames({
-                'has-background-info-light': selectedTodo?.id === id,
+                'has-background-info-light': selectedId,
               })}
             >
               <td className="is-vcentered">{id}</td>
@@ -66,7 +70,7 @@ export const TodoList: React.FC<Props> = ({
                     <i
                       className={classNames({
                         'far fa-eye': selectedTodo?.id !== id,
-                        'far fa-eye-slash': selectedTodo?.id === id,
+                        'far fa-eye-slash': selectedId,
                       })}
                     />
                   </span>
