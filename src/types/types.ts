@@ -1,1 +1,1 @@
-type TaskStatus = 'completed'| 'active' | 'all';
+export type TaskStatus = 'completed'| 'active' | 'all';

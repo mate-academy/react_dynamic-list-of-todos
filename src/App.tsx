@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TaskStatus } from './types/types';
 
 type FilterOptions = {
   query: string,
@@ -48,7 +49,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .finally(() => setIsTodoArrayLoaded(true));
-  });
+  }, []);
 
   const filteredTodos = getFilteredTodos(todos, { query, taskStatusFilter });
 
