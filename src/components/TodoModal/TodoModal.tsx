@@ -15,13 +15,25 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
-  const [user, setUser] = useState<User>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  const {
+    id,
+    userId,
+    completed,
+    title
+  } = selectedTodo;
+
+  const {
+    email,
+    name,
+  } = user;
 
   useEffect(() => {
-    getUser(selectedTodo.userId)
+    getUser(userId)
       .then(setUser)
       .finally(() => setIsUserLoaded(true));
-  }, [selectedTodo.userId]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -36,7 +48,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectedTodo.id}
+              Todo #{id}
             </div>
 
             <button
@@ -49,23 +61,23 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={cn({
-                  "has-text-danger": !selectedTodo.completed,
-                  "has-text-success": selectedTodo.completed,
+                  "has-text-danger": !selectedTodo?.completed,
+                  "has-text-success": selectedTodo?.completed,
                 })}
               >
-                {selectedTodo.completed ? 'Done' : 'Planned'}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
               {}
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              <a href={`mailto:${email}`}>{name}</a>
             </p>
           </div>
         </div>
