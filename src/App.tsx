@@ -18,7 +18,7 @@ type FilterTheTodos = (
 ) => Todo[];
 
 const getFilteredTodos: FilterTheTodos = (todos, filterBy, query) => {
-  let filteredTodos = todos;
+  let filteredTodos = [...todos];
 
   if (filterBy !== FilterBy.All) {
     filteredTodos = todos.filter(todo => {
