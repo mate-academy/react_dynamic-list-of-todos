@@ -11,12 +11,12 @@ import { Todo } from './types/Todo';
 import { FilteredOptions } from './types/FilteredOption';
 import { getTodos } from './api';
 
-function handleFilteredTodos(
+function getFilteredTodos(
   todos: Todo[],
   selectedOption: FilteredOptions,
   query: string,
 ) {
-  let filteredTodos = [...todos];
+  let filteredTodos = todos;
 
   if (query) {
     filteredTodos = filteredTodos.filter(todo =>
@@ -25,9 +25,9 @@ function handleFilteredTodos(
   }
 
   switch (selectedOption) {
-    case FilteredOptions.active:
+    case FilteredOptions.Active:
       return filteredTodos.filter(todo => !todo.completed);
-    case FilteredOptions.completed:
+    case FilteredOptions.Completed:
       return filteredTodos.filter(todo => todo.completed);
 
     default:
@@ -41,19 +41,17 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [selectedOption, setSelectedOption] = useState<FilteredOptions>(
-    FilteredOptions.all,
+    FilteredOptions.All,
   );
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      })
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
-  const preparedTodos = handleFilteredTodos(todos, selectedOption, query);
+  const preparedTodos = getFilteredTodos(todos, selectedOption, query);
 
   return (
     <>
@@ -66,14 +64,14 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 setQuery={setQuery}
-                handleSetOption={option => setSelectedOption(option)}
+                handleSetOption={setSelectedOption}
                 selectedOption={selectedOption}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              {!isLoading && todos.length > 0 && (
+              {!isLoading && todos.length && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}

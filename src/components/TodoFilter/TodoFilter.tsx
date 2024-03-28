@@ -1,4 +1,5 @@
 import { FilteredOptions } from '../../types/FilteredOption';
+import './TodoFilter';
 
 type Props = {
   query: string;
@@ -26,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleOptionChange}
           >
-            <option value="all">{FilteredOptions.all}</option>
-            <option value="active">{FilteredOptions.active}</option>
-            <option value="completed">{FilteredOptions.completed}</option>
+            <option value={FilteredOptions.All}>All</option>
+            <option value={FilteredOptions.Active}>Active</option>
+            <option value={FilteredOptions.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -47,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className="icon is-right all-pointer-events">
             <button
               data-cy="clearSearchButton"
               type="button"
