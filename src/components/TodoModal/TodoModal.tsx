@@ -15,16 +15,20 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(setSelectedUser);
+    setIsLoading(true);
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .finally(() => setIsLoading(false));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,7 +54,7 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo?.completed === false ? (
+              {!selectedTodo?.completed ? (
                 <strong className="has-text-danger">Planned</strong>
               ) : (
                 <strong className="has-text-success">Done</strong>
@@ -58,7 +62,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>{selectedUser.name}</a>
+              <a href={`mailto:${selectedUser?.email}`}>{selectedUser?.name}</a>
             </p>
           </div>
         </div>
