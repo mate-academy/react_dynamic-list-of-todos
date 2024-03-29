@@ -10,12 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Status } from './enums/Status';
+import { handleFiltration } from './functions/functions';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // for hiding modal once the posts fully loaded
-  const [value, setValue] = useState<string>(''); // for controling input, the reasone why it is in App component because I need to set this state into two components (TodoFilter and TodoList)
-  const [status, setStatus] = useState(Status.All); // for control select
-  const [todos, setTodos] = useState<Todo[]>([]); // for updating todos list
+  const [value, setValue] = useState<string>(''); // for controling input, the reasone why it is in App component because I need to pass this state into handleFiltration function
+  const [status, setStatus] = useState(Status.All); // for control select, the reasone why it is in App component because I need to pass this state into handleFiltration function
+  const [todos, setTodos] = useState<Todo[]>([]); // for updating todos list and need to pass this state into handleFiltration function
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null); // this needs for information into popup
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,36 +42,14 @@ export const App: React.FC = () => {
     setStatus(e.target.value as Status);
   };
 
-  const handleFiltration = (query: string, condition: Status) => {
-    let preparedTodos = [...todos];
-
-    if (query) {
-      preparedTodos = preparedTodos.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    if (condition) {
-      switch (condition) {
-        case Status.Active.toLowerCase():
-          preparedTodos = preparedTodos.filter(todo => !todo.completed);
-          break;
-        case Status.Completed.toLowerCase():
-          preparedTodos = preparedTodos.filter(todo => todo.completed);
-          break;
-      }
-    }
-
-    return preparedTodos;
-  };
-
   useEffect(() => {
     getTodos().then(response => {
       setTodos(response);
       setLoading(!response);
     });
   }, []);
-  const visibleTodos = handleFiltration(value, status);
+
+  const visibleTodos = handleFiltration(value, status, todos);
 
   return (
     <>
