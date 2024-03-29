@@ -1,11 +1,18 @@
 import React from 'react';
+import { FilterOption } from '../../types/FilterOption';
 
 type Props = {
   query: string;
   setQuery: (value: string) => void;
   filterOption: string;
-  setFilterOption: (value: string) => void;
+  setFilterOption: (value: FilterOption) => void;
 };
+
+const optionsList: string[] = [];
+
+for (const value of Object.values(FilterOption)) {
+  optionsList.push(value);
+}
 
 export const TodoFilter: React.FC<Props> = ({
   query,
@@ -20,11 +27,21 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterOption}
-            onChange={event => setFilterOption(event.target.value)}
+            onChange={event =>
+              setFilterOption(event.target.value as FilterOption)
+            }
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {optionsList.map(option => {
+              const optionCapitalised =
+                option.slice(0, 1).toUpperCase() +
+                option.slice(1, option.length);
+
+              return (
+                <option value={option} key={option}>
+                  {optionCapitalised}
+                </option>
+              );
+            })}
           </select>
         </span>
       </p>
@@ -43,8 +60,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right filter__button-reset">
             <button
               data-cy="clearSearchButton"
               type="button"

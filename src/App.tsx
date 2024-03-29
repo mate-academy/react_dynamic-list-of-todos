@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,13 +9,14 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { getPreparedTodos } from './components/services/getPreparedTodos';
+import { FilterOption } from './types/FilterOption';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const [query, setQuery] = useState('');
-  const [filterOption, setFilterOption] = useState('all');
+  const [filterOption, setFilterOption] = useState(FilterOption.All);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 

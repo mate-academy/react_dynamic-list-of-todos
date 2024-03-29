@@ -1,3 +1,4 @@
+import { FilterOption } from '../../types/FilterOption';
 import { Todo } from '../../types/Todo';
 
 export const getPreparedTodos = (
@@ -15,13 +16,13 @@ export const getPreparedTodos = (
 
   return todosCopy.filter(todo => {
     switch (filterOption) {
-      case 'completed':
+      case FilterOption.Completed:
         return todo.completed;
 
-      case 'active':
+      case FilterOption.Active:
         return !todo.completed;
 
-      case 'all':
+      case FilterOption.All:
       default:
         return true;
     }
