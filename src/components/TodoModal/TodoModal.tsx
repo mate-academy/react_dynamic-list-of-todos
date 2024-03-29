@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  checkedTodo: Todo | null;
+  closeModal: (value: Todo | null) => void;
+  resetTodoClickedState: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  checkedTodo,
+  closeModal,
+  resetTodoClickedState,
+}) => {
+  const [loadingModal, setLoadingModal] = useState(false);
+  const [userSt, setUserSt] = useState<User | null>(null);
+
+  useEffect(() => {
+    setLoadingModal(true);
+    if (checkedTodo !== null) {
+      getUser(checkedTodo.userId)
+        .then(setUserSt)
+        .finally(() => setLoadingModal(false));
+    }
+  }, [checkedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loadingModal ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +40,37 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${checkedTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => {
+                closeModal(null);
+                resetTodoClickedState();
+              }}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {checkedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {checkedTodo?.completed === true ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${userSt?.email}`}>{userSt?.name}</a>
             </p>
           </div>
         </div>
