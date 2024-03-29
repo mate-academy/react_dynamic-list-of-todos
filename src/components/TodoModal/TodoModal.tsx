@@ -5,18 +5,16 @@ import { getData } from '../../utils/httpClient';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  user: User | null;
   checkedTodo: Todo | null;
   closeModal: (value: Todo | null) => void;
   resetTodoClickedState: () => void;
 };
 
-function getUser(user: User): Promise<User> {
-  return getData(`/users/${user.id}.json`);
+function getUser(todo: Todo): Promise<User> {
+  return getData(`/users/${todo.userId}.json`);
 }
 
 export const TodoModal: React.FC<Props> = ({
-  user,
   checkedTodo,
   closeModal,
   resetTodoClickedState,
@@ -26,12 +24,12 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setLoadingModal(true);
-    if (user !== null) {
-      getUser(user)
+    if (checkedTodo !== null) {
+      getUser(checkedTodo)
         .then(setUserSt)
         .finally(() => setLoadingModal(false));
     }
-  }, [user]);
+  }, [checkedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
