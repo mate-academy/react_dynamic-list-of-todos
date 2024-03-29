@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
           const isSelectedTodo = selectedTodo?.id === todo.id;
 
           return (
-            <tr data-cy="todo" className="" key={todo.userId}>
+            <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
@@ -60,7 +60,6 @@ export const TodoList: React.FC<Props> = ({
                   onClick={() => setSelectedTodo(todo)}
                 >
                   <span className="icon">
-                    {/* fa-eye-slash */}
                     <i
                       className={cn('far', {
                         'fa-eye': !isSelectedTodo,

@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState(Status.All);
+  const [filter, setFilter] = useState<Status>(Status.All);
   const [query, setQuery] = useState('');
 
   let visibleTodos = getFilterTodos([...todos], filter);
