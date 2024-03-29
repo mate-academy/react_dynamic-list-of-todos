@@ -12,15 +12,15 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getUsers } from './services/user';
 
-function getFilteredTodos(tododos: Todo[], query: string, queryInput: string) {
+function getFilteredTodos(todos: Todo[], query: string, queryInput: string) {
   const lowerCaseQueryInput = queryInput.toLowerCase();
-  const preparedTodos = tododos.filter(tododo => {
+  const preparedTodos = todos.filter(todo => {
     if (query === 'active') {
-      return tododo.completed === false;
+      return todo.completed === false;
     } else if (query === 'completed') {
-      return tododo.completed === true;
+      return todo.completed === true;
     } else {
-      return tododos;
+      return todos;
     }
   });
 
