@@ -13,7 +13,7 @@ import { getPreparedTodos } from './components/services/getPreparedTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   const [query, setQuery] = useState('');
   const [filterOption, setFilterOption] = useState('all');
@@ -23,6 +23,7 @@ export const App: React.FC = () => {
   const visibleTodos = getPreparedTodos(todos, query, filterOption);
 
   useEffect(() => {
+    setLoading(true);
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));

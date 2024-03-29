@@ -9,7 +9,7 @@ export const getPreparedTodos = (
 
   if (query) {
     todosCopy = todosCopy.filter(todo =>
-      todo.title.trim().toLowerCase().includes(query.trim().toLowerCase()),
+      todo.title.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
