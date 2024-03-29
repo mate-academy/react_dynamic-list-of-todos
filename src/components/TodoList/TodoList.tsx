@@ -1,11 +1,10 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { SetTodo } from '../../interfaces/interfaces';
 import classNames from 'classnames';
 type Props = {
   todos: Todo[];
-  handleShowModal: (id: number, information: SetTodo) => void;
-  choseTodo: SetTodo | null;
+  handleShowModal: (todo: Todo) => void;
+  choseTodo: Todo | null;
 };
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -28,19 +27,19 @@ export const TodoList: React.FC<Props> = ({
       </thead>
       <tbody>
         {todos &&
-          todos.map(({ id, title, completed, userId }) => {
+          todos.map(todo => {
             return (
               <tr
                 data-cy="todo"
                 className={classNames({
                   'has-background-info-light':
-                    choseTodo?.highlightedTodo && choseTodo.id === id,
+                    choseTodo && choseTodo.id === todo.id,
                 })}
-                key={id}
+                key={todo.id}
               >
-                <td className="is-vcentered">{id}</td>
+                <td className="is-vcentered">{todo.id}</td>
                 <td className="is-vcentered">
-                  {completed && (
+                  {todo.completed && (
                     <span className="icon" data-cy="iconCompleted">
                       <i className="fas fa-check" />
                     </span>
@@ -49,10 +48,10 @@ export const TodoList: React.FC<Props> = ({
                 <td className="is-vcentered is-expanded">
                   <p
                     className={
-                      completed ? 'has-text-success' : 'has-text-danger'
+                      todo.completed ? 'has-text-success' : 'has-text-danger'
                     }
                   >
-                    {title}
+                    {todo.title}
                   </p>
                 </td>
                 <td className="has-text-right is-vcentered">
@@ -60,16 +59,9 @@ export const TodoList: React.FC<Props> = ({
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() =>
-                      handleShowModal(userId, {
-                        title,
-                        id,
-                        completed,
-                        highlightedTodo: true,
-                      })
-                    }
+                    onClick={() => handleShowModal(todo)}
                   >
-                    {choseTodo?.highlightedTodo && choseTodo.id == id ? (
+                    {choseTodo && choseTodo.id === todo.id ? (
                       <span className="icon">
                         <i className="far fa-eye-slash" />
                       </span>

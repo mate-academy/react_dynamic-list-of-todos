@@ -1,28 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
-import { SetTodo } from '../../interfaces/interfaces';
 import { getUser } from '../../api';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  loading: boolean;
   handleCloseModal: () => void;
-  user: User | null;
-  choseTodo: SetTodo | null;
-  usersId: number;
-  setUser: (response: User) => void;
-  setLoadingUser: (res: boolean) => void;
+  choseTodo: Todo | null;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  loading,
-  handleCloseModal,
-  user,
-  choseTodo,
-  usersId,
-  setUser,
-  setLoadingUser,
-}) => {
+export const TodoModal: React.FC<Props> = ({ handleCloseModal, choseTodo }) => {
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const status = choseTodo?.completed ? (
     <strong className="has-text-success">Done</strong>
   ) : (
@@ -30,17 +19,19 @@ export const TodoModal: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    getUser(usersId)
-      .then(response => {
-        setUser(response);
-      })
-      .finally(() => setLoadingUser(false));
-  }, [usersId, setLoadingUser, setUser]);
+    if (choseTodo) {
+      getUser(choseTodo.userId)
+        .then(response => {
+          setUser(response);
+        })
+        .finally(() => setLoadingUser(false));
+    }
+  }, [choseTodo, setLoadingUser, setUser]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      {loading ? (
+      {loadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">

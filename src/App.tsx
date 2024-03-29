@@ -10,31 +10,32 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Status } from './enums/Status';
-import { User } from './types/User';
-import { SetTodo } from './interfaces/interfaces';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [loadingUser, setLoadingUser] = useState(true);
-  const [text, setText] = useState('');
-  const [status, setStatus] = useState(Status.All);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [usersId, setUsersId] = useState<number>(0);
-  const [user, setUser] = useState<User | null>(null);
-  const [choseTodo, setChoseTodo] = useState<SetTodo | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // for hiding modal once the posts fully loaded
+  const [value, setValue] = useState<string>(''); // for controling input, the reasone why it is in App component because I need to set this state into two components (TodoFilter and TodoList)
+  const [status, setStatus] = useState(Status.All); // for control select
+  const [todos, setTodos] = useState<Todo[]>([]); // for updating todos list
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null); // this needs for information into popup
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+    setValue(e.target.value);
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
-    setChoseTodo(prevState => ({
-      ...prevState,
-      highlightedTodo: false,
-    }));
+    setSelectedTodo(null);
   };
+
+  const handleClearInput = () => {
+    setValue('');
+  };
+
+  const handleShowModal = useMemo(
+    () => (todo: Todo) => {
+      setSelectedTodo(todo);
+    },
+    [],
+  );
 
   const handleCheckStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value as Status);
@@ -55,7 +56,7 @@ export const App: React.FC = () => {
           preparedTodos = preparedTodos.filter(todo => !todo.completed);
           break;
         case Status.Completed.toLowerCase():
-          preparedTodos = preparedTodos.filter(todo => todo.completed === true);
+          preparedTodos = preparedTodos.filter(todo => todo.completed);
           break;
       }
     }
@@ -63,28 +64,13 @@ export const App: React.FC = () => {
     return preparedTodos;
   };
 
-  const visibleTodos = handleFiltration(text, status);
-
   useEffect(() => {
-    getTodos().then(res => {
-      setTodos(res);
-      setLoading(!res);
+    getTodos().then(response => {
+      setTodos(response);
+      setLoading(!response);
     });
   }, []);
-
-  const handleClearInput = () => {
-    setText('');
-  };
-
-  const handleShowModal = useMemo(
-    () => (id: number, information: SetTodo) => {
-      setShowModal(true);
-      setLoadingUser(true);
-      setUsersId(id);
-      setChoseTodo(information);
-    },
-    [],
-  );
+  const visibleTodos = handleFiltration(value, status);
 
   return (
     <>
@@ -95,7 +81,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                text={text}
+                text={value}
                 handleFilter={handleFilter}
                 handleClearInput={handleClearInput}
                 handleCheckStatus={handleCheckStatus}
@@ -109,7 +95,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   handleShowModal={handleShowModal}
-                  choseTodo={choseTodo}
+                  choseTodo={selectedTodo}
                 />
               )}
             </div>
@@ -117,15 +103,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && (
+      {selectedTodo && (
         <TodoModal
-          user={user}
-          choseTodo={choseTodo}
-          loading={loadingUser}
+          choseTodo={selectedTodo}
           handleCloseModal={handleCloseModal}
-          usersId={usersId}
-          setUser={setUser}
-          setLoadingUser={setLoadingUser}
         />
       )}
     </>
