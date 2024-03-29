@@ -1,8 +1,29 @@
-export const TodoFilter = () => (
+enum FilterType {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
+
+interface Props {
+  setFilterType: (filterType: FilterType) => void;
+  filterText: string;
+  setFilterText: (filterText: string) => void;
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  filterText,
+  setFilterText,
+  setFilterType,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+            setFilterType(event.target.value as FilterType)
+          }
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,14 +37,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={filterText}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setFilterText(event.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {filterText.length > 0 && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setFilterText('')}
+          />
+        )}
       </span>
     </p>
   </form>
