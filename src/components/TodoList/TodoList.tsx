@@ -3,13 +3,13 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  onTodoSelect: (todo: Todo) => void;
   selectedTodo: Todo | null;
-  onShowButtonClick: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onShowButtonClick = () => {},
+  onTodoSelect,
   selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -29,12 +29,13 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => {
         const { id, title, completed } = todo;
+        const isCurrentTodoSelected = selectedTodo?.id === todo.id;
 
         return (
           <tr
             data-cy="todo"
             className={cn({
-              'has-background-info-light': selectedTodo?.id === todo.id,
+              'has-background-info-light': isCurrentTodoSelected,
             })}
             key={id}
           >
@@ -60,13 +61,13 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onShowButtonClick(todo)}
+                onClick={() => onTodoSelect(todo)}
               >
                 <span className="icon">
                   <i
                     className={cn(
                       'far',
-                      selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye',
+                      isCurrentTodoSelected ? 'fa-eye-slash' : 'fa-eye',
                     )}
                   />
                 </span>

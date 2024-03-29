@@ -7,15 +7,12 @@ import { User } from '../../types/User';
 
 interface Props {
   selectedTodo: Todo;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onClose: (todo: Todo | null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodo,
-}) => {
-  const [isModalLoading, setIsModalLoading] = useState(false);
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
   useEffect(() => {
     setIsModalLoading(true);
@@ -41,12 +38,11 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => onClose(null)}
             />
           </header>
 

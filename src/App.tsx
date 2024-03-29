@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -13,7 +12,7 @@ import { FilterBy } from './types/FilterBy';
 
 type FilterTheTodos = (
   todos: Todo[],
-  filterBy: string,
+  filterBy: FilterBy,
   query: string,
 ) => Todo[];
 
@@ -51,13 +50,22 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [query, setQuery] = useState('');
 
+  const handleToglingTodo = (todo: Todo | null) => {
+    setSelectedTodo(todo);
+  };
+
+  const handleQueryResetting = () => setQuery('');
+  const handleQuerySelecting = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setQuery(event.target.value);
+
+  const handleFilteringBy = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setFilterBy(event.target.value as FilterBy);
+
   useEffect(() => {
     setIsLoading(true);
 
     getTodos()
-      .then(newTodos => {
-        setTodos(newTodos);
-      })
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -72,9 +80,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setQuery={setQuery}
+                onType={handleQuerySelecting}
+                onReset={handleQueryResetting}
                 query={query}
-                setFilterBy={setFilterBy}
+                onSetFilter={handleFilteringBy}
               />
             </div>
 
@@ -84,8 +93,8 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
+                  onTodoSelect={handleToglingTodo}
                   selectedTodo={selectedTodo}
-                  onShowButtonClick={setSelectedTodo}
                 />
               )}
             </div>
@@ -94,10 +103,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
+        <TodoModal selectedTodo={selectedTodo} onClose={handleToglingTodo} />
       )}
     </>
   );
