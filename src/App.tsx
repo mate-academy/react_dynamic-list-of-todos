@@ -49,10 +49,17 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getTodos().then(data => {
-      setTodods(data);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(data => {
+        setTodods(data);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching todos:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (

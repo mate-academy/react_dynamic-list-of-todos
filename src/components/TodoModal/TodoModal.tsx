@@ -17,10 +17,18 @@ export const TodoModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(data => {
-      setUser(data);
-      setIsLoading(false);
-    });
+    setIsLoading(true);
+    getUser(selectedTodo.userId)
+      .then(data => {
+        setUser(data);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching user data:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [selectedTodo.userId]);
 
   return (
