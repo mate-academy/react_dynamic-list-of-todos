@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
-import { getData } from '../../utils/httpClient';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
   checkedTodo: Todo | null;
   closeModal: (value: Todo | null) => void;
   resetTodoClickedState: () => void;
 };
-
-function getUser(todo: Todo): Promise<User> {
-  return getData(`/users/${todo.userId}.json`);
-}
 
 export const TodoModal: React.FC<Props> = ({
   checkedTodo,
@@ -25,7 +21,7 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     setLoadingModal(true);
     if (checkedTodo !== null) {
-      getUser(checkedTodo)
+      getUser(checkedTodo.userId)
         .then(setUserSt)
         .finally(() => setLoadingModal(false));
     }

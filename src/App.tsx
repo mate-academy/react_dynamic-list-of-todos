@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './services/todo';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 function getFilteredTodos(todos: Todo[], query: string, queryInput: string) {
