@@ -11,16 +11,6 @@ export const TodoList: React.FC<TodoListProps> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const completedTodo = (
-    <td className="is-vcentered">
-      <span className="icon" data-cy="iconCompleted">
-        <i className="fas fa-check" />
-      </span>
-    </td>
-  );
-
-  const incompletedTodo = <td className="is-vcentered" />;
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -40,7 +30,20 @@ export const TodoList: React.FC<TodoListProps> = ({
         {todos.map(todo => (
           <tr key={todo.id} data-cy="todo" className="">
             <td className="is-vcentered">{todo.id}</td>
-            {todo.completed ? completedTodo : incompletedTodo}
+            {todo.completed && (
+              <>
+                <td className="is-vcentered">
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                </td>
+              </>
+            )}
+            {!todo.completed && (
+              <>
+                <td className="is-vcentered" />
+              </>
+            )}
             <td className="is-vcentered is-expanded">
               <p
                 className={
