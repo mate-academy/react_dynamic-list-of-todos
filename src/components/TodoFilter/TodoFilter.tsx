@@ -1,4 +1,6 @@
 import React from 'react';
+import cn from 'classnames';
+
 import { Status } from '../../types/Status';
 
 type Props = {
@@ -18,9 +20,11 @@ export const TodoFilter: React.FC<Props> = ({
     <p className="control">
       <span className="select">
         <select data-cy="statusSelect" onChange={onSelectedStatus}>
-          <option value={Status.All}>All</option>
-          <option value={Status.Active}>Active</option>
-          <option value={Status.Completed}>Completed</option>
+          {Object.values(Status).map(status => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -39,8 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       {currentQuery && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className={cn('icon', 'is-right', 'pointer-events-all')}>
           <button
             data-cy="clearSearchButton"
             type="button"

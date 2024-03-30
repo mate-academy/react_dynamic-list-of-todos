@@ -15,13 +15,11 @@ export const TodoModal: React.FC<Props> = ({ currentTodo, onRemove }) => {
 
   useEffect(() => {
     getUser(currentTodo.userId)
-      .then(user => {
-        setCurrentUser(user);
-      })
+      .then(setCurrentUser)
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [currentTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">

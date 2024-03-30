@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   listOfTodos: Todo[];
@@ -33,7 +34,9 @@ export const TodoList: React.FC<Props> = ({
           <tr
             key={todo.id}
             data-cy="todo"
-            className="has-background-info-light"
+            className={cn({
+              'has-background-info-light': todoSelected?.id === todo.id,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -63,11 +66,11 @@ export const TodoList: React.FC<Props> = ({
               >
                 <span className="icon">
                   <i
-                    className={
-                      todoSelected === todo ? 'far fa-eye-slash' : 'far fa-eye'
-                    }
+                    className={cn(
+                      { 'far fa-eye-slash': todoSelected?.id === todo.id },
+                      { 'far fa-eye': todoSelected?.id !== todo.id },
+                    )}
                   />
-                  {/* -slash */}
                 </span>
               </button>
             </td>

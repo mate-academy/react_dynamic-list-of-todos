@@ -11,16 +11,16 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
 
-function filteredTodos(todos: Todo[], filteredStatus: string, options: string) {
-  let visibleTodos = [...todos];
+function filteredTodos(todos: Todo[], filteredStatus: Status, options: string) {
+  let visibleTodos = todos;
 
   if (filteredStatus !== Status.All) {
     visibleTodos = visibleTodos.filter((todo: Todo) => {
       switch (filteredStatus) {
         case Status.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case Status.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           return;
       }
@@ -33,23 +33,21 @@ function filteredTodos(todos: Todo[], filteredStatus: string, options: string) {
 }
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [listOfTodos, setListOfTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [query, setQuery] = useState<string>('');
-  const [filterByStatus, setFilterByStatus] = useState<string>(Status.All);
+  const [filterByStatus, setFilterByStatus] = useState<Status>(Status.All);
 
   const visibleTodos = filteredTodos(listOfTodos, filterByStatus, query);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
-      .then(newValue => {
-        setListOfTodos(newValue);
-      })
+      .then(setListOfTodos)
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
       });
   }, []);
 
@@ -64,7 +62,7 @@ export const App: React.FC = () => {
   const handleSelectedFilterByStatus = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
-    setFilterByStatus(event.target.value);
+    setFilterByStatus(event.target.value as Status);
   };
 
   const handleUnselectedTodo = () => {
@@ -92,7 +90,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 listOfTodos={visibleTodos}
                 onSelected={handleSelectedTodo}
