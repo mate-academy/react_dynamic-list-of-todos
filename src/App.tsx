@@ -29,13 +29,13 @@ export const App: React.FC = () => {
   }, []);
 
   const handleFiltering = useCallback(() => {
-    const newTodos = todos.filter(todo => {
-      if (query && !todo.title.includes(query)) {
+    const newTodos = todos.filter(({ title, completed }) => {
+      if (query && !title.includes(query)) {
         return false;
       }
 
       if (status !== Status.All) {
-        return status === 'active' ? !todo.completed : todo.completed;
+        return status === 'active' ? !completed : completed;
       }
 
       return true;
