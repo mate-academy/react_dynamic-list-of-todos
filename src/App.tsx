@@ -5,20 +5,16 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilteringOption } from './types/FilteringOption';
 import { Status } from './types/Status';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 
-type FilteringProps = {
-  selectedStatus: Status;
-  query: string;
-};
-
 const getPreparedTodos = (
   todos: Todo[],
-  { selectedStatus, query }: FilteringProps,
+  { selectedStatus, query }: FilteringOption,
 ) => {
   let preparedTodos = [...todos];
 
@@ -46,7 +42,12 @@ const getPreparedTodos = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo>({
+    id: 0,
+    title: '',
+    completed: false,
+    userId: 0,
+  });
 
   const [isListLoading, setIsListLoading] = useState(true);
   const [isModalShowing, setIsModalShowing] = useState(false);
@@ -108,10 +109,7 @@ export const App: React.FC = () => {
       </div>
 
       {isModalShowing && (
-        <TodoModal
-          todo={selectedTodo as Todo}
-          onDelete={handleDelete as () => void}
-        />
+        <TodoModal todo={selectedTodo} onDelete={handleDelete} />
       )}
     </>
   );

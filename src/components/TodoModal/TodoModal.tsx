@@ -11,7 +11,12 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
   useEffect(() => {
@@ -59,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
 
               {' by '}
 
-              <a href={`mailto:${selectedUser?.email}`}>{selectedUser?.name}</a>
+              <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
             </p>
           </div>
         </div>
