@@ -19,10 +19,10 @@ const getPreparedTodos = (
   let preparedTodos = [...todos];
 
   switch (selectedStatus) {
-    case 'active':
+    case Status.active:
       preparedTodos = todos.filter(todo => !todo.completed);
       break;
-    case 'completed':
+    case Status.completed:
       preparedTodos = todos.filter(todo => todo.completed);
       break;
   }
@@ -42,39 +42,24 @@ const getPreparedTodos = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>({
-    id: 0,
-    title: '',
-    completed: false,
-    userId: 0,
-  });
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [isListLoading, setIsListLoading] = useState(true);
-  const [isModalShowing, setIsModalShowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [query, setQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<Status>('all');
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.all);
 
-  let visibleTodos = getPreparedTodos(todos, { selectedStatus, query });
+  const visibleTodos = getPreparedTodos(todos, { selectedStatus, query });
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setIsListLoading(false));
+      .finally(() => setIsLoading(true));
   }, []);
-
-  const handleClick = (todo: Todo) => {
-    setSelectedTodo(todo);
-    setIsModalShowing(true);
-  };
-
-  const handleDelete = () => {
-    setIsModalShowing(false);
-  };
 
   const handleReset = () => {
     setQuery('');
-    visibleTodos = todos;
+    setSelectedStatus(Status.all);
   };
 
   return (
@@ -87,20 +72,21 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
+                selectedStatus={selectedStatus}
                 onReset={handleReset}
                 onQueryChange={setQuery}
                 onStatusChange={setSelectedStatus}
               />
             </div>
 
-            {isListLoading ? (
+            {!isLoading ? (
               <Loader />
             ) : (
               <div className="block">
                 <TodoList
                   todos={visibleTodos}
-                  onClick={handleClick}
-                  isModalShowing={isModalShowing}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               </div>
             )}
@@ -108,8 +94,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalShowing && (
-        <TodoModal todo={selectedTodo} onDelete={handleDelete} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />
       )}
     </>
   );

@@ -7,29 +7,24 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
-  onDelete: () => void;
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
-  const [selectedUser, setSelectedUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getUser(todo.userId)
       .then(setSelectedUser)
-      .finally(() => setIsUserLoaded(true));
+      .finally(() => setIsLoading(true));
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isUserLoaded ? (
+      {!isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -41,12 +36,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onDelete}
+              onClick={() => setSelectedTodo(null)}
             />
           </header>
 
@@ -64,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
 
               {' by '}
 
-              <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
+              <a href={`mailto:${selectedUser?.email}`}>{selectedUser?.name}</a>
             </p>
           </div>
         </div>
