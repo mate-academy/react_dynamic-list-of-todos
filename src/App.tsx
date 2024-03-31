@@ -9,41 +9,17 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { getFilteredTodos } from './utils/GetFiltreredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filteredBy, setFilteredBy] = useState('');
+  const [filteredBy, setFilteredBy] = useState('all');
 
   const [loading, setLoading] = useState(false);
 
-  const getFilteredTodos = (queryData: string, fieldFilter: string): Todo[] => {
-    let preparedTodos = [...todos];
-
-    if (queryData) {
-      preparedTodos = preparedTodos.filter(todo =>
-        todo.title.toLowerCase().includes(query.trim().toLowerCase()),
-      );
-    }
-
-    if (fieldFilter !== 'all') {
-      switch (filteredBy) {
-        case 'active':
-          preparedTodos = preparedTodos.filter(todo => !todo.completed);
-          break;
-        case 'completed':
-          preparedTodos = preparedTodos.filter(todo => todo.completed);
-          break;
-        default:
-          break;
-      }
-    }
-
-    return preparedTodos;
-  };
-
-  const visibleTodos = getFilteredTodos(query, filteredBy);
+  const visibleTodos = getFilteredTodos(todos, query, filteredBy);
 
   useEffect(() => {
     setLoading(true);
