@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
-import { SelectedTodo } from '../../types/SelectedTodo';
+import { Todo } from '../../types/Todo';
 import { SelectedUser } from '../../types/SelectedUser';
+import { SelectedTodo } from '../../types/SelectedTodo';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: SelectedTodo;
+  selectedTodo: Todo;
   onSelectTodo: (todo: SelectedTodo) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
   const [user, setUser] = useState<SelectedUser>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
-    getUser(selectedTodo?.userId as number)
+    getUser(selectedTodo.userId)
       .then(setUser)
       .catch(() => setErrorMessage('Try again later'))
-      .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTodo?.userId]);
+      .finally(() => setIsLoading(false));
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {selectedTodo && !loading && !errorMessage ? (
+      {selectedTodo && !isLoading && !errorMessage ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -66,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelectTodo }) => {
           </div>
         </div>
       ) : (
-        !errorMessage && loading && <Loader />
+        !errorMessage && isLoading && <Loader />
       )}
     </div>
   );

@@ -2,8 +2,8 @@ import React from 'react';
 import { CompletedStatus } from '../../types/CompletedStatus';
 
 type Props = {
-  onSetCompleted: (_: CompletedStatus) => void;
-  onSetQuery: (_: string) => void;
+  onSetCompleted: (completedStatus: CompletedStatus) => void;
+  onSetQuery: (query: string) => void;
   query: string;
 };
 
@@ -21,9 +21,9 @@ export const TodoFilter: React.FC<Props> = ({
             onSetCompleted(event.target.value as CompletedStatus)
           }
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={CompletedStatus.all}>All</option>
+          <option value={CompletedStatus.active}>Active</option>
+          <option value={CompletedStatus.completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -42,7 +42,6 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {query && (
           <button
             data-cy="clearSearchButton"

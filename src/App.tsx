@@ -25,11 +25,11 @@ const getPreparedTodos = (
   let preparedTodos = [...todos];
 
   switch (completedStatus) {
-    case 'active':
+    case CompletedStatus.active:
       preparedTodos = preparedTodos.filter(todo => !todo.completed);
       break;
 
-    case 'completed':
+    case CompletedStatus.completed:
       preparedTodos = preparedTodos.filter(todo => todo.completed);
   }
 
@@ -47,20 +47,21 @@ const getPreparedTodos = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>(null);
   const [query, setQuery] = useState('');
-  const [completedStatus, setCompletedStatus] =
-    useState<CompletedStatus>('all');
+  const [completedStatus, setCompletedStatus] = useState<CompletedStatus>(
+    CompletedStatus.all,
+  );
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Try again later'))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const preparedTodos = getPreparedTodos(todos, { completedStatus, query });
@@ -81,8 +82,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && !errorMessage && (
+              {isLoading && <Loader />}
+              {!isLoading && !errorMessage && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodo={selectedTodo}
