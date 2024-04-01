@@ -1,7 +1,7 @@
-import { SortFild } from '../../App';
+import { SortField } from '../../types/SortField';
 
 type Props = {
-  setFilter: (velue: SortFild) => void;
+  setFilter: (velue: SortField) => void;
   setSearchTerm: (velue: string) => void;
   searchTerm: string;
 };
@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 
-    setFilter(selectedValue as SortFild);
+    setFilter(selectedValue as SortField);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleChange}>
-            <option value={SortFild.All}>All</option>
-            <option value={SortFild.Active}>Active</option>
-            <option value={SortFild.Completed}>Completed</option>
+            <option value={SortField.All}>All</option>
+            <option value={SortField.Active}>Active</option>
+            <option value={SortField.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -47,8 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right pointer-events-all">
           {searchTerm && (
             <button
               data-cy="clearSearchButton"

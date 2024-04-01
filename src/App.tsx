@@ -9,52 +9,45 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-export enum SortFild {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { SortField } from './types/SortField';
 
 const getFilteredTodos = (
   todos: Todo[],
-  filter: SortFild,
+  filter: SortField,
   searchTerm: string,
 ) => {
-  let filteredTodos = [...todos];
-
   if (searchTerm) {
-    filteredTodos = todos.filter(todo =>
+    todos.filter(todo =>
       todo.title.toLowerCase().includes(searchTerm.trim().toLowerCase()),
     );
   }
 
   switch (filter) {
-    case SortFild.Active:
-      return filteredTodos.filter(todo => !todo.completed);
-    case SortFild.Completed:
-      return filteredTodos.filter(todo => todo.completed);
+    case SortField.Active:
+      return todos.filter(todo => !todo.completed);
+    case SortField.Completed:
+      return todos.filter(todo => todo.completed);
     default:
-      return filteredTodos;
+      return todos;
   }
 };
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<SortFild>(SortFild.All);
+  const [filter, setFilter] = useState<SortField>(SortField.All);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [hasLoading, setHasLoading] = useState(false);
 
   const filteredTodos = getFilteredTodos(todos, filter, searchTerm);
 
   useEffect(() => {
-    setLoading(true);
+    setHasLoading(true);
 
     getTodos()
       .then(setTodos)
       .finally(() => {
-        setLoading(false);
+        setHasLoading(false);
       });
   }, []);
 
@@ -74,7 +67,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {hasLoading && <Loader />}
               <TodoList
                 todos={filteredTodos}
                 setSelectTodo={setSelectTodo}
