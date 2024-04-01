@@ -10,18 +10,11 @@ interface TodoModalProps {
   onSelect: (todo: Select) => void;
 }
 
-const defaultUserData = {
-  id: 0,
-  name: '',
-  email: '',
-  phone: '',
-};
-
 export const TodoModal: React.FC<TodoModalProps> = ({
   selectedTodo,
   onSelect,
 }) => {
-  const [user, setUser] = useState<User>(defaultUserData);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +24,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
         setUser(userData);
         setLoading(false);
       })
-      .catch(() => {
+      .finally(() => {
         setLoading(false);
       });
   }, [selectedTodo.userId]);
@@ -71,10 +64,8 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
-
               {' by '}
-
-              <a href={`mailto:${user.id}`}>{user.name}</a>
+              {user && <a href={`mailto:${user.id}`}>{user.name}</a>}
             </p>
           </div>
         </div>

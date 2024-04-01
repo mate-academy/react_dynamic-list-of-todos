@@ -11,9 +11,10 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterCriteria, Select, Status } from './types/otherTypes';
 
-const filterTodos = (todos: Todo[], filter: FilterCriteria): Todo[] => {
-  const { status, searchInput } = filter;
-
+const filterTodos = (
+  todos: Todo[],
+  { status, searchInput }: FilterCriteria,
+): Todo[] => {
   return todos.filter(todo => {
     if (status === 'active' && todo.completed) {
       return false;
@@ -35,7 +36,7 @@ const filterTodos = (todos: Todo[], filter: FilterCriteria): Todo[] => {
 };
 
 export const App: React.FC = () => {
-  const [loadingTodos, setLoadingTodos] = useState(true);
+  const [isTodosLoading, setIsTodosLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Select>(null);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterCriteria>({
@@ -44,16 +45,16 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    setLoadingTodos(true);
+    setIsTodosLoading(true);
     getTodos()
       .then((todos: Todo[]) => {
         const filteredTodos = filterTodos(todos, filter);
 
         setTodosFromServer(filteredTodos);
-        setLoadingTodos(false);
+        setIsTodosLoading(false);
       })
-      .catch(() => {
-        setLoadingTodos(false);
+      .finally(() => {
+        setIsTodosLoading(false);
       });
   }, [filter]);
 
@@ -77,9 +78,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodos && <Loader />}
+              {isTodosLoading && <Loader />}
 
-              {!loadingTodos && (
+              {!isTodosLoading && (
                 <TodoList
                   todos={todosFromServer}
                   selectedTodo={selectedTodo}
