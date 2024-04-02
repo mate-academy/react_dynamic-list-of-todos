@@ -6,3 +6,8 @@ export interface Todo {
 }
 
 export type StatusFilterValue = 'all' | 'completed' | 'active';
+
+export enum TodoStatus {
+  Completed = 'completed',
+  Active = 'active',
+}

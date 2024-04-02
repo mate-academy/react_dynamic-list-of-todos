@@ -9,6 +9,7 @@ import { Loader } from './components/Loader';
 import { StatusFilterValue, Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { TodoStatus } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,11 +32,11 @@ export const App: React.FC = () => {
   const getPreparedTodos = () => {
     let result = [...todos];
 
-    if (statusFilter === 'completed') {
+    if (statusFilter === TodoStatus.Completed) {
       result = result.filter(todo => todo.completed);
     }
 
-    if (statusFilter === 'active') {
+    if (statusFilter === TodoStatus.Active) {
       result = result.filter(todo => !todo.completed);
     }
 
