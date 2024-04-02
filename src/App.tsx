@@ -23,10 +23,10 @@ const getFilteredTodos: FilterTheTodos = (todos, filterBy, query) => {
     filteredTodos = todos.filter(todo => {
       switch (filterBy) {
         case FilterTask.Active:
-          return todo.completed === false;
+          return !todo.completed;
 
         case FilterTask.Completed:
-          return todo.completed === true;
+          return todo.completed;
 
         default:
           throw new Error('Unknown filter type');
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterTask>(FilterTask.All);
   const [query, setQuery] = useState('');
 
-  const handleToglingTodo = (todo: Todo | null) => {
+  const handleTogglingTodo = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
           ) : (
             <TodoList
               todos={filteredTodos}
-              onTodoSelect={handleToglingTodo}
+              onTodoSelect={handleTogglingTodo}
               selectedTodo={selectedTodo}
             />
           )}
@@ -99,7 +99,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onClose={handleToglingTodo} />
+        <TodoModal selectedTodo={selectedTodo} onClose={handleTogglingTodo} />
       )}
     </>
   );
