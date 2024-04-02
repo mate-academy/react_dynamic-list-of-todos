@@ -22,7 +22,6 @@ export const TodoModal: React.FC<TodoModalProps> = ({
     getUser(selectedTodo.userId)
       .then(userData => {
         setUser(userData);
-        setLoading(false);
       })
       .finally(() => {
         setLoading(false);

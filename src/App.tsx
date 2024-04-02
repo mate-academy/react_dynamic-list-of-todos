@@ -16,11 +16,11 @@ const filterTodos = (
   { status, searchInput }: FilterCriteria,
 ): Todo[] => {
   return todos.filter(todo => {
-    if (status === 'active' && todo.completed) {
+    if (status === Status.Active && todo.completed) {
       return false;
     }
 
-    if (status === 'completed' && !todo.completed) {
+    if (status === Status.Completed && !todo.completed) {
       return false;
     }
 
@@ -51,7 +51,6 @@ export const App: React.FC = () => {
         const filteredTodos = filterTodos(todos, filter);
 
         setTodosFromServer(filteredTodos);
-        setIsTodosLoading(false);
       })
       .finally(() => {
         setIsTodosLoading(false);
