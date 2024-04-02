@@ -68,7 +68,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && preparedTodos.length > 0 && (
+              {!loading && !!preparedTodos.length && (
                 <TodoList
                   todos={preparedTodos}
                   onTodoSelected={handleTogglingTodo}
