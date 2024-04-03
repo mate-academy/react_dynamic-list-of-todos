@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -7,8 +6,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { useTodos } from './store/Store';
 
 export const App: React.FC = () => {
+  const { isLoading, selectedTodo } = useTodos();
+
   return (
     <>
       <div className="section">
@@ -21,14 +23,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+              {isLoading && <Loader />}
+
               <TodoList />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal />}
     </>
   );
 };
