@@ -5,8 +5,10 @@ import { getUser } from '../../api';
 
 export const TodoModal: React.FC = () => {
   const { selectedTodo, user, setUser, setSelectedTodo } = useTodos();
-  const [isModal, setIsModal] = useState(true);
+  const [isModalShow, setIsModalShow] = useState(true);
   const [modal, setModal] = useState(true);
+
+  const { id, title, completed } = selectedTodo || {};
 
   const handleCloseModal = () => {
     setModal(false);
@@ -15,10 +17,10 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     if (selectedTodo) {
-      setIsModal(true);
+      setIsModalShow(true);
       getUser(selectedTodo.userId)
         .then(setUser)
-        .finally(() => setIsModal(false));
+        .finally(() => setIsModalShow(false));
     }
   }, [selectedTodo, setUser]);
 
@@ -30,7 +32,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isModal ? (
+      {isModalShow ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -39,7 +41,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${selectedTodo?.id}`}
+              {`Todo #${id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -53,11 +55,11 @@ export const TodoModal: React.FC = () => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectedTodo?.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo?.completed ? (
+              {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

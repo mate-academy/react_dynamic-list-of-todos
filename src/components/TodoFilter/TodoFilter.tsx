@@ -2,6 +2,12 @@ import React from 'react';
 import { useTodos } from '../../store/Store';
 import { FilterType } from '../../types/FilterBy';
 
+const filterOptions = [
+  { label: 'all', value: FilterType.ALL },
+  { label: 'active', value: FilterType.ACTIVE },
+  { label: 'completed', value: FilterType.COMPLETED },
+];
+
 export const TodoFilter: React.FC = () => {
   const { filter, setFilter, query, handleChangeQuery, setQuery } = useTodos();
 
@@ -28,11 +34,11 @@ export const TodoFilter: React.FC = () => {
             value={filter}
             onChange={handleFilterChange}
           >
-            <option value={FilterType.ALL}>All</option>
-
-            <option value={FilterType.ACTIVE}>Active</option>
-
-            <option value={FilterType.COMPLETED}>Completed</option>
+            {filterOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </span>
       </p>
