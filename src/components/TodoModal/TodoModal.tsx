@@ -6,21 +6,25 @@ import { getUser } from '../../api';
 
 interface Props {
   todo: Todo;
-  onClose: (_: Todo | null) => void;
+  onClose: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
+    setIsLoading(true);
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -54,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

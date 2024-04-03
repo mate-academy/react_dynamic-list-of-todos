@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  onTodoSelected: (_: Todo) => void;
+  onTodoSelected: (todo: Todo) => void;
   selectedTodo: Todo | null;
 };
 
@@ -30,6 +30,7 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => {
         const { id, completed, title } = todo;
+        const isSelectedTodo = selectedTodo?.id === todo.id;
 
         return (
           <tr
@@ -40,13 +41,13 @@ export const TodoList: React.FC<Props> = ({
             key={id}
           >
             <td className="is-vcentered">{id}</td>
-            {(completed && (
-              <td className="is-vcentered">
+            <td className="is-vcentered">
+              {completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
-              </td>
-            )) || <td className="is-vcentered" />}
+              )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p
                 className={`${completed ? 'has-text-success' : 'has-text-danger'}`}
@@ -64,8 +65,8 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i
                     className={classNames('far', {
-                      'fa-eye-slash': selectedTodo?.id === todo.id,
-                      'fa-eye': selectedTodo?.id !== todo.id,
+                      'fa-eye-slash': isSelectedTodo,
+                      'fa-eye': !isSelectedTodo,
                     })}
                   />
                 </span>

@@ -5,4 +5,8 @@ export interface Todo {
   userId: number;
 }
 
-export type StatusFilterValue = 'all' | 'completed' | 'active';
+export enum StatusFilterValue {
+  All = 'all',
+  Complited = 'completed',
+  Active = 'active',
+}

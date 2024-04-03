@@ -1,4 +1,5 @@
 import { StatusFilterValue } from '../../types/Todo';
+import './TodoFilter.scss';
 
 interface Props {
   onStatusSelected: (value: StatusFilterValue) => void;
@@ -21,9 +22,11 @@ export const TodoFilter: React.FC<Props> = ({
           value={statusFilter}
           onChange={e => onStatusSelected(e.target.value as StatusFilterValue)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          {Object.values(StatusFilterValue).map(value => (
+            <option value={value} key={value}>
+              {`${value[0].toUpperCase()}${value.slice(1)}`}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -42,7 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right clear-button">
           <button
             data-cy="clearSearchButton"
             type="button"

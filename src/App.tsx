@@ -10,11 +10,40 @@ import { StatusFilterValue, Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 
+const getPreparedTodos = (
+  todos: Todo[],
+  filterValue: StatusFilterValue,
+  query: string,
+): Todo[] => {
+  let result;
+
+  switch (filterValue) {
+    case StatusFilterValue.Active:
+      result = todos.filter(todo => !todo.completed);
+      break;
+    case StatusFilterValue.Complited:
+      result = todos.filter(todo => todo.completed);
+      break;
+    default:
+      result = todos;
+  }
+
+  if (query) {
+    result = result.filter(todo =>
+      todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  }
+
+  return result;
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>(
+    StatusFilterValue.All,
+  );
   const [query, setQuery] = useState('');
 
   const handleTogglingTodo = (todo: Todo | null) => {
@@ -22,33 +51,13 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const getPreparedTodos = () => {
-    let result = [...todos];
-
-    if (statusFilter === 'completed') {
-      result = result.filter(todo => todo.completed);
-    }
-
-    if (statusFilter === 'active') {
-      result = result.filter(todo => !todo.completed);
-    }
-
-    if (query) {
-      result = result.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    return result;
-  };
-
-  const preparedTodos = getPreparedTodos();
+  const preparedTodos = getPreparedTodos(todos, statusFilter, query);
 
   return (
     <>
@@ -67,8 +76,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && preparedTodos.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && preparedTodos.length > 0 && (
                 <TodoList
                   todos={preparedTodos}
                   onTodoSelected={handleTogglingTodo}
