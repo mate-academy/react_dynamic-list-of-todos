@@ -91,7 +91,7 @@ export const App: React.FC = () => {
           ) : (
             <TodoList
               todos={filteredTodos}
-              onTodoSelect={handleToglingTodo}
+              onTodoSelect={handleTogglingTodo}
               selectedTodo={selectedTodo}
             />
           )}
@@ -99,7 +99,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onClose={handleToglingTodo} />
+        <TodoModal selectedTodo={selectedTodo} onClose={handleTogglingTodo} />
       )}
     </>
   );
