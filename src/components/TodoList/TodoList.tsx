@@ -33,6 +33,15 @@ export const TodoList: React.FC<Props> = ({
         const { id, title, completed } = todo;
         const isCurrentTodoSelected = selectedTodo?.id === todo.id;
 
+        const titleColorClasses = cn(
+          completed ? 'has-text-success' : 'has-text-danger',
+        );
+
+        const eyeClasses = cn('far', {
+          'fa-eye-slash': isCurrentTodoSelected,
+          'fa-eye': !isCurrentTodoSelected,
+        });
+
         return (
           <tr
             data-cy="todo"
@@ -50,13 +59,7 @@ export const TodoList: React.FC<Props> = ({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p
-                className={cn(
-                  completed ? 'has-text-success' : 'has-text-danger',
-                )}
-              >
-                {title}
-              </p>
+              <p className={titleColorClasses}>{title}</p>
             </td>
             <td className="has-text-right is-vcentered">
               <button
@@ -66,12 +69,7 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onTodoSelect(todo)}
               >
                 <span className="icon">
-                  <i
-                    className={cn(
-                      'far',
-                      isCurrentTodoSelected ? 'fa-eye-slash' : 'fa-eye',
-                    )}
-                  />
+                  <i className={eyeClasses} />
                 </span>
               </button>
             </td>
