@@ -23,10 +23,10 @@ const getFilteredTodos: FilterTheTodos = (todos, filterBy, query) => {
     filteredTodos = todos.filter(todo => {
       switch (filterBy) {
         case FilterTask.Active:
-          return todo.completed === false;
+          return !todo.completed;
 
         case FilterTask.Completed:
-          return todo.completed === true;
+          return todo.completed;
 
         default:
           throw new Error('Unknown filter type');
