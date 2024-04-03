@@ -12,7 +12,7 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isModalLoading, setIsModalLoading] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(true);
 
   useEffect(() => {
     setIsModalLoading(true);
