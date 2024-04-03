@@ -50,7 +50,7 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterTask>(FilterTask.All);
   const [query, setQuery] = useState('');
 
-  const handleToglingTodo = (todo: Todo | null) => {
+  const handleTogglingTodo = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
