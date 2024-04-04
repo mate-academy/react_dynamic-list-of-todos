@@ -1,23 +1,16 @@
-import React, { useContext } from 'react';
-
 import { Todo } from '../../types/Todo';
-import { ModalIdContext, ShowModalContext } from '../context/stateContext';
 
 interface PropsTodo {
   todos: Todo[];
-  setCurrentUserId(userId: number): void;
+  chousenTodo: Todo | null;
+  chooseTodo(selectedTodo: Todo | null): void;
 }
 
-export const TodoList: React.FC<PropsTodo> = ({ todos, setCurrentUserId }) => {
-  const { setisModalShowed } = useContext(ShowModalContext);
-  const { currentId, setCurrentId } = useContext(ModalIdContext);
-
-  const handleEyeButtonClick = (id: number, userId: number) => {
-    setisModalShowed(true);
-    setCurrentId(id);
-    setCurrentUserId(userId);
-  };
-
+export const TodoList: React.FC<PropsTodo> = ({
+  todos,
+  chousenTodo,
+  chooseTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -56,7 +49,7 @@ export const TodoList: React.FC<PropsTodo> = ({ todos, setCurrentUserId }) => {
             </td>
             <td className="has-text-right is-vcentered">
               <button
-                onClick={() => handleEyeButtonClick(todo.id, todo.userId)}
+                onClick={() => chooseTodo(todo)}
                 data-cy="selectButton"
                 className="button"
                 type="button"
@@ -64,7 +57,9 @@ export const TodoList: React.FC<PropsTodo> = ({ todos, setCurrentUserId }) => {
                 <span className="icon">
                   <i
                     className={
-                      currentId === todo.id ? 'far fa-eye-slash' : 'far fa-eye'
+                      todo.id === chousenTodo?.id
+                        ? 'far fa-eye-slash'
+                        : 'far fa-eye'
                     }
                   />
                 </span>

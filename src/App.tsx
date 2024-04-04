@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,26 +8,39 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { ShowModalContext } from './components/context/stateContext';
-import { User } from './types/User';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [todosInitial, setTodosInitial] = useState<Todo[]>([]);
-  const [todos, setTodos] = useState<Todo[]>(todosInitial);
-  const [user, setUser] = useState<User>();
-  const [userId, setUserId] = useState(1);
-
-  const { isModalShowed } = useContext(ShowModalContext);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filterValue, setFilterValue] = useState('');
+  const [query, setQuery] = useState('all');
 
   useEffect(() => {
-    getTodos().then(setTodosInitial);
+    getTodos().then(setTodos);
   }, []);
 
-  useEffect(() => {
-    getUser(userId).then(setUser);
-    setTodos(todosInitial);
-  }, [userId, todosInitial]);
+  const filteredByInput = () => {
+    return todos.filter(todo =>
+      todo.title.toLowerCase().includes(filterValue.toLowerCase()),
+    );
+  };
+
+  function renderThis() {
+    if (query === 'all') {
+      return filteredByInput();
+    }
+
+    if (query === 'active') {
+      return filteredByInput().filter(todo => todo.completed === false);
+    }
+
+    if (query === 'completed') {
+      return filteredByInput().filter(todo => todo.completed === true);
+    }
+
+    return todos;
+  }
 
   return (
     <>
@@ -38,21 +51,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                todosInitial={todosInitial}
-                todosToRender={setTodos}
+                inputValue={filterValue}
+                setiInputValue={setFilterValue}
+                setQueryFilter={setQuery}
               />
             </div>
 
             <div className="block">
               {todos.length === 0 && <Loader />}
 
-              <TodoList todos={todos} setCurrentUserId={setUserId} />
+              <TodoList
+                chousenTodo={selectedTodo}
+                chooseTodo={setSelectedTodo}
+                todos={renderThis()}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {isModalShowed === true && <TodoModal user={user} todos={todos} />}
+      {selectedTodo && (
+        <TodoModal chousenTodo={selectedTodo} chooseTodo={setSelectedTodo} />
+      )}
     </>
   );
 };

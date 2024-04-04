@@ -1,22 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import {
-  EyeClickContext,
-  ModalIdContext,
-  ShowModalContext,
-} from '../context/stateContext';
+
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 interface PropsTodo {
-  user: User | undefined;
-  todos: Todo[];
+  chousenTodo: Todo | null;
+  chooseTodo(selectedTodo: Todo | null): void;
 }
 
-export const TodoModal: React.FC<PropsTodo> = ({ user, todos }) => {
-  const { isClicked, setIsClicked } = useContext(EyeClickContext);
-  const { setisModalShowed } = useContext(ShowModalContext);
-  const { currentId, setCurrentId } = useContext(ModalIdContext);
+export const TodoModal: React.FC<PropsTodo> = ({ chousenTodo, chooseTodo }) => {
+  const [user, setUser] = useState<User>();
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -25,8 +21,7 @@ export const TodoModal: React.FC<PropsTodo> = ({ user, todos }) => {
   }, [setIsClicked]);
 
   const handleModaleClose = () => {
-    setCurrentId(0);
-    setisModalShowed(false);
+    chooseTodo(null);
     setIsClicked(false);
   };
 
@@ -34,7 +29,11 @@ export const TodoModal: React.FC<PropsTodo> = ({ user, todos }) => {
     event.preventDefault();
   };
 
-  const nededTodo = todos.find(todo => todo.id === currentId);
+  useEffect(() => {
+    if (chousenTodo) {
+      getUser(chousenTodo.userId).then(setUser);
+    }
+  }, [chousenTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -49,7 +48,7 @@ export const TodoModal: React.FC<PropsTodo> = ({ user, todos }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${nededTodo?.id}`}
+              {`Todo #${chousenTodo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -63,19 +62,19 @@ export const TodoModal: React.FC<PropsTodo> = ({ user, todos }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {`${nededTodo?.title}`}
+              {`${chousenTodo?.title}`}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={
-                  todos[currentId - 1].completed
+                  chousenTodo?.completed
                     ? 'has-text-success'
                     : 'has-text-danger'
                 }
               >
-                {todos[currentId - 1].completed ? 'Done' : 'Planned'}
+                {chousenTodo?.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
