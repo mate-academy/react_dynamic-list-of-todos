@@ -4,14 +4,14 @@ import classNames from 'classnames';
 
 type Props = {
   todos: FullTodo[];
-  visibleModal: FullTodo | null;
-  setVisibleTodo: (todo: FullTodo | null) => void;
+  selectedTodo: FullTodo | null;
+  setSelectedTodo: (todo: FullTodo | null) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  visibleModal,
-  setVisibleTodo,
+  selectedTodo,
+  setSelectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
           data-cy="todo"
           className={classNames({
             'has-background-info-light':
-              visibleModal && todo.id === visibleModal.id,
+              selectedTodo && todo.id === selectedTodo.id,
           })}
           key={todo.id}
         >
@@ -60,10 +60,17 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => setVisibleTodo(todo)}
+              onClick={() => {
+                setSelectedTodo(todo);
+              }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i
+                  className={classNames('far', {
+                    'fa-eye-slash': selectedTodo && todo.id === selectedTodo.id,
+                    'fa-eye': !(selectedTodo && todo.id === selectedTodo.id),
+                  })}
+                />
               </span>
             </button>
           </td>
