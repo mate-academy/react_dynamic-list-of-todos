@@ -19,16 +19,13 @@ enum FilterType {
 const filterTodos = (todos: Todo[], filterType: string, filterText: string) => {
   let filteredTodos: Todo[] = [...todos];
 
-  if (filterType === FilterType.Active) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return !todo.completed;
-    });
-  }
-
-  if (filterType === FilterType.Completed) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return todo.completed;
-    });
+  switch (filterType) {
+    case FilterType.Active:
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+      break;
+    case FilterType.Completed:
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      break;
   }
 
   if (filterText) {
@@ -43,16 +40,14 @@ const filterTodos = (todos: Todo[], filterType: string, filterText: string) => {
 export const App: React.FC = () => {
   const [todos, setTodods] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filterType, setFilterType] = useState<string>('All');
+  const [filterType, setFilterType] = useState<string>(FilterType.All);
   const [filterText, setFilterText] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then(data => {
-        setTodods(data);
-      })
+      .then(setTodods)
       .catch(error => {
         // eslint-disable-next-line no-console
         console.error('Error fetching todos:', error);

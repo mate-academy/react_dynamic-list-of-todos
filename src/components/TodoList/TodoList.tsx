@@ -31,13 +31,11 @@ export const TodoList: React.FC<TodoListProps> = ({
           <tr key={todo.id} data-cy="todo" className="">
             <td className="is-vcentered">{todo.id}</td>
             {todo.completed && (
-              <>
-                <td className="is-vcentered">
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                </td>
-              </>
+              <td className="is-vcentered">
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              </td>
             )}
             {!todo.completed && (
               <>
