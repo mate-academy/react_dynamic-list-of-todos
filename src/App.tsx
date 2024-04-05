@@ -3,49 +3,42 @@ import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { User } from './types/User';
 import { Todo } from './types/Todo';
-
-type FullTodo = {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-  user: User | null;
-};
 
 type CurrentFilter = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<FullTodo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<CurrentFilter>('all');
   const [query, setQuery] = useState<string>('');
 
-  const [fullTodos, setFullTodos] = useState<FullTodo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-  const getFullTodos = (todos: Todo[], user: User) => {
-    let result = [...todos.map(todo => ({ ...todo, user: user }))].sort(
-      (a, b) => a.id - b.id,
-    );
+  const preperedTodos = (
+    currentTodos: Todo[],
+    currentFilter: CurrentFilter,
+    currentQuery?: string,
+  ) => {
+    let result = currentTodos.map(todo => ({ ...todo })).sort((a, b) => a.id - b.id);
 
-    if (query) {
+    if (currentQuery) {
       result = result.filter(item =>
-        item.title.includes(query.toLocaleLowerCase().trim()),
+        item.title.includes(currentQuery.toLocaleLowerCase().trim()),
       );
     }
 
-    if (filter === 'completed') {
+    if (currentFilter === 'completed') {
       return result.filter(item => item.completed);
     }
 
-    if (filter === 'active') {
+    if (currentFilter === 'active') {
       return result.filter(item => !item.completed);
     }
 
@@ -57,16 +50,10 @@ export const App: React.FC = () => {
       setLoader(true);
     }
 
-    getTodos().then(responses => {
-      responses.forEach(respons => {
-        getUser(respons.userId)
-          .then(user => {
-            setFullTodos(getFullTodos(responses, user));
-          })
-          .finally(() => setLoader(false));
-      });
-    });
-  }, [filter, query]);
+    getTodos()
+      .then(responses => setTodos(responses))
+      .finally(() => setLoader(false));
+  }, []);
 
   return (
     <>
@@ -88,7 +75,7 @@ export const App: React.FC = () => {
 
               {!loader && (
                 <TodoList
-                  todos={fullTodos}
+                  todos={preperedTodos(todos, filter, query)}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={modal => setSelectedTodo(modal)}
                 />

@@ -1,11 +1,11 @@
 import React from 'react';
-import { FullTodo } from '../../types/FullTodo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: FullTodo[];
-  selectedTodo: FullTodo | null;
-  setSelectedTodo: (todo: FullTodo | null) => void;
+  todos: Todo[];
+  selectedTodo: Todo | null;
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -28,7 +28,7 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map((todo: FullTodo) => (
+      {todos.map((todo: Todo) => (
         <tr
           data-cy="todo"
           className={classNames({
