@@ -9,11 +9,47 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Filter } from './types/Filter';
+
+type Props = {
+  filterBy: string;
+  query: string;
+};
+
+function getFilteredTodos(todos: Todo[], { filterBy, query }: Props) {
+  let filteredTodos = [...todos];
+  const lowerQuery = query.trim().toLowerCase();
+
+  switch (filterBy) {
+    case Filter.Active:
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case Filter.Completed:
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
+  }
+
+  if (lowerQuery) {
+    return filteredTodos.filter(todo =>
+      todo.title.toLowerCase().includes(lowerQuery),
+    );
+  }
+
+  return filteredTodos;
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [filterBy, setFilterBy] = useState(Filter.All);
+
+  const filteredTodos = getFilteredTodos(todos, { filterBy, query });
 
   useEffect(() => {
     setIsLoading(true);
@@ -21,6 +57,12 @@ export const App: React.FC = () => {
       .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
+
+  const handleQueryChange = (newQuery: string) => {
+    if (newQuery.trim() !== '' || newQuery === '') {
+      setQuery(newQuery);
+    }
+  };
 
   return (
     <>
@@ -30,16 +72,22 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setFilterBy={setFilterBy}
+                setQuery={handleQueryChange}
+              />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList
-                todos={todos}
-                selectedTodo={selectedTodo}
-                setSelectedTodo={setSelectedTodo}
-              />
+              {!isLoading && todos.length > 0 && (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
