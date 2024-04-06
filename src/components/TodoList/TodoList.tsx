@@ -3,16 +3,11 @@ import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 type Props = {
-  setModalHeader: (boolean: boolean) => void;
   todos: Todo[];
   setTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  setTodo,
-  setModalHeader,
-}) => (
+export const TodoList: React.FC<Props> = ({ todos, setTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -30,7 +25,7 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => (
         <tr key={todo.id} data-cy="todo" className="">
-          <td className="is-vcentered">{todo.id + 1}</td>
+          <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
               <span className="icon" data-cy="iconCompleted">
@@ -52,7 +47,6 @@ export const TodoList: React.FC<Props> = ({
             <button
               onClick={() => {
                 setTodo(todo);
-                setModalHeader(true);
               }}
               data-cy="selectButton"
               className="button"

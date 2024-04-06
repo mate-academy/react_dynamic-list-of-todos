@@ -41,12 +41,14 @@ export const TodoFilter = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            onClick={() => setSearchInput('')}
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {searchInputValue.length > 0 && (
+            <button
+              onClick={() => setSearchInput('')}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+            />
+          )}
         </span>
       </p>
     </form>

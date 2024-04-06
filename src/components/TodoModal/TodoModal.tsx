@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 type Props = {
-  todo: Todo | null | undefined;
-  modalHeader: boolean;
-  setModalHeader: (boolean: boolean) => void;
+  todo: Todo;
+  setTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todo,
+export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-  setModalHeader,
-}) => {
+  useEffect(() => {
+    if (todo.userId) {
+      getUser(todo?.userId)
+        .then(setUser)
+        .finally(() => setIsLoading(false));
+    }
+  }, [todo]);
+
+  const handleChangeButton = () => {
+    setTodo(null);
+    setUser(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!todo ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -31,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
-              onClick={() => setModalHeader(false)}
+              onClick={() => handleChangeButton()}
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -53,7 +66,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

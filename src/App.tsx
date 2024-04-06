@@ -11,37 +11,45 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Filter } from './types/Filters';
 
+const filteredTodos = (tasks: Todo[], filter: Filter, query: string) => {
+  let copyTasks = [...tasks];
+  const queryLowerCase = query.trim().toLocaleLowerCase();
+
+  switch (filter) {
+    case 'active':
+      copyTasks = copyTasks.filter(t => t.completed === false);
+      break;
+
+    case 'completed':
+      copyTasks = copyTasks.filter(t => t.completed === true);
+      break;
+
+    default:
+      break;
+  }
+
+  if (queryLowerCase) {
+    return copyTasks.filter(task =>
+      task.title.toLocaleLowerCase().includes(queryLowerCase),
+    );
+  }
+
+  return copyTasks;
+};
+
 export const App: React.FC = () => {
-  const [todo, setTodo] = useState<Todo | null>();
+  const [todo, setTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [modalHeader, setModalHeader] = useState(false);
   const [visibleTodos, setVisibleTodos] = useState<Filter>('all');
   const [searchInputValue, setSearchInput] = useState('');
   const [isloading, setIsloading] = useState(true);
-
-  const filteredTodos = (objects: Todo[], filter: Filter, word: string) => {
-    switch (filter) {
-      case 'active':
-        return objects.filter(
-          t => t.completed === false && t.title.includes(word),
-        );
-
-      case 'completed':
-        return objects.filter(
-          t => t.completed === true && t.title.includes(word),
-        );
-
-      default:
-        return objects.filter(t => t.title.includes(word));
-    }
-  };
 
   const newTodos = filteredTodos(todos, visibleTodos, searchInputValue);
 
   useEffect(() => {
     setIsloading(true);
     getTodos()
-      .then(setTodos)
+      .then(data => setTodos(data))
       .catch(error => {
         throw new Error(`${error} ups... can't load todos`);
       })
@@ -66,24 +74,14 @@ export const App: React.FC = () => {
             <div className="block">
               {isloading && <Loader />}
               {!isloading && todos.length > 0 && (
-                <TodoList
-                  todos={newTodos}
-                  setModalHeader={setModalHeader}
-                  setTodo={setTodo}
-                />
+                <TodoList todos={newTodos} setTodo={setTodo} />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {modalHeader && (
-        <TodoModal
-          todo={todo}
-          modalHeader={modalHeader}
-          setModalHeader={setModalHeader}
-        />
-      )}
+      {todo && <TodoModal todo={todo} setTodo={setTodo} />}
     </>
   );
 };
