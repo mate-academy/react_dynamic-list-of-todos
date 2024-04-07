@@ -1,6 +1,8 @@
+import { FieldFilter } from '../../types/FieldFilter';
+
 type Props = {
   onFilterByQuery: (event: string) => void;
-  onFilterBy: (event: string) => void;
+  onFilterBy: (event: FieldFilter) => void;
   query: string;
 };
 
@@ -10,7 +12,9 @@ export const TodoFilter: React.FC<Props> = ({
   query,
 }) => {
   const handleChoose = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterBy(event.target.value);
+    const selectedFilter = event.target.value as FieldFilter;
+
+    onFilterBy(selectedFilter);
   };
 
   const handleSearchTodos = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,9 +26,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleChoose}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FieldFilter.All}>All</option>
+            <option value={FieldFilter.Active}>Active</option>
+            <option value={FieldFilter.Completed}>Completed</option>
           </select>
         </span>
       </p>

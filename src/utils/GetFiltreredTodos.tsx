@@ -4,7 +4,7 @@ import { Todo } from '../types/Todo';
 export const getFilteredTodos = (
   todos: Todo[],
   query: string,
-  filteredBy: string,
+  filteredBy: FieldFilter,
 ): Todo[] => {
   let preparedTodos = [...todos];
 

@@ -7,27 +7,27 @@ import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
-  onSelect?: (user: Todo | null) => void;
+  onSelect: (user: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onSelect = () => {} }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
   const { userId, title, id, completed } = todo;
   const [user, setUser] = useState<User | null>(null);
 
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getUser(userId)
       .then(setUser)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

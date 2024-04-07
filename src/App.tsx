@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -10,22 +9,23 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { getFilteredTodos } from './utils/GetFiltreredTodos';
+import { FieldFilter } from './types/FieldFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [filteredBy, setFilteredBy] = useState('all');
+  const [filteredBy, setFilteredBy] = useState<FieldFilter>(FieldFilter.All);
 
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const visibleTodos = getFilteredTodos(todos, query, filteredBy);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
             <div className="block"></div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoFilter
                 onFilterBy={setFilteredBy}
                 onFilterByQuery={setQuery}
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
 
               <TodoList
                 todos={visibleTodos}
-                onSelect={todo => setSelectedTodo(todo)}
+                onSelect={setSelectedTodo}
                 selectedTodoId={selectedTodo?.id}
               />
             </div>
@@ -55,10 +55,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          onSelect={todo => setSelectedTodo(todo)}
-        />
+        <TodoModal todo={selectedTodo} onSelect={setSelectedTodo} />
       )}
     </>
   );
