@@ -5,12 +5,12 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   selectedTodoId?: number;
-  onSelect?: (user: Todo | null) => void;
+  onSelect: (user: Todo | null) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSelect = () => {},
+  onSelect,
   selectedTodoId,
 }) => {
   return (
@@ -46,7 +46,8 @@ export const TodoList: React.FC<Props> = ({
 
               <td className="is-vcentered is-expanded">
                 <p
-                  className={classNames('has-text-success', {
+                  className={classNames({
+                    'has-text-success': completed,
                     'has-text-danger': !completed,
                   })}
                 >
@@ -54,29 +55,18 @@ export const TodoList: React.FC<Props> = ({
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                {id === selectedTodoId ? (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => onSelect(null)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye-slash" />
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => onSelect(todo)}
-                  >
-                    <span className="icon">
-                      <i className="far fa-eye" />
-                    </span>
-                  </button>
-                )}
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => onSelect(todo)}
+                >
+                  <span className="icon">
+                    <i
+                      className={`far fa-eye${id === selectedTodoId ? '-slash' : ''}`}
+                    />
+                  </span>
+                </button>
               </td>
             </tr>
           );

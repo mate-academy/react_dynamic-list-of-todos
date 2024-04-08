@@ -38,8 +38,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
             >
               {`Todo #${id}`}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -54,9 +52,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
-                className={classNames('has-text-success', {
+                className={classNames({
+                  'has-text-success': completed,
                   'has-text-danger': !completed,
                 })}
               >

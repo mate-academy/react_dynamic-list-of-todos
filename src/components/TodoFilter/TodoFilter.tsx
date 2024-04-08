@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { FieldFilter } from '../../types/FieldFilter';
 
 type Props = {
@@ -7,11 +8,13 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onFilterByQuery = () => {},
-  onFilterBy = () => {},
+  onFilterByQuery,
+  onFilterBy,
   query,
 }) => {
-  const handleChoose = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const selectedFilter = event.target.value as FieldFilter;
 
     onFilterBy(selectedFilter);
@@ -21,14 +24,18 @@ export const TodoFilter: React.FC<Props> = ({
     onFilterByQuery(event.target.value);
   };
 
+  const filterOptions = Object.values(FieldFilter);
+
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleChoose}>
-            <option value={FieldFilter.All}>All</option>
-            <option value={FieldFilter.Active}>Active</option>
-            <option value={FieldFilter.Completed}>Completed</option>
+          <select data-cy="statusSelect" onChange={handleFilterTypeChange}>
+            {filterOptions.map(filter => (
+              <option value={filter} key={filter}>
+                {filter[0].toUpperCase() + filter.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -46,8 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className={classNames('icon is-right', { pointerEvents: 'all' })}>
           {query && (
             <button
               data-cy="clearSearchButton"
